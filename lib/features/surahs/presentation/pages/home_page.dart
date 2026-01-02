@@ -57,12 +57,8 @@ class _HomePageState extends State<HomePage> {
               AyahOfTheDay(theme: theme),
               const SizedBox(height: 16),
 
-              //quick links
-              Text('Quick links', style: theme.textTheme.bodySmall),
-              const SizedBox(height: 16),
-
               //horizontal listview
-              quickSurahLinks(context),
+              const QuickSurahLinks(),
               const SizedBox(height: 16),
 
               //all surahs
@@ -70,21 +66,6 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget quickSurahLinks(BuildContext context) {
-    return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          _buildSurahLink(surah: 'Surah Al-Fatiha', context: context),
-          _buildSurahLink(surah: 'Surah Mulk', context: context),
-          _buildSurahLink(surah: 'Surah Kahf', context: context),
-          _buildSurahLink(surah: 'Surah Ar-Rahman', context: context),
-        ],
       ),
     );
   }
@@ -100,38 +81,6 @@ class _HomePageState extends State<HomePage> {
           style: theme.textTheme.bodySmall!.copyWith(
             fontStyle: FontStyle.italic,
           ),
-        ),
-      ],
-    );
-  }
-}
-
-class AllSurahsList extends StatelessWidget {
-  const AllSurahsList({super.key, required this.theme});
-
-  final ThemeData theme;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('All Surahs', style: theme.textTheme.bodySmall!),
-        const SizedBox(height: 16),
-
-        _buildSurahTile(
-          context: context,
-          index: '1',
-          surahName: 'Al Fatiha',
-          englName: 'The Opener',
-          verses: '7',
-        ),
-        _buildSurahTile(
-          context: context,
-          index: '2',
-          surahName: 'Al Baqarah',
-          englName: 'The Cow',
-          verses: '286',
         ),
       ],
     );
@@ -203,85 +152,166 @@ class AyahOfTheDay extends ConsumerWidget {
   }
 }
 
-Widget _buildSurahTile({
-  required BuildContext context,
-  required String index,
-  required String surahName,
-  required String verses,
-  required String englName,
-}) {
-  final theme = Theme.of(context);
-  final isDark = Theme.of(context).brightness == Brightness.dark;
+class AllSurahsList extends StatelessWidget {
+  const AllSurahsList({super.key, required this.theme});
 
-  return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 8.0),
-    child: Material(
-      color: theme.cardColor, //list tile color
-      borderRadius: BorderRadius.circular(16),
-      clipBehavior: Clip.hardEdge,
-      child: Container(
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
+  final ThemeData theme;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('All Surahs', style: theme.textTheme.bodySmall!),
+        const SizedBox(height: 16),
+
+        const SurahTile(
+          index: '1',
+          surahName: 'Al Fatiha',
+          englName: 'The Opener',
+          verses: '7',
+        ),
+        const SurahTile(
+          index: '2',
+          surahName: 'Al Baqarah',
+          englName: 'The Cow',
+          verses: '286',
+        ),
+      ],
+    );
+  }
+}
+
+class SurahTile extends ConsumerWidget {
+  final String index;
+  final String surahName;
+  final String englName;
+  final String verses;
+
+  const SurahTile({
+    super.key,
+    required this.index,
+    required this.surahName,
+    required this.englName,
+    required this.verses,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final isDark = ref.watch(isDarkProvider);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Material(
+        color: theme.cardColor,
+        borderRadius: BorderRadius.circular(16),
+        clipBehavior: Clip.hardEdge,
         child: ListTile(
           splashColor: isDark
               ? AppColors.lightTextSecondary.withAlpha(50)
               : AppColors.darkSurface.withAlpha(50),
           onTap: () {
-            //navigate to full surah page
-            pushZoomPage(context, FullSurahPage(surahName: surahName));
+            pushZoomPage(
+              context,
+              FullSurahPage(surahName: surahName, engName: englName),
+            );
           },
           leading: CircleAvatar(
             backgroundColor: AppColors.amber,
             child: Text(
               index,
-              style: const TextStyle(color: AppColors.darkBackground),
+              style: const TextStyle(
+                color: AppColors.darkBackground,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 14,
+            vertical: 8,
+          ),
           title: Text(surahName, style: theme.textTheme.titleMedium),
           subtitle: Text(englName, style: theme.textTheme.bodySmall),
           trailing: Text(verses, style: theme.textTheme.bodySmall),
         ),
       ),
-    ),
-  );
+    );
+  }
 }
 
-Widget _buildSurahLink({required String surah, required BuildContext context}) {
-  final theme = Theme.of(context);
-  final isDark = Theme.of(context).brightness == Brightness.dark;
+class SurahLink extends ConsumerWidget {
+  final String surah;
 
-  return Padding(
-    padding: const EdgeInsets.only(right: 8.0),
-    child: Material(
-      color: theme.cardColor, //container color
-      borderRadius: BorderRadius.circular(8),
-      clipBehavior: Clip.hardEdge,
-      child: InkWell(
-        splashColor: isDark
-            ? AppColors.lightTextSecondary.withAlpha(50)
-            : AppColors.darkSurface.withAlpha(50),
-        highlightColor: Colors.transparent,
-        onTap: () {
-          //navigate to full surah page
-          pushZoomPage(context, FullSurahPage(surahName: surah));
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            color: theme.cardColor,
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          child: Center(
-            child: Text(
-              surah,
-              style: theme.textTheme.bodySmall!.copyWith(
-                fontWeight: FontWeight.bold,
-                color: AppColors.lightTextBody,
+  const SurahLink({super.key, required this.surah});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final isDark = ref.watch(isDarkProvider);
+
+    return Padding(
+      padding: const EdgeInsets.only(right: 8.0),
+      child: Material(
+        color: theme.cardColor,
+        borderRadius: BorderRadius.circular(8),
+        clipBehavior: Clip.hardEdge,
+        child: InkWell(
+          splashColor: isDark
+              ? AppColors.lightTextSecondary.withAlpha(50)
+              : AppColors.darkSurface.withAlpha(50),
+          highlightColor: Colors.transparent,
+          onTap: () {
+            pushZoomPage(
+              context,
+              FullSurahPage(surahName: surah, engName: 'Eng name'),
+            );
+          },
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: Center(
+              child: Text(
+                surah,
+                style: theme.textTheme.bodySmall!.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: isDark
+                      ? AppColors.textSecondary
+                      : AppColors.lightTextBody,
+                ),
               ),
             ),
           ),
         ),
       ),
-    ),
-  );
+    );
+  }
+}
+
+class QuickSurahLinks extends StatelessWidget {
+  const QuickSurahLinks({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    final quickSurahs = ['Al Fatiha', 'Al Baqarah', 'Yaseen', 'Ar Rahman'];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Quick links', style: theme.textTheme.bodySmall),
+        const SizedBox(height: 16),
+
+        SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: quickSurahs
+                .map((surah) => SurahLink(surah: surah))
+                .toList(),
+          ),
+        ),
+      ],
+    );
+  }
 }
