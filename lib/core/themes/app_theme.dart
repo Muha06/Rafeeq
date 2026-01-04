@@ -27,8 +27,6 @@ class AppTheme {
         backgroundColor: AppColors.darkBackground,
         foregroundColor: AppColors.textPrimary,
         toolbarHeight: 48,
-        shadowColor: AppColors.textSecondary.withAlpha(150),
-        scrolledUnderElevation: 1, //this creates the divider effect
         surfaceTintColor: Colors.transparent, // color when scrolling
         centerTitle: false,
         titleTextStyle: AppTextStyles.title.copyWith(fontFamily: 'Inter'),

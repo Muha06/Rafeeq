@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/themes/app_colors.dart';
@@ -45,6 +46,50 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
         ),
       ),
 
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          const BottomNavigationBarItem(
+            icon: Icon(Icons.tune),
+            label: 'Content',
+          ),
+          const BottomNavigationBarItem(
+            icon: Icon(CupertinoIcons.list_bullet),
+            label: 'Content',
+          ),
+        ],
+        backgroundColor: theme.scaffoldBackgroundColor,
+        selectedItemColor: Colors.grey,
+        currentIndex: 0,
+        onTap: (index) {
+          if (index == 0)
+            showModalBottomSheet(
+              context: context,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+              ),
+              builder: (context) {
+                return Container(
+                  padding: const EdgeInsets.all(16),
+                  height: 250, // or whatever height you want
+                  child: const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Modify Surahs',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 12),
+                      Text('Options for adding/editing content go here.'),
+                    ],
+                  ),
+                );
+              },
+            );
+        },
+      ),
       body: Padding(
         padding: const EdgeInsets.only(bottom: 16.0),
         child: ListView.builder(
@@ -53,7 +98,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
           itemBuilder: (context, index) {
             if (index == 0) {
               // First item = Surah header
-              return SurahDetails(surah: widget.surah);
+              return SurahDetails(surah: widget.surah, isDark: isDark);
             }
 
             // Rest = Ayah tiles
@@ -72,8 +117,9 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
 }
 
 class SurahDetails extends StatelessWidget {
-  const SurahDetails({super.key, required this.surah});
+  const SurahDetails({super.key, required this.surah, required this.isDark});
   final Surah surah;
+  final bool isDark;
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -104,6 +150,14 @@ class SurahDetails extends StatelessWidget {
           'The opener',
           style: theme.textTheme.bodyMedium!.copyWith(fontSize: 14, height: 1),
         ),
+        const SizedBox(height: 22),
+
+        Image.asset(
+          isDark
+              ? 'assets/images/bismillah_dark.png'
+              : 'assets/images/bismillah_1.png',
+          height: 48,
+        ),
         const SizedBox(height: 16),
       ],
     );
@@ -121,7 +175,7 @@ class AyahTile extends ConsumerWidget {
     final isDark = ref.watch(isDarkProvider);
 
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: theme.cardColor,
