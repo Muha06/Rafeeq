@@ -4,9 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hijri_date/hijri.dart';
 import 'package:rafeeq/core/animations/navigation_animations.dart';
 import 'package:rafeeq/core/themes/app_colors.dart';
+import 'package:rafeeq/features/Quran/domain/entities/ayah.dart';
+import 'package:rafeeq/features/Quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/settings/presentation/pages/settings_page.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
-import 'package:rafeeq/features/surahs/presentation/pages/full_surah_page.dart';
+import 'package:rafeeq/features/Quran/presentation/pages/full_surah_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -96,56 +98,53 @@ class AyahOfTheDay extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     final isDark = ref.watch(isDarkProvider);
 
-    return Card(
-      shadowColor: isDark ? Colors.white38 : Colors.grey[400],
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: theme.cardColor,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        //contant padding
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              //title
-              Text(
-                '==== Ayah of the day ====',
-                textAlign: TextAlign.center,
-                style: theme.textTheme.bodySmall!,
-              ),
-              const SizedBox(height: 16),
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: theme.cardColor,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      //contant padding
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            //title
+            Text(
+              '==== Ayah of the day ====',
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodySmall!,
+            ),
+            const SizedBox(height: 16),
 
-              //arabic
-              Text(
-                'يَـٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوا۟ ٱسْتَعِينُوا۟ بِٱلصَّبْرِ وَٱلصَّلَوٰةِ ۚ إِنَّ ٱللَّهَ مَعَ ٱلصَّـٰبِرِينَ',
-                textAlign: TextAlign.center,
-                textDirection: TextDirection.rtl,
-                style: theme.textTheme.bodyLarge!,
-              ),
-              const SizedBox(height: 8),
+            //arabic
+            Text(
+              'يَـٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوا۟ ٱسْتَعِينُوا۟ بِٱلصَّبْرِ وَٱلصَّلَوٰةِ ۚ إِنَّ ٱللَّهَ مَعَ ٱلصَّـٰبِرِينَ',
+              textAlign: TextAlign.center,
+              textDirection: TextDirection.rtl,
+              style: theme.textTheme.bodyLarge!,
+            ),
+            const SizedBox(height: 8),
 
-              //translation
-              Text(
-                "'O believers! Seek comfort in patience and prayer. Allah is truly with those who are patient.'",
-                textAlign: TextAlign.center,
-                style: theme.textTheme.bodyMedium!.copyWith(
-                  fontStyle: FontStyle.italic,
-                ),
+            //translation
+            Text(
+              "'O believers! Seek comfort in patience and prayer. Allah is truly with those who are patient.'",
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodyMedium!.copyWith(
+                fontStyle: FontStyle.italic,
               ),
-              const SizedBox(height: 8),
+            ),
+            const SizedBox(height: 8),
 
-              Text(
-                '2:128',
-                style: theme.textTheme.bodySmall!.copyWith(
-                  color: const Color.fromRGBO(255, 195, 106, 1),
-                ),
+            Text(
+              '2:128',
+              style: theme.textTheme.bodySmall!.copyWith(
+                color: const Color.fromRGBO(255, 195, 106, 1),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -212,9 +211,12 @@ class SurahTile extends ConsumerWidget {
               ? AppColors.lightTextSecondary.withAlpha(50)
               : AppColors.darkSurface.withAlpha(50),
           onTap: () {
-            pushZoomPage(
+            Navigator.push(
               context,
-              FullSurahPage(surahName: surahName, engName: englName),
+              MaterialPageRoute(
+                builder: (context) =>
+                    FullSurahPage(surah: surahs[0], ayahs: ayahsFatiha),
+              ),
             );
           },
           leading: CircleAvatar(
@@ -262,9 +264,12 @@ class SurahLink extends ConsumerWidget {
               : AppColors.darkSurface.withAlpha(50),
           highlightColor: Colors.transparent,
           onTap: () {
-            pushZoomPage(
+            Navigator.push(
               context,
-              FullSurahPage(surahName: surah, engName: 'Eng name'),
+              MaterialPageRoute(
+                builder: (context) =>
+                    FullSurahPage(surah: surahs[0], ayahs: ayahsFatiha),
+              ),
             );
           },
           child: Container(

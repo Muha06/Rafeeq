@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/themes/app_theme.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
-import 'package:rafeeq/features/surahs/presentation/pages/home_page.dart';
+import 'package:rafeeq/features/Quran/presentation/pages/home_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

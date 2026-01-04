@@ -10,8 +10,10 @@ class AppTextStyles {
 
   // Qur'an Arabic text
   static final TextStyle quranBody = GoogleFonts.amiri(
-    fontSize: 18,
+    // fontFamily: 'Scheherazade', // or AmiriQuran, Cairo
+    fontSize: 20,
     height: 2.0,
+    fontWeight: FontWeight.w400,
   );
 
   // Main body text

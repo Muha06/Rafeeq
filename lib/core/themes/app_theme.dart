@@ -7,8 +7,14 @@ class AppTheme {
   //dark theme
   static ThemeData dark() {
     return ThemeData(
+      useMaterial3: true,
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: {
+          TargetPlatform.android: ZoomPageTransitionsBuilder(),
+          TargetPlatform.iOS: ZoomPageTransitionsBuilder(),
+        },
+      ),
       brightness: Brightness.dark,
-
       scaffoldBackgroundColor: AppColors.darkBackground,
 
       colorScheme: const ColorScheme.dark(
@@ -99,6 +105,13 @@ class AppTheme {
   //light theme
   static ThemeData light() {
     return ThemeData(
+      useMaterial3: true,
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: {
+          TargetPlatform.android: ZoomPageTransitionsBuilder(),
+          TargetPlatform.iOS: ZoomPageTransitionsBuilder(),
+        },
+      ),
       brightness: Brightness.light,
       scaffoldBackgroundColor: AppColors.lightBackground,
       colorScheme: const ColorScheme.light(
@@ -107,13 +120,12 @@ class AppTheme {
       ),
 
       // ===== APPBAR =====
-      appBarTheme: AppBarTheme(
+      appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.lightBackground,
         foregroundColor: AppColors.lightTextPrimary,
         elevation: 0,
         centerTitle: false,
         toolbarHeight: 48,
-        shadowColor: AppColors.textSecondary.withAlpha(150),
         scrolledUnderElevation: 1, //this creates the divider effect
         surfaceTintColor: Colors.transparent, // color when scrolling
       ),
