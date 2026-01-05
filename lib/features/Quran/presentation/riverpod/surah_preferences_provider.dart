@@ -1,7 +1,7 @@
 // Show/hide translation
 import 'package:riverpod/legacy.dart';
 
-final showTranslationProvider = StateProvider<bool>((ref) => false);
+final showTranslationProvider = StateProvider<bool>((ref) => true);
 
 // Font size (for Arabic text)
 final arabicFontSizeProvider = StateProvider<double>((ref) => 20.0);

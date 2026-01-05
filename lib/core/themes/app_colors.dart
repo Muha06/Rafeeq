@@ -20,12 +20,11 @@ class AppColors {
   ); // metadata, ayah numbers
 
   // ==== Light Theme ====
-
+  //background color
   static const Color lightBackground = Color(0xFFF4F6F8);
-  // subtle light shade of dark primary
 
-  static const Color lightSurface = Color(0xFFFDFEFE);
-  // card/elevated bg
+  //light surface
+  static const Color lightSurface = Color(0xFFFFFBF5);
 
   //light theme text colors
   static const Color lightTextPrimary = Color(0xFF0B1A24);

@@ -7,18 +7,13 @@ import 'package:rafeeq/features/Quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/surah_preferences_provider.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
-class FullSurahPage extends ConsumerStatefulWidget {
+class FullSurahPage extends ConsumerWidget {
   const FullSurahPage({super.key, required this.surah, required this.ayahs});
   final List<Ayah> ayahs;
   final Surah surah;
 
   @override
-  ConsumerState<FullSurahPage> createState() => _FullSurahPageState();
-}
-
-class _FullSurahPageState extends ConsumerState<FullSurahPage> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     final theme = Theme.of(context);
     final isDark = ref.watch(isDarkProvider);
 
@@ -28,7 +23,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              widget.surah.nameEnglish,
+              surah.nameEnglish,
               style: theme.textTheme.bodyMedium!.copyWith(
                 color: isDark ? AppColors.textPrimary : AppColors.darkSurface,
                 fontWeight: FontWeight.bold,
@@ -37,7 +32,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
             ),
             const SizedBox(height: 4),
 
-            Text(widget.surah.nameArabic, style: theme.textTheme.bodySmall),
+            Text(surah.nameArabic, style: theme.textTheme.bodySmall),
           ],
         ),
         toolbarHeight: 58,
@@ -54,132 +49,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
                   borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
                 ),
                 builder: (context) {
-                  return Consumer(
-                    builder: (context, ref, _) {
-                      final showTranslation = ref.watch(
-                        showTranslationProvider,
-                      );
-                      final arabicFontSize = ref.watch(arabicFontSizeProvider);
-                      final translationFontSize = ref.watch(
-                        translationFontSizeProvider,
-                      );
-
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 16,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Center(
-                              child: Container(
-                                height: 6,
-                                width: 48,
-                                decoration: BoxDecoration(
-                                  color: AppColors.lightTextSecondary,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-
-                            Center(
-                              child: Text(
-                                'Full Surah Settings',
-                                style: theme.textTheme.titleMedium,
-                              ),
-                            ),
-
-                            Divider(color: theme.dividerColor),
-                            const SizedBox(height: 16),
-
-                            // Show/hide translation
-                            SwitchListTile(
-                              value: showTranslation,
-                              contentPadding: EdgeInsets.zero,
-                              title: Text(
-                                'Show Translation',
-                                style: theme.textTheme.bodyLarge!.copyWith(
-                                  // color: isDark ? Colors.white : Colors.black,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w100,
-                                ),
-                              ),
-                              onChanged: (value) {
-                                ref
-                                        .read(showTranslationProvider.notifier)
-                                        .state =
-                                    value;
-                              },
-                            ),
-
-                            const SizedBox(height: 8),
-
-                            // Font size slider (Arabic)
-                            Text(
-                              'Arabic Font Size: ${arabicFontSize.toInt()}',
-                              style: theme.textTheme.bodySmall!.copyWith(
-                                fontSize: 16,
-                              ),
-                            ),
-                            Slider(
-                              min: 16,
-                              max: 36,
-                              value: arabicFontSize,
-                              onChanged: (value) {
-                                ref
-                                        .read(arabicFontSizeProvider.notifier)
-                                        .state =
-                                    value;
-                              },
-                            ),
-
-                            // Font size slider (Translation)
-                            if (showTranslation) ...[
-                              Text(
-                                'Translation Font Size: ${translationFontSize.toInt()}',
-                              ),
-                              Slider(
-                                min: 12,
-                                max: 28,
-                                value: translationFontSize,
-                                onChanged: (value) {
-                                  ref
-                                          .read(
-                                            translationFontSizeProvider
-                                                .notifier,
-                                          )
-                                          .state =
-                                      value;
-                                },
-                              ),
-                            ],
-
-                            //divider
-                            Divider(color: theme.dividerColor),
-                            const SizedBox(height: 0),
-
-                            //cancel btn
-                            Center(
-                              child: TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text(
-                                  'Close',
-                                  style: theme.textTheme.bodyMedium!.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  );
+                  return const SurahSettingsSheet();
                 },
               );
             },
@@ -192,16 +62,16 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
         padding: const EdgeInsets.only(bottom: 16.0),
         child: ListView.builder(
           padding: EdgeInsets.zero,
-          itemCount: widget.ayahs.length + 1, // +1 for SurahDetails
+          itemCount: ayahs.length + 1, // +1 for SurahDetails
           itemBuilder: (context, index) {
             if (index == 0) {
               // First item = Surah header
-              return SurahDetails(surah: widget.surah, isDark: isDark);
+              return SurahDetails(surah: surah, isDark: isDark);
             }
 
             // Rest = Ayah tiles
-            final ayah = widget.ayahs[index - 1];
-            final isLast = index == widget.ayahs.length;
+            final ayah = ayahs[index - 1];
+            final isLast = index == ayahs.length;
 
             return Padding(
               padding: EdgeInsets.only(bottom: isLast ? 16.0 : 0),
@@ -210,6 +80,120 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
           },
         ),
       ),
+    );
+  }
+}
+
+class SurahSettingsSheet extends StatelessWidget {
+  const SurahSettingsSheet({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Consumer(
+      builder: (context, ref, _) {
+        final showTranslation = ref.watch(showTranslationProvider);
+        final arabicFontSize = ref.watch(arabicFontSizeProvider);
+        final translationFontSize = ref.watch(translationFontSizeProvider);
+
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Center(
+                child: Container(
+                  height: 6,
+                  width: 48,
+                  decoration: BoxDecoration(
+                    color: AppColors.lightTextSecondary,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              Center(
+                child: Text(
+                  'Full Surah Settings',
+                  style: theme.textTheme.titleMedium,
+                ),
+              ),
+
+              Divider(color: theme.dividerColor),
+              const SizedBox(height: 16),
+
+              // Show/hide translation
+              SwitchListTile(
+                value: showTranslation,
+                contentPadding: EdgeInsets.zero,
+                title: Text(
+                  'Show Translation',
+                  style: theme.textTheme.bodyLarge!.copyWith(
+                    // color: isDark ? Colors.white : Colors.black,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w100,
+                  ),
+                ),
+                onChanged: (value) {
+                  ref.read(showTranslationProvider.notifier).state = value;
+                },
+              ),
+
+              const SizedBox(height: 8),
+
+              // Font size slider (Arabic)
+              Text(
+                'Arabic Font Size: ${arabicFontSize.toInt()}',
+                style: theme.textTheme.bodySmall!.copyWith(fontSize: 16),
+              ),
+              Slider(
+                min: 16,
+                max: 36,
+                value: arabicFontSize,
+                onChanged: (value) {
+                  ref.read(arabicFontSizeProvider.notifier).state = value;
+                },
+              ),
+
+              // Font size slider (Translation)
+              if (showTranslation) ...[
+                Text('Translation Font Size: ${translationFontSize.toInt()}'),
+                Slider(
+                  min: 12,
+                  max: 28,
+                  value: translationFontSize,
+                  onChanged: (value) {
+                    ref.read(translationFontSizeProvider.notifier).state =
+                        value;
+                  },
+                ),
+              ],
+
+              //divider
+              Divider(color: theme.dividerColor),
+              const SizedBox(height: 0),
+
+              //cancel btn
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    'Close',
+                    style: theme.textTheme.bodyMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
@@ -283,7 +267,7 @@ class AyahTile extends ConsumerWidget {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: theme.cardColor,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -302,7 +286,7 @@ class AyahTile extends ConsumerWidget {
               ),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(height: 24),
 
             // arabic text (right)
             Align(
@@ -312,13 +296,12 @@ class AyahTile extends ConsumerWidget {
                 textDirection: TextDirection.rtl,
                 style: theme.textTheme.bodyLarge!.copyWith(
                   fontSize: arabicFontSize,
-                  height: 1.8,
-                  fontWeight: FontWeight.w600,
+                  height: 2.5,
+                  fontWeight: FontWeight.w400,
                 ),
               ),
             ),
-
-            const SizedBox(height: 12),
+            const SizedBox(height: 24),
 
             // Translation
             AnimatedSwitcher(
@@ -339,6 +322,22 @@ class AyahTile extends ConsumerWidget {
                       ),
                     )
                   : const SizedBox.shrink(key: ValueKey('hide')),
+            ),
+            if (showTranslation) const SizedBox(height: 20),
+
+            Divider(color: theme.dividerColor),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.bookmark_add_outlined, size: 22),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.share, size: 22),
+                ),
+              ],
             ),
           ],
         ),

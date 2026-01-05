@@ -97,6 +97,7 @@ class AppTheme {
         ),
         backgroundColor: AppColors.darkSurface,
       ),
+      iconTheme: IconThemeData(color: Colors.grey[400]),
     );
   }
 
@@ -149,7 +150,8 @@ class AppTheme {
       // ===== CARD =====
       cardColor: AppColors.lightSurface,
       dividerColor: AppColors.lightTextSecondary.withAlpha(50),
-
+      iconTheme: IconThemeData(color: Colors.grey[800]),
+      
       // ===== SLIDER =====
       sliderTheme: const SliderThemeData(
         activeTrackColor: AppColors.amber,
