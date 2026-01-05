@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/themes/app_colors.dart';
 import 'package:rafeeq/features/Quran/domain/entities/ayah.dart';
 import 'package:rafeeq/features/Quran/domain/entities/surah.dart';
+import 'package:rafeeq/features/Quran/presentation/riverpod/surah_preferences_provider.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class FullSurahPage extends ConsumerStatefulWidget {
@@ -53,28 +54,136 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
                   borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
                 ),
                 builder: (context) {
-                  return Container(
-                    padding: const EdgeInsets.all(16),
-                    height: 250, // or whatever height you want
-                    child: const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Modify Surahs',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+                  return Consumer(
+                    builder: (context, ref, _) {
+                      final showTranslation = ref.watch(
+                        showTranslationProvider,
+                      );
+                      final arabicFontSize = ref.watch(arabicFontSizeProvider);
+                      final translationFontSize = ref.watch(
+                        translationFontSizeProvider,
+                      );
+
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 16,
                         ),
-                        SizedBox(height: 12),
-                        Text('Options for adding/editing content go here.'),
-                      ],
-                    ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Center(
+                              child: Container(
+                                height: 6,
+                                width: 48,
+                                decoration: BoxDecoration(
+                                  color: AppColors.lightTextSecondary,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+
+                            Center(
+                              child: Text(
+                                'Full Surah Settings',
+                                style: theme.textTheme.titleMedium,
+                              ),
+                            ),
+
+                            Divider(color: theme.dividerColor),
+                            const SizedBox(height: 16),
+
+                            // Show/hide translation
+                            SwitchListTile(
+                              value: showTranslation,
+                              contentPadding: EdgeInsets.zero,
+                              title: Text(
+                                'Show Translation',
+                                style: theme.textTheme.bodyLarge!.copyWith(
+                                  // color: isDark ? Colors.white : Colors.black,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w100,
+                                ),
+                              ),
+                              onChanged: (value) {
+                                ref
+                                        .read(showTranslationProvider.notifier)
+                                        .state =
+                                    value;
+                              },
+                            ),
+
+                            const SizedBox(height: 8),
+
+                            // Font size slider (Arabic)
+                            Text(
+                              'Arabic Font Size: ${arabicFontSize.toInt()}',
+                              style: theme.textTheme.bodySmall!.copyWith(
+                                fontSize: 16,
+                              ),
+                            ),
+                            Slider(
+                              min: 16,
+                              max: 36,
+                              value: arabicFontSize,
+                              onChanged: (value) {
+                                ref
+                                        .read(arabicFontSizeProvider.notifier)
+                                        .state =
+                                    value;
+                              },
+                            ),
+
+                            // Font size slider (Translation)
+                            if (showTranslation) ...[
+                              Text(
+                                'Translation Font Size: ${translationFontSize.toInt()}',
+                              ),
+                              Slider(
+                                min: 12,
+                                max: 28,
+                                value: translationFontSize,
+                                onChanged: (value) {
+                                  ref
+                                          .read(
+                                            translationFontSizeProvider
+                                                .notifier,
+                                          )
+                                          .state =
+                                      value;
+                                },
+                              ),
+                            ],
+
+                            //divider
+                            Divider(color: theme.dividerColor),
+                            const SizedBox(height: 0),
+
+                            //cancel btn
+                            Center(
+                              child: TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text(
+                                  'Close',
+                                  style: theme.textTheme.bodyMedium!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   );
                 },
               );
             },
-            icon: Icon(Icons.tune, color: isDark ? Colors.white : Colors.black),
+            icon: const Icon(Icons.tune),
           ),
         ],
       ),
@@ -162,61 +271,77 @@ class AyahTile extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     final theme = Theme.of(context);
     final isDark = ref.watch(isDarkProvider);
+    final showTranslation = ref.watch(showTranslationProvider);
+    final arabicFontSize = ref.watch(arabicFontSizeProvider);
+    final translationFontSize = ref.watch(translationFontSizeProvider);
 
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: theme.cardColor,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // verse number (top-left)
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              ayah.ayahNumber.toString(),
-              textAlign: TextAlign.center,
-              style: theme.textTheme.bodySmall!.copyWith(
-                fontWeight: FontWeight.bold,
-                color: AppColors.amber,
-                fontSize: 16,
+    return AnimatedSize(
+      duration: const Duration(milliseconds: 450),
+      curve: Curves.easeInOut,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: theme.cardColor,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // verse number (top-left)
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                ayah.ayahNumber.toString(),
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodySmall!.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.amber,
+                  fontSize: 16,
+                ),
               ),
             ),
-          ),
 
-          const SizedBox(height: 16),
+            const SizedBox(height: 16),
 
-          // arabic text (right)
-          Align(
-            alignment: Alignment.centerRight,
-            child: Text(
-              ayah.textArabic,
-              textDirection: TextDirection.rtl,
-              style: theme.textTheme.bodyLarge!.copyWith(
-                height: 1.8,
-                fontWeight: FontWeight.w600,
+            // arabic text (right)
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                ayah.textArabic,
+                textDirection: TextDirection.rtl,
+                style: theme.textTheme.bodyLarge!.copyWith(
+                  fontSize: arabicFontSize,
+                  height: 1.8,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
-          ),
 
-          const SizedBox(height: 12),
+            const SizedBox(height: 12),
 
-          // english translation
-          Text(
-            ayah.textEnglish,
-            textAlign: TextAlign.left,
-            style: theme.textTheme.bodyLarge!.copyWith(
-              fontFamily: 'Roboto',
-              fontWeight: isDark ? FontWeight.w300 : FontWeight.w400,
-              letterSpacing: 2,
-              height: 1.7,
-              color: isDark ? Colors.white : Colors.black,
+            // Translation
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+
+              child: showTranslation
+                  ? Text(
+                      key: const ValueKey('translation'),
+                      ayah.textEnglish,
+                      textAlign: TextAlign.left,
+                      style: theme.textTheme.bodyLarge!.copyWith(
+                        fontFamily: 'Roboto',
+                        fontSize: translationFontSize,
+                        fontWeight: isDark ? FontWeight.w300 : FontWeight.w400,
+                        letterSpacing: 2,
+                        height: 1.7,
+                        color: isDark ? Colors.white : Colors.black,
+                      ),
+                    )
+                  : const SizedBox.shrink(key: ValueKey('hide')),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
