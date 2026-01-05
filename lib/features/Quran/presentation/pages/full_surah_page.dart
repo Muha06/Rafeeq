@@ -44,52 +44,41 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
           preferredSize: const Size.fromHeight(1),
           child: Divider(color: theme.dividerColor),
         ),
-      ),
-
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.tune),
-            label: 'Content',
-          ),
-          const BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.list_bullet),
-            label: 'Content',
+        actions: [
+          IconButton(
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                ),
+                builder: (context) {
+                  return Container(
+                    padding: const EdgeInsets.all(16),
+                    height: 250, // or whatever height you want
+                    child: const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Modify Surahs',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 12),
+                        Text('Options for adding/editing content go here.'),
+                      ],
+                    ),
+                  );
+                },
+              );
+            },
+            icon: Icon(Icons.tune, color: isDark ? Colors.white : Colors.black),
           ),
         ],
-        backgroundColor: theme.scaffoldBackgroundColor,
-        selectedItemColor: Colors.grey,
-        currentIndex: 0,
-        onTap: (index) {
-          if (index == 0)
-            showModalBottomSheet(
-              context: context,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-              ),
-              builder: (context) {
-                return Container(
-                  padding: const EdgeInsets.all(16),
-                  height: 250, // or whatever height you want
-                  child: const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Modify Surahs',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 12),
-                      Text('Options for adding/editing content go here.'),
-                    ],
-                  ),
-                );
-              },
-            );
-        },
       ),
+
       body: Padding(
         padding: const EdgeInsets.only(bottom: 16.0),
         child: ListView.builder(
