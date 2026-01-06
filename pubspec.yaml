@@ -20,7 +20,7 @@ dependencies:
   riverpod: ^3.1.0
   flutter_riverpod: ^3.1.0 
   hijri_date: ^1.0.0
-  shimmer: ^3.0.0
+  shimmer: ^3.0.0 
 
 dev_dependencies:
   flutter_test:
@@ -42,6 +42,6 @@ flutter:
     - assets/images/kaaba_2.jpeg
     - assets/images/bismillah_1.png
     - assets/images/bismillah_dark.png
-    
+    - .env
  
  

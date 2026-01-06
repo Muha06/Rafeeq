@@ -6,7 +6,7 @@ import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_surahs_provide
 
 final ayahRepositoryProvider = Provider<AyahRepository>((ref) {
   final remoteDS = ref.watch(
-    QuranremoteApiServiceProvider,
+    quranremoteApiServiceProvider,
   ); // make sure you have this
   return AyahRepository(remoteDS: remoteDS);
 });
