@@ -96,7 +96,6 @@ class AyahOfTheDay extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final isDark = ref.watch(isDarkProvider);
 
     return Container(
       width: double.infinity,
