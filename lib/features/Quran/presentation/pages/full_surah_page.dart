@@ -1,21 +1,24 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/themes/app_colors.dart';
 import 'package:rafeeq/features/Quran/domain/entities/ayah.dart';
 import 'package:rafeeq/features/Quran/domain/entities/surah.dart';
+import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_ayah_provider.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/surah_preferences_provider.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class FullSurahPage extends ConsumerWidget {
-  const FullSurahPage({super.key, required this.surah, required this.ayahs});
-  final List<Ayah> ayahs;
   final Surah surah;
 
+  const FullSurahPage({super.key, required this.surah});
+
   @override
-  Widget build(BuildContext context, ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final isDark = ref.watch(isDarkProvider);
+
+    // Watch ayahs for this surah
+    final ayahsAsync = ref.watch(ayahsFutureProvider(surah.id));
 
     return Scaffold(
       appBar: AppBar(
@@ -23,7 +26,7 @@ class FullSurahPage extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              surah.nameEnglish,
+              surah.nameTransliteration,
               style: theme.textTheme.bodyMedium!.copyWith(
                 color: isDark ? AppColors.textPrimary : AppColors.darkSurface,
                 fontWeight: FontWeight.bold,
@@ -32,57 +35,53 @@ class FullSurahPage extends ConsumerWidget {
             ),
             const SizedBox(height: 4),
 
-            Text(surah.nameArabic, style: theme.textTheme.bodySmall),
+            Text(
+              surah.nameEnglish,
+              style: theme.textTheme.bodySmall!.copyWith(height: 1),
+            ),
           ],
         ),
-        toolbarHeight: 58,
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Divider(color: theme.dividerColor),
-        ),
+        toolbarHeight: 60,
         actions: [
           IconButton(
             onPressed: () {
               showModalBottomSheet(
                 context: context,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-                ),
-                builder: (context) {
-                  return const SurahSettingsSheet();
-                },
+                builder: (context) => const SurahSettingsSheet(),
               );
             },
             icon: const Icon(Icons.tune),
           ),
         ],
       ),
-
-      body: Padding(
-        padding: const EdgeInsets.only(bottom: 16.0),
-        child: ListView.builder(
+      body: ayahsAsync.when(
+        data: (ayahs) => ListView.builder(
           padding: EdgeInsets.zero,
           itemCount: ayahs.length + 1, // +1 for SurahDetails
           itemBuilder: (context, index) {
-            if (index == 0) {
-              // First item = Surah header
-              return SurahDetails(surah: surah, isDark: isDark);
-            }
+            if (index == 0) return SurahDetails(surah: surah, isDark: isDark);
 
-            // Rest = Ayah tiles
             final ayah = ayahs[index - 1];
             final isLast = index == ayahs.length;
-
             return Padding(
               padding: EdgeInsets.only(bottom: isLast ? 16.0 : 0),
-              child: AyahTile(ayah: ayah),
+              child: SlideFadeWrapper(
+                index: index,
+                child: AyahTile(ayah: ayah),
+              ),
             );
           },
         ),
+        loading: () => const Center(
+          child: CircularProgressIndicator(color: AppColors.amber),
+        ),
+        error: (e, _) => Center(child: Text('Failed to load ayahs: $e')),
       ),
     );
   }
 }
+
+// Keep your SurahDetails and AyahTile widgets mostly the same, no changes needed
 
 class SurahSettingsSheet extends StatelessWidget {
   const SurahSettingsSheet({super.key});
@@ -113,7 +112,7 @@ class SurahSettingsSheet extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
 
               Center(
                 child: Text(
@@ -121,6 +120,7 @@ class SurahSettingsSheet extends StatelessWidget {
                   style: theme.textTheme.titleMedium,
                 ),
               ),
+              const SizedBox(height: 16),
 
               Divider(color: theme.dividerColor),
               const SizedBox(height: 16),
@@ -219,20 +219,20 @@ class SurahDetails extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 12),
 
         //Surah title
         Text(
           surah.nameEnglish,
           style: theme.textTheme.titleLarge!.copyWith(fontSize: 16),
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: 12),
 
         Text(
-          'The opener',
+          '${surah.versesCount.toString()} Verses',
           style: theme.textTheme.bodyMedium!.copyWith(fontSize: 14, height: 1),
         ),
-        const SizedBox(height: 22),
+        const SizedBox(height: 12),
 
         Image.asset(
           isDark
@@ -306,7 +306,8 @@ class AyahTile extends ConsumerWidget {
             // Translation
             AnimatedSwitcher(
               duration: const Duration(milliseconds: 200),
-
+              switchInCurve: Curves.easeOutCubic,
+              switchOutCurve: Curves.easeIn,
               child: showTranslation
                   ? Text(
                       key: const ValueKey('translation'),
@@ -342,6 +343,59 @@ class AyahTile extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class SlideFadeWrapper extends StatefulWidget {
+  final Widget child;
+  final int index;
+
+  const SlideFadeWrapper({super.key, required this.child, required this.index});
+
+  @override
+  State<SlideFadeWrapper> createState() => _SlideFadeWrapperState();
+}
+
+class _SlideFadeWrapperState extends State<SlideFadeWrapper>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _fade;
+  late final Animation<Offset> _slide;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+
+    _fade = CurvedAnimation(parent: _controller, curve: Curves.easeOut);
+
+    _slide = Tween<Offset>(
+      begin: const Offset(0, 0.08),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
+
+    // stagger effect
+    Future.delayed(Duration(milliseconds: widget.index * 40), () {
+      if (mounted) _controller.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(
+      opacity: _fade,
+      child: SlideTransition(position: _slide, child: widget.child),
     );
   }
 }

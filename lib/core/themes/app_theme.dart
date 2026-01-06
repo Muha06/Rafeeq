@@ -121,12 +121,11 @@ class AppTheme {
       // ===== APPBAR =====
       appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.lightBackground,
+        surfaceTintColor: AppColors.lightBackground,
         foregroundColor: AppColors.lightTextPrimary,
         elevation: 0,
         centerTitle: false,
         toolbarHeight: 48,
-        scrolledUnderElevation: 1, //this creates the divider effect
-        surfaceTintColor: Colors.transparent, // color when scrolling
       ),
 
       //=====text theme========
@@ -150,8 +149,9 @@ class AppTheme {
       // ===== CARD =====
       cardColor: AppColors.lightSurface,
       dividerColor: AppColors.lightTextSecondary.withAlpha(50),
+      dividerTheme: const DividerThemeData(space: 0),
       iconTheme: IconThemeData(color: Colors.grey[800]),
-      
+
       // ===== SLIDER =====
       sliderTheme: const SliderThemeData(
         activeTrackColor: AppColors.amber,

@@ -4,11 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hijri_date/hijri.dart';
 import 'package:rafeeq/core/animations/navigation_animations.dart';
 import 'package:rafeeq/core/themes/app_colors.dart';
-import 'package:rafeeq/features/Quran/domain/entities/ayah.dart';
 import 'package:rafeeq/features/Quran/domain/entities/surah.dart';
+import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_surahs_provider.dart';
 import 'package:rafeeq/features/settings/presentation/pages/settings_page.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 import 'package:rafeeq/features/Quran/presentation/pages/full_surah_page.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -60,7 +61,7 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(height: 16),
 
               //horizontal listview
-              const QuickSurahLinks(),
+              //  const QuickSurahLinks(surah: ,),
               const SizedBox(height: 16),
 
               //all surahs
@@ -96,8 +97,6 @@ class AyahOfTheDay extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final isDark = ref.watch(isDarkProvider);
-
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -151,49 +150,50 @@ class AyahOfTheDay extends ConsumerWidget {
   }
 }
 
-class AllSurahsList extends StatelessWidget {
+class AllSurahsList extends ConsumerWidget {
   const AllSurahsList({super.key, required this.theme});
 
   final ThemeData theme;
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('All Surahs', style: theme.textTheme.bodySmall!),
-        const SizedBox(height: 16),
+  Widget build(BuildContext context, ref) {
+    final surahAsync = ref.watch(surahsFutureProvider);
 
-        const SurahTile(
-          index: '1',
-          surahName: 'Al Fatiha',
-          englName: 'The Opener',
-          verses: '7',
-        ),
-        const SurahTile(
-          index: '2',
-          surahName: 'Al Baqarah',
-          englName: 'The Cow',
-          verses: '286',
-        ),
-      ],
+    return surahAsync.when(
+      error: (error, stackTrace) => const Center(child: Text('Error ')),
+      loading: () => ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        //padding: const EdgeInsets.symmetric(horizontal: 16),
+        itemCount: 8,
+        itemBuilder: (_, __) => const SurahTileShimmer(),
+      ),
+      data: (data) {
+        final surahs = data;
+
+        return ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: surahs.length,
+          itemBuilder: (context, index) {
+            final surah = surahs[index];
+
+            return SlideFadeWrapper(
+              index: index,
+              child: SurahTile(surah: surah),
+              // child: const SurahTileShimmer(),
+            );
+          },
+        );
+      },
     );
   }
 }
 
 class SurahTile extends ConsumerWidget {
-  final String index;
-  final String surahName;
-  final String englName;
-  final String verses;
+  final Surah surah;
 
-  const SurahTile({
-    super.key,
-    required this.index,
-    required this.surahName,
-    required this.englName,
-    required this.verses,
-  });
+  const SurahTile({super.key, required this.surah});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -214,15 +214,14 @@ class SurahTile extends ConsumerWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    FullSurahPage(surah: surahs[0], ayahs: ayahsFatiha),
+                builder: (context) => FullSurahPage(surah: surah),
               ),
             );
           },
           leading: CircleAvatar(
             backgroundColor: AppColors.amber,
             child: Text(
-              index,
+              surah.id.toString(),
               style: const TextStyle(
                 color: AppColors.darkBackground,
                 fontWeight: FontWeight.bold,
@@ -233,9 +232,87 @@ class SurahTile extends ConsumerWidget {
             horizontal: 14,
             vertical: 8,
           ),
-          title: Text(surahName, style: theme.textTheme.titleMedium),
-          subtitle: Text(englName, style: theme.textTheme.bodySmall),
-          trailing: Text(verses, style: theme.textTheme.bodySmall),
+          title: Text(
+            surah.nameTransliteration,
+            style: theme.textTheme.titleMedium,
+          ),
+          subtitle: Text(surah.nameEnglish, style: theme.textTheme.bodySmall),
+          trailing: Text(
+            surah.versesCount.toString(),
+            style: theme.textTheme.bodySmall,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SurahTileShimmer extends StatelessWidget {
+  const SurahTileShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    final baseColor = isDark
+        ? theme.cardColor.withAlpha(150)
+        : Colors.grey.shade300;
+    final highlightColor = isDark ? Colors.grey[800]! : Colors.grey.shade100;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Shimmer.fromColors(
+        baseColor: baseColor,
+        highlightColor: highlightColor,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: AppColors.darkSurface),
+            //color: isDark ? AppColors.darkSurface : AppColors.darkSurface,
+          ),
+          child: ListTile(
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 14,
+              vertical: 8,
+            ),
+
+            // Leading circle (surah number)
+            leading: const CircleAvatar(backgroundColor: Colors.white),
+
+            // Title shimmer
+            title: Container(
+              height: 16,
+              width: 140,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(6),
+              ),
+            ),
+
+            // Subtitle shimmer
+            subtitle: Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Container(
+                height: 12,
+                width: 40,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+              ),
+            ),
+
+            // Trailing ayah count
+            trailing: Container(
+              height: 12,
+              width: 24,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(6),
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -243,7 +320,7 @@ class SurahTile extends ConsumerWidget {
 }
 
 class SurahLink extends ConsumerWidget {
-  final String surah;
+  final Surah surah;
 
   const SurahLink({super.key, required this.surah});
 
@@ -267,8 +344,7 @@ class SurahLink extends ConsumerWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    FullSurahPage(surah: surahs[0], ayahs: ayahsFatiha),
+                builder: (context) => FullSurahPage(surah: surah),
               ),
             );
           },
@@ -276,7 +352,7 @@ class SurahLink extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: Center(
               child: Text(
-                surah,
+                surah.nameEnglish,
                 style: theme.textTheme.bodySmall!.copyWith(
                   fontWeight: FontWeight.bold,
                   color: isDark
@@ -293,13 +369,22 @@ class SurahLink extends ConsumerWidget {
 }
 
 class QuickSurahLinks extends StatelessWidget {
-  const QuickSurahLinks({super.key});
-
+  const QuickSurahLinks({super.key, required this.surah});
+  final Surah surah;
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final quickSurahs = ['Al Fatiha', 'Al Baqarah', 'Yaseen', 'Ar Rahman'];
+    final quickSurahs = [
+      const Surah(
+        id: 0,
+        nameArabic: 'nameArabic',
+        nameEnglish: 'nameEnglish',
+        nameTransliteration: 'nameTransliteration',
+        versesCount: 0,
+        isMeccan: true,
+      ),
+    ];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
