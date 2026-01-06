@@ -4,8 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hijri_date/hijri.dart';
 import 'package:rafeeq/core/animations/navigation_animations.dart';
 import 'package:rafeeq/core/themes/app_colors.dart';
-import 'package:rafeeq/features/Quran/domain/entities/ayah.dart';
-import 'package:rafeeq/features/Quran/domain/entities/surah.dart';
+import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_surahs_provider.dart';
 import 'package:rafeeq/features/settings/presentation/pages/settings_page.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 import 'package:rafeeq/features/Quran/presentation/pages/full_surah_page.dart';
@@ -96,7 +95,6 @@ class AyahOfTheDay extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -150,46 +148,51 @@ class AyahOfTheDay extends ConsumerWidget {
   }
 }
 
-class AllSurahsList extends StatelessWidget {
+class AllSurahsList extends ConsumerWidget {
   const AllSurahsList({super.key, required this.theme});
 
   final ThemeData theme;
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('All Surahs', style: theme.textTheme.bodySmall!),
-        const SizedBox(height: 16),
+  Widget build(BuildContext context, ref) {
+    final surahAsync = ref.watch(surahsFutureProvider);
 
-        const SurahTile(
-          index: '1',
-          surahName: 'Al Fatiha',
-          englName: 'The Opener',
-          verses: '7',
-        ),
-        const SurahTile(
-          index: '2',
-          surahName: 'Al Baqarah',
-          englName: 'The Cow',
-          verses: '286',
-        ),
-      ],
+    return surahAsync.when(
+      error: (error, stackTrace) => const Center(child: Text('Error ')),
+      loading: () => const Center(child: CircularProgressIndicator()),
+      data: (data) {
+        final surahs = data;
+
+        return ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: surahs.length,
+          itemBuilder: (context, index) {
+            final surah = surahs[index];
+
+            return SurahTile(
+              index: surah.id.toString(),
+              nameTransliteration: surah.nameTransliteration,
+              englName: surah.nameEnglish,
+              verses: surah.versesCount.toString(),
+            );
+          },
+        );
+      },
     );
   }
 }
 
 class SurahTile extends ConsumerWidget {
   final String index;
-  final String surahName;
+  final String nameTransliteration;
   final String englName;
   final String verses;
 
   const SurahTile({
     super.key,
     required this.index,
-    required this.surahName,
+    required this.nameTransliteration,
     required this.englName,
     required this.verses,
   });
@@ -212,10 +215,7 @@ class SurahTile extends ConsumerWidget {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    FullSurahPage(surah: surahs[0], ayahs: ayahsFatiha),
-              ),
+              MaterialPageRoute(builder: (context) => const FullSurahPage()),
             );
           },
           leading: CircleAvatar(
@@ -232,7 +232,7 @@ class SurahTile extends ConsumerWidget {
             horizontal: 14,
             vertical: 8,
           ),
-          title: Text(surahName, style: theme.textTheme.titleMedium),
+          title: Text(nameTransliteration, style: theme.textTheme.titleMedium),
           subtitle: Text(englName, style: theme.textTheme.bodySmall),
           trailing: Text(verses, style: theme.textTheme.bodySmall),
         ),
@@ -265,10 +265,7 @@ class SurahLink extends ConsumerWidget {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    FullSurahPage(surah: surahs[0], ayahs: ayahsFatiha),
-              ),
+              MaterialPageRoute(builder: (context) => const FullSurahPage()),
             );
           },
           child: Container(

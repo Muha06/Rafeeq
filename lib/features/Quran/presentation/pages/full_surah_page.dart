@@ -7,14 +7,90 @@ import 'package:rafeeq/features/Quran/presentation/riverpod/surah_preferences_pr
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class FullSurahPage extends ConsumerWidget {
-  const FullSurahPage({super.key, required this.surah, required this.ayahs});
-  final List<Ayah> ayahs;
-  final Surah surah;
+  const FullSurahPage({super.key});
 
   @override
   Widget build(BuildContext context, ref) {
     final theme = Theme.of(context);
     final isDark = ref.watch(isDarkProvider);
+
+    //sample data
+
+    const List<Ayah> ayahsFatiha = [
+      Ayah(
+        id: 1,
+        surahId: 1,
+        ayahNumber: 1,
+        textArabic: 'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ',
+        textEnglish:
+            'In the name of Allah, the Most Gracious, the Most Merciful.',
+      ),
+      Ayah(
+        id: 2,
+        surahId: 1,
+        ayahNumber: 2,
+        textArabic: 'الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ',
+        textEnglish: 'All praise is for Allah—Lord of all worlds.',
+      ),
+      Ayah(
+        id: 3,
+        surahId: 1,
+        ayahNumber: 3,
+        textArabic: 'الرَّحْمَٰنِ الرَّحِيمِ',
+        textEnglish: 'The Most Gracious, the Most Merciful.',
+      ),
+      Ayah(
+        id: 4,
+        surahId: 1,
+        ayahNumber: 4,
+        textArabic: 'مَالِكِ يَوْمِ الدِّينِ',
+        textEnglish: 'Master of the Day of Judgment.',
+      ),
+      Ayah(
+        id: 5,
+        surahId: 1,
+        ayahNumber: 5,
+        textArabic: 'إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ',
+        textEnglish: 'You alone we worship, and You alone we ask for help.',
+      ),
+      Ayah(
+        id: 6,
+        surahId: 1,
+        ayahNumber: 6,
+        textArabic: 'اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ',
+        textEnglish: 'Guide us to the straight path.',
+      ),
+      Ayah(
+        id: 7,
+        surahId: 1,
+        ayahNumber: 7,
+        textArabic:
+            'صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ',
+        textEnglish:
+            'The path of those upon whom You have bestowed favor, not of those who have evoked Your anger or gone astray.',
+      ),
+    ];
+    final ayahs = ayahsFatiha;
+
+    const List<Surah> surahs = [
+      Surah(
+        id: 1,
+        nameArabic: 'الفاتحة',
+        nameEnglish: 'The Opener',
+        nameTransliteration: 'Al Fatiha',
+        versesCount: 7,
+        isMeccan: true,
+      ),
+      Surah(
+        id: 2,
+        nameArabic: 'البقرة',
+        nameTransliteration: 'Al-Baqarah',
+        nameEnglish: 'The Cow',
+        versesCount: 286,
+        isMeccan: false,
+      ),
+    ];
+    final surah = surahs[0];
 
     return Scaffold(
       appBar: AppBar(

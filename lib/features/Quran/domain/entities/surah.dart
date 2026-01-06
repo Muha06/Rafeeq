@@ -1,7 +1,8 @@
 class Surah {
   final int id;
-  final String nameArabic;
-  final String nameEnglish;
+  final String nameArabic; // 'الفاتحة'
+  final String nameEnglish; // 'The Opener'
+  final String nameTransliteration; // 'Al Fatiha'
   final int versesCount;
   final bool isMeccan;
 
@@ -9,26 +10,10 @@ class Surah {
     required this.id,
     required this.nameArabic,
     required this.nameEnglish,
+    required this.nameTransliteration,
     required this.versesCount,
     required this.isMeccan,
   });
 }
 
-//sample data
 
-const List<Surah> surahs = [
-  Surah(
-    id: 1,
-    nameArabic: 'الفاتحة',
-    nameEnglish: 'Al-Fatiha',
-    versesCount: 7,
-    isMeccan: true,
-  ),
-  Surah(
-    id: 2,
-    nameArabic: 'البقرة',
-    nameEnglish: 'Al-Baqarah',
-    versesCount: 286,
-    isMeccan: false,
-  ),
-];
