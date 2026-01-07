@@ -41,18 +41,10 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               onTap: () {
                 showThemePicker(context);
               },
-              leading: SizedBox(
+              leading: const SizedBox(
                 height: 48,
                 width: 48,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: isDark
-                        ? AppColors.darkSurface
-                        : AppColors.lightSurface,
-                  ),
-                  child: const Center(child: Icon(CupertinoIcons.paintbrush)),
-                ),
+                child: Icon(CupertinoIcons.paintbrush),
               ),
               title: Text('Theme', style: theme.textTheme.titleMedium),
               subtitle: Text(
@@ -146,7 +138,7 @@ class _ThemePickerSheetState extends ConsumerState<ThemePickerSheet> {
               child: Text(
                 'Close',
                 style: theme.textTheme.bodyMedium!.copyWith(
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),

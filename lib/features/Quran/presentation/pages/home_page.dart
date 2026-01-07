@@ -97,6 +97,8 @@ class AyahOfTheDay extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
+    final isDark = ref.watch(isDarkProvider);
+
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -123,7 +125,9 @@ class AyahOfTheDay extends ConsumerWidget {
               'يَـٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوا۟ ٱسْتَعِينُوا۟ بِٱلصَّبْرِ وَٱلصَّلَوٰةِ ۚ إِنَّ ٱللَّهَ مَعَ ٱلصَّـٰبِرِينَ',
               textAlign: TextAlign.center,
               textDirection: TextDirection.rtl,
-              style: theme.textTheme.bodyLarge!,
+              style: theme.textTheme.bodyLarge!.copyWith(
+                fontWeight: isDark ? FontWeight.w300 : FontWeight.w400,
+              ),
             ),
             const SizedBox(height: 8),
 
@@ -131,9 +135,7 @@ class AyahOfTheDay extends ConsumerWidget {
             Text(
               "'O believers! Seek comfort in patience and prayer. Allah is truly with those who are patient.'",
               textAlign: TextAlign.center,
-              style: theme.textTheme.bodyMedium!.copyWith(
-                fontStyle: FontStyle.italic,
-              ),
+              style: theme.textTheme.bodyMedium!,
             ),
             const SizedBox(height: 8),
 
@@ -201,10 +203,10 @@ class SurahTile extends ConsumerWidget {
     final isDark = ref.watch(isDarkProvider);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Material(
         color: theme.cardColor,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(14),
         clipBehavior: Clip.hardEdge,
         child: ListTile(
           splashColor: isDark

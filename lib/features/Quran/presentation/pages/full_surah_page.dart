@@ -131,9 +131,9 @@ class SurahSettingsSheet extends StatelessWidget {
                 contentPadding: EdgeInsets.zero,
                 title: Text(
                   'Show Translation',
-                  style: theme.textTheme.bodyLarge!.copyWith(
+                  style: theme.textTheme.bodyMedium!.copyWith(
                     // color: isDark ? Colors.white : Colors.black,
-                    fontSize: 22,
+                    fontSize: 18,
                     fontWeight: FontWeight.w100,
                   ),
                 ),
@@ -160,7 +160,10 @@ class SurahSettingsSheet extends StatelessWidget {
 
               // Font size slider (Translation)
               if (showTranslation) ...[
-                Text('Translation Font Size: ${translationFontSize.toInt()}'),
+                Text(
+                  'Translation Font Size: ${translationFontSize.toInt()}',
+                  style: theme.textTheme.bodySmall!.copyWith(fontSize: 16),
+                ),
                 Slider(
                   min: 12,
                   max: 28,
@@ -261,7 +264,7 @@ class AyahTile extends ConsumerWidget {
 
     return AnimatedSize(
       duration: const Duration(milliseconds: 450),
-      curve: Curves.easeInOut,
+      curve: Curves.easeIn,
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
         padding: const EdgeInsets.all(16),
@@ -295,9 +298,8 @@ class AyahTile extends ConsumerWidget {
                 ayah.textArabic,
                 textDirection: TextDirection.rtl,
                 style: theme.textTheme.bodyLarge!.copyWith(
+                  fontWeight: isDark ? FontWeight.w300 : FontWeight.w400,
                   fontSize: arabicFontSize,
-                  height: 2.5,
-                  fontWeight: FontWeight.w400,
                 ),
               ),
             ),
@@ -305,21 +307,15 @@ class AyahTile extends ConsumerWidget {
 
             // Translation
             AnimatedSwitcher(
-              duration: const Duration(milliseconds: 200),
-              switchInCurve: Curves.easeOutCubic,
-              switchOutCurve: Curves.easeIn,
+              duration: const Duration(milliseconds: 100),
               child: showTranslation
                   ? Text(
                       key: const ValueKey('translation'),
                       ayah.textEnglish,
                       textAlign: TextAlign.left,
-                      style: theme.textTheme.bodyLarge!.copyWith(
-                        fontFamily: 'Roboto',
+                      style: theme.textTheme.bodyMedium!.copyWith(
+                        fontWeight: isDark ? FontWeight.w400 : FontWeight.w500,
                         fontSize: translationFontSize,
-                        fontWeight: isDark ? FontWeight.w300 : FontWeight.w400,
-                        letterSpacing: 2,
-                        height: 1.7,
-                        color: isDark ? Colors.white : Colors.black,
                       ),
                     )
                   : const SizedBox.shrink(key: ValueKey('hide')),

@@ -9,15 +9,20 @@ class AppTextStyles {
   );
 
   // Qur'an Arabic text
-  static final TextStyle quranBody = GoogleFonts.amiri(
-    // fontFamily: 'Scheherazade', // or AmiriQuran, Cairo
-    fontSize: 20,
-    height: 2.0,
-    fontWeight: FontWeight.w400,
+  static final TextStyle quranBody = GoogleFonts.scheherazadeNew(
+    fontSize: 22,
+    height: 2.5,
+    //fontweight: set in the widget
+    wordSpacing: 2,
   );
 
-  // Main body text
-  static final TextStyle body = GoogleFonts.lato(fontSize: 16, height: 1.6);
+  // Main body text(Translation)
+  static final TextStyle body = GoogleFonts.inter(
+    fontSize: 19,
+    height: 1.7,
+    // fontWeight: FontWeight.w400, set in the text widget
+    letterSpacing: 2,
+  );
 
   // Secondary / caption text
   static final TextStyle secondary = GoogleFonts.lato(fontSize: 14);

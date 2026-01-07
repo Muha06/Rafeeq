@@ -45,7 +45,7 @@ class AppTheme {
         ),
         //Normal body
         bodyMedium: AppTextStyles.body.copyWith(
-          color: AppColors.textBody, // dark
+          color: AppColors.textBody, // white
         ),
         //small text
         bodySmall: AppTextStyles.secondary.copyWith(
@@ -134,12 +134,15 @@ class AppTheme {
         titleLarge: AppTextStyles.title.copyWith(
           color: AppColors.lightTextPrimary,
         ),
+
         //Arabic
         bodyLarge: AppTextStyles.quranBody.copyWith(
           color: AppColors.lightTextPrimary,
         ),
-        //Normal body
+
+        //Normal body(Translation)
         bodyMedium: AppTextStyles.body.copyWith(color: AppColors.lightTextBody),
+
         //small text
         bodySmall: AppTextStyles.secondary.copyWith(
           color: AppColors.lightTextSecondary,
@@ -203,7 +206,7 @@ class AppTheme {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
         ),
-        backgroundColor: AppColors.lightSurface,
+        backgroundColor: AppColors.lightBackground,
       ),
     );
   }
