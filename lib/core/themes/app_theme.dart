@@ -86,10 +86,12 @@ class AppTheme {
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: AppColors.amber,
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           overlayColor: Colors.transparent,
           splashFactory: NoSplash.splashFactory,
           textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+          padding: EdgeInsets.zero, // remove all padding
+          minimumSize: Size.zero, // optional: remove minimum size
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap, // shrink tap area
         ),
       ),
       bottomSheetTheme: const BottomSheetThemeData(
@@ -190,16 +192,14 @@ class AppTheme {
       ),
 
       textButtonTheme: TextButtonThemeData(
-        style: ButtonStyle(
-          foregroundColor: WidgetStateProperty.all(AppColors.amber),
-          padding: WidgetStateProperty.all(
-            const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          ),
-          overlayColor: WidgetStateProperty.all(Colors.transparent),
+        style: TextButton.styleFrom(
+          foregroundColor: AppColors.amber,
+          overlayColor: Colors.transparent,
           splashFactory: NoSplash.splashFactory,
-          textStyle: WidgetStateProperty.all(
-            const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-          ),
+          textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+          padding: EdgeInsets.zero, // remove all padding
+          minimumSize: Size.zero, // optional: remove minimum size
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap, // shrink tap area
         ),
       ),
 

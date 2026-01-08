@@ -33,6 +33,11 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
+  bool isFriday() {
+    final today = DateTime.now().weekday; // 1 = Monday, 7 = Sunday
+    return today == DateTime.friday; // 5 = Friday
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -53,7 +58,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                 snap: false,
                 title: GestureDetector(
                   onTap: scrollToTop,
-                  child: Text('Rafiq', style: theme.appBarTheme.titleTextStyle),
+                  child: Text(
+                    'Rafeeq',
+                    style: theme.appBarTheme.titleTextStyle,
+                  ),
                 ),
                 actions: [
                   IconButton(
@@ -89,6 +97,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                 ),
               ),
               const SliverToBoxAdapter(child: SizedBox(height: 16)),
+
+              if (isFriday())
+                SliverToBoxAdapter(child: FridayReminder(isFriday: isFriday())),
 
               // STICKY QUICKSURAHLINK
               SliverPersistentHeader(
@@ -141,6 +152,94 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 }
 
+class FridayReminder extends ConsumerWidget {
+  const FridayReminder({super.key, required this.isFriday});
+  final bool isFriday;
+  @override
+  Widget build(BuildContext context, ref) {
+    final theme = Theme.of(context);
+    final isDark = ref.watch(isDarkProvider);
+
+    if (!isFriday) return const SizedBox.shrink(); // hide if not Friday
+
+    const surahAlKahf = Surah(
+      id: 18,
+      nameArabic: 'الكهف',
+      nameEnglish: 'Al-Kahf',
+      nameTransliteration: 'Al Kahf',
+      versesCount: 110,
+      isMeccan: false, // Al-Kahf is Madani
+    );
+
+    return Container(
+      margin: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            Icons.book,
+            color: isDark ? AppColors.lightBackground : AppColors.lightTextBody,
+          ),
+          const SizedBox(width: 16),
+
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("It's Friday!", style: theme.textTheme.bodySmall),
+                const SizedBox(height: 12),
+
+                Text.rich(
+                  TextSpan(
+                    text: 'Don’t forget to read ',
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      color: isDark ? Colors.white70 : Colors.black87,
+                      height: 1.3,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: 'Surah Al-Kahf',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: isDark ? Colors.white70 : Colors.black,
+                        ),
+                      ),
+                      const TextSpan(text: ' today to earn blessings!'),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
+
+                TextButton(
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          const FullSurahPage(surah: surahAlKahf),
+                    ),
+                  ),
+                  child: Text(
+                    'Tap to read',
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      color: isDark ? AppColors.amber : Colors.black,
+                      fontWeight: FontWeight.bold,
+                      height: 1.3,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class SimpleSliverHeaderDelegate extends SliverPersistentHeaderDelegate {
   final Widget child;
   final double height;
@@ -176,7 +275,7 @@ class GreetingsRow extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final theme = Theme.of(context); 
+    final theme = Theme.of(context);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
