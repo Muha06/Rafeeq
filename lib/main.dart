@@ -2,12 +2,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:rafeeq/core/themes/app_theme.dart';
+import 'package:rafeeq/features/Quran/data/models/surah_hive.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 import 'package:rafeeq/features/Quran/presentation/pages/home_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+ 
+ //HIVE
+  await Hive.initFlutter();
+  Hive.registerAdapter(SurahHiveAdapter());
+  await Hive.openBox<SurahHive>('surahs');
 
   try {
     await dotenv.load(fileName: ".env");

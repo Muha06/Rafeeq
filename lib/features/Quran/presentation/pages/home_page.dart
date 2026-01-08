@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(height: 16),
 
               //Daily ayah card
-              AyahOfTheDay(theme: theme),
+              const AyahOfTheDay(),
               const SizedBox(height: 16),
 
               //horizontal listview
@@ -79,25 +79,19 @@ class _HomePageState extends State<HomePage> {
       children: [
         Image.asset('assets/images/salam_amber.png', height: 50, width: 100),
 
-        Text(
-          formattedHijri,
-          style: theme.textTheme.bodySmall!.copyWith(
-            fontStyle: FontStyle.italic,
-          ),
-        ),
+        Text(formattedHijri, style: theme.textTheme.bodySmall),
       ],
     );
   }
 }
 
 class AyahOfTheDay extends ConsumerWidget {
-  const AyahOfTheDay({super.key, required this.theme});
-
-  final ThemeData theme;
+  const AyahOfTheDay({super.key});
 
   @override
   Widget build(BuildContext context, ref) {
     final isDark = ref.watch(isDarkProvider);
+    final theme = Theme.of(context);
 
     return Container(
       width: double.infinity,
@@ -165,8 +159,7 @@ class AllSurahsList extends ConsumerWidget {
       error: (error, stackTrace) => const Center(child: Text('Error ')),
       loading: () => ListView.builder(
         shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        //padding: const EdgeInsets.symmetric(horizontal: 16),
+        physics: const NeverScrollableScrollPhysics(), 
         itemCount: 8,
         itemBuilder: (_, __) => const SurahTileShimmer(),
       ),

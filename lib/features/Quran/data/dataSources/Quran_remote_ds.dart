@@ -75,6 +75,8 @@ class QuranApiService {
       try {
         final data = json.decode(response.body);
         final chapters = data['chapters'] as List<dynamic>;
+        print('Api fetched successfully: ${chapters.length}');
+        
         return chapters.map((json) => SurahDto.fromJson(json)).toList();
       } catch (e) {
         throw Exception('Failed to parse surahs: $e');

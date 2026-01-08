@@ -27,11 +27,7 @@ class FullSurahPage extends ConsumerWidget {
           children: [
             Text(
               surah.nameTransliteration,
-              style: theme.textTheme.bodyMedium!.copyWith(
-                color: isDark ? AppColors.textPrimary : AppColors.darkSurface,
-                fontWeight: FontWeight.bold,
-                height: 1,
-              ),
+              style: theme.textTheme.titleLarge!.copyWith(fontSize: 16),
             ),
             const SizedBox(height: 4),
 
@@ -233,7 +229,7 @@ class SurahDetails extends StatelessWidget {
 
         Text(
           '${surah.versesCount.toString()} Verses',
-          style: theme.textTheme.bodyMedium!.copyWith(fontSize: 14, height: 1),
+          style: theme.textTheme.bodySmall!,
         ),
         const SizedBox(height: 12),
 

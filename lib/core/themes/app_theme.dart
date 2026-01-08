@@ -26,10 +26,10 @@ class AppTheme {
       appBarTheme: AppBarTheme(
         backgroundColor: AppColors.darkBackground,
         foregroundColor: AppColors.textPrimary,
-        toolbarHeight: 48,
+        toolbarHeight: 52,
         surfaceTintColor: Colors.transparent, // color when scrolling
         centerTitle: false,
-        titleTextStyle: AppTextStyles.title.copyWith(fontFamily: 'Inter'),
+        titleTextStyle: AppTextStyles.title,
         actionsIconTheme: const IconThemeData(color: Colors.white, size: 26),
       ),
 
@@ -38,6 +38,7 @@ class AppTheme {
         //title
         titleLarge: AppTextStyles.title.copyWith(
           color: AppColors.textPrimary, // for dark theme
+          height: 1,
         ),
         //arabic
         bodyLarge: AppTextStyles.quranBody.copyWith(
