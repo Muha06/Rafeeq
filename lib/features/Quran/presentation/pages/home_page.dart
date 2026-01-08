@@ -11,69 +11,172 @@ import 'package:rafeeq/features/settings/presentation/provider/theme_provider.da
 import 'package:rafeeq/features/Quran/presentation/pages/full_surah_page.dart';
 import 'package:shimmer/shimmer.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  ConsumerState<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends ConsumerState<HomePage> {
   final todayHijri = HijriDate.now();
-
   String get formattedHijri => todayHijri.toFormat('MMMM dd, yyyy h');
+  final ScrollController scrollController = ScrollController();
+
+  void scrollToTop() {
+    scrollController.animateTo(
+      0,
+      duration: Durations.short4,
+      curve: Curves.easeInOut,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isDark = ref.watch(isDarkProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Rafiq', style: theme.appBarTheme.titleTextStyle),
-        actions: [
-          IconButton(
-            onPressed: () {
-              pushLeftPage(context, const SettingsPage());
-            },
-            icon: const Icon(CupertinoIcons.settings),
-          ),
-        ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Divider(thickness: 1, color: theme.dividerColor.withAlpha(20)),
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 14.0),
+      body: SafeArea(
         child: RefreshIndicator(
           onRefresh: () async {
             return await Future.delayed(const Duration(seconds: 3));
           },
-          child: ListView(
+          child: CustomScrollView(
+            controller: scrollController,
             physics: const AlwaysScrollableScrollPhysics(),
-            children: [
-              //greetings date row
-              greetingRow(theme),
-              const SizedBox(height: 16),
+            slivers: [
+              SliverAppBar(
+                pinned: false,
+                floating: true,
+                snap: false,
+                title: GestureDetector(
+                  onTap: scrollToTop,
+                  child: Text('Rafiq', style: theme.appBarTheme.titleTextStyle),
+                ),
+                actions: [
+                  IconButton(
+                    onPressed: () {
+                      pushLeftPage(context, const SettingsPage());
+                    },
+                    icon: const Icon(CupertinoIcons.settings),
+                  ),
+                ],
+                bottom: PreferredSize(
+                  preferredSize: const Size.fromHeight(1),
+                  child: Divider(
+                    thickness: 1,
+                    color: theme.dividerColor.withAlpha(20),
+                  ),
+                ),
+              ),
 
-              //Daily ayah card
-              const AyahOfTheDay(),
-              const SizedBox(height: 16),
+              //GREETINGS
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                  child: GreetingsRow(formattedHijri: formattedHijri),
+                ),
+              ),
+              const SliverToBoxAdapter(child: SizedBox(height: 16)),
 
-              //horizontal listview
-              //  const QuickSurahLinks(surah: ,),
-              const SizedBox(height: 16),
+              //AYAH OF THE DAY
+              const SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 14.0),
+                  child: AyahOfTheDay(),
+                ),
+              ),
+              const SliverToBoxAdapter(child: SizedBox(height: 16)),
 
-              //all surahs
-              AllSurahsList(theme: theme),
+              // STICKY QUICKSURAHLINK
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: SimpleSliverHeaderDelegate(
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 14.0,
+                      vertical: 8,
+                    ),
+                    child: QuickSurahLinks(),
+                  ),
+                  height: 80, // adjust to match QuickSurahLinks height
+                ),
+              ),
+              const SliverToBoxAdapter(child: SizedBox(height: 16)),
+
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                sliver: Consumer(
+                  builder: (context, ref, _) {
+                    final surahAsync = ref.watch(surahsFutureProvider);
+
+                    return surahAsync.when(
+                      error: (e, st) => const SliverToBoxAdapter(
+                        child: Center(child: Text('Error loading surahs')),
+                      ),
+                      loading: () => SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) => const SurahTileShimmer(),
+                          childCount: 8,
+                        ),
+                      ),
+                      data: (surahs) => SliverList(
+                        delegate: SliverChildBuilderDelegate((context, index) {
+                          final surah = surahs[index];
+                          return SurahTile(surah: surah);
+                        }, childCount: surahs.length),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              // AllSurahsList
             ],
           ),
         ),
       ),
     );
   }
+}
 
-  Widget greetingRow(ThemeData theme) {
+class SimpleSliverHeaderDelegate extends SliverPersistentHeaderDelegate {
+  final Widget child;
+  final double height;
+
+  SimpleSliverHeaderDelegate({required this.child, required this.height});
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return Container(
+      color: Theme.of(context).scaffoldBackgroundColor, // keeps bg consistent
+      child: child,
+    );
+  }
+
+  @override
+  double get maxExtent => height;
+
+  @override
+  double get minExtent => height;
+
+  @override
+  bool shouldRebuild(covariant SimpleSliverHeaderDelegate oldDelegate) => false;
+}
+
+class GreetingsRow extends StatelessWidget {
+  const GreetingsRow({super.key, required this.formattedHijri});
+
+  final String formattedHijri;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -159,7 +262,7 @@ class AllSurahsList extends ConsumerWidget {
       error: (error, stackTrace) => const Center(child: Text('Error ')),
       loading: () => ListView.builder(
         shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(), 
+        physics: const NeverScrollableScrollPhysics(),
         itemCount: 8,
         itemBuilder: (_, __) => const SurahTileShimmer(),
       ),
@@ -347,9 +450,9 @@ class SurahLink extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: Center(
               child: Text(
-                surah.nameEnglish,
+                surah.nameTransliteration,
                 style: theme.textTheme.bodySmall!.copyWith(
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w500,
                   color: isDark
                       ? AppColors.textSecondary
                       : AppColors.lightTextBody,
@@ -363,23 +466,18 @@ class SurahLink extends ConsumerWidget {
   }
 }
 
-class QuickSurahLinks extends StatelessWidget {
-  const QuickSurahLinks({super.key, required this.surah});
-  final Surah surah;
+class QuickSurahLinks extends ConsumerWidget {
+  const QuickSurahLinks({super.key});
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     final theme = Theme.of(context);
 
-    final quickSurahs = [
-      const Surah(
-        id: 0,
-        nameArabic: 'nameArabic',
-        nameEnglish: 'nameEnglish',
-        nameTransliteration: 'nameTransliteration',
-        versesCount: 0,
-        isMeccan: true,
-      ),
-    ];
+    final quickSurahs = ref.watch(quickSurahLinksProvider);
+
+    if (quickSurahs.isEmpty) {
+      return const SizedBox.shrink();
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

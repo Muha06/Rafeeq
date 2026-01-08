@@ -21,52 +21,62 @@ class FullSurahPage extends ConsumerWidget {
     final ayahsAsync = ref.watch(ayahsFutureProvider(surah.id));
 
     return Scaffold(
-      appBar: AppBar(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              surah.nameTransliteration,
-              style: theme.textTheme.titleLarge!.copyWith(fontSize: 16),
+      body: ayahsAsync.when(
+        data: (ayahs) => CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              pinned: false,
+              floating: true,
+              snap: false,
+              backgroundColor: theme.scaffoldBackgroundColor,
+              toolbarHeight: 60,
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    surah.nameTransliteration,
+                    style: theme.textTheme.titleLarge!.copyWith(fontSize: 16),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    surah.nameEnglish,
+                    style: theme.textTheme.bodySmall!.copyWith(height: 1),
+                  ),
+                ],
+              ),
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) => const SurahSettingsSheet(),
+                    );
+                  },
+                  icon: const Icon(Icons.tune),
+                ),
+              ],
             ),
-            const SizedBox(height: 4),
 
-            Text(
-              surah.nameEnglish,
-              style: theme.textTheme.bodySmall!.copyWith(height: 1),
+            //Surah details
+            SliverToBoxAdapter(
+              child: SurahDetails(surah: surah, isDark: isDark),
+            ),
+
+            //SURAH LIST
+            SliverList(
+              delegate: SliverChildBuilderDelegate((context, index) {
+                final ayah = ayahs[index];
+                final isLast = index == ayahs.length - 1;
+                return Padding(
+                  padding: EdgeInsets.only(bottom: isLast ? 16.0 : 0),
+                  child: SlideFadeWrapper(
+                    index: index,
+                    child: AyahTile(ayah: ayah),
+                  ),
+                );
+              }, childCount: ayahs.length),
             ),
           ],
-        ),
-        toolbarHeight: 60,
-        actions: [
-          IconButton(
-            onPressed: () {
-              showModalBottomSheet(
-                context: context,
-                builder: (context) => const SurahSettingsSheet(),
-              );
-            },
-            icon: const Icon(Icons.tune),
-          ),
-        ],
-      ),
-      body: ayahsAsync.when(
-        data: (ayahs) => ListView.builder(
-          padding: EdgeInsets.zero,
-          itemCount: ayahs.length + 1, // +1 for SurahDetails
-          itemBuilder: (context, index) {
-            if (index == 0) return SurahDetails(surah: surah, isDark: isDark);
-
-            final ayah = ayahs[index - 1];
-            final isLast = index == ayahs.length;
-            return Padding(
-              padding: EdgeInsets.only(bottom: isLast ? 16.0 : 0),
-              child: SlideFadeWrapper(
-                index: index,
-                child: AyahTile(ayah: ayah),
-              ),
-            );
-          },
         ),
         loading: () => const Center(
           child: CircularProgressIndicator(color: AppColors.amber),
@@ -76,8 +86,6 @@ class FullSurahPage extends ConsumerWidget {
     );
   }
 }
-
-// Keep your SurahDetails and AyahTile widgets mostly the same, no changes needed
 
 class SurahSettingsSheet extends StatelessWidget {
   const SurahSettingsSheet({super.key});
@@ -361,7 +369,7 @@ class _SlideFadeWrapperState extends State<SlideFadeWrapper>
 
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 400),
     );
 
     _fade = CurvedAnimation(parent: _controller, curve: Curves.easeOut);
@@ -371,10 +379,7 @@ class _SlideFadeWrapperState extends State<SlideFadeWrapper>
       end: Offset.zero,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
 
-    // stagger effect
-    Future.delayed(Duration(milliseconds: widget.index * 40), () {
-      if (mounted) _controller.forward();
-    });
+    if (mounted) _controller.forward();
   }
 
   @override
