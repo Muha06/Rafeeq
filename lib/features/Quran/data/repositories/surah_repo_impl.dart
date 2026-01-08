@@ -35,7 +35,6 @@ class SurahRepositoryImpl implements SurahRepository {
       final List<SurahDto> dtos = await apiService.fetchSurahs();
 
       final surahs = dtos.map((dto) => dto.toEntity()).toList();
-      print('repo found: ${surahs.length}');
 
       // 3️⃣ Save to Hive
       await saveSurahsTLocal(surahs);
