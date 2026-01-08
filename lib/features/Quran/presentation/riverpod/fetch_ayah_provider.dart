@@ -19,8 +19,6 @@ final ayahsFutureProvider = FutureProvider.family<List<Ayah>, int>((
   final repository = ref.watch(ayahRepositoryProvider);
 
   return repository.fetchAyahs(
-    surahId,
-    page: 1,
-    limit: 20,
+    surahId, 
   ); // lazy-load next pages later
 });

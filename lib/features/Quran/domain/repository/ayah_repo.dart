@@ -7,16 +7,8 @@ class AyahRepository {
   AyahRepository({required this.remoteDS});
 
   /// Fetch ayahs for a surah and convert DTO → Entity
-  Future<List<Ayah>> fetchAyahs(
-    int surahId, {
-    int page = 1,
-    int limit = 20,
-  }) async {
-    final ayahDtos = await remoteDS.fetchAyahs(
-      surahId: surahId,
-      page: page,
-      limit: limit,
-    );
+  Future<List<Ayah>> fetchAyahs(int surahId) async {
+    final ayahDtos = await remoteDS.fetchAyahs(surahId: surahId);
 
     //convert to entity
     return ayahDtos.map((dto) => dto.toEntity()).toList();

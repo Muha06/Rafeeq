@@ -379,7 +379,9 @@ class _SlideFadeWrapperState extends State<SlideFadeWrapper>
       end: Offset.zero,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
 
-    if (mounted) _controller.forward();
+    Future.delayed(Durations.short1, () {
+      if (mounted) _controller.forward();
+    });
   }
 
   @override

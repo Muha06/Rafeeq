@@ -11,6 +11,6 @@ class FetchAyahsUseCase {
     int page = 1,
     int limit = 20,
   }) async {
-    return repository.fetchAyahs(surahId, page: page, limit: limit);
+    return repository.fetchAyahs(surahId);
   }
 }

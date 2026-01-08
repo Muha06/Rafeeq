@@ -7,7 +7,6 @@ import 'package:rafeeq/features/Quran/data/repositories/surah_repo_impl.dart';
 import 'package:rafeeq/features/Quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/Quran/domain/repository/surah_repo.dart';
 import 'package:rafeeq/features/Quran/domain/useCases/fetch_surahs_useCase.dart';
-import 'package:rafeeq/features/Quran/presentation/pages/home_page.dart';
 
 String clientId = dotenv.env['QURAN_CLIENT_ID'] ?? '';
 String clientSecret = dotenv.env['QURAN_CLIENT_SECRET'] ?? '';

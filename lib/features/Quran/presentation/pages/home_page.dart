@@ -5,7 +5,9 @@ import 'package:hijri_date/hijri.dart';
 import 'package:rafeeq/core/animations/navigation_animations.dart';
 import 'package:rafeeq/core/themes/app_colors.dart';
 import 'package:rafeeq/features/Quran/domain/entities/surah.dart';
+import 'package:rafeeq/features/Quran/presentation/riverpod/ayah_of_the_day.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_surahs_provider.dart';
+import 'package:rafeeq/features/Quran/presentation/widgets/ayah_of_the_day.dart';
 import 'package:rafeeq/features/settings/presentation/pages/settings_page.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 import 'package:rafeeq/features/Quran/presentation/pages/full_surah_page.dart';
@@ -34,7 +36,6 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = ref.watch(isDarkProvider);
 
     return Scaffold(
       body: SafeArea(
@@ -168,83 +169,27 @@ class SimpleSliverHeaderDelegate extends SliverPersistentHeaderDelegate {
   bool shouldRebuild(covariant SimpleSliverHeaderDelegate oldDelegate) => false;
 }
 
-class GreetingsRow extends StatelessWidget {
+class GreetingsRow extends ConsumerWidget {
   const GreetingsRow({super.key, required this.formattedHijri});
 
   final String formattedHijri;
 
   @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+  Widget build(BuildContext context, ref) {
+    final theme = Theme.of(context); 
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Image.asset('assets/images/salam_amber.png', height: 50, width: 100),
 
-        Text(formattedHijri, style: theme.textTheme.bodySmall),
-      ],
-    );
-  }
-}
-
-class AyahOfTheDay extends ConsumerWidget {
-  const AyahOfTheDay({super.key});
-
-  @override
-  Widget build(BuildContext context, ref) {
-    final isDark = ref.watch(isDarkProvider);
-    final theme = Theme.of(context);
-
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: theme.cardColor,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      //contant padding
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            //title
-            Text(
-              '==== Ayah of the day ====',
-              textAlign: TextAlign.center,
-              style: theme.textTheme.bodySmall!,
-            ),
-            const SizedBox(height: 16),
-
-            //arabic
-            Text(
-              'يَـٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوا۟ ٱسْتَعِينُوا۟ بِٱلصَّبْرِ وَٱلصَّلَوٰةِ ۚ إِنَّ ٱللَّهَ مَعَ ٱلصَّـٰبِرِينَ',
-              textAlign: TextAlign.center,
-              textDirection: TextDirection.rtl,
-              style: theme.textTheme.bodyLarge!.copyWith(
-                fontWeight: isDark ? FontWeight.w300 : FontWeight.w400,
-              ),
-            ),
-            const SizedBox(height: 8),
-
-            //translation
-            Text(
-              "'O believers! Seek comfort in patience and prayer. Allah is truly with those who are patient.'",
-              textAlign: TextAlign.center,
-              style: theme.textTheme.bodyMedium!,
-            ),
-            const SizedBox(height: 8),
-
-            Text(
-              '2:128',
-              style: theme.textTheme.bodySmall!.copyWith(
-                color: const Color.fromRGBO(255, 195, 106, 1),
-              ),
-            ),
-          ],
+        Text(
+          formattedHijri,
+          style: theme.textTheme.bodySmall!.copyWith(
+            color: AppColors.lightTextSecondary,
+          ),
         ),
-      ),
+      ],
     );
   }
 }

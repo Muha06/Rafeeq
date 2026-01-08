@@ -91,9 +91,7 @@ class QuranApiService {
   /// Fetch ayahs for a specific surah
   /// Supports pagination with page & limit
   Future<List<AyahDto>> fetchAyahs({
-    required int surahId,
-    int page = 1,
-    int limit = 20,
+    required int surahId, 
   }) async {
     final token = await _getAccessToken();
 
@@ -106,9 +104,7 @@ class QuranApiService {
       '&per_page=286', // max surah length (Baqarah),
     );
 
-    debugPrint(
-      'Fetching ayahs for surah: $surahId, page: $page, limit: $limit',
-    );
+     
 
     final response = await client!.get(
       url,
