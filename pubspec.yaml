@@ -37,7 +37,11 @@ dev_dependencies:
 flutter:
 
   uses-material-design: true
- 
+  fonts:
+    - family: Uthmani
+      fonts:
+        - asset: assets/fonts/uthmani_font.otf
+
   assets: 
     - assets/images/salam_amber.png
     - assets/images/kaaba.jpeg

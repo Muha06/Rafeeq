@@ -88,8 +88,8 @@ class AyahOfTheDay extends ConsumerWidget {
                       textAlign: TextAlign.right,
                       textDirection: TextDirection.rtl,
                       style: theme.textTheme.bodyLarge!.copyWith(
-                        fontWeight: isDark ? FontWeight.w300 : FontWeight.w400,
-                        fontSize: 16,
+                        fontWeight: isDark ? FontWeight.w500 : FontWeight.w400,
+                        fontSize: 22,
                       ),
                     ),
                     const SizedBox(height: 8),

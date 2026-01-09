@@ -9,9 +9,10 @@ class AppTextStyles {
   );
 
   // Qur'an Arabic text
-  static final TextStyle quranBody = GoogleFonts.scheherazadeNew(
+  static final TextStyle quranBody = const TextStyle(
+    fontFamily: 'Uthmani',
     fontSize: 22,
-    height: 2.5,
+    height: 2,
     //fontweight: set in the widget
     wordSpacing: 2,
   );

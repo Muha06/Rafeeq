@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/core/functions/clean_arabic_text.dart';
 import 'package:rafeeq/core/themes/app_colors.dart';
 import 'package:rafeeq/features/Quran/domain/entities/ayah.dart';
 import 'package:rafeeq/features/Quran/domain/entities/surah.dart';
@@ -299,7 +300,7 @@ class AyahTile extends ConsumerWidget {
             Align(
               alignment: Alignment.centerRight,
               child: Text(
-                ayah.textArabic,
+                cleanAyah(ayah.textArabic),
                 textDirection: TextDirection.rtl,
                 style: theme.textTheme.bodyLarge!.copyWith(
                   fontWeight: isDark ? FontWeight.w300 : FontWeight.w400,
