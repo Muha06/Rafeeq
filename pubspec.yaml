@@ -26,6 +26,7 @@ dependencies:
   hive_flutter: ^1.1.0
   build_runner: ^2.4.13
   analyzer: ^6.4.1
+  collection: ^1.19.1
 
 dev_dependencies:
   flutter_test:
