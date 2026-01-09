@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hijri_date/hijri.dart';
 import 'package:rafeeq/core/animations/navigation_animations.dart';
-import 'package:rafeeq/core/themes/app_colors.dart';
 import 'package:rafeeq/core/themes/sliver_header_delegate.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_surahs_provider.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/HOME_PAGE/all_surah_listview.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/HOME_PAGE/ayah_of_the_day.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/HOME_PAGE/friday_reminder.dart';
+import 'package:rafeeq/features/Quran/presentation/widgets/HOME_PAGE/greetings_row.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/HOME_PAGE/quick_surah_links.dart';
 import 'package:rafeeq/features/settings/presentation/pages/settings_page.dart';
 
@@ -32,11 +32,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  bool isFriday() {
-    final today = DateTime.now().weekday; // 1 = Monday, 7 = Sunday
-    return today == DateTime.friday; // 5 = Friday
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -45,7 +40,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: () async {
-            return await Future.delayed(const Duration(seconds: 3));
+            ref.invalidate(surahsFutureProvider);
           },
           child: CustomScrollView(
             controller: scrollController,
@@ -97,8 +92,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
               const SliverToBoxAdapter(child: SizedBox(height: 16)),
 
-              if (isFriday())
-                SliverToBoxAdapter(child: FridayReminder(isFriday: isFriday())),
+              const SliverToBoxAdapter(child: FridayReminder()),
 
               // STICKY QUICKSURAHLINK
               SliverPersistentHeader(
@@ -126,31 +120,6 @@ class _HomePageState extends ConsumerState<HomePage> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class GreetingsRow extends ConsumerWidget {
-  const GreetingsRow({super.key, required this.formattedHijri});
-
-  final String formattedHijri;
-
-  @override
-  Widget build(BuildContext context, ref) {
-    final theme = Theme.of(context);
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Image.asset('assets/images/salam_amber.png', height: 50, width: 100),
-
-        Text(
-          formattedHijri,
-          style: theme.textTheme.bodySmall!.copyWith(
-            color: AppColors.lightTextSecondary,
-          ),
-        ),
-      ],
     );
   }
 }

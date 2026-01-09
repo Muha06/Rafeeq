@@ -3,14 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/themes/app_colors.dart';
 import 'package:rafeeq/features/Quran/domain/entities/surah.dart';
-import 'package:rafeeq/features/Quran/presentation/pages/full_surah_page.dart';
+import 'package:rafeeq/features/Quran/presentation/pages/surah_page.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
-class FridayReminder extends ConsumerWidget {
-  const FridayReminder({super.key, required this.isFriday});
-  final bool isFriday;
+class FridayReminder extends ConsumerStatefulWidget {
+  const FridayReminder({super.key});
+
   @override
-  Widget build(BuildContext context, ref) {
+  ConsumerState<FridayReminder> createState() => _FridayReminderState();
+}
+
+class _FridayReminderState extends ConsumerState<FridayReminder> {
+  bool isFriday = DateTime.now().weekday == DateTime.friday;
+
+  @override
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = ref.watch(isDarkProvider);
 

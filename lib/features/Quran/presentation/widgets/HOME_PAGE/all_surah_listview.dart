@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/themes/app_colors.dart';
 import 'package:rafeeq/features/Quran/domain/entities/surah.dart';
-import 'package:rafeeq/features/Quran/presentation/pages/full_surah_page.dart';
+import 'package:rafeeq/features/Quran/presentation/pages/surah_page.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_surahs_provider.dart';
-import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 import 'package:shimmer/shimmer.dart';
 
 class AllSurahsList extends ConsumerWidget {
@@ -46,48 +45,51 @@ class SurahTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final isDark = ref.watch(isDarkProvider);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Material(
-        color: theme.cardColor,
-        borderRadius: BorderRadius.circular(14),
-        clipBehavior: Clip.hardEdge,
-        child: ListTile(
-          splashColor: isDark
-              ? AppColors.lightTextSecondary.withAlpha(50)
-              : AppColors.darkSurface.withAlpha(50),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => FullSurahPage(surah: surah),
-              ),
-            );
-          },
-          leading: CircleAvatar(
-            backgroundColor: AppColors.amber,
-            child: Text(
-              surah.id.toString(),
-              style: const TextStyle(
-                color: AppColors.darkBackground,
-                fontWeight: FontWeight.bold,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: theme.cardColor,
+        ),
+        child: Material(
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(16),
+          clipBehavior: Clip.hardEdge,
+          child: ListTile(
+            splashColor: null,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => FullSurahPage(surah: surah),
+                ),
+              );
+            },
+            leading: CircleAvatar(
+              backgroundColor: AppColors.amber,
+              child: Text(
+                surah.id.toString(),
+                style: const TextStyle(
+                  color: AppColors.darkBackground,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-          ),
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 14,
-            vertical: 8,
-          ),
-          title: Text(
-            surah.nameTransliteration,
-            style: theme.textTheme.titleMedium,
-          ),
-          subtitle: Text(surah.nameEnglish, style: theme.textTheme.bodySmall),
-          trailing: Text(
-            surah.versesCount.toString(),
-            style: theme.textTheme.bodySmall,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 14,
+              vertical: 8,
+            ),
+            title: Text(
+              surah.nameTransliteration,
+              style: theme.textTheme.titleMedium,
+            ),
+            subtitle: Text(surah.nameEnglish, style: theme.textTheme.bodySmall),
+            trailing: Text(
+              surah.versesCount.toString(),
+              style: theme.textTheme.bodySmall,
+            ),
           ),
         ),
       ),

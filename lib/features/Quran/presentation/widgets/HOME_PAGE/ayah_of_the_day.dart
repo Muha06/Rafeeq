@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/themes/app_colors.dart';
-import 'package:rafeeq/features/Quran/presentation/pages/full_surah_page.dart';
+import 'package:rafeeq/features/Quran/presentation/pages/surah_page.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/ayah_of_the_day.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
@@ -22,7 +22,7 @@ class AyahOfTheDay extends ConsumerWidget {
         return FadeTransition(opacity: animation, child: child);
       },
       child: AnimatedSize(
-        duration: Durations.short3,
+        duration: Durations.medium4,
         child: ayahAsync.when(
           loading: () => Container(
             key: const ValueKey('loading'),
@@ -50,11 +50,11 @@ class AyahOfTheDay extends ConsumerWidget {
 
             //Fetch surah for the ayah
             final ayahSurah = ref.watch(ayahSurahProvider(ayah.surahId));
-            if (ayahSurah == null) return const SizedBox(); 
+            if (ayahSurah == null) return const SizedBox();
 
             return GestureDetector(
               key: const ValueKey('data'),
-              onTap: () { 
+              onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(

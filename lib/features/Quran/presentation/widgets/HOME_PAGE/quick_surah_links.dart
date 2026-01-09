@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/themes/app_colors.dart';
 import 'package:rafeeq/features/Quran/domain/entities/surah.dart';
-import 'package:rafeeq/features/Quran/presentation/pages/full_surah_page.dart';
+import 'package:rafeeq/features/Quran/presentation/pages/surah_page.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_surahs_provider.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
@@ -19,34 +19,29 @@ class SurahLink extends ConsumerWidget {
 
     return Padding(
       padding: const EdgeInsets.only(right: 8.0),
-      child: Material(
-        color: theme.cardColor,
-        borderRadius: BorderRadius.circular(8),
-        clipBehavior: Clip.hardEdge,
-        child: InkWell(
-          splashColor: isDark
-              ? AppColors.lightTextSecondary.withAlpha(50)
-              : AppColors.darkSurface.withAlpha(50),
-          highlightColor: Colors.transparent,
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => FullSurahPage(surah: surah),
-              ),
-            );
-          },
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            child: Center(
-              child: Text(
-                surah.nameTransliteration,
-                style: theme.textTheme.bodySmall!.copyWith(
-                  fontWeight: FontWeight.w500,
-                  color: isDark
-                      ? AppColors.textSecondary
-                      : AppColors.lightTextBody,
-                ),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => FullSurahPage(surah: surah),
+            ),
+          );
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            color: theme.cardColor,
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Center(
+            child: Text(
+              surah.nameTransliteration,
+              style: theme.textTheme.bodySmall!.copyWith(
+                fontWeight: FontWeight.w500,
+                color: isDark
+                    ? AppColors.textSecondary
+                    : AppColors.lightTextBody,
               ),
             ),
           ),
