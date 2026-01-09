@@ -90,7 +90,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                   child: AyahOfTheDay(),
                 ),
               ),
-              const SliverToBoxAdapter(child: SizedBox(height: 16)),
 
               const SliverToBoxAdapter(child: FridayReminder()),
 

@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   // 🌑 Dark theme bg (default)
-  static const Color darkBackground = Color(0xFF010B13);
+  // Background stays ultra-dark
+  static const Color darkBackground = Color(
+    0xFF020A17,
+  ); // deep navy, almost black
 
-  // Slightly lighter surface for cards, sheets, etc.
-  static const Color darkSurface = Color(0xFF111E28);
-  
+  // Lighter surface for cards, sheets, etc.
+  static const Color darkSurface = Color(
+    0xFF06122B,
+  ); // richer, slightly brighter dark blue
+
   // 🟡 Accent – soft amber
   static const Color amber = Color(0xFFFFC36A);
 
