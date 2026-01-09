@@ -2,27 +2,22 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   // 🌑 Dark theme bg (default)
-  // Background stays ultra-dark
-  static const Color darkBackground = Color(
-    0xFF020A17,
-  ); // deep navy, almost black
-
-  // Lighter surface for cards, sheets, etc.
-  static const Color darkSurface = Color(
-    0xFF06122B,
-  ); // richer, slightly brighter dark blue
+  static const Color darkBackground = Color(0xFF0B0C10);
+  static const Color darkSurface = Color(0xFF1B1F26);
 
   // 🟡 Accent – soft amber
   static const Color amber = Color(0xFFFFC36A);
 
   // 📝 Text colors
-  static const Color textPrimary = Color(0xFFEDEDED); // Qur’an text, brighter
-
-  static const Color textBody = Colors.white; // normal body, slightly darker
-
+  static const Color textPrimary = Color(
+    0xFFEDEDED,
+  ); // Qur’an text – bright enough against darkSurface
+  static const Color textBody = Color(
+    0xFFD9D9D9,
+  ); // normal body text – slightly softer than primary
   static const Color textSecondary = Color(
-    0xFFB3B3B3,
-  ); // metadata, ayah numbers
+    0xFF9CA3AF,
+  ); // metadata, ayah numbers – muted but readable
 
   // ==== Light Theme ====
   //background color

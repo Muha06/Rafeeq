@@ -33,6 +33,12 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 
   @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
@@ -44,7 +50,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           },
           child: CustomScrollView(
             controller: scrollController,
-            physics: const AlwaysScrollableScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             slivers: [
               SliverAppBar(
                 pinned: false,
