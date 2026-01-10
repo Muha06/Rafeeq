@@ -27,6 +27,7 @@ dependencies:
   build_runner: ^2.4.13
   analyzer: ^6.4.1
   collection: ^1.19.1
+  scrollable_positioned_list:
 
 dev_dependencies:
   flutter_test:

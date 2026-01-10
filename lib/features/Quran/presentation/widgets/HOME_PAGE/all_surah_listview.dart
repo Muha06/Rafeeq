@@ -53,15 +53,15 @@ class SurahTile extends ConsumerWidget {
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          color: theme.cardColor,
-        ),
-        child: Material(
-          color: Colors.transparent,
-          borderRadius: BorderRadius.circular(16),
-          clipBehavior: Clip.hardEdge,
+      child: Material(
+        color: theme.cardColor,
+        borderRadius: BorderRadius.circular(16),
+        clipBehavior: Clip.hardEdge,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            color: theme.cardColor,
+          ),
           child: ListTile(
             splashColor: null,
             onTap: () {

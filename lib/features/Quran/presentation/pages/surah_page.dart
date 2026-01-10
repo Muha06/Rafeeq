@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/core/animations/slide_fade_wrapper.dart';
 import 'package:rafeeq/core/functions/clean_arabic_text.dart';
 import 'package:rafeeq/core/themes/app_colors.dart';
 import 'package:rafeeq/features/Quran/domain/entities/ayah.dart';
@@ -9,6 +9,7 @@ import 'package:rafeeq/features/Quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_ayah_provider.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/surah_preferences_provider.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class FullSurahPage extends ConsumerStatefulWidget {
   final Surah surah;
@@ -20,18 +21,19 @@ class FullSurahPage extends ConsumerStatefulWidget {
 }
 
 class _FullSurahPageState extends ConsumerState<FullSurahPage> {
-  final ScrollController scrollController = ScrollController();
-  double estimatedAyahHeight = 150.0;
-
-  // Throttle last read saving
-  bool _isSaving = false;
+  // ScrollablePositionedList controllers
+  final ItemScrollController itemScrollController = ItemScrollController();
+  final ItemPositionsListener itemPositionsListener =
+      ItemPositionsListener.create();
+  int? _lastSavedAyah;
+  bool _isSaving = false; // Throttle last read saving
 
   @override
   void initState() {
     super.initState();
 
-    // Add scroll listener
-    scrollController.addListener(_onScroll);
+    // Listen to which ayahs are visible -> called whenever user scrolls
+    itemPositionsListener.itemPositions.addListener(_onVisibleAyahsChanged);
 
     // Check last read after first frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -41,67 +43,88 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
 
   @override
   void dispose() {
-    scrollController.removeListener(_onScroll);
-    scrollController.dispose();
     super.dispose();
+    itemPositionsListener.itemPositions.removeListener(_onVisibleAyahsChanged);
+    ScaffoldMessenger.of(context).clearSnackBars();
   }
 
-  // Called whenever user scrolls
-  void _onScroll() {
+  // Called whenever visible items change
+  void _onVisibleAyahsChanged() {
     if (_isSaving) return;
-
     _isSaving = true;
-    Future.delayed(const Duration(milliseconds: 300), () {
-      _saveLastRead();
-      _isSaving = false;
-    });
+
+    final positions = itemPositionsListener.itemPositions.value;
+    if (positions.isEmpty) return;
+
+    // First fully visible item = current ayah
+    final firstVisible = positions
+        .where((position) => position.itemLeadingEdge >= 0)
+        .reduce(
+          (min, position) =>
+              position.itemLeadingEdge < min.itemLeadingEdge ? position : min,
+        );
+
+    final currentAyahNumber = firstVisible.index + 1;
+
+    if (currentAyahNumber != _lastSavedAyah) {
+      saveLastRead(
+        LastReadAyah(surahId: widget.surah.id, ayahNumber: currentAyahNumber),
+      );
+      _lastSavedAyah = currentAyahNumber;
+      debugPrint(
+        'Saved last read: Surah ${widget.surah.id}, Ayah $currentAyahNumber',
+      );
+    }
+
+    _isSaving = false;
   }
 
-  void _saveLastRead() {
-    final index = (scrollController.offset / estimatedAyahHeight).floor();
-    final ayahNumber = (index.clamp(0, widget.surah.versesCount - 1)) + 1;
-
-    saveLastRead(
-      LastReadAyah(surahId: widget.surah.id, ayahNumber: ayahNumber),
+  void _jumpToAyah(int ayahNumber) {
+    itemScrollController.scrollTo(
+      index: ayahNumber - 1,
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
     );
-    debugPrint('Saved last read: Surah ${widget.surah.id}, Ayah $ayahNumber');
   }
 
   void _checkLastRead() {
-    debugPrint('Checking last read');
+    final isDark = ref.watch(isDarkProvider);
 
     final lastRead = getLastRead(); // synchronous version
     debugPrint('Last read: $lastRead');
 
     if (lastRead == null) return;
 
-    if (lastRead.surahId == widget.surah.id && scrollController.hasClients) {
+    if (!mounted) return;
+
+    if (lastRead.surahId == widget.surah.id) {
       // Show SnackBar with Go button
+      ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Jump to last-read Ayah ${lastRead.ayahNumber}?'),
+          backgroundColor: isDark ? Colors.black : Colors.white,
+          persist: false,
+          behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          content: Text(
+            'Jump to last-read Ayah ${lastRead.ayahNumber}?',
+            style: TextStyle(
+              color: isDark ? Colors.white : Colors.black,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
           action: SnackBarAction(
             label: 'Go',
+            textColor: isDark ? Colors.amber : Colors.blue,
             onPressed: () => _jumpToAyah(lastRead.ayahNumber),
           ),
-          duration: const Duration(seconds: 5),
+          duration: const Duration(seconds: 3),
         ),
       );
-
-      // Auto jump with slight delay so SnackBar is visible
-      // Future.delayed(const Duration(milliseconds: 300), () {
-      //   _jumpToAyah(lastRead.ayahNumber);
-      // });
     }
-  }
-
-  void _jumpToAyah(int ayahNumber) {
-    final offset = (ayahNumber - 1) * estimatedAyahHeight;
-    scrollController.animateTo(
-      offset,
-      duration: const Duration(milliseconds: 400),
-      curve: Curves.easeInOut,
-    );
   }
 
   @override
@@ -112,66 +135,57 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
     final ayahsAsync = ref.watch(ayahsFutureProvider(widget.surah.id));
 
     return Scaffold(
-      body: ayahsAsync.when(
-        data: (ayahs) => CustomScrollView(
-          controller: scrollController,
-          slivers: [
-            SliverAppBar(
-              pinned: false,
-              floating: true,
-              snap: false,
-              backgroundColor: theme.scaffoldBackgroundColor,
-              toolbarHeight: 60,
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.surah.nameTransliteration,
-                    style: theme.textTheme.titleLarge!.copyWith(fontSize: 16),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    widget.surah.nameEnglish,
-                    style: theme.textTheme.bodySmall!.copyWith(height: 1),
-                  ),
-                ],
-              ),
-              actions: [
-                IconButton(
-                  onPressed: () {
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (context) => const SurahSettingsSheet(),
-                    );
-                  },
-                  icon: const Icon(Icons.tune),
-                ),
-              ],
+      appBar: AppBar(
+        backgroundColor: theme.scaffoldBackgroundColor,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              widget.surah.nameTransliteration,
+              style: theme.textTheme.titleLarge!.copyWith(fontSize: 16),
             ),
-
-            SliverToBoxAdapter(
-              child: SurahDetails(surah: widget.surah, isDark: isDark),
-            ),
-
-            SliverList(
-              delegate: SliverChildBuilderDelegate((context, index) {
-                final ayah = ayahs[index];
-                final isLast = index == ayahs.length - 1;
-                return Padding(
-                  padding: EdgeInsets.only(bottom: isLast ? 16.0 : 0),
-                  child: SlideFadeWrapper(
-                    index: index,
-                    child: AyahTile(ayah: ayah),
-                  ),
-                );
-              }, childCount: ayahs.length),
+            const SizedBox(height: 4),
+            Text(
+              widget.surah.nameEnglish,
+              style: theme.textTheme.bodySmall!.copyWith(height: 1),
             ),
           ],
         ),
-        loading: () => const Center(
-          child: CircularProgressIndicator(color: AppColors.amber),
-        ),
-        error: (e, _) => Center(child: Text('Failed to load ayahs: $e')),
+        actions: [
+          IconButton(
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                builder: (_) => const SurahSettingsSheet(),
+              );
+            },
+            icon: const Icon(Icons.tune),
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: ayahsAsync.when(
+              data: (ayahs) => ScrollablePositionedList.builder(
+                itemCount: ayahs.length + 1,
+                itemBuilder: (context, index) {
+                  if (index == 0) {
+                    return SurahDetails(surah: widget.surah, isDark: isDark);
+                  }
+                  return AyahTile(ayah: ayahs[index - 1]);
+                },
+                itemScrollController: itemScrollController,
+                itemPositionsListener: itemPositionsListener,
+                //scrollController: scrollController, // attach scroll controller
+              ),
+              loading: () => const Center(
+                child: CircularProgressIndicator(color: AppColors.amber),
+              ),
+              error: (e, _) => Center(child: Text('Failed to load ayahs: $e')),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -454,4 +468,3 @@ class AyahTile extends ConsumerWidget {
     );
   }
 }
-
