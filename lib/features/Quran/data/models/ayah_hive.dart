@@ -3,7 +3,7 @@ import 'package:rafeeq/features/Quran/domain/entities/ayah.dart';
 
 part 'ayah_hive.g.dart';
 
-@HiveType(typeId: 2) // make sure typeId is unique across your app
+@HiveType(typeId: 2) // typeID should be unique
 class AyahHive extends HiveObject {
   @HiveField(0)
   int id;

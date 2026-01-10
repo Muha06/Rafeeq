@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/core/functions/clean_arabic_text.dart';
 import 'package:rafeeq/core/themes/app_colors.dart';
 import 'package:rafeeq/features/Quran/presentation/pages/surah_page.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/ayah_of_the_day.dart';
@@ -84,7 +85,7 @@ class AyahOfTheDay extends ConsumerWidget {
 
                     //Arabic
                     Text(
-                      ayah.textArabic,
+                      cleanAyah(ayah.textArabic),
                       textAlign: TextAlign.right,
                       textDirection: TextDirection.rtl,
                       style: theme.textTheme.bodyLarge!.copyWith(

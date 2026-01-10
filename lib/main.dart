@@ -11,19 +11,20 @@ import 'package:rafeeq/features/Quran/presentation/pages/home_page.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  //HIVE
+  //Init HIVE
   await Hive.initFlutter();
+
+  //register adapters
   Hive.registerAdapter(SurahHiveAdapter());
   Hive.registerAdapter(AyahHiveAdapter());
+
+  //open boxes
   await Hive.openBox<SurahHive>('surahs');
   await Hive.openBox<AyahHive>('ayahs');
+  await Hive.openBox('lastReadBox'); // for LastReadAyah
 
-  try {
-    await dotenv.load(fileName: ".env");
-  } catch (e) {
-    // Handle error, e.g., print a message
-    print('Error loading .env file: $e');
-  }
+  //dotenv
+  await dotenv.load(fileName: ".env");
 
   runApp(const ProviderScope(child: MyApp()));
 }

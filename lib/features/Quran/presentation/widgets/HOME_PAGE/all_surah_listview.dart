@@ -6,11 +6,16 @@ import 'package:rafeeq/features/Quran/presentation/pages/surah_page.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_surahs_provider.dart';
 import 'package:shimmer/shimmer.dart';
 
-class AllSurahsList extends ConsumerWidget {
+class AllSurahsList extends ConsumerStatefulWidget {
   const AllSurahsList({super.key});
 
   @override
-  Widget build(BuildContext context, ref) {
+  ConsumerState<AllSurahsList> createState() => _AllSurahsListState();
+}
+
+class _AllSurahsListState extends ConsumerState<AllSurahsList> {
+  @override
+  Widget build(BuildContext context) {
     final surahAsync = ref.watch(surahsFutureProvider);
 
     return surahAsync.when(

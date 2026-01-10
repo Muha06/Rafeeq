@@ -1,29 +1,120 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/core/animations/slide_fade_wrapper.dart';
 import 'package:rafeeq/core/functions/clean_arabic_text.dart';
 import 'package:rafeeq/core/themes/app_colors.dart';
 import 'package:rafeeq/features/Quran/domain/entities/ayah.dart';
+import 'package:rafeeq/features/Quran/domain/entities/last_read_ayah.dart';
 import 'package:rafeeq/features/Quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_ayah_provider.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/surah_preferences_provider.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
-class FullSurahPage extends ConsumerWidget {
+class FullSurahPage extends ConsumerStatefulWidget {
   final Surah surah;
 
   const FullSurahPage({super.key, required this.surah});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<FullSurahPage> createState() => _FullSurahPageState();
+}
+
+class _FullSurahPageState extends ConsumerState<FullSurahPage> {
+  final ScrollController scrollController = ScrollController();
+  double estimatedAyahHeight = 150.0;
+
+  // Throttle last read saving
+  bool _isSaving = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Add scroll listener
+    scrollController.addListener(_onScroll);
+
+    // Check last read after first frame
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkLastRead();
+    });
+  }
+
+  @override
+  void dispose() {
+    scrollController.removeListener(_onScroll);
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  // Called whenever user scrolls
+  void _onScroll() {
+    if (_isSaving) return;
+
+    _isSaving = true;
+    Future.delayed(const Duration(milliseconds: 300), () {
+      _saveLastRead();
+      _isSaving = false;
+    });
+  }
+
+  void _saveLastRead() {
+    final index = (scrollController.offset / estimatedAyahHeight).floor();
+    final ayahNumber = (index.clamp(0, widget.surah.versesCount - 1)) + 1;
+
+    saveLastRead(
+      LastReadAyah(surahId: widget.surah.id, ayahNumber: ayahNumber),
+    );
+    debugPrint('Saved last read: Surah ${widget.surah.id}, Ayah $ayahNumber');
+  }
+
+  void _checkLastRead() {
+    debugPrint('Checking last read');
+
+    final lastRead = getLastRead(); // synchronous version
+    debugPrint('Last read: $lastRead');
+
+    if (lastRead == null) return;
+
+    if (lastRead.surahId == widget.surah.id && scrollController.hasClients) {
+      // Show SnackBar with Go button
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Jump to last-read Ayah ${lastRead.ayahNumber}?'),
+          action: SnackBarAction(
+            label: 'Go',
+            onPressed: () => _jumpToAyah(lastRead.ayahNumber),
+          ),
+          duration: const Duration(seconds: 5),
+        ),
+      );
+
+      // Auto jump with slight delay so SnackBar is visible
+      // Future.delayed(const Duration(milliseconds: 300), () {
+      //   _jumpToAyah(lastRead.ayahNumber);
+      // });
+    }
+  }
+
+  void _jumpToAyah(int ayahNumber) {
+    final offset = (ayahNumber - 1) * estimatedAyahHeight;
+    scrollController.animateTo(
+      offset,
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = ref.watch(isDarkProvider);
 
-    // Watch ayahs for this surah
-    final ayahsAsync = ref.watch(ayahsFutureProvider(surah.id));
+    final ayahsAsync = ref.watch(ayahsFutureProvider(widget.surah.id));
 
     return Scaffold(
       body: ayahsAsync.when(
         data: (ayahs) => CustomScrollView(
+          controller: scrollController,
           slivers: [
             SliverAppBar(
               pinned: false,
@@ -35,12 +126,12 @@ class FullSurahPage extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    surah.nameTransliteration,
+                    widget.surah.nameTransliteration,
                     style: theme.textTheme.titleLarge!.copyWith(fontSize: 16),
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    surah.nameEnglish,
+                    widget.surah.nameEnglish,
                     style: theme.textTheme.bodySmall!.copyWith(height: 1),
                   ),
                 ],
@@ -58,12 +149,10 @@ class FullSurahPage extends ConsumerWidget {
               ],
             ),
 
-            //Surah details
             SliverToBoxAdapter(
-              child: SurahDetails(surah: surah, isDark: isDark),
+              child: SurahDetails(surah: widget.surah, isDark: isDark),
             ),
 
-            //SURAH LIST
             SliverList(
               delegate: SliverChildBuilderDelegate((context, index) {
                 final ayah = ayahs[index];
@@ -339,6 +428,24 @@ class AyahTile extends ConsumerWidget {
                   onPressed: () {},
                   icon: const Icon(Icons.share, size: 22),
                 ),
+                IconButton(
+                  onPressed: () {
+                    saveLastRead(
+                      LastReadAyah(
+                        surahId: ayah.surahId,
+                        ayahNumber: ayah.ayahNumber,
+                      ),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          'Saved Ayah ${ayah.ayahNumber} as last read',
+                        ),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.bookmark, size: 22),
+                ),
               ],
             ),
           ],
@@ -348,54 +455,3 @@ class AyahTile extends ConsumerWidget {
   }
 }
 
-class SlideFadeWrapper extends StatefulWidget {
-  final Widget child;
-  final int index;
-
-  const SlideFadeWrapper({super.key, required this.child, required this.index});
-
-  @override
-  State<SlideFadeWrapper> createState() => _SlideFadeWrapperState();
-}
-
-class _SlideFadeWrapperState extends State<SlideFadeWrapper>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
-  late final Animation<double> _fade;
-  late final Animation<Offset> _slide;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 400),
-    );
-
-    _fade = CurvedAnimation(parent: _controller, curve: Curves.easeOut);
-
-    _slide = Tween<Offset>(
-      begin: const Offset(0, 0.08),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
-
-    Future.delayed(Durations.short1, () {
-      if (mounted) _controller.forward();
-    });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return FadeTransition(
-      opacity: _fade,
-      child: SlideTransition(position: _slide, child: widget.child),
-    );
-  }
-}
