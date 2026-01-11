@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/core/themes/app_colors.dart';
+import 'package:rafeeq/core/themes/dark_colors.dart';
+import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/features/Quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/Quran/presentation/pages/surah_page.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
@@ -45,7 +46,9 @@ class _FridayReminderState extends ConsumerState<FridayReminder> {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            color: isDark ? AppColors.darkSurface : AppColors.lightSurface,
+            color: isDark
+                ? AppDarkColors.darkSurface
+                : AppLightColors.lightSurface,
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -54,8 +57,8 @@ class _FridayReminderState extends ConsumerState<FridayReminder> {
                 Icon(
                   Icons.book,
                   color: isDark
-                      ? AppColors.lightBackground
-                      : AppColors.lightTextBody,
+                      ? AppDarkColors.darkSurface
+                      : AppLightColors.textBody,
                 ),
                 const SizedBox(width: 16),
 
@@ -91,7 +94,7 @@ class _FridayReminderState extends ConsumerState<FridayReminder> {
                       Text(
                         'Tap to read',
                         style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                          color: isDark ? AppColors.amber : Colors.black,
+                          color: isDark ? AppLightColors.amber : Colors.black,
                           fontWeight: FontWeight.bold,
                           height: 1.3,
                         ),

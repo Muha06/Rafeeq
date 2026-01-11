@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rafeeq/core/themes/app_text_style.dart';
-import 'app_colors.dart';
+import 'package:rafeeq/core/themes/light_colors.dart';
+import 'dark_colors.dart';
 
 //DARK THEME
 class AppTheme {
@@ -15,60 +16,65 @@ class AppTheme {
         },
       ),
       brightness: Brightness.dark,
-      scaffoldBackgroundColor: AppColors.darkBackground,
+      scaffoldBackgroundColor: AppDarkColors.darkBackground,
 
       colorScheme: const ColorScheme.dark(
-        surface: AppColors.darkBackground,
-        primary: AppColors.amber,
+        surface: AppDarkColors.darkSurface,
+        primary: AppDarkColors.amber,
       ),
 
       //APPBAR
       appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.darkBackground,
-        foregroundColor: AppColors.textPrimary,
+        backgroundColor: AppDarkColors.darkBackground,
+        foregroundColor: AppDarkColors.textPrimary,
         toolbarHeight: 52,
         surfaceTintColor: Colors.transparent, // color when scrolling
         centerTitle: false,
         titleTextStyle: AppTextStyles.title,
-        actionsIconTheme: const IconThemeData(color: Colors.white, size: 26),
+        iconTheme: const IconThemeData(color: AppDarkColors.iconPrimary),
       ),
 
       //=====Text theme=======
       textTheme: TextTheme(
         //title
         titleLarge: AppTextStyles.title.copyWith(
-          color: AppColors.textPrimary, // for dark theme
+          color: AppDarkColors.textPrimary, // for dark theme
           height: 1,
         ),
         //arabic
         bodyLarge: AppTextStyles.quranBody.copyWith(
-          color: AppColors.textPrimary, // dark
+          color: AppDarkColors.textPrimary, // dark
         ),
         //Normal body
         bodyMedium: AppTextStyles.body.copyWith(
-          color: AppColors.textBody, // white
+          color: AppDarkColors.textBody, // white
         ),
         //small text
         bodySmall: AppTextStyles.secondary.copyWith(
-          color: AppColors.textSecondary, // dark
+          color: AppDarkColors.textSecondary, // dark
         ),
       ),
       //CARD
-      cardColor: AppColors.darkSurface,
+      cardTheme: CardThemeData(
+        elevation: 2,
+        shadowColor: Colors.black.withAlpha(60),
+        color: AppDarkColors.darkSurface,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      ),
 
-      dividerColor: AppColors.textSecondary.withAlpha(50),
+      dividerColor: AppDarkColors.textSecondary.withAlpha(50),
 
       sliderTheme: const SliderThemeData(
-        activeTrackColor: AppColors.amber,
-        thumbColor: AppColors.amber,
-        inactiveTrackColor: AppColors.textSecondary,
+        activeTrackColor: AppDarkColors.amber,
+        thumbColor: AppDarkColors.amber,
+        inactiveTrackColor: AppDarkColors.textSecondary,
       ),
 
       // ===== BUTTON THEME =====
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.amber,
-          foregroundColor: AppColors.darkBackground,
+          backgroundColor: AppDarkColors.amber,
+          foregroundColor: AppDarkColors.darkBackground,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
         ),
@@ -76,8 +82,8 @@ class AppTheme {
 
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.amber,
-          side: const BorderSide(color: AppColors.amber),
+          foregroundColor: AppDarkColors.amber,
+          side: const BorderSide(color: AppDarkColors.amber),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
         ),
@@ -85,7 +91,7 @@ class AppTheme {
 
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: AppColors.amber,
+          foregroundColor: AppDarkColors.amber,
           overlayColor: Colors.transparent,
           splashFactory: NoSplash.splashFactory,
           textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
@@ -98,9 +104,9 @@ class AppTheme {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
         ),
-        backgroundColor: AppColors.darkSurface,
+        backgroundColor: AppDarkColors.darkSurface,
       ),
-      iconTheme: IconThemeData(color: Colors.grey[400]),
+      iconTheme: const IconThemeData(color: AppDarkColors.textBody),
     );
   }
 
@@ -115,85 +121,88 @@ class AppTheme {
         },
       ),
       brightness: Brightness.light,
-      scaffoldBackgroundColor: AppColors.lightBackground,
+      scaffoldBackgroundColor: AppLightColors.lightBackground,
       colorScheme: const ColorScheme.light(
-        surface: AppColors.lightSurface,
-        primary: AppColors.amber,
+        surface: AppLightColors.lightSurface,
+        primary: AppLightColors.amber,
       ),
 
       // ===== APPBAR =====
       appBarTheme: const AppBarTheme(
-        backgroundColor: AppColors.lightBackground,
-        surfaceTintColor: AppColors.lightBackground,
-        foregroundColor: AppColors.lightTextPrimary,
+        backgroundColor: AppLightColors.lightBackground,
+        surfaceTintColor: AppLightColors.lightBackground,
+        foregroundColor: AppLightColors.textPrimary,
         elevation: 0,
         centerTitle: false,
         toolbarHeight: 48,
+        iconTheme: IconThemeData(color: AppLightColors.iconPrimary),
       ),
 
       //=====text theme========
       textTheme: TextTheme(
         //title
         titleLarge: AppTextStyles.title.copyWith(
-          color: AppColors.lightTextPrimary,
+          color: AppLightColors.textPrimary,
         ),
 
         //Arabic
         bodyLarge: AppTextStyles.quranBody.copyWith(
-          color: AppColors.lightTextPrimary,
+          color: AppLightColors.textPrimary,
         ),
 
         //Normal body(Translation)
-        bodyMedium: AppTextStyles.body.copyWith(color: AppColors.lightTextBody),
+        bodyMedium: AppTextStyles.body.copyWith(
+          color: AppLightColors.textPrimary,
+        ),
 
         //small text
         bodySmall: AppTextStyles.secondary.copyWith(
-          color: AppColors.lightTextSecondary,
+          color: AppLightColors.textSecondary,
         ),
       ),
 
       // ===== CARD =====
-      cardColor: AppColors.lightSurface,
-      dividerColor: AppColors.lightTextSecondary.withAlpha(50),
+      cardColor: AppLightColors.lightSurface,
+      dividerColor: AppLightColors.divider,
       dividerTheme: const DividerThemeData(space: 0),
-      iconTheme: IconThemeData(color: Colors.grey[800]),
+      iconTheme: const IconThemeData(color: AppLightColors.iconPrimary),
 
       // ===== SLIDER =====
       sliderTheme: const SliderThemeData(
-        activeTrackColor: AppColors.amber,
-        thumbColor: AppColors.amber,
-        inactiveTrackColor: AppColors.lightTextSecondary,
+        activeTrackColor: AppLightColors.amber,
+        thumbColor: AppLightColors.amber,
+        inactiveTrackColor: AppLightColors.textSecondary,
       ),
 
       // ===== BUTTONS =====
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.amber,
-          foregroundColor: AppColors.lightBackground,
+          backgroundColor: AppLightColors.amber,
+          foregroundColor: AppLightColors.lightBackground,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
           elevation: 0,
           shadowColor: Colors.transparent, // optional if you want no shadow
           splashFactory: InkRipple.splashFactory,
-          overlayColor: AppColors.lightTextBody,
+          overlayColor: AppLightColors.textBody,
         ),
       ),
 
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.amber,
-          side: const BorderSide(color: AppColors.amber),
+          foregroundColor: AppLightColors.amber,
+          side: const BorderSide(color: AppLightColors.amber),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
           backgroundColor: Colors.transparent, // optional, usually default
           splashFactory: InkRipple.splashFactory, //splash
-          overlayColor: AppColors.amber,
+          overlayColor: AppLightColors.amber,
         ),
       ),
 
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: AppColors.amber,
+          foregroundColor: AppLightColors.amber,
           overlayColor: Colors.transparent,
           splashFactory: NoSplash.splashFactory,
           textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
@@ -207,7 +216,7 @@ class AppTheme {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
         ),
-        backgroundColor: AppColors.lightBackground,
+        backgroundColor: AppLightColors.lightBackground,
       ),
     );
   }

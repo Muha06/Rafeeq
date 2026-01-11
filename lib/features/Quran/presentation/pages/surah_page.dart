@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/functions/clean_arabic_text.dart';
-import 'package:rafeeq/core/themes/app_colors.dart';
+import 'package:rafeeq/core/themes/dark_colors.dart';
+import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/features/Quran/domain/entities/ayah.dart';
 import 'package:rafeeq/features/Quran/domain/entities/last_read_ayah.dart';
 import 'package:rafeeq/features/Quran/domain/entities/surah.dart';
@@ -180,7 +180,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
                 //scrollController: scrollController, // attach scroll controller
               ),
               loading: () => const Center(
-                child: CircularProgressIndicator(color: AppColors.amber),
+                child: CircularProgressIndicator(color: AppDarkColors.amber),
               ),
               error: (e, _) => Center(child: Text('Failed to load ayahs: $e')),
             ),
@@ -215,7 +215,7 @@ class SurahSettingsSheet extends StatelessWidget {
                   height: 6,
                   width: 48,
                   decoration: BoxDecoration(
-                    color: AppColors.lightTextSecondary,
+                    color: AppDarkColors.textSecondary,
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
@@ -391,7 +391,7 @@ class AyahTile extends ConsumerWidget {
                 textAlign: TextAlign.center,
                 style: theme.textTheme.bodySmall!.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: AppColors.amber,
+                  color: AppDarkColors.amber,
                   fontSize: 16,
                 ),
               ),
@@ -436,29 +436,23 @@ class AyahTile extends ConsumerWidget {
               children: [
                 IconButton(
                   onPressed: () {},
-                  icon: const Icon(Icons.bookmark_add_outlined, size: 22),
+                  icon: Icon(
+                    Icons.bookmark_add_outlined,
+                    size: 22,
+                    color: isDark
+                        ? AppDarkColors.iconSecondary
+                        : AppLightColors.iconSecondary,
+                  ),
                 ),
                 IconButton(
                   onPressed: () {},
-                  icon: const Icon(Icons.share, size: 22),
-                ),
-                IconButton(
-                  onPressed: () {
-                    saveLastRead(
-                      LastReadAyah(
-                        surahId: ayah.surahId,
-                        ayahNumber: ayah.ayahNumber,
-                      ),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          'Saved Ayah ${ayah.ayahNumber} as last read',
-                        ),
-                      ),
-                    );
-                  },
-                  icon: const Icon(Icons.bookmark, size: 22),
+                  icon: Icon(
+                    Icons.share,
+                    size: 22,
+                    color: isDark
+                        ? AppDarkColors.iconSecondary
+                        : AppLightColors.iconSecondary,
+                  ),
                 ),
               ],
             ),

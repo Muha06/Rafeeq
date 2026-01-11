@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/functions/clean_arabic_text.dart';
-import 'package:rafeeq/core/themes/app_colors.dart';
+import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/features/Quran/presentation/pages/surah_page.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/ayah_of_the_day.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
@@ -36,7 +36,7 @@ class AyahOfTheDay extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             child: const Center(
               child: CupertinoActivityIndicator(
-                color: AppColors.amber,
+                color: AppDarkColors.amber,
                 animating: true,
                 radius: 18,
               ),
@@ -110,9 +110,10 @@ class AyahOfTheDay extends ConsumerWidget {
                     Text(
                       '${ayahSurah.id}:${ayah.ayahNumber}',
                       style: theme.textTheme.bodySmall!.copyWith(
-                        color: AppColors.amber,
+                        color: AppDarkColors.amber,
                       ),
                     ),
+                 
                   ],
                 ),
               ),

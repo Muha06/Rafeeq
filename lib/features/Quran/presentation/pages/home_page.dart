@@ -120,7 +120,9 @@ class _HomePageState extends ConsumerState<HomePage> {
                 padding: EdgeInsets.symmetric(horizontal: 14.0),
                 sliver: AllSurahsList(),
               ),
-              // AllSurahsList
+              const SliverToBoxAdapter(
+                child: Card(child: Text('this is a card')),
+              ),
             ],
           ),
         ),

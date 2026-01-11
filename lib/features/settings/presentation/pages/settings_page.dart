@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/core/themes/app_colors.dart';
+import 'package:rafeeq/core/themes/dark_colors.dart';
+import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
@@ -36,8 +37,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             color: Colors.transparent,
             child: ListTile(
               splashColor: isDark
-                  ? AppColors.darkSurface
-                  : AppColors.lightSurface,
+                  ? AppDarkColors.darkSurface
+                  : AppLightColors.lightSurface,
               onTap: () {
                 showThemePicker(context);
               },
@@ -91,7 +92,7 @@ class _ThemePickerSheetState extends ConsumerState<ThemePickerSheet> {
               height: 6,
               width: 48,
               decoration: BoxDecoration(
-                color: AppColors.lightTextSecondary,
+                color: AppLightColors.textSecondary,
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
@@ -175,8 +176,8 @@ class _ThemeOption extends ConsumerWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
         splashColor: isDark
-            ? AppColors.lightTextSecondary.withAlpha(35)
-            : AppColors.lightTextSecondary.withAlpha(35),
+            ? AppDarkColors.textSecondary.withAlpha(35)
+            : AppLightColors.textSecondary.withAlpha(35),
         onTap: () {
           RadioGroup.maybeOf<AppThemeMode>(context)?.onChanged.call(value);
         },
@@ -187,7 +188,7 @@ class _ThemeOption extends ConsumerWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: selected ? AppColors.amber : theme.dividerColor,
+              color: selected ? AppLightColors.amber : theme.dividerColor,
             ),
           ),
           child: Row(
