@@ -18,6 +18,7 @@ class SimpleSliverHeaderDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
+    //final isDark = theme
     return Material(
       // 🔥 KEY MOVE
       color: Theme.of(context).scaffoldBackgroundColor,
