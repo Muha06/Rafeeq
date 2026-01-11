@@ -96,6 +96,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   child: AyahOfTheDay(),
                 ),
               ),
+              const SliverToBoxAdapter(child: SizedBox(height: 16)),
 
               const SliverToBoxAdapter(child: FridayReminder()),
 
@@ -110,7 +111,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     ),
                     child: QuickSurahLinks(),
                   ),
-                  height: 80,
+                  height: 90,
                 ),
               ),
               const SliverToBoxAdapter(child: SizedBox(height: 16)),
@@ -119,9 +120,6 @@ class _HomePageState extends ConsumerState<HomePage> {
               const SliverPadding(
                 padding: EdgeInsets.symmetric(horizontal: 14.0),
                 sliver: AllSurahsList(),
-              ),
-              const SliverToBoxAdapter(
-                child: Card(child: Text('this is a card')),
               ),
             ],
           ),

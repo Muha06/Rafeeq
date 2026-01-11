@@ -26,5 +26,5 @@ class AppTextStyles {
   );
 
   // Secondary / caption text
-  static final TextStyle secondary = GoogleFonts.lato(fontSize: 14, height: 1);
+  static final TextStyle secondary = GoogleFonts.lato(fontSize: 12, height: 1);
 }

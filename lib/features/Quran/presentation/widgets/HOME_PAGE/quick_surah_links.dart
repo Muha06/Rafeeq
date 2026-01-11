@@ -30,15 +30,16 @@ class SurahLink extends ConsumerWidget {
         },
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(8),
             color: theme.cardColor,
           ),
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           child: Center(
             child: Text(
               surah.nameTransliteration,
-              style: theme.textTheme.bodySmall!.copyWith(
-                fontWeight: FontWeight.w500,
+              style: theme.textTheme.bodyMedium!.copyWith(
+                //fontWeight: FontWeight.w500,
+                fontSize: 12,
                 color: isDark
                     ? AppDarkColors.textSecondary
                     : AppLightColors.textBody,

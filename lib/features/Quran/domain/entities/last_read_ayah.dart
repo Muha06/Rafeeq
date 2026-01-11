@@ -24,19 +24,24 @@ class LastReadAyah {
 /// Open the Hive box once in main() or a provider
 final lastReadBox = Hive.box('lastReadBox');
 
-/// Save last read ayah
+//SAVE LAST READ
 Future<void> saveLastRead(LastReadAyah lastRead) async {
-  debugPrint(
-    'Saving last read: surahId=${lastRead.surahId}, ayahNumber=${lastRead.ayahNumber}',
-  );
-  await lastReadBox.put('lastRead', lastRead.toMap());
+  await lastReadBox.put(lastRead.surahId, lastRead.toMap());
+  debugPrint('Saved last read for Surah ${lastRead.surahId}');
 }
 
-/// Get last read ayah
-LastReadAyah? getLastRead() {
-  final data = lastReadBox.get('lastRead');
-  if (data != null && data is Map) {
-    return LastReadAyah.fromMap(data);
-  }
+//GET LAST READ
+LastReadAyah? getLastRead(int surahId) {
+  final data = lastReadBox.get(surahId);
+  if (data != null && data is Map) return LastReadAyah.fromMap(data);
   return null;
 }
+
+//REMOVE LAST READ
+Future<void> removeLastReadHive(int surahId) async {
+  if (lastReadBox.containsKey(surahId)) {
+    await lastReadBox.delete(surahId);
+    debugPrint('Last-read for Surah $surahId deleted from Hive');
+  }
+}
+

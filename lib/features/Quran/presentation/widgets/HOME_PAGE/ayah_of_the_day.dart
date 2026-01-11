@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/core/functions/clean_arabic_text.dart';
-import 'package:rafeeq/core/themes/dark_colors.dart';
+ import 'package:rafeeq/core/themes/dark_colors.dart';
+import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/features/Quran/presentation/pages/surah_page.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/ayah_of_the_day.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
@@ -59,7 +59,10 @@ class AyahOfTheDay extends ConsumerWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => FullSurahPage(surah: ayahSurah),
+                    builder: (_) => FullSurahPage(
+                      surah: ayahSurah,
+                      ayahOfTheDayAyah: ayah.ayahNumber,
+                    ),
                   ),
                 );
               },
@@ -67,33 +70,31 @@ class AyahOfTheDay extends ConsumerWidget {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: theme.cardColor,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: isDark
+                          ? Colors.black.withAlpha(120)
+                          : Colors.black.withAlpha(10),
+                      blurRadius: 8,
+                      spreadRadius: 2,
+                      offset: const Offset(0, 4), // y offset creates depth
+                    ),
+                  ],
                 ),
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16,
                   vertical: 16,
                 ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '==== Ayah of the Day ====',
-                      textAlign: TextAlign.center,
+                      'Daily verse',
+                      textAlign: TextAlign.left,
                       style: theme.textTheme.bodySmall,
                     ),
-                    const SizedBox(height: 16),
-
-                    //Arabic
-                    Text(
-                      cleanAyah(ayah.textArabic),
-                      textAlign: TextAlign.right,
-                      textDirection: TextDirection.rtl,
-                      style: theme.textTheme.bodyLarge!.copyWith(
-                        fontWeight: isDark ? FontWeight.w500 : FontWeight.w400,
-                        fontSize: 22,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 12),
 
                     //Translation
                     Text(
@@ -104,16 +105,15 @@ class AyahOfTheDay extends ConsumerWidget {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 12),
 
                     //refrence
                     Text(
-                      '${ayahSurah.id}:${ayah.ayahNumber}',
+                      'Quran ${ayahSurah.id}:${ayah.ayahNumber}',
                       style: theme.textTheme.bodySmall!.copyWith(
-                        color: AppDarkColors.amber,
+                        color: AppLightColors.amber,
                       ),
                     ),
-                 
                   ],
                 ),
               ),
