@@ -65,22 +65,25 @@ class QuickSurahLinks extends ConsumerWidget {
       return const SizedBox.shrink();
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Quick links', style: theme.textTheme.bodySmall),
-        const SizedBox(height: 16),
+    return DecoratedBox(
+      decoration: const BoxDecoration(color: AppDarkColors.darkBackground),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Quick links', style: theme.textTheme.bodySmall),
+          const SizedBox(height: 16),
 
-        SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: quickSurahs
-                .map((surah) => SurahLink(surah: surah))
-                .toList(),
+          SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: quickSurahs
+                  .map((surah) => SurahLink(surah: surah))
+                  .toList(),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

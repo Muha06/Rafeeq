@@ -84,7 +84,12 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
         currentAyahNumber != _lastSavedAyah &&
         currentAyahNumber > skipInitialAyahs) {
       saveLastRead(
-        LastReadAyah(surahId: widget.surah.id, ayahNumber: currentAyahNumber),
+        LastReadAyah(
+          surahId: widget.surah.id,
+          ayahNumber: currentAyahNumber,
+          surahName: widget.surah.nameTransliteration,
+          verseCount: widget.surah.versesCount,
+        ),
       );
       _lastSavedAyah = currentAyahNumber;
       debugPrint(
@@ -112,19 +117,21 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          backgroundColor: isDark ? AppDarkColors.divider : Colors.white,
+          backgroundColor: isDark
+              ? AppDarkColors.divider
+              : AppDarkColors.darkSurface,
           // persist: false,
           content: Text(
             'Jump to last-read Ayah ${lastRead.ayahNumber}?',
             style: theme.textTheme.bodySmall!.copyWith(
-              color: isDark ? Colors.white : Colors.black,
+              color: Colors.white,
               fontWeight: FontWeight.bold,
               fontSize: 14,
             ),
           ),
           action: SnackBarAction(
             label: 'Go',
-            textColor: isDark ? Colors.amber : Colors.blue,
+            textColor: Colors.amber,
             onPressed: () {
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
               _jumpToAyah(lastRead.ayahNumber, suppressSave: true);

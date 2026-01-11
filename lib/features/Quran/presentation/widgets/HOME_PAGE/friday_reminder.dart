@@ -21,7 +21,7 @@ class _FridayReminderState extends ConsumerState<FridayReminder> {
     final theme = Theme.of(context);
     final isDark = ref.watch(isDarkProvider);
 
-    if (!isFriday) return const SizedBox.shrink(); // hide if not Friday
+    if (isFriday) return const SizedBox.shrink(); // hide if not Friday
 
     const surahAlKahf = Surah(
       id: 18,
@@ -33,7 +33,7 @@ class _FridayReminderState extends ConsumerState<FridayReminder> {
     );
 
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.only(left: 14.0, right: 14, top: 4, bottom: 16),
       child: GestureDetector(
         onTap: () {
           Navigator.push(
@@ -43,68 +43,72 @@ class _FridayReminderState extends ConsumerState<FridayReminder> {
             ),
           );
         },
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: isDark
-                ? AppDarkColors.darkSurface
-                : AppLightColors.lightSurface,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.book,
-                  color: isDark
-                      ? AppDarkColors.darkSurface
-                      : AppLightColors.textBody,
+        child: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: isDark
+                    ? AppDarkColors.darkSurface
+                    : AppLightColors.lightSurface,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 16,
                 ),
-                const SizedBox(width: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("It's Friday!", style: theme.textTheme.bodySmall),
+                    const SizedBox(height: 10),
 
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("It's Friday!", style: theme.textTheme.bodySmall),
-                      const SizedBox(height: 12),
-
-                      Text.rich(
-                        TextSpan(
-                          text: 'Don’t forget to read ',
-                          style: Theme.of(context).textTheme.bodySmall!
-                              .copyWith(
-                                color: isDark ? Colors.white70 : Colors.black87,
-                                height: 1.3,
-                              ),
-                          children: [
-                            TextSpan(
-                              text: 'Surah Al-Kahf',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: isDark ? Colors.white70 : Colors.black,
-                              ),
-                            ),
-                            const TextSpan(text: ' today to earn blessings!'),
-                          ],
+                    Text.rich(
+                      TextSpan(
+                        text: 'Don’t forget to read ',
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          height: 1,
+                          fontSize: 14,
                         ),
+                        children: [
+                          TextSpan(
+                            text: 'Surah Al-Kahf',
+                            style: Theme.of(context).textTheme.bodyMedium!
+                                .copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                  height: 1.1,
+                                  color: isDark ? Colors.white : Colors.black,
+                                ),
+                          ),
+                          const TextSpan(text: ' today to earn blessings!'),
+                        ],
                       ),
-                      const SizedBox(height: 12),
+                    ),
+                    const SizedBox(height: 10),
 
-                      Text(
-                        'Tap to read',
-                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                          color: isDark ? AppLightColors.amber : Colors.black,
-                          fontWeight: FontWeight.bold,
-                          height: 1.3,
-                        ),
+                    Text(
+                      'Tap to read',
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                        color: isDark ? AppLightColors.amber : Colors.black,
+                        fontWeight: FontWeight.bold,
+                        height: 1.3,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
+            Positioned(
+              top: 8,
+              right: 8,
+              child: Image.asset(
+                'assets/images/mosque.png',
+                height: 30,
+                width: 30,
+              ),
+            ),
+          ],
         ),
       ),
     );

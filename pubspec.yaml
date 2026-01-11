@@ -45,10 +45,14 @@ flutter:
 
   assets: 
     - assets/images/salam_amber.png
+    - assets/images/salam_black.png
     - assets/images/kaaba.jpeg
     - assets/images/kaaba_2.jpeg
     - assets/images/bismillah_1.png
     - assets/images/bismillah_dark.png
+    - assets/images/quran.png
+    - assets/images/quran_book.png
+    - assets/images/mosque.png
     - .env
  
  

@@ -4,11 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hijri_date/hijri.dart';
 import 'package:rafeeq/core/animations/navigation_animations.dart';
 import 'package:rafeeq/core/helper_widgets/sliver_header_delegate.dart';
-import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_surahs_provider.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/HOME_PAGE/all_surah_listview.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/HOME_PAGE/ayah_of_the_day.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/HOME_PAGE/friday_reminder.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/HOME_PAGE/greetings_row.dart';
+import 'package:rafeeq/features/Quran/presentation/widgets/HOME_PAGE/quick_last_read.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/HOME_PAGE/quick_surah_links.dart';
 import 'package:rafeeq/features/settings/presentation/pages/settings_page.dart';
 
@@ -44,85 +44,76 @@ class _HomePageState extends ConsumerState<HomePage> {
 
     return Scaffold(
       body: SafeArea(
-        child: RefreshIndicator(
-          onRefresh: () async {
-            ref.invalidate(surahsFutureProvider);
-          },
-          child: CustomScrollView(
-            controller: scrollController,
-            physics: const BouncingScrollPhysics(),
-            slivers: [
-              SliverAppBar(
-                pinned: false,
-                floating: true,
-                snap: false,
-                title: GestureDetector(
-                  onTap: scrollToTop,
-                  child: Text(
-                    'Rafeeq',
-                    style: theme.appBarTheme.titleTextStyle,
-                  ),
+        child: CustomScrollView(
+          controller: scrollController,
+          physics: const BouncingScrollPhysics(),
+          slivers: [
+            SliverAppBar(
+              pinned: false,
+              floating: true,
+              snap: false,
+              title: GestureDetector(
+                onTap: scrollToTop,
+                child: Text('Rafeeq', style: theme.appBarTheme.titleTextStyle),
+              ),
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    pushLeftPage(context, const SettingsPage());
+                  },
+                  icon: const Icon(CupertinoIcons.settings),
                 ),
-                actions: [
-                  IconButton(
-                    onPressed: () {
-                      pushLeftPage(context, const SettingsPage());
-                    },
-                    icon: const Icon(CupertinoIcons.settings),
-                  ),
-                ],
-                bottom: PreferredSize(
-                  preferredSize: const Size.fromHeight(1),
-                  child: Divider(
-                    thickness: 1,
-                    color: theme.dividerColor.withAlpha(20),
-                  ),
+              ],
+              bottom: PreferredSize(
+                preferredSize: const Size.fromHeight(1),
+                child: Divider(
+                  thickness: 1,
+                  color: theme.dividerColor.withAlpha(20),
                 ),
               ),
+            ),
 
-              //GREETINGS
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 14.0),
-                  child: GreetingsRow(formattedHijri: formattedHijri),
+            //GREETINGS
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12.0,
+                  vertical: 14,
                 ),
+                child: GreetingsRow(formattedHijri: formattedHijri),
               ),
-              const SliverToBoxAdapter(child: SizedBox(height: 16)),
+            ),
 
-              //AYAH OF THE DAY
-              const SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 14.0),
-                  child: AyahOfTheDay(),
+            //AYAH OF THE DAY
+            const SliverToBoxAdapter(child: AyahOfTheDay()),
+
+            // const SliverToBoxAdapter(child: FridayReminder()),
+            const SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12.0),
+                child: QuickLastReadList(),
+              ),
+            ),
+
+            // STICKY QUICKSURAHLINK
+            SliverPersistentHeader(
+              pinned: true,
+              delegate: SimpleSliverHeaderDelegate(
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8),
+                  child: QuickSurahLinks(),
                 ),
+                height: 90,
               ),
-              const SliverToBoxAdapter(child: SizedBox(height: 16)),
+            ),
+            const SliverToBoxAdapter(child: SizedBox(height: 16)),
 
-              const SliverToBoxAdapter(child: FridayReminder()),
-
-              // STICKY QUICKSURAHLINK
-              SliverPersistentHeader(
-                pinned: true,
-                delegate: SimpleSliverHeaderDelegate(
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 14.0,
-                      vertical: 8,
-                    ),
-                    child: QuickSurahLinks(),
-                  ),
-                  height: 90,
-                ),
-              ),
-              const SliverToBoxAdapter(child: SizedBox(height: 16)),
-
-              //Surah listview
-              const SliverPadding(
-                padding: EdgeInsets.symmetric(horizontal: 14.0),
-                sliver: AllSurahsList(),
-              ),
-            ],
-          ),
+            //Surah listview
+            const SliverPadding(
+              padding: EdgeInsets.symmetric(horizontal: 12.0),
+              sliver: AllSurahsList(),
+            ),
+          ],
         ),
       ),
     );

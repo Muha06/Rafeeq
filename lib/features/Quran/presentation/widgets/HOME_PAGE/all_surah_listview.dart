@@ -118,7 +118,7 @@ class SurahTileShimmer extends StatelessWidget {
     final highlightColor = isDark ? Colors.grey[800]! : Colors.grey.shade100;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 4),
       child: Shimmer.fromColors(
         baseColor: baseColor,
         highlightColor: highlightColor,
