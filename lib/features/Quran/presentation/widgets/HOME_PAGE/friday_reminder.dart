@@ -21,7 +21,7 @@ class _FridayReminderState extends ConsumerState<FridayReminder> {
     final theme = Theme.of(context);
     final isDark = ref.watch(isDarkProvider);
 
-    if (isFriday) return const SizedBox.shrink(); // hide if not Friday
+    if (!isFriday) return const SizedBox.shrink(); // hide if not Friday
 
     const surahAlKahf = Surah(
       id: 18,

@@ -4,6 +4,7 @@ import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/features/Quran/domain/entities/last_read_ayah.dart';
 import 'package:rafeeq/features/Quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_ayah_provider.dart';
+import 'package:rafeeq/features/Quran/presentation/riverpod/last_read_provider.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/SURAH_PAGE/ayah_tile.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/SURAH_PAGE/surah_details.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/SURAH_PAGE/surah_settings.dart';
@@ -83,14 +84,21 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
     if (!_suppressNextSave &&
         currentAyahNumber != _lastSavedAyah &&
         currentAyahNumber > skipInitialAyahs) {
-      saveLastRead(
-        LastReadAyah(
-          surahId: widget.surah.id,
-          ayahNumber: currentAyahNumber,
-          surahName: widget.surah.nameTransliteration,
-          verseCount: widget.surah.versesCount,
-        ),
-      );
+      ref
+          .read(lastReadRepositoryProvider)
+          .saveLastRead(
+            LastReadAyah(
+              surahId: widget.surah.id,
+              ayahNumber: currentAyahNumber,
+              surahName: widget.surah.nameTransliteration,
+              verseCount: widget.surah.versesCount,
+            ),
+          )
+          .then((_) {
+            debugPrint(
+              'Saved last read: Surah ${widget.surah.id}, Ayah $currentAyahNumber',
+            );
+          });
       _lastSavedAyah = currentAyahNumber;
       debugPrint(
         'Saved last read: Surah ${widget.surah.id}, Ayah $currentAyahNumber',
@@ -104,7 +112,10 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
     final isDark = ref.watch(isDarkProvider);
     final theme = Theme.of(context);
 
-    final lastRead = getLastRead(widget.surah.id); // synchronous version
+    final lastRead = ref
+        .read(lastReadRepositoryProvider)
+        .getLastRead(widget.surah.id);
+
     debugPrint('Last read: $lastRead');
 
     if (lastRead == null) return;
@@ -135,7 +146,9 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
             onPressed: () {
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
               _jumpToAyah(lastRead.ayahNumber, suppressSave: true);
-              removeLastReadHive(lastRead.surahId);
+              ref
+                  .read(lastReadRepositoryProvider)
+                  .removeLastRead(lastRead.surahId);
             },
           ),
           duration: const Duration(seconds: 3),

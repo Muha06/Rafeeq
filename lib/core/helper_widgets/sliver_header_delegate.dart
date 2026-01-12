@@ -18,12 +18,13 @@ class SimpleSliverHeaderDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
-    //final isDark = theme
     return Material(
-      // 🔥 KEY MOVE
       color: Theme.of(context).scaffoldBackgroundColor,
       elevation: overlapsContent ? 2 : 0,
-      child: SizedBox.expand(child: child),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: child,
+      ),
     );
   }
 

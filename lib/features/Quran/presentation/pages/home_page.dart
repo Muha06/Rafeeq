@@ -87,11 +87,15 @@ class _HomePageState extends ConsumerState<HomePage> {
             //AYAH OF THE DAY
             const SliverToBoxAdapter(child: AyahOfTheDay()),
 
-            // const SliverToBoxAdapter(child: FridayReminder()),
+            //friday reminder
+            const SliverToBoxAdapter(child: FridayReminder()),
+
+            //quick last read
             const SliverToBoxAdapter(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12.0),
                 child: QuickLastReadList(),
+                // child: SizedBox.shrink(),
               ),
             ),
 
@@ -100,13 +104,12 @@ class _HomePageState extends ConsumerState<HomePage> {
               pinned: true,
               delegate: SimpleSliverHeaderDelegate(
                 child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8),
+                  padding: EdgeInsets.symmetric(horizontal: 12.0),
                   child: QuickSurahLinks(),
                 ),
                 height: 90,
               ),
             ),
-            const SliverToBoxAdapter(child: SizedBox(height: 16)),
 
             //Surah listview
             const SliverPadding(

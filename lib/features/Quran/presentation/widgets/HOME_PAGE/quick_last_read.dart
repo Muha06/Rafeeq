@@ -12,7 +12,7 @@ class QuickLastReadList extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
 
     if (sampleLastReadAyahs.isEmpty) {
-      return const SizedBox(); // hide if nothing to show
+      return const SizedBox.shrink(); // hide if nothing to show
     }
 
     return Column(
