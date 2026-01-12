@@ -1,61 +1,96 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/features/Quran/domain/entities/last_read_ayah.dart';
+import 'package:rafeeq/features/Quran/presentation/pages/surah_page.dart';
+import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_surahs_provider.dart';
+import 'package:rafeeq/features/Quran/presentation/riverpod/last_read_provider.dart';
 
-class QuickLastReadList extends StatelessWidget {
+class QuickLastReadList extends ConsumerWidget {
   const QuickLastReadList({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+  Widget build(BuildContext context, ref) {
+    final theme = Theme.of(context); 
 
-    if (sampleLastReadAyahs.isEmpty) {
+    final lastReadAyahsAsync = ref.watch(
+      lastReadAyahsProvider,
+    ); // Fetch last read ayahs
+
+    if (lastReadAyahsAsync.isLoading) {
       return const SizedBox.shrink(); // hide if nothing to show
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Title
-        Text('Last Read', style: theme.textTheme.bodySmall!.copyWith()),
-        const SizedBox(height: 8),
+    return lastReadAyahsAsync.when(
+      error: (error, stack) {
+        print(error);
+        return const SizedBox.shrink(); // hide if error
+      },
+      loading: () => const SizedBox.shrink(),
+      data: (lastReadAyahs) {
+        if (lastReadAyahs.isEmpty) {
+          return const SizedBox.shrink(); // hide if nothing to show
+        }
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Title
+            Text('Last Read', style: theme.textTheme.bodySmall!.copyWith()),
+            const SizedBox(height: 8),
 
-        // Horizontal scrollable cards
-        SizedBox(
-          height: 100, // adjust based on card height
-          child: ListView.separated(
-            physics: const BouncingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            itemCount: sampleLastReadAyahs.length,
-            separatorBuilder: (_, __) => const SizedBox(width: 12),
-            itemBuilder: (context, index) {
-              final lastRead = sampleLastReadAyahs[index];
-              return SizedBox(
-                // width: 250, // card width
-                child: QuickLastReadCard(lastRead: lastRead),
-              );
-            },
-          ),
-        ),
-      ],
+            // Horizontal scrollable cards
+            SizedBox(
+              height: 100, // adjust based on card height
+              child: ListView.separated(
+                physics: const BouncingScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+                itemCount: lastReadAyahs.length,
+                separatorBuilder: (_, __) => const SizedBox(width: 12),
+                itemBuilder: (context, index) {
+                  final lastRead = lastReadAyahs[index];
+                  return SizedBox(
+                    // width: 250, // card width
+                    child: QuickLastReadCard(lastRead: lastRead),
+                  );
+                },
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
 
-class QuickLastReadCard extends StatelessWidget {
+class QuickLastReadCard extends ConsumerWidget {
   final LastReadAyah lastRead;
 
   const QuickLastReadCard({super.key, required this.lastRead});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        // Fetch the Surah from the cached surahs in hive
+        final surah = ref
+            .watch(surahsFutureProvider)
+            .maybeWhen(
+              data: (surahs) => surahs.firstWhere(
+                (s) => s.id == lastRead.surahId,
+                orElse: () => throw Exception('Surah not found in cache'),
+              ),
+              orElse: () => throw Exception('Failed to fetch surahs'),
+            );
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => FullSurahPage(surah: surah)),
+        );
+      },
       child: Stack(
         children: [
           Container(
@@ -109,36 +144,3 @@ class QuickLastReadCard extends StatelessWidget {
     );
   }
 }
-
-final List<LastReadAyah> sampleLastReadAyahs = [
-  const LastReadAyah(
-    surahId: 1,
-    surahName: 'Al-Fātiḥah',
-    ayahNumber: 7,
-    verseCount: 7,
-  ),
-  const LastReadAyah(
-    surahId: 2,
-    surahName: 'Al-Baqarah',
-    ayahNumber: 255,
-    verseCount: 286,
-  ),
-  const LastReadAyah(
-    surahId: 36,
-    surahName: 'Yā Sīn',
-    ayahNumber: 12,
-    verseCount: 83,
-  ),
-  const LastReadAyah(
-    surahId: 112,
-    surahName: 'Al-Ikhlāṣ',
-    ayahNumber: 4,
-    verseCount: 4,
-  ),
-  const LastReadAyah(
-    surahId: 18,
-    surahName: 'Al-Kahf',
-    ayahNumber: 10,
-    verseCount: 110,
-  ),
-];

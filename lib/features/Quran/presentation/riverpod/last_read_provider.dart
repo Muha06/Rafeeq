@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:rafeeq/features/Quran/data/dataSources/last_read_local_ds.dart';
 import 'package:rafeeq/features/Quran/data/repositories/last_read_repo_impl.dart';
+import 'package:rafeeq/features/Quran/domain/entities/last_read_ayah.dart';
 import 'package:rafeeq/features/Quran/domain/repository/last_read_repo.dart';
 
 //LAST READ HIVE BOX provider
@@ -19,4 +20,10 @@ final lastReadLocalDataSourceProvider = Provider<LastReadLocalDataSource>((
 //REPO provider
 final lastReadRepositoryProvider = Provider<LastReadRepository>((ref) {
   return LastReadRepositoryImpl(ref.read(lastReadLocalDataSourceProvider));
+});
+
+// FUTURE PROVIDER to get all last read ayahs
+final lastReadAyahsProvider = FutureProvider<List<LastReadAyah>>((ref) async {
+  // Call the repo directly (perfectly fine for now)
+  return ref.read(lastReadRepositoryProvider).getAllLastReads();
 });

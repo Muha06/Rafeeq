@@ -5,13 +5,15 @@ abstract class LastReadLocalDataSource {
   Future<void> saveLastRead(LastReadAyah lastRead);
   LastReadAyah? getLastRead(int surahId);
   Future<void> removeLastRead(int surahId);
+  Future<List<LastReadAyah>> getAllLastReads();
 }
- 
+
 class LastReadLocalDataSourceImpl implements LastReadLocalDataSource {
   final Box box;
 
   LastReadLocalDataSourceImpl(this.box);
 
+  //SAVE Last read
   @override
   Future<void> saveLastRead(LastReadAyah lastRead) async {
     await box.put(lastRead.surahId, {
@@ -22,6 +24,7 @@ class LastReadLocalDataSourceImpl implements LastReadLocalDataSource {
     });
   }
 
+  //GET last read
   @override
   LastReadAyah? getLastRead(int surahId) {
     final data = box.get(surahId);
@@ -35,10 +38,29 @@ class LastReadLocalDataSourceImpl implements LastReadLocalDataSource {
     );
   }
 
+  //REMOVE last read
   @override
   Future<void> removeLastRead(int surahId) async {
     if (box.containsKey(surahId)) {
       await box.delete(surahId);
     }
+  }
+
+  //GET all last reads
+  @override
+  Future<List<LastReadAyah>> getAllLastReads() async {
+    final lastReads = box.values
+        .cast<Map>()
+        .map(
+          (data) => LastReadAyah(
+            surahId: data['surahId'],
+            surahName: data['surahName'],
+            ayahNumber: data['ayahNumber'],
+            verseCount: data['verseCount'],
+          ),
+        )
+        .toList();
+
+    return lastReads;
   }
 }

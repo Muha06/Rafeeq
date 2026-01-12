@@ -30,6 +30,8 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
   bool _isSaving = false; // Throttle last read saving
   bool _suppressNextSave = false;
   static const int skipInitialAyahs = 2;
+  LastReadAyah?
+  temporaryLastReadAyah; // last read ayah, to be saved when popping
 
   @override
   void initState() {
@@ -60,6 +62,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
       duration: const Duration(milliseconds: 600),
       curve: Curves.easeInOut,
     );
+    _suppressNextSave = false;
   }
 
   // Called whenever visible items change
@@ -70,39 +73,27 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
     final positions = itemPositionsListener.itemPositions.value;
     if (positions.isEmpty) return;
 
-    // First fully visible item = current ayah
-    final firstVisible = positions
-        .where((position) => position.itemLeadingEdge >= 0)
-        .reduce(
-          (min, position) =>
-              position.itemLeadingEdge < min.itemLeadingEdge ? position : min,
-        );
+    // Track first fully visible ayah
+    final currentAyahNumber =
+        positions
+            .where((p) => p.itemLeadingEdge >= 0)
+            .reduce(
+              (min, p) => p.itemLeadingEdge < min.itemLeadingEdge ? p : min,
+            )
+            .index +
+        1;
 
-    final currentAyahNumber = firstVisible.index + 1;
-
-    //save the ayah
+    // Update temporary last read if needed
     if (!_suppressNextSave &&
         currentAyahNumber != _lastSavedAyah &&
         currentAyahNumber > skipInitialAyahs) {
-      ref
-          .read(lastReadRepositoryProvider)
-          .saveLastRead(
-            LastReadAyah(
-              surahId: widget.surah.id,
-              ayahNumber: currentAyahNumber,
-              surahName: widget.surah.nameTransliteration,
-              verseCount: widget.surah.versesCount,
-            ),
-          )
-          .then((_) {
-            debugPrint(
-              'Saved last read: Surah ${widget.surah.id}, Ayah $currentAyahNumber',
-            );
-          });
-      _lastSavedAyah = currentAyahNumber;
-      debugPrint(
-        'Saved last read: Surah ${widget.surah.id}, Ayah $currentAyahNumber',
+      temporaryLastReadAyah = LastReadAyah(
+        surahId: widget.surah.id,
+        ayahNumber: currentAyahNumber,
+        surahName: widget.surah.nameTransliteration,
+        verseCount: widget.surah.versesCount,
       );
+      _lastSavedAyah = currentAyahNumber;
     }
 
     _isSaving = false;
@@ -146,9 +137,14 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
             onPressed: () {
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
               _jumpToAyah(lastRead.ayahNumber, suppressSave: true);
+
               ref
                   .read(lastReadRepositoryProvider)
                   .removeLastRead(lastRead.surahId);
+
+              ref.invalidate(
+                lastReadAyahsProvider,
+              ); //refresh last read ayahs homepage
             },
           ),
           duration: const Duration(seconds: 3),
@@ -171,8 +167,18 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
     final ayahsAsync = ref.watch(ayahsFutureProvider(widget.surah.id));
 
     return PopScope(
-      onPopInvokedWithResult: (didPop, result) =>
-          ScaffoldMessenger.of(context).hideCurrentSnackBar(),
+      onPopInvokedWithResult: (didPop, result) {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        //finally save the last read ayah
+        if (temporaryLastReadAyah != null) {
+          ref
+              .read(lastReadRepositoryProvider)
+              .saveLastRead(temporaryLastReadAyah!)
+              .then((_) {
+                ref.invalidate(lastReadAyahsProvider);
+              });
+        }
+      },
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: theme.scaffoldBackgroundColor,
