@@ -97,10 +97,10 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
             ),
 
-            // STICKY QUICKSURAHLINK
+            // QUICKSURAHLINK
             const SliverToBoxAdapter(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12.0),
+                padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8),
                 child: QuickSurahLinks(),
               ),
             ),

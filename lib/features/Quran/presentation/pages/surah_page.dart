@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
+import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/features/Quran/domain/entities/last_read_ayah.dart';
 import 'package:rafeeq/features/Quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_ayah_provider.dart';
@@ -26,12 +27,14 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
   final ItemScrollController itemScrollController = ItemScrollController();
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
+  final ScrollController _scrollController = ScrollController();
   int? _lastSavedAyah;
   bool _isSaving = false; // Throttle last read saving
   bool _suppressNextSave = false;
   static const int skipInitialAyahs = 2;
   LastReadAyah?
   temporaryLastReadAyah; // last read ayah, to be saved when popping
+  int? _currentAyahNumber;
 
   @override
   void initState() {
@@ -82,11 +85,12 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
             )
             .index +
         1;
+    _currentAyahNumber = currentAyahNumber;
 
     // Update temporary last read if needed
     if (!_suppressNextSave &&
-        currentAyahNumber != _lastSavedAyah &&
-        currentAyahNumber > skipInitialAyahs) {
+        _currentAyahNumber != _lastSavedAyah &&
+        _currentAyahNumber! > skipInitialAyahs) {
       temporaryLastReadAyah = LastReadAyah(
         surahId: widget.surah.id,
         ayahNumber: currentAyahNumber,
@@ -95,6 +99,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
         updatedAt: DateTime.now(),
       );
       _lastSavedAyah = currentAyahNumber;
+      print('temporaryLastReadAyah updated: $temporaryLastReadAyah');
     }
 
     _isSaving = false;
@@ -139,10 +144,6 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
               _jumpToAyah(lastRead.ayahNumber, suppressSave: true);
 
-              ref
-                  .read(lastReadRepositoryProvider)
-                  .removeLastRead(lastRead.surahId);
-
               ref.invalidate(
                 lastReadAyahsProvider,
               ); //refresh last read ayahs homepage
@@ -176,7 +177,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
               .read(lastReadRepositoryProvider)
               .saveLastRead(temporaryLastReadAyah!)
               .then((_) {
-                ref.invalidate(lastReadAyahsProvider);
+                ref.refresh(lastReadAyahsProvider);
               });
         }
       },
@@ -213,17 +214,33 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
           children: [
             Expanded(
               child: ayahsAsync.when(
-                data: (ayahs) => ScrollablePositionedList.builder(
-                  itemCount: ayahs.length + 1,
-                  itemBuilder: (context, index) {
-                    if (index == 0) {
-                      return SurahDetails(surah: widget.surah, isDark: isDark);
-                    }
-                    return AyahTile(ayah: ayahs[index - 1]);
-                  },
-                  itemScrollController: itemScrollController,
-                  itemPositionsListener: itemPositionsListener,
-                  //scrollController: scrollController, // attach scroll controller
+                data: (ayahs) => SizedBox(
+                  height: 16,
+                  child: RawScrollbar(
+                    thumbColor: isDark
+                        ? AppDarkColors.divider
+                        : AppLightColors.iconSecondary,
+                    thickness: 8,
+                    interactive: false,
+                    thumbVisibility: true,
+                    radius: const Radius.circular(8),
+                    controller: _scrollController,
+                    child: ScrollablePositionedList.builder(
+                      itemCount: ayahs.length + 1,
+                      itemBuilder: (context, index) {
+                        if (index == 0) {
+                          return SurahDetails(
+                            surah: widget.surah,
+                            isDark: isDark,
+                          );
+                        }
+                        return AyahTile(ayah: ayahs[index - 1]);
+                      },
+                      itemScrollController: itemScrollController,
+                      itemPositionsListener: itemPositionsListener,
+                      //scrollController: scrollController, // attach scroll controller
+                    ),
+                  ),
                 ),
                 loading: () => const Center(
                   child: CircularProgressIndicator(color: AppDarkColors.amber),

@@ -12,11 +12,13 @@ class LastReadRepositoryImpl implements LastReadRepository {
   Future<void> saveLastRead(LastReadAyah lastRead) {
     final ayahNumber = lastRead.ayahNumber;
     final lastAyah = lastRead.verseCount;
+    //reached last ayah? do not save but remove instead
     if (ayahNumber >= lastAyah) {
       debugPrint(
         'Skipping save for ayah ${lastRead.ayahNumber}, last ayah ${lastRead.verseCount}',
       );
-      return Future.value(); // Do not save if it's the last ayah
+      //remove surah from last read
+      return localDataSource.removeLastRead(lastRead.surahId);
     } else {
       debugPrint(
         'Saved last read: Surah  ${lastRead.surahId}, Ayah ${lastRead.ayahNumber}',

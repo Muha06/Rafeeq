@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
@@ -6,6 +7,7 @@ import 'package:rafeeq/features/Quran/domain/entities/last_read_ayah.dart';
 import 'package:rafeeq/features/Quran/presentation/pages/surah_page.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_surahs_provider.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/last_read_provider.dart';
+import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class QuickLastReadList extends ConsumerWidget {
   const QuickLastReadList({super.key});
@@ -19,14 +21,14 @@ class QuickLastReadList extends ConsumerWidget {
     ); // Fetch last read ayahs
 
     if (lastReadAyahsAsync.isLoading) {
-      return const SizedBox(); // hide if nothing to show
+      return const SizedBox(height: 120); // hide if nothing to show
     }
 
     return lastReadAyahsAsync.when(
-      error: (error, stack) { 
+      error: (error, stack) {
         return const SizedBox.shrink(); // hide if error
       },
-      loading: () => const SizedBox.shrink(),
+      loading: () => const SizedBox.shrink(), // hide if loading
       data: (lastReadAyahs) {
         if (lastReadAyahs.isEmpty) {
           return const SizedBox.shrink(); // hide if nothing to show
@@ -40,17 +42,15 @@ class QuickLastReadList extends ConsumerWidget {
 
             // Horizontal scrollable cards
             SizedBox(
-              height: 100, // adjust based on card height
-              child: ListView.separated(
-                physics: const BouncingScrollPhysics(),
+              height: 100,
+              child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: lastReadAyahs.length,
-                separatorBuilder: (_, __) => const SizedBox(width: 12),
                 itemBuilder: (context, index) {
                   final lastRead = lastReadAyahs[index];
-                  return SizedBox(
-                    // width: 250, // card width
-                    child: QuickLastReadCard(lastRead: lastRead),
+                  return QuickLastReadCard(
+                    lastRead: lastRead,
+                    key: ValueKey(lastRead.surahId),
                   );
                 },
               ),
@@ -62,15 +62,96 @@ class QuickLastReadList extends ConsumerWidget {
   }
 }
 
-class QuickLastReadCard extends ConsumerWidget {
+class QuickLastReadCard extends ConsumerStatefulWidget {
   final LastReadAyah lastRead;
 
   const QuickLastReadCard({super.key, required this.lastRead});
 
   @override
-  Widget build(BuildContext context, ref) {
+  ConsumerState<QuickLastReadCard> createState() => _QuickLastReadCardState();
+}
+
+class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
+  bool _isSelected = false; //for long press style
+
+  Future<void> _showDeleteLastReadSheet(
+    BuildContext context,
+    WidgetRef ref,
+    LastReadAyah lastRead,
+  ) {
+    setState(() {
+      _isSelected = true;
+    });
+    return showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (_) {
+        final theme = Theme.of(context);
+        final isDark = ref.watch(isDarkProvider);
+
+        return Container(
+          // height: 300,
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surface,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(
+                Icons.delete_outline,
+                size: 72,
+                color: AppDarkColors.iconAccent,
+              ),
+              const SizedBox(height: 16),
+
+              Text('Remove last read?', style: theme.textTheme.titleMedium),
+              const SizedBox(height: 12),
+
+              Text(
+                '${lastRead.surahName} • Ayah ${lastRead.ayahNumber}',
+                style: theme.textTheme.bodySmall,
+              ),
+              const SizedBox(height: 32),
+
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Cancel'),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        await ref
+                            .read(lastReadRepositoryProvider)
+                            .removeLastRead(lastRead.surahId);
+
+                        if (context.mounted) {
+                          ref.refresh(lastReadAyahsProvider);
+                        }
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Delete'),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
+    final isDark = ref.watch(isDarkProvider);
 
     return GestureDetector(
       onTap: () {
@@ -79,7 +160,7 @@ class QuickLastReadCard extends ConsumerWidget {
             .watch(surahsFutureProvider)
             .maybeWhen(
               data: (surahs) => surahs.firstWhere(
-                (s) => s.id == lastRead.surahId,
+                (s) => s.id == widget.lastRead.surahId,
                 orElse: () => throw Exception('Surah not found in cache'),
               ),
               orElse: () => throw Exception('Failed to fetch surahs'),
@@ -90,15 +171,33 @@ class QuickLastReadCard extends ConsumerWidget {
           MaterialPageRoute(builder: (context) => FullSurahPage(surah: surah)),
         );
       },
+
+      //delete
+      onLongPress: () async {
+        HapticFeedback.vibrate();
+        setState(() {
+          _isSelected = true;
+        });
+
+        await _showDeleteLastReadSheet(context, ref, widget.lastRead);
+
+        setState(() {
+          _isSelected = false;
+        });
+      },
       child: Stack(
         children: [
           Container(
-            width: 200,
-            margin: const EdgeInsets.symmetric(vertical: 8),
+            width: 160,
+            margin: const EdgeInsets.only(top: 8, bottom: 8, right: 8),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             decoration: BoxDecoration(
               color: isDark
-                  ? AppDarkColors.darkSurface
+                  ? _isSelected
+                        ? AppDarkColors.divider
+                        : AppDarkColors.darkSurface
+                  : _isSelected
+                  ? AppLightColors.iconDisabled
                   : AppLightColors.lightSurface,
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
@@ -116,14 +215,14 @@ class QuickLastReadCard extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  lastRead.surahName,
+                  widget.lastRead.surahName,
                   style: theme.textTheme.titleMedium!.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Ayah ${lastRead.ayahNumber} of ${lastRead.verseCount}',
+                  'Ayah ${widget.lastRead.ayahNumber} of ${widget.lastRead.verseCount}',
                   style: theme.textTheme.bodySmall,
                 ),
               ],
