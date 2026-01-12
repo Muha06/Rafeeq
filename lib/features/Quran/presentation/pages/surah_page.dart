@@ -92,6 +92,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
         ayahNumber: currentAyahNumber,
         surahName: widget.surah.nameTransliteration,
         verseCount: widget.surah.versesCount,
+        updatedAt: DateTime.now(),
       );
       _lastSavedAyah = currentAyahNumber;
     }
@@ -167,7 +168,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
     final ayahsAsync = ref.watch(ayahsFutureProvider(widget.surah.id));
 
     return PopScope(
-      onPopInvokedWithResult: (didPop, result) {
+      onPopInvokedWithResult: (didPop, result) async {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         //finally save the last read ayah
         if (temporaryLastReadAyah != null) {

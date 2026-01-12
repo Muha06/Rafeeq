@@ -3,15 +3,17 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 class LastReadAyah {
   final int surahId;
-  final String surahName; // new
+  final String surahName;
   final int ayahNumber;
-  final int verseCount; // new
+  final int verseCount;
+  final DateTime updatedAt;
 
   const LastReadAyah({
     required this.surahId,
     required this.surahName,
     required this.ayahNumber,
     required this.verseCount,
+    required this.updatedAt,
   });
 
   /// Convert to Map for Hive
@@ -21,6 +23,7 @@ class LastReadAyah {
       'surahName': surahName,
       'ayahNumber': ayahNumber,
       'verseCount': verseCount,
+      'updatedAt': updatedAt,
     };
   }
 
@@ -31,6 +34,7 @@ class LastReadAyah {
       surahName: map['surahName'] as String,
       ayahNumber: map['ayahNumber'] as int,
       verseCount: map['verseCount'] as int,
+      updatedAt: map['updatedAt'] as DateTime,
     );
   }
 }

@@ -12,19 +12,18 @@ class QuickLastReadList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final theme = Theme.of(context); 
+    final theme = Theme.of(context);
 
     final lastReadAyahsAsync = ref.watch(
       lastReadAyahsProvider,
     ); // Fetch last read ayahs
 
     if (lastReadAyahsAsync.isLoading) {
-      return const SizedBox.shrink(); // hide if nothing to show
+      return const SizedBox(); // hide if nothing to show
     }
 
     return lastReadAyahsAsync.when(
-      error: (error, stack) {
-        print(error);
+      error: (error, stack) { 
         return const SizedBox.shrink(); // hide if error
       },
       loading: () => const SizedBox.shrink(),

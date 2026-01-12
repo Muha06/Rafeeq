@@ -64,23 +64,29 @@ class QuickSurahLinks extends ConsumerWidget {
     if (quickSurahs.isEmpty) {
       return const SizedBox.shrink();
     }
+    final hasData = quickSurahs.isNotEmpty;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Quick links', style: theme.textTheme.bodySmall),
-        const SizedBox(height: 16),
+    return SizedBox(
+      height: hasData ? 90 : 0,
+      child: hasData
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Quick links', style: theme.textTheme.bodySmall),
+                const SizedBox(height: 16),
 
-        SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: quickSurahs
-                .map((surah) => SurahLink(surah: surah))
-                .toList(),
-          ),
-        ),
-      ],
+                SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: quickSurahs
+                        .map((surah) => SurahLink(surah: surah))
+                        .toList(),
+                  ),
+                ),
+              ],
+            )
+          : const SizedBox.shrink(),
     );
   }
 }

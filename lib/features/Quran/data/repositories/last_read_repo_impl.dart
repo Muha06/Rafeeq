@@ -17,7 +17,6 @@ class LastReadRepositoryImpl implements LastReadRepository {
         'Skipping save for ayah ${lastRead.ayahNumber}, last ayah ${lastRead.verseCount}',
       );
       return Future.value(); // Do not save if it's the last ayah
-      
     } else {
       debugPrint(
         'Saved last read: Surah  ${lastRead.surahId}, Ayah ${lastRead.ayahNumber}',
@@ -37,7 +36,12 @@ class LastReadRepositoryImpl implements LastReadRepository {
   }
 
   @override
-  Future<List<LastReadAyah>> getAllLastReads() {
-    return localDataSource.getAllLastReads();
+  Future<List<LastReadAyah>> getAllLastReads() async {
+    final lastReads = await localDataSource.getAllLastReads();
+    //sort by updatedAt descending
+    lastReads.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+    // Return only top 3 recent last reads
+    final top3 = lastReads.take(3).toList();
+    return top3;
   }
 }

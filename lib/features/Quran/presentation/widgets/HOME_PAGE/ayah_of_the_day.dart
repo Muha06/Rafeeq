@@ -52,7 +52,7 @@ class AyahOfTheDay extends ConsumerWidget {
           if (ayahSurah == null) return const SizedBox();
 
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 14),
+            padding: const EdgeInsets.only(left: 14.0, right: 14.0, bottom: 14),
             child: GestureDetector(
               key: const ValueKey('data'),
               onTap: () {

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hijri_date/hijri.dart';
 import 'package:rafeeq/core/animations/navigation_animations.dart';
-import 'package:rafeeq/core/helper_widgets/sliver_header_delegate.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/HOME_PAGE/all_surah_listview.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/HOME_PAGE/ayah_of_the_day.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/HOME_PAGE/friday_reminder.dart';
@@ -95,19 +94,14 @@ class _HomePageState extends ConsumerState<HomePage> {
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12.0),
                 child: QuickLastReadList(),
-                // child: SizedBox.shrink(),
               ),
             ),
 
             // STICKY QUICKSURAHLINK
-            SliverPersistentHeader(
-              pinned: true,
-              delegate: SimpleSliverHeaderDelegate(
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12.0),
-                  child: QuickSurahLinks(),
-                ),
-                height: 90,
+            const SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12.0),
+                child: QuickSurahLinks(),
               ),
             ),
 

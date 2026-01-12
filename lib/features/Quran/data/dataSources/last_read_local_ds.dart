@@ -21,6 +21,7 @@ class LastReadLocalDataSourceImpl implements LastReadLocalDataSource {
       'surahName': lastRead.surahName,
       'ayahNumber': lastRead.ayahNumber,
       'verseCount': lastRead.verseCount,
+      'updatedAt': lastRead.updatedAt,
     });
   }
 
@@ -35,6 +36,7 @@ class LastReadLocalDataSourceImpl implements LastReadLocalDataSource {
       surahName: data['surahName'],
       ayahNumber: data['ayahNumber'],
       verseCount: data['verseCount'],
+      updatedAt: data['updatedAt'],
     );
   }
 
@@ -57,6 +59,7 @@ class LastReadLocalDataSourceImpl implements LastReadLocalDataSource {
             surahName: data['surahName'],
             ayahNumber: data['ayahNumber'],
             verseCount: data['verseCount'],
+            updatedAt: data['updatedAt'] ?? DateTime.now(),
           ),
         )
         .toList();
