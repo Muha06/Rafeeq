@@ -4,12 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hijri_date/hijri.dart';
 import 'package:rafeeq/core/animations/navigation_animations.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
-import 'package:rafeeq/features/Quran/presentation/widgets/HOME_PAGE/all_surah_listview.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/HOME_PAGE/ayah_of_the_day.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/HOME_PAGE/friday_reminder.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/HOME_PAGE/greetings_row.dart';
-import 'package:rafeeq/features/Quran/presentation/widgets/HOME_PAGE/quick_last_read.dart';
-import 'package:rafeeq/features/Quran/presentation/widgets/HOME_PAGE/quick_surah_links.dart';
 import 'package:rafeeq/features/settings/presentation/pages/settings_page.dart';
 
 class HomePage extends ConsumerStatefulWidget {
@@ -73,7 +70,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 12.0,
-                  vertical: 14,
+                  vertical: 16,
                 ),
                 child: GreetingsRow(formattedHijri: formattedHijri),
               ),
@@ -84,28 +81,6 @@ class _HomePageState extends ConsumerState<HomePage> {
 
             //friday reminder
             const SliverToBoxAdapter(child: FridayReminder()),
-
-            //quick last read
-            const SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12.0),
-                child: QuickLastReadList(),
-              ),
-            ),
-
-            // QUICKSURAHLINK
-            const SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8),
-                child: QuickSurahLinks(),
-              ),
-            ),
-
-            //Surah listview
-            const SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: 12.0),
-              sliver: AllSurahsList(),
-            ),
           ],
         ),
       ),

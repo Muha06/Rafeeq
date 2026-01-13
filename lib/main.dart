@@ -5,7 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:rafeeq/core/themes/app_theme.dart';
 import 'package:rafeeq/features/Quran/data/models/ayah_hive.dart';
 import 'package:rafeeq/features/Quran/data/models/surah_hive.dart';
-import 'package:rafeeq/features/Quran/presentation/pages/tabs_screen.dart';
+import 'package:rafeeq/app/tabs_screen.dart';
 import 'package:rafeeq/features/bookmarks/data/models/quran_bookmark_hive_model.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
  

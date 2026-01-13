@@ -1,3 +1,5 @@
+// ignore_for_file: unused_result
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
@@ -34,8 +36,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
   bool _isSaving = false; // Throttle last read saving
   bool _suppressNextSave = false;
   static const int skipInitialAyahs = 2;
-  LastReadAyah?
-  temporaryLastReadAyah; // last read ayah, to be saved when popping
+  LastReadAyah? temporaryLastReadAyah;
   int? _currentAyahNumber;
 
   @override
@@ -101,7 +102,6 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
         updatedAt: DateTime.now(),
       );
       _lastSavedAyah = currentAyahNumber;
-      print('temporaryLastReadAyah updated: $temporaryLastReadAyah');
     }
 
     _isSaving = false;
@@ -109,7 +109,6 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
 
   void _checkLastRead() {
     final isDark = ref.watch(isDarkProvider);
-    final theme = Theme.of(context);
 
     final lastRead = ref
         .read(lastReadRepositoryProvider)
@@ -144,6 +143,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
   void dispose() {
     super.dispose();
     itemPositionsListener.itemPositions.removeListener(_onVisibleAyahsChanged);
+    _scrollController.dispose();
   }
 
   @override
@@ -200,33 +200,16 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
           children: [
             Expanded(
               child: ayahsAsync.when(
-                data: (ayahs) => SizedBox(
-                  height: 16,
-                  child: RawScrollbar(
-                    thumbColor: isDark
-                        ? AppDarkColors.divider
-                        : AppLightColors.iconSecondary,
-                    thickness: 8,
-                    interactive: false,
-                    thumbVisibility: true,
-                    radius: const Radius.circular(8),
-                    controller: _scrollController,
-                    child: ScrollablePositionedList.builder(
-                      itemCount: ayahs.length + 1,
-                      itemBuilder: (context, index) {
-                        if (index == 0) {
-                          return SurahDetails(
-                            surah: widget.surah,
-                            isDark: isDark,
-                          );
-                        }
-                        return AyahTile(ayah: ayahs[index - 1]);
-                      },
-                      itemScrollController: itemScrollController,
-                      itemPositionsListener: itemPositionsListener,
-                      //scrollController: scrollController, // attach scroll controller
-                    ),
-                  ),
+                data: (ayahs) => ScrollablePositionedList.builder(
+                  itemCount: ayahs.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index == 0) {
+                      return SurahDetails(surah: widget.surah, isDark: isDark);
+                    }
+                    return AyahTile(ayah: ayahs[index - 1]);
+                  },
+                  itemScrollController: itemScrollController,
+                  itemPositionsListener: itemPositionsListener,
                 ),
                 loading: () => const Center(
                   child: CircularProgressIndicator(color: AppDarkColors.amber),
