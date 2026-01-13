@@ -5,6 +5,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:rafeeq/core/themes/app_theme.dart';
 import 'package:rafeeq/features/Quran/data/models/ayah_hive.dart';
 import 'package:rafeeq/features/Quran/data/models/surah_hive.dart';
+import 'package:rafeeq/features/Quran/presentation/pages/tabs_screen.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 import 'package:rafeeq/features/Quran/presentation/pages/home_page.dart';
 
@@ -46,7 +47,7 @@ class MyApp extends ConsumerWidget {
         AppThemeMode.system => ThemeMode.system,
       },
       debugShowCheckedModeBanner: false,
-      home: const HomePage(),
+      home: const TabsScreen(),
     );
   }
 }
