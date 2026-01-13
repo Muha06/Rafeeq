@@ -6,9 +6,9 @@ import 'package:rafeeq/core/themes/app_theme.dart';
 import 'package:rafeeq/features/Quran/data/models/ayah_hive.dart';
 import 'package:rafeeq/features/Quran/data/models/surah_hive.dart';
 import 'package:rafeeq/features/Quran/presentation/pages/tabs_screen.dart';
+import 'package:rafeeq/features/bookmarks/data/models/quran_bookmark_hive_model.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
-import 'package:rafeeq/features/Quran/presentation/pages/home_page.dart';
-
+ 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -18,11 +18,14 @@ Future<void> main() async {
   //register adapters
   Hive.registerAdapter(SurahHiveAdapter());
   Hive.registerAdapter(AyahHiveAdapter());
+  Hive.registerAdapter(QuranBookmarkHiveModelAdapter());
 
   //open boxes
   await Hive.openBox<SurahHive>('surahs');
   await Hive.openBox<AyahHive>('ayahs');
   await Hive.openBox('lastReadBox'); // for LastReadAyah
+
+  await Hive.openBox<QuranBookmarkHiveModel>('quran_bookmarks_box');
 
   //dotenv
   await dotenv.load(fileName: ".env");

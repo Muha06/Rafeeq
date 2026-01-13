@@ -53,7 +53,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               snap: false,
               title: GestureDetector(
                 onTap: scrollToTop,
-                child: Text('Rafeeq', style: theme.appBarTheme.titleTextStyle),
+                child: const Text('Rafeeq'),
               ),
               actions: [
                 IconButton(

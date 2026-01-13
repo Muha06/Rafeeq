@@ -81,6 +81,7 @@ class GithubStyleBottomBar extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 6),
+                    
                     Text(
                       item.label,
                       maxLines: 1,

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/widgets/github_style_bottom_bar.dart';
-import 'package:rafeeq/features/Quran/presentation/pages/bookmark.dart';
+import 'package:rafeeq/features/Quran/presentation/pages/adhkar.dart';
 import 'package:rafeeq/features/Quran/presentation/pages/home_page.dart';
+import 'package:rafeeq/features/bookmarks/presentation/pages/bookmark_page.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class TabsScreen extends ConsumerStatefulWidget {
@@ -14,7 +14,13 @@ class TabsScreen extends ConsumerStatefulWidget {
 }
 
 class _TabsScreenState extends ConsumerState<TabsScreen> {
-  final List<Widget> _pages = [const HomePage(), const HomePage()];
+  final List<Widget> _pages = [
+    const HomePage(),
+    const HomePage(),
+    const AdhkarPage(),
+    const BookmarkPage(),
+  ];
+
   int _selectedIndex = 0;
 
   @override
