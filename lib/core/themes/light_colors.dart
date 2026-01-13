@@ -48,6 +48,7 @@ class AppLightColors {
   static const Color iconSecondary = textSecondary;
   static const Color iconDisabled = Color(0xFF9CA3AF);
   static const Color iconAccent = AppLightColors.amber; //selected index
+  static const Color iconSuccess = Color(0xFF16A34A);
 
   static Color selectedBottomBar = Colors.grey[300]!; //bottom bar selected bg
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hijri_date/hijri.dart';
 import 'package:rafeeq/core/animations/navigation_animations.dart';
+import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/HOME_PAGE/all_surah_listview.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/HOME_PAGE/ayah_of_the_day.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/HOME_PAGE/friday_reminder.dart';
@@ -51,6 +52,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               pinned: false,
               floating: true,
               snap: false,
+              toolbarHeight: theme.appBarTheme.toolbarHeight!,
               title: GestureDetector(
                 onTap: scrollToTop,
                 child: const Text('Rafeeq'),
@@ -63,13 +65,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   icon: const Icon(CupertinoIcons.settings),
                 ),
               ],
-              bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(1),
-                child: Divider(
-                  thickness: 1,
-                  color: theme.dividerColor.withAlpha(20),
-                ),
-              ),
+              bottom: appBarBottomDivider(context),
             ),
 
             //GREETINGS

@@ -39,13 +39,13 @@ class AppDarkColors {
   static const Color divider = Color(0xFF2C2C2C); // subtle separation lines
   static const Color border = Color(0xFF3A3A3A); // card or input borders
 
+  static Color selectedBottomBar = Colors.grey[800]!; //bottom bar selected bg
+
   // ⚡ Icon colors
   static const Color iconPrimary = textPrimary; // main icons, app bar, actions
   static const Color iconSecondary = textSecondary; // metadata, subtle actions
-  static const Color iconDisabled =
-      textSecondary; // use .withOpacity(0.5) when needed
+  static const Color iconDisabled = textSecondary; // disabled / inactive icons
   static const Color iconAccent = amber; // selected / active icons
-  static Color selectedBottomBar = Colors.grey[800]!; //bottom bar selected bg
   static const Color iconError = Color(0xFFDC2626);
   static const Color iconSuccess = Color(0xFF16A34A);
   static const Color iconWarning = amber;

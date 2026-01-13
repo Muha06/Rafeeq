@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
+import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
+import 'package:rafeeq/core/widgets/snackbars.dart';
 import 'package:rafeeq/features/Quran/domain/entities/last_read_ayah.dart';
 import 'package:rafeeq/features/Quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_ayah_provider.dart';
@@ -122,35 +124,18 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
 
     if (lastRead.surahId == widget.surah.id) {
       // Show SnackBar with Go button
-      ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: isDark
-              ? AppDarkColors.divider
-              : AppDarkColors.darkSurface,
-          // persist: false,
-          content: Text(
-            'Jump to last-read Ayah ${lastRead.ayahNumber}?',
-            style: theme.textTheme.bodySmall!.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
-            ),
-          ),
-          action: SnackBarAction(
-            label: 'Go',
-            textColor: Colors.amber,
-            onPressed: () {
-              ScaffoldMessenger.of(context).hideCurrentSnackBar();
-              _jumpToAyah(lastRead.ayahNumber, suppressSave: true);
+      AppSnackBar.showAction(
+        context: context,
+        isDark: isDark,
+        message: 'Jump to last-read Ayah ${lastRead.ayahNumber}?',
+        actionLabel: 'Go',
+        onAction: () {
+          _jumpToAyah(lastRead.ayahNumber, suppressSave: true);
 
-              ref.invalidate(
-                lastReadAyahsProvider,
-              ); //refresh last read ayahs homepage
-            },
-          ),
-          duration: const Duration(seconds: 3),
-        ),
+          ref.invalidate(
+            lastReadAyahsProvider,
+          ); //refresh last read ayahs homepage}, darkBg: darkBg, lightBg: lightBg);
+        },
       );
     }
   }
@@ -209,6 +194,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
               icon: const Icon(Icons.tune),
             ),
           ],
+          bottom: appBarBottomDivider(context),
         ),
         body: Column(
           children: [

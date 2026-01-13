@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
+import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
@@ -28,6 +29,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings', style: theme.appBarTheme.titleTextStyle),
+        bottom: appBarBottomDivider(context),
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 8),

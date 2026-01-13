@@ -3,10 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/functions/clean_arabic_text.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
+import 'package:rafeeq/core/widgets/snackbars.dart';
 import 'package:rafeeq/features/Quran/domain/entities/ayah.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/ayah_of_the_day.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/surah_preferences_provider.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/quran_bookmark.dart';
+import 'package:rafeeq/features/bookmarks/domain/usecases/is_bookmarked.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/execution_providers.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
@@ -23,9 +25,9 @@ class AyahTile extends ConsumerWidget {
     final arabicFontSize = ref.watch(arabicFontSizeProvider);
     final translationFontSize = ref.watch(translationFontSizeProvider);
 
-    final isBookmarked = ref.watch(
-      isBookmarkedProvider('${ayah.surahId}:${ayah.ayahNumber}'),
-    );
+    final id = '${ayah.surahId}:${ayah.ayahNumber}';
+    final bookmarkedIds = ref.watch(bookmarkedIdsProvider);
+    final isBookmarked = bookmarkedIds.contains(id);
 
     return AnimatedSize(
       duration: const Duration(milliseconds: 450),
@@ -88,12 +90,30 @@ class AyahTile extends ConsumerWidget {
             if (showTranslation) const SizedBox(height: 20),
 
             Divider(color: theme.dividerColor),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 IconButton(
-                  onPressed: () {
+                  onPressed: () async {
                     try {
+                      final isBookmarked = ref.read(isBookmarkedProvider(id));
+
+                      if (isBookmarked) {
+                        // remove bookmark
+                        await ref.read(removeQuranBookmarkProvider(id))();
+
+                        AppSnackBar.showSimple(
+                          context: context,
+                          isDark: isDark,
+                          message: 'Bookmark removed ❌',
+                          duration: const Duration(seconds: 3),
+                        );
+
+                        return;
+                      }
+
+                      // add bookmark
                       final ayahSurah = ref.read(
                         ayahSurahProvider(ayah.surahId),
                       );
@@ -107,34 +127,33 @@ class AyahTile extends ConsumerWidget {
                           createdAt: DateTime.now(),
                         );
 
-                        ref.read(addQuranBookmarkProvider(bookmark).future);
+                        await ref.read(addQuranBookmarkProvider(bookmark))();
                       }
 
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Bookmarked ✅')),
-                        );
-                      }
+                      AppSnackBar.showSimple(
+                        context: context,
+                        isDark: isDark,
+                        message: 'Bookmark added ✅',
+                        duration: const Duration(seconds: 3),
+                      );
                     } catch (e) {
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Bookmark failed: $e')),
-                        );
-                      }
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Bookmark failed: $e')),
+                      );
                     }
                   },
                   icon: Icon(
                     isBookmarked
-                        ? Icons.bookmark_outlined
+                        ? Icons.bookmark_added
                         : Icons.bookmark_add_outlined,
                     size: 22,
                     color: isBookmarked
                         ? isDark
-                              ? AppDarkColors.iconSecondary
-                              : AppLightColors.iconSecondary
+                              ? AppDarkColors.iconSuccess
+                              : AppLightColors.iconSuccess
                         : isDark
-                        ? AppDarkColors.iconAccent
-                        : AppLightColors.iconAccent,
+                        ? AppDarkColors.iconSecondary
+                        : AppLightColors.iconSecondary,
                   ),
                 ),
                 IconButton(

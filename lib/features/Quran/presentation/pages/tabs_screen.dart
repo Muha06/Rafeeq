@@ -26,8 +26,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = ref.watch(isDarkProvider);
-    final theme = Theme.of(context);
-
+ 
     return Scaffold(
       body: IndexedStack(index: _selectedIndex, children: _pages),
       bottomNavigationBar: GithubStyleBottomBar(

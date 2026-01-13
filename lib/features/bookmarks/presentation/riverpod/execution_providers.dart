@@ -1,28 +1,28 @@
-//ADD BOOKMARK
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/quran_bookmark.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/usecases_provider.dart';
 
+//Add bookmark
 final addQuranBookmarkProvider =
-    FutureProvider.family<void, QuranBookmarkEntity>((ref, bookmark) async {
+    Provider.family<Function(), QuranBookmarkEntity>((ref, bookmark) {
       final userCase = ref.read(addQuranBookmarkUseCaseProvider);
 
-      await userCase.call(bookmark);
-
-      ref.invalidate(getAllQuranBookmarksProvider); //refresh
+      return () async {
+        await userCase.call(bookmark);
+        ref.invalidate(getAllQuranBookmarksProvider); //refresh
+      };
     });
 
 //REMOVE BOOKMARK
-final removeQuranBookmarkProvider = FutureProvider.family<void, String>((
-  ref,
-  bookmarkId,
-) async {
-  final userCase = ref.read(removeQuranBookmarkUseCaseProvider);
+final removeQuranBookmarkProvider =
+    Provider.family<Future<void> Function(), String>((ref, bookmarkId) {
+      final userCase = ref.read(removeQuranBookmarkUseCaseProvider);
 
-  await userCase.call(bookmarkId);
-
-  ref.invalidate(getAllQuranBookmarksProvider); //refresh
-});
+      return () async {
+        await userCase.call(bookmarkId);
+        ref.invalidate(getAllQuranBookmarksProvider); //refresh
+      };
+    });
 
 // GET ALL BOOKMARKS (sync)
 final getAllQuranBookmarksProvider = Provider<List<QuranBookmarkEntity>>((ref) {
@@ -30,19 +30,28 @@ final getAllQuranBookmarksProvider = Provider<List<QuranBookmarkEntity>>((ref) {
   return useCase.call();
 });
 
-final isBookmarkedProvider =  Provider.family<bool, String>((
-  ref,
-  bookmarkId,
-)   {
+// IS BOOKMARKED
+final isBookmarkedProvider = Provider.family<bool, String>((ref, bookmarkId) {
   final useCase = ref.read(isBookmarkedUseCaseProvider);
+  ref.watch(getAllQuranBookmarksProvider); //to refresh when cleared
+
   return useCase.call(bookmarkId);
 });
 
+// BOOKMARKED IDS (stores all ids of bookmarked ayahs)
+final bookmarkedIdsProvider = Provider<Set<String>>((ref) {
+  final list = ref.watch(getAllQuranBookmarksProvider);
+  return list.map((b) => b.id).toSet();
+});
+
 // CLEAR ALL BOOKMARKS
-final clearAllQuranBookmarksProvider = FutureProvider<void>((ref) async {
+final clearAllBookmarksActionProvider = Provider<Future<void> Function()>((
+  ref,
+) {
   final useCase = ref.read(clearBookmarksUseCaseProvider);
 
-  await useCase.call();
-
-  ref.invalidate(getAllQuranBookmarksProvider); //refresh
+  return () async {
+    await useCase.call();
+    ref.invalidate(getAllQuranBookmarksProvider); //refresh
+  };
 });
