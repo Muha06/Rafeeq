@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/widgets/github_style_bottom_bar.dart';
-import 'package:rafeeq/features/Quran/presentation/pages/adhkar.dart';
+import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_page.dart';
 import 'package:rafeeq/features/Quran/presentation/pages/quran_page.dart';
 import 'package:rafeeq/features/home/presentation/home_page.dart';
 import 'package:rafeeq/features/bookmarks/presentation/pages/bookmark_page.dart';

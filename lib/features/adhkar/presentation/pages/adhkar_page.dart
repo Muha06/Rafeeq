@@ -11,8 +11,7 @@ class AdhkarPage extends StatefulWidget {
 class _AdhkarPageState extends State<AdhkarPage> {
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
+ 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Adhkār'),

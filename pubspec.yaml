@@ -54,5 +54,6 @@ flutter:
     - assets/images/quran_book.png
     - assets/images/mosque.png
     - .env
+    - assets/adhkar/general.json
  
  
