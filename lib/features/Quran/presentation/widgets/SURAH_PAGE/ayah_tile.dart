@@ -8,7 +8,6 @@ import 'package:rafeeq/features/Quran/domain/entities/ayah.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/ayah_of_the_day.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/surah_preferences_provider.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/quran_bookmark.dart';
-import 'package:rafeeq/features/bookmarks/domain/usecases/is_bookmarked.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/execution_providers.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
