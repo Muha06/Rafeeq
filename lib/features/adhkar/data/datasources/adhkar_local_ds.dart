@@ -11,6 +11,7 @@ abstract class AdhkarLocalDataSource {
 }
 
 class AdhkarLocalDsImpl implements AdhkarLocalDataSource {
+  //get adhkar
   @override
   Future<List<DhikrModel>> loadAdhkarFromAsset(String assetPath) async {
     final jsonStr = await rootBundle.loadString(assetPath);
