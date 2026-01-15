@@ -19,6 +19,10 @@ class AppTheme {
       scaffoldBackgroundColor: AppDarkColors.darkBackground,
       canvasColor: AppDarkColors.darkBackground,
 
+      dividerColor: AppDarkColors.textSecondary.withAlpha(50),
+      cardColor: AppDarkColors.darkSurface,
+      iconTheme: const IconThemeData(color: AppDarkColors.iconPrimary),
+
       colorScheme: const ColorScheme.dark(
         surface: AppDarkColors.darkBackground, //hide the navigation color
         primary: AppDarkColors.amber,
@@ -55,6 +59,7 @@ class AppTheme {
           color: AppDarkColors.textSecondary, // dark
         ),
       ),
+
       //CARD
       cardTheme: CardThemeData(
         elevation: 2,
@@ -62,8 +67,6 @@ class AppTheme {
         color: AppDarkColors.darkSurface,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
-
-      dividerColor: AppDarkColors.textSecondary.withAlpha(50),
 
       sliderTheme: const SliderThemeData(
         activeTrackColor: AppDarkColors.amber,
@@ -107,7 +110,6 @@ class AppTheme {
         ),
         backgroundColor: AppDarkColors.darkSurface,
       ),
-      iconTheme: const IconThemeData(color: AppDarkColors.textBody),
     );
   }
 

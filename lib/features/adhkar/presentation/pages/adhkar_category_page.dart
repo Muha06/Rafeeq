@@ -64,7 +64,7 @@ class AdhkarCategoryTile extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
               decoration: BoxDecoration(
-                color: AppDarkColors.darkSurface,
+                color: theme.cardColor,
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Text(

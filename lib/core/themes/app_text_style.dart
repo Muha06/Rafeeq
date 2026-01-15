@@ -14,6 +14,10 @@ class AppTextStyles {
     fontSize: 22,
     height: 2,
     wordSpacing: 2,
+    fontFamilyFallback: [
+      'NotoNaskhArabic', // or Amiri
+      'Amiri',
+    ],
   );
 
   // Main body text(Translation)

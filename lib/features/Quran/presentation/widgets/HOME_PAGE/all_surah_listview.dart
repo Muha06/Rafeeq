@@ -57,7 +57,7 @@ class SurahTile extends ConsumerWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          color: AppDarkColors.darkSurface,
+          color: theme.cardColor,
         ),
         child: ListTile(
           onTap: () {

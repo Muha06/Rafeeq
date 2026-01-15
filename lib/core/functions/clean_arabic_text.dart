@@ -4,8 +4,5 @@ String cleanAyah(String text) {
 }
 
 String cleanDhikr(String s) {
-  return s
-      .replaceAll(',', '،') // latin comma -> arabic comma
-      .replaceAll(';', '؛') // latin semicolon -> arabic semicolon
-      .replaceAll('?', '؟'); // latin question -> arabic question mark
+  return s.replaceAll('،', ' ');
 }

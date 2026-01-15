@@ -17,6 +17,41 @@ class AdhkarDetailsPage extends ConsumerStatefulWidget {
 }
 
 class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
+  void openBottomSheet(Dhikr dhikr) {
+    showModalBottomSheet(
+      context: context,
+      enableDrag: true,
+      builder: (context) {
+        final theme = Theme.of(context);
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              //title
+              Text('Adhkar settings', style: theme.textTheme.titleMedium),
+              const SizedBox(height: 8),
+              //divider
+              Divider(color: theme.dividerColor),
+              const SizedBox(height: 8),
+
+              //copy
+              ListTile(
+                onTap: () {
+                  Clipboard.setData(ClipboardData(text: dhikr.arabic));
+                  Navigator.pop(context);
+                },
+                title: Text('Copy Dhikr', style: theme.textTheme.bodyLarge),
+                trailing: const Icon(Icons.copy),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDark = ref.watch(isDarkProvider);
@@ -24,7 +59,11 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
     final textTheme = theme.textTheme;
     final dhikr = widget.dhikr;
 
-    final TextStyle bodyTextstyle = textTheme.bodyMedium!;
+    final TextStyle headerStyle = textTheme.bodySmall!.copyWith(fontSize: 14);
+
+    final TextStyle bodyTextstyle = textTheme.bodyMedium!.copyWith(
+      color: isDark ? AppDarkColors.textBody : AppLightColors.textBody,
+    );
 
     Widget section(String title, String? text) {
       final t = (text ?? '').trim();
@@ -33,7 +72,7 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: Theme.of(context).textTheme.labelLarge), //header
+          Text(title, style: headerStyle), //header
           const SizedBox(height: 8),
           Text(t, style: bodyTextstyle), //text
           const SizedBox(height: 16),
@@ -41,8 +80,6 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
       );
     }
 
-    print(dhikr.arabic);
-    
     return Scaffold(
       appBar: AppBar(
         title: const Text('Adhkār details'),
@@ -50,9 +87,9 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
         actions: [
           IconButton(
             onPressed: () {
-              Clipboard.setData(ClipboardData(text: dhikr.arabic));
+              openBottomSheet(dhikr);
             },
-            icon: const Icon(Icons.copy),
+            icon: const Icon(Icons.tune),
           ),
         ],
       ),
@@ -74,9 +111,9 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
                   //title
                   Center(
                     child: Text(
-                      cleanDhikr(dhikr.title),
+                      dhikr.title,
                       textAlign: TextAlign.center,
-                      style: textTheme.titleMedium,
+                      style: textTheme.titleMedium!,
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -85,12 +122,9 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
                   Align(
                     alignment: Alignment.centerRight,
                     child: Text(
-                      dhikr.arabic,
-                      style: textTheme.bodyLarge!.copyWith(
-                        color: AppDarkColors.textPrimary,
-                        fontSize: 24,
-                      ),
+                      cleanDhikr(dhikr.arabic),
                       textDirection: TextDirection.rtl,
+                      style: textTheme.bodyLarge!.copyWith(fontSize: 24),
                     ),
                   ),
                   const SizedBox(height: 16),
