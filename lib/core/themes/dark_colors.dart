@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class AppDarkColors {
   // 🌑 Dark theme bg (default)
-  static const Color darkBackground = Color(0xFF0F0F0F); // main app background
-  static const Color darkSurface = Color(
-    0xFF1A1A1A,
-  ); // slightly darker/lighter for cards/dialogs
+  static const Color darkBackground = Color(0xFF0F0F0F);
+  static const Color darkSurface = Color(0xFF1A1A1A);
+
+  // slightly darker/lighter for cards/dialogs
 
   // 🟡 Accent
   static const Color amber = Color(
@@ -40,6 +40,7 @@ class AppDarkColors {
   static const Color border = Color(0xFF3A3A3A); // card or input borders
 
   static Color selectedBottomBar = Colors.grey[800]!; //bottom bar selected bg
+  static Color bottomSheet = Colors.grey[900]!; //bottom bar selected bg
 
   // ⚡ Icon colors
   static const Color iconPrimary = textPrimary; // main icons, app bar, actions

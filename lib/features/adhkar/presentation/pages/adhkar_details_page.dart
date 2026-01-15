@@ -4,14 +4,14 @@ import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/features/adhkar/presentation/riverpod/get_adhkars_provider.dart';
 
-class AdhkarPage extends ConsumerStatefulWidget {
-  const AdhkarPage({super.key});
+class AdhkarDetailsPage extends ConsumerStatefulWidget {
+  const AdhkarDetailsPage({super.key});
 
   @override
-  ConsumerState<AdhkarPage> createState() => _AdhkarPageState();
+  ConsumerState<AdhkarDetailsPage> createState() => _AdhkarDetailsPageState();
 }
 
-class _AdhkarPageState extends ConsumerState<AdhkarPage> {
+class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
   @override
   Widget build(BuildContext context) {
     final adhkarAsync = ref.watch(

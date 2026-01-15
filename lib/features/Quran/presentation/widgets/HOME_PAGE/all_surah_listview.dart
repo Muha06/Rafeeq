@@ -54,49 +54,43 @@ class SurahTile extends ConsumerWidget {
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Material(
-        color: theme.cardColor,
-        borderRadius: BorderRadius.circular(16),
-        clipBehavior: Clip.hardEdge,
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            color: theme.cardColor,
-          ),
-          child: ListTile(
-            splashColor: null,
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => FullSurahPage(surah: surah),
-                ),
-              );
-            },
-            leading: CircleAvatar(
-              backgroundColor: AppLightColors.amber,
-              radius: 16,
-              child: Text(
-                surah.id.toString(),
-                style: const TextStyle(
-                  color: AppLightColors.textPrimary,
-                  fontWeight: FontWeight.bold,
-                ),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: AppDarkColors.darkSurface,
+        ),
+        child: ListTile(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => FullSurahPage(surah: surah),
+              ),
+            );
+          },
+          leading: CircleAvatar(
+            backgroundColor: AppLightColors.amber,
+            radius: 16,
+            child: Text(
+              surah.id.toString(),
+              style: const TextStyle(
+                color: AppLightColors.textPrimary,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 14,
-              vertical: 8,
-            ),
-            title: Text(
-              surah.nameTransliteration,
-              style: theme.textTheme.titleMedium,
-            ),
-            subtitle: Text(surah.nameEnglish, style: theme.textTheme.bodySmall),
-            trailing: Text(
-              surah.versesCount.toString(),
-              style: theme.textTheme.bodySmall,
-            ),
+          ),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 14,
+            vertical: 8,
+          ),
+          title: Text(
+            surah.nameTransliteration,
+            style: theme.textTheme.titleMedium,
+          ),
+          subtitle: Text(surah.nameEnglish, style: theme.textTheme.bodySmall),
+          trailing: Text(
+            surah.versesCount.toString(),
+            style: theme.textTheme.bodySmall,
           ),
         ),
       ),

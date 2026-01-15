@@ -17,9 +17,10 @@ class AppTheme {
       ),
       brightness: Brightness.dark,
       scaffoldBackgroundColor: AppDarkColors.darkBackground,
+      canvasColor: AppDarkColors.darkBackground,
 
       colorScheme: const ColorScheme.dark(
-        surface: AppDarkColors.darkSurface,
+        surface: AppDarkColors.darkBackground, //hide the navigation color
         primary: AppDarkColors.amber,
       ),
 

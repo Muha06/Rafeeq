@@ -93,7 +93,9 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
           // height: 300,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
           decoration: BoxDecoration(
-            color: theme.colorScheme.surface,
+            color: isDark
+                ? AppDarkColors.bottomSheet
+                : AppLightColors.lightSurface,
             borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
           ),
           child: Column(
@@ -200,16 +202,6 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
                   ? AppLightColors.iconDisabled
                   : AppLightColors.lightSurface,
               borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: isDark
-                      ? Colors.black.withAlpha(120)
-                      : Colors.black.withAlpha(10),
-                  blurRadius: 8,
-                  spreadRadius: 2,
-                  offset: const Offset(0, 4),
-                ),
-              ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

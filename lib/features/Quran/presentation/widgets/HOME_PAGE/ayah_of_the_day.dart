@@ -69,7 +69,9 @@ class AyahOfTheDay extends ConsumerWidget {
               child: Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: theme.cardColor,
+                  color: isDark
+                      ? AppDarkColors.darkSurface
+                      : AppLightColors.lightSurface,
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(

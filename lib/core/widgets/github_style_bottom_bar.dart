@@ -41,7 +41,9 @@ class GithubStyleBottomBar extends StatelessWidget {
       bottom: false,
       child: Container(
         height: 74,
-        color: theme.cardColor,
+        color: isDarkMode
+            ? AppDarkColors.darkSurface
+            : AppLightColors.lightSurface,
         padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
         child: Row(
           children: List.generate(_items.length, (index) {
@@ -81,7 +83,7 @@ class GithubStyleBottomBar extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 6),
-                    
+
                     Text(
                       item.label,
                       maxLines: 1,

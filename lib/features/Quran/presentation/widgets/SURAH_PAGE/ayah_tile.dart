@@ -35,7 +35,9 @@ class AyahTile extends ConsumerWidget {
         margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: theme.cardColor,
+          color: isDark
+              ? AppDarkColors.darkSurface
+              : AppLightColors.lightSurface,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
