@@ -60,6 +60,7 @@ flutter:
     - assets/images/category/sunset.png
 
     - assets/adhkar/general.json
+    - assets/adhkar/morning.json
     - assets/adhkar/evening.json
  
  

@@ -72,7 +72,13 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: headerStyle), //header
+          Text(
+            title,
+            style: headerStyle.copyWith(
+              color: AppDarkColors.amber,
+              fontWeight: FontWeight.bold,
+            ),
+          ), //header
           const SizedBox(height: 8),
           Text(t, style: bodyTextstyle), //text
           const SizedBox(height: 16),
@@ -85,6 +91,11 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
         title: const Text('Adhkār details'),
         bottom: appBarBottomDivider(context),
         actions: [
+          //bookmark
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.bookmark_add_outlined),
+          ),
           IconButton(
             onPressed: () {
               openBottomSheet(dhikr);
@@ -105,56 +116,58 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
               borderRadius: BorderRadius.circular(24),
             ),
             child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  //title
-                  Center(
-                    child: Text(
-                      dhikr.title,
-                      textAlign: TextAlign.center,
-                      style: textTheme.titleMedium!,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-
-                  //arabic
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      cleanDhikr(dhikr.arabic),
-                      textDirection: TextDirection.rtl,
-                      style: textTheme.bodyLarge!.copyWith(fontSize: 24),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-
-                  //transliteration
-                  section('Transliteration', dhikr.latin),
-
-                  //english
-                  section('Translation', dhikr.translation),
-
-                  //note
-                  section('Notes', dhikr.notes),
-
-                  //benefit
-                  section('Benefit', dhikr.benefits),
-
-                  //fawaid
-                  section('Fawaid', dhikr.fawaid),
-
-                  //source
-                  if ((dhikr.source ?? '').trim().isNotEmpty) ...[
-                    Text('Source:', style: textTheme.labelLarge),
-                    const SizedBox(height: 8),
-                    Text(
-                      dhikr.source!.trim(),
-                      style: textTheme.bodySmall!.copyWith(fontSize: 16),
+              child: SelectionArea(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    //title
+                    Center(
+                      child: Text(
+                        dhikr.title,
+                        textAlign: TextAlign.center,
+                        style: textTheme.titleMedium!,
+                      ),
                     ),
                     const SizedBox(height: 16),
+
+                    //arabic
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        cleanDhikr(dhikr.arabic),
+                        textDirection: TextDirection.rtl,
+                        style: textTheme.bodyLarge!.copyWith(fontSize: 24),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    //transliteration
+                    section('Transliteration', dhikr.latin),
+
+                    //english
+                    section('Translation', dhikr.translation),
+
+                    //note
+                    section('Notes', dhikr.notes),
+
+                    //benefit
+                    section('Benefit', dhikr.benefits),
+
+                    //fawaid
+                    section('Fawaid', dhikr.fawaid),
+
+                    //source
+                    if ((dhikr.source ?? '').trim().isNotEmpty) ...[
+                      Text('Source:', style: textTheme.labelLarge),
+                      const SizedBox(height: 8),
+                      Text(
+                        dhikr.source!.trim(),
+                        style: textTheme.bodySmall!.copyWith(fontSize: 16),
+                      ),
+                      const SizedBox(height: 16),
+                    ],
                   ],
-                ],
+                ),
               ),
             ),
           ),

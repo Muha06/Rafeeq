@@ -22,7 +22,6 @@ class _AdhkarListPageState extends ConsumerState<AdhkarListPage> {
   @override
   Widget build(BuildContext context) {
     final assetPath = widget.category.assetPath;
-    print(assetPath);
     final adhkars = ref.watch(getAdhkarsProvider(assetPath));
     final isDark = ref.watch(isDarkProvider);
 
@@ -82,7 +81,7 @@ class AdhkarListTile extends ConsumerWidget {
                 height: 24,
                 width: 36,
                 decoration: BoxDecoration(
-                  color: theme.cardColor,
+                  color: AppDarkColors.amber,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Center(
@@ -90,7 +89,7 @@ class AdhkarListTile extends ConsumerWidget {
                     (index + 1).toString(),
                     style: theme.textTheme.bodySmall!.copyWith(
                       color: isDark
-                          ? AppDarkColors.textSecondary
+                          ? AppDarkColors.darkBackground
                           : AppLightColors.textBody,
                       fontWeight: FontWeight.bold,
                     ),

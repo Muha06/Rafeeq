@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppTextStyles {
   // Titles (AppBar, headings)
-  static final TextStyle title = GoogleFonts.inter(
+  static final TextStyle title = GoogleFonts.lato(
     fontSize: 20,
     fontWeight: FontWeight.w600,
   );
