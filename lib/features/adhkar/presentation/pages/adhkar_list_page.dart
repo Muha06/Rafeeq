@@ -5,6 +5,7 @@ import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/features/adhkar/domain/entities/adhkar_category.dart';
 import 'package:rafeeq/features/adhkar/domain/entities/dhikr.dart';
+import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_details_page.dart';
 import 'package:rafeeq/features/adhkar/presentation/riverpod/get_adhkars_provider.dart';
 
 class AdhkarListPage extends ConsumerStatefulWidget {
@@ -56,50 +57,61 @@ class AdhkarListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 14),
-      child: SizedBox(
-        // height: 48,
-        child: Row(
-          children: [
-            Container(
-              height: 24,
-              width: 36,
-              decoration: BoxDecoration(
-                color: AppDarkColors.darkSurface,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Center(
-                child: Text(
-                  (index + 1).toString(),
-                  style: theme.textTheme.bodySmall!.copyWith(
-                    color: AppDarkColors.textSecondary,
-                    fontWeight: FontWeight.bold,
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => AdhkarDetailsPage(dhikr: dhikr),
+          ),
+        );
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 14),
+        child: SizedBox(
+          // height: 48,
+          child: Row(
+            children: [
+              Container(
+                height: 24,
+                width: 36,
+                decoration: BoxDecoration(
+                  color: AppDarkColors.darkSurface,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Center(
+                  child: Text(
+                    (index + 1).toString(),
+                    style: theme.textTheme.bodySmall!.copyWith(
+                      color: AppDarkColors.textSecondary,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(width: 16),
+              const SizedBox(width: 16),
 
-            Expanded(
-              child: Text(
-                dhikr.title,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                style: theme.textTheme.bodySmall!.copyWith(
-                  fontSize: 16,
-                  height: 1.2,
+              Expanded(
+                child: Text(
+                  dhikr.title,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: theme.textTheme.bodySmall!.copyWith(
+                    fontSize: 16,
+                    color: AppDarkColors.textBody,
+                    height: 1.2,
+                  ),
                 ),
               ),
-            ),
 
-            const SizedBox(width: 8),
-            const Icon(
-              CupertinoIcons.right_chevron,
-              size: 18,
-              color: AppDarkColors.iconSecondary,
-            ),
-          ],
+              const SizedBox(width: 8),
+              const Icon(
+                CupertinoIcons.right_chevron,
+                size: 18,
+                color: AppDarkColors.iconSecondary,
+              ),
+            ],
+          ),
         ),
       ),
     );

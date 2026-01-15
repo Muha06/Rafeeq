@@ -13,7 +13,6 @@ class AppTextStyles {
     fontFamily: 'Uthmani',
     fontSize: 22,
     height: 2,
-    //fontweight: set in the widget
     wordSpacing: 2,
   );
 
@@ -21,7 +20,6 @@ class AppTextStyles {
   static final TextStyle body = GoogleFonts.inter(
     fontSize: 19,
     height: 1.7,
-    // fontWeight: FontWeight.w400, set in the text widget
     letterSpacing: 2,
   );
 
