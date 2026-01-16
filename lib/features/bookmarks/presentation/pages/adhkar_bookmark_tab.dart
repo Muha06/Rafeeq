@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/core/themes/dark_colors.dart';
+import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/dhikr/execution_providers.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
@@ -26,7 +28,7 @@ class _AdhkarBookmarksTabState extends ConsumerState<AdhkarBookmarksTab> {
           )
         : ListView.separated(
             separatorBuilder: (context, index) {
-              return Divider(color: theme.dividerColor.withAlpha(20));
+              return Divider(color: theme.dividerColor);
             },
             itemCount: bookMarks.length,
             itemBuilder: (context, index) {
@@ -43,7 +45,12 @@ class _AdhkarBookmarksTabState extends ConsumerState<AdhkarBookmarksTab> {
                     onPressed: () {
                       ref.read(toggleDhikrBookmarkProvider(bookMark));
                     },
-                    icon: const Icon(Icons.delete),
+                    icon: Icon(
+                      Icons.delete,
+                      color: isDark
+                          ? AppDarkColors.iconSecondary
+                          : AppLightColors.iconSecondary,
+                    ),
                   ),
                 ),
               );

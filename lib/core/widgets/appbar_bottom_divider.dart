@@ -5,10 +5,6 @@ PreferredSizeWidget appBarBottomDivider(BuildContext context) {
 
   return PreferredSize(
     preferredSize: const Size.fromHeight(1),
-    child: Divider(
-      height: 1,
-      thickness: 1,
-      color: theme.dividerColor.withAlpha(20),
-    ),
+    child: Divider(height: 1, thickness: 1, color: theme.dividerColor),
   );
 }

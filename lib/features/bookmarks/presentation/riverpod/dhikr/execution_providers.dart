@@ -8,16 +8,17 @@ final getAllDhikrBookmarksProvider = Provider<List<DhikrBookmark>>((ref) {
   return useCase.call();
 });
 
-// IS BOOKMARKED
-final isDhikrBookmarkedProvider = Provider.family<bool, String>((ref, dhikrId) {
-  final ids = ref.watch(bookmarkedDhikrIdsProvider);
-  return ids.contains(dhikrId); //to refresh when cleared
-});
-
 // BOOKMARKED IDS (stores all ids of bookmarked ayahs)
 final bookmarkedDhikrIdsProvider = Provider<Set<String>>((ref) {
   final list = ref.watch(getAllDhikrBookmarksProvider);
   return list.map((b) => b.dhikrId).toSet();
+});
+
+// IS BOOKMARKED
+final isDhikrBookmarkedProvider = Provider.family<bool, String>((ref, dhikrId) {
+  final ids = ref.watch(bookmarkedDhikrIdsProvider);
+
+  return ids.contains(dhikrId);
 });
 
 // CLEAR ALL BOOKMARKS
@@ -46,7 +47,7 @@ final toggleDhikrBookmarkProvider =
           await add.call(b);
         }
 
-        ref.invalidate(getAllDhikrBookmarksProvider);
+        ref.invalidate(getAllDhikrBookmarksProvider); //the list
         return !exists;
       };
     });

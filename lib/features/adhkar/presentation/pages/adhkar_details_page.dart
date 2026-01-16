@@ -8,9 +8,7 @@ import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/core/widgets/snackbars.dart';
 import 'package:rafeeq/features/adhkar/domain/entities/dhikr.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/dhikr_bookmark.dart';
-import 'package:rafeeq/features/bookmarks/domain/usecases/is_bookmarked.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/dhikr/execution_providers.dart';
-import 'package:rafeeq/features/bookmarks/presentation/riverpod/execution_providers.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class AdhkarDetailsPage extends ConsumerStatefulWidget {
@@ -80,13 +78,15 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
           Text(
             title,
             style: headerStyle.copyWith(
-              color: AppDarkColors.amber,
+              color: isDark
+                  ? AppDarkColors.textPrimary
+                  : AppLightColors.textPrimary,
               fontWeight: FontWeight.bold,
             ),
           ), //header
           const SizedBox(height: 8),
           Text(t, style: bodyTextstyle), //text
-          const SizedBox(height: 16),
+          const SizedBox(height: 24),
         ],
       );
     }
@@ -99,7 +99,10 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
           //bookmark
           Consumer(
             builder: (context, ref, child) {
-              final isBookmarked = ref.watch(isBookmarkedProvider(dhikr.id));
+              final bookmarked = ref.watch(
+                isDhikrBookmarkedProvider(dhikr.id),
+              ); // ✅ watch
+
               return IconButton(
                 onPressed: () async {
                   final bookMark = DhikrBookmark(
@@ -108,35 +111,35 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
                     createdAt: DateTime.now(),
                   );
 
-                  final toggle = ref.watch(
+                  final toggle = ref.read(
                     toggleDhikrBookmarkProvider(bookMark),
-                  );
-
-                  final isBookmarked = await toggle();
+                  ); // ✅ read
+                  final nowBookmarked = await toggle();
 
                   AppSnackBar.showSimple(
                     context: context,
                     isDark: isDark,
-                    message: isBookmarked
+                    message: nowBookmarked
                         ? 'Added dhikr to bookmarks'
                         : 'Removed dhikr from bookmarks',
                   );
                 },
                 icon: Icon(
-                  isBookmarked
-                      ? Icons.bookmark_added_sharp
-                      : Icons.bookmark_add_outlined,
-                  color: isBookmarked
-                      ? isDark
+                  bookmarked
+                      ? Icons.bookmark_added_rounded
+                      : Icons.bookmark_add,
+                  color: bookmarked
+                      ? (isDark
+                            ? AppDarkColors.amber
+                            : AppLightColors.snackbarSuccessBg)
+                      : (isDark
                             ? AppDarkColors.iconSecondary
-                            : AppLightColors.iconSuccess
-                      : isDark
-                      ? AppDarkColors.iconPrimary
-                      : AppLightColors.iconPrimary,
+                            : AppLightColors.iconSecondary),
                 ),
               );
             },
           ),
+
           IconButton(
             onPressed: () {
               openBottomSheet(dhikr);
@@ -169,7 +172,7 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
                         style: textTheme.titleMedium!,
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 20),
 
                     //arabic
                     Align(
@@ -177,10 +180,10 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
                       child: Text(
                         cleanDhikr(dhikr.arabic),
                         textDirection: TextDirection.rtl,
-                        style: textTheme.bodyLarge!.copyWith(fontSize: 24),
+                        style: textTheme.bodyLarge!.copyWith(fontSize: 28),
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 32),
 
                     //transliteration
                     section('Transliteration', dhikr.latin),

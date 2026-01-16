@@ -35,9 +35,7 @@ class AyahTile extends ConsumerWidget {
         margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: isDark
-              ? AppDarkColors.darkSurface
-              : AppLightColors.lightSurface,
+          color: isDark ? AppDarkColors.darkSurface : AppLightColors.amberSoft,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
@@ -47,11 +45,13 @@ class AyahTile extends ConsumerWidget {
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                ayah.ayahNumber.toString(),
+                '${ayah.surahId}: ${ayah.ayahNumber.toString()}',
                 textAlign: TextAlign.center,
                 style: theme.textTheme.bodySmall!.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: AppDarkColors.amber,
+                  color: isDark
+                      ? AppDarkColors.textBody
+                      : AppLightColors.textBody,
                   fontSize: 16,
                 ),
               ),
@@ -150,8 +150,8 @@ class AyahTile extends ConsumerWidget {
                     size: 22,
                     color: isBookmarked
                         ? isDark
-                              ? AppDarkColors.iconSuccess
-                              : AppLightColors.iconSuccess
+                              ? AppDarkColors.amber
+                              : AppLightColors.iconAccent
                         : isDark
                         ? AppDarkColors.iconSecondary
                         : AppLightColors.iconSecondary,

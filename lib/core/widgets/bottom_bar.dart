@@ -38,11 +38,11 @@ class GithubStyleBottomBar extends StatelessWidget {
     final theme = Theme.of(context);
 
     return SafeArea(
-      bottom: false,
+      bottom: true,
       child: Container(
         height: 74,
         color: isDarkMode
-            ? AppDarkColors.darkSurface
+            ? AppDarkColors.bottomBar
             : AppLightColors.lightSurface,
         padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
         child: Row(
@@ -50,13 +50,9 @@ class GithubStyleBottomBar extends StatelessWidget {
             final item = _items[index];
             final isSelected = currentIndex == index;
 
-            final selectedBg = isDarkMode
-                ? AppDarkColors.selectedBottomBar
-                : AppLightColors.iconAccent;
-
             final selectedFg = isDarkMode
-                ? AppDarkColors.iconAccent
-                : Colors.grey[900];
+                ? AppDarkColors.amber
+                : AppLightColors.buttonPrimaryPressed;
 
             final unselectedFg = isDarkMode
                 ? AppDarkColors.iconSecondary
@@ -64,23 +60,15 @@ class GithubStyleBottomBar extends StatelessWidget {
 
             return Expanded(
               child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () => onTap(index),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 150),
-                      width: 54,
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: isSelected ? selectedBg : Colors.transparent,
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      child: Icon(
-                        isSelected ? item.active : item.icon,
-                        size: 22,
-                        color: isSelected ? selectedFg : unselectedFg,
-                      ),
+                    Icon(
+                      isSelected ? item.active : item.icon,
+                      size: 22,
+                      color: isSelected ? selectedFg : unselectedFg,
                     ),
                     const SizedBox(height: 6),
 
@@ -90,9 +78,9 @@ class GithubStyleBottomBar extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: isSelected ? selectedFg : unselectedFg,
-                        fontSize: 12,
+                        fontSize: isSelected ? 14 : 12,
                         fontWeight: isSelected
-                            ? FontWeight.w700
+                            ? FontWeight.bold
                             : FontWeight.w500,
                       ),
                     ),

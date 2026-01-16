@@ -27,7 +27,7 @@ class QuranBookmarksTab extends ConsumerWidget {
           )
         : ListView.separated(
             separatorBuilder: (context, index) {
-              return Divider(color: theme.dividerColor.withAlpha(20));
+              return Divider(color: theme.dividerColor);
             },
             itemCount: bookMarks.length,
             itemBuilder: (context, index) {

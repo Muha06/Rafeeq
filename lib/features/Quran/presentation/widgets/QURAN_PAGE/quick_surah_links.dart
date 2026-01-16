@@ -33,15 +33,15 @@ class SurahLink extends ConsumerWidget {
             borderRadius: BorderRadius.circular(8),
             color: isDark
                 ? AppDarkColors.darkSurface
-                : AppLightColors.lightSurface,
+                : AppLightColors.amberSoft,
           ),
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           child: Center(
             child: Text(
               surah.nameTransliteration,
-              style: theme.textTheme.bodyMedium!.copyWith(
-                //fontWeight: FontWeight.w500,
-                fontSize: 12,
+              style: theme.textTheme.bodyLarge!.copyWith(
+                fontWeight: FontWeight.w500,
+                fontSize: 14,
                 color: isDark
                     ? AppDarkColors.textSecondary
                     : AppLightColors.textBody,
@@ -74,8 +74,8 @@ class QuickSurahLinks extends ConsumerWidget {
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Quick links', style: theme.textTheme.bodySmall),
-                const SizedBox(height: 16),
+                Text('Quick links', style: theme.textTheme.titleMedium),
+                const SizedBox(height: 12),
 
                 SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),

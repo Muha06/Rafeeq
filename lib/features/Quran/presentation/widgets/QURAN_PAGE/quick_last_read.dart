@@ -37,7 +37,7 @@ class QuickLastReadList extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Title
-            Text('Last Read', style: theme.textTheme.bodySmall!.copyWith()),
+            Text('Last Read', style: theme.textTheme.titleMedium!.copyWith()),
             const SizedBox(height: 8),
 
             // Horizontal scrollable cards
@@ -90,7 +90,6 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
         final isDark = ref.watch(isDarkProvider);
 
         return Container(
-          // height: 300,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
           decoration: BoxDecoration(
             color: isDark
@@ -101,10 +100,12 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
+              Icon(
                 Icons.delete_outline,
                 size: 72,
-                color: AppDarkColors.iconAccent,
+                color: isDark
+                    ? AppDarkColors.iconPrimary
+                    : AppLightColors.iconPrimary,
               ),
               const SizedBox(height: 16),
 
@@ -126,6 +127,7 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
                     ),
                   ),
                   const SizedBox(width: 12),
+
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () async {
@@ -190,7 +192,7 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
       child: Stack(
         children: [
           Container(
-            width: 160,
+            alignment: Alignment.center,
             margin: const EdgeInsets.only(top: 8, bottom: 8, right: 8),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             decoration: BoxDecoration(
@@ -199,8 +201,8 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
                         ? AppDarkColors.divider
                         : AppDarkColors.darkSurface
                   : _isSelected
-                  ? AppLightColors.iconDisabled
-                  : AppLightColors.lightSurface,
+                  ? AppLightColors.buttonSecondaryBorder
+                  : AppLightColors.amberSoft,
               borderRadius: BorderRadius.circular(16),
             ),
             child: Column(
@@ -208,9 +210,7 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
               children: [
                 Text(
                   widget.lastRead.surahName,
-                  style: theme.textTheme.titleMedium!.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: theme.textTheme.titleMedium,
                 ),
                 const SizedBox(height: 4),
                 Text(
@@ -220,15 +220,15 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
               ],
             ),
           ),
-          Positioned(
-            bottom: 16,
-            right: 16,
-            child: Image.asset(
-              'assets/images/quran_book.png',
-              height: 26,
-              width: 26,
-            ),
-          ),
+          // Positioned(
+          //   bottom: 16,
+          //   right: 16,
+          //   child: Image.asset(
+          //     'assets/images/quran_book.png',
+          //     height: 26,
+          //     width: 26,
+          //   ),
+          // ),
         ],
       ),
     );

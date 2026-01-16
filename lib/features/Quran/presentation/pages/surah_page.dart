@@ -11,7 +11,7 @@ import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_ayah_provider.
 import 'package:rafeeq/features/Quran/presentation/riverpod/last_read_provider.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/SURAH_PAGE/ayah_tile.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/SURAH_PAGE/surah_details.dart';
-import 'package:rafeeq/features/Quran/presentation/widgets/SURAH_PAGE/surah_settings.dart';
+import 'package:rafeeq/features/Quran/presentation/widgets/SURAH_PAGE/surah_content_settings.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 

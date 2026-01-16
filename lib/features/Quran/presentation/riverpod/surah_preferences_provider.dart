@@ -4,7 +4,7 @@ import 'package:riverpod/legacy.dart';
 final showTranslationProvider = StateProvider<bool>((ref) => true);
 
 // Font size (for Arabic text)
-final arabicFontSizeProvider = StateProvider<double>((ref) => 22.0);
+final arabicFontSizeProvider = StateProvider<double>((ref) => 28.0);
 
 // Font size (for translation)
 final translationFontSizeProvider = StateProvider<double>((ref) => 16.0);

@@ -7,10 +7,12 @@ class AppSnackBar {
     required BuildContext context,
     required bool isDark,
     required String message,
+    Color? lightBgColor,
+    Color? lightText,
     Duration duration = const Duration(seconds: 3),
   }) {
-    final darkBg = AppLightColors.lightSurface;
-    final lightBg = AppDarkColors.darkSurface;
+    final darkBg = AppDarkColors.iconPrimary;
+    final lightBg = lightBgColor ?? AppLightColors.snackbarInfoBg;
     final theme = Theme.of(context);
 
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -18,18 +20,19 @@ class AppSnackBar {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         elevation: 3,
+        persist: false,
         backgroundColor: isDark ? darkBg : lightBg,
         content: Text(
           message,
           style: theme.textTheme.bodySmall!.copyWith(
             color: isDark
-                ? AppLightColors.textPrimary
-                : AppDarkColors.textPrimary,
+                ? AppDarkColors.darkBackground
+                : lightText ?? AppLightColors.snackbarText,
             fontWeight: FontWeight.bold,
             fontSize: 14,
           ),
         ),
-        duration: duration,
+        // duration: duration,
       ),
     );
   }
@@ -45,7 +48,7 @@ class AppSnackBar {
   }) {
     final theme = Theme.of(context);
     final darkBg = AppLightColors.lightSurface;
-    final lightBg = AppDarkColors.darkSurface;
+    final lightBg = AppLightColors.snackbarInfoBg;
 
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).clearSnackBars();
@@ -56,14 +59,14 @@ class AppSnackBar {
         content: Text(
           message,
           style: theme.textTheme.bodySmall!.copyWith(
-            color: isDark ? Colors.black : Colors.white,
+            color: isDark ? Colors.white : Colors.white,
             fontWeight: FontWeight.bold,
             fontSize: 14,
           ),
         ),
         action: SnackBarAction(
           label: actionLabel,
-          textColor: AppDarkColors.iconSuccess,
+          textColor: AppDarkColors.successColor,
           onPressed: onAction,
         ),
         duration: duration,

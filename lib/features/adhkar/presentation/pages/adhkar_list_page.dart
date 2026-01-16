@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
@@ -24,7 +23,7 @@ class _AdhkarListPageState extends ConsumerState<AdhkarListPage> {
   Widget build(BuildContext context) {
     final assetPath = widget.category.assetPath;
     final adhkars = ref.watch(getAdhkarsProvider(assetPath));
-    final isDark = ref.watch(isDarkProvider);
+    final theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -36,9 +35,8 @@ class _AdhkarListPageState extends ConsumerState<AdhkarListPage> {
         loading: () => const Center(child: CircularProgressIndicator()),
         data: (adhkars) {
           return ListView.separated(
-            separatorBuilder: (context, index) => Divider(
-              color: isDark ? AppDarkColors.divider : AppLightColors.divider,
-            ),
+            separatorBuilder: (context, index) =>
+                Divider(color: theme.dividerColor),
             itemCount: adhkars.length,
             itemBuilder: (context, index) {
               final dhikr = adhkars[index];
@@ -64,6 +62,7 @@ class AdhkarListTile extends ConsumerWidget {
     final isDark = ref.watch(isDarkProvider);
 
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () {
         Navigator.push(
           context,
@@ -82,7 +81,7 @@ class AdhkarListTile extends ConsumerWidget {
                 height: 24,
                 width: 36,
                 decoration: BoxDecoration(
-                  color: AppDarkColors.amber,
+                  color: isDark ? AppDarkColors.amber : AppDarkColors.amberSoft,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Center(
@@ -91,7 +90,7 @@ class AdhkarListTile extends ConsumerWidget {
                     style: theme.textTheme.bodySmall!.copyWith(
                       color: isDark
                           ? AppDarkColors.darkBackground
-                          : AppLightColors.textBody,
+                          : AppLightColors.textPrimary,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -101,16 +100,15 @@ class AdhkarListTile extends ConsumerWidget {
 
               Expanded(
                 child: Text(
-                  dhikr.title,
+                  dhikr.title.trim(),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   style: theme.textTheme.bodySmall!.copyWith(
                     fontSize: 16,
                     color: isDark
-                        ? AppDarkColors.textBody
+                        ? AppDarkColors.textPrimary
                         : AppLightColors.textPrimary,
-                    height: 1.2,
-                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),

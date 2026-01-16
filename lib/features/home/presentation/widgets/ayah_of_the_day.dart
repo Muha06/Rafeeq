@@ -71,18 +71,8 @@ class AyahOfTheDay extends ConsumerWidget {
                 decoration: BoxDecoration(
                   color: isDark
                       ? AppDarkColors.darkSurface
-                      : AppLightColors.lightSurface,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: isDark
-                          ? Colors.black.withAlpha(120)
-                          : Colors.black.withAlpha(10),
-                      blurRadius: 8,
-                      spreadRadius: 2,
-                      offset: const Offset(0, 4), // y offset creates depth
-                    ),
-                  ],
+                      : AppLightColors.amberSoft,
+                  borderRadius: BorderRadius.circular(20),
                 ),
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16,
@@ -94,11 +84,14 @@ class AyahOfTheDay extends ConsumerWidget {
                     Text(
                       'Daily verse',
                       textAlign: TextAlign.left,
-                      style: theme.textTheme.bodySmall,
+                      style: theme.textTheme.titleSmall,
                     ),
                     const SizedBox(height: 12),
 
-                    //Translation
+                    Divider(color: theme.dividerColor),
+                    const SizedBox(height: 8),
+
+                    //Ayah text
                     Text(
                       ayah.textEnglish,
                       textAlign: TextAlign.left,
@@ -107,14 +100,34 @@ class AyahOfTheDay extends ConsumerWidget {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
+                    const SizedBox(height: 8),
+
+                    Divider(color: theme.dividerColor),
                     const SizedBox(height: 12),
 
                     //refrence
-                    Text(
-                      'Quran ${ayahSurah.id}:${ayah.ayahNumber}',
-                      style: theme.textTheme.bodySmall!.copyWith(
-                        color: AppLightColors.amber,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Quran ${ayahSurah.id}:${ayah.ayahNumber}',
+                          style: theme.textTheme.bodySmall!.copyWith(
+                            // color: AppLightColors.textBody,
+                          ),
+                        ),
+
+                        Text(
+                          'Click to read more >',
+                          style: theme.textTheme.bodyMedium!.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: isDark
+                                ? AppDarkColors.amber
+                                : AppLightColors.textBody,
+                            height: 1,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

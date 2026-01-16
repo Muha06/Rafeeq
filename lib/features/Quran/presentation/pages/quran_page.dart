@@ -1,17 +1,23 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/core/themes/dark_colors.dart';
+import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
-import 'package:rafeeq/features/Quran/presentation/widgets/HOME_PAGE/all_surah_listview.dart';
-import 'package:rafeeq/features/Quran/presentation/widgets/HOME_PAGE/quick_last_read.dart';
-import 'package:rafeeq/features/Quran/presentation/widgets/HOME_PAGE/quick_surah_links.dart';
+import 'package:rafeeq/core/widgets/snackbars.dart';
+import 'package:rafeeq/features/Quran/presentation/widgets/QURAN_PAGE/all_surah_listview.dart';
+import 'package:rafeeq/features/Quran/presentation/widgets/QURAN_PAGE/quick_last_read.dart';
+import 'package:rafeeq/features/Quran/presentation/widgets/QURAN_PAGE/quick_surah_links.dart';
+import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
-class QuranPage extends StatefulWidget {
+class QuranPage extends ConsumerStatefulWidget {
   const QuranPage({super.key});
 
   @override
-  State<QuranPage> createState() => _QuranPageState();
+  ConsumerState<QuranPage> createState() => _QuranPageState();
 }
 
-class _QuranPageState extends State<QuranPage> {
+class _QuranPageState extends ConsumerState<QuranPage> {
   final ScrollController scrollController = ScrollController();
 
   void scrollToTop() {
@@ -31,6 +37,7 @@ class _QuranPageState extends State<QuranPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isDark = ref.watch(isDarkProvider);
 
     return Scaffold(
       body: SafeArea(
@@ -47,7 +54,23 @@ class _QuranPageState extends State<QuranPage> {
                 onTap: scrollToTop,
                 child: const Text('Quran'),
               ),
-
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    AppSnackBar.showSimple(
+                      context: context,
+                      isDark: isDark,
+                      message: 'Babaa, wataka kusearch nini, hebu soma hapo 😂',
+                    );
+                  },
+                  icon: Icon(
+                    CupertinoIcons.search,
+                    color: isDark
+                        ? AppDarkColors.iconPrimary
+                        : AppLightColors.iconPrimary,
+                  ),
+                ),
+              ],
               bottom: appBarBottomDivider(context),
             ),
             const SliverToBoxAdapter(child: SizedBox(height: 8)),

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
-import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
+import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/features/adhkar/domain/entities/adhkar_category.dart';
 import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_list_page.dart';
 import 'package:rafeeq/features/adhkar/presentation/riverpod/adhkar_categories.dart';
+import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class AdhkarCategoryPage extends ConsumerStatefulWidget {
   const AdhkarCategoryPage({super.key});
@@ -16,14 +17,12 @@ class AdhkarCategoryPage extends ConsumerStatefulWidget {
 class _AdhkarCategoryPageState extends ConsumerState<AdhkarCategoryPage> {
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     final adhkarCategories = ref.watch(getAdhkarCategoriesProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Adhkars Categories'),
-        bottom: appBarBottomDivider(context),
+        // bottom: appBarBottomDivider(context),
       ),
       body: ListView.builder(
         itemCount: adhkarCategories.length,
@@ -37,14 +36,15 @@ class _AdhkarCategoryPageState extends ConsumerState<AdhkarCategoryPage> {
   }
 }
 
-class AdhkarCategoryTile extends StatelessWidget {
+class AdhkarCategoryTile extends ConsumerWidget {
   const AdhkarCategoryTile({super.key, required this.category});
 
   final AdhkarCategory category;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     final theme = Theme.of(context);
+    final isDark = ref.watch(isDarkProvider);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -64,7 +64,9 @@ class AdhkarCategoryTile extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
               decoration: BoxDecoration(
-                color: theme.cardColor,
+                color: isDark
+                    ? AppDarkColors.darkSurface
+                    : AppLightColors.amberSoft,
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Text(

@@ -47,10 +47,10 @@ class _FridayReminderState extends ConsumerState<FridayReminder> {
           children: [
             Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(20),
                 color: isDark
                     ? AppDarkColors.darkSurface
-                    : AppLightColors.lightSurface,
+                    : AppLightColors.amberSoft,
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(
@@ -60,7 +60,7 @@ class _FridayReminderState extends ConsumerState<FridayReminder> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("It's Friday!", style: theme.textTheme.bodySmall),
+                    Text("It's Friday!", style: theme.textTheme.titleSmall),
                     const SizedBox(height: 10),
 
                     Text.rich(
@@ -87,12 +87,15 @@ class _FridayReminderState extends ConsumerState<FridayReminder> {
                     ),
                     const SizedBox(height: 10),
 
-                    Text(
-                      'Tap to read',
-                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        color: isDark ? AppLightColors.amber : Colors.black,
-                        fontWeight: FontWeight.bold,
-                        height: 1.3,
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        'Tap to read >',
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          color: isDark ? AppLightColors.amber : Colors.black,
+                          fontWeight: FontWeight.bold,
+                          height: 1,
+                        ),
                       ),
                     ),
                   ],

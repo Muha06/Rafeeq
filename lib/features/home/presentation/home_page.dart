@@ -4,9 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hijri_date/hijri.dart';
 import 'package:rafeeq/core/animations/navigation_animations.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
-import 'package:rafeeq/features/Quran/presentation/widgets/HOME_PAGE/ayah_of_the_day.dart';
-import 'package:rafeeq/features/Quran/presentation/widgets/HOME_PAGE/friday_reminder.dart';
-import 'package:rafeeq/features/Quran/presentation/widgets/HOME_PAGE/greetings_row.dart';
+import 'package:rafeeq/features/home/presentation/widgets/ayah_of_the_day.dart';
+import 'package:rafeeq/features/home/presentation/widgets/friday_reminder.dart';
+import 'package:rafeeq/features/Quran/presentation/widgets/QURAN_PAGE/greetings_row.dart';
 import 'package:rafeeq/features/settings/presentation/pages/settings_page.dart';
 
 class HomePage extends ConsumerStatefulWidget {
@@ -19,21 +19,6 @@ class HomePage extends ConsumerStatefulWidget {
 class _HomePageState extends ConsumerState<HomePage> {
   final todayHijri = HijriDate.now();
   String get formattedHijri => todayHijri.toFormat('MMMM dd, yyyy h');
-  final ScrollController scrollController = ScrollController();
-
-  void scrollToTop() {
-    scrollController.animateTo(
-      0,
-      duration: Durations.short4,
-      curve: Curves.easeInOut,
-    );
-  }
-
-  @override
-  void dispose() {
-    scrollController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +27,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
-          controller: scrollController,
           physics: const BouncingScrollPhysics(),
           slivers: [
             SliverAppBar(
@@ -50,10 +34,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               floating: true,
               snap: false,
               toolbarHeight: theme.appBarTheme.toolbarHeight!,
-              title: GestureDetector(
-                onTap: scrollToTop,
-                child: const Text('Rafeeq'),
-              ),
+              title: const Text('Rafeeq'),
               actions: [
                 IconButton(
                   onPressed: () {
@@ -75,12 +56,11 @@ class _HomePageState extends ConsumerState<HomePage> {
                 child: GreetingsRow(formattedHijri: formattedHijri),
               ),
             ),
+            //friday reminder
+            const SliverToBoxAdapter(child: FridayReminder()),
 
             //AYAH OF THE DAY
             const SliverToBoxAdapter(child: AyahOfTheDay()),
-
-            //friday reminder
-            const SliverToBoxAdapter(child: FridayReminder()),
           ],
         ),
       ),
