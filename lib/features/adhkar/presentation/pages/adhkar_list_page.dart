@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
@@ -27,7 +28,7 @@ class _AdhkarListPageState extends ConsumerState<AdhkarListPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Adhkars'),
+        title: Text(widget.category.title),
         bottom: appBarBottomDivider(context),
       ),
       body: adhkars.when(

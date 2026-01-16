@@ -1,7 +1,7 @@
-import 'package:rafeeq/features/bookmarks/data/datasources/bookmarks_local_ds.dart';
+import 'package:rafeeq/features/bookmarks/data/datasources/quran_bookmark_local_ds.dart';
 import 'package:rafeeq/features/bookmarks/data/models/quran_bookmark_hive_model.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/quran_bookmark.dart';
-import 'package:rafeeq/features/bookmarks/domain/repos/bookmark_repo.dart';
+import 'package:rafeeq/features/bookmarks/domain/repos/quran_bookmark_repo.dart';
 
 class BookmarksRepositoryImpl implements BookmarksRepository {
   final BookmarksLocalDataSource local;

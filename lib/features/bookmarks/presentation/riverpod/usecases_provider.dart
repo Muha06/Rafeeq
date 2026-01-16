@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:rafeeq/features/bookmarks/data/datasources/bookmarks_local_ds.dart';
-import 'package:rafeeq/features/bookmarks/data/models/quran_bookmark_hive_model.dart';
-import 'package:rafeeq/features/bookmarks/data/repos_impl/bookmark_impl.dart';
-import 'package:rafeeq/features/bookmarks/domain/repos/bookmark_repo.dart';
+ import 'package:rafeeq/features/bookmarks/data/datasources/quran_bookmark_local_ds.dart';
+ import 'package:rafeeq/features/bookmarks/data/models/quran_bookmark_hive_model.dart';
+ import 'package:rafeeq/features/bookmarks/data/repos_impl/quran_bookmark_impl.dart';
+ import 'package:rafeeq/features/bookmarks/domain/repos/quran_bookmark_repo.dart';
 import 'package:rafeeq/features/bookmarks/domain/usecases/add_bookmark.dart';
 import 'package:rafeeq/features/bookmarks/domain/usecases/clear_bookmarks.dart';
 import 'package:rafeeq/features/bookmarks/domain/usecases/get_bookmark.dart';
@@ -59,4 +59,3 @@ final getAllQuranBookmarksUseCaseProvider =
       final repo = ref.watch(bookmarksRepositoryProvider);
       return GetAllQuranBookmarksUseCase(repo);
     });
-

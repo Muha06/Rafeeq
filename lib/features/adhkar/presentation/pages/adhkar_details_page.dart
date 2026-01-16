@@ -5,7 +5,12 @@ import 'package:rafeeq/core/functions/clean_arabic_text.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
+import 'package:rafeeq/core/widgets/snackbars.dart';
 import 'package:rafeeq/features/adhkar/domain/entities/dhikr.dart';
+import 'package:rafeeq/features/bookmarks/domain/entities/dhikr_bookmark.dart';
+import 'package:rafeeq/features/bookmarks/domain/usecases/is_bookmarked.dart';
+import 'package:rafeeq/features/bookmarks/presentation/riverpod/dhikr/execution_providers.dart';
+import 'package:rafeeq/features/bookmarks/presentation/riverpod/execution_providers.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class AdhkarDetailsPage extends ConsumerStatefulWidget {
@@ -92,9 +97,45 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
         bottom: appBarBottomDivider(context),
         actions: [
           //bookmark
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.bookmark_add_outlined),
+          Consumer(
+            builder: (context, ref, child) {
+              final isBookmarked = ref.watch(isBookmarkedProvider(dhikr.id));
+              return IconButton(
+                onPressed: () async {
+                  final bookMark = DhikrBookmark(
+                    dhikrId: dhikr.id,
+                    title: dhikr.title,
+                    createdAt: DateTime.now(),
+                  );
+
+                  final toggle = ref.watch(
+                    toggleDhikrBookmarkProvider(bookMark),
+                  );
+
+                  final isBookmarked = await toggle();
+
+                  AppSnackBar.showSimple(
+                    context: context,
+                    isDark: isDark,
+                    message: isBookmarked
+                        ? 'Added dhikr to bookmarks'
+                        : 'Removed dhikr from bookmarks',
+                  );
+                },
+                icon: Icon(
+                  isBookmarked
+                      ? Icons.bookmark_added_sharp
+                      : Icons.bookmark_add_outlined,
+                  color: isBookmarked
+                      ? isDark
+                            ? AppDarkColors.iconSecondary
+                            : AppLightColors.iconSuccess
+                      : isDark
+                      ? AppDarkColors.iconPrimary
+                      : AppLightColors.iconPrimary,
+                ),
+              );
+            },
           ),
           IconButton(
             onPressed: () {
