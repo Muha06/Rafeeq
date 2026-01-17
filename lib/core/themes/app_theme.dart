@@ -35,7 +35,10 @@ class AppTheme {
         toolbarHeight: 52,
         surfaceTintColor: Colors.transparent, // color when scrolling
         centerTitle: false,
-        titleTextStyle: AppTextStyles.title,
+        titleTextStyle: AppTextStyles.title.copyWith(
+          color: AppDarkColors.textPrimary, // for dark theme
+          height: 1,
+        ), //same with title large
         iconTheme: const IconThemeData(color: AppDarkColors.iconPrimary),
       ),
 

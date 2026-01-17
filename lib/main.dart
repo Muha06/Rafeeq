@@ -9,6 +9,7 @@ import 'package:rafeeq/features/Quran/data/models/surah_hive.dart';
 import 'package:rafeeq/app/tabs_screen.dart';
 import 'package:rafeeq/features/bookmarks/data/models/dhikr_bookmark_hive_model.dart';
 import 'package:rafeeq/features/bookmarks/data/models/quran_bookmark_hive_model.dart';
+import 'package:rafeeq/features/settings/presentation/provider/notifcation_provider.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 Future<void> main() async {
@@ -27,33 +28,42 @@ Future<void> main() async {
   await Hive.openBox<SurahHive>('surahs');
   await Hive.openBox<AyahHive>('ayahs');
   await Hive.openBox('lastReadBox'); // for LastReadAyah
+  await Hive.openBox('settingsBox'); //settings
 
   await Hive.openBox<QuranBookmarkHiveModel>('quran_bookmarks_box');
   await Hive.openBox<DhikrBookmarkHiveModel>('dhikr_bookmarks_box');
 
+  //------------------NOTIFICATIONS---------------//
+  await NotificationService.instance.init(); //init
+  final settings = Hive.box('settingsBox');
+
+  final adhkarOn =
+      settings.get('adhkar_notif_enabled', defaultValue: true) as bool;
+
+  await NotificationService.instance.cancel(200); //cancel firsts
+  await NotificationService.instance.cancel(201);
+
+  if (adhkarOn) {
+    await NotificationService.instance.scheduleDaily(
+      id: 200,
+      title: 'Morning Adhkār ☀️',
+      body: 'Take 2 minutes for your morning adhkār.',
+      time: kmorningAdhkarTime,
+    );
+
+    await NotificationService.instance.scheduleDaily(
+      id: 201,
+      title: 'Evening Adhkār 🌙',
+      body: 'Don’t miss your evening adhkār.',
+      time: keveningAdhkarTime,
+    );
+  } else {
+    await NotificationService.instance.cancel(200); //else cancel
+    await NotificationService.instance.cancel(201); //else cancel
+  }
+
   //dotenv
   await dotenv.load(fileName: ".env");
-
-  await NotificationService.instance.init(); //init
-
-  await NotificationService.instance.cancel(1);
-  await NotificationService.instance.cancel(2);
-
-  // //notification 1
-  await NotificationService.instance.scheduleDaily(
-    id: 1,
-    title: 'Morning Adhkars ☀️',
-    body: 'Take 2 minutes for your morning adhkār.',
-    time: const TimeOfDay(hour: 7, minute: 30),
-  );
-
-  // //notification 2
-  await NotificationService.instance.scheduleDaily(
-    id: 2,
-    title: 'Evening Adhkars 🌙',
-    body: 'Don’t miss your evening adhkār.',
-    time: const TimeOfDay(hour: 18, minute: 30),
-  );
 
   runApp(const ProviderScope(child: MyApp()));
 }
