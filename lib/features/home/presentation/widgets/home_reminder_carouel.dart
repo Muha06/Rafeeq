@@ -2,7 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/features/home/presentation/widgets/evening_adhkar_reminder.dart';
-import 'package:rafeeq/features/home/presentation/widgets/friday_reminder.dart';
+import 'package:rafeeq/features/home/presentation/widgets/friday_reminder_card.dart';
 import 'package:rafeeq/features/home/presentation/widgets/morning_adhkar_reminder.dart';
 
 class HomeRemindersCarousel extends ConsumerWidget {
