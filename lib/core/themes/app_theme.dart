@@ -1,69 +1,84 @@
 import 'package:flutter/material.dart';
 import 'package:rafeeq/core/themes/app_text_style.dart';
-import 'app_colors.dart';
+import 'package:rafeeq/core/themes/light_colors.dart';
+import 'dark_colors.dart';
 
 //DARK THEME
 class AppTheme {
   //dark theme
   static ThemeData dark() {
     return ThemeData(
+      useMaterial3: true,
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: {
+          TargetPlatform.android: ZoomPageTransitionsBuilder(),
+          TargetPlatform.iOS: ZoomPageTransitionsBuilder(),
+        },
+      ),
       brightness: Brightness.dark,
+      scaffoldBackgroundColor: AppDarkColors.darkBackground,
+      canvasColor: AppDarkColors.darkBackground,
 
-      scaffoldBackgroundColor: AppColors.darkBackground,
+      dividerColor: AppDarkColors.divider,
+      cardColor: AppDarkColors.darkSurface,
+      iconTheme: const IconThemeData(color: AppDarkColors.iconPrimary),
 
       colorScheme: const ColorScheme.dark(
-        surface: AppColors.darkBackground,
-        primary: AppColors.amber,
+        surface: AppDarkColors.darkBackground, //hide the navigation color
+        primary: AppDarkColors.amber,
       ),
 
       //APPBAR
       appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.darkBackground,
-        foregroundColor: AppColors.textPrimary,
-        toolbarHeight: 48,
-        shadowColor: AppColors.textSecondary.withAlpha(150),
-        scrolledUnderElevation: 1, //this creates the divider effect
+        backgroundColor: AppDarkColors.darkBackground,
+        foregroundColor: AppDarkColors.textPrimary,
+        toolbarHeight: 52,
         surfaceTintColor: Colors.transparent, // color when scrolling
         centerTitle: false,
-        titleTextStyle: AppTextStyles.title.copyWith(fontFamily: 'Inter'),
-        actionsIconTheme: const IconThemeData(color: Colors.white, size: 26),
+        titleTextStyle: AppTextStyles.title,
+        iconTheme: const IconThemeData(color: AppDarkColors.iconPrimary),
       ),
 
       //=====Text theme=======
       textTheme: TextTheme(
         //title
         titleLarge: AppTextStyles.title.copyWith(
-          color: AppColors.textPrimary, // for dark theme
+          color: AppDarkColors.textPrimary, // for dark theme
+          height: 1,
         ),
         //arabic
         bodyLarge: AppTextStyles.quranBody.copyWith(
-          color: AppColors.textPrimary, // dark
+          color: AppDarkColors.textPrimary, // dark
         ),
         //Normal body
         bodyMedium: AppTextStyles.body.copyWith(
-          color: AppColors.textBody, // dark
+          color: AppDarkColors.textBody, // white
         ),
         //small text
         bodySmall: AppTextStyles.secondary.copyWith(
-          color: AppColors.textSecondary, // dark
+          color: AppDarkColors.textSecondary, // dark
         ),
       ),
-      //CARD
-      cardColor: AppColors.darkSurface,
 
-      dividerColor: AppColors.textSecondary.withAlpha(50),
+      //CARD
+      cardTheme: CardThemeData(
+        elevation: 2,
+        shadowColor: Colors.black.withAlpha(60),
+        color: AppDarkColors.darkSurface,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      ),
 
       sliderTheme: const SliderThemeData(
-        activeTrackColor: AppColors.amber,
-        thumbColor: AppColors.amber,
-        inactiveTrackColor: AppColors.textSecondary,
+        activeTrackColor: AppDarkColors.amber,
+        thumbColor: AppDarkColors.amber,
+        inactiveTrackColor: AppDarkColors.textSecondary,
       ),
 
       // ===== BUTTON THEME =====
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.amber,
-          foregroundColor: AppColors.darkBackground,
+          backgroundColor: AppDarkColors.amber,
+          foregroundColor: AppDarkColors.darkBackground,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
         ),
@@ -71,8 +86,8 @@ class AppTheme {
 
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.amber,
-          side: const BorderSide(color: AppColors.amber),
+          foregroundColor: AppDarkColors.amber,
+          side: const BorderSide(color: AppDarkColors.amber),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
         ),
@@ -80,18 +95,20 @@ class AppTheme {
 
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: AppColors.amber,
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          foregroundColor: AppDarkColors.amber,
           overlayColor: Colors.transparent,
           splashFactory: NoSplash.splashFactory,
           textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+          padding: EdgeInsets.zero, // remove all padding
+          minimumSize: Size.zero, // optional: remove minimum size
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap, // shrink tap area
         ),
       ),
       bottomSheetTheme: const BottomSheetThemeData(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
         ),
-        backgroundColor: AppColors.darkSurface,
+        backgroundColor: AppDarkColors.darkSurfaceSolid,
       ),
     );
   }
@@ -99,91 +116,139 @@ class AppTheme {
   //light theme
   static ThemeData light() {
     return ThemeData(
+      useMaterial3: true,
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: {
+          TargetPlatform.android: ZoomPageTransitionsBuilder(),
+          TargetPlatform.iOS: ZoomPageTransitionsBuilder(),
+        },
+      ),
       brightness: Brightness.light,
-      scaffoldBackgroundColor: AppColors.lightBackground,
+      scaffoldBackgroundColor: AppLightColors.lightBackground,
       colorScheme: const ColorScheme.light(
-        surface: AppColors.lightSurface,
-        primary: AppColors.amber,
+        surface: AppLightColors.lightSurface,
+        primary: AppLightColors.amber,
       ),
 
       // ===== APPBAR =====
-      appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.lightBackground,
-        foregroundColor: AppColors.lightTextPrimary,
+      appBarTheme: const AppBarTheme(
+        backgroundColor: AppLightColors.lightBackground,
+        surfaceTintColor: AppLightColors.lightBackground,
+        foregroundColor: AppLightColors.textPrimary,
         elevation: 0,
         centerTitle: false,
         toolbarHeight: 48,
-        shadowColor: AppColors.textSecondary.withAlpha(150),
-        scrolledUnderElevation: 1, //this creates the divider effect
-        surfaceTintColor: Colors.transparent, // color when scrolling
+        iconTheme: IconThemeData(color: AppLightColors.iconPrimary),
       ),
 
       //=====text theme========
       textTheme: TextTheme(
         //title
         titleLarge: AppTextStyles.title.copyWith(
-          color: AppColors.lightTextPrimary,
+          color: AppLightColors.textPrimary,
         ),
+
         //Arabic
         bodyLarge: AppTextStyles.quranBody.copyWith(
-          color: AppColors.lightTextPrimary,
+          color: AppLightColors.textPrimary,
         ),
-        //Normal body
-        bodyMedium: AppTextStyles.body.copyWith(color: AppColors.lightTextBody),
+
+        //Normal body(Translation)
+        bodyMedium: AppTextStyles.body.copyWith(
+          color: AppLightColors.textPrimary,
+        ),
+
         //small text
         bodySmall: AppTextStyles.secondary.copyWith(
-          color: AppColors.lightTextSecondary,
+          color: AppLightColors.textSecondary,
         ),
       ),
 
       // ===== CARD =====
-      cardColor: AppColors.lightSurface,
-      dividerColor: AppColors.lightTextSecondary.withAlpha(50),
+      cardColor: AppLightColors.lightSurface,
+
+      dividerColor: AppLightColors.divider,
+      dividerTheme: const DividerThemeData(
+        space: 0,
+        thickness: 0.5,
+        color: AppLightColors.divider,
+      ),
+
+      iconTheme: const IconThemeData(color: AppLightColors.iconPrimary),
 
       // ===== SLIDER =====
       sliderTheme: const SliderThemeData(
-        activeTrackColor: AppColors.amber,
-        thumbColor: AppColors.amber,
-        inactiveTrackColor: AppColors.lightTextSecondary,
+        activeTrackColor: AppLightColors.primary,
+        inactiveTrackColor: AppLightColors.border,
+        thumbColor: AppLightColors.primary,
+      ),
+
+      //======Switch=======
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith((states) {
+          // ON thumb
+          if (states.contains(WidgetState.selected)) {
+            return AppLightColors.switchThumbOn; // cocoa
+          }
+          // OFF thumb
+          return AppLightColors.switchThumbOff;
+        }),
+        trackColor: WidgetStateProperty.resolveWith((states) {
+          // ON track (bg)
+          if (states.contains(WidgetState.selected)) {
+            return AppLightColors.switchTrackOn;
+          }
+          // OFF track
+          return AppLightColors.switchTrackOff;
+        }),
+        trackOutlineColor: WidgetStateProperty.resolveWith((states) {
+          // OFF: show border
+          if (!states.contains(WidgetState.selected)) {
+            return AppLightColors.switchOutlineOn;
+          }
+          // ON: no border (looks cleaner)
+          return Colors.transparent;
+        }),
+        trackOutlineWidth: WidgetStateProperty.resolveWith((states) {
+          return 1.0; // keep thin
+        }),
       ),
 
       // ===== BUTTONS =====
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.amber,
-          foregroundColor: AppColors.lightBackground,
+          backgroundColor: AppLightColors.buttonPrimary,
+          foregroundColor: AppLightColors.buttonPrimaryText,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
           elevation: 0,
           shadowColor: Colors.transparent, // optional if you want no shadow
           splashFactory: InkRipple.splashFactory,
-          overlayColor: AppColors.lightTextBody,
+          overlayColor: AppLightColors.textBody,
         ),
       ),
 
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.amber,
-          side: const BorderSide(color: AppColors.amber),
+          backgroundColor: Colors.transparent, // optional, usually default
+          foregroundColor: AppLightColors.buttonPrimary,
+          side: const BorderSide(color: AppLightColors.buttonPrimary),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-          backgroundColor: Colors.transparent, // optional, usually default
           splashFactory: InkRipple.splashFactory, //splash
-          overlayColor: AppColors.amber,
+          overlayColor: AppLightColors.amber,
         ),
       ),
 
       textButtonTheme: TextButtonThemeData(
-        style: ButtonStyle(
-          foregroundColor: WidgetStateProperty.all(AppColors.amber),
-          padding: WidgetStateProperty.all(
-            const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          ),
-          overlayColor: WidgetStateProperty.all(Colors.transparent),
+        style: TextButton.styleFrom(
+          foregroundColor: AppLightColors.amber,
+          overlayColor: Colors.transparent,
           splashFactory: NoSplash.splashFactory,
-          textStyle: WidgetStateProperty.all(
-            const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-          ),
+          textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+          padding: EdgeInsets.zero, // remove all padding
+          minimumSize: Size.zero, // optional: remove minimum size
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap, // shrink tap area
         ),
       ),
 
@@ -191,7 +256,7 @@ class AppTheme {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
         ),
-        backgroundColor: AppColors.lightSurface,
+        backgroundColor: AppLightColors.lightBackground,
       ),
     );
   }

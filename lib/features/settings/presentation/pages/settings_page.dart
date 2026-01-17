@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/core/themes/app_colors.dart';
+import 'package:rafeeq/core/themes/dark_colors.dart';
+import 'package:rafeeq/core/themes/light_colors.dart';
+import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
@@ -27,6 +29,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings', style: theme.appBarTheme.titleTextStyle),
+        bottom: appBarBottomDivider(context),
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 8),
@@ -36,23 +39,15 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             color: Colors.transparent,
             child: ListTile(
               splashColor: isDark
-                  ? AppColors.darkSurface
-                  : AppColors.lightSurface,
+                  ? AppDarkColors.darkSurface
+                  : AppLightColors.lightSurface,
               onTap: () {
                 showThemePicker(context);
               },
-              leading: SizedBox(
+              leading: const SizedBox(
                 height: 48,
                 width: 48,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: isDark
-                        ? AppColors.darkSurface
-                        : AppColors.lightSurface,
-                  ),
-                  child: const Center(child: Icon(CupertinoIcons.paintbrush)),
-                ),
+                child: Icon(CupertinoIcons.paintbrush),
               ),
               title: Text('Theme', style: theme.textTheme.titleMedium),
               subtitle: Text(
@@ -62,6 +57,25 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               trailing: const Icon(Icons.keyboard_arrow_right, size: 32),
             ),
           ),
+      //  SwitchListTile(
+      //       value: morningReminderEnabled,
+      //       onChanged: (val) async {
+      //         if (val) {
+      //           await NotificationService.instance.scheduleDaily(
+      //             id: 100,
+      //             title: 'Morning Adhkār ☀️',
+      //             body: 'Take 2 minutes for your morning adhkār.',
+      //             time: const TimeOfDay(hour: 6, minute: 30),
+      //           );
+      //         } else {
+      //           await NotificationService.instance.cancel(100);
+      //         }
+
+      //         // then update your stored setting (Hive/Prefs/Riverpod state)
+      //       },
+      //       title: const Text("Morning adhkār reminder"),
+      //     ),
+
         ],
       ),
     );
@@ -99,7 +113,7 @@ class _ThemePickerSheetState extends ConsumerState<ThemePickerSheet> {
               height: 6,
               width: 48,
               decoration: BoxDecoration(
-                color: AppColors.lightTextSecondary,
+                color: AppLightColors.textSecondary,
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
@@ -146,7 +160,7 @@ class _ThemePickerSheetState extends ConsumerState<ThemePickerSheet> {
               child: Text(
                 'Close',
                 style: theme.textTheme.bodyMedium!.copyWith(
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),
@@ -183,8 +197,8 @@ class _ThemeOption extends ConsumerWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
         splashColor: isDark
-            ? AppColors.lightTextSecondary.withAlpha(35)
-            : AppColors.lightTextSecondary.withAlpha(35),
+            ? AppDarkColors.textSecondary.withAlpha(35)
+            : AppLightColors.textSecondary.withAlpha(35),
         onTap: () {
           RadioGroup.maybeOf<AppThemeMode>(context)?.onChanged.call(value);
         },
@@ -195,7 +209,7 @@ class _ThemeOption extends ConsumerWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: selected ? AppColors.amber : theme.dividerColor,
+              color: selected ? AppLightColors.amber : theme.dividerColor,
             ),
           ),
           child: Row(

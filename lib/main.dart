@@ -1,16 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:rafeeq/app/notifications.dart';
 import 'package:rafeeq/core/themes/app_theme.dart';
+import 'package:rafeeq/features/Quran/data/models/ayah_hive.dart';
+import 'package:rafeeq/features/Quran/data/models/surah_hive.dart';
+import 'package:rafeeq/app/tabs_screen.dart';
+import 'package:rafeeq/features/bookmarks/data/models/dhikr_bookmark_hive_model.dart';
+import 'package:rafeeq/features/bookmarks/data/models/quran_bookmark_hive_model.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
-import 'package:rafeeq/features/surahs/presentation/pages/home_page.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // await dotenv.load(); // <-- just this
+  //Init HIVE
+  await Hive.initFlutter();
 
-  // // Optional: print to confirm
-  // debugPrint('Client ID: ${dotenv.env['QURAN_CLIENT_ID']}');
+  //register adapters
+  Hive.registerAdapter(SurahHiveAdapter());
+  Hive.registerAdapter(AyahHiveAdapter());
+  Hive.registerAdapter(QuranBookmarkHiveModelAdapter());
+  Hive.registerAdapter(DhikrBookmarkHiveModelAdapter());
+
+  //open boxes
+  await Hive.openBox<SurahHive>('surahs');
+  await Hive.openBox<AyahHive>('ayahs');
+  await Hive.openBox('lastReadBox'); // for LastReadAyah
+
+  await Hive.openBox<QuranBookmarkHiveModel>('quran_bookmarks_box');
+  await Hive.openBox<DhikrBookmarkHiveModel>('dhikr_bookmarks_box');
+
+  //dotenv
+  await dotenv.load(fileName: ".env");
+
+  await NotificationService.instance.init(); //init
+
+  await NotificationService.instance.cancel(1);
+  await NotificationService.instance.cancel(2);
+
+  // //notification 1
+  await NotificationService.instance.scheduleDaily(
+    id: 1,
+    title: 'Morning Adhkars ☀️',
+    body: 'Take 2 minutes for your morning adhkār.',
+    time: const TimeOfDay(hour: 7, minute: 30),
+  );
+
+  // //notification 2
+  await NotificationService.instance.scheduleDaily(
+    id: 2,
+    title: 'Evening Adhkars 🌙',
+    body: 'Don’t miss your evening adhkār.',
+    time: const TimeOfDay(hour: 18, minute: 30),
+  );
 
   runApp(const ProviderScope(child: MyApp()));
 }
@@ -32,7 +75,7 @@ class MyApp extends ConsumerWidget {
         AppThemeMode.system => ThemeMode.system,
       },
       debugShowCheckedModeBanner: false,
-      home: const HomePage(),
+      home: const TabsScreen(),
     );
   }
 }

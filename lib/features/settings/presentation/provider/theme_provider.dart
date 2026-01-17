@@ -8,13 +8,28 @@ final themeModeProvider = StateProvider<AppThemeMode>(
   (ref) => AppThemeMode.system,
 );
 
+//provider that listens when user changes phone theme
+final platformBrightnessProvider = Provider<Brightness>((ref) {
+  final dispatcher = WidgetsBinding.instance.platformDispatcher;
+
+  ref.onDispose(() {
+    dispatcher.onPlatformBrightnessChanged = null;
+  });
+
+  dispatcher.onPlatformBrightnessChanged = () {
+    ref.invalidateSelf();
+  };
+
+  return dispatcher.platformBrightness;
+});
+
 final isDarkProvider = Provider<bool>((ref) {
   final currentMode = ref.watch(themeModeProvider);
   if (currentMode == AppThemeMode.dark) return true;
   if (currentMode == AppThemeMode.light) return false;
 
   // System mode
-  final brightness =
-      WidgetsBinding.instance.platformDispatcher.platformBrightness;
+  final brightness = ref.watch(platformBrightnessProvider);
+
   return brightness == Brightness.dark;
 });
