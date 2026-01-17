@@ -28,6 +28,7 @@ dependencies:
   analyzer: ^6.4.1
   collection: ^1.19.1
   scrollable_positioned_list:
+  carousel_slider: ^5.1.1
 
 dev_dependencies:
   flutter_test:

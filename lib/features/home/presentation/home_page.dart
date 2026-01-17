@@ -5,8 +5,8 @@ import 'package:hijri_date/hijri.dart';
 import 'package:rafeeq/core/animations/navigation_animations.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/features/home/presentation/widgets/ayah_of_the_day.dart';
-import 'package:rafeeq/features/home/presentation/widgets/friday_reminder.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/QURAN_PAGE/greetings_row.dart';
+import 'package:rafeeq/features/home/presentation/widgets/home_reminder_carouel.dart';
 import 'package:rafeeq/features/settings/presentation/pages/settings_page.dart';
 
 class HomePage extends ConsumerStatefulWidget {
@@ -57,7 +57,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
             ),
             //friday reminder
-            const SliverToBoxAdapter(child: FridayReminder()),
+            const SliverToBoxAdapter(child: HomeRemindersCarousel()),
 
             //AYAH OF THE DAY
             const SliverToBoxAdapter(child: AyahOfTheDay()),
