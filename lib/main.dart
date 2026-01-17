@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:rafeeq/app/notifications.dart';
 import 'package:rafeeq/core/themes/app_theme.dart';
 import 'package:rafeeq/features/Quran/data/models/ayah_hive.dart';
 import 'package:rafeeq/features/Quran/data/models/surah_hive.dart';
@@ -32,6 +33,27 @@ Future<void> main() async {
 
   //dotenv
   await dotenv.load(fileName: ".env");
+
+  await NotificationService.instance.init(); //init
+
+  await NotificationService.instance.cancel(1);
+  await NotificationService.instance.cancel(2);
+
+  // //notification 1
+  await NotificationService.instance.scheduleDaily(
+    id: 1,
+    title: 'Morning Adhkars ☀️',
+    body: 'Take 2 minutes for your morning adhkār.',
+    time: const TimeOfDay(hour: 7, minute: 30),
+  );
+
+  // //notification 2
+  await NotificationService.instance.scheduleDaily(
+    id: 2,
+    title: 'Evening Adhkars 🌙',
+    body: 'Don’t miss your evening adhkār.',
+    time: const TimeOfDay(hour: 18, minute: 30),
+  );
 
   runApp(const ProviderScope(child: MyApp()));
 }

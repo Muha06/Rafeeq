@@ -37,7 +37,7 @@ class HomeRemindersCarousel extends ConsumerWidget {
     }
 
     // Evening: 17:00 – 21:00
-    if (_isInWindow(now, 17 * 60, 21 * 60)) {
+    if (_isInWindow(now, 17 * 60, 22 * 90)) {
       items.add(const EveningAdhkarRemindercard());
     }
 

@@ -57,6 +57,25 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               trailing: const Icon(Icons.keyboard_arrow_right, size: 32),
             ),
           ),
+      //  SwitchListTile(
+      //       value: morningReminderEnabled,
+      //       onChanged: (val) async {
+      //         if (val) {
+      //           await NotificationService.instance.scheduleDaily(
+      //             id: 100,
+      //             title: 'Morning Adhkār ☀️',
+      //             body: 'Take 2 minutes for your morning adhkār.',
+      //             time: const TimeOfDay(hour: 6, minute: 30),
+      //           );
+      //         } else {
+      //           await NotificationService.instance.cancel(100);
+      //         }
+
+      //         // then update your stored setting (Hive/Prefs/Riverpod state)
+      //       },
+      //       title: const Text("Morning adhkār reminder"),
+      //     ),
+
         ],
       ),
     );
