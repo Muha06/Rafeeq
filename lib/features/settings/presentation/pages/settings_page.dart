@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
+import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
+import 'package:rafeeq/features/settings/presentation/provider/notifcation_provider.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
@@ -23,40 +25,100 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = ref.read(isDarkProvider);
+    final isDark = ref.watch(isDarkProvider);
+
+    final adhkarOn = ref.watch(adhkarNotifEnabledProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings', style: theme.appBarTheme.titleTextStyle),
+        bottom: appBarBottomDivider(context),
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 8),
         children: [
           //theme preferences
-          Material(
-            color: Colors.transparent,
-            child: ListTile(
-              splashColor: isDark
-                  ? AppDarkColors.darkSurface
-                  : AppLightColors.lightSurface,
-              onTap: () {
-                showThemePicker(context);
+          SettingsTile(
+            leading: const Icon(CupertinoIcons.paintbrush),
+            title: 'App Theme',
+            isDark: isDark,
+            trailing: const Icon(Icons.keyboard_arrow_right),
+            subtitle: 'Change the app theme',
+            onTap: () => showThemePicker(context),
+          ),
+
+          SettingsTile(
+            leading: const Icon(CupertinoIcons.bell),
+            title: 'Adhkar reminder',
+            subtitle: 'morning & evening adhkars',
+            isDark: isDark,
+            trailing: Switch(
+              value: adhkarOn,
+              onChanged: (val) {
+                setAdhkarNotif(ref, val);
+                print(val);
               },
-              leading: const SizedBox(
-                height: 48,
-                width: 48,
-                child: Icon(CupertinoIcons.paintbrush),
-              ),
-              title: Text('Theme', style: theme.textTheme.titleMedium),
-              subtitle: Text(
-                'Change the app theme',
-                style: theme.textTheme.bodySmall,
-              ),
-              trailing: const Icon(Icons.keyboard_arrow_right, size: 32),
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class SettingsTile extends StatelessWidget {
+  final Widget leading;
+  final String title;
+  final String? subtitle;
+  final VoidCallback? onTap;
+  final bool isDark;
+  final Widget? trailing;
+  final EdgeInsetsGeometry? contentPadding;
+  final bool enabled;
+
+  const SettingsTile({
+    super.key,
+    required this.leading,
+    required this.title,
+    required this.isDark,
+    this.subtitle,
+    this.onTap,
+    this.trailing,
+    this.contentPadding,
+    this.enabled = true,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Column(
+      children: [
+        Material(
+          color: Colors.transparent,
+          child: ListTile(
+            enabled: enabled,
+            splashColor: isDark
+                ? AppDarkColors.darkSurface
+                : AppLightColors.lightSurface,
+            onTap: enabled ? onTap : null,
+            contentPadding:
+                contentPadding ?? const EdgeInsets.symmetric(horizontal: 8),
+            leading: SizedBox(
+              height: 48,
+              width: 48,
+              child: Center(child: leading),
+            ),
+            title: Text(title, style: theme.textTheme.titleMedium),
+            subtitle: subtitle == null
+                ? null
+                : Text(subtitle!, style: theme.textTheme.bodySmall),
+            trailing:
+                trailing ?? const Icon(Icons.keyboard_arrow_right, size: 32),
+          ),
+        ),
+        Divider(color: theme.dividerColor),
+      ],
     );
   }
 }

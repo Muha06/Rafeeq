@@ -1,51 +1,51 @@
 import 'package:flutter/material.dart';
 
 class AppDarkColors {
-  // 🌑 Dark theme bg (default)
-  static const Color darkBackground = Color(0xFF0F0F0F); // main app background
-  static const Color darkSurface = Color(
-    0xFF1A1A1A,
-  ); // slightly darker/lighter for cards/dialogs
+  // ✅ Your base
+  static const Color darkBackground = Color(0xFF050C0E);
+  static const Color darkSurface = Color(0xCC0F1F25);
 
-  // 🟡 Accent
-  static const Color amber = Color(
-    0xFFFFC36A,
-  ); // buttons, highlights, selected states
+  static const Color darkSurfaceSolid = Color(0xFF0F1F25);
 
-  // 📝 Text colors
-  static const Color textPrimary = Color(
-    0xFFEDEDED,
-  ); // Qur’an text – bright enough
-  static const Color textBody = Color(0xFFD9D9D9); // body text – softer
-  static const Color textSecondary = Color(
-    0xFF9CA3AF,
-  ); // metadata, ayah numbers, muted
+  // ✨ Accent (keep your amber, but add a dim + soft)
+  static const Color amber = Color(0xFFFFC36A);
+  static const Color amberSoft = Color(0x33FFC36A); // 20% highlight bg
 
-  // 🔹 Buttons & interactive elements
-  static const Color buttonPrimary = amber; // main call-to-action buttons
-  static const Color buttonSecondary = Color(
-    0xFF2C2C2C,
-  ); // secondary buttons (dark gray)
-  static const Color buttonDisabled = Color(
-    0xFF3A3A3A,
-  ); // disabled state buttons
+  // ✅ Teal supporting accent (small use: links, active states if you want)
+  static const Color teal = Color(0xFF22C6A6);
+  static const Color tealSoft = Color(0x3322C6A6); // 20%
 
-  // ⚠️ Feedback
-  static const Color errorColor = Color(0xFFE04F5F); // validation errors
-  static const Color successColor = Color(0xFF4BB543); // success indicators
-  static const Color warningColor = amber; // warnings / highlights
+  // 📝 Text (slightly warmer + softer so it doesn't look sterile)
+  static const Color textPrimary = Color(0xFFEAF2F2);
+  static const Color textBody = Color(0xFFCAD6D8);
+  static const Color textSecondary = Color(0xFF93A9AB);
+  static const Color textHint = Color(0xFF6F8587);
 
-  // 🌑 Borders / Dividers
-  static const Color divider = Color(0xFF2C2C2C); // subtle separation lines
-  static const Color border = Color(0xFF3A3A3A); // card or input borders
+  // ⚡ Icons
+  static const Color iconPrimary = textPrimary;
+  static const Color iconSecondary = textSecondary;
+  static const Color iconDisabled = Color(0xFF5E7376);
 
-  // ⚡ Icon colors
-  static const Color iconPrimary = textPrimary; // main icons, app bar, actions
-  static const Color iconSecondary = textSecondary; // metadata, subtle actions
-  static const Color iconDisabled =
-      textSecondary; // use .withOpacity(0.5) when needed
-  static const Color iconAccent = amber; // selected / active icons
-  static const Color iconError = Color(0xFFDC2626);
-  static const Color iconSuccess = Color(0xFF16A34A);
-  static const Color iconWarning = amber;
+  // 🎛 Buttons
+  static const Color buttonPrimary = amber;
+  static const Color buttonPrimaryPressed = amberSoft;
+  static const Color buttonSecondary = Color(0xFF0E2A2D); // teal-dark
+  static const Color buttonDisabled = Color(0xFF1A2A2E);
+
+  // 📌 Selected states / highlights
+  static const Color selectedPillBg = amberSoft; // behind selected nav
+  static const Color selectedCardBorder = Color(0xFF1E3B40);
+
+  // 🌑 Borders / Dividers (teal-ish, subtle)
+  static const Color divider = Color(0xFF0E2A2D);
+  static const Color border = Color(0xFF123238);
+
+  // Bottom bar / sheets (match your surface stack)
+  static const Color bottomBar = darkSurfaceSolid;
+  static const Color bottomSheet = Color(0xFF081214); // slightly closer to bg
+
+  // ⚠️ Feedback (match the palette; less “random red/green”)
+  static const Color errorColor = Color(0xFFFF5A6A);
+  static const Color successColor = Color(0xFF2FD07F);
+  static const Color warningColor = amber;
 }

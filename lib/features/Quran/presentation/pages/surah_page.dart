@@ -1,14 +1,17 @@
+// ignore_for_file: unused_result
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
-import 'package:rafeeq/core/themes/light_colors.dart';
+import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
+import 'package:rafeeq/core/widgets/snackbars.dart';
 import 'package:rafeeq/features/Quran/domain/entities/last_read_ayah.dart';
 import 'package:rafeeq/features/Quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_ayah_provider.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/last_read_provider.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/SURAH_PAGE/ayah_tile.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/SURAH_PAGE/surah_details.dart';
-import 'package:rafeeq/features/Quran/presentation/widgets/SURAH_PAGE/surah_settings.dart';
+import 'package:rafeeq/features/Quran/presentation/widgets/SURAH_PAGE/surah_content_settings.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
@@ -32,8 +35,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
   bool _isSaving = false; // Throttle last read saving
   bool _suppressNextSave = false;
   static const int skipInitialAyahs = 2;
-  LastReadAyah?
-  temporaryLastReadAyah; // last read ayah, to be saved when popping
+  LastReadAyah? temporaryLastReadAyah;
   int? _currentAyahNumber;
 
   @override
@@ -99,7 +101,6 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
         updatedAt: DateTime.now(),
       );
       _lastSavedAyah = currentAyahNumber;
-      print('temporaryLastReadAyah updated: $temporaryLastReadAyah');
     }
 
     _isSaving = false;
@@ -107,7 +108,6 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
 
   void _checkLastRead() {
     final isDark = ref.watch(isDarkProvider);
-    final theme = Theme.of(context);
 
     final lastRead = ref
         .read(lastReadRepositoryProvider)
@@ -122,35 +122,18 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
 
     if (lastRead.surahId == widget.surah.id) {
       // Show SnackBar with Go button
-      ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: isDark
-              ? AppDarkColors.divider
-              : AppDarkColors.darkSurface,
-          // persist: false,
-          content: Text(
-            'Jump to last-read Ayah ${lastRead.ayahNumber}?',
-            style: theme.textTheme.bodySmall!.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
-            ),
-          ),
-          action: SnackBarAction(
-            label: 'Go',
-            textColor: Colors.amber,
-            onPressed: () {
-              ScaffoldMessenger.of(context).hideCurrentSnackBar();
-              _jumpToAyah(lastRead.ayahNumber, suppressSave: true);
+      AppSnackBar.showAction(
+        context: context,
+        isDark: isDark,
+        message: 'Jump to last-read Ayah ${lastRead.ayahNumber}?',
+        actionLabel: 'Go',
+        onAction: () {
+          _jumpToAyah(lastRead.ayahNumber, suppressSave: true);
 
-              ref.invalidate(
-                lastReadAyahsProvider,
-              ); //refresh last read ayahs homepage
-            },
-          ),
-          duration: const Duration(seconds: 3),
-        ),
+          ref.invalidate(
+            lastReadAyahsProvider,
+          ); //refresh last read ayahs homepage}, darkBg: darkBg, lightBg: lightBg);
+        },
       );
     }
   }
@@ -159,6 +142,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
   void dispose() {
     super.dispose();
     itemPositionsListener.itemPositions.removeListener(_onVisibleAyahsChanged);
+    _scrollController.dispose();
   }
 
   @override
@@ -209,37 +193,22 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
               icon: const Icon(Icons.tune),
             ),
           ],
+          bottom: appBarBottomDivider(context),
         ),
         body: Column(
           children: [
             Expanded(
               child: ayahsAsync.when(
-                data: (ayahs) => SizedBox(
-                  height: 16,
-                  child: RawScrollbar(
-                    thumbColor: isDark
-                        ? AppDarkColors.divider
-                        : AppLightColors.iconSecondary,
-                    thickness: 8,
-                    interactive: false,
-                    thumbVisibility: true,
-                    radius: const Radius.circular(8),
-                    controller: _scrollController,
-                    child: ScrollablePositionedList.builder(
-                      itemCount: ayahs.length + 1,
-                      itemBuilder: (context, index) {
-                        if (index == 0) {
-                          return SurahDetails(
-                            surah: widget.surah,
-                            isDark: isDark,
-                          );
-                        }
-                        return AyahTile(ayah: ayahs[index - 1]);
-                      },
-                      itemScrollController: itemScrollController,
-                      itemPositionsListener: itemPositionsListener, 
-                    ),
-                  ),
+                data: (ayahs) => ScrollablePositionedList.builder(
+                  itemCount: ayahs.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index == 0) {
+                      return SurahDetails(surah: widget.surah, isDark: isDark);
+                    }
+                    return AyahTile(ayah: ayahs[index - 1]);
+                  },
+                  itemScrollController: itemScrollController,
+                  itemPositionsListener: itemPositionsListener,
                 ),
                 loading: () => const Center(
                   child: CircularProgressIndicator(color: AppDarkColors.amber),

@@ -1,51 +1,82 @@
-import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 
 // ==== Light Theme ====
 class AppLightColors {
-  // ☀️ Light theme background
-  static const Color lightBackground = Color(
-    0xFFF1F3F6,
-  ); // soft off-white, not pure white
+  // Background (warm paper)
+  static const Color lightBackground = Color(0xFFF6EFE6);
 
-  // 🧱 Surfaces (cards, sheets, dialogs)
-  static const Color lightSurface = Color(
-    0xfffafafa,
-  ); // clean white for contrast & readability
+  // Surface (cards/sheets) - slightly lighter than bg
+  static const Color lightSurface = Color(0xFFFFF8F1);
+  // static const Color lightSurface2 = amberSoft;
 
-  // 🟡 Accent (same as dark → brand consistency)
+  // Surface 2 (chips/sections/containers)
+  static const Color lightSurface2 = Color(0xFFF2E6D8);
+
+  // Primary (cocoa brown)
+  static const Color primary = Color(0xFF7A5A45);
+
+  // Primary pressed / darker
+  static const Color primaryDark = Color(0xFF5E4333);
+
+  // Soft highlight (selected tab / selected bottom nav bg)
+  static const Color primarySoft = Color(0x267A5A45); // ~15%
+
+  // Accent (your amber for tiny highlights if needed)
   static const Color amber = Color(0xFFFFC36A);
+  static const Color amberSoft = Color(0x26FFC36A);
 
-  // 📝 Text colors
-  static const Color textPrimary = Color(
-    0xFF111827,
-  ); // Qur’an text – deep charcoal (not pure black)
+  // Text
+  static const Color textPrimary = Color(0xFF1F1A17);
+  static const Color textBody = Color(0xFF2F2722);
+  static const Color textSecondary = Color(0xFF7A6F67);
 
-  static const Color textBody = Color(
-    0xFF1F2937,
-  ); // translations / body text – softer than primary
-
-  static const Color textSecondary = Color(
-    0xFF6B7280,
-  ); // metadata, ayah numbers, hints
-
-  // 🔘 Buttons & interactive elements
-  static const Color buttonPrimary = amber;
-  static const Color buttonSecondary = Color(0xFFE5E7EB); // subtle gray buttons
-  static const Color buttonDisabled = Color(0xFFCBD5E1);
-
-  // ⚠️ Feedback
-  static const Color errorColor = Color(0xFFDC2626); // red but not aggressive
-  static const Color successColor = Color(0xFF16A34A); // calm green
-  static const Color warningColor = amber;
-
-  // ─ Borders / Dividers
-  static Color divider = const Color(0xFF1F2937).withAlpha(40);
-  static const Color border = Color(0xFF1F2937);
-
-  //icon colors
+  // Icons
   static const Color iconPrimary = textPrimary;
   static const Color iconSecondary = textSecondary;
-  static const Color iconDisabled = Color(0xFF9CA3AF);
-  static const Color iconAccent = AppLightColors.amber; //selected index
+  static const Color iconAccent = primary;
+
+  // Dividers / borders (warm, subtle)
+  static const Color divider = Color(0xFFD8CABB);
+  static const Color border = Color(0xFFE6D9CC);
+
+  // Selected bottom bar bg
+  static const Color selectedBottomBar = Color(0x1A7A5A45); // ~10%
+
+  // ✅ Buttons (Warm Paper theme)
+  static const Color buttonPrimary = AppLightColors.primary; // cocoa
+  static const Color buttonPrimaryText = Color(0xFFFFF8F1); // paper-white
+  static const Color buttonPrimaryPressed =
+      AppLightColors.primaryDark; // darker cocoa
+  static const Color buttonPrimaryDisabled = Color(0xFFC9B9AE); // warm gray
+
+  static const Color buttonSecondary = AppLightColors.lightSurface; // paper
+  static const Color buttonSecondaryText = AppLightColors.primary; // cocoa text
+  static const Color buttonSecondaryBorder = Color(0xFFD8CABB); // warm border
+  static const Color buttonSecondaryPressed = AppLightColors.lightSurface2;
+
+  static const Color buttonTertiaryText = AppLightColors.primary; // text-only
+
+  // Optional: small highlight button (use sparingly)
+  static const Color buttonAccent = AppLightColors.amber; // your amber
+  static const Color buttonAccentText = Color(0xFF1F1A17);
+
+  //-------SNACKBAR COLORS-----------------------
+  static const snackbarText = Color(0xFFFFF8F1);
+  static const snackbarActionbutton = Color(0xFFFFC36A);
+
+  static const snackbarSuccessBg = Color(0xFF2F6B4F);
+  static const snackbarErrorBg = Color(0xFF8B2E3A);
+  static const snackbarWarningBg = Color(0xFF8A5A1E);
+  static const snackbarInfoBg = Color(0xFF3B2F28);
+
+  //-------switch----------
+  // ON
+  static const Color switchTrackOn = Color(0x267A5A45); // cocoa @ ~15%
+  static const Color switchThumbOn = Color(0xFF7A5A45); // cocoa
+  static const Color switchOutlineOn = Color(0x1F7A5A45); // cocoa @ ~12%
+
+  // OFF
+  static const Color switchTrackOff = Color(0xFFD8CABB); // warm divider
+  static const Color switchThumbOff = Color(0xFFF2E6D8); // surface2
+  static const Color switchOutlineOff = Color(0xFFE6D9CC); // border
 }

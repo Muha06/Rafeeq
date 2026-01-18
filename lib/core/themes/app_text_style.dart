@@ -12,19 +12,24 @@ class AppTextStyles {
   static final TextStyle quranBody = const TextStyle(
     fontFamily: 'Uthmani',
     fontSize: 22,
-    height: 2,
-    //fontweight: set in the widget
+    height: 1.8,
     wordSpacing: 2,
+    fontFamilyFallback: [
+      'NotoNaskhArabic', // or Amiri
+      'Amiri',
+    ],
   );
 
   // Main body text(Translation)
   static final TextStyle body = GoogleFonts.inter(
-    fontSize: 19,
+    fontSize: 16,
     height: 1.7,
-    // fontWeight: FontWeight.w400, set in the text widget
-    letterSpacing: 2,
+    letterSpacing: 0.2,
   );
 
   // Secondary / caption text
-  static final TextStyle secondary = GoogleFonts.lato(fontSize: 12, height: 1);
+  static final TextStyle secondary = GoogleFonts.inter(
+    fontSize: 14,
+    height: 1.2,
+  );
 }
