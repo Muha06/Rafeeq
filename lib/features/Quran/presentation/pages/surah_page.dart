@@ -10,6 +10,7 @@ import 'package:rafeeq/core/widgets/snackbars.dart';
 import 'package:rafeeq/features/Quran/domain/entities/last_read_ayah.dart';
 import 'package:rafeeq/features/Quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_ayah_provider.dart';
+import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_surahs_provider.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/last_read_provider.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/SURAH_PAGE/ayah_tile.dart';
@@ -48,8 +49,6 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
 
   Timer? _autoTimer;
   bool _autoOn = false;
-  // speed in pixels per second
-  // final double _speedPxPerSec = 0 ;
 
   bool _autoTickBusy = false;
 
@@ -125,7 +124,6 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
     });
   }
 
-  //when
   void _autoScrollToAyah() {
     if (widget.autoScrollAyah != null) {
       _jumpToAyah(widget.autoScrollAyah!);
@@ -221,6 +219,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
   void dispose() {
     _autoTimer?.cancel();
     itemPositionsListener.itemPositions.removeListener(_onVisibleAyahsChanged);
+
     super.dispose();
   }
 
@@ -230,8 +229,9 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
 
     final theme = Theme.of(context);
     final isDark = ref.watch(isDarkProvider);
+    final surahId = widget.surah.id;
 
-    final ayahsAsync = ref.watch(ayahsFutureProvider(widget.surah.id));
+    final ayahsAsync = ref.watch(ayahsFutureProvider(surahId));
 
     return PopScope(
       onPopInvokedWithResult: (didPop, result) async {
@@ -265,7 +265,10 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
           ),
           actions: [
             IconButton(
-              onPressed: _toggleAutoScroll,
+              onPressed: () {
+                if (!ayahsAsync.hasValue) return;
+                _toggleAutoScroll();
+              },
               icon: Icon(_autoOn ? Icons.pause : Icons.play_arrow),
             ),
 
@@ -282,31 +285,48 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
           ],
           bottom: appBarBottomDivider(context),
         ),
-        body: Column(
-          children: [
-            Expanded(
-              child: ayahsAsync.when(
-                data: (ayahs) => ScrollablePositionedList.builder(
-                  itemCount: ayahs.length + 1,
-                  itemBuilder: (context, index) {
-                    if (index == 0) {
-                      return SurahDetails(surah: widget.surah, isDark: isDark);
-                    }
-                    return AyahTile(ayah: ayahs[index - 1]);
+
+        body: ayahsAsync.when(
+          data: (ayahs) => ScrollablePositionedList.builder(
+            itemCount: ayahs.length + 1,
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return SurahDetails(surah: widget.surah, isDark: isDark);
+              }
+              return AyahTile(ayah: ayahs[index - 1]);
+            },
+            itemScrollController: itemScrollController,
+            itemPositionsListener: itemPositionsListener,
+            scrollOffsetController: scrollOffsetController,
+            scrollOffsetListener: scrollOffsetListener,
+          ),
+          loading: () => const Center(
+            child: CircularProgressIndicator(color: AppDarkColors.amber),
+          ),
+          error: (e, _) => Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.cloud_off_sharp, size: 120),
+
+                Text(
+                  'Failed to load surahs.\n Please try again',
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.titleMedium,
+                ),
+                const SizedBox(height: 16),
+
+                ElevatedButton(
+                  onPressed: () async {
+                    await ref.refresh(ayahsFutureProvider(surahId).future);
                   },
-                  itemScrollController: itemScrollController,
-                  itemPositionsListener: itemPositionsListener,
-                  scrollOffsetController: scrollOffsetController,
-                  scrollOffsetListener: scrollOffsetListener,
+                  child: const Text('Refresh'),
                 ),
-                loading: () => const Center(
-                  child: CircularProgressIndicator(color: AppDarkColors.amber),
-                ),
-                error: (e, _) =>
-                    Center(child: Text('Failed to load ayahs: $e')),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

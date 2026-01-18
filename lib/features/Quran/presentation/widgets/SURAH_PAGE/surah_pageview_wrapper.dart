@@ -39,6 +39,7 @@ class _SurahPagerPageState extends ConsumerState<SurahPagerPage> {
       controller: _pageController,
       itemCount: widget.surahs.length,
       scrollDirection: Axis.horizontal,
+      pageSnapping: true,
       dragStartBehavior: DragStartBehavior.down, // 👈 reacts sooner
       physics: const ClampingScrollPhysics(),
       onPageChanged: (index) {
