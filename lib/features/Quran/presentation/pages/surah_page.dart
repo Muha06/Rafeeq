@@ -9,7 +9,6 @@ import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/core/widgets/snackbars.dart';
 import 'package:rafeeq/features/Quran/domain/entities/last_read_ayah.dart';
 import 'package:rafeeq/features/Quran/domain/entities/surah.dart';
-import 'package:rafeeq/features/Quran/presentation/riverpod/auto_scroll_provider.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_ayah_provider.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/last_read_provider.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/surah_settings_provider.dart';
@@ -29,11 +28,18 @@ class FullSurahPage extends ConsumerStatefulWidget {
   ConsumerState<FullSurahPage> createState() => _FullSurahPageState();
 }
 
-class _FullSurahPageState extends ConsumerState<FullSurahPage> {
+class _FullSurahPageState extends ConsumerState<FullSurahPage>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => false;
+
   // ScrollablePositionedList controllers
   final ItemScrollController itemScrollController = ItemScrollController();
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
+  final scrollOffsetController = ScrollOffsetController();
+  final scrollOffsetListener = ScrollOffsetListener.create();
+
   int? _lastSavedAyah;
   bool _isSaving = false; // Throttle last read saving
   bool _suppressNextSave = false;
@@ -42,58 +48,70 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
 
   Timer? _autoTimer;
   bool _autoOn = false;
-  // double _ayahsPerMinute = 20; // change later with slider if you want
+  // speed in pixels per second
+  // final double _speedPxPerSec = 0 ;
 
-  Duration _intervalFrom(double ayahsPerMinute) {
-    final ms = (60000 / ayahsPerMinute).round().clamp(120, 5000);
-    return Duration(milliseconds: ms);
+  bool _autoTickBusy = false;
+
+  bool _isAtEnd() {
+    final positions = itemPositionsListener.itemPositions.value;
+    if (positions.isEmpty) return false;
+
+    // Your list has: SurahDetails at index 0 + ayahs
+    final lastIndex =
+        widget.surah.versesCount; // because itemCount = versesCount + 1
+
+    final last = positions.where((p) => p.index == lastIndex).toList();
+    if (last.isEmpty) return false;
+
+    // If the last item’s trailing edge is within the viewport, we’re basically at the end
+    return last.first.itemTrailingEdge <= 1.02; // small tolerance
   }
 
   void _startAutoScroll() {
     if (_autoOn) return;
     _autoOn = true;
 
-    final speed = ref.read(surahSettingsProvider).autoScrollSpeed;
+    const tick = Duration(milliseconds: 300); //duration to wait b4 next scroll
 
     _autoTimer?.cancel();
-    final tick = _intervalFrom(speed);
 
     _autoTimer = Timer.periodic(tick, (_) async {
-      final positions = itemPositionsListener.itemPositions.value;
-      if (positions.isEmpty) return;
+      if (!_autoOn) return;
+      if (_autoTickBusy) return; // prevent overlapping animations
+      _autoTickBusy = true;
 
-      final visible = positions.where((p) => p.itemLeadingEdge >= 0).toList();
-      if (visible.isEmpty) return;
-
-      final firstVisible = visible.reduce(
-        (min, p) => p.itemLeadingEdge < min.itemLeadingEdge ? p : min,
-      );
-
-      var nextIndex = firstVisible.index + 1;
-      final maxIndex = widget.surah.versesCount - 1;
-      nextIndex = nextIndex.clamp(0, maxIndex);
-
-      if (nextIndex == maxIndex) {
+      // ✅ stop if last item is already visible
+      if (_isAtEnd()) {
         _stopAutoScroll();
+        _autoTickBusy = false;
         return;
       }
 
-      await _jumpToAyah(nextIndex + 1, suppressSave: true);
+      final speed = ref.read(surahSettingsProvider).autoScrollSpeed;
+
+      try {
+        await scrollOffsetController.animateScroll(
+          offset: speed, // relative pixels down
+          duration: tick,
+          curve: Curves.linear,
+        );
+      } finally {
+        _autoTickBusy = false;
+      }
     });
 
     setState(() {});
   }
 
   void _stopAutoScroll() {
+    _autoOn = false;
     _autoTimer?.cancel();
     _autoTimer = null;
-    _autoOn = false;
     setState(() {});
   }
 
-  void _toggleAutoScroll() {
-    _autoOn ? _stopAutoScroll() : _startAutoScroll();
-  }
+  void _toggleAutoScroll() => _autoOn ? _stopAutoScroll() : _startAutoScroll();
 
   @override
   void initState() {
@@ -118,7 +136,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
     if (suppressSave) _suppressNextSave = true;
 
     await itemScrollController.scrollTo(
-      index: ayahNumber - 1,
+      index: ayahNumber,
       duration: const Duration(milliseconds: 600),
       curve: Curves.easeInOut,
     );
@@ -170,7 +188,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
   }
 
   void _checkLastRead() {
-    final isDark = ref.watch(isDarkProvider);
+    final isDark = ref.read(isDarkProvider);
 
     final lastRead = ref
         .read(lastReadRepositoryProvider)
@@ -208,6 +226,8 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     final theme = Theme.of(context);
     final isDark = ref.watch(isDarkProvider);
 
@@ -276,6 +296,8 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
                   },
                   itemScrollController: itemScrollController,
                   itemPositionsListener: itemPositionsListener,
+                  scrollOffsetController: scrollOffsetController,
+                  scrollOffsetListener: scrollOffsetListener,
                 ),
                 loading: () => const Center(
                   child: CircularProgressIndicator(color: AppDarkColors.amber),

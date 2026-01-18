@@ -52,8 +52,8 @@ class AyahTile extends ConsumerWidget {
                 style: theme.textTheme.bodySmall!.copyWith(
                   fontWeight: FontWeight.bold,
                   color: isDark
-                      ? AppDarkColors.textBody
-                      : AppLightColors.textBody,
+                      ? AppDarkColors.textPrimary
+                      : AppLightColors.textPrimary,
                   fontSize: 16,
                 ),
               ),
@@ -68,7 +68,7 @@ class AyahTile extends ConsumerWidget {
                 cleanAyah(ayah.textArabic),
                 textDirection: TextDirection.rtl,
                 style: theme.textTheme.bodyLarge!.copyWith(
-                  fontWeight: isDark ? FontWeight.w300 : FontWeight.w400,
+                  fontWeight: isDark ? FontWeight.w500 : FontWeight.w400,
                   fontSize: arabicFontSize,
                 ),
               ),
@@ -85,6 +85,9 @@ class AyahTile extends ConsumerWidget {
                       textAlign: TextAlign.left,
                       style: theme.textTheme.bodyMedium!.copyWith(
                         fontWeight: isDark ? FontWeight.w400 : FontWeight.w500,
+                        color: isDark
+                            ? AppDarkColors.textPrimary
+                            : AppLightColors.textPrimary,
                         fontSize: translationFontSize,
                       ),
                     )

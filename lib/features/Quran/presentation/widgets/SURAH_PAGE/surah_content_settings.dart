@@ -19,7 +19,7 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
 
     final s = ref.watch(surahSettingsProvider);
     final sNotifier = ref.read(surahSettingsProvider.notifier);
-    
+
     final showTranslation = ref.watch(
       surahSettingsProvider.select((s) => s.showTranslation),
     );
@@ -121,7 +121,7 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
               isDark: isDark,
               children: [
                 Text(
-                  'Auto scroll speed',
+                  'Auto-scroll speed',
                   style: theme.textTheme.bodyMedium!.copyWith(
                     // color: isDark ? Colors.white : Colors.black,
                     fontSize: 18,
@@ -129,11 +129,11 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
                   ),
                 ),
                 Slider(
-                  min: 3,
-                  max: 80,
+                  min: 10,
+                  max: 120,
                   divisions: 15,
                   value: speed,
-                  label: '${speed.round()} ayahs/min',
+                  label: '${speed.round()} px/s',
                   onChanged: (value) {
                     sNotifier.setAutoScrollSpeed(value);
                   },
