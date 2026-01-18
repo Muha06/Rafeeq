@@ -6,7 +6,7 @@ import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/core/widgets/snackbars.dart';
 import 'package:rafeeq/features/Quran/domain/entities/ayah.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/ayah_of_the_day.dart';
-import 'package:rafeeq/features/Quran/presentation/riverpod/surah_preferences_provider.dart';
+import 'package:rafeeq/features/Quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/quran_bookmark.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/execution_providers.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
@@ -20,9 +20,11 @@ class AyahTile extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     final theme = Theme.of(context);
     final isDark = ref.watch(isDarkProvider);
-    final showTranslation = ref.watch(showTranslationProvider);
-    final arabicFontSize = ref.watch(arabicFontSizeProvider);
-    final translationFontSize = ref.watch(translationFontSizeProvider);
+    final settings = ref.watch(surahSettingsProvider);
+
+    final showTranslation = settings.showTranslation;
+    final arabicFontSize = settings.arabicFontSize;
+    final translationFontSize = settings.translationFontSize;
 
     final id = '${ayah.surahId}:${ayah.ayahNumber}';
     final bookmarkedIds = ref.watch(bookmarkedIdsProvider);

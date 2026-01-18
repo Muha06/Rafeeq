@@ -172,7 +172,12 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
 
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => FullSurahPage(surah: surah)),
+          MaterialPageRoute(
+            builder: (context) => FullSurahPage(
+              surah: surah,
+              autoScrollAyah: widget.lastRead.ayahNumber,
+            ),
+          ),
         );
       },
 
