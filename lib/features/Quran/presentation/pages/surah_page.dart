@@ -237,8 +237,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
                         return AyahTile(ayah: ayahs[index - 1]);
                       },
                       itemScrollController: itemScrollController,
-                      itemPositionsListener: itemPositionsListener,
-                      //scrollController: scrollController, // attach scroll controller
+                      itemPositionsListener: itemPositionsListener, 
                     ),
                   ),
                 ),
