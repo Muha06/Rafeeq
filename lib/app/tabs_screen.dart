@@ -30,7 +30,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
 
     return Scaffold(
       body: IndexedStack(index: _selectedIndex, children: _pages),
-      bottomNavigationBar: GithubStyleBottomBar(
+      bottomNavigationBar: MyBottomBar(
         currentIndex: _selectedIndex,
         onTap: (value) => setState(() {
           _selectedIndex = value;

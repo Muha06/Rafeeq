@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
 
-class GithubStyleBottomBar extends StatelessWidget {
+class MyBottomBar extends StatelessWidget {
   final ValueChanged<int> onTap;
   final int currentIndex;
   final bool isDarkMode;
 
-  const GithubStyleBottomBar({
+  const MyBottomBar({
     super.key,
     required this.onTap,
     required this.currentIndex,
@@ -40,7 +40,7 @@ class GithubStyleBottomBar extends StatelessWidget {
     return SafeArea(
       bottom: true,
       child: Container(
-        height: 74,
+        height: 77,
         color: isDarkMode
             ? AppDarkColors.bottomBar
             : AppLightColors.lightSurface,
@@ -59,33 +59,56 @@ class GithubStyleBottomBar extends StatelessWidget {
                 : Colors.black54;
 
             return Expanded(
-              child: GestureDetector(
-                behavior: HitTestBehavior.opaque,
+              child: InkWell(
                 onTap: () => onTap(index),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      isSelected ? item.active : item.icon,
-                      size: 22,
-                      color: isSelected ? selectedFg : unselectedFg,
-                    ),
-                    const SizedBox(height: 6),
-
-                    Text(
-                      item.label,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: isSelected ? selectedFg : unselectedFg,
-                        fontSize: isSelected ? 14 : 12,
-                        fontWeight: isSelected
-                            ? FontWeight.bold
-                            : FontWeight.w500,
+                borderRadius: BorderRadius.circular(16),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 250),
+                  curve: Curves.easeOut,
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    color: isSelected
+                        ? (isDarkMode
+                              ? AppDarkColors.bottomBar.withAlpha(60)
+                              : AppLightColors.lightSurface.withAlpha(120))
+                        : Colors.transparent,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 200),
+                        switchInCurve: Curves.easeOutBack,
+                        switchOutCurve: Curves.easeIn,
+                        transitionBuilder: (child, anim) =>
+                            ScaleTransition(scale: anim, child: child),
+                        child: Icon(
+                          isSelected ? item.active : item.icon,
+                          key: ValueKey(isSelected),
+                          size: isSelected ? 24 : 22,
+                          color: isSelected ? selectedFg : unselectedFg,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                  ],
+                      const SizedBox(height: 6),
+                      AnimatedDefaultTextStyle(
+                        duration: const Duration(milliseconds: 200),
+                        curve: Curves.easeOut,
+                        style: theme.textTheme.bodySmall!.copyWith(
+                          color: isSelected ? selectedFg : unselectedFg,
+                          fontSize: isSelected ? 13 : 12,
+                          fontWeight: isSelected
+                              ? FontWeight.w700
+                              : FontWeight.w500,
+                        ),
+                        child: Text(
+                          item.label,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );
