@@ -34,7 +34,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               floating: true,
               snap: false,
               toolbarHeight: theme.appBarTheme.toolbarHeight!,
-              title: const Text('Rafeeq'),
+              title: Text('Rafeeq', style: theme.appBarTheme.titleTextStyle),
               actions: [
                 IconButton(
                   onPressed: () {
