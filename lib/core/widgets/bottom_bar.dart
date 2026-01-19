@@ -39,6 +39,7 @@ class MyBottomBar extends StatelessWidget {
 
     return SafeArea(
       bottom: true,
+      //bg container
       child: Container(
         height: 77,
         color: isDarkMode
@@ -59,9 +60,8 @@ class MyBottomBar extends StatelessWidget {
                 : Colors.black54;
 
             return Expanded(
-              child: InkWell(
+              child: GestureDetector(
                 onTap: () => onTap(index),
-                borderRadius: BorderRadius.circular(16),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 250),
                   curve: Curves.easeOut,
@@ -91,6 +91,7 @@ class MyBottomBar extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 6),
+                      
                       AnimatedDefaultTextStyle(
                         duration: const Duration(milliseconds: 200),
                         curve: Curves.easeOut,
