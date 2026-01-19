@@ -290,7 +290,13 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
             itemCount: ayahs.length + 1,
             itemBuilder: (context, index) {
               if (index == 0) {
-                return SurahDetails(surah: widget.surah, isDark: isDark);
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                    vertical: 16,
+                  ),
+                  child: SurahDetails(surah: widget.surah, isDark: isDark),
+                );
               }
               return AyahTile(ayah: ayahs[index - 1]);
             },
