@@ -5,6 +5,7 @@ import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/core/widgets/snackbars.dart';
+import 'package:rafeeq/features/Quran/presentation/pages/search_surah_page.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/QURAN_PAGE/all_surah_listview.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/QURAN_PAGE/quick_last_read.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/QURAN_PAGE/quick_surah_links.dart';
@@ -20,8 +21,8 @@ class QuranPage extends ConsumerStatefulWidget {
 class _QuranPageState extends ConsumerState<QuranPage> {
   final ScrollController scrollController = ScrollController();
 
-  void scrollToTop() {
-    scrollController.animateTo(
+  Future<void> scrollToTop() async {
+    await scrollController.animateTo(
       0,
       duration: Durations.short4,
       curve: Curves.easeIn,
@@ -56,19 +57,21 @@ class _QuranPageState extends ConsumerState<QuranPage> {
               ),
               actions: [
                 IconButton(
-                  onPressed: () {
-                    AppSnackBar.showSimple(
-                      context: context,
-                      isDark: isDark,
-                      message: 'Babaa, wataka kusearch nini, hebu soma hapo 😂',
-                    );
-                  },
                   icon: Icon(
                     CupertinoIcons.search,
                     color: isDark
                         ? AppDarkColors.iconPrimary
                         : AppLightColors.iconPrimary,
                   ),
+
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SurahSearchPage(),
+                      ),
+                    );
+                  },
                 ),
               ],
               bottom: appBarBottomDivider(context),
