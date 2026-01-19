@@ -62,9 +62,7 @@ class MyBottomBar extends StatelessWidget {
             return Expanded(
               child: GestureDetector(
                 onTap: () => onTap(index),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 250),
-                  curve: Curves.easeOut,
+                child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
@@ -78,20 +76,20 @@ class MyBottomBar extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 200),
+                        duration: const Duration(milliseconds: 120),
                         switchInCurve: Curves.easeOutBack,
                         switchOutCurve: Curves.easeIn,
                         transitionBuilder: (child, anim) =>
                             ScaleTransition(scale: anim, child: child),
                         child: Icon(
                           isSelected ? item.active : item.icon,
-                          key: ValueKey(isSelected),
+                          key: ValueKey('$index-$isSelected'),
                           size: isSelected ? 24 : 22,
                           color: isSelected ? selectedFg : unselectedFg,
                         ),
                       ),
                       const SizedBox(height: 6),
-                      
+
                       AnimatedDefaultTextStyle(
                         duration: const Duration(milliseconds: 200),
                         curve: Curves.easeOut,
