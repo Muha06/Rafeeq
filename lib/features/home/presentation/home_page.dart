@@ -49,14 +49,124 @@ class _HomePageState extends ConsumerState<HomePage> {
             //GREETINGS
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12.0,
-                  vertical: 16,
+                padding: const EdgeInsets.only(
+                  left: 12.0,
+                  right: 12,
+                  top: 20,
+                  bottom: 8,
                 ),
                 child: GreetingsRow(formattedHijri: formattedHijri),
               ),
             ),
-            //friday reminder
+
+            // SliverToBoxAdapter(
+            //   child: Padding(
+            //     padding: const EdgeInsets.symmetric(
+            //       horizontal: 12.0,
+            //       vertical: 16,
+            //     ),
+            //     child: Stack(
+            //       children: [
+            //         // ✅ Background image with radius
+            //         ClipRRect(
+            //           borderRadius: BorderRadius.circular(16),
+            //           child: Image.asset(
+            //             'assets/salat/isha.jpeg',
+            //             height: 180,
+            //             width: double.infinity,
+            //             fit: BoxFit.cover,
+            //           ),
+            //         ),
+
+            //         // ✅ Gradient overlay so text is always readable
+            //         Positioned.fill(
+            //           child: ClipRRect(
+            //             borderRadius: BorderRadius.circular(16),
+            //             child: DecoratedBox(
+            //               decoration: BoxDecoration(
+            //                 color: Colors.black.withAlpha(100),
+            //               ),
+            //             ),
+            //           ),
+            //         ),
+
+            //         // ✅ Content
+            //         Positioned.fill(
+            //           child: Padding(
+            //             padding: const EdgeInsets.all(14),
+            //             child: Column(
+            //               crossAxisAlignment: CrossAxisAlignment.start,
+            //               children: [
+            //                 // Top row: prev + next
+            //                 const Row(
+            //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //                   children: [
+            //                     _MiniPrayerTime(
+            //                       title: 'Dhuhr',
+            //                       time: '12:32 PM',
+            //                     ),
+            //                     _MiniPrayerTime(
+            //                       title: 'Asr',
+            //                       time: '03:56 PM',
+            //                       alignRight: true,
+            //                     ),
+            //                   ],
+            //                 ),
+
+            //                 const Spacer(),
+
+            //                 // Middle: progress bar
+            //                 ClipRRect(
+            //                   borderRadius: BorderRadius.circular(99),
+            //                   child: const LinearProgressIndicator(
+            //                     value: 0.62, // mock (0 -> 1)
+            //                     minHeight: 6,
+            //                     backgroundColor: Colors.white24,
+            //                   ),
+            //                 ),
+
+            //                 const SizedBox(height: 10),
+
+            //                 // Bottom: countdown + meta chip
+            //                 Row(
+            //                   crossAxisAlignment: CrossAxisAlignment.end,
+            //                   children: [
+            //                     Column(
+            //                       crossAxisAlignment: CrossAxisAlignment.start,
+            //                       children: [
+            //                         Text(
+            //                           'Next prayer in',
+            //                           style: TextStyle(
+            //                             color: Colors.white.withOpacity(0.9),
+            //                             fontSize: 12,
+            //                           ),
+            //                         ),
+            //                         const SizedBox(height: 4),
+            //                         const Text(
+            //                           '01:23:19',
+            //                           style: TextStyle(
+            //                             color: Colors.white,
+            //                             fontSize: 30,
+            //                             fontWeight: FontWeight.w800,
+            //                             letterSpacing: 1.0,
+            //                           ),
+            //                         ),
+            //                       ],
+            //                     ),
+            //                     const Spacer(),
+            //                     const _InfoChip(
+            //                       text: 'Nairobi • MWL • Shāfiʿī',
+            //                     ),
+            //                   ],
+            //                 ),
+            //               ],
+            //             ),
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
             const SliverToBoxAdapter(child: HomeRemindersCarousel()),
 
             //AYAH OF THE DAY

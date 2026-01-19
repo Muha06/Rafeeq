@@ -47,6 +47,7 @@ class AppTheme {
         //title
         titleLarge: AppTextStyles.title.copyWith(
           color: AppDarkColors.textPrimary, // for dark theme
+          // color: const Color(0xFF1F1A17),
           height: 1,
         ),
         //arabic

@@ -19,12 +19,15 @@ class GreetingsRow extends ConsumerWidget {
           isDark
               ? 'assets/images/salam_amber.png'
               : 'assets/images/salam_black.png',
-          height: isDark ? 30 : 40, 
+          height: isDark ? 30 : 40,
         ),
 
         Text(
           formattedHijri,
-          style: theme.textTheme.bodySmall!.copyWith(fontSize: 14),
+          style: theme.textTheme.bodySmall!.copyWith(
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ],
     );
