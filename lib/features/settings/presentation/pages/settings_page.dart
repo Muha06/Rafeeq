@@ -50,13 +50,12 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           SettingsTile(
             leading: const Icon(CupertinoIcons.bell),
             title: 'Adhkar reminder',
-            subtitle: 'morning & evening adhkars',
+            subtitle: 'Morning & evening adhkars',
             isDark: isDark,
             trailing: Switch(
               value: adhkarOn,
               onChanged: (val) {
                 setAdhkarNotif(ref, val);
-                print(val);
               },
             ),
           ),

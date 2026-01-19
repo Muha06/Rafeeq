@@ -41,7 +41,11 @@ class _AdhkarListPageState extends ConsumerState<AdhkarListPage> {
             itemBuilder: (context, index) {
               final dhikr = adhkars[index];
 
-              return AdhkarListTile(dhikr: dhikr, index: index);
+              return AdhkarListTile(
+                dhikr: dhikr,
+                index: index,
+                adhkars: adhkars,
+              );
             },
           );
         },
@@ -51,9 +55,15 @@ class _AdhkarListPageState extends ConsumerState<AdhkarListPage> {
 }
 
 class AdhkarListTile extends ConsumerWidget {
-  const AdhkarListTile({super.key, required this.dhikr, required this.index});
+  const AdhkarListTile({
+    super.key,
+    required this.dhikr,
+    required this.index,
+    required this.adhkars,
+  });
 
   final Dhikr dhikr;
+  final List<Dhikr> adhkars;
   final int index;
 
   @override
@@ -67,7 +77,11 @@ class AdhkarListTile extends ConsumerWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => AdhkarDetailsPage(dhikr: dhikr),
+            builder: (context) => AdhkarDetailsPage(
+              dhikr: dhikr,
+              adhkars: adhkars,
+              initialIndex: index,
+            ),
           ),
         );
       },

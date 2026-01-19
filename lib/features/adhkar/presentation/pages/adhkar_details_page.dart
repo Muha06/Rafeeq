@@ -12,14 +12,31 @@ import 'package:rafeeq/features/bookmarks/presentation/riverpod/dhikr/execution_
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class AdhkarDetailsPage extends ConsumerStatefulWidget {
-  const AdhkarDetailsPage({super.key, required this.dhikr});
+  const AdhkarDetailsPage({
+    super.key,
+    required this.dhikr,
+    required this.adhkars,
+    required this.initialIndex,
+  });
 
   final Dhikr dhikr;
+  final List<Dhikr> adhkars;
+  final int initialIndex;
   @override
   ConsumerState<AdhkarDetailsPage> createState() => _AdhkarDetailsPageState();
 }
 
 class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
+  late PageController _pageController;
+  late int _currentIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.initialIndex;
+    _pageController = PageController(initialPage: _currentIndex);
+  }
+
   void openBottomSheet(Dhikr dhikr) {
     showModalBottomSheet(
       context: context,
@@ -42,7 +59,12 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
               //copy
               ListTile(
                 onTap: () {
-                  Clipboard.setData(ClipboardData(text: dhikr.arabic));
+                  Clipboard.setData(
+                    ClipboardData(
+                      text:
+                          '${dhikr.title} \n ${dhikr.arabic} \n ${dhikr.translation!}',
+                    ),
+                  );
                   Navigator.pop(context);
                 },
                 title: Text('Copy Dhikr', style: theme.textTheme.bodyLarge),
@@ -56,44 +78,22 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
   }
 
   @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final isDark = ref.watch(isDarkProvider);
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
-    final dhikr = widget.dhikr;
 
-    final TextStyle headerStyle = textTheme.bodySmall!.copyWith(fontSize: 14);
-
-    final TextStyle bodyTextstyle = textTheme.bodyMedium!.copyWith(
-      color: isDark ? AppDarkColors.textBody : AppLightColors.textBody,
-    );
-
-    Widget section(String title, String? text) {
-      final t = (text ?? '').trim();
-      if (t.isEmpty) return const SizedBox.shrink();
-
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: headerStyle.copyWith(
-              color: isDark
-                  ? AppDarkColors.textPrimary
-                  : AppLightColors.textPrimary,
-              fontWeight: FontWeight.bold,
-            ),
-          ), //header
-          const SizedBox(height: 8),
-          Text(t, style: bodyTextstyle), //text
-          const SizedBox(height: 24),
-        ],
-      );
-    }
+    final dhikr = widget.adhkars[_currentIndex];
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Adhkār details'),
+        title: Text(dhikr.title),
         bottom: appBarBottomDivider(context),
         actions: [
           //bookmark
@@ -149,70 +149,131 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
         ],
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            decoration: BoxDecoration(
+        child: PageView.builder(
+          controller: _pageController,
+          itemCount: widget.adhkars.length,
+          onPageChanged: (i) => setState(() => _currentIndex = i),
+          itemBuilder: (context, i) {
+            final dhikr = widget.adhkars[i];
+            return AdhkarDetailsTile(
+              key: ValueKey(dhikr.id),
+              isDark: isDark,
+              dhikr: dhikr,
+              textTheme: textTheme,
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class AdhkarDetailsTile extends StatelessWidget {
+  const AdhkarDetailsTile({
+    super.key,
+    required this.isDark,
+    required this.dhikr,
+    required this.textTheme,
+  });
+
+  final bool isDark;
+  final Dhikr dhikr;
+  final TextTheme textTheme;
+
+  @override
+  Widget build(BuildContext context) {
+    final TextStyle headerStyle = textTheme.bodySmall!.copyWith(fontSize: 14);
+
+    final TextStyle bodyTextstyle = textTheme.bodyMedium!.copyWith(
+      color: isDark ? AppDarkColors.textBody : AppLightColors.textBody,
+    );
+
+    Widget section(String title, String? text) {
+      final t = (text ?? '').trim();
+      if (t.isEmpty) return const SizedBox.shrink();
+
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: headerStyle.copyWith(
               color: isDark
-                  ? AppDarkColors.darkSurface
-                  : AppLightColors.lightSurface,
-              borderRadius: BorderRadius.circular(24),
+                  ? AppDarkColors.textPrimary
+                  : AppLightColors.textPrimary,
+              fontWeight: FontWeight.bold,
             ),
-            child: SingleChildScrollView(
-              child: SelectionArea(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    //title
-                    Center(
-                      child: Text(
-                        dhikr.title,
-                        textAlign: TextAlign.center,
-                        style: textTheme.titleMedium!,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
+          ), //header
+          const SizedBox(height: 8),
+          Text(t, style: bodyTextstyle), //text
+          const SizedBox(height: 24),
+        ],
+      );
+    }
 
-                    //arabic
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        cleanDhikr(dhikr.arabic),
-                        textDirection: TextDirection.rtl,
-                        style: textTheme.bodyLarge!.copyWith(fontSize: 28),
-                      ),
-                    ),
-                    const SizedBox(height: 32),
-
-                    //transliteration
-                    section('Transliteration', dhikr.latin),
-
-                    //english
-                    section('Translation', dhikr.translation),
-
-                    //note
-                    section('Notes', dhikr.notes),
-
-                    //benefit
-                    section('Benefit', dhikr.benefits),
-
-                    //fawaid
-                    section('Fawaid', dhikr.fawaid),
-
-                    //source
-                    if ((dhikr.source ?? '').trim().isNotEmpty) ...[
-                      Text('Source:', style: textTheme.labelLarge),
-                      const SizedBox(height: 8),
-                      Text(
-                        dhikr.source!.trim(),
-                        style: textTheme.bodySmall!.copyWith(fontSize: 16),
-                      ),
-                      const SizedBox(height: 16),
-                    ],
-                  ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        decoration: BoxDecoration(
+          color: isDark
+              ? AppDarkColors.darkSurface
+              : AppLightColors.lightSurface,
+          borderRadius: BorderRadius.circular(24),
+        ),
+        child: SingleChildScrollView(
+          child: SelectionArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                //title
+                Center(
+                  child: Text(
+                    dhikr.title,
+                    textAlign: TextAlign.center,
+                    style: textTheme.titleMedium!,
+                  ),
                 ),
-              ),
+                const SizedBox(height: 20),
+
+                //arabic
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    cleanDhikr(dhikr.arabic),
+                    textDirection: TextDirection.rtl,
+                    style: textTheme.bodyLarge!.copyWith(fontSize: 28),
+                  ),
+                ),
+                const SizedBox(height: 32),
+
+                //transliteration
+                section('Transliteration', dhikr.latin),
+
+                //english
+                section('Translation', dhikr.translation),
+
+                //note
+                section('Notes', dhikr.notes),
+
+                //benefit
+                section('Benefit', dhikr.benefits),
+
+                //fawaid
+                if (dhikr.benefits != dhikr.fawaid)
+                  section('Fawaid', dhikr.fawaid),
+
+                //source
+                if ((dhikr.source ?? '').trim().isNotEmpty) ...[
+                  Text('Source:', style: textTheme.labelLarge),
+                  const SizedBox(height: 8),
+                  Text(
+                    dhikr.source!.trim(),
+                    style: textTheme.bodySmall!.copyWith(fontSize: 16),
+                  ),
+                  const SizedBox(height: 16),
+                ],
+              ],
             ),
           ),
         ),

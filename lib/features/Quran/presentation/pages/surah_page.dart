@@ -10,7 +10,6 @@ import 'package:rafeeq/core/widgets/snackbars.dart';
 import 'package:rafeeq/features/Quran/domain/entities/last_read_ayah.dart';
 import 'package:rafeeq/features/Quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_ayah_provider.dart';
-import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_surahs_provider.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/last_read_provider.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/SURAH_PAGE/ayah_tile.dart';
