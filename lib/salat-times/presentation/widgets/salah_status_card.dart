@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/salat-times/domain/entities/salah_status.dart';
+import 'package:rafeeq/salat-times/presentation/pages/salat_times_page.dart';
 import 'package:rafeeq/salat-times/presentation/riverpod/salah_status_provider.dart';
 
 import '../../domain/entities/salah_prayer.dart';
@@ -143,26 +144,46 @@ class _CardBody extends StatelessWidget {
                   ),
 
                   const Spacer(),
+                  Row(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Bottom: "Next salah in"
+                          Text(
+                            'Next salah in:',
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: onImage.withOpacity(0.9),
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
 
-                  // Bottom: "Next salah in"
-                  Text(
-                    'Next salah in:',
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: onImage.withOpacity(0.9),
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+                          const SizedBox(height: 6),
 
-                  const SizedBox(height: 6),
+                          Text(
+                            _formatHms(status.timeToNext),
+                            textAlign: TextAlign.left,
+                            style: theme.textTheme.headlineMedium?.copyWith(
+                              color: onImage,
+                              fontWeight: FontWeight.w800,
+                              height: 1.0,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Spacer(),
 
-                  Text(
-                    _formatHms(status.timeToNext),
-                    textAlign: TextAlign.left,
-                    style: theme.textTheme.headlineMedium?.copyWith(
-                      color: onImage,
-                      fontWeight: FontWeight.w800,
-                      height: 1.0,
-                    ),
+                      ShowSalahTimesChip(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const SalahTimingsPage(),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -222,6 +243,52 @@ class _TopLabel extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class ShowSalahTimesChip extends StatelessWidget {
+  const ShowSalahTimesChip({super.key, required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(999),
+        child: Ink(
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.18),
+            borderRadius: BorderRadius.circular(999),
+            border: Border.all(color: Colors.white.withOpacity(0.28)),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.schedule_rounded,
+                  size: 16,
+                  color: Colors.white.withOpacity(0.95),
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  'Show salah times',
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: Colors.white.withOpacity(0.95),
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
