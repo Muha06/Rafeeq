@@ -54,6 +54,7 @@ flutter:
     - assets/images/quran.png
     - assets/images/quran_book.png
     - assets/images/mosque.png
+
     - assets/images/quran/surah_details.jpeg
     - assets/salat/isha_2.jpeg
     - assets/salat/isha.jpeg

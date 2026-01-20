@@ -21,8 +21,7 @@ class _AdhkarCategoryPageState extends ConsumerState<AdhkarCategoryPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Adhkars Categories'),
-        // bottom: appBarBottomDivider(context),
+        title: const Text('Adhkars Categories'), 
       ),
       body: ListView.builder(
         itemCount: adhkarCategories.length,

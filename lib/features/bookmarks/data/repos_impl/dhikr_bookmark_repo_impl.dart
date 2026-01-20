@@ -1,7 +1,7 @@
- import 'package:rafeeq/features/bookmarks/data/datasources/dhikr_local_ds.dart';
+import 'package:rafeeq/features/bookmarks/data/datasources/dhikr_local_ds.dart';
 import 'package:rafeeq/features/bookmarks/data/models/dhikr_bookmark_hive_model.dart';
- import 'package:rafeeq/features/bookmarks/domain/entities/dhikr_bookmark.dart';
-  import 'package:rafeeq/features/bookmarks/domain/repos/dhikr_bookmark_repo.dart';
+import 'package:rafeeq/features/bookmarks/domain/entities/dhikr_bookmark.dart';
+import 'package:rafeeq/features/bookmarks/domain/repos/dhikr_bookmark_repo.dart';
 
 class DhikrBookmarksRepositoryImpl implements DhikrBookmarksRepository {
   final DhikrBookmarksLocalDataSource local;
@@ -42,6 +42,7 @@ class DhikrBookmarksRepositoryImpl implements DhikrBookmarksRepository {
     return DhikrBookmarkHiveModel(
       dhikrId: e.dhikrId,
       dhikrTitle: e.title,
+      assetPath: e.assetPath,
       createdAtMillis: e.createdAt.millisecondsSinceEpoch,
     );
   }
@@ -50,6 +51,7 @@ class DhikrBookmarksRepositoryImpl implements DhikrBookmarksRepository {
     return DhikrBookmark(
       dhikrId: m.dhikrId,
       title: m.dhikrTitle,
+      assetPath: m.assetPath,
       createdAt: DateTime.fromMillisecondsSinceEpoch(m.createdAtMillis),
     );
   }

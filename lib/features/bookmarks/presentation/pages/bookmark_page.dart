@@ -7,7 +7,8 @@ import 'package:rafeeq/core/widgets/snackbars.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/quran_bookmark.dart';
 import 'package:rafeeq/features/bookmarks/presentation/pages/adhkar_bookmark_tab.dart';
 import 'package:rafeeq/features/bookmarks/presentation/pages/quran_bookmark_tab.dart';
-import 'package:rafeeq/features/bookmarks/presentation/riverpod/execution_providers.dart';
+import 'package:rafeeq/features/bookmarks/presentation/riverpod/Quran/execution_providers.dart';
+import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class BookmarkPage extends ConsumerStatefulWidget {
   const BookmarkPage({super.key});
@@ -48,6 +49,9 @@ class _BookmarkPageState extends ConsumerState<BookmarkPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = ref.watch(isDarkProvider);
+    final theme = Theme.of(context);
+
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -58,26 +62,55 @@ class _BookmarkPageState extends ConsumerState<BookmarkPage> {
         body: Column(
           children: [
             const SizedBox(height: 8),
-            Align(
-              alignment: Alignment.topLeft,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: SizedBox(
-                  width:
-                      MediaQuery.of(context).size.width * 0.60, // 60% of screen
-                  child: const TabBar(
-                    labelPadding: EdgeInsets.zero, // no extra spacing
-                    indicatorSize: TabBarIndicatorSize.tab,
 
-                    tabs: [
-                      Tab(text: 'Quran'),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.60,
+                // padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  color: isDark
+                      ? AppDarkColors.darkSurface
+                      : AppLightColors.amberSoft,
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(color: theme.dividerColor),
+                ),
+                child: TabBar(
+                  dividerColor: Colors.transparent,
+                  splashFactory: NoSplash.splashFactory,
+                  overlayColor: WidgetStateProperty.all(Colors.transparent),
 
-                      Tab(text: 'Adhkār'),
-                    ],
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  indicator: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: isDark
+                        ? AppDarkColors.textSecondary
+                        : AppLightColors.buttonPrimaryPressed,
                   ),
+
+                  // labelColor: isDark ? Colors.white : Colors.black,
+                  unselectedLabelColor: isDark
+                      ? AppDarkColors.textBody
+                      : AppLightColors.textPrimary,
+
+                  labelStyle: const TextStyle(
+                    fontWeight: FontWeight.w700,
+                    color: AppLightColors.snackbarText,
+                    fontSize: 13,
+                  ),
+                  unselectedLabelStyle: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 13,
+                  ),
+
+                  tabs: const [
+                    Tab(text: 'Quran'),
+                    Tab(text: 'Adhkār'),
+                  ],
                 ),
               ),
             ),
+
             const SizedBox(height: 8),
 
             const Expanded(

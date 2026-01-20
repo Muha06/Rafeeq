@@ -13,10 +13,14 @@ class DhikrBookmarkHiveModel extends HiveObject {
   @HiveField(2)
   final int createdAtMillis;
 
+  @HiveField(3)
+  final String assetPath;
+
   DhikrBookmarkHiveModel({
     required this.dhikrId,
     required this.dhikrTitle,
     required this.createdAtMillis,
+    required this.assetPath,
   });
 }
  

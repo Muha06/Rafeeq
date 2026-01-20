@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 // ==== Light Theme ====
 class AppLightColors {
   // Background (warm paper)
-  static const Color lightBackground = Color(0xFFF6EFE6);
+  static const Color lightBackground = Color(0xFFF8F2EA);
 
   // Surface (cards/sheets) - slightly lighter than bg
-  static const Color lightSurface = Color(0xFFFFF8F1);
+  static const Color lightSurface = amberSoft;
   // static const Color lightSurface2 = amberSoft;
 
   // Surface 2 (chips/sections/containers)

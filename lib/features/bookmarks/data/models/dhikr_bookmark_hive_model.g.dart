@@ -21,19 +21,22 @@ class DhikrBookmarkHiveModelAdapter
       dhikrId: fields[0] as String,
       dhikrTitle: fields[1] as String,
       createdAtMillis: fields[2] as int,
+      assetPath: fields[3] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, DhikrBookmarkHiveModel obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.dhikrId)
       ..writeByte(1)
       ..write(obj.dhikrTitle)
       ..writeByte(2)
-      ..write(obj.createdAtMillis);
+      ..write(obj.createdAtMillis)
+      ..writeByte(3)
+      ..write(obj.assetPath);
   }
 
   @override

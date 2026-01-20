@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/quran_bookmark.dart';
-import 'package:rafeeq/features/bookmarks/presentation/riverpod/usecases_provider.dart';
+import 'package:rafeeq/features/bookmarks/presentation/riverpod/Quran/usecases_provider.dart';
 
 //Add bookmark
 final addQuranBookmarkProvider =

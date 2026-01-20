@@ -41,11 +41,9 @@ class MyBottomBar extends StatelessWidget {
       bottom: true,
       //bg container
       child: Container(
-        height: 77,
-        color: isDarkMode
-            ? AppDarkColors.bottomBar
-            : AppLightColors.lightSurface,
-        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+        height: 60,
+        color: isDarkMode ? AppDarkColors.bottomBar : AppLightColors.amberSoft,
+        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 12),
         child: Row(
           children: List.generate(_items.length, (index) {
             final item = _items[index];
@@ -66,11 +64,11 @@ class MyBottomBar extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
-                    color: isSelected
-                        ? (isDarkMode
-                              ? AppDarkColors.bottomBar.withAlpha(60)
-                              : AppLightColors.lightSurface.withAlpha(120))
-                        : Colors.transparent,
+                    // color: isSelected
+                    //     ? (isDarkMode
+                    //           ? AppDarkColors.bottomBar.withAlpha(60)
+                    //           : AppLightColors.lightSurface.withAlpha(120))
+                    //     : Colors.transparent,
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -84,7 +82,7 @@ class MyBottomBar extends StatelessWidget {
                         child: Icon(
                           isSelected ? item.active : item.icon,
                           key: ValueKey('$index-$isSelected'),
-                          size: isSelected ? 24 : 22,
+                          size: isSelected ? 21 : 19,
                           color: isSelected ? selectedFg : unselectedFg,
                         ),
                       ),
@@ -95,10 +93,10 @@ class MyBottomBar extends StatelessWidget {
                         curve: Curves.easeOut,
                         style: theme.textTheme.bodySmall!.copyWith(
                           color: isSelected ? selectedFg : unselectedFg,
-                          fontSize: isSelected ? 13 : 12,
+                          fontSize: isSelected ? 12 : 11,
                           fontWeight: isSelected
                               ? FontWeight.w700
-                              : FontWeight.w500,
+                              : FontWeight.w700,
                         ),
                         child: Text(
                           item.label,

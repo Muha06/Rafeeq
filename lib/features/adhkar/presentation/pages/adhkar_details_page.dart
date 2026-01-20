@@ -16,12 +16,14 @@ class AdhkarDetailsPage extends ConsumerStatefulWidget {
     super.key,
     required this.dhikr,
     required this.adhkars,
+    required this.assetPath,
     required this.initialIndex,
   });
 
   final Dhikr dhikr;
   final List<Dhikr> adhkars;
   final int initialIndex;
+  final String assetPath;
   @override
   ConsumerState<AdhkarDetailsPage> createState() => _AdhkarDetailsPageState();
 }
@@ -108,6 +110,7 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
                   final bookMark = DhikrBookmark(
                     dhikrId: dhikr.id,
                     title: dhikr.title,
+                    assetPath: widget.assetPath,
                     createdAt: DateTime.now(),
                   );
 

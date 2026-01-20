@@ -8,6 +8,16 @@ final getAllDhikrBookmarksProvider = Provider<List<DhikrBookmark>>((ref) {
   return useCase.call();
 });
 
+final removeDhikrBookmarkActionProvider =
+    Provider.family<Future<void> Function(), String>((ref, dhikrId) {
+      final remove = ref.read(removeDhikrBookmarkUseCaseProvider);
+
+      return () async {
+        await remove.call(dhikrId);
+        ref.invalidate(getAllDhikrBookmarksProvider);
+      };
+    });
+
 // BOOKMARKED IDS (stores all ids of bookmarked ayahs)
 final bookmarkedDhikrIdsProvider = Provider<Set<String>>((ref) {
   final list = ref.watch(getAllDhikrBookmarksProvider);

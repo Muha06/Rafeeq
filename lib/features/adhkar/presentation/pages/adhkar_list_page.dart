@@ -44,6 +44,7 @@ class _AdhkarListPageState extends ConsumerState<AdhkarListPage> {
               return AdhkarListTile(
                 dhikr: dhikr,
                 index: index,
+                assetPath: assetPath,
                 adhkars: adhkars,
               );
             },
@@ -59,12 +60,14 @@ class AdhkarListTile extends ConsumerWidget {
     super.key,
     required this.dhikr,
     required this.index,
+    required this.assetPath,
     required this.adhkars,
   });
 
   final Dhikr dhikr;
   final List<Dhikr> adhkars;
   final int index;
+  final String assetPath;
 
   @override
   Widget build(BuildContext context, ref) {
@@ -80,6 +83,7 @@ class AdhkarListTile extends ConsumerWidget {
             builder: (context) => AdhkarDetailsPage(
               dhikr: dhikr,
               adhkars: adhkars,
+              assetPath: assetPath,
               initialIndex: index,
             ),
           ),
