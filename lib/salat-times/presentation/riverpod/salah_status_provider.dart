@@ -1,0 +1,41 @@
+import 'dart:async';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/salat-times/domain/entities/salah_status.dart';
+import 'package:rafeeq/salat-times/domain/usecases/get_salah_status.dart';
+
+import 'salah_times_providers.dart'; // where todaySalahTimesProvider lives
+
+/// emits DateTime.now() every second
+final salahTickerProvider = StreamProvider<DateTime>((ref) {
+  final controller = StreamController<DateTime>();
+
+  // emit immediately
+  controller.add(DateTime.now());
+
+  final timer = Timer.periodic(const Duration(seconds: 1), (_) {
+    controller.add(DateTime.now());
+  });
+
+  ref.onDispose(() {
+    timer.cancel();
+    controller.close();
+  });
+
+  return controller.stream;
+});
+
+/// combines (today timings + now) -> SalahStatusEntity
+final salahStatusProvider = Provider<AsyncValue<SalahStatusEntity>>((ref) {
+  final timesAsync = ref.watch(todaySalahTimesProvider);
+  final nowAsync = ref.watch(salahTickerProvider);
+
+  return timesAsync.when(
+    loading: () => const AsyncLoading(),
+    error: (e, st) => AsyncError(e, st),
+    data: (times) => nowAsync.when(
+      loading: () => const AsyncLoading(),
+      error: (e, st) => AsyncError(e, st),
+      data: (now) => AsyncData(computeSalahStatus(times: times, now: now)),
+    ),
+  );
+});

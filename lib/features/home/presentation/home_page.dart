@@ -8,6 +8,8 @@ import 'package:rafeeq/features/home/presentation/widgets/ayah_of_the_day.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/QURAN_PAGE/greetings_row.dart';
 import 'package:rafeeq/features/home/presentation/widgets/home_reminder_carouel.dart';
 import 'package:rafeeq/features/settings/presentation/pages/settings_page.dart';
+import 'package:rafeeq/salat-times/domain/entities/salah_prayer.dart';
+import 'package:rafeeq/salat-times/presentation/widgets/salah_status_card.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -19,6 +21,14 @@ class HomePage extends ConsumerStatefulWidget {
 class _HomePageState extends ConsumerState<HomePage> {
   final todayHijri = HijriDate.now();
   String get formattedHijri => todayHijri.toFormat('MMMM dd, yyyy h');
+
+  final Map<SalahPrayer, String> assetByPrayer = {
+    SalahPrayer.fajr: 'assets/salat/fajr.jpeg',
+    SalahPrayer.dhuhr: 'assets/salat/dhuhr.jpeg',
+    SalahPrayer.asr: 'assets/salat/asr.jpeg',
+    SalahPrayer.maghrib: 'assets/salat/maghrib.jpeg',
+    SalahPrayer.isha: 'assets/salat/isha.jpeg',
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -59,114 +69,16 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
             ),
 
-            // SliverToBoxAdapter(
-            //   child: Padding(
-            //     padding: const EdgeInsets.symmetric(
-            //       horizontal: 12.0,
-            //       vertical: 16,
-            //     ),
-            //     child: Stack(
-            //       children: [
-            //         // ✅ Background image with radius
-            //         ClipRRect(
-            //           borderRadius: BorderRadius.circular(16),
-            //           child: Image.asset(
-            //             'assets/salat/isha.jpeg',
-            //             height: 180,
-            //             width: double.infinity,
-            //             fit: BoxFit.cover,
-            //           ),
-            //         ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsetsGeometry.symmetric(
+                  horizontal: 12,
+                  vertical: 16,
+                ),
+                child: SalahTimesCard(assetsByPrayer: assetByPrayer),
+              ),
+            ),
 
-            //         // ✅ Gradient overlay so text is always readable
-            //         Positioned.fill(
-            //           child: ClipRRect(
-            //             borderRadius: BorderRadius.circular(16),
-            //             child: DecoratedBox(
-            //               decoration: BoxDecoration(
-            //                 color: Colors.black.withAlpha(100),
-            //               ),
-            //             ),
-            //           ),
-            //         ),
-
-            //         // ✅ Content
-            //         Positioned.fill(
-            //           child: Padding(
-            //             padding: const EdgeInsets.all(14),
-            //             child: Column(
-            //               crossAxisAlignment: CrossAxisAlignment.start,
-            //               children: [
-            //                 // Top row: prev + next
-            //                 const Row(
-            //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //                   children: [
-            //                     _MiniPrayerTime(
-            //                       title: 'Dhuhr',
-            //                       time: '12:32 PM',
-            //                     ),
-            //                     _MiniPrayerTime(
-            //                       title: 'Asr',
-            //                       time: '03:56 PM',
-            //                       alignRight: true,
-            //                     ),
-            //                   ],
-            //                 ),
-
-            //                 const Spacer(),
-
-            //                 // Middle: progress bar
-            //                 ClipRRect(
-            //                   borderRadius: BorderRadius.circular(99),
-            //                   child: const LinearProgressIndicator(
-            //                     value: 0.62, // mock (0 -> 1)
-            //                     minHeight: 6,
-            //                     backgroundColor: Colors.white24,
-            //                   ),
-            //                 ),
-
-            //                 const SizedBox(height: 10),
-
-            //                 // Bottom: countdown + meta chip
-            //                 Row(
-            //                   crossAxisAlignment: CrossAxisAlignment.end,
-            //                   children: [
-            //                     Column(
-            //                       crossAxisAlignment: CrossAxisAlignment.start,
-            //                       children: [
-            //                         Text(
-            //                           'Next prayer in',
-            //                           style: TextStyle(
-            //                             color: Colors.white.withOpacity(0.9),
-            //                             fontSize: 12,
-            //                           ),
-            //                         ),
-            //                         const SizedBox(height: 4),
-            //                         const Text(
-            //                           '01:23:19',
-            //                           style: TextStyle(
-            //                             color: Colors.white,
-            //                             fontSize: 30,
-            //                             fontWeight: FontWeight.w800,
-            //                             letterSpacing: 1.0,
-            //                           ),
-            //                         ),
-            //                       ],
-            //                     ),
-            //                     const Spacer(),
-            //                     const _InfoChip(
-            //                       text: 'Nairobi • MWL • Shāfiʿī',
-            //                     ),
-            //                   ],
-            //                 ),
-            //               ],
-            //             ),
-            //           ),
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
             const SliverToBoxAdapter(child: HomeRemindersCarousel()),
 
             //AYAH OF THE DAY
