@@ -93,12 +93,6 @@ class _Chip extends ConsumerWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: isDark
-            ? AppDarkColors.darkSurface
-            : theme.colorScheme.surfaceContainerHighest.withOpacity(0.6),
-        borderRadius: BorderRadius.circular(999),
-      ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

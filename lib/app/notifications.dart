@@ -10,15 +10,17 @@ class NotificationService {
 
   final _plugin = FlutterLocalNotificationsPlugin();
 
+  FlutterLocalNotificationsPlugin get plugin => _plugin;
+
+  Future<bool> ensureExactAlarmsAllowed() => _ensureExactAlarmsAllowed();
+
   Future<void> init() async {
     tzdata.initializeTimeZones();
 
     try {
       final tzInfo = await FlutterTimezone.getLocalTimezone();
       tz.setLocalLocation(tz.getLocation(tzInfo.identifier));
-      print(tzInfo);
     } catch (e) {
-      debugPrint('Failed to get local timezone: $e');
       tz.setLocalLocation(tz.getLocation('UTC'));
     }
 

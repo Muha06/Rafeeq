@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:rafeeq/app/salat_notifications.dart';
 import 'package:rafeeq/salat-times/data/datasources/salah_remote_ds.dart';
 import 'package:rafeeq/salat-times/data/repository/salah_repo_impl.dart';
 import 'package:rafeeq/salat-times/domain/entities/salah_times.dart';
@@ -44,4 +45,19 @@ final todaySalahTimesProvider = FutureProvider<SalahTimesEntity>((ref) async {
     country: ref.read(salahCountryProvider),
     method: ref.read(salahMethodProvider),
   );
+});
+
+final salahNotificationsSchedulerProvider = Provider<void>((ref) {
+  //listen to todaySalahTimesProvider & schedules when data  arrives
+  ref.listen<AsyncValue<SalahTimesEntity>>(todaySalahTimesProvider, (
+    prev,
+    next,
+  ) {
+    next.whenData((times) async {
+      await SalahNotifications.instance.scheduleForToday(
+        times: times,
+        remindBeforeMinutes: 0, // or 10
+      );
+    });
+  });
 });

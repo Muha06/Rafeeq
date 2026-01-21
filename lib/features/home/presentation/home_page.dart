@@ -9,6 +9,7 @@ import 'package:rafeeq/features/Quran/presentation/widgets/QURAN_PAGE/greetings_
 import 'package:rafeeq/features/home/presentation/widgets/home_reminder_carouel.dart';
 import 'package:rafeeq/features/settings/presentation/pages/settings_page.dart';
 import 'package:rafeeq/salat-times/domain/entities/salah_prayer.dart';
+import 'package:rafeeq/salat-times/presentation/riverpod/salah_times_providers.dart';
 import 'package:rafeeq/salat-times/presentation/widgets/salah_status_card.dart';
 
 class HomePage extends ConsumerStatefulWidget {
@@ -33,7 +34,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
+    ref.watch(salahNotificationsSchedulerProvider); //activate
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
