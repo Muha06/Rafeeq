@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
- import 'package:rafeeq/salat-times/domain/entities/salah_status.dart';
-import 'package:rafeeq/salat-times/presentation/pages/salat_times_page.dart';
-import 'package:rafeeq/salat-times/presentation/riverpod/salah_status_provider.dart';
+ import 'package:rafeeq/features/salat-times/domain/entities/salah_status.dart';
+import 'package:rafeeq/features/salat-times/presentation/pages/salat_times_page.dart';
+import 'package:rafeeq/features/salat-times/presentation/riverpod/salah_status_provider.dart';
 
 import '../../domain/entities/salah_prayer.dart';
 

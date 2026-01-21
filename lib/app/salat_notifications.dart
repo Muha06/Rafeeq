@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:rafeeq/app/notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:rafeeq/salat-times/domain/entities/salah_prayer.dart';
-import 'package:rafeeq/salat-times/domain/entities/salah_times.dart';
+import 'package:rafeeq/features/salat-times/domain/entities/salah_prayer.dart';
+import 'package:rafeeq/features/salat-times/domain/entities/salah_times.dart';
 
 class SalahNotifications {
   SalahNotifications._();

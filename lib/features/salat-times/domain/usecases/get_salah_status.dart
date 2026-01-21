@@ -1,5 +1,5 @@
-import 'package:rafeeq/salat-times/domain/entities/salah_status.dart';
-import 'package:rafeeq/salat-times/domain/entities/salah_times.dart';
+import 'package:rafeeq/features/salat-times/domain/entities/salah_status.dart';
+import 'package:rafeeq/features/salat-times/domain/entities/salah_times.dart';
 import '../entities/salah_prayer.dart';
 
 /* 

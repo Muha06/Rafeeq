@@ -28,6 +28,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     final isDark = ref.watch(isDarkProvider);
 
     final adhkarOn = ref.watch(adhkarNotifEnabledProvider);
+    final salahNotifOn = ref.watch(salahNotifEnabledProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -56,6 +57,18 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               value: adhkarOn,
               onChanged: (val) {
                 setAdhkarNotif(ref, val);
+              },
+            ),
+          ),
+
+          SettingsTile(
+            leading: const Icon(CupertinoIcons.bell),
+            title: 'Salah reminder',
+            isDark: isDark,
+            trailing: Switch(
+              value: salahNotifOn,
+              onChanged: (val) {
+                setSalahNotif(ref, val);
               },
             ),
           ),

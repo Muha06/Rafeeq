@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:rafeeq/salat-times/data/models/salah_times_model.dart';
+import 'package:rafeeq/features/salat-times/data/models/salah_times_model.dart';
 
 abstract class SalahRemoteDataSource {
   Future<AladhanTimingsModel> fetchTodayByCity({

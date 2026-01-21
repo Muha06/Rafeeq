@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:rafeeq/salat-times/data/datasources/cached_salah_local_ds.dart';
-import 'package:rafeeq/salat-times/data/datasources/salah_remote_ds.dart';
-import 'package:rafeeq/salat-times/data/models/mappers.dart';
-import 'package:rafeeq/salat-times/domain/entities/salah_times.dart';
-import 'package:rafeeq/salat-times/domain/repository/get_today_salah_times_repo.dart';
+import 'package:rafeeq/features/salat-times/data/datasources/cached_salah_local_ds.dart';
+import 'package:rafeeq/features/salat-times/data/datasources/salah_remote_ds.dart';
+import 'package:rafeeq/features/salat-times/data/models/mappers.dart';
+import 'package:rafeeq/features/salat-times/domain/entities/salah_times.dart';
+import 'package:rafeeq/features/salat-times/domain/repository/get_today_salah_times_repo.dart';
 
 class SalahTimesRepositoryImpl implements SalahTimesRepository {
   final SalahRemoteDataSource remote;

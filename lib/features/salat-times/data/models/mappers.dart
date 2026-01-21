@@ -1,7 +1,7 @@
 import 'package:rafeeq/core/functions/parse_aladhan_timings.dart';
-import 'package:rafeeq/salat-times/data/models/cached_salah_times_hive.dart';
-import 'package:rafeeq/salat-times/data/models/salah_times_model.dart';
-import 'package:rafeeq/salat-times/domain/entities/salah_times.dart';
+import 'package:rafeeq/features/salat-times/data/models/cached_salah_times_hive.dart';
+import 'package:rafeeq/features/salat-times/data/models/salah_times_model.dart';
+import 'package:rafeeq/features/salat-times/domain/entities/salah_times.dart';
 import '../../domain/entities/salah_prayer.dart';
 
 /* 

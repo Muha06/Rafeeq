@@ -1,12 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:rafeeq/app/salat_notifications.dart';
-import 'package:rafeeq/salat-times/data/datasources/salah_remote_ds.dart';
-import 'package:rafeeq/salat-times/data/repository/salah_repo_impl.dart';
-import 'package:rafeeq/salat-times/domain/entities/salah_times.dart';
-import 'package:rafeeq/salat-times/domain/repository/get_today_salah_times_repo.dart';
-import 'package:rafeeq/salat-times/domain/usecases/get_today_salah_times.dart';
-import 'package:rafeeq/salat-times/presentation/riverpod/cached_salah_providers.dart';
+import 'package:rafeeq/features/salat-times/data/datasources/salah_remote_ds.dart';
+import 'package:rafeeq/features/salat-times/data/repository/salah_repo_impl.dart';
+import 'package:rafeeq/features/salat-times/domain/entities/salah_times.dart';
+import 'package:rafeeq/features/salat-times/domain/repository/get_today_salah_times_repo.dart';
+import 'package:rafeeq/features/salat-times/domain/usecases/get_today_salah_times.dart';
+import 'package:rafeeq/features/salat-times/presentation/riverpod/cached_salah_providers.dart';
 
 /// 1) External client
 final httpClientProvider = Provider.autoDispose<http.Client>((ref) {

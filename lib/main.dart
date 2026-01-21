@@ -11,7 +11,7 @@ import 'package:rafeeq/features/bookmarks/data/models/dhikr_bookmark_hive_model.
 import 'package:rafeeq/features/bookmarks/data/models/quran_bookmark_hive_model.dart';
 import 'package:rafeeq/features/settings/presentation/provider/notifcation_provider.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
-import 'package:rafeeq/salat-times/data/models/cached_salah_times_hive.dart';
+import 'package:rafeeq/features/salat-times/data/models/cached_salah_times_hive.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
