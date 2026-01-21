@@ -4,9 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hijri_date/hijri.dart';
 import 'package:rafeeq/core/animations/navigation_animations.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
+import 'package:rafeeq/features/Quran/presentation/pages/quran_page.dart';
+import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_category_page.dart';
+import 'package:rafeeq/features/asma_ul_husna/presentation/pages/asma_ul_husna_list_page.dart';
 import 'package:rafeeq/features/home/presentation/widgets/ayah_of_the_day.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/QURAN_PAGE/greetings_row.dart';
 import 'package:rafeeq/features/home/presentation/widgets/home_reminder_carouel.dart';
+import 'package:rafeeq/features/home/presentation/widgets/quick_action_row.dart';
 import 'package:rafeeq/features/settings/presentation/pages/settings_page.dart';
 import 'package:rafeeq/features/salat-times/domain/entities/salah_prayer.dart';
 import 'package:rafeeq/features/salat-times/presentation/riverpod/salah_times_providers.dart';
@@ -83,7 +87,44 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
             ),
 
+            //REMINDER
             const SliverToBoxAdapter(child: HomeRemindersCarousel()),
+
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsetsGeometry.only(
+                  left: 12,
+                  right: 12,
+                  bottom: 24,
+                ),
+                child: HomeQuickActionsRow(
+                  onQuran: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const QuranPage(),
+                      ),
+                    );
+                  },
+                  onAdhkar: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AdhkarCategoryPage(),
+                      ),
+                    );
+                  },
+                  onAllahNames: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AllahNamesPage(),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
 
             //AYAH OF THE DAY
             const SliverToBoxAdapter(child: AyahOfTheDay()),
