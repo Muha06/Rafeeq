@@ -11,6 +11,7 @@ import 'package:rafeeq/features/bookmarks/data/models/dhikr_bookmark_hive_model.
 import 'package:rafeeq/features/bookmarks/data/models/quran_bookmark_hive_model.dart';
 import 'package:rafeeq/features/settings/presentation/provider/notifcation_provider.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
+import 'package:rafeeq/salat-times/data/models/cached_salah_times_hive.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +24,7 @@ Future<void> main() async {
   Hive.registerAdapter(AyahHiveAdapter());
   Hive.registerAdapter(QuranBookmarkHiveModelAdapter());
   Hive.registerAdapter(DhikrBookmarkHiveModelAdapter());
+  Hive.registerAdapter(CachedSalahTimesHiveAdapter());
 
   //open boxes
   await Hive.openBox<SurahHive>('surahs');
@@ -32,6 +34,7 @@ Future<void> main() async {
 
   await Hive.openBox<QuranBookmarkHiveModel>('quran_bookmarks_box');
   await Hive.openBox<DhikrBookmarkHiveModel>('dhikr_bookmarks_box');
+  await Hive.openBox<CachedSalahTimesHive>('salah_times_cache_box');
 
   //------------------NOTIFICATIONS---------------//
   await NotificationService.instance.init(); //init

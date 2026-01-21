@@ -1,6 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/salat-times/domain/entities/salah_status.dart';
+ import 'package:rafeeq/salat-times/domain/entities/salah_status.dart';
 import 'package:rafeeq/salat-times/presentation/pages/salat_times_page.dart';
 import 'package:rafeeq/salat-times/presentation/riverpod/salah_status_provider.dart';
 
@@ -213,6 +214,7 @@ class _TopLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    String two(int n) => n.toString().padLeft(2, '0');
 
     return Column(
       crossAxisAlignment: align,
@@ -235,7 +237,7 @@ class _TopLabel extends StatelessWidget {
 
         const SizedBox(height: 6),
         Text(
-          '${salatTime.hour}:${salatTime.minute}',
+          '${two(salatTime.hour)}:${two(salatTime.minute)}',
           style: theme.textTheme.titleLarge?.copyWith(
             color: Colors.amber,
             fontSize: 24,
@@ -302,11 +304,14 @@ class _SkeletonCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(radius),
       child: Container(
         height: height,
-        color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.4),
+        alignment: Alignment.center, // ✅ or Center()
+        decoration: BoxDecoration(color: theme.cardColor),
+        child: const CupertinoActivityIndicator(radius: 18),
       ),
     );
   }
@@ -333,7 +338,7 @@ class _ErrorCard extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.4),
         child: Align(
-          alignment: Alignment.centerLeft,
+          alignment: Alignment.center,
           child: Text(message, style: theme.textTheme.bodyMedium),
         ),
       ),

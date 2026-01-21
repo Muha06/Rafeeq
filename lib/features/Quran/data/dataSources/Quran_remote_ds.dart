@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/rendering.dart';
 import 'package:http/http.dart' as http;
 import 'package:rafeeq/features/Quran/data/models/ayah_dto.dart';
 import 'package:rafeeq/features/Quran/data/models/surah_dto.dart';
@@ -51,7 +50,6 @@ class QuranApiService {
       //expiry
       final expiresIn = data['expires_in'] ?? 3600; // usually returned by API
       _expiry = DateTime.now().add(Duration(seconds: expiresIn));
-      debugPrint('Got new access token, expires in $expiresIn seconds');
 
       return _accessToken!;
     } else {
@@ -75,8 +73,7 @@ class QuranApiService {
       try {
         final data = json.decode(response.body);
         final chapters = data['chapters'] as List<dynamic>;
-        print('Api fetched successfully: ${chapters.length}');
-        
+
         return chapters.map((json) => SurahDto.fromJson(json)).toList();
       } catch (e) {
         throw Exception('Failed to parse surahs: $e');
@@ -90,9 +87,7 @@ class QuranApiService {
 
   /// Fetch ayahs for a specific surah
   /// Supports pagination with page & limit
-  Future<List<AyahDto>> fetchAyahs({
-    required int surahId, 
-  }) async {
+  Future<List<AyahDto>> fetchAyahs({required int surahId}) async {
     final token = await _getAccessToken();
 
     final url = Uri.parse(
@@ -104,21 +99,15 @@ class QuranApiService {
       '&per_page=286', // max surah length (Baqarah),
     );
 
-     
-
     final response = await client!.get(
       url,
       headers: {'x-auth-token': token, 'x-client-id': clientId},
     );
 
     if (response.statusCode == 200) {
-      // debugPrint('response: ${response.toString()}');
-
       final data = json.decode(response.body);
-      // debugPrint('data: ${data.toString()}');
 
       final verses = data['verses'] as List<dynamic>;
-      debugPrint('verse: ${verses[0]}');
       return verses.map((json) => AyahDto.fromJson(json)).toList();
     } else {
       throw Exception(

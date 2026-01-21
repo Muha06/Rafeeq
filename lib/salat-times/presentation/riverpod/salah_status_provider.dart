@@ -12,8 +12,9 @@ final salahTickerProvider = StreamProvider<DateTime>((ref) {
   // emit immediately
   controller.add(DateTime.now());
 
+  //Timer that emits after every 1 second
   final timer = Timer.periodic(const Duration(seconds: 1), (_) {
-    controller.add(DateTime.now());
+    controller.add(DateTime.now()); //emit
   });
 
   ref.onDispose(() {
@@ -26,16 +27,19 @@ final salahTickerProvider = StreamProvider<DateTime>((ref) {
 
 /// combines (today timings + now) -> SalahStatusEntity
 final salahStatusProvider = Provider<AsyncValue<SalahStatusEntity>>((ref) {
-  final timesAsync = ref.watch(todaySalahTimesProvider);
-  final nowAsync = ref.watch(salahTickerProvider);
+  final timesAsync = ref.watch(
+    todaySalahTimesProvider,
+  ); //salahTimesEntity (times)
+
+  final nowAsync = ref.watch(salahTickerProvider); //stream of datetime.now()
 
   return timesAsync.when(
     loading: () => const AsyncLoading(),
     error: (e, st) => AsyncError(e, st),
-    data: (times) => nowAsync.when(
+    data: (times) => nowAsync.when( //times -> SalahTimesEntity
       loading: () => const AsyncLoading(),
       error: (e, st) => AsyncError(e, st),
-      data: (now) => AsyncData(computeSalahStatus(times: times, now: now)),
+      data: (now) => AsyncData(computeSalahStatus(times: times, now: now)), //return 
     ),
   );
 });
