@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/core/themes/dark_colors.dart';
+import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/features/asma_ul_husna/presentation/providers/asma_ul_husna_provider.dart';
+import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class AllahNamesPage extends ConsumerStatefulWidget {
   const AllahNamesPage({super.key});
@@ -20,11 +23,11 @@ class _AllahNamesPageState extends ConsumerState<AllahNamesPage> {
       appBar: AppBar(
         title: const Text("Asma’ul Husna"),
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(64),
+          preferredSize: const Size.fromHeight(100),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
             child: _SearchBar(
-              hintText: "Search (Arabic / transliteration / meaning)",
+              hintText: "Search (Arabic / transliteration)",
               onChanged: (v) => setState(() => _query = v.trim()),
             ),
           ),
@@ -65,20 +68,6 @@ class _AllahNamesPageState extends ConsumerState<AllahNamesPage> {
                 arabic: n.arabic,
                 transliteration: n.transliteration,
                 meaning: n.meaningEn,
-                onTap: () {
-                  // For now: simple bottom sheet preview.
-                  // Later: route to details page.
-                  showModalBottomSheet(
-                    context: context,
-                    showDragHandle: true,
-                    builder: (_) => _NameDetailsSheet(
-                      number: n.number,
-                      arabic: n.arabic,
-                      transliteration: n.transliteration,
-                      meaning: n.meaningEn,
-                    ),
-                  );
-                },
               );
             },
           );
@@ -88,145 +77,160 @@ class _AllahNamesPageState extends ConsumerState<AllahNamesPage> {
   }
 }
 
-class _AllahNameTile extends StatelessWidget {
+class _AllahNameTile extends ConsumerWidget {
   final int number;
   final String arabic;
   final String transliteration;
-  final String meaning;
-  final VoidCallback onTap;
+  final String meaning; 
 
   const _AllahNameTile({
     required this.number,
     required this.arabic,
     required this.transliteration,
-    required this.meaning,
-    required this.onTap,
+    required this.meaning, 
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     final theme = Theme.of(context);
+    final isDark = ref.watch(isDarkProvider);
 
-    return Material(
-      color: theme.colorScheme.surface,
-      elevation: 0.6,
-      borderRadius: BorderRadius.circular(18),
-      shadowColor: theme.shadowColor.withOpacity(0.12),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(18),
-        child: Padding(
-          padding: const EdgeInsets.all(14),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _NumberBadge(number: number),
-              const SizedBox(width: 12),
-
-              // Main content
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Arabic
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        arabic,
-                        textDirection: TextDirection.rtl,
-                        style: theme.textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.w700,
-                          height: 1.1,
-                        ),
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.cardColor,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _NumberBadge(number: number),
+            const SizedBox(width: 12),
+    
+            // Main content
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Arabic
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      arabic,
+                      textDirection: TextDirection.rtl,
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: isDark
+                            ? AppDarkColors.amber
+                            : AppLightColors.textPrimary,
+                        height: 1.1,
                       ),
                     ),
-                    const SizedBox(height: 8),
-
-                    // Transliteration
-                    Text(
-                      transliteration,
-                      style: theme.textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+                  ),
+                  const SizedBox(height: 8),
+    
+                  // Transliteration
+                  Text(
+                    transliteration,
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w600,
                     ),
-                    const SizedBox(height: 6),
-
-                    // Meaning
-                    Text(
-                      meaning,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onSurface.withOpacity(0.75),
-                        height: 1.25,
-                      ),
+                  ),
+                  const SizedBox(height: 6),
+    
+                  // Meaning
+                  Text(
+                    meaning,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.onSurface.withOpacity(0.75),
+                      height: 1.25,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-
-              const SizedBox(width: 8),
-              Icon(
-                Icons.chevron_right_rounded,
-                color: theme.colorScheme.onSurface.withOpacity(0.35),
-              ),
-            ],
-          ),
+            ),
+    
+            const SizedBox(width: 8),
+            Icon(Icons.chevron_right_rounded, color: theme.iconTheme.color),
+          ],
         ),
       ),
     );
   }
 }
 
-class _NumberBadge extends StatelessWidget {
+class _NumberBadge extends ConsumerWidget {
   final int number;
   const _NumberBadge({required this.number});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     final theme = Theme.of(context);
+    final isDark = ref.watch(isDarkProvider);
 
     return Container(
       width: 42,
       height: 42,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
-        color: theme.colorScheme.primary.withOpacity(0.12),
-        border: Border.all(color: theme.colorScheme.primary.withOpacity(0.25)),
+        color: isDark ? AppDarkColors.darkSurface : AppLightColors.amberSoft,
+        border: Border.all(
+          color: isDark
+              ? theme.colorScheme.primary.withOpacity(0.25)
+              : AppLightColors.primary,
+        ),
       ),
       alignment: Alignment.center,
       child: Text(
         '$number',
         style: theme.textTheme.titleSmall?.copyWith(
           fontWeight: FontWeight.w800,
-          color: theme.colorScheme.primary,
+          color: isDark
+              ? theme.colorScheme.primary
+              : AppLightColors.textPrimary,
         ),
       ),
     );
   }
 }
 
-class _SearchBar extends StatelessWidget {
+class _SearchBar extends ConsumerWidget {
   final String hintText;
   final ValueChanged<String> onChanged;
 
   const _SearchBar({required this.hintText, required this.onChanged});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     final theme = Theme.of(context);
+    final isDark = ref.watch(isDarkProvider);
 
     return TextField(
       onChanged: onChanged,
       textInputAction: TextInputAction.search,
       decoration: InputDecoration(
         hintText: hintText,
-        prefixIcon: const Icon(Icons.search_rounded),
+        hintStyle: theme.textTheme.bodySmall,
+        prefixIcon: Icon(
+          Icons.search_rounded,
+          color: isDark
+              ? AppDarkColors.iconPrimary
+              : AppLightColors.iconPrimary,
+        ),
         filled: true,
         fillColor: theme.colorScheme.surface,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 14,
           vertical: 14,
         ),
-        border: OutlineInputBorder(
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide(
+            color: isDark ? AppDarkColors.border : AppLightColors.iconPrimary,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide.none,
         ),
