@@ -23,7 +23,7 @@ class HomeQuickActionsRow extends StatelessWidget {
         Expanded(
           child: _QuickActionCard(
             title: "Qur’an",
-            icon: Icons.menu_book_rounded,
+            imagePath: 'assets/images/home/quran.png',
             onTap: onQuran,
           ),
         ),
@@ -31,7 +31,7 @@ class HomeQuickActionsRow extends StatelessWidget {
         Expanded(
           child: _QuickActionCard(
             title: "Adhkār",
-            icon: Icons.self_improvement_rounded,
+            imagePath: 'assets/images/home/tasbih.png',
             onTap: onAdhkar,
           ),
         ),
@@ -39,7 +39,7 @@ class HomeQuickActionsRow extends StatelessWidget {
         Expanded(
           child: _QuickActionCard(
             title: "Allah Names",
-            icon: Icons.auto_awesome_rounded,
+            imagePath: 'assets/images/home/Allah_name.png',
             onTap: onAllahNames,
           ),
         ),
@@ -50,12 +50,12 @@ class HomeQuickActionsRow extends StatelessWidget {
 
 class _QuickActionCard extends ConsumerWidget {
   final String title;
-  final IconData icon;
+  final String imagePath;
   final VoidCallback onTap;
 
   const _QuickActionCard({
     required this.title,
-    required this.icon,
+    required this.imagePath,
     required this.onTap,
   });
 
@@ -69,7 +69,7 @@ class _QuickActionCard extends ConsumerWidget {
       child: Container(
         // height: 120,
         width: 200,
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14),
           color: isDark ? theme.cardColor : AppLightColors.lightSurface,
@@ -89,31 +89,12 @@ class _QuickActionCard extends ConsumerWidget {
                     : AppLightColors.textPrimary,
               ),
             ),
-            const SizedBox(height: 10),
+            // const SizedBox(height: 4),
 
             //will change to image later
             Align(
               alignment: Alignment.bottomRight,
-              child: Container(
-                width: 38,
-                height: 38,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(
-                    color: isDark
-                        ? AppDarkColors.border
-                        : AppLightColors.primary,
-                  ),
-                  color: isDark ? theme.cardColor : AppLightColors.lightSurface,
-                ),
-                child: Icon(
-                  icon,
-                  color: isDark
-                      ? AppDarkColors.iconPrimary
-                      : AppLightColors.primary,
-                  size: 20,
-                ),
-              ),
+              child: Image.asset(imagePath, height: 40, width: 40),
             ),
           ],
         ),

@@ -48,12 +48,10 @@ flutter:
   assets:
     - assets/images/salam_amber.png
     - assets/images/salam_black.png
-    - assets/images/kaaba.jpeg
-    - assets/images/kaaba_2.jpeg
-    - assets/images/bismillah_1.png
+    - assets/images/bismillah_light.png
     - assets/images/bismillah_dark.png
     - assets/images/quran.png
-    - assets/images/quran_book.png
+    - assets/images/quran_amber.png
     - assets/images/mosque.png
 
     - assets/images/quran/surah_details.jpeg
@@ -69,6 +67,10 @@ flutter:
     - assets/images/category/daily.png
     - assets/images/category/sunrise.png
     - assets/images/category/sunset.png
+
+    - assets/images/home/Allah_name.png
+    - assets/images/home/quran.png
+    - assets/images/home/tasbih.png
 
     - assets/adhkar/general.json
     - assets/adhkar/morning.json
