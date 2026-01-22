@@ -46,13 +46,13 @@ flutter:
         - asset: assets/fonts/uthmani_font.otf
 
   assets:
-    - assets/images/salam_amber.png
-    - assets/images/salam_black.png
-    - assets/images/bismillah_light.png
-    - assets/images/bismillah_dark.png
-    - assets/images/quran.png
-    - assets/images/quran_amber.png
-    - assets/images/mosque.png
+    - assets/images/home/salam_amber.png
+    - assets/images/home/salam_black.png
+    - assets/images/quran/bismillah_light.png
+    - assets/images/quran/bismillah_dark.png
+    - assets/images/home/quran.png
+    - assets/images/quran/quran_amber.png
+    - assets/images/adhkar/mosque.png
 
     - assets/images/quran/surah_details.jpeg
     - assets/salat/fajr.jpeg
