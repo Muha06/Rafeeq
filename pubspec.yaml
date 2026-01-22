@@ -75,6 +75,7 @@ flutter:
     - assets/adhkar/general.json
     - assets/adhkar/morning.json
     - assets/adhkar/evening.json
+    - assets/adhkar/after_salah.json
 
 flutter_launcher_icons:
   android: true

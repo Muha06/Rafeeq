@@ -16,11 +16,7 @@ class MyBottomBar extends StatelessWidget {
 
   static const _items = [
     (icon: Icons.home_outlined, active: Icons.home_rounded, label: 'Home'),
-    (
-      icon: Icons.menu_book_outlined,
-      active: Icons.menu_book_rounded,
-      label: "Qur'an",
-    ),
+    (icon: Icons.menu_book, active: Icons.menu_book_rounded, label: "Qur'an"),
     (
       icon: Icons.self_improvement_outlined,
       active: Icons.self_improvement_rounded,
@@ -41,8 +37,13 @@ class MyBottomBar extends StatelessWidget {
       bottom: true,
       //bg container
       child: Container(
-        height: 60,
-        color: isDarkMode ? AppDarkColors.bottomBar : AppLightColors.amberSoft,
+        height: 61,
+        decoration: BoxDecoration(
+          color: isDarkMode
+              ? AppDarkColors.bottomBar
+              : AppLightColors.amberSoft,
+          border: Border(top: BorderSide(color: theme.dividerColor)),
+        ),
         padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 12),
         child: Row(
           children: List.generate(_items.length, (index) {
@@ -51,7 +52,7 @@ class MyBottomBar extends StatelessWidget {
 
             final selectedFg = isDarkMode
                 ? AppDarkColors.amber
-                : AppLightColors.buttonPrimaryPressed;
+                : AppLightColors.iconPrimary;
 
             final unselectedFg = isDarkMode
                 ? AppDarkColors.iconSecondary
@@ -64,11 +65,6 @@ class MyBottomBar extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
-                    // color: isSelected
-                    //     ? (isDarkMode
-                    //           ? AppDarkColors.bottomBar.withAlpha(60)
-                    //           : AppLightColors.lightSurface.withAlpha(120))
-                    //     : Colors.transparent,
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

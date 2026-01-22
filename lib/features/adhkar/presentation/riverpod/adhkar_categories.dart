@@ -21,5 +21,11 @@ final getAdhkarCategoriesProvider = Provider<List<AdhkarCategory>>((ref) {
       assetPath: 'assets/adhkar/evening.json',
       imagePath: 'assets/images/category/sunset.png',
     ),
+    AdhkarCategory(
+      key: 'after_salah',
+      title: 'After Salah',
+      assetPath: 'assets/adhkar/after_salah.json',
+      imagePath: 'assets/images/home/tasbih.png',
+    ),
   ];
 });
