@@ -26,7 +26,7 @@ class GreetingsRow extends ConsumerWidget {
           formattedHijri,
           style: theme.textTheme.bodySmall!.copyWith(
             fontSize: 14,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w500,
           ),
         ),
       ],

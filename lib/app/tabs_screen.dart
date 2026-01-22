@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/app/providers/tabs_screen_provider.dart';
 import 'package:rafeeq/core/widgets/bottom_bar.dart';
 import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_category_page.dart';
 import 'package:rafeeq/features/Quran/presentation/pages/quran_page.dart';
@@ -22,18 +23,17 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
     const BookmarkPage(),
   ];
 
-  int _selectedIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     final isDark = ref.watch(isDarkProvider);
+    final selectedIndex = ref.watch(tabsScreenIndexProvider);
 
     return Scaffold(
-      body: IndexedStack(index: _selectedIndex, children: _pages),
+      body: IndexedStack(index: selectedIndex, children: _pages),
       bottomNavigationBar: MyBottomBar(
-        currentIndex: _selectedIndex,
+        currentIndex: selectedIndex,
         onTap: (value) => setState(() {
-          _selectedIndex = value;
+          ref.read(tabsScreenIndexProvider.notifier).state = value;
         }),
         isDarkMode: isDark,
       ),
