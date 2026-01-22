@@ -14,7 +14,7 @@ import 'package:rafeeq/features/home/presentation/widgets/quick_action_row.dart'
 import 'package:rafeeq/features/settings/presentation/pages/settings_page.dart';
 import 'package:rafeeq/features/salat-times/domain/entities/salah_prayer.dart';
 import 'package:rafeeq/features/salat-times/presentation/riverpod/salah_times_providers.dart';
-import 'package:rafeeq/features/salat-times/presentation/widgets/salah_status_card.dart';
+import 'package:rafeeq/features/salat-times/presentation/widgets/timeline_card.dart';
 import 'package:rafeeq/features/settings/presentation/provider/notifcation_provider.dart';
 
 class HomePage extends ConsumerStatefulWidget {

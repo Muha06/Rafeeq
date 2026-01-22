@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
- import 'package:rafeeq/features/salat-times/domain/entities/salah_status.dart';
+import 'package:rafeeq/core/functions/salat-times.dart';
+import 'package:rafeeq/features/salat-times/domain/entities/salah_status.dart';
 import 'package:rafeeq/features/salat-times/presentation/pages/salat_times_page.dart';
 import 'package:rafeeq/features/salat-times/presentation/riverpod/salah_status_provider.dart';
 
@@ -27,11 +28,7 @@ class SalahTimesCard extends ConsumerWidget {
 
     return statusAsync.when(
       loading: () => _SkeletonCard(height: height, radius: borderRadius),
-      error: (e, _) => _ErrorCard(
-        height: height,
-        radius: borderRadius,
-        message: 'Failed to load prayer times',
-      ),
+      error: (e, _) => const SizedBox.shrink(),
       data: (status) => _CardBody(
         status: status,
         theme: theme,
@@ -73,7 +70,7 @@ class _CardBody extends StatelessWidget {
             if (bgAsset != null)
               Image.asset(bgAsset!, fit: BoxFit.cover)
             else
-              Container(color: theme.colorScheme.surface),
+              Container(color: theme.cardColor),
 
             // Gradient overlay (keeps text readable)
             DecoratedBox(
@@ -82,9 +79,9 @@ class _CardBody extends StatelessWidget {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Colors.black.withOpacity(0.55),
-                    Colors.black.withOpacity(0.35),
-                    Colors.black.withOpacity(0.70),
+                    Colors.black.withAlpha(125),
+                    Colors.black.withAlpha(65),
+                    Colors.black.withAlpha(140),
                   ],
                 ),
               ),
@@ -121,9 +118,9 @@ class _CardBody extends StatelessWidget {
                                     ? 0
                                     : status.progress.clamp(0.0, 1.0),
                                 minHeight: 8,
-                                backgroundColor: Colors.white.withOpacity(0.25),
+                                backgroundColor: Colors.white.withAlpha(62),
                                 valueColor: AlwaysStoppedAnimation<Color>(
-                                  Colors.white.withOpacity(0.9),
+                                  Colors.white.withAlpha(230),
                                 ),
                               ),
                             ),
@@ -154,7 +151,7 @@ class _CardBody extends StatelessWidget {
                           Text(
                             'Next salah in:',
                             style: theme.textTheme.bodySmall?.copyWith(
-                              color: onImage.withOpacity(0.9),
+                              color: onImage.withAlpha(230),
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -162,7 +159,7 @@ class _CardBody extends StatelessWidget {
                           const SizedBox(height: 6),
 
                           Text(
-                            _formatHms(status.timeToNext),
+                            formatHms(status.timeToNext),
                             textAlign: TextAlign.left,
                             style: theme.textTheme.headlineMedium?.copyWith(
                               color: onImage,
@@ -222,7 +219,7 @@ class _TopLabel extends StatelessWidget {
         Text(
           title,
           style: theme.textTheme.labelMedium?.copyWith(
-            color: color.withOpacity(0.85),
+            color: color.withAlpha(210),
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -309,51 +306,10 @@ class _SkeletonCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(radius),
       child: Container(
         height: height,
-        alignment: Alignment.center, // ✅ or Center()
+        alignment: Alignment.center,
         decoration: BoxDecoration(color: theme.cardColor),
         child: const CupertinoActivityIndicator(radius: 18),
       ),
     );
   }
-}
-
-class _ErrorCard extends StatelessWidget {
-  const _ErrorCard({
-    required this.height,
-    required this.radius,
-    required this.message,
-  });
-
-  final double height;
-  final double radius;
-  final String message;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(radius),
-      child: Container(
-        height: height,
-        padding: const EdgeInsets.all(16),
-        color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.4),
-        child: Align(
-          alignment: Alignment.center,
-          child: Text(message, style: theme.textTheme.bodyMedium),
-        ),
-      ),
-    );
-  }
-}
-
-String _formatHms(Duration d) {
-  if (d.isNegative) d = Duration.zero;
-
-  String two(int n) => n.toString().padLeft(2, '0');
-
-  final hours = d.inHours;
-  final minutes = d.inMinutes.remainder(60);
-  final seconds = d.inSeconds.remainder(60);
-
-  return '${two(hours)}:${two(minutes)}:${two(seconds)}';
 }

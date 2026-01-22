@@ -12,3 +12,15 @@ DateTime parseAladhanTime({required String raw, required DateTime date}) {
 
   return DateTime(date.year, date.month, date.day, hour, minute);
 }
+
+String formatHms(Duration d) {
+  if (d.isNegative) d = Duration.zero;
+
+  String two(int n) => n.toString().padLeft(2, '0');
+
+  final hours = d.inHours;
+  final minutes = d.inMinutes.remainder(60);
+  final seconds = d.inSeconds.remainder(60);
+
+  return '${two(hours)}:${two(minutes)}:${two(seconds)}';
+}

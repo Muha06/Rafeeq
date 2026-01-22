@@ -1,4 +1,4 @@
-enum SalahPrayer { fajr, dhuhr, asr, maghrib, isha }
+enum SalahPrayer { fajr, dhuhr, asr, maghrib, isha, midnight }
 
 //extra method on enum SalahPrayer that returns label(String) for every salah in the enum
 extension SalahPrayerX on SalahPrayer {
@@ -8,5 +8,6 @@ extension SalahPrayerX on SalahPrayer {
     SalahPrayer.asr => 'Asr',
     SalahPrayer.maghrib => 'Maghrib',
     SalahPrayer.isha => 'Isha',
+    SalahPrayer.midnight => 'Midnight',
   };
 }

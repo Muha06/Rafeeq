@@ -1,11 +1,7 @@
+import 'package:rafeeq/features/salat-times/domain/entities/salah_prayer.dart';
 import 'package:rafeeq/features/salat-times/domain/entities/salah_status.dart';
 import 'package:rafeeq/features/salat-times/domain/entities/salah_times.dart';
-import '../entities/salah_prayer.dart';
 
-/* 
-accepts times & now() then computes current salah, next & previous
-
-*/
 SalahStatusEntity computeSalahStatus({
   required SalahTimesEntity times,
   required DateTime now,
@@ -20,81 +16,103 @@ SalahStatusEntity computeSalahStatus({
 
   // Normal intervals: [prayer_i, prayer_(i+1))
   for (var i = 0; i < order.length - 1; i++) {
-    final cur = order[i]; //current salah
-    final nxt = order[i + 1]; //next
+    final cur = order[i];
+    final nxt = order[i + 1];
 
-    //times of the salat
-    final curStart = times.at(cur); // current salah times
-    final nxtStart = times.at(nxt); //next salah times
+    final curStart = times.at(cur);
+    final nxtStart = times.at(nxt);
 
-    // Guard against bad ordering
     if (!nxtStart.isAfter(curStart)) continue;
 
     if (!now.isBefore(curStart) && now.isBefore(nxtStart)) {
-      final differenceBtwn2Salahs = nxtStart
-          .difference(curStart)
-          .inSeconds; //differences btwn the 2 salahs in seconds
+      final total = nxtStart.difference(curStart).inSeconds;
+      final done = now.difference(curStart).inSeconds;
 
-      final timePassedFromPrev = now.difference(curStart).inSeconds;
-
-      final progress = differenceBtwn2Salahs <= 0
-          ? 0.0
-          : (timePassedFromPrev / differenceBtwn2Salahs).clamp(0.0, 1.0);
+      final progress = total <= 0 ? 0.0 : (done / total).clamp(0.0, 1.0);
 
       return SalahStatusEntity(
         current: cur,
         next: nxt,
         currentStart: curStart,
         nextStart: nxtStart,
-        timeToNext: nxtStart.difference(now), //for the counter
+        timeToNext: nxtStart.difference(now),
         progress: progress,
       );
     }
   }
 
-  // After Isha: next is Fajr tomorrow
+  // Handle night segment: Isha -> Midnight -> Fajr
   final ishaStart = times.at(SalahPrayer.isha);
-  final fajrTomorrow = times.at(SalahPrayer.fajr).add(const Duration(days: 1));
+  final fajrToday = times.at(SalahPrayer.fajr);
+  final fajrTomorrow = fajrToday.add(const Duration(days: 1));
 
+  // Case A: After Isha (today)
   if (!now.isBefore(ishaStart)) {
-    final differenceBtwn2Salahs = fajrTomorrow.difference(ishaStart).inSeconds;
-    final timePassedFromIsha = now.difference(ishaStart).inSeconds;
+    final totalSeconds = fajrTomorrow.difference(ishaStart).inSeconds;
+    final midnight = ishaStart.add(Duration(seconds: totalSeconds ~/ 2));
 
-    final progress = differenceBtwn2Salahs <= 0
-        ? 0.0
-        : (timePassedFromIsha / differenceBtwn2Salahs).clamp(0.0, 1.0);
+    // Isha -> Midnight
+    if (now.isBefore(midnight)) {
+      final total = midnight.difference(ishaStart).inSeconds;
+      final done = now.difference(ishaStart).inSeconds;
+      final progress = total <= 0 ? 0.0 : (done / total).clamp(0.0, 1.0);
+
+      return SalahStatusEntity(
+        current: SalahPrayer.isha,
+        next: SalahPrayer.midnight,
+        currentStart: ishaStart,
+        nextStart: midnight,
+        timeToNext: midnight.difference(now),
+        progress: progress,
+      );
+    }
+
+    // Midnight -> Fajr (tomorrow)
+    final total = fajrTomorrow.difference(midnight).inSeconds;
+    final done = now.difference(midnight).inSeconds;
+    final progress = total <= 0 ? 0.0 : (done / total).clamp(0.0, 1.0);
 
     return SalahStatusEntity(
-      current: SalahPrayer.isha,
+      current: SalahPrayer.midnight,
       next: SalahPrayer.fajr,
-      currentStart: ishaStart,
+      currentStart: midnight,
       nextStart: fajrTomorrow,
       timeToNext: fajrTomorrow.difference(now),
       progress: progress,
     );
   }
 
-  // Before Fajr: current treated as Isha (yesterday), next is Fajr today
-  final ishaYesterday = times
-      .at(SalahPrayer.isha)
-      .subtract(const Duration(days: 1));
-  final fajrToday = times.at(SalahPrayer.fajr);
+  // Case B: Before Fajr (after midnight but before fajr, same night)
+  // Treat current as "midnight", next as Fajr today.
+  final ishaYesterday = ishaStart.subtract(const Duration(days: 1));
+  final totalSeconds = fajrToday.difference(ishaYesterday).inSeconds;
+  final midnight = ishaYesterday.add(Duration(seconds: totalSeconds ~/ 2));
 
-  final differencesBtwn2Salahs = ishaYesterday.difference(fajrToday).inSeconds;
+  // If we're before midnight (rare edge if times mismatch), show Isha -> Midnight
+  if (now.isBefore(midnight)) {
+    final total = midnight.difference(ishaYesterday).inSeconds;
+    final done = now.difference(ishaYesterday).inSeconds;
+    final progress = total <= 0 ? 0.0 : (done / total).clamp(0.0, 1.0);
 
-  final timePassedFromIsha = now.isBefore(ishaYesterday)
-      ? 0
-      : now.difference(ishaYesterday).inSeconds;
+    return SalahStatusEntity(
+      current: SalahPrayer.isha,
+      next: SalahPrayer.midnight,
+      currentStart: ishaYesterday,
+      nextStart: midnight,
+      timeToNext: midnight.difference(now),
+      progress: progress,
+    );
+  }
 
-  final progress = (timePassedFromIsha / differencesBtwn2Salahs).clamp(
-    0.0,
-    1.0,
-  );
+  // Midnight -> Fajr today
+  final total = fajrToday.difference(midnight).inSeconds;
+  final done = now.difference(midnight).inSeconds;
+  final progress = total <= 0 ? 0.0 : (done / total).clamp(0.0, 1.0);
 
   return SalahStatusEntity(
-    current: SalahPrayer.isha,
+    current: SalahPrayer.midnight,
     next: SalahPrayer.fajr,
-    currentStart: ishaYesterday,
+    currentStart: midnight,
     nextStart: fajrToday,
     timeToNext: fajrToday.difference(now),
     progress: progress,
