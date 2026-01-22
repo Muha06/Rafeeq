@@ -23,7 +23,7 @@ class _AllahNamesPageState extends ConsumerState<AllahNamesPage> {
       appBar: AppBar(
         title: const Text("Asma’ul Husna"),
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(100),
+          preferredSize: const Size.fromHeight(80),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
             child: _SearchBar(
@@ -81,13 +81,13 @@ class _AllahNameTile extends ConsumerWidget {
   final int number;
   final String arabic;
   final String transliteration;
-  final String meaning; 
+  final String meaning;
 
   const _AllahNameTile({
     required this.number,
     required this.arabic,
     required this.transliteration,
-    required this.meaning, 
+    required this.meaning,
   });
 
   @override
@@ -107,7 +107,7 @@ class _AllahNameTile extends ConsumerWidget {
           children: [
             _NumberBadge(number: number),
             const SizedBox(width: 12),
-    
+
             // Main content
             Expanded(
               child: Column(
@@ -129,7 +129,7 @@ class _AllahNameTile extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
-    
+
                   // Transliteration
                   Text(
                     transliteration,
@@ -138,7 +138,7 @@ class _AllahNameTile extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(height: 6),
-    
+
                   // Meaning
                   Text(
                     meaning,
@@ -150,9 +150,6 @@ class _AllahNameTile extends ConsumerWidget {
                 ],
               ),
             ),
-    
-            const SizedBox(width: 8),
-            Icon(Icons.chevron_right_rounded, color: theme.iconTheme.color),
           ],
         ),
       ),
@@ -212,6 +209,7 @@ class _SearchBar extends ConsumerWidget {
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: theme.textTheme.bodySmall,
+        labelStyle: const TextStyle(fontSize: 14),
         prefixIcon: Icon(
           Icons.search_rounded,
           color: isDark
@@ -232,72 +230,9 @@ class _SearchBar extends ConsumerWidget {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide.none,
-        ),
-      ),
-    );
-  }
-}
-
-class _NameDetailsSheet extends StatelessWidget {
-  final int number;
-  final String arabic;
-  final String transliteration;
-  final String meaning;
-
-  const _NameDetailsSheet({
-    required this.number,
-    required this.arabic,
-    required this.transliteration,
-    required this.meaning,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(18, 8, 18, 24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                _NumberBadge(number: number),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    transliteration,
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 14),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                arabic,
-                textDirection: TextDirection.rtl,
-                style: theme.textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              meaning,
-              style: theme.textTheme.bodyLarge?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.78),
-                height: 1.35,
-              ),
-            ),
-            const SizedBox(height: 18),
-          ],
+          borderSide: BorderSide(
+            color: isDark ? AppDarkColors.border : AppLightColors.iconPrimary,
+          ),
         ),
       ),
     );
