@@ -17,8 +17,8 @@ class GreetingsRow extends ConsumerWidget {
       children: [
         Image.asset(
           isDark
-              ? 'assets/images/salam_amber.png'
-              : 'assets/images/salam_black.png',
+              ? 'assets/images/home/salam_amber.png'
+              : 'assets/images/home/salam_black.png',
           height: isDark ? 30 : 40,
         ),
 

@@ -41,7 +41,7 @@ class AppDarkColors {
   static const Color border = Color(0xFF123238);
 
   // Bottom bar / sheets (match your surface stack)
-  static const Color bottomBar = darkSurfaceSolid;
+  static const Color bottomBar = darkSurface;
   static const Color bottomSheet = Color(0xFF081214); // slightly closer to bg
 
   // ⚠️ Feedback (match the palette; less “random red/green”)

@@ -33,6 +33,8 @@ class _HomePageState extends ConsumerState<HomePage> {
     SalahPrayer.asr: 'assets/salat/asr.jpeg',
     SalahPrayer.maghrib: 'assets/salat/maghrib.jpeg',
     SalahPrayer.isha: 'assets/salat/isha.jpeg',
+    SalahPrayer.midnight: 'assets/salat/isha2.jpeg',
+
   };
 
   @override
