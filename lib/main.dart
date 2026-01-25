@@ -7,6 +7,7 @@ import 'package:rafeeq/core/themes/app_theme.dart';
 import 'package:rafeeq/features/Quran/data/models/ayah_hive.dart';
 import 'package:rafeeq/features/Quran/data/models/surah_hive.dart';
 import 'package:rafeeq/app/tabs_screen.dart';
+import 'package:rafeeq/features/asma_ul_husna/data/models/hive/name_hive_model.dart';
 import 'package:rafeeq/features/bookmarks/data/models/dhikr_bookmark_hive_model.dart';
 import 'package:rafeeq/features/bookmarks/data/models/quran_bookmark_hive_model.dart';
 import 'package:rafeeq/features/settings/presentation/provider/notifcation_provider.dart';
@@ -25,7 +26,8 @@ Future<void> main() async {
   Hive.registerAdapter(QuranBookmarkHiveModelAdapter());
   Hive.registerAdapter(DhikrBookmarkHiveModelAdapter());
   Hive.registerAdapter(CachedSalahTimesHiveAdapter());
-
+Hive.registerAdapter(AllahNameHiveAdapter());  
+ 
   //open boxes
   await Hive.openBox<SurahHive>('surahs');
   await Hive.openBox<AyahHive>('ayahs');
@@ -35,6 +37,7 @@ Future<void> main() async {
   await Hive.openBox<QuranBookmarkHiveModel>('quran_bookmarks_box');
   await Hive.openBox<DhikrBookmarkHiveModel>('dhikr_bookmarks_box');
   await Hive.openBox<CachedSalahTimesHive>('salah_times_cache_box');
+  await Hive.openBox<AllahNameHive>('allah_names_box');
 
   //------------------NOTIFICATIONS---------------//
   await NotificationService.instance.init(); //init
