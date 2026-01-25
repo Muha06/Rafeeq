@@ -57,6 +57,9 @@ flutter:
     - assets/images/adhkar/mosque.png
 
     - assets/images/quran/surah_details.jpeg
+    - assets/images/quran/surah_badge.png
+    - assets/images/quran/surah_badge2.png
+    - assets/images/quran/surah_details.jpeg
 
     - assets/images/salat/fajr.jpeg
     - assets/images/salat/daytime.jpeg

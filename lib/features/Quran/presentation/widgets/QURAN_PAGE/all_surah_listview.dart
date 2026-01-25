@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/core/functions/clean_arabic_text.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/features/Quran/domain/entities/surah.dart';
@@ -82,17 +83,18 @@ class SurahTile extends ConsumerWidget {
             );
           },
           leading: CircleAvatar(
-            backgroundColor: isDark
-                ? AppDarkColors.amber
-                : AppLightColors.amberSoft,
+            backgroundImage: const AssetImage(
+              'assets/images/quran/surah_badge.png',
+            ),
             radius: 20,
             child: Text(
               surah.id.toString(),
-              style: TextStyle(
+              style: theme.textTheme.bodySmall!.copyWith(
                 color: isDark
                     ? AppDarkColors.darkBackground
                     : AppLightColors.textPrimary,
                 fontWeight: FontWeight.bold,
+                fontSize: 16,
               ),
             ),
           ),
@@ -109,8 +111,10 @@ class SurahTile extends ConsumerWidget {
             style: theme.textTheme.bodySmall,
           ),
           trailing: Text(
-            surah.nameArabic.toString(),
-            style: theme.textTheme.bodyLarge,
+            cleanAyah(surah.nameArabic.toString()),
+            style: theme.textTheme.bodyLarge!.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),
