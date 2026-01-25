@@ -4,6 +4,7 @@ import 'package:rafeeq/core/functions/clean_arabic_text.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/features/Quran/domain/entities/surah.dart';
+import 'package:rafeeq/features/Quran/presentation/pages/surah_page.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_surahs_provider.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/SURAH_PAGE/surah_pageview_wrapper.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
@@ -78,7 +79,8 @@ class SurahTile extends ConsumerWidget {
               context,
               MaterialPageRoute(
                 builder: (context) =>
-                    SurahPagerPage(surahs: surahs, initialIndex: index),
+                    // SurahPagerPage(surahs: surahs, initialIndex: index),
+                    FullSurahPage(surah: surah),
               ),
             );
           },

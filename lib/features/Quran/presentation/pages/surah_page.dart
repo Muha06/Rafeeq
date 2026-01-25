@@ -32,7 +32,7 @@ class FullSurahPage extends ConsumerStatefulWidget {
 class _FullSurahPageState extends ConsumerState<FullSurahPage>
     with AutomaticKeepAliveClientMixin {
   @override
-  bool get wantKeepAlive => false;
+  bool get wantKeepAlive => true;
 
   // ScrollablePositionedList controllers
   final ItemScrollController itemScrollController = ItemScrollController();
@@ -335,8 +335,9 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
 
     final theme = Theme.of(context);
     final isDark = ref.watch(isDarkProvider);
-    final surahId = widget.surah.id;
+    final surah = widget.surah;
 
+    final surahId = widget.surah.id;
     final ayahsAsync = ref.watch(ayahsFutureProvider(surahId));
 
     return PopScope(
@@ -360,12 +361,12 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                widget.surah.nameTransliteration,
+                surah.nameTransliteration,
                 style: theme.textTheme.titleLarge!.copyWith(fontSize: 16),
               ),
               const SizedBox(height: 4),
               Text(
-                widget.surah.nameEnglish,
+                surah.nameEnglish,
                 style: theme.textTheme.bodySmall!.copyWith(height: 1),
               ),
             ],
@@ -409,21 +410,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
                     horizontal: 16.0,
                     vertical: 16,
                   ),
-                  child: Column(
-                    children: [
-                      SurahDetails(surah: widget.surah, isDark: isDark),
-                      const SizedBox(height: 16),
-
-                      if (surahId != 9) ...[
-                        Image.asset(
-                          isDark
-                              ? 'assets/images/quran/bismillah_dark.png'
-                              : 'assets/images/quran/bismillah_light.png',
-                          height: 40,
-                        ),
-                      ],
-                    ],
-                  ),
+                  child: SurahDetails(surah: widget.surah, isDark: isDark),
                 );
               }
               return AyahTile(ayah: ayahs[index - 1]);
