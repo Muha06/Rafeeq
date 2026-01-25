@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/core/themes/dark_colors.dart';
-import 'package:rafeeq/core/themes/light_colors.dart';
-import 'package:rafeeq/features/Quran/presentation/riverpod/surah_settings_provider.dart';
+ import 'package:rafeeq/features/Quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class SurahSettingsSheet extends ConsumerStatefulWidget {
@@ -33,6 +31,11 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
       surahSettingsProvider.select((s) => s.autoScrollSpeed),
     );
 
+    final titleTextstyle = theme.textTheme.labelLarge!.copyWith(
+      fontSize: 18,
+      fontWeight: FontWeight.w300,
+    );
+
     return AnimatedSize(
       duration: Durations.medium3,
       curve: Curves.easeInOut,
@@ -59,10 +62,7 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
                 SwitchListTile(
                   value: showTranslation,
                   contentPadding: EdgeInsets.zero,
-                  title: Text(
-                    'Show Translation',
-                    style: theme.textTheme.labelLarge!.copyWith(fontSize: 18),
-                  ),
+                  title: Text('Show Translation', style: titleTextstyle),
                   onChanged: (value) {
                     sNotifier.setShowTranslation(value);
                   },
@@ -73,11 +73,7 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
                   const SizedBox(height: 8),
                   Text(
                     'Translation Font Size: ${translationSize.toInt()}',
-                    style: theme.textTheme.bodyMedium!.copyWith(
-                      // color: isDark ? Colors.white : Colors.black,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w100,
-                    ),
+                    style: titleTextstyle,
                   ),
                   Slider(
                     min: 12,
@@ -87,11 +83,9 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
                       sNotifier.setTranslationFont(value);
                     },
                   ),
-                  const SizedBox(height: 8),
                 ],
               ],
             ),
-            const SizedBox(height: 16),
 
             // Font size slider (Arabic)
             _buildSettingBorder(
@@ -99,11 +93,7 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
               children: [
                 Text(
                   'Arabic Font Size: ${arabicFontSize.toInt()}',
-                  style: theme.textTheme.bodyMedium!.copyWith(
-                    // color: isDark ? Colors.white : Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w100,
-                  ),
+                  style: titleTextstyle,
                 ),
                 Slider(
                   min: 16,
@@ -115,19 +105,11 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
 
             _buildSettingBorder(
               isDark: isDark,
               children: [
-                Text(
-                  'Auto-scroll speed',
-                  style: theme.textTheme.bodyMedium!.copyWith(
-                    // color: isDark ? Colors.white : Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w100,
-                  ),
-                ),
+                Text('Auto-scroll speed', style: titleTextstyle),
                 Slider(
                   min: 10,
                   max: 120,
@@ -170,19 +152,16 @@ Widget _buildSettingBorder({
   required List<Widget> children,
 }) {
   return Container(
-    padding: const EdgeInsets.all(8),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(16),
-      color: isDark ? AppDarkColors.border : AppLightColors.lightSurface2,
-      border: Border.all(
-        color: isDark ? AppDarkColors.divider : AppLightColors.divider,
-      ),
-    ),
+    // padding: const EdgeInsets.all(8),
+    decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
-      children: children,
+      children: [
+        ...children,
+        // Divider(color: isDark ? AppDarkColors.divider : AppLightColors.divider),
+      ],
     ),
   );
 }

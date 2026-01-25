@@ -32,7 +32,7 @@ class AppSnackBar {
             fontSize: 14,
           ),
         ),
-        // duration: duration,
+        duration: duration,
       ),
     );
   }
@@ -47,7 +47,7 @@ class AppSnackBar {
     Duration duration = const Duration(seconds: 3),
   }) {
     final theme = Theme.of(context);
-    final darkBg = AppLightColors.lightSurface;
+    final darkBg = AppDarkColors.darkSurfaceSolid;
     final lightBg = AppLightColors.snackbarInfoBg;
 
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -55,11 +55,16 @@ class AppSnackBar {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: isDark ? darkBg : lightBg,
+        shape: Border(
+          top: BorderSide(
+            color: isDark ? AppDarkColors.border : AppLightColors.border,
+          ),
+        ),
         persist: false,
         content: Text(
           message,
           style: theme.textTheme.bodySmall!.copyWith(
-            color: isDark ? AppDarkColors.darkBackground : Colors.white,
+            color: isDark ? AppDarkColors.textPrimary : Colors.white,
             fontWeight: FontWeight.bold,
             fontSize: 14,
           ),

@@ -7,8 +7,7 @@ import 'package:rafeeq/features/asma_ul_husna/data/repository/repository_impl.da
 import 'package:rafeeq/features/asma_ul_husna/domain/entities/name_entity.dart';
 import 'package:rafeeq/features/asma_ul_husna/domain/repository/repository.dart';
 import 'package:dio/dio.dart';
-import 'package:rafeeq/features/settings/presentation/provider/notifcation_provider.dart';
-
+ 
 final dioProvider = Provider<Dio>((ref) {
   return Dio(
     BaseOptions(

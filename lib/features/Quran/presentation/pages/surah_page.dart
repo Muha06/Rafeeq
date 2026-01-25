@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
+import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/core/widgets/snackbars.dart';
 import 'package:rafeeq/features/Quran/domain/entities/last_read_ayah.dart';
@@ -14,7 +15,7 @@ import 'package:rafeeq/features/Quran/presentation/riverpod/last_read_provider.d
 import 'package:rafeeq/features/Quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/SURAH_PAGE/ayah_tile.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/SURAH_PAGE/surah_details.dart';
-import 'package:rafeeq/features/Quran/presentation/widgets/SURAH_PAGE/surah_content_settings.dart';
+import 'package:rafeeq/features/Quran/presentation/widgets/SURAH_PAGE/surah_settings.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
@@ -214,6 +215,112 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
     }
   }
 
+  void _openJumpToAyahSheet(BuildContext context) {
+    final theme = Theme.of(context);
+    final controller = TextEditingController();
+    final isDark = ref.watch(isDarkProvider);
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (ctx) {
+        final bottom = MediaQuery.of(ctx).viewInsets.bottom;
+
+        return Padding(
+          padding: EdgeInsets.fromLTRB(16, 16, 16, bottom + 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Text('Jump to Ayah', style: theme.textTheme.titleMedium),
+              ),
+              const SizedBox(height: 16),
+
+              TextField(
+                controller: controller,
+                keyboardType: TextInputType.number,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(fontSize: 14),
+                decoration: InputDecoration(
+                  hintText: 'Ayah number (1 - ${widget.surah.versesCount})',
+                  hintStyle: theme.textTheme.bodySmall?.copyWith(
+                    fontSize: 13,
+                    color: Colors.grey,
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 12,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide.none,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                      color: isDark
+                          ? AppDarkColors.border
+                          : AppLightColors.border,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.primary.withOpacity(0.6),
+                      width: 1.2,
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 12),
+
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        final raw = controller.text.trim();
+                        final n = int.tryParse(raw);
+
+                        if (n == null ||
+                            n < 1 ||
+                            n > widget.surah.versesCount) {
+                          AppSnackBar.showSimple(
+                            context: ctx,
+                            isDark: ref.read(isDarkProvider),
+                            message:
+                                'Enter a valid ayah (1 - ${widget.surah.versesCount})',
+                          );
+                          return;
+                        }
+
+                        Navigator.pop(ctx); // close sheet
+                        await _jumpToAyah(n, suppressSave: true);
+                      },
+                      child: const Text('Jump'),
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 8),
+              Text(
+                'Tip: You can also use “Go” from last-read snackbar.',
+                style: theme.textTheme.bodySmall,
+              ),
+              const SizedBox(height: 8),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   void dispose() {
     _autoTimer?.cancel();
@@ -235,6 +342,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
     return PopScope(
       onPopInvokedWithResult: (didPop, result) async {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).clearSnackBars();
         //finally save the last read ayah
         if (temporaryLastReadAyah != null) {
           ref
@@ -273,6 +381,12 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
 
             IconButton(
               onPressed: () {
+                _openJumpToAyahSheet(context);
+              },
+              icon: const Icon(Icons.pin_drop_outlined),
+            ),
+            IconButton(
+              onPressed: () {
                 showModalBottomSheet(
                   context: context,
                   isScrollControlled: true,
@@ -295,7 +409,21 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
                     horizontal: 16.0,
                     vertical: 16,
                   ),
-                  child: SurahDetails(surah: widget.surah, isDark: isDark),
+                  child: Column(
+                    children: [
+                      SurahDetails(surah: widget.surah, isDark: isDark),
+                      const SizedBox(height: 16),
+
+                      if (surahId != 9) ...[
+                        Image.asset(
+                          isDark
+                              ? 'assets/images/quran/bismillah_dark.png'
+                              : 'assets/images/quran/bismillah_light.png',
+                          height: 40,
+                        ),
+                      ],
+                    ],
+                  ),
                 );
               }
               return AyahTile(ayah: ayahs[index - 1]);

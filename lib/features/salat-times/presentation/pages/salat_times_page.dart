@@ -19,7 +19,7 @@ class SalahTimingsPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Salah Timings'),
+        title: const Text('Today\'s Timings'),
         bottom: appBarBottomDivider(context),
       ),
       body: timesAsync.when(
