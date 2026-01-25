@@ -6,4 +6,12 @@ abstract class SalahTimesRepository {
     required String country,
     int method,
   });
+
+   Future<SalahTimesEntity> getTodayByCoords({
+    required double latitude,
+    required double longitude,
+    required String city,
+    required String country,
+    int method,
+  });
 }

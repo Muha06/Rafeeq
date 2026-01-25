@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:rafeeq/app/notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -52,7 +51,6 @@ class SalahNotifications {
         .ensureExactAlarmsAllowed();
 
     final now = tz.TZDateTime.now(tz.local);
-    debugPrint(now.toString());
 
     for (final prayer in _ids.keys) {
       final raw = times.at(prayer);
@@ -80,13 +78,13 @@ class SalahNotifications {
             ? AndroidScheduleMode.exactAllowWhileIdle
             : AndroidScheduleMode.inexactAllowWhileIdle,
       );
-      final pending = await plugin.pendingNotificationRequests();
-      debugPrint('🔔 Pending notifications: ${pending.length}');
-      for (final p in pending) {
-        debugPrint(
-          '• id=${p.id}, title=${p.title}, body=${p.body}, payload=${p.payload}',
-        );
-      }
+      // final pending = await plugin.pendingNotificationRequests();
+      // debugPrint('🔔 Pending notifications: ${pending.length}');
+      // for (final p in pending) {
+      //   debugPrint(
+      //     '• id=${p.id}, title=${p.title}, body=${p.body}, payload=${p.payload}',
+      //   );
+      // }
     }
   }
 }

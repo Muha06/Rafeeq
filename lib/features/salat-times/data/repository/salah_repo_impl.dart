@@ -12,6 +12,52 @@ class SalahTimesRepositoryImpl implements SalahTimesRepository {
   const SalahTimesRepositoryImpl({required this.remote, required this.local});
 
   @override
+  Future<SalahTimesEntity> getTodayByCoords({
+    required double latitude,
+    required double longitude,
+    required String city,
+    required String country,
+    int method = 3,
+  }) async {
+    final now = DateTime.now();
+    final normalized = DateTime(now.year, now.month, now.day);
+
+    // 1) Cache first (still keying by city/country/method/date)
+    final localCache = local.getToday(
+      date: normalized,
+      city: city,
+      country: country,
+      method: method,
+    );
+
+    if (localCache != null) {
+      return localCache.toEntity();
+    }
+
+    // 2) Remote fetch by coords
+    final model = await remote.fetchTodayByCoords(
+      latitude: latitude,
+      longitude: longitude,
+      method: method,
+    );
+    debugPrint('$latitude $longitude');
+
+    final entity = model.toEntity();
+
+    // 3) Save to cache
+    await local.save(
+      CachedSalahTimesHiveX.fromEntity(
+        entity: entity,
+        city: city,
+        country: country,
+        method: method,
+      ),
+    );
+
+    return entity;
+  }
+
+  @override
   Future<SalahTimesEntity> getTodayByCity({
     required String city,
     required String country,
@@ -29,10 +75,8 @@ class SalahTimesRepositoryImpl implements SalahTimesRepository {
     );
 
     if (localCache != null) {
-      debugPrint('✅ Salah cache HIT');
       return localCache.toEntity();
     }
- 
 
     // 2) Remote fetch
     final model = await remote.fetchTodayByCity(
@@ -43,7 +87,7 @@ class SalahTimesRepositoryImpl implements SalahTimesRepository {
 
     final entity = model.toEntity();
 
-    // 3) Save to cache  
+    // 3) Save to cache
     await local.save(
       CachedSalahTimesHiveX.fromEntity(
         entity: entity,

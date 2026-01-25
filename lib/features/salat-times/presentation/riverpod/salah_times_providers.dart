@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:rafeeq/app/salat_notifications.dart';
+import 'package:rafeeq/core/location/presentation/provider/user_location_provider.dart';
 import 'package:rafeeq/features/salat-times/data/datasources/salah_remote_ds.dart';
 import 'package:rafeeq/features/salat-times/data/repository/salah_repo_impl.dart';
 import 'package:rafeeq/features/salat-times/domain/entities/salah_times.dart';
@@ -31,18 +32,25 @@ final getTodaySalahTimesProvider = Provider<GetTodaySalahTimes>((ref) {
   return GetTodaySalahTimes(ref.read(salahTimesRepositoryProvider));
 });
 
-/// MVP settings (later move to Hive/settings)
-final salahCityProvider = Provider<String>((ref) => 'Nairobi');
-final salahCountryProvider = Provider<String>((ref) => 'Kenya');
 final salahMethodProvider = Provider<int>((ref) => 3);
 
-/// 5) Fetch today timings (Entity)
 final todaySalahTimesProvider = FutureProvider<SalahTimesEntity>((ref) async {
   final usecase = ref.read(getTodaySalahTimesProvider);
+  final loc = await ref.watch(userLocationProvider.future);
+
+  // fallback if reverse geocode returns empty/Unknown
+  final city = (loc.city.trim().isEmpty || loc.city == 'Unknown')
+      ? 'Nairobi'
+      : loc.city;
+  final country = (loc.country.trim().isEmpty || loc.country == 'Unknown')
+      ? 'Kenya'
+      : loc.country;
 
   return usecase.call(
-    city: ref.read(salahCityProvider),
-    country: ref.read(salahCountryProvider),
+    latitude: loc.lat,
+    longitude: loc.lng,
+    city: city,
+    country: country,
     method: ref.read(salahMethodProvider),
   );
 });

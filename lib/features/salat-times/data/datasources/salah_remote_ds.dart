@@ -8,6 +8,12 @@ abstract class SalahRemoteDataSource {
     required String country,
     int method,
   });
+
+  Future<AladhanTimingsModel> fetchTodayByCoords({
+    required double latitude,
+    required double longitude,
+    int method,
+  });
 }
 
 class SalahRemoteDataSourceImpl implements SalahRemoteDataSource {
@@ -36,8 +42,42 @@ class SalahRemoteDataSourceImpl implements SalahRemoteDataSource {
     final data = jsonMap['data'] as Map<String, dynamic>;
 
     final timingsJson = data['timings'] as Map<String, dynamic>; //salat timings
-    final metaJson = data['meta'] as Map<String, dynamic>;// meatadata: timezones
-    final dateJson = data['date'] as Map<String, dynamic>;// date when sending report
+    final metaJson =
+        data['meta'] as Map<String, dynamic>; // meatadata: timezones
+    final dateJson =
+        data['date'] as Map<String, dynamic>; // date when sending report
+
+    return AladhanTimingsModel.fromJson(
+      timingsJson: timingsJson,
+      metaJson: metaJson,
+      dateJson: dateJson,
+    );
+  }
+
+  //By coords
+  @override
+  Future<AladhanTimingsModel> fetchTodayByCoords({
+    required double latitude,
+    required double longitude,
+    int method = 3,
+  }) async {
+    final uri = Uri.https('api.aladhan.com', '/v1/timings', {
+      'latitude': latitude.toString(),
+      'longitude': longitude.toString(),
+      'method': method.toString(),
+    });
+
+    final res = await client.get(uri);
+    if (res.statusCode != 200) {
+      throw Exception('Failed to fetch timings: ${res.statusCode}');
+    }
+
+    final jsonMap = json.decode(res.body) as Map<String, dynamic>;
+    final data = jsonMap['data'] as Map<String, dynamic>;
+
+    final timingsJson = data['timings'] as Map<String, dynamic>;
+    final metaJson = data['meta'] as Map<String, dynamic>;
+    final dateJson = data['date'] as Map<String, dynamic>;
 
     return AladhanTimingsModel.fromJson(
       timingsJson: timingsJson,
