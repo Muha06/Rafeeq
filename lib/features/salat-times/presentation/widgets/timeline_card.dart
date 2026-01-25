@@ -306,7 +306,7 @@ class ShowTodayTimesChip extends StatelessWidget {
                 ),
                 const SizedBox(width: 6),
                 Text(
-                  'Show today times',
+                  "See today’s times",
                   style: Theme.of(context).textTheme.labelLarge?.copyWith(
                     color: Colors.white.withOpacity(0.95),
                     fontWeight: FontWeight.w700,
