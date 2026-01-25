@@ -23,18 +23,21 @@ class CachedSalahTimesHiveAdapter extends TypeAdapter<CachedSalahTimesHive> {
       method: fields[3] as int,
       timezone: fields[4] as String,
       fajr: fields[5] as DateTime,
-      dhuhr: fields[6] as DateTime,
-      asr: fields[7] as DateTime,
-      maghrib: fields[8] as DateTime,
-      isha: fields[9] as DateTime,
-      cachedAt: fields[10] as DateTime,
+      sunrise: fields[6] as DateTime,
+      dhuhr: fields[8] as DateTime,
+      dhuha: fields[7] as DateTime,
+      asr: fields[9] as DateTime,
+      maghrib: fields[10] as DateTime,
+      isha: fields[11] as DateTime,
+      tahajjud: fields[12] as DateTime,
+      cachedAt: fields[13] as DateTime,
     );
   }
 
   @override
   void write(BinaryWriter writer, CachedSalahTimesHive obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(14)
       ..writeByte(0)
       ..write(obj.date)
       ..writeByte(1)
@@ -48,14 +51,20 @@ class CachedSalahTimesHiveAdapter extends TypeAdapter<CachedSalahTimesHive> {
       ..writeByte(5)
       ..write(obj.fajr)
       ..writeByte(6)
-      ..write(obj.dhuhr)
+      ..write(obj.sunrise)
       ..writeByte(7)
-      ..write(obj.asr)
+      ..write(obj.dhuha)
       ..writeByte(8)
-      ..write(obj.maghrib)
+      ..write(obj.dhuhr)
       ..writeByte(9)
-      ..write(obj.isha)
+      ..write(obj.asr)
       ..writeByte(10)
+      ..write(obj.maghrib)
+      ..writeByte(11)
+      ..write(obj.isha)
+      ..writeByte(12)
+      ..write(obj.tahajjud)
+      ..writeByte(13)
       ..write(obj.cachedAt);
   }
 

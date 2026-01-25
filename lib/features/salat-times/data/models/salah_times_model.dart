@@ -1,29 +1,33 @@
 class AladhanTimingsModel {
   final String fajr;
+  final String sunrise; //will calculate dhuha
   final String dhuhr;
   final String asr;
   final String maghrib;
   final String isha;
+  final String tahajjud;
 
   final String timezone; // meta.timezone
   final DateTime date; // derived from data.date.gregorian.date (dd-mm-yyyy)
 
   const AladhanTimingsModel({
     required this.fajr,
+    required this.sunrise,
     required this.dhuhr,
     required this.asr,
     required this.maghrib,
     required this.isha,
+    required this.tahajjud,
 
     required this.timezone,
     required this.date,
   });
 
-//from api 
+  //from api
   factory AladhanTimingsModel.fromJson({
     required Map<String, dynamic> timingsJson, //salah timings
     required Map<String, dynamic> metaJson, //Time zone
-    required Map<String, dynamic> dateJson,// date
+    required Map<String, dynamic> dateJson, // date
   }) {
     // AlAdhan gregorian date often looks like "20-01-2026"
     final greg = dateJson['gregorian'] as Map<String, dynamic>;
@@ -35,10 +39,12 @@ class AladhanTimingsModel {
 
     return AladhanTimingsModel(
       fajr: timingsJson['Fajr'] as String,
+      sunrise: timingsJson['Sunrise'] as String,
       dhuhr: timingsJson['Dhuhr'] as String,
       asr: timingsJson['Asr'] as String,
       maghrib: timingsJson['Maghrib'] as String,
       isha: timingsJson['Isha'] as String,
+      tahajjud: timingsJson['Lastthird'] as String,
       timezone: metaJson['timezone'] as String,
       date: DateTime(year, month, day),
     );

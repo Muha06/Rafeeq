@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import '../models/cached_salah_times_hive.dart';
+import '../models/hive/cached_salah_times_hive.dart';
 
 abstract class SalahCacheLocalDataSource {
   CachedSalahTimesHive? getToday({

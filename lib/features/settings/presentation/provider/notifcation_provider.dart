@@ -108,7 +108,6 @@ Future<void> setAdhkarNotif(WidgetRef ref, bool enabled) async {
 
 final adhkarNotifUpdatingProvider = StateProvider<bool>((_) => false);
 
-
 final salahDailyReschedulerProvider = Provider<void>((ref) {
   final box = ref.read(settingsBoxProvider);
   final enabled = box.get(kSalahEnabled, defaultValue: true) as bool;

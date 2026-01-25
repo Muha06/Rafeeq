@@ -55,12 +55,15 @@ flutter:
     - assets/images/adhkar/mosque.png
 
     - assets/images/quran/surah_details.jpeg
-    - assets/salat/fajr.jpeg
-    - assets/salat/dhuhr.jpeg
-    - assets/salat/asr.jpeg
-    - assets/salat/maghrib.jpeg
-    - assets/salat/isha.jpeg
-    - assets/salat/isha_2.jpeg
+
+    - assets/images/salat/fajr.jpeg
+    - assets/images/salat/daytime.jpeg
+    - assets/images/salat/daytime_2.jpeg
+    - assets/images/salat/daytime_3.jpeg
+    - assets/images/salat/dhuhr.jpeg 
+    - assets/images/salat/maghrib.jpeg
+    - assets/images/salat/isha.jpeg
+    - assets/images/salat/isha_2.jpeg
 
     - .env
 

@@ -34,10 +34,13 @@ class SalahTimingsPage extends ConsumerWidget {
         data: (times) {
           final order = const [
             SalahPrayer.fajr,
+            SalahPrayer.sunrise,
+            SalahPrayer.dhuha,
             SalahPrayer.dhuhr,
             SalahPrayer.asr,
             SalahPrayer.maghrib,
             SalahPrayer.isha,
+            SalahPrayer.tahajjud,
           ];
 
           return ListView(

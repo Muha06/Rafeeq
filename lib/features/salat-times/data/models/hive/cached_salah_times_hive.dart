@@ -23,18 +23,27 @@ class CachedSalahTimesHive extends HiveObject {
   final DateTime fajr;
 
   @HiveField(6)
-  final DateTime dhuhr;
+  final DateTime sunrise;
 
   @HiveField(7)
-  final DateTime asr;
+  final DateTime dhuha;
 
   @HiveField(8)
-  final DateTime maghrib;
+  final DateTime dhuhr;
 
   @HiveField(9)
-  final DateTime isha;
+  final DateTime asr;
 
   @HiveField(10)
+  final DateTime maghrib;
+
+  @HiveField(11)
+  final DateTime isha;
+
+  @HiveField(12)
+  final DateTime tahajjud;
+
+  @HiveField(13)
   final DateTime cachedAt;
 
   CachedSalahTimesHive({
@@ -44,10 +53,13 @@ class CachedSalahTimesHive extends HiveObject {
     required this.method,
     required this.timezone,
     required this.fajr,
+    required this.sunrise,
     required this.dhuhr,
+    required this.dhuha,
     required this.asr,
     required this.maghrib,
     required this.isha,
+    required this.tahajjud,
     required this.cachedAt,
   });
 
