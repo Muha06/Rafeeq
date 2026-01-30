@@ -2,9 +2,11 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
 class LocationGpsDataSource {
-  Future<Position> getPosition() async {
+  Future<Position> getCurrentPosition() async {
     final enabled = await Geolocator.isLocationServiceEnabled();
-    if (!enabled) throw Exception('Location services are disabled');
+    if (!enabled) {
+      await Geolocator.openLocationSettings();
+    }
 
     var perm = await Geolocator.checkPermission();
     if (perm == LocationPermission.denied) {
@@ -17,6 +19,7 @@ class LocationGpsDataSource {
 
     return Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
+      timeLimit: const Duration(seconds: 60),
     );
   }
 

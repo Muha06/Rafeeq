@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/core/location/domain/user_location.dart';
+import 'package:rafeeq/core/location/presentation/provider/user_location_provider.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
@@ -8,14 +10,20 @@ import 'package:rafeeq/features/settings/presentation/provider/theme_provider.da
 import '../../domain/entities/salah_prayer.dart';
 import '../riverpod/salah_times_providers.dart';
 
-class SalahTimingsPage extends ConsumerWidget {
+class SalahTimingsPage extends ConsumerStatefulWidget {
   const SalahTimingsPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SalahTimingsPage> createState() => _SalahTimingsPageState();
+}
+
+class _SalahTimingsPageState extends ConsumerState<SalahTimingsPage> {
+  @override
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     final timesAsync = ref.watch(todaySalahTimesProvider);
+    final userLoc = ref.watch(userLocationProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -48,7 +56,11 @@ class SalahTimingsPage extends ConsumerWidget {
             children: [
               _HeaderChipRow(
                 dateText: _formatDate(times.date),
-                timezone: times.timezone,
+                timezone: userLoc.when(
+                  data: (loc) => '${loc?.country}/${loc?.city}',
+                  error: (error, stackTrace) => '',
+                  loading: () => 'loading',
+                ),
               ),
               const SizedBox(height: 12),
 

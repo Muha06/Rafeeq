@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:rafeeq/app/salat_notifications.dart';
@@ -38,19 +39,19 @@ final todaySalahTimesProvider = FutureProvider<SalahTimesEntity>((ref) async {
   final usecase = ref.read(getTodaySalahTimesProvider);
   final loc = await ref.watch(userLocationProvider.future);
 
-  // fallback if reverse geocode returns empty/Unknown
-  final city = (loc.city.trim().isEmpty || loc.city == 'Unknown')
-      ? 'Nairobi'
-      : loc.city;
-  final country = (loc.country.trim().isEmpty || loc.country == 'Unknown')
-      ? 'Kenya'
-      : loc.country;
+  debugPrint(
+    'Salat times provider fetching for location: ${loc?.lat},${loc?.lng},${loc?.country},${loc?.city}',
+  );
 
+  if (loc == null) {
+    throw Exception('Location not set. Tap refresh to detect your location.');
+  }
+  
   return usecase.call(
     latitude: loc.lat,
     longitude: loc.lng,
-    city: city,
-    country: country,
+    city: loc.city,
+    country: loc.country,
     method: ref.read(salahMethodProvider),
   );
 });

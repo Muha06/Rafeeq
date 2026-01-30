@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
 import 'package:rafeeq/core/location/domain/user_location.dart';
 
@@ -13,8 +14,12 @@ class LocationLocalDataSource {
   static const _kIsAuto = 'user_loc_is_auto';
 
   Future<UserLocation?> read() async {
-    final lat = settingsBox.get(_kLat) as double?;
-    final lng = settingsBox.get(_kLng) as double?;
+    final latRaw = settingsBox.get(_kLat);
+    final lngRaw = settingsBox.get(_kLng);
+
+    final lat = (latRaw is num) ? latRaw.toDouble() : null;
+    final lng = (lngRaw is num) ? lngRaw.toDouble() : null;
+
     if (lat == null || lng == null) return null;
 
     return UserLocation(
@@ -34,6 +39,7 @@ class LocationLocalDataSource {
     await settingsBox.put(_kCountry, loc.country);
     await settingsBox.put(_kTimezone, loc.timezone);
     await settingsBox.put(_kIsAuto, loc.isAuto);
+    debugPrint('Hive wrote');
   }
 
   Future<void> clear() async {

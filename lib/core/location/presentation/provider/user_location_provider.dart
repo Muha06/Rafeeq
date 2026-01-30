@@ -1,12 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:rafeeq/core/location/data/location_gps_ds.dart';
-import 'package:rafeeq/core/location/data/user_loc_local.ds.dart';
+import 'package:rafeeq/core/location/data/location_local_ds.dart';
 import 'package:rafeeq/core/location/domain/user_location.dart';
 import 'package:rafeeq/core/location/domain/user_location_repo.dart';
+import 'package:rafeeq/features/settings/presentation/provider/notifcation_provider.dart';
 
 // You already have something like this in your app:
-final settingsBoxProvider = Provider<Box>((ref) => Hive.box('settingsBox'));
 
 final locationRepositoryProvider = Provider<LocationRepository>((ref) {
   final box = ref.read(settingsBoxProvider);
@@ -16,14 +16,28 @@ final locationRepositoryProvider = Provider<LocationRepository>((ref) {
   );
 });
 
-final userLocationProvider = FutureProvider<UserLocation>((ref) async {
-  final repo = ref.read(locationRepositoryProvider);
-  return repo.getCachedLocation();
-});
+final userLocationProvider =
+    AsyncNotifierProvider<UserLocationNotifier, UserLocation?>(
+      UserLocationNotifier.new,
+    );
 
-final refreshUserLocationProvider = FutureProvider<UserLocation>((ref) async {
-  final repo = ref.read(locationRepositoryProvider);
-  final loc = await repo.refreshAutoLocation();
-  ref.invalidate(userLocationProvider); // force refetch everywhere
-  return loc;
-});
+class UserLocationNotifier extends AsyncNotifier<UserLocation?> {
+  @override
+  Future<UserLocation?> build() async {
+    final repo = ref.read(locationRepositoryProvider);
+
+    return repo.getCachedLocation();
+  }
+
+  Future<void> refresh() async {
+    state = const AsyncLoading();
+    final repo = ref.read(locationRepositoryProvider);
+    state = AsyncData(await repo.refreshLocation());
+  }
+
+  Future<void> clear() async {
+    final repo = ref.read(locationRepositoryProvider);
+    await repo.clear();
+    state = const AsyncData(null);
+  }
+}

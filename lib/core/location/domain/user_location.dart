@@ -53,11 +53,11 @@ class UserLocation {
 
   /// A safe fallback you can ship with (Nairobi)
   static const fallback = UserLocation(
-    lat: -1.2921,
-    lng: 36.8219,
-    city: 'Nairobi',
-    country: 'Kenya',
-    timezone: 'Africa/Nairobi',
+    lat: 000000,
+    lng: 000000,
+    city: 'fallback',
+    country: 'fallback',
+    timezone: 'fallback',
     isAuto: false,
   );
 }

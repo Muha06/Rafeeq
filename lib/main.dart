@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:rafeeq/app/notifications.dart';
 import 'package:rafeeq/core/themes/app_theme.dart';
@@ -15,6 +16,7 @@ import 'package:rafeeq/features/settings/presentation/provider/theme_provider.da
 import 'package:rafeeq/features/salat-times/data/models/hive/cached_salah_times_hive.dart';
 
 Future<void> main() async {
+  
   WidgetsFlutterBinding.ensureInitialized();
 
   //Init HIVE
@@ -26,8 +28,8 @@ Future<void> main() async {
   Hive.registerAdapter(QuranBookmarkHiveModelAdapter());
   Hive.registerAdapter(DhikrBookmarkHiveModelAdapter());
   Hive.registerAdapter(CachedSalahTimesHiveAdapter());
-Hive.registerAdapter(AllahNameHiveAdapter());  
- 
+  Hive.registerAdapter(AllahNameHiveAdapter());
+
   //open boxes
   await Hive.openBox<SurahHive>('surahs');
   await Hive.openBox<AyahHive>('ayahs');
