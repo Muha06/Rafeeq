@@ -49,6 +49,11 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/images/adhkar/
+    - assets/images/category/
+    - assets/images/home/
+    - assets/images/quran/
+    - assets/images/salat/
     - assets/adhkar/
 
     - .env

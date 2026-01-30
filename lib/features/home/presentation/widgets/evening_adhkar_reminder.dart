@@ -80,7 +80,7 @@ class EveningAdhkarRemindercard extends ConsumerWidget {
               top: 8,
               right: 8,
               child: Image.asset(
-                'assets/images/mosque.png',
+                'assets/images/adhkar/mosque.png',
                 height: 30,
                 width: 30,
               ),
