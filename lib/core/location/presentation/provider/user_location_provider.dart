@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive/hive.dart';
 import 'package:rafeeq/core/location/data/location_gps_ds.dart';
 import 'package:rafeeq/core/location/data/location_local_ds.dart';
 import 'package:rafeeq/core/location/domain/user_location.dart';
@@ -30,9 +29,11 @@ class UserLocationNotifier extends AsyncNotifier<UserLocation?> {
   }
 
   Future<void> refresh() async {
-    state = const AsyncLoading();
     final repo = ref.read(locationRepositoryProvider);
-    state = AsyncData(await repo.refreshLocation());
+    final prev = state.value; // keep old
+    state = AsyncData(prev); // keep showing
+    final newLoc = await repo.refreshLocation();
+    state = AsyncData(newLoc);
   }
 
   Future<void> clear() async {

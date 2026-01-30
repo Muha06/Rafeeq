@@ -24,6 +24,7 @@ class _SalahTimingsPageState extends ConsumerState<SalahTimingsPage> {
 
     final timesAsync = ref.watch(todaySalahTimesProvider);
     final userLoc = ref.watch(userLocationProvider);
+    final formattedDate = _formatDate(DateTime.now());
 
     return Scaffold(
       appBar: AppBar(
@@ -54,13 +55,25 @@ class _SalahTimingsPageState extends ConsumerState<SalahTimingsPage> {
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              _HeaderChipRow(
-                dateText: _formatDate(times.date),
-                timezone: userLoc.when(
-                  data: (loc) => '${loc?.country}/${loc?.city}',
-                  error: (error, stackTrace) => '',
-                  loading: () => 'loading',
-                ),
+              Row(
+                children: [
+                  Chip(text: formattedDate, icon: Icons.date_range),
+
+                  GestureDetector(
+                    onTap: () async {
+                      await ref.read(userLocationProvider.notifier).refresh();
+                      await ref.refresh(todaySalahTimesProvider.future);
+                    },
+                    child: Chip(
+                      text: userLoc.when(
+                        loading: () => 'Loading',
+                        error: (error, stackTrace) => 'Unknown',
+                        data: (loc) => '${loc?.country}/${loc?.city}',
+                      ),
+                      icon: Icons.refresh,
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 12),
 
@@ -76,30 +89,10 @@ class _SalahTimingsPageState extends ConsumerState<SalahTimingsPage> {
   }
 }
 
-class _HeaderChipRow extends StatelessWidget {
-  const _HeaderChipRow({required this.dateText, required this.timezone});
-
-  final String dateText;
-  final String timezone;
-
-  @override
-  Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 18,
-      runSpacing: 10,
-      children: [
-        _Chip(text: dateText, icon: Icons.calendar_today_rounded),
-        _Chip(text: timezone, icon: Icons.public_rounded),
-      ],
-    );
-  }
-}
-
-class _Chip extends ConsumerWidget {
-  const _Chip({required this.text, required this.icon});
-
-  final String text;
+class Chip extends ConsumerWidget {
+  const Chip({super.key, required this.text, required this.icon});
   final IconData icon;
+  final String text;
 
   @override
   Widget build(BuildContext context, ref) {
