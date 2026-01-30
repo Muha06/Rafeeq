@@ -114,6 +114,7 @@ class AppTheme {
         ),
         backgroundColor: AppDarkColors.darkSurfaceSolid,
       ),
+      iconTheme: IconThemeData(color: Colors.grey[400]),
     );
   }
 
@@ -169,6 +170,7 @@ class AppTheme {
       ),
 
       // ===== CARD =====
+<<<<<<< HEAD
       cardColor: AppLightColors.lightSurface,
 
       dividerColor: AppLightColors.divider,
@@ -180,6 +182,12 @@ class AppTheme {
 
       iconTheme: const IconThemeData(color: AppLightColors.iconPrimary),
 
+=======
+      cardColor: AppColors.lightSurface,
+      dividerColor: AppColors.lightTextSecondary.withAlpha(50),
+      iconTheme: IconThemeData(color: Colors.grey[800]),
+      
+>>>>>>> f248da3 (FullSurahPage upgrade UI & Ayah tile)
       // ===== SLIDER =====
       sliderTheme: const SliderThemeData(
         activeTrackColor: AppLightColors.primary,
