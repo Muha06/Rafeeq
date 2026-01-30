@@ -48,42 +48,10 @@ flutter:
         - asset: assets/fonts/uthmani_font.otf
 
   assets:
-    - assets/images/home/salam_amber.png
-    - assets/images/home/salam_black.png
-    - assets/images/quran/bismillah_light.png
-    - assets/images/quran/bismillah_dark.png
-    - assets/images/home/quran.png
-    - assets/images/quran/quran_amber.png
-    - assets/images/adhkar/mosque.png
-
-    - assets/images/quran/surah_details.jpeg
-    - assets/images/quran/surah_badge.png
-    - assets/images/quran/surah_badge2.png
-    - assets/images/quran/surah_details.jpeg
-
-    - assets/images/salat/fajr.jpeg
-    - assets/images/salat/daytime.jpeg
-    - assets/images/salat/daytime_2.jpeg
-    - assets/images/salat/daytime_3.jpeg
-    - assets/images/salat/dhuhr.jpeg 
-    - assets/images/salat/maghrib.jpeg
-    - assets/images/salat/isha.jpeg
-    - assets/images/salat/isha_2.jpeg
+    - assets/images/
+    - assets/adhkar/
 
     - .env
-
-    - assets/images/category/daily.png
-    - assets/images/category/sunrise.png
-    - assets/images/category/sunset.png
-
-    - assets/images/home/Allah_name.png
-    - assets/images/home/quran.png
-    - assets/images/home/tasbih.png
-
-    - assets/adhkar/general.json
-    - assets/adhkar/morning.json
-    - assets/adhkar/evening.json
-    - assets/adhkar/after_salah.json
 
 flutter_launcher_icons:
   android: true

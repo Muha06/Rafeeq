@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:rafeeq/features/salat-times/data/models/salah_times_model.dart';
 
@@ -32,6 +33,8 @@ class SalahRemoteDataSourceImpl implements SalahRemoteDataSource {
       'country': country,
       'method': method.toString(),
     });
+
+    debugPrint("$country, $city");
 
     final res = await client.get(uri);
     if (res.statusCode != 200) {
