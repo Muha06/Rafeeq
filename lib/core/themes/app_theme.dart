@@ -22,6 +22,11 @@ class AppTheme {
       dividerColor: AppDarkColors.divider,
       cardColor: AppDarkColors.darkSurface,
       iconTheme: const IconThemeData(color: AppDarkColors.iconPrimary),
+      iconButtonTheme: const IconButtonThemeData(
+        style: ButtonStyle(
+          iconColor: WidgetStatePropertyAll(AppDarkColors.iconPrimary),
+        ),
+      ),
 
       colorScheme: const ColorScheme.dark(
         surface: AppDarkColors.darkBackground, //hide the navigation color
@@ -91,14 +96,16 @@ class AppTheme {
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: AppDarkColors.amber,
+          iconColor: AppDarkColors.iconPrimary,
           side: const BorderSide(color: AppDarkColors.amber),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
           textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
         ),
       ),
 
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
+          iconColor: AppDarkColors.iconPrimary,
           foregroundColor: AppDarkColors.amber,
           overlayColor: Colors.transparent,
           splashFactory: NoSplash.splashFactory,
@@ -113,7 +120,7 @@ class AppTheme {
           borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
         ),
         backgroundColor: AppDarkColors.darkSurfaceSolid,
-      ), 
+      ),
     );
   }
 
@@ -170,9 +177,9 @@ class AppTheme {
 
       // ===== CARD =====
       cardColor: AppLightColors.lightSurface,
-      dividerColor:  AppLightColors.textSecondary.withAlpha(50),
+      dividerColor: AppLightColors.textSecondary.withAlpha(50),
       iconTheme: IconThemeData(color: Colors.grey[800]),
-      
+
       // ===== SLIDER =====
       sliderTheme: const SliderThemeData(
         activeTrackColor: AppLightColors.primary,
@@ -229,9 +236,10 @@ class AppTheme {
         style: OutlinedButton.styleFrom(
           backgroundColor: Colors.transparent, // optional, usually default
           foregroundColor: AppLightColors.buttonPrimary,
-          side: const BorderSide(color: AppLightColors.buttonPrimary),
+          iconColor: AppLightColors.iconPrimary,
+          side: const BorderSide(color: AppLightColors.iconPrimary),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+          textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           splashFactory: InkRipple.splashFactory, //splash
           overlayColor: AppLightColors.amber,
         ),
@@ -240,6 +248,7 @@ class AppTheme {
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: AppLightColors.amber,
+          iconColor: AppLightColors.iconPrimary,
           overlayColor: Colors.transparent,
           splashFactory: NoSplash.splashFactory,
           textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),

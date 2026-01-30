@@ -4,12 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hijri_date/hijri.dart';
 import 'package:rafeeq/app/providers/tabs_screen_provider.dart';
 import 'package:rafeeq/core/animations/navigation_animations.dart';
-import 'package:rafeeq/core/location/presentation/provider/user_location_provider.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/QURAN_PAGE/greetings_row.dart';
 import 'package:rafeeq/features/asma_ul_husna/presentation/pages/asma_ul_husna_list_page.dart';
 import 'package:rafeeq/features/home/presentation/widgets/ayah_of_the_day.dart';
-import 'package:rafeeq/features/home/presentation/widgets/home_reminder_carouel.dart';
+import 'package:rafeeq/features/home/presentation/widgets/reminders_carousel.dart';
 import 'package:rafeeq/features/home/presentation/widgets/quick_action_row.dart';
 import 'package:rafeeq/features/settings/presentation/pages/settings_page.dart';
 import 'package:rafeeq/features/salat-times/domain/entities/salah_prayer.dart';
@@ -90,9 +89,10 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
             ),
 
-            //REMINDER
+            //REMINDERs
             const SliverToBoxAdapter(child: HomeRemindersCarousel()),
 
+//quick actions row
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsetsGeometry.only(

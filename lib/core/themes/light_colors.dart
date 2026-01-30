@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 // ==== Light Theme ====
 class AppLightColors {
-  // Background (warm paper)
-  static const Color lightBackground = Color(0xFFF8F2EA);
+  // Background (warm paper) 
+  static const Color lightBackground = Colors.white;
 
   // Surface (cards/sheets) - slightly lighter than bg
   static const Color lightSurface = amberSoft;
@@ -24,6 +24,7 @@ class AppLightColors {
   // Accent (your amber for tiny highlights if needed)
   static const Color amber = Color(0xFFFFC36A);
   static const Color amberSoft = Color(0x26FFC36A);
+  static Color onAmberSoft = const Color(0x26FFC36A).withAlpha(155);
 
   // Text
   static const Color textPrimary = Color(0xFF1F1A17);

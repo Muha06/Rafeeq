@@ -4,6 +4,7 @@ class AppDarkColors {
   // ✅ Your base
   static const Color darkBackground = Color(0xFF050C0E);
   static const Color darkSurface = Color(0xCC0F1F25);
+  static const Color onDarkSurface = selectedCardBorder;
 
   static const Color darkSurfaceSolid = Color(0xFF0F1F25);
 
