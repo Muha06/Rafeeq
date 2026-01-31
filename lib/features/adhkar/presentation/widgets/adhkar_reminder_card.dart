@@ -6,7 +6,8 @@ import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_list_page.dart';
 import 'package:rafeeq/features/adhkar/presentation/riverpod/adhkar_categories.dart';
-import 'package:rafeeq/features/adhkar/presentation/riverpod/audio_provider.dart';
+import 'package:rafeeq/core/audio/providers/just_audio_player_provider.dart';
+import 'package:rafeeq/features/adhkar/presentation/riverpod/get_adhkars_provider.dart';
 import 'package:rafeeq/features/adhkar/presentation/widgets/audio_controls_card.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
@@ -111,38 +112,56 @@ Future<void> playAdhkar(
   AudioPlayer player, {
   required bool isMorning,
 }) async {
-  final asset = isMorning
-      ? 'assets/adhkar/audio/morning_adhkar.mp3'
-      : 'assets/adhkar/audio/evening_adhkar.mp3';
-
-  final active = ref.read(activeAdhkarAssetProvider);
-
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      persist: true,
-      behavior: SnackBarBehavior.floating,
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      margin: const EdgeInsets.all(12),
-      content: AdhkarMiniPlayerSheet(isMorning: isMorning),
-      dismissDirection: DismissDirection.none, // optional: prevent swipe away
-    ),
-  );
-
-  // Same track -> toggle
-  if (active == asset) {
-    if (player.playing) {
-      await player.pause();
-    } else {
-      await player.play();
-    }
-    return;
+  if (context.mounted) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        persist: true,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        margin: const EdgeInsets.all(12),
+        content: AdhkarMiniPlayerSheet(isMorning: isMorning),
+        dismissDirection: DismissDirection.none,
+      ),
+    );
   }
+  try {
+    final urls = await ref.read(adhkarAudioUrlsProvider.future);
+    final url = isMorning ? urls.morningUrl : urls.eveningUrl;
 
-  // New track -> load + play
-  ref.read(activeAdhkarAssetProvider.notifier).state = asset;
-  await player.setAudioSource(AudioSource.asset(asset));
-  await player.play();
+    final active = ref.read(activeAdhkarUrlProvider);
+
+    // Same track -> toggle
+    if (active == url) {
+      if (player.playing) {
+        await player.pause();
+      } else {
+        await player.play();
+      }
+      return; // This is OK - finally block will still run
+    }
+
+    // New track -> load + play (STREAM)
+    ref.read(activeAdhkarUrlProvider.notifier).state = url;
+
+    await player.setUrl(url);
+
+    await player.play();
+  } catch (e, st) {
+    debugPrint('playAdhkar error: $e');
+    debugPrint(st.toString());
+
+    ref.read(activeAdhkarUrlProvider.notifier).state = null;
+
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Could not play adhkār. Check connection & try again.'),
+        ),
+      );
+    }
+  }
 }
 
 class AudioControlsChip extends ConsumerWidget {
@@ -152,48 +171,57 @@ class AudioControlsChip extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final player = ref.watch(adhkarPlayerProvider);
-
-    final asset = isMorning
-        ? 'assets/adhkar/audio/morning_adhkar.mp3'
-        : 'assets/adhkar/audio/evening_adhkar.mp3';
-
-    final activeAsset = ref.watch(activeAdhkarAssetProvider);
-    final isActive = activeAsset == asset;
-
+    final activeUrl = ref.watch(activeAdhkarUrlProvider);
     final playing = ref.watch(adhkarPlayingProvider).value ?? false;
 
-    final showPlaying = isActive && playing;
+    final urlsAsync = ref.watch(adhkarAudioUrlsProvider);
+
     final theme = Theme.of(context);
     final isDark = ref.watch(isDarkProvider);
+    final buffering = ref.watch(adhkarBufferingProvider).value ?? false;
 
-    return Row(
-      children: [
-        OutlinedButton.icon(
-          onPressed: () async {
-            await playAdhkar(ref, context, player, isMorning: isMorning);
-          },
+    return urlsAsync.when(
+      loading: () => OutlinedButton.icon(
+        onPressed: null,
+        icon: const CupertinoActivityIndicator(),
+        label: const Text('Loading'),
+      ),
+      error: (e, st) => OutlinedButton.icon(
+        onPressed: () => ref.invalidate(adhkarAudioUrlsProvider),
+        icon: const Icon(CupertinoIcons.exclamationmark_triangle),
+        label: const Text('Retry'),
+      ),
+      data: (urls) {
+        final url = isMorning ? urls.morningUrl : urls.eveningUrl;
+        final isActive = activeUrl == url;
+        final showPlaying = isActive && playing;
+
+        return OutlinedButton.icon(
+          onPressed: buffering
+              ? null
+              : () async {
+                  await playAdhkar(ref, context, player, isMorning: isMorning);
+                },
+
           style: theme.outlinedButtonTheme.style!.copyWith(
             padding: const WidgetStatePropertyAll(
-              EdgeInsets.symmetric(horizontal: 12),
+              EdgeInsets.symmetric(horizontal: 4),
             ),
           ),
-          icon: Icon(
-            showPlaying ? CupertinoIcons.pause : CupertinoIcons.play,
-            color: isDark
-                ? AppDarkColors.iconPrimary
-                : AppLightColors.iconPrimary,
-          ),
+          icon: buffering
+              ? const CupertinoActivityIndicator()
+              : Icon(showPlaying ? CupertinoIcons.pause : CupertinoIcons.play),
           label: Text(
-            showPlaying ? 'Pause' : 'Play',
+            (buffering ? 'Loading' : (showPlaying ? 'Pause' : 'Play')),
             style: theme.textTheme.bodySmall!.copyWith(
               fontWeight: FontWeight.bold,
               color: isDark
-                  ? AppDarkColors.textPrimary
-                  : AppLightColors.textPrimary,
+                  ? AppDarkColors.iconPrimary
+                  : AppLightColors.iconPrimary,
             ),
           ),
-        ),
-      ],
+        );
+      },
     );
   }
 }

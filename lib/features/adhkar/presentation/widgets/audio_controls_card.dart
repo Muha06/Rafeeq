@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
-import 'package:rafeeq/features/adhkar/presentation/riverpod/audio_provider.dart';
+import 'package:rafeeq/core/audio/providers/just_audio_player_provider.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class AdhkarMiniPlayerSheet extends ConsumerWidget {
@@ -15,6 +15,7 @@ class AdhkarMiniPlayerSheet extends ConsumerWidget {
     final playing = ref.watch(adhkarPlayingProvider).value ?? false;
     final theme = Theme.of(context);
     final isDark = ref.watch(isDarkProvider);
+    final buffering = ref.watch(adhkarBufferingProvider).value ?? false;
 
     return SafeArea(
       child: Container(
@@ -44,9 +45,13 @@ class AdhkarMiniPlayerSheet extends ConsumerWidget {
             ),
             IconButton(
               onPressed: () => playing ? player.pause() : player.play(),
-              icon: Icon(
-                playing ? CupertinoIcons.pause_fill : CupertinoIcons.play_fill,
-              ),
+              icon: buffering
+                  ? const CupertinoActivityIndicator()
+                  : Icon(
+                      playing
+                          ? CupertinoIcons.pause_fill
+                          : CupertinoIcons.play_fill,
+                    ),
             ),
             IconButton(
               onPressed: () async {

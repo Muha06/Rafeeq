@@ -123,41 +123,6 @@ class NotificationService {
     await _plugin.show(id, title, body, details);
   }
 
-  Future<void> scheduleOnceIn({
-    required int id,
-    required String title,
-    required String body,
-    required Duration after,
-  }) async {
-    final scheduled = tz.TZDateTime.now(tz.local).add(after);
-
-    const androidDetails = AndroidNotificationDetails(
-      'rafeeq_reminders',
-      'Reminders',
-      channelDescription: 'Daily adhkār & ṣalāh reminders',
-      importance: Importance.max,
-      priority: Priority.high,
-    );
-
-    const details = NotificationDetails(
-      android: androidDetails,
-      iOS: DarwinNotificationDetails(),
-    );
-
-    final exactAllowed = await _ensureExactAlarmsAllowed();
-
-    await _plugin.zonedSchedule(
-      id,
-      title,
-      body,
-      scheduled,
-      details,
-      androidScheduleMode: exactAllowed
-          ? AndroidScheduleMode.exactAllowWhileIdle
-          : AndroidScheduleMode.inexactAllowWhileIdle,
-    );
-  }
-
   Future<bool> _ensureExactAlarmsAllowed() async {
     final android = _plugin
         .resolvePlatformSpecificImplementation<

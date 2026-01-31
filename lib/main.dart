@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
- import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:rafeeq/app/notifications.dart';
 import 'package:rafeeq/core/themes/app_theme.dart';
 import 'package:rafeeq/features/Quran/data/models/ayah_hive.dart';
@@ -13,13 +13,19 @@ import 'package:rafeeq/features/bookmarks/data/models/quran_bookmark_hive_model.
 import 'package:rafeeq/features/settings/presentation/provider/notifcation_provider.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 import 'package:rafeeq/features/salat-times/data/models/hive/cached_salah_times_hive.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
-  
   WidgetsFlutterBinding.ensureInitialized();
+
+  await dotenv.load(fileName: ".env");
 
   //Init HIVE
   await Hive.initFlutter();
+  await Supabase.initialize(
+    url: dotenv.env['SUPABASE_URL']!,
+    anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
+  );
 
   //register adapters
   Hive.registerAdapter(SurahHiveAdapter());
@@ -32,22 +38,27 @@ Future<void> main() async {
   //open boxes
   await Hive.openBox<SurahHive>('surahs');
   await Hive.openBox<AyahHive>('ayahs');
+  await Hive.openBox<QuranBookmarkHiveModel>('quran_bookmarks_box');
   await Hive.openBox('lastReadBox'); // for LastReadAyah
+
+  await Hive.openBox<DhikrBookmarkHiveModel>('dhikr_bookmarks_box');
+  await Hive.openBox<AllahNameHive>('allah_names_box');
+  await Hive.openBox<CachedSalahTimesHive>('salah_times_cache_box');
+  
+
+
   await Hive.openBox('settingsBox'); //settings
 
-  await Hive.openBox<QuranBookmarkHiveModel>('quran_bookmarks_box');
-  await Hive.openBox<DhikrBookmarkHiveModel>('dhikr_bookmarks_box');
-  await Hive.openBox<CachedSalahTimesHive>('salah_times_cache_box');
-  await Hive.openBox<AllahNameHive>('allah_names_box');
 
-  //------------------NOTIFICATIONS---------------//
+  //------------------NOTIFICATIONS---------------
   await NotificationService.instance.init(); //init
   final settings = Hive.box('settingsBox');
 
   final adhkarOn =
       settings.get('adhkar_notif_enabled', defaultValue: true) as bool;
 
-  await NotificationService.instance.cancel(200); //cancel firsts
+  //cancel first
+  await NotificationService.instance.cancel(200);
   await NotificationService.instance.cancel(201);
 
   if (adhkarOn) {
@@ -68,9 +79,6 @@ Future<void> main() async {
     await NotificationService.instance.cancel(200); //else cancel
     await NotificationService.instance.cancel(201); //else cancel
   }
-
-  //dotenv
-  await dotenv.load(fileName: ".env");
 
   runApp(const ProviderScope(child: MyApp()));
 }
