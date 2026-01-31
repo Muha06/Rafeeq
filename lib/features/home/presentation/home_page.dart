@@ -92,7 +92,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             //REMINDERs
             const SliverToBoxAdapter(child: HomeRemindersCarousel()),
 
-//quick actions row
+            //quick actions row
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsetsGeometry.only(

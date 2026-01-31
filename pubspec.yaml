@@ -57,8 +57,7 @@ flutter:
     - assets/images/home/
     - assets/images/quran/
     - assets/images/salat/
-    - assets/adhkar/
-    - assets/adhkar/audio/
+    - assets/adhkar/ 
 
     - .env
 

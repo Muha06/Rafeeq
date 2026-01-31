@@ -48,6 +48,14 @@ Future<void> main() async {
 
   await Hive.openBox('settingsBox'); //settings
 
+  final pending = await NotificationService.instance.plugin
+      .pendingNotificationRequests();
+
+  debugPrint('🔔 Pending notifications: ${pending.length}');
+  for (final p in pending) {
+    debugPrint('• id=${p.id}, title=${p.title}, body=${p.body}');
+  }
+
   //------------------NOTIFICATIONS---------------
   await NotificationService.instance.init(); //init
   final settings = Hive.box('settingsBox');

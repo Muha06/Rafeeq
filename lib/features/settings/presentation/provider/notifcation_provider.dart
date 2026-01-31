@@ -33,6 +33,7 @@ final salahNotifEnabledProvider = StateProvider<bool>((ref) {
   final box = ref.watch(settingsBoxProvider);
   return box.get(kSalahEnabled, defaultValue: true) as bool;
 });
+
 Future<void> setSalahNotif(WidgetRef ref, bool enabled) async {
   final isUpdating = ref.read(salahNotifUpdatingProvider);
   if (isUpdating) return;
@@ -58,10 +59,7 @@ Future<void> setSalahNotif(WidgetRef ref, bool enabled) async {
     final times = await ref.read(todaySalahTimesProvider.future);
 
     // ✅ schedule salah for today
-    await SalahNotifications.instance.scheduleForToday(
-      times: times,
-      remindBeforeMinutes: 0,
-    );
+    await SalahNotifications.instance.scheduleForToday(times: times);
   } finally {
     ref.read(salahNotifUpdatingProvider.notifier).state = false;
   }
@@ -119,10 +117,7 @@ final salahDailyReschedulerProvider = Provider<void>((ref) {
     next,
   ) {
     next.whenData((times) async {
-      await SalahNotifications.instance.scheduleForToday(
-        times: times,
-        remindBeforeMinutes: 0,
-      );
+      await SalahNotifications.instance.scheduleForToday(times: times);
     });
   });
 });

@@ -38,19 +38,136 @@ class NotificationService {
       android: androidInit,
       iOS: iosInit,
     );
+    await _plugin.initialize(initSettings); // init plugin
 
-    await _plugin.initialize(initSettings); //init plugin
+    const AndroidNotificationChannel adhanChannel = AndroidNotificationChannel(
+      'rafeeq_salah_adhan_v1',
+      'Salah (Adhan)',
+      description: 'Salah notifications with adhan sound',
+      importance: Importance.max,
+      playSound: true,
+      sound: RawResourceAndroidNotificationSound('adhan_normal'),
+    );
 
-    // Android 13+ runtime permission
+    const fajrChannel = AndroidNotificationChannel(
+      'rafeeq_salah_adhan_fajr_v1',
+      'Salah (Adhan - Fajr)',
+      description: 'Fajr notifications with fajr adhan sound',
+      importance: Importance.max,
+      playSound: true,
+      sound: RawResourceAndroidNotificationSound('adhan_fajr'),
+    );
+
     final androidImpl = _plugin
         .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin
         >();
-    await androidImpl?.requestNotificationsPermission(); // easiest
-    // iOS permissions are requested via DarwinInitializationSettings above
+
+    if (androidImpl != null) {
+      await androidImpl.createNotificationChannel(adhanChannel);
+      await androidImpl.createNotificationChannel(fajrChannel);
+
+      await androidImpl.createNotificationChannel(
+        const AndroidNotificationChannel(
+          'rafeeq_reminders',
+          'Reminders',
+          description: 'Daily adhkār & ṣalāh reminders',
+          importance: Importance.high,
+        ),
+      );
+
+      // Android 13+ permission
+      await androidImpl.requestNotificationsPermission();
+    }
   }
 
-  //schedule daily
+  Future<void> testAdhanNow() async {
+    const details = NotificationDetails(
+      android: AndroidNotificationDetails(
+        'rafeeq_salah_adhan_v1',
+        'Salah (Adhan)',
+        channelDescription: 'Salah notifications with adhan sound',
+        importance: Importance.max,
+        priority: Priority.high,
+        playSound: true,
+        sound: RawResourceAndroidNotificationSound('adhan_normal'),
+      ),
+    );
+
+    await _plugin.show(
+      9999,
+      'Test Adhan',
+      'If you hear sound, we’re good ✅',
+      details,
+    );
+  }
+
+  //FOR SALAH
+  Future<void> scheduleSalah({
+    required int id,
+    required String title,
+    required String body,
+    required tz.TZDateTime scheduled,
+    bool isFajr = false,
+  }) async {
+    final channelId = isFajr
+        ? 'rafeeq_salah_adhan_fajr_v1'
+        : 'rafeeq_salah_adhan_v1';
+
+    final androidDetails = AndroidNotificationDetails(
+      channelId,
+      isFajr ? 'Salah (Adhan - Fajr)' : 'Salah (Adhan)',
+      channelDescription: 'Salah notifications with adhan sound',
+      importance: Importance.max,
+      priority: Priority.high,
+      playSound: true,
+      sound: RawResourceAndroidNotificationSound(
+        isFajr ? 'adhan_fajr' : 'adhan_normal',
+      ),
+    );
+
+    const iosDetails = DarwinNotificationDetails(presentSound: true);
+
+    final details = NotificationDetails(
+      android: androidDetails,
+      iOS: iosDetails,
+    );
+
+    final exactAllowed = await _ensureExactAlarmsAllowed();
+
+    await _plugin.zonedSchedule(
+      id,
+      title,
+      body,
+      scheduled,
+      details,
+      androidScheduleMode: exactAllowed
+          ? AndroidScheduleMode.exactAllowWhileIdle
+          : AndroidScheduleMode.inexactAllowWhileIdle,
+    );
+  }
+
+  Future<void> testFajrNow() async {
+    const details = NotificationDetails(
+      android: AndroidNotificationDetails(
+        'rafeeq_salah_adhan_fajr_v1',
+        'Salah (Adhan - Fajr)',
+        importance: Importance.max,
+        priority: Priority.high,
+        playSound: true,
+        sound: RawResourceAndroidNotificationSound('adhan_fajr'),
+      ),
+    );
+
+    await _plugin.show(
+      9998,
+      'Test Fajr Adhan',
+      'If this sounds different, we’re cooking ✅',
+      details,
+    );
+  }
+
+  //schedule daily (FOR ADHKARS)
   Future<void> scheduleDaily({
     required int id,
     required String title,
@@ -98,29 +215,6 @@ class NotificationService {
           : AndroidScheduleMode.inexactAllowWhileIdle, // fallback
       matchDateTimeComponents: DateTimeComponents.time,
     );
-  }
-
-  Future<void> showNow({
-    required int id,
-    required String title,
-    required String body,
-  }) async {
-    const androidDetails = AndroidNotificationDetails(
-      'rafeeq_reminders',
-      'Reminders',
-      channelDescription: 'Daily adhkār & ṣalāh reminders',
-      importance: Importance.max,
-      priority: Priority.high,
-    );
-
-    const iosDetails = DarwinNotificationDetails();
-
-    const details = NotificationDetails(
-      android: androidDetails,
-      iOS: iosDetails,
-    );
-
-    await _plugin.show(id, title, body, details);
   }
 
   Future<bool> _ensureExactAlarmsAllowed() async {

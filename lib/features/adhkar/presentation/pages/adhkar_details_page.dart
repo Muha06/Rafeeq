@@ -144,7 +144,7 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
           ),
 
           IconButton(
-            onPressed: () {
+            onPressed: () async {
               openBottomSheet(dhikr);
             },
             icon: const Icon(Icons.tune),

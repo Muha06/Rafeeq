@@ -46,7 +46,7 @@ final todaySalahTimesProvider = FutureProvider<SalahTimesEntity>((ref) async {
   if (loc == null) {
     throw Exception('Location not set. Tap refresh to detect your location.');
   }
-  
+
   return usecase.call(
     latitude: loc.lat,
     longitude: loc.lng,
@@ -63,10 +63,7 @@ final salahNotificationsSchedulerProvider = Provider<void>((ref) {
     next,
   ) {
     next.whenData((times) async {
-      await SalahNotifications.instance.scheduleForToday(
-        times: times,
-        remindBeforeMinutes: 0, // or 10
-      );
+      await SalahNotifications.instance.scheduleForToday(times: times);
     });
   });
 });

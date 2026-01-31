@@ -1,6 +1,5 @@
 import 'package:rafeeq/app/notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:rafeeq/features/salat-times/domain/entities/salah_prayer.dart';
 import 'package:rafeeq/features/salat-times/domain/entities/salah_times.dart';
 
@@ -8,8 +7,8 @@ class SalahNotifications {
   SalahNotifications._();
   static final instance = SalahNotifications._();
 
-  // stable ids so updates replace previous schedules
-  static const _ids = {
+  // Adhan IDs (stable)
+  static const _adhanIds = {
     SalahPrayer.fajr: 101,
     SalahPrayer.dhuhr: 102,
     SalahPrayer.asr: 103,
@@ -17,74 +16,47 @@ class SalahNotifications {
     SalahPrayer.isha: 105,
   };
 
+  // Reminder-before IDs (separate so they don't overwrite adhan)
+  static const _reminderIds = {
+    SalahPrayer.fajr: 201,
+    SalahPrayer.dhuhr: 202,
+    SalahPrayer.asr: 203,
+    SalahPrayer.maghrib: 204,
+    SalahPrayer.isha: 205,
+  };
+
   Future<void> cancelAll() async {
-    for (final id in _ids.values) {
+    for (final id in _adhanIds.values) {
+      await NotificationService.instance.cancel(id);
+    }
+    for (final id in _reminderIds.values) {
       await NotificationService.instance.cancel(id);
     }
   }
 
-  Future<void> scheduleForToday({
-    required SalahTimesEntity times,
-    int remindBeforeMinutes = 0, // 0 = at adhan time, 10 = 10 mins before
-  }) async {
-    final plugin = NotificationService.instance.plugin;
-
+  Future<void> scheduleForToday({required SalahTimesEntity times}) async {
     // clear old first (prevents duplicates)
-    for (final id in _ids.values) {
-      await plugin.cancel(id);
-    }
-
-    const androidDetails = AndroidNotificationDetails(
-      'rafeeq_salah',
-      'Ṣalāh Times',
-      channelDescription: 'Prayer time notifications',
-      importance: Importance.high,
-      priority: Priority.high,
-    );
-
-    const details = NotificationDetails(
-      android: androidDetails,
-      iOS: DarwinNotificationDetails(),
-    );
-
-    final exactAllowed = await NotificationService.instance
-        .ensureExactAlarmsAllowed();
+    await cancelAll();
 
     final now = tz.TZDateTime.now(tz.local);
 
-    for (final prayer in _ids.keys) {
+    for (final prayer in _adhanIds.keys) {
       final raw = times.at(prayer);
 
-      // apply reminder offset if needed
-      final target = raw.subtract(Duration(minutes: remindBeforeMinutes));
+      // Convert to TZDateTime safely
+      final adhanTime = tz.TZDateTime.from(raw, tz.local);
 
-      // timezone-aware
-      final scheduled = tz.TZDateTime.from(target, tz.local);
+      // Don't schedule past times
+      if (!adhanTime.isAfter(now)) continue;
 
-      // don’t schedule past times
-      if (!scheduled.isAfter(now)) continue;
-
-      await plugin.zonedSchedule(
-        _ids[prayer]!,
-        remindBeforeMinutes > 0
-            ? '${prayer.label} in $remindBeforeMinutes min'
-            : '${prayer.label} time',
-        remindBeforeMinutes > 0
-            ? 'Get ready for ${prayer.label}.'
-            : 'It’s time for ${prayer.label}.',
-        scheduled,
-        details,
-        androidScheduleMode: exactAllowed
-            ? AndroidScheduleMode.exactAllowWhileIdle
-            : AndroidScheduleMode.inexactAllowWhileIdle,
+      // 1) MAIN: Adhan at prayer time
+      await NotificationService.instance.scheduleSalah(
+        id: _adhanIds[prayer]!,
+        title: '${prayer.label} time',
+        body: 'It’s time for ${prayer.label}.',
+        scheduled: adhanTime,
+        isFajr: prayer == SalahPrayer.fajr,
       );
-      // final pending = await plugin.pendingNotificationRequests();
-      // debugPrint('🔔 Pending notifications: ${pending.length}');
-      // for (final p in pending) {
-      //   debugPrint(
-      //     '• id=${p.id}, title=${p.title}, body=${p.body}, payload=${p.payload}',
-      //   );
-      // }
     }
   }
 }
