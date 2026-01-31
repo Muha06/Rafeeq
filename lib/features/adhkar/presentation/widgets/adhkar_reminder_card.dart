@@ -19,7 +19,7 @@ class AdhkarReminderCard extends ConsumerWidget {
     final isDark = ref.watch(isDarkProvider);
     final theme = Theme.of(context);
     const String morningMsg =
-        "Morning adhkār is a daily shield and a reminder that Allah ﷻ is with you. Take a minute, breathe, and listen";
+        "Morning adhkār is a daily shield and a reminder that Allah ﷻ is with you. Take a minute, read, and listen";
     const String eveningMsg =
         'Evening adhkār is your nightly shield — protection, calm, and barakah by Allah ﷻ. Read along, breathe, and listen.';
 
@@ -76,7 +76,7 @@ class AdhkarReminderCard extends ConsumerWidget {
                           );
                         },
                         child: Text(
-                          'Tap to start >',
+                          'Tap to read >',
                           style: theme.textTheme.bodySmall!.copyWith(
                             color: isDark ? AppLightColors.amber : Colors.black,
                             fontWeight: FontWeight.bold,
@@ -118,13 +118,13 @@ Future<void> playAdhkar(
   final active = ref.read(activeAdhkarAssetProvider);
 
   ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(
+    SnackBar(
       persist: true,
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.transparent,
       elevation: 0,
-      margin: EdgeInsets.all(12),
-      content: AdhkarMiniPlayerSheet(),
+      margin: const EdgeInsets.all(12),
+      content: AdhkarMiniPlayerSheet(isMorning: isMorning),
       dismissDirection: DismissDirection.none, // optional: prevent swipe away
     ),
   );

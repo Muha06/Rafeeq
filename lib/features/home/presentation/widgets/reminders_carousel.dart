@@ -25,12 +25,12 @@ class HomeRemindersCarousel extends ConsumerWidget {
 
     final items = <Widget>[];
 
-    bool isMorning = _isInWindow(now, 5 * 60, 10 * 60);
-    bool isEvening = _isInWindow(now, 17 * 60, 24 * 60);
+    bool isMorning = _isInWindow(now, 5 * 60, 11 * 60);
+    bool isEvening = _isInWindow(now, 17 * 60, 22 * 60);
 
     // Morning: 05:00 – 10:00
     if (isMorning) {
-      items.add(AdhkarReminderCard(isMorning: !isMorning));
+      items.add(AdhkarReminderCard(isMorning: isMorning));
     }
 
     // Friday reminder (all Friday)
