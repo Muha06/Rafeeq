@@ -154,7 +154,7 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
       body: SafeArea(
         child: PageView.builder(
           controller: _pageController,
-          itemCount: widget.adhkars.length,
+          itemCount: widget.adhkars.length, 
           onPageChanged: (i) => setState(() => _currentIndex = i),
           itemBuilder: (context, i) {
             final dhikr = widget.adhkars[i];
