@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rafeeq/core/app_keys.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
 
@@ -15,9 +16,9 @@ class AppSnackBar {
     final lightBg = lightBgColor ?? AppLightColors.snackbarInfoBg;
     final theme = Theme.of(context);
 
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(
+    scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
+    scaffoldMessengerKey.currentState?.clearSnackBars();
+    scaffoldMessengerKey.currentState?.showSnackBar(
       SnackBar(
         elevation: 3,
         persist: false,

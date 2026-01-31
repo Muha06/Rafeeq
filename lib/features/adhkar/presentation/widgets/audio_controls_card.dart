@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/core/app_keys.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/core/audio/providers/just_audio_player_provider.dart';
@@ -19,11 +20,11 @@ class AdhkarMiniPlayerSheet extends ConsumerWidget {
 
     return SafeArea(
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
         decoration: BoxDecoration(
           color: isDark
               ? AppDarkColors.selectedCardBorder.withAlpha(200)
-              : AppLightColors.onAmberSoft,
+              : AppLightColors.amber,
           borderRadius: BorderRadius.circular(18),
         ),
         child: Row(
@@ -39,12 +40,18 @@ class AdhkarMiniPlayerSheet extends ConsumerWidget {
                 children: [
                   Text('Adhkār Playing', style: theme.textTheme.titleMedium),
                   const SizedBox(height: 2),
-                  Text('Tap pause anytime', style: theme.textTheme.bodyMedium),
+                  Text(
+                    buffering ? 'Buffering…' : 'Tap pause anytime',
+                    style: theme.textTheme.bodyMedium,
+                  ),
                 ],
               ),
             ),
             IconButton(
-              onPressed: () => playing ? player.pause() : player.play(),
+              onPressed: buffering
+                  ? null
+                  : () => playing ? player.pause() : player.play(),
+
               icon: buffering
                   ? const CupertinoActivityIndicator()
                   : Icon(
@@ -57,9 +64,7 @@ class AdhkarMiniPlayerSheet extends ConsumerWidget {
               onPressed: () async {
                 await player.stop();
                 await player.seek(Duration.zero); // reset
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).clearSnackBars();
-                }
+                scaffoldMessengerKey.currentState?.clearSnackBars();
               },
               icon: const Icon(CupertinoIcons.xmark),
             ),

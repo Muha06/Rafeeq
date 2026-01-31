@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:rafeeq/core/app_keys.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
+import 'package:rafeeq/core/widgets/snackbars.dart';
 import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_list_page.dart';
 import 'package:rafeeq/features/adhkar/presentation/riverpod/adhkar_categories.dart';
 import 'package:rafeeq/core/audio/providers/just_audio_player_provider.dart';
@@ -57,6 +59,7 @@ class AdhkarReminderCard extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Expanded(child: AudioControlsChip(isMorning: isMorning)),
+                      const Spacer(),
                       GestureDetector(
                         onTap: () {
                           final categories = ref.read(
@@ -112,19 +115,19 @@ Future<void> playAdhkar(
   AudioPlayer player, {
   required bool isMorning,
 }) async {
-  if (context.mounted) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        persist: true,
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        margin: const EdgeInsets.all(12),
-        content: AdhkarMiniPlayerSheet(isMorning: isMorning),
-        dismissDirection: DismissDirection.none,
-      ),
-    );
-  }
+  scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
+  scaffoldMessengerKey.currentState?.showSnackBar(
+    SnackBar(
+      persist: true,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      margin: const EdgeInsets.all(12),
+      content: AdhkarMiniPlayerSheet(isMorning: isMorning),
+      dismissDirection: DismissDirection.none,
+    ),
+  );
+
   try {
     final urls = await ref.read(adhkarAudioUrlsProvider.future);
     final url = isMorning ? urls.morningUrl : urls.eveningUrl;
@@ -138,7 +141,7 @@ Future<void> playAdhkar(
       } else {
         await player.play();
       }
-      return; // This is OK - finally block will still run
+      return;  
     }
 
     // New track -> load + play (STREAM)
@@ -151,14 +154,15 @@ Future<void> playAdhkar(
     debugPrint('playAdhkar error: $e');
     debugPrint(st.toString());
 
+    await player.stop();
     ref.read(activeAdhkarUrlProvider.notifier).state = null;
 
     if (context.mounted) {
-      ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Could not play adhkār. Check connection & try again.'),
-        ),
+      AppSnackBar.showSimple(
+        context: context,
+        isDark: ref.read(isDarkProvider),
+        message:
+            'Could not play adhkar. Please check your Internet and try again',
       );
     }
   }
@@ -182,14 +186,34 @@ class AudioControlsChip extends ConsumerWidget {
 
     return urlsAsync.when(
       loading: () => OutlinedButton.icon(
+        key: const ValueKey('loading'),
         onPressed: null,
+        style: theme.outlinedButtonTheme.style!.copyWith(
+          padding: const WidgetStatePropertyAll(
+            EdgeInsets.symmetric(horizontal: 16),
+          ),
+        ),
         icon: const CupertinoActivityIndicator(),
-        label: const Text('Loading'),
+        label: Text('Loading', style: theme.textTheme.bodySmall!),
       ),
       error: (e, st) => OutlinedButton.icon(
+        key: const ValueKey('error'),
         onPressed: () => ref.invalidate(adhkarAudioUrlsProvider),
+        style: theme.outlinedButtonTheme.style!.copyWith(
+          padding: const WidgetStatePropertyAll(
+            EdgeInsets.symmetric(horizontal: 16),
+          ),
+        ),
         icon: const Icon(CupertinoIcons.exclamationmark_triangle),
-        label: const Text('Retry'),
+        label: Text(
+          'Retry',
+          style: theme.textTheme.bodySmall!.copyWith(
+            fontWeight: FontWeight.bold,
+            color: isDark
+                ? AppDarkColors.textPrimary
+                : AppLightColors.textPrimary,
+          ),
+        ),
       ),
       data: (urls) {
         final url = isMorning ? urls.morningUrl : urls.eveningUrl;
@@ -205,21 +229,23 @@ class AudioControlsChip extends ConsumerWidget {
 
           style: theme.outlinedButtonTheme.style!.copyWith(
             padding: const WidgetStatePropertyAll(
-              EdgeInsets.symmetric(horizontal: 4),
+              EdgeInsets.symmetric(horizontal: 6),
             ),
           ),
           icon: buffering
               ? const CupertinoActivityIndicator()
               : Icon(showPlaying ? CupertinoIcons.pause : CupertinoIcons.play),
-          label: Text(
-            (buffering ? 'Loading' : (showPlaying ? 'Pause' : 'Play')),
-            style: theme.textTheme.bodySmall!.copyWith(
-              fontWeight: FontWeight.bold,
-              color: isDark
-                  ? AppDarkColors.iconPrimary
-                  : AppLightColors.iconPrimary,
-            ),
-          ),
+          label: buffering
+              ? Text('Loading', style: theme.textTheme.bodySmall!)
+              : Text(
+                  (showPlaying ? 'Pause' : 'Play'),
+                  style: theme.textTheme.bodySmall!.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: isDark
+                        ? AppDarkColors.iconPrimary
+                        : AppLightColors.iconPrimary,
+                  ),
+                ),
         );
       },
     );

@@ -61,3 +61,4 @@ final getAdhkarsProvider = FutureProvider.family<List<Dhikr>, String>((
 
   return usecase.call(assetPath);
 });
+ 

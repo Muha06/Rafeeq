@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:rafeeq/app/notifications.dart';
+import 'package:rafeeq/core/app_keys.dart';
 import 'package:rafeeq/core/themes/app_theme.dart';
 import 'package:rafeeq/features/Quran/data/models/ayah_hive.dart';
 import 'package:rafeeq/features/Quran/data/models/surah_hive.dart';
@@ -44,11 +45,8 @@ Future<void> main() async {
   await Hive.openBox<DhikrBookmarkHiveModel>('dhikr_bookmarks_box');
   await Hive.openBox<AllahNameHive>('allah_names_box');
   await Hive.openBox<CachedSalahTimesHive>('salah_times_cache_box');
-  
-
 
   await Hive.openBox('settingsBox'); //settings
-
 
   //------------------NOTIFICATIONS---------------
   await NotificationService.instance.init(); //init
@@ -100,6 +98,7 @@ class MyApp extends ConsumerWidget {
         AppThemeMode.system => ThemeMode.system,
       },
       debugShowCheckedModeBanner: false,
+      scaffoldMessengerKey: scaffoldMessengerKey,
       home: const TabsScreen(),
     );
   }
