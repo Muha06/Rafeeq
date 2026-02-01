@@ -6,7 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/location/domain/open_mateo.dart';
 import 'package:rafeeq/core/location/presentation/provider/open_mateo_provider.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
+import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/features/salat-times/presentation/riverpod/salah_times_providers.dart';
+import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 enum LocMode { gps, manual }
 
@@ -26,6 +28,7 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
   GeoPlace? _selectedPlace; // ✅ selected from Open-Meteo
 
   Color get darkSurface => AppDarkColors.darkSurface;
+  Color get lightSurface => AppLightColors.lightSurface;
 
   bool _verifying = false;
   String? _verifyError;
@@ -140,6 +143,7 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isDark = ref.watch(isDarkProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('My location')),
@@ -151,8 +155,10 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
             description:
                 'We’ll detect your location and compute prayer times for where you are.',
             selected: _mode == LocMode.gps,
-            baseColor: darkSurface,
-            selectedColor: AppDarkColors.onDarkSurface,
+            baseColor: isDark ? darkSurface : lightSurface,
+            selectedColor: isDark
+                ? AppDarkColors.onDarkSurface
+                : AppLightColors.onAmberSoft,
             onTap: () => setState(() => _mode = LocMode.gps),
             trailing: _mode == LocMode.gps
                 ? const Icon(Icons.check_circle_rounded)
@@ -164,8 +170,10 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
             description:
                 'Stable and predictable. No location permission needed.',
             selected: _mode == LocMode.manual,
-            baseColor: darkSurface,
-            selectedColor: AppDarkColors.onDarkSurface,
+            baseColor: isDark ? darkSurface : lightSurface,
+            selectedColor: isDark
+                ? AppDarkColors.onDarkSurface
+                : AppLightColors.onAmberSoft,
             onTap: () => setState(() => _mode = LocMode.manual),
             trailing: _mode == LocMode.manual
                 ? const Icon(Icons.expand_less_rounded)
@@ -439,7 +447,7 @@ class _CitySearchSheetState extends ConsumerState<CitySearchSheet> {
 
 /// ---------- UI bits ----------
 
-class _SettingCard extends StatelessWidget {
+class _SettingCard extends ConsumerWidget {
   const _SettingCard({
     required this.title,
     required this.description,
@@ -461,8 +469,9 @@ class _SettingCard extends StatelessWidget {
   final Widget? child;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     final bg = selected ? selectedColor : baseColor;
+    final isDark = ref.watch(isDarkProvider);
 
     return InkWell(
       borderRadius: BorderRadius.circular(16),
@@ -493,8 +502,10 @@ class _SettingCard extends StatelessWidget {
                       Text(
                         description,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Colors.white.withAlpha(184),
                           height: 1.35,
+                          color: isDark
+                              ? AppDarkColors.textPrimary
+                              : AppLightColors.textPrimary,
                         ),
                       ),
                     ],
@@ -503,7 +514,9 @@ class _SettingCard extends StatelessWidget {
                 const SizedBox(width: 10),
                 IconTheme(
                   data: IconThemeData(
-                    color: Colors.white.withAlpha(selected ? 242 : 166),
+                    color: isDark
+                        ? AppDarkColors.iconPrimary
+                        : AppLightColors.iconPrimary,
                     size: 22,
                   ),
                   child: trailing,
@@ -518,7 +531,7 @@ class _SettingCard extends StatelessWidget {
   }
 }
 
-class _ActionButton extends StatelessWidget {
+class _ActionButton extends ConsumerWidget {
   const _ActionButton({
     required this.label,
     required this.icon,
@@ -530,8 +543,9 @@ class _ActionButton extends StatelessWidget {
   final VoidCallback? onTap;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     final enabled = onTap != null;
+    final isDark = ref.watch(isDarkProvider);
 
     return InkWell(
       borderRadius: BorderRadius.circular(12),
@@ -539,13 +553,21 @@ class _ActionButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(
-          color: Colors.white.withAlpha(enabled ? 15 : 8),
+          color: isDark
+              ? Colors.white.withAlpha(enabled ? 15 : 8)
+              : AppLightColors.lightSurface2,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: Colors.white.withAlpha(enabled ? 26 : 15)),
         ),
         child: Row(
           children: [
-            Icon(icon, size: 18, color: Colors.white.withAlpha(217)),
+            Icon(
+              icon,
+              size: 18,
+              color: isDark
+                  ? AppDarkColors.iconPrimary
+                  : AppLightColors.iconPrimary,
+            ),
             const SizedBox(width: 8),
             Expanded(
               child: Text(
@@ -553,8 +575,10 @@ class _ActionButton extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white.withAlpha(enabled ? 235 : 115),
+                  fontWeight: FontWeight.w300,
+                  color: isDark
+                      ? AppDarkColors.textPrimary
+                      : AppLightColors.textBody,
                 ),
               ),
             ),

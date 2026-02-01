@@ -12,7 +12,7 @@ class TodayTimesCard extends ConsumerWidget {
   const TodayTimesCard({
     super.key,
     required this.assetsByPrayer,
-    this.height = 190,
+    this.height = 180,
     this.borderRadius = 20,
   });
 

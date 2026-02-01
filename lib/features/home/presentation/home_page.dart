@@ -5,6 +5,9 @@ import 'package:hijri_date/hijri.dart';
 import 'package:rafeeq/app/providers/tabs_screen_provider.dart';
 import 'package:rafeeq/core/animations/navigation_animations.dart';
 import 'package:rafeeq/core/location/presentation/pages/user_loc_settings.dart';
+import 'package:rafeeq/core/location/presentation/provider/user_location_provider.dart';
+import 'package:rafeeq/core/themes/dark_colors.dart';
+import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/QURAN_PAGE/greetings_row.dart';
 import 'package:rafeeq/features/asma_ul_husna/presentation/pages/asma_ul_husna_list_page.dart';
@@ -16,6 +19,7 @@ import 'package:rafeeq/features/salat-times/domain/entities/salah_prayer.dart';
 import 'package:rafeeq/features/salat-times/presentation/riverpod/salah_times_providers.dart';
 import 'package:rafeeq/features/salat-times/presentation/widgets/timeline_card.dart';
 import 'package:rafeeq/features/settings/presentation/provider/notifcation_provider.dart';
+import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -33,7 +37,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     SalahPrayer.sunrise: 'assets/images/salat/fajr.jpeg',
     SalahPrayer.dhuha: 'assets/images/salat/daytime_3.jpeg',
     SalahPrayer.dhuhr: 'assets/images/salat/dhuhr.jpeg',
-    SalahPrayer.asr: 'assets/images/salat/asr.jpeg',
+    SalahPrayer.asr: 'assets/images/salat/dhuhr.jpeg',
     SalahPrayer.maghrib: 'assets/images/salat/maghrib.jpeg',
     SalahPrayer.isha: 'assets/images/salat/isha_2.jpeg',
     SalahPrayer.midnight: 'assets/images/salat/isha_2.jpeg',
@@ -46,6 +50,8 @@ class _HomePageState extends ConsumerState<HomePage> {
     ref.watch(salahNotificationsSchedulerProvider); //activate
     ref.watch(salahDailyReschedulerProvider); //activate
 
+    final isDark = ref.watch(isDarkProvider);
+
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
@@ -53,19 +59,40 @@ class _HomePageState extends ConsumerState<HomePage> {
           slivers: [
             SliverAppBar(
               pinned: false,
-              floating: true,
+              floating: false,
               snap: false,
               toolbarHeight: theme.appBarTheme.toolbarHeight!,
               title: Text('Rafeeq', style: theme.appBarTheme.titleTextStyle),
               actions: [
-                GestureDetector(
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const UserLocSettingsPage(),
-                    ),
-                  ),
-                  child: const Chip(label: Text('Mombasa')),
+                Consumer(
+                  builder: (context, ref, child) {
+                    final userLocation = ref.watch(userLocationProvider).value;
+                    return GestureDetector(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const UserLocSettingsPage(),
+                        ),
+                      ),
+                      child: Chip(
+                        label: Text(
+                          userLocation?.city ?? '',
+                          style: theme.textTheme.bodyMedium!.copyWith(
+                            fontWeight: FontWeight.w300,
+                            height: 1.25,
+                            fontSize: 14,
+                          ),
+                        ),
+                        backgroundColor: isDark
+                            ? AppDarkColors.darkSurface
+                            : AppLightColors.amberSoft,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                          side: const BorderSide(color: Colors.transparent),
+                        ),
+                      ),
+                    );
+                  },
                 ),
                 IconButton(
                   onPressed: () {
@@ -83,12 +110,13 @@ class _HomePageState extends ConsumerState<HomePage> {
                 padding: const EdgeInsets.only(
                   left: 12.0,
                   right: 12,
-                  top: 20,
-                  bottom: 8,
+                  top: 16,
+                  bottom: 0,
                 ),
                 child: GreetingsRow(formattedHijri: formattedHijri),
               ),
             ),
+            
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsetsGeometry.symmetric(
