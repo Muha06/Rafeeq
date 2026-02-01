@@ -28,12 +28,47 @@ class UserLocationNotifier extends AsyncNotifier<UserLocation?> {
     return repo.getCachedLocation();
   }
 
+  //refresh
   Future<void> refresh() async {
     final repo = ref.read(locationRepositoryProvider);
     final prev = state.value; // keep old
     state = AsyncData(prev); // keep showing
     final newLoc = await repo.refreshLocation();
     state = AsyncData(newLoc);
+  }
+
+  /// ✅ Save manual selection (from Open-Meteo pick)
+  Future<void> setManual({
+    required double lat,
+    required double lng,
+    required String city,
+    required String country,
+    String? timezone,
+  }) async {
+    final repo = ref.read(locationRepositoryProvider);
+
+    final loc = UserLocation(
+      lat: lat,
+      lng: lng,
+      city: city,
+      country: country,
+      timezone: timezone ?? 'Africa/Nairobi',
+      isAuto: false,
+    );
+
+    await repo.saveLocation(loc);
+    state = AsyncData(loc);
+  }
+
+  /// ✅ Switch back to auto mode (GPS)
+  Future<void> setAuto() async {
+    final repo = ref.read(locationRepositoryProvider);
+
+    final prev = state.value;
+    state = AsyncData(prev);
+
+    final loc = await repo.refreshLocation(); // this refetches user location
+    state = AsyncData(loc);
   }
 
   Future<void> clear() async {

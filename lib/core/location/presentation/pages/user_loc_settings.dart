@@ -4,13 +4,14 @@ import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/location/domain/open_mateo.dart';
+import 'package:rafeeq/core/location/domain/user_location.dart';
 import 'package:rafeeq/core/location/presentation/provider/open_mateo_provider.dart';
+import 'package:rafeeq/core/location/presentation/provider/user_location_provider.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
+import 'package:rafeeq/core/widgets/snackbars.dart';
 import 'package:rafeeq/features/salat-times/presentation/riverpod/salah_times_providers.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
-
-enum LocMode { gps, manual }
 
 class UserLocSettingsPage extends ConsumerStatefulWidget {
   const UserLocSettingsPage({super.key});
@@ -21,7 +22,7 @@ class UserLocSettingsPage extends ConsumerStatefulWidget {
 }
 
 class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
-  LocMode _mode = LocMode.gps;
+  bool _manualExpanded = false;
 
   String? _country;
   String? _countryCode; // ✅ needed for Open-Meteo country filter
@@ -35,6 +36,15 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
   bool _verified = false;
 
   String? _verifiedCity;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     final isAuto = ref.read(userLocationProvider).value?.isAuto ?? true;
+  //     if (!isAuto) setState(() => _manualExpanded = true);
+  //   });
+  // }
 
   void _resetVerification() {
     _verifyError = null;
@@ -54,7 +64,6 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
           _country = c.name;
           _countryCode = c.countryCode; // ✅
           _selectedPlace = null; // reset city
-          _mode = LocMode.manual;
           _resetVerification();
         });
       },
@@ -116,7 +125,6 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
       final usecase = ref.read(getTodaySalahTimesProvider);
       final method = ref.read(salahMethodProvider);
 
-      // ✅ reliable verification: timings by coordinates
       final times = await usecase.call(
         latitude: p.lat,
         longitude: p.lng,
@@ -132,6 +140,19 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
         _verifiedCity = p.name;
         _verifying = false;
       });
+
+      //After verifying -> setManual
+      await ref
+          .read(userLocationProvider.notifier)
+          .setManual(
+            lat: p.lat,
+            lng: p.lng,
+            city: p.name,
+            country: _country ?? p.country,
+          );
+      setState(() => _manualExpanded = true);
+
+      ref.invalidate(todaySalahTimesProvider);
     } catch (e) {
       setState(() {
         _verifyError = 'Couldn’t verify timings. Try another city.';
@@ -144,6 +165,11 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = ref.watch(isDarkProvider);
+    final isAuto = ref
+        .watch(userLocationProvider)
+        .maybeWhen(data: (loc) => loc?.isAuto ?? true, orElse: () => true);
+
+    final notifier = ref.read(userLocationProvider.notifier);
 
     return Scaffold(
       appBar: AppBar(title: const Text('My location')),
@@ -154,28 +180,51 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
             title: 'Use GPS automatically',
             description:
                 'We’ll detect your location and compute prayer times for where you are.',
-            selected: _mode == LocMode.gps,
+            selected: isAuto,
             baseColor: isDark ? darkSurface : lightSurface,
             selectedColor: isDark
                 ? AppDarkColors.onDarkSurface
                 : AppLightColors.onAmberSoft,
-            onTap: () => setState(() => _mode = LocMode.gps),
-            trailing: _mode == LocMode.gps
+            onTap: () async {
+              setState(() {
+                _manualExpanded = false;
+                _country = null;
+                _countryCode = null;
+                _selectedPlace = null;
+                _verifiedCity = null;
+              });
+
+              AppSnackBar.showSimple(
+                context: context,
+                isDark: isDark,
+                duration: const Duration(seconds: 4),
+                message: 'Setting to GPS mode...',
+              );
+
+              //Save as auto
+              await notifier.setAuto();
+              ref.invalidate(todaySalahTimesProvider);
+            },
+            trailing: isAuto
                 ? const Icon(Icons.check_circle_rounded)
                 : const Icon(Icons.gps_fixed_rounded),
           ),
           const SizedBox(height: 12),
+
+          //MANUAL
           _SettingCard(
             title: 'Select country & city manually',
             description:
                 'Stable and predictable. No location permission needed.',
-            selected: _mode == LocMode.manual,
+            selected: !isAuto,
             baseColor: isDark ? darkSurface : lightSurface,
             selectedColor: isDark
                 ? AppDarkColors.onDarkSurface
                 : AppLightColors.onAmberSoft,
-            onTap: () => setState(() => _mode = LocMode.manual),
-            trailing: _mode == LocMode.manual
+            onTap: () {
+              setState(() => _manualExpanded = !_manualExpanded);
+            },
+            trailing: _manualExpanded
                 ? const Icon(Icons.expand_less_rounded)
                 : const Icon(Icons.expand_more_rounded),
             child: AnimatedCrossFade(
@@ -240,7 +289,7 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          'Will save: $_country, $_verifiedCity',
+                          'Will save: ${_country ?? _selectedPlace?.country}, $_verifiedCity',
                           style: theme.textTheme.bodyMedium,
                         ),
                       ),
@@ -248,7 +297,7 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
                   ],
                 ),
               ),
-              crossFadeState: _mode == LocMode.manual
+              crossFadeState: _manualExpanded || !isAuto
                   ? CrossFadeState.showSecond
                   : CrossFadeState.showFirst,
               duration: const Duration(milliseconds: 180),

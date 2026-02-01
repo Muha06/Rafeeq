@@ -10,6 +10,8 @@ abstract class LocationRepository {
   /// Refresh using GPS + reverse geocode, then cache it
   Future<UserLocation> refreshLocation();
 
+  Future<void> saveLocation(UserLocation loc);
+
   /// Clear cached location (optional)
   Future<void> clear();
 }
@@ -33,46 +35,41 @@ class LocationRepositoryImpl implements LocationRepository {
       debugPrint('No cached location → refreshing once...');
       final refreshed = await refreshLocation();
 
-      debugPrint('Refreshed: ${refreshed.city}, ${refreshed.country}');
       return refreshed;
     } catch (e) {
-      debugPrint('getCachedLocation failed: $e');
       return null;
     }
   }
 
   @override
+  Future<void> saveLocation(UserLocation loc) async {
+    debugPrint('❤️Saving User locationn to local');
+    await local.write(loc);
+  }
+
+  @override
   Future<UserLocation> refreshLocation() async {
     try {
-      debugPrint('📍 Step 1: getCurrentPosition()...');
       final pos = await gps.getCurrentPosition();
-      debugPrint(
-        '📍got Position: ${pos.latitude},${pos.longitude} acc=${pos.accuracy} ts=${pos.timestamp}',
-      );
 
-      debugPrint('🗺️ Step 2: convert to city/country');
       final (city, country) = await gps.reverseGeocode(
         lat: pos.latitude,
         lng: pos.longitude,
       );
-      debugPrint('🗺️ Geocoded: $city, $country');
 
       final loc = UserLocation(
         lat: pos.latitude,
         lng: pos.longitude,
         city: city,
         country: country,
-        timezone: 'Africa/Nairobi',
+        timezone: '$country/$city',
         isAuto: true,
       );
 
-      debugPrint('✅ Step 3: About to write...');
       await local.write(loc);
-      debugPrint('✅ Step 4: Wrote to Hive');
 
       return loc;
     } catch (e, st) {
-      debugPrint('❌ refreshLocation failed: $e');
       debugPrint('$st');
       rethrow;
     }

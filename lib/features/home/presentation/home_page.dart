@@ -49,7 +49,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     final theme = Theme.of(context);
     ref.watch(salahNotificationsSchedulerProvider); //activate
     ref.watch(salahDailyReschedulerProvider); //activate
-
+    final userLocationAsync = ref.watch(userLocationProvider);
     final isDark = ref.watch(isDarkProvider);
 
     return Scaffold(
@@ -64,36 +64,69 @@ class _HomePageState extends ConsumerState<HomePage> {
               toolbarHeight: theme.appBarTheme.toolbarHeight!,
               title: Text('Rafeeq', style: theme.appBarTheme.titleTextStyle),
               actions: [
-                Consumer(
-                  builder: (context, ref, child) {
-                    final userLocation = ref.watch(userLocationProvider).value;
-                    return GestureDetector(
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const UserLocSettingsPage(),
-                        ),
-                      ),
-                      child: Chip(
-                        label: Text(
-                          userLocation?.city ?? '',
-                          style: theme.textTheme.bodyMedium!.copyWith(
-                            fontWeight: FontWeight.w300,
-                            height: 1.25,
-                            fontSize: 14,
+                userLocationAsync.when(
+                  error: (error, stackTrace) => GestureDetector(
+                    onTap: () => ref.invalidate(userLocationProvider),
+                    child: Chip(
+                      label: Row(
+                        children: [
+                          Icon(
+                            Icons.error_outline,
+                            size: 18,
+                            color: isDark
+                                ? AppDarkColors.iconSecondary
+                                : AppLightColors.iconSecondary,
                           ),
-                        ),
-                        backgroundColor: isDark
-                            ? AppDarkColors.darkSurface
-                            : AppLightColors.amberSoft,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
-                          side: const BorderSide(color: Colors.transparent),
+                          const SizedBox(width: 4),
+                          Text('retry', style: theme.textTheme.labelLarge),
+                        ],
+                      ),
+                      backgroundColor: isDark
+                          ? AppDarkColors.darkSurface
+                          : AppLightColors.lightSurface,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24),
+                        side: const BorderSide(color: Colors.transparent),
+                      ),
+                    ),
+                  ),
+                  loading: () => Chip(
+                    label: const CupertinoActivityIndicator(),
+                    backgroundColor: isDark
+                        ? AppDarkColors.darkSurface
+                        : AppLightColors.amberSoft,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24),
+                      side: const BorderSide(color: Colors.transparent),
+                    ),
+                  ),
+                  data: (userLocation) => GestureDetector(
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const UserLocSettingsPage(),
+                      ),
+                    ),
+                    child: Chip(
+                      label: Text(
+                        userLocation?.city ?? '',
+                        style: theme.textTheme.bodyMedium!.copyWith(
+                          fontWeight: FontWeight.w300,
+                          height: 1.25,
+                          fontSize: 14,
                         ),
                       ),
-                    );
-                  },
+                      backgroundColor: isDark
+                          ? AppDarkColors.darkSurface
+                          : AppLightColors.lightSurface,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24),
+                        side: const BorderSide(color: Colors.transparent),
+                      ),
+                    ),
+                  ),
                 ),
+
                 IconButton(
                   onPressed: () {
                     pushLeftPage(context, const SettingsPage());
@@ -116,7 +149,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 child: GreetingsRow(formattedHijri: formattedHijri),
               ),
             ),
-            
+
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsetsGeometry.symmetric(

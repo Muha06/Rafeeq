@@ -58,19 +58,13 @@ class _SalahTimingsPageState extends ConsumerState<SalahTimingsPage> {
                 children: [
                   Chip(text: formattedDate, icon: Icons.date_range),
 
-                  GestureDetector(
-                    onTap: () async {
-                      await ref.read(userLocationProvider.notifier).refresh();
-                      await ref.refresh(todaySalahTimesProvider.future);
-                    },
-                    child: Chip(
-                      text: userLoc.when(
-                        loading: () => 'Loading',
-                        error: (error, stackTrace) => 'Unknown',
-                        data: (loc) => '${loc?.country}/${loc?.city}',
-                      ),
-                      icon: Icons.refresh,
+                  Chip(
+                    text: userLoc.when(
+                      loading: () => 'Loading',
+                      error: (error, stackTrace) => 'Unknown',
+                      data: (loc) => '${loc?.country}/${loc?.city}',
                     ),
+                    icon: Icons.pin_drop_outlined,
                   ),
                 ],
               ),
@@ -136,7 +130,7 @@ class _TimingTile extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.cardColor,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: theme.dividerColor.withOpacity(0.25)),
+        border: Border.all(color: theme.dividerColor.withAlpha(65)),
       ),
       child: Row(
         children: [

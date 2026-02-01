@@ -10,7 +10,7 @@ class UserLocation {
   /// Usually from prayer API meta.timezone (optional but useful)
   final String timezone;
 
-  /// True = GPS/auto, False = user selected manually
+  /// True = GPS/auto,  
   final bool isAuto;
 
   const UserLocation({
