@@ -34,7 +34,9 @@ class SalahRemoteDataSourceImpl implements SalahRemoteDataSource {
       'method': method.toString(),
     });
 
-    debugPrint("user in : $country, $city");
+    debugPrint("fetching with city/country for user in : $country, $city");
+
+    print("❤️${uri.toString()}");
 
     final res = await client.get(uri);
     if (res.statusCode != 200) {
@@ -71,6 +73,9 @@ class SalahRemoteDataSourceImpl implements SalahRemoteDataSource {
     });
 
     debugPrint("fethcing salah for user in (coords) : $latitude, $longitude");
+
+    debugPrint("❤️${uri.toString()}");
+
     final res = await client.get(uri);
     if (res.statusCode != 200) {
       throw Exception('Failed to fetch timings: ${res.statusCode}');
