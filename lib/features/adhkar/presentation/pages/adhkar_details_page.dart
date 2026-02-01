@@ -119,13 +119,15 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
                   ); // ✅ read
                   final nowBookmarked = await toggle();
 
-                  AppSnackBar.showSimple(
-                    context: context,
-                    isDark: isDark,
-                    message: nowBookmarked
-                        ? 'Added dhikr to bookmarks'
-                        : 'Removed dhikr from bookmarks',
-                  );
+                  if (context.mounted) {
+                    AppSnackBar.showSimple(
+                      context: context,
+                      isDark: isDark,
+                      message: nowBookmarked
+                          ? 'Added dhikr to bookmarks'
+                          : 'Removed dhikr from bookmarks',
+                    );
+                  }
                 },
                 icon: Icon(
                   bookmarked
@@ -154,7 +156,7 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
       body: SafeArea(
         child: PageView.builder(
           controller: _pageController,
-          itemCount: widget.adhkars.length, 
+          itemCount: widget.adhkars.length,
           onPageChanged: (i) => setState(() => _currentIndex = i),
           itemBuilder: (context, i) {
             final dhikr = widget.adhkars[i];
