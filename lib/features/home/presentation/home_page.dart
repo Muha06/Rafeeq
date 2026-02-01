@@ -11,6 +11,7 @@ import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/QURAN_PAGE/greetings_row.dart';
 import 'package:rafeeq/features/asma_ul_husna/presentation/pages/asma_ul_husna_list_page.dart';
+import 'package:rafeeq/features/haramain-live/presentation/widgets/haramain_card.dart';
 import 'package:rafeeq/features/home/presentation/widgets/ayah_of_the_day.dart';
 import 'package:rafeeq/features/home/presentation/widgets/reminders_carousel.dart';
 import 'package:rafeeq/features/home/presentation/widgets/quick_action_row.dart';
@@ -190,6 +191,9 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
             ),
 
+            const SliverToBoxAdapter(child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+              child: HaramainCard())),
             //AYAH OF THE DAY
             const SliverToBoxAdapter(child: AyahOfTheDay()),
           ],

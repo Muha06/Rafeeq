@@ -1,0 +1,200 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:rafeeq/core/themes/dark_colors.dart';
+import 'package:rafeeq/core/themes/light_colors.dart';
+import 'package:rafeeq/features/haramain-live/presentation/pages/haramain_live_page.dart';
+import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
+
+class HaramainCard extends ConsumerWidget {
+  const HaramainCard({super.key});
+
+  @override
+  Widget build(BuildContext context, ref) {
+    final isDark = ref.watch(isDarkProvider);
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+    return Container(
+      decoration: BoxDecoration(
+        color: isDark ? AppDarkColors.darkSurface : AppLightColors.lightSurface,
+        borderRadius: BorderRadius.circular(16),
+      ),
+
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            //title
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const FaIcon(FontAwesomeIcons.kaaba),
+                const SizedBox(width: 8),
+                Text('Haramain • Live', style: textTheme.titleMedium),
+              ],
+            ),
+            const SizedBox(height: 4),
+
+            //subtitle
+            Text('Live from the sacred mosques', style: textTheme.bodyMedium),
+            const SizedBox(height: 8),
+            Divider(color: theme.dividerColor),
+
+            //cards
+            const MosqueCard(mosqueName: 'Makkah'),
+
+            const SizedBox(height: 12),
+
+            const MosqueCard(mosqueName: 'Madinah'),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class MosqueCard extends ConsumerWidget {
+  const MosqueCard({super.key, required this.mosqueName});
+
+  final String mosqueName;
+
+  @override
+  Widget build(BuildContext context, ref) {
+    final isDark = ref.watch(isDarkProvider);
+    final theme = Theme.of(context);
+
+    final bg = isDark
+        ? AppDarkColors.onDarkSurface
+        : AppLightColors.onAmberSoft.withAlpha(100);
+
+    return Material(
+      color: bg,
+      borderRadius: BorderRadius.circular(16),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        highlightColor: Colors.white.withAlpha(25),
+        onTap: () async {
+          await Future.delayed(const Duration(milliseconds: 250));
+
+          if (context.mounted) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const HaramainLivePage(
+                  title: 'Makkah',
+                  videoId: 'Cm1v4bteXbI',
+                ),
+              ),
+            );
+          }
+        },
+
+        child: Container(
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      mosqueName,
+                      style: theme.textTheme.titleSmall!.copyWith(fontSize: 16),
+                    ),
+                    const SizedBox(height: 4),
+
+                    const LiveChip(),
+                  ],
+                ),
+              ),
+
+              const Spacer(),
+
+              const FaIcon(FontAwesomeIcons.chevronRight),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class LiveChip extends StatefulWidget {
+  const LiveChip({super.key, this.text = 'LIVE'});
+
+  final String text;
+
+  @override
+  State<LiveChip> createState() => _LiveChipState();
+}
+
+class _LiveChipState extends State<LiveChip>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _c;
+  late final Animation<double> _pulse;
+
+  @override
+  void initState() {
+    super.initState();
+    _c = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    )..repeat(reverse: true);
+
+    _pulse = Tween<double>(
+      begin: 0.65,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _c, curve: Curves.easeInOut));
+  }
+
+  @override
+  void dispose() {
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textStyle = theme.textTheme.labelSmall?.copyWith(
+      fontWeight: FontWeight.w800,
+      letterSpacing: 0.6,
+      color: Colors.white,
+    );
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: Colors.red, // deep red/near-black
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          AnimatedBuilder(
+            animation: _pulse,
+            builder: (_, _) {
+              return Transform.scale(
+                scale: _pulse.value,
+                child: Container(
+                  height: 8,
+                  width: 8,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.black,
+                  ),
+                ),
+              );
+            },
+          ),
+          const SizedBox(width: 7),
+          Text(widget.text, style: textStyle),
+        ],
+      ),
+    );
+  }
+}
