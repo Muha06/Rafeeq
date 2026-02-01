@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hijri_date/hijri.dart';
 import 'package:rafeeq/app/providers/tabs_screen_provider.dart';
 import 'package:rafeeq/core/animations/navigation_animations.dart';
+import 'package:rafeeq/core/location/presentation/pages/user_loc_settings.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/QURAN_PAGE/greetings_row.dart';
 import 'package:rafeeq/features/asma_ul_husna/presentation/pages/asma_ul_husna_list_page.dart';
@@ -57,6 +58,15 @@ class _HomePageState extends ConsumerState<HomePage> {
               toolbarHeight: theme.appBarTheme.toolbarHeight!,
               title: Text('Rafeeq', style: theme.appBarTheme.titleTextStyle),
               actions: [
+                GestureDetector(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const UserLocSettingsPage(),
+                    ),
+                  ),
+                  child: const Chip(label: Text('Mombasa')),
+                ),
                 IconButton(
                   onPressed: () {
                     pushLeftPage(context, const SettingsPage());

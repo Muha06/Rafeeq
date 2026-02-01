@@ -19,23 +19,24 @@ class LocationRepositoryImpl implements LocationRepository {
   final LocationGpsDataSource gps;
 
   LocationRepositoryImpl({required this.local, required this.gps});
-
   @override
   Future<UserLocation?> getCachedLocation() async {
-    // debugPrint('Getting cached location');
-    // final hiveLoc = await local.read();
-    // debugPrint('Hive loc: ${hiveLoc?.city}, ${hiveLoc?.country}');
-
-    // if (hiveLoc != null) return hiveLoc;
-
     try {
-      debugPrint('Hive is null → refreshing once...');
+      // 1) try local cache first
+      final cached = await local.read();
 
+      if (cached != null) {
+        debugPrint('Using cached location: ${cached.city}, ${cached.country}');
+        return cached;
+      }
+
+      debugPrint('No cached location → refreshing once...');
       final refreshed = await refreshLocation();
+
       debugPrint('Refreshed: ${refreshed.city}, ${refreshed.country}');
       return refreshed;
     } catch (e) {
-      debugPrint('Refresh failed: $e');
+      debugPrint('getCachedLocation failed: $e');
       return null;
     }
   }
@@ -46,10 +47,10 @@ class LocationRepositoryImpl implements LocationRepository {
       debugPrint('📍 Step 1: getCurrentPosition()...');
       final pos = await gps.getCurrentPosition();
       debugPrint(
-        '📍 Position: ${pos.latitude},${pos.longitude} acc=${pos.accuracy} ts=${pos.timestamp}',
+        '📍got Position: ${pos.latitude},${pos.longitude} acc=${pos.accuracy} ts=${pos.timestamp}',
       );
 
-      debugPrint('🗺️ Step 2: reverseGeocode()...');
+      debugPrint('🗺️ Step 2: convert to city/country');
       final (city, country) = await gps.reverseGeocode(
         lat: pos.latitude,
         lng: pos.longitude,

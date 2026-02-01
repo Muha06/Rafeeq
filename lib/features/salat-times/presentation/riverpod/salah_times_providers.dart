@@ -37,14 +37,19 @@ final salahMethodProvider = Provider<int>((ref) => 3);
 
 final todaySalahTimesProvider = FutureProvider<SalahTimesEntity>((ref) async {
   final usecase = ref.read(getTodaySalahTimesProvider);
-  final loc = await ref.watch(userLocationProvider.future);
 
-  debugPrint(
-    'Salat times provider fetching for location: ${loc?.lat},${loc?.lng},${loc?.country},${loc?.city}',
+  // watch location state (reactive)
+  final locAsync = ref.watch(userLocationProvider);
+
+  // if it's loading/error, just await the future once
+  final loc = await locAsync.when(
+    data: (v) async => v,
+    loading: () => ref.watch(userLocationProvider.future),
+    error: (e, st) => Future.error(e, st),
   );
 
   if (loc == null) {
-    throw Exception('Location not set. Tap refresh to detect your location.');
+    throw Exception('Location not set. Turn on location and try again.');
   }
 
   return usecase.call(
