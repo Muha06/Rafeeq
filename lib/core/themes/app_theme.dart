@@ -121,6 +121,17 @@ class AppTheme {
         ),
         backgroundColor: AppDarkColors.darkSurfaceSolid,
       ),
+
+      dialogTheme: DialogThemeData(
+        backgroundColor: AppDarkColors.darkSurfaceSolid,
+        surfaceTintColor: Colors.transparent, // removes M3 tint "wash"
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: const BorderSide(color: AppDarkColors.divider),
+        ),
+        titleTextStyle: AppTextStyles.title,
+      ),
     );
   }
 
@@ -247,7 +258,7 @@ class AppTheme {
 
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: AppLightColors.amber,
+          foregroundColor: AppLightColors.textPrimary,
           iconColor: AppLightColors.iconPrimary,
           overlayColor: Colors.transparent,
           splashFactory: NoSplash.splashFactory,
@@ -263,6 +274,17 @@ class AppTheme {
           borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
         ),
         backgroundColor: AppLightColors.lightBackground,
+      ),
+
+      dialogTheme: DialogThemeData(
+        backgroundColor: AppLightColors.lightBackground,
+        surfaceTintColor: Colors.transparent, // removes M3 tint "wash"
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: const BorderSide(color: AppLightColors.divider),
+        ),
+        titleTextStyle: AppTextStyles.title,
       ),
     );
   }
