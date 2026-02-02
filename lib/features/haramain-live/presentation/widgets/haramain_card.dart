@@ -61,12 +61,15 @@ class MosqueCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
+    const makkahLive = 'https://makkahlive.net/makkahlive.aspx';
+    const madinahLive = 'https://makkahlive.net/madinalive.aspx';
+
     final isDark = ref.watch(isDarkProvider);
     final theme = Theme.of(context);
 
     final bg = isDark
         ? AppDarkColors.onDarkSurface
-        : AppLightColors.onAmberSoft.withAlpha(100);
+        : AppLightColors.onAmberSoft.withAlpha(50);
 
     return Material(
       color: bg,
@@ -76,16 +79,15 @@ class MosqueCard extends ConsumerWidget {
         highlightColor: Colors.white.withAlpha(25),
         onTap: () async {
           await Future.delayed(const Duration(milliseconds: 250));
+          final liveUrl = mosqueName == 'Madinah' ? madinahLive : makkahLive;
+          final title = mosqueName;
 
           if (context.mounted) {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const HaramainLivePage(
-                  title: 'Makkah',
-                  videoUrl:
-                      'https://www.youtube.com/live/7-Qf3g-0xEI?si=SoXH_yJwKJ_Z8cAC',
-                ),
+                builder: (context) =>
+                    HaramainAloulaLivePage(title: title, liveUrl: liveUrl),
               ),
             );
           }

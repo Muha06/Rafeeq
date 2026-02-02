@@ -1,97 +1,163 @@
 import 'package:flutter/material.dart';
-import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter_android/webview_flutter_android.dart';
 
-class HaramainLivePage extends StatefulWidget {
-  const HaramainLivePage({
+class HaramainAloulaLivePage extends StatefulWidget {
+  const HaramainAloulaLivePage({
     super.key,
-    required this.videoUrl,
     required this.title,
+    required this.liveUrl,
   });
 
-  final String videoUrl;
   final String title;
+  final String liveUrl;
 
   @override
-  State<HaramainLivePage> createState() => _HaramainLivePageState();
+  State<HaramainAloulaLivePage> createState() => _HaramainAloulaLivePageState();
 }
 
-class _HaramainLivePageState extends State<HaramainLivePage> {
-  late final YoutubePlayerController _controller;
+class _HaramainAloulaLivePageState extends State<HaramainAloulaLivePage> {
+  late final WebViewController _controller;
+
+  bool _isLoading = true;
+  bool _failed = false;
+  String? _errorText;
 
   @override
   void initState() {
     super.initState();
 
-    final videoId = YoutubePlayerController.convertUrlToId(widget.videoUrl);
-    
-    _controller = YoutubePlayerController.fromVideoId(
-      videoId: videoId ?? '',
-      autoPlay: true,
-      params: const YoutubePlayerParams(
-        showControls: true,
-        showFullscreenButton: true,
-        enableJavaScript: true,
-        playsInline: true,
-        strictRelatedVideos: true,
-        mute: true,
-      ),
-    );
+    _controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(Colors.transparent)
+      ..setUserAgent(
+        'Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Mobile Safari/537.36',
+      )
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onPageStarted: (_) {
+            setState(() {
+              _isLoading = true;
+              _failed = false;
+              _errorText = null;
+            });
+          },
+          onPageFinished: (_) {
+            setState(() => _isLoading = false);
+          },
+          onWebResourceError: (err) {
+            debugPrint(
+              'WEBVIEW ERROR: code=${err.errorCode} desc=${err.description} url=${err.url}',
+            );
+            setState(() {
+              _failed = true;
+              _isLoading = false;
+              _errorText = '${err.errorCode}: ${err.description}';
+            });
+          },
+          onNavigationRequest: (req) => NavigationDecision.navigate,
+        ),
+      )
+      ..loadRequest(Uri.parse(widget.liveUrl));
+
+    // ✅ Android-only: allow autoplay without user gesture
+    final platform = _controller.platform;
+    if (platform is AndroidWebViewController) {
+      platform.setMediaPlaybackRequiresUserGesture(false);
+    }
   }
 
-  @override
-  void dispose() {
-    _controller.close();
-    super.dispose();
+  Future<void> _openExternal() async {
+    final uri = Uri.parse(widget.liveUrl);
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  }
+
+  Future<void> _reload() async {
+    setState(() {
+      _failed = false;
+      _errorText = null;
+      _isLoading = true;
+    });
+    await _controller.reload();
   }
 
   @override
   Widget build(BuildContext context) {
-    return YoutubePlayerScaffold(
-      controller: _controller,
-      builder: (context, player) {
-        return Scaffold(
-          appBar: AppBar(title: Text(widget.title)),
-          body: ListView(
-            padding: const EdgeInsets.all(16),
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: AspectRatio(
-                  aspectRatio: 16 / 9,
-                  child: Stack(
-                    children: [
-                      Positioned.fill(child: player),
-                      Positioned.fill(
-                        child: YoutubeValueBuilder(
-                          controller: _controller,
-                          builder: (context, value) {
-                            final isReady =
-                                value.playerState != PlayerState.unknown;
-                            if (isReady) return const SizedBox.shrink();
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          },
-                        ),
+    final theme = Theme.of(context);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+        actions: [
+          IconButton(
+            tooltip: 'Open externally',
+            onPressed: _openExternal,
+            icon: const Icon(Icons.open_in_new),
+          ),
+          IconButton(
+            tooltip: 'Reload',
+            onPressed: _reload,
+            icon: const Icon(Icons.refresh),
+          ),
+        ],
+      ),
+      body: Stack(
+        children: [
+          if (_failed)
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.wifi_off, size: 40),
+                    const SizedBox(height: 10),
+                    Text(
+                      'Couldn’t load the live stream in-app.',
+                      style: theme.textTheme.titleMedium,
+                      textAlign: TextAlign.center,
+                    ),
+                    if (_errorText != null) ...[
+                      const SizedBox(height: 6),
+                      Text(
+                        _errorText!,
+                        style: theme.textTheme.bodySmall,
+                        textAlign: TextAlign.center,
                       ),
                     ],
-                  ),
+                    const SizedBox(height: 14),
+                    Wrap(
+                      spacing: 14,
+                      runSpacing: 10,
+                      alignment: WrapAlignment.center,
+                      children: [
+                        ElevatedButton(
+                          onPressed: _reload,
+                          child: const Text('Try again'),
+                        ),
+                        OutlinedButton(
+                          onPressed: _openExternal,
+                          child: Text(
+                            'Open externally',
+                            style: theme.textTheme.bodySmall!.copyWith(
+                              fontSize: 12,
+                              color: theme.textTheme.bodyLarge!.color,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 14),
-              Text(
-                widget.title,
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              const SizedBox(height: 6),
-              Text(
-                'Streaming in-app via YouTube.',
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-            ],
-          ),
-        );
-      },
+            )
+          else
+            WebViewWidget(controller: _controller),
+
+          if (_isLoading) const Center(child: CircularProgressIndicator()),
+        ],
+      ),
     );
   }
 }
