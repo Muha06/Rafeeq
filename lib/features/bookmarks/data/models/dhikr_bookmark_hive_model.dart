@@ -23,4 +23,3 @@ class DhikrBookmarkHiveModel extends HiveObject {
     required this.assetPath,
   });
 }
- 

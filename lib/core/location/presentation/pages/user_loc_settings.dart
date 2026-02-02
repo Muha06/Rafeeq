@@ -571,7 +571,7 @@ class _SettingCard extends ConsumerWidget {
                 ),
               ],
             ),
-            if (child != null) child!,
+            ?child,
           ],
         ),
       ),
