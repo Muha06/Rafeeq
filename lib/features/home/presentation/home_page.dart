@@ -19,7 +19,6 @@ import 'package:rafeeq/features/settings/presentation/pages/settings_page.dart';
 import 'package:rafeeq/features/salat-times/domain/entities/salah_prayer.dart';
 import 'package:rafeeq/features/salat-times/presentation/riverpod/salah_times_providers.dart';
 import 'package:rafeeq/features/salat-times/presentation/widgets/timeline_card.dart';
-import 'package:rafeeq/features/settings/presentation/provider/notifcation_provider.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class HomePage extends ConsumerStatefulWidget {
@@ -48,8 +47,9 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    ref.watch(salahNotificationsSchedulerProvider); //activate
-    ref.watch(salahDailyReschedulerProvider); //activate
+    ref.watch(
+      salahNotificationsControllerProvider,
+    ); //activate salah notification scheduling
     final userLocationAsync = ref.watch(userLocationProvider);
     final isDark = ref.watch(isDarkProvider);
 
@@ -191,9 +191,12 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
             ),
 
-            const SliverToBoxAdapter(child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-              child: HaramainCard())),
+            const SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                child: HaramainCard(),
+              ),
+            ),
             //AYAH OF THE DAY
             const SliverToBoxAdapter(child: AyahOfTheDay()),
           ],

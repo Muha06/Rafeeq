@@ -1,3 +1,4 @@
+import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:rafeeq/app/salat_notifications.dart';
@@ -8,6 +9,7 @@ import 'package:rafeeq/features/salat-times/domain/entities/salah_times.dart';
 import 'package:rafeeq/features/salat-times/domain/repository/get_today_salah_times_repo.dart';
 import 'package:rafeeq/features/salat-times/domain/usecases/get_today_salah_times.dart';
 import 'package:rafeeq/features/salat-times/presentation/riverpod/cached_salah_providers.dart';
+import 'package:rafeeq/features/settings/presentation/provider/notifcation_provider.dart';
 
 /// 1) External client
 final httpClientProvider = Provider.autoDispose<http.Client>((ref) {
@@ -60,14 +62,40 @@ final todaySalahTimesProvider = FutureProvider<SalahTimesEntity>((ref) async {
   );
 });
 
-final salahNotificationsSchedulerProvider = Provider<void>((ref) {
-  //listen to todaySalahTimesProvider & schedules when data  arrives
+//SINGLE SCHEDULER CONTROLLER PROVIDER
+final salahNotificationsControllerProvider = Provider<void>((ref) {
   ref.listen<AsyncValue<SalahTimesEntity>>(todaySalahTimesProvider, (
     prev,
     next,
-  ) {
+  ) async {
+    final enabled = ref.read(salahNotifEnabledProvider);
+
+    if (!enabled) {
+      debugPrint('☀️salah reminders settings: $enabled');
+      await SalahNotifications.instance.cancelAll();
+      return;
+    }
+
     next.whenData((times) async {
+      // re-check enabled again before scheduling (async safety)
+      if (!ref.read(salahNotifEnabledProvider)) return;
+      debugPrint('salah reminders: allowed scheduling');
       await SalahNotifications.instance.scheduleForToday(times: times);
     });
+  });
+
+  //check if user allowed salah reminders settings
+  ref.listen<bool>(salahNotifEnabledProvider, (prev, next) async {
+    if (!next) {
+      debugPrint('☀️salah reminders: canceled, cancelling');
+      await SalahNotifications.instance.cancelAll();
+      return;
+    }
+
+    final times = await ref.read(todaySalahTimesProvider.future);
+    if (!ref.read(salahNotifEnabledProvider)) return; //off? dont set
+
+    debugPrint('☀️salah reminders allowed: $next');
+    await SalahNotifications.instance.scheduleForToday(times: times);
   });
 });

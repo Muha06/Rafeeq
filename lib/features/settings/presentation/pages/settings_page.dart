@@ -22,6 +22,21 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     );
   }
 
+  //called when user toggles salah reminder settings
+  Future<void> setSalahNotif(WidgetRef ref, bool enabled) async {
+    final isUpdating = ref.read(salahNotifUpdatingProvider);
+    if (isUpdating) return;
+
+    ref.read(salahNotifUpdatingProvider.notifier).state = true;
+    try {
+      final box = ref.read(settingsBoxProvider);
+      await box.put(kSalahEnabled, enabled);
+      ref.read(salahNotifEnabledProvider.notifier).state = enabled;
+    } finally {
+      ref.read(salahNotifUpdatingProvider.notifier).state = false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);

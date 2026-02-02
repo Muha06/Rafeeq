@@ -4,7 +4,6 @@ import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/location/domain/open_mateo.dart';
-import 'package:rafeeq/core/location/domain/user_location.dart';
 import 'package:rafeeq/core/location/presentation/provider/open_mateo_provider.dart';
 import 'package:rafeeq/core/location/presentation/provider/user_location_provider.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';

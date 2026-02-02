@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:rafeeq/app/notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:rafeeq/features/salat-times/domain/entities/salah_prayer.dart';
@@ -41,13 +42,17 @@ class SalahNotifications {
     final now = tz.TZDateTime.now(tz.local);
 
     for (final prayer in _adhanIds.keys) {
-      final raw = times.at(prayer);
+      final salatTime = times.at(prayer);
 
       // Convert to TZDateTime safely
-      final adhanTime = tz.TZDateTime.from(raw, tz.local);
+      var adhanTime = tz.TZDateTime.from(salatTime, tz.local);
 
-      // Don't schedule past times
-      if (!adhanTime.isAfter(now)) continue;
+      // time passed -> take it tomorrow
+      if (!adhanTime.isAfter(now)) {
+        adhanTime = adhanTime.add(const Duration(days: 1));
+      }
+
+      debugPrint('⏰ ${prayer.label}: now=$times -> scheduled=$adhanTime');
 
       // 1) MAIN: Adhan at prayer time
       await NotificationService.instance.scheduleSalah(
@@ -57,6 +62,15 @@ class SalahNotifications {
         scheduled: adhanTime,
         isFajr: prayer == SalahPrayer.fajr,
       );
+    }
+
+    final pending = await NotificationService.instance.plugin
+        .pendingNotificationRequests();
+
+    debugPrint('🔔 Pending salat notifications: ${pending.length}');
+
+    for (final p in pending) {
+      debugPrint('• id=${p.id}, title=${p.title}, body=${p.body}');
     }
   }
 }
