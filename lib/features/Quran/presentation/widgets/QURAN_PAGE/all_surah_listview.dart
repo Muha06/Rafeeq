@@ -83,22 +83,34 @@ class SurahTile extends ConsumerWidget {
               ),
             );
           },
-          leading: CircleAvatar(
-            backgroundImage: const AssetImage(
-              'assets/images/quran/surah_badge.png',
-            ),
-            radius: 20,
-            child: Text(
-              surah.id.toString(),
-              style: theme.textTheme.bodySmall!.copyWith(
-                color: isDark
-                    ? AppDarkColors.darkBackground
-                    : AppLightColors.textPrimary,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
+          leading: SizedBox(
+            width: 44,
+            height: 44,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Image.asset(
+                  isDark
+                      ? 'assets/images/quran/surah_badge_dark.png'
+                      : 'assets/images/quran/surah_badge_light.png',
+                  width: 44,
+                  height: 44,
+                  fit: BoxFit.contain,
+                ),
+                Text(
+                  surah.id.toString(),
+                  style: theme.textTheme.bodySmall!.copyWith(
+                    color: isDark
+                        ? AppDarkColors.textPrimary
+                        : AppLightColors.textPrimary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
             ),
           ),
+
           contentPadding: const EdgeInsets.symmetric(
             // horizontal: 14,
             vertical: 8,

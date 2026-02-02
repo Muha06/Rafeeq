@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
- import 'package:rafeeq/features/Quran/presentation/riverpod/surah_settings_provider.dart';
+import 'package:rafeeq/features/Quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class SurahSettingsSheet extends ConsumerStatefulWidget {
@@ -32,7 +32,7 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
     );
 
     final titleTextstyle = theme.textTheme.labelLarge!.copyWith(
-      fontSize: 18,
+      fontSize: 19,
       fontWeight: FontWeight.w300,
     );
 
@@ -46,12 +46,7 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
           mainAxisSize: MainAxisSize.min,
           children: [
             const SizedBox(height: 24),
-            Center(
-              child: Text(
-                'Full Surah Settings',
-                style: theme.textTheme.titleMedium,
-              ),
-            ),
+            Text('Full Surah Settings', style: theme.textTheme.titleMedium),
             const SizedBox(height: 24),
 
             //TRANSATION TOGGLE & FONT SIZE

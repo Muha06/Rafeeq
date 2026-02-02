@@ -34,28 +34,109 @@ class AyahTile extends ConsumerWidget {
       duration: const Duration(milliseconds: 450),
       curve: Curves.easeIn,
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: isDark ? AppDarkColors.darkSurface : AppLightColors.amberSoft,
-          borderRadius: BorderRadius.circular(20),
-        ),
+        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+        padding: const EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // verse number (top-left)
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                '${ayah.surahId}: ${ayah.ayahNumber.toString()}',
-                textAlign: TextAlign.center,
-                style: theme.textTheme.bodySmall!.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: isDark
-                      ? AppDarkColors.textPrimary
-                      : AppLightColors.textPrimary,
-                  fontSize: 16,
-                ),
+            //Controls ssection
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              decoration: BoxDecoration(
+                color: isDark
+                    ? AppDarkColors.darkSurface
+                    : AppLightColors.amberSoft,
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    '${ayah.surahId}: ${ayah.ayahNumber.toString()}',
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.bodySmall!.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: isDark
+                          ? AppDarkColors.textPrimary
+                          : AppLightColors.textPrimary,
+                      fontSize: 16,
+                    ),
+                  ),
+                  const Spacer(),
+
+                  IconButton(
+                    onPressed: () async {
+                      try {
+                        final isBookmarked = ref.read(isBookmarkedProvider(id));
+
+                        if (isBookmarked) {
+                          // remove bookmark
+                          await ref.read(removeQuranBookmarkProvider(id))();
+
+                          AppSnackBar.showSimple(
+                            context: context,
+                            isDark: isDark,
+                            message: 'Bookmark removed ❌',
+                            duration: const Duration(seconds: 3),
+                          );
+
+                          return;
+                        }
+
+                        // add bookmark
+                        final ayahSurah = ref.read(
+                          ayahSurahProvider(ayah.surahId),
+                        );
+
+                        if (ayahSurah != null) {
+                          final bookmark = QuranBookmarkEntity(
+                            id: '${ayah.surahId}:${ayah.ayahNumber}',
+                            surahId: ayah.surahId,
+                            surahEnglishName: ayahSurah.nameTransliteration,
+                            ayahNumber: ayah.ayahNumber,
+                            createdAt: DateTime.now(),
+                          );
+
+                          await ref.read(addQuranBookmarkProvider(bookmark))();
+                        }
+
+                        AppSnackBar.showSimple(
+                          context: context,
+                          isDark: isDark,
+                          message: 'Bookmark added ✅',
+                          duration: const Duration(seconds: 3),
+                        );
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Bookmark failed: $e')),
+                        );
+                      }
+                    },
+                    icon: Icon(
+                      isBookmarked
+                          ? Icons.bookmark_added
+                          : Icons.bookmark_add_outlined,
+                      size: 22,
+                      color: isBookmarked
+                          ? isDark
+                                ? AppDarkColors.amber
+                                : AppLightColors.iconAccent
+                          : isDark
+                          ? AppDarkColors.iconPrimary
+                          : AppLightColors.iconPrimary,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () async {},
+                    icon: Icon(
+                      Icons.share,
+                      size: 22,
+                      color: isDark
+                          ? AppDarkColors.iconPrimary
+                          : AppLightColors.iconPrimary,
+                    ),
+                  ),
+                ],
               ),
             ),
 
@@ -94,86 +175,6 @@ class AyahTile extends ConsumerWidget {
                   : const SizedBox.shrink(key: ValueKey('hide')),
             ),
             if (showTranslation) const SizedBox(height: 20),
-
-            Divider(color: theme.dividerColor),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                IconButton(
-                  onPressed: () async {
-                    try {
-                      final isBookmarked = ref.read(isBookmarkedProvider(id));
-
-                      if (isBookmarked) {
-                        // remove bookmark
-                        await ref.read(removeQuranBookmarkProvider(id))();
-
-                        AppSnackBar.showSimple(
-                          context: context,
-                          isDark: isDark,
-                          message: 'Bookmark removed ❌',
-                          duration: const Duration(seconds: 3),
-                        );
-
-                        return;
-                      }
-
-                      // add bookmark
-                      final ayahSurah = ref.read(
-                        ayahSurahProvider(ayah.surahId),
-                      );
-
-                      if (ayahSurah != null) {
-                        final bookmark = QuranBookmarkEntity(
-                          id: '${ayah.surahId}:${ayah.ayahNumber}',
-                          surahId: ayah.surahId,
-                          surahEnglishName: ayahSurah.nameTransliteration,
-                          ayahNumber: ayah.ayahNumber,
-                          createdAt: DateTime.now(),
-                        );
-
-                        await ref.read(addQuranBookmarkProvider(bookmark))();
-                      }
-
-                      AppSnackBar.showSimple(
-                        context: context,
-                        isDark: isDark,
-                        message: 'Bookmark added ✅',
-                        duration: const Duration(seconds: 3),
-                      );
-                    } catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Bookmark failed: $e')),
-                      );
-                    }
-                  },
-                  icon: Icon(
-                    isBookmarked
-                        ? Icons.bookmark_added
-                        : Icons.bookmark_add_outlined,
-                    size: 22,
-                    color: isBookmarked
-                        ? isDark
-                              ? AppDarkColors.amber
-                              : AppLightColors.iconAccent
-                        : isDark
-                        ? AppDarkColors.iconSecondary
-                        : AppLightColors.iconSecondary,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () async {},
-                  icon: Icon(
-                    Icons.share,
-                    size: 22,
-                    color: isDark
-                        ? AppDarkColors.iconSecondary
-                        : AppLightColors.iconSecondary,
-                  ),
-                ),
-              ],
-            ),
           ],
         ),
       ),

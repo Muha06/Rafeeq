@@ -11,7 +11,7 @@ class AppTextStyles {
   // Qur'an Arabic text
   static final TextStyle quranBody = const TextStyle(
     fontFamily: 'Uthmani',
-    fontSize: 22,
+    fontSize: 32,
     height: 1.8,
     wordSpacing: 2,
     fontFamilyFallback: [
