@@ -83,7 +83,8 @@ class MosqueCard extends ConsumerWidget {
               MaterialPageRoute(
                 builder: (context) => const HaramainLivePage(
                   title: 'Makkah',
-                  videoId: 'Cm1v4bteXbI',
+                  videoUrl:
+                      'https://www.youtube.com/live/7-Qf3g-0xEI?si=SoXH_yJwKJ_Z8cAC',
                 ),
               ),
             );

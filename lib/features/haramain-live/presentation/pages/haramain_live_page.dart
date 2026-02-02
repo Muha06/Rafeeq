@@ -4,11 +4,11 @@ import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 class HaramainLivePage extends StatefulWidget {
   const HaramainLivePage({
     super.key,
-    required this.videoId,
+    required this.videoUrl,
     required this.title,
   });
 
-  final String videoId;
+  final String videoUrl;
   final String title;
 
   @override
@@ -22,8 +22,10 @@ class _HaramainLivePageState extends State<HaramainLivePage> {
   void initState() {
     super.initState();
 
+    final videoId = YoutubePlayerController.convertUrlToId(widget.videoUrl);
+    
     _controller = YoutubePlayerController.fromVideoId(
-      videoId: widget.videoId,
+      videoId: videoId ?? '',
       autoPlay: true,
       params: const YoutubePlayerParams(
         showControls: true,
