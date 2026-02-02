@@ -81,10 +81,7 @@ Future<void> main() async {
       body: 'Don’t miss your evening adhkār.',
       time: keveningAdhkarTime,
     );
-  } else {
-    await NotificationService.instance.cancel(200); //else cancel
-    await NotificationService.instance.cancel(201); //else cancel
-  }
+  }  
 
   runApp(const ProviderScope(child: MyApp()));
 }
