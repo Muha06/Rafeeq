@@ -9,7 +9,7 @@ import 'package:rafeeq/features/salat-times/domain/entities/salah_times.dart';
 import 'package:rafeeq/features/salat-times/domain/repository/get_today_salah_times_repo.dart';
 import 'package:rafeeq/features/salat-times/domain/usecases/get_today_salah_times.dart';
 import 'package:rafeeq/features/salat-times/presentation/riverpod/cached_salah_providers.dart';
-import 'package:rafeeq/features/settings/presentation/provider/notifcation_provider.dart';
+import 'package:rafeeq/features/settings/presentation/provider/settings_notifcation_provider.dart';
 
 /// 1) External client
 final httpClientProvider = Provider.autoDispose<http.Client>((ref) {

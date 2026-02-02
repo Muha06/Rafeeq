@@ -32,20 +32,13 @@ final salahNotifEnabledProvider = StateProvider<bool>((ref) {
 });
 
 //Listens to user adhkarsettingsprovider
-final adhkarNotificationsControllerProvider = Provider<void>((ref) {
-  ref.listen<bool>(adhkarNotifEnabledProvider, (prev, next) async {
-    if (!next) {
-      debugPrint('Cancelling $next');
-      await NotificationService.instance.cancel(morningNotifId);
-      await NotificationService.instance.cancel(eveningNotifId);
-      return;
-    }
-
-    // enabled: schedule both
+final adhkarNotificationsControllerProvider = Provider<void>((ref) async {
+  void schedule() async {
     await NotificationService.instance.cancel(morningNotifId);
     await NotificationService.instance.cancel(eveningNotifId);
 
-    debugPrint('scheduling adhakr $next');
+    debugPrint('Scheduling  ');
+
     await NotificationService.instance.scheduleDaily(
       id: morningNotifId,
       title: 'Morning Adhkār ☀️',
@@ -59,7 +52,23 @@ final adhkarNotificationsControllerProvider = Provider<void>((ref) {
       body: 'Don’t miss your evening adhkār.',
       time: keveningAdhkarTime,
     );
-    
+  }
+
+  final enabled = ref.read(adhkarNotifEnabledProvider);
+
+  if (enabled) {
+  debugPrint('enabled, scheduling $enabled');
+    schedule();
+  }
+
+  // then react to changes
+  ref.listen<bool>(adhkarNotifEnabledProvider, (prev, next) async {
+    if (!next) {
+      await NotificationService.instance.cancel(morningNotifId);
+      await NotificationService.instance.cancel(eveningNotifId);
+      return;
+    }
+    schedule();
   });
 });
 

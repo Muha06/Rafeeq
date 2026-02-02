@@ -83,26 +83,46 @@ class NotificationService {
     }
   }
 
-  Future<void> testAdhanNow() async {
-    const details = NotificationDetails(
-      android: AndroidNotificationDetails(
-        'rafeeq_salah_adhan_v1',
-        'Salah (Adhan)',
-        channelDescription: 'Salah notifications with adhan sound',
-        importance: Importance.max,
-        priority: Priority.high,
-        playSound: true,
-        sound: RawResourceAndroidNotificationSound('adhan_normal'),
-      ),
-    );
+  // Future<void> testAdhanNow() async {
+  //   const details = NotificationDetails(
+  //     android: AndroidNotificationDetails(
+  //       'rafeeq_salah_adhan_v1',
+  //       'Salah (Adhan)',
+  //       channelDescription: 'Salah notifications with adhan sound',
+  //       importance: Importance.max,
+  //       priority: Priority.high,
+  //       playSound: true,
+  //       sound: RawResourceAndroidNotificationSound('adhan_normal'),
+  //     ),
+  //   );
 
-    await _plugin.show(
-      9999,
-      'Test Adhan',
-      'If you hear sound, we’re good ✅',
-      details,
-    );
-  }
+  //   await _plugin.show(
+  //     9999,
+  //     'Test Adhan',
+  //     'If you hear sound, we’re good ✅',
+  //     details,
+  //   );
+  // }
+
+  // Future<void> testFajrNow() async {
+  //   const details = NotificationDetails(
+  //     android: AndroidNotificationDetails(
+  //       'rafeeq_salah_adhan_fajr_v1',
+  //       'Salah (Adhan - Fajr)',
+  //       importance: Importance.max,
+  //       priority: Priority.high,
+  //       playSound: true,
+  //       sound: RawResourceAndroidNotificationSound('adhan_fajr'),
+  //     ),
+  //   );
+
+  //   await _plugin.show(
+  //     9998,
+  //     'Test Fajr Adhan',
+  //     'If this sounds different, we’re cooking ✅',
+  //     details,
+  //   );
+  // }
 
   //FOR SALAH
   Future<void> scheduleSalah({
@@ -146,26 +166,6 @@ class NotificationService {
       androidScheduleMode: exactAllowed
           ? AndroidScheduleMode.exactAllowWhileIdle
           : AndroidScheduleMode.inexactAllowWhileIdle,
-    );
-  }
-
-  Future<void> testFajrNow() async {
-    const details = NotificationDetails(
-      android: AndroidNotificationDetails(
-        'rafeeq_salah_adhan_fajr_v1',
-        'Salah (Adhan - Fajr)',
-        importance: Importance.max,
-        priority: Priority.high,
-        playSound: true,
-        sound: RawResourceAndroidNotificationSound('adhan_fajr'),
-      ),
-    );
-
-    await _plugin.show(
-      9998,
-      'Test Fajr Adhan',
-      'If this sounds different, we’re cooking ✅',
-      details,
     );
   }
 
@@ -217,6 +217,13 @@ class NotificationService {
           : AndroidScheduleMode.inexactAllowWhileIdle, // fallback
       matchDateTimeComponents: DateTimeComponents.time,
     );
+    final pending = await NotificationService.instance.plugin
+        .pendingNotificationRequests();
+
+    debugPrint('🔔 Pending adhkar notifications: ${pending.length}');
+    for (final p in pending) {
+      debugPrint('• id=${p.id}, title=${p.title}, body=${p.body}');
+    }
   }
 
   Future<bool> _ensureExactAlarmsAllowed() async {

@@ -3,7 +3,7 @@ import 'package:rafeeq/core/location/data/location_gps_ds.dart';
 import 'package:rafeeq/core/location/data/location_local_ds.dart';
 import 'package:rafeeq/core/location/domain/user_location.dart';
 import 'package:rafeeq/core/location/domain/user_location_repo.dart';
-import 'package:rafeeq/features/settings/presentation/provider/notifcation_provider.dart';
+import 'package:rafeeq/features/settings/presentation/provider/settings_notifcation_provider.dart';
 
 // You already have something like this in your app:
 

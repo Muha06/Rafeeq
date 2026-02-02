@@ -52,8 +52,6 @@ class SalahNotifications {
         adhanTime = adhanTime.add(const Duration(days: 1));
       }
 
-      debugPrint('⏰ ${prayer.label}: now=$times -> scheduled=$adhanTime');
-
       // 1) MAIN: Adhan at prayer time
       await NotificationService.instance.scheduleSalah(
         id: _adhanIds[prayer]!,
