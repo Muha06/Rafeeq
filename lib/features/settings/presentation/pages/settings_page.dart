@@ -37,6 +37,22 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     }
   }
 
+  //Add/ remove adhkar reminders
+  Future<void> setAdhkarNotif(WidgetRef ref, bool enabled) async {
+    final isUpdating = ref.read(adhkarNotifUpdatingProvider);
+    if (isUpdating) return;
+
+    ref.read(adhkarNotifUpdatingProvider.notifier).state = true;
+
+    try {
+      final box = ref.read(settingsBoxProvider);
+      await box.put(kAdhkarEnabled, enabled);
+      ref.read(adhkarNotifEnabledProvider.notifier).state = enabled;
+    } finally {
+      ref.read(adhkarNotifUpdatingProvider.notifier).state = false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);

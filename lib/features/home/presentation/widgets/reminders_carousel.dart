@@ -19,14 +19,16 @@ class HomeRemindersCarousel extends ConsumerWidget {
     return m >= startMin || m < endMin;
   }
 
+  int hm(int h, int m) => h * 60 + m;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final now = DateTime.now();
 
     final items = <Widget>[];
 
-    bool isMorning = _isInWindow(now, 5 * 60, 11 * 60);
-    bool isEvening = _isInWindow(now, 17 * 60, 22 * 60);
+    bool isMorning = _isInWindow(now, hm(6, 30), hm(11, 30));
+    bool isEvening = _isInWindow(now, hm(17, 30), hm(22, 30));
 
     // Morning: 05:00 – 10:00
     if (isMorning) {

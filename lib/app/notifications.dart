@@ -40,6 +40,7 @@ class NotificationService {
     );
     await _plugin.initialize(initSettings); // init plugin
 
+    //Nomal adhan channed
     const AndroidNotificationChannel adhanChannel = AndroidNotificationChannel(
       'rafeeq_salah_adhan_v1',
       'Salah (Adhan)',
@@ -49,6 +50,7 @@ class NotificationService {
       sound: RawResourceAndroidNotificationSound('adhan_normal'),
     );
 
+    //Special fajr adhan channel
     const fajrChannel = AndroidNotificationChannel(
       'rafeeq_salah_adhan_fajr_v1',
       'Salah (Adhan - Fajr)',
