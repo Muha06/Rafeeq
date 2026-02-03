@@ -17,9 +17,7 @@ import 'package:rafeeq/features/home/presentation/widgets/reminders_carousel.dar
 import 'package:rafeeq/features/home/presentation/widgets/quick_action_row.dart';
 import 'package:rafeeq/features/settings/presentation/pages/settings_page.dart';
 import 'package:rafeeq/features/salat-times/domain/entities/salah_prayer.dart';
-import 'package:rafeeq/features/salat-times/presentation/riverpod/salah_times_providers.dart';
 import 'package:rafeeq/features/salat-times/presentation/widgets/timeline_card.dart';
-import 'package:rafeeq/features/settings/presentation/provider/settings_notifcation_provider.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class HomePage extends ConsumerStatefulWidget {
@@ -48,13 +46,6 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    ref.watch(
-      salahNotificationsControllerProvider,
-    ); //activate salah notification scheduling
-    ref.watch(
-      adhkarNotificationsControllerProvider,
-    ); //activate adhkar notification scheduling
-
     final userLocationAsync = ref.watch(userLocationProvider);
     final isDark = ref.watch(isDarkProvider);
 

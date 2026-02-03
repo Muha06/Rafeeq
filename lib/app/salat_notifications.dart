@@ -61,14 +61,13 @@ class SalahNotifications {
         isFajr: prayer == SalahPrayer.fajr,
       );
     }
-
+    //Then debug print
     final pending = await NotificationService.instance.plugin
         .pendingNotificationRequests();
 
-    debugPrint('🔔 Pending salat notifications: ${pending.length}');
-
+    debugPrint('🕌 Pending Salat TOTAL: ${pending.length}');
     for (final p in pending) {
-      debugPrint('• id=${p.id}, title=${p.title}, body=${p.body}');
+      debugPrint('• id=${p.id}, title=${p.title}');
     }
   }
 }

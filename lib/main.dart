@@ -8,9 +8,11 @@ import 'package:rafeeq/core/themes/app_theme.dart';
 import 'package:rafeeq/features/Quran/data/models/ayah_hive.dart';
 import 'package:rafeeq/features/Quran/data/models/surah_hive.dart';
 import 'package:rafeeq/app/tabs_screen.dart';
- import 'package:rafeeq/features/asma_ul_husna/data/models/hive/name_hive_model.dart';
+import 'package:rafeeq/features/asma_ul_husna/data/models/hive/name_hive_model.dart';
 import 'package:rafeeq/features/bookmarks/data/models/dhikr_bookmark_hive_model.dart';
 import 'package:rafeeq/features/bookmarks/data/models/quran_bookmark_hive_model.dart';
+import 'package:rafeeq/features/salat-times/presentation/riverpod/salah_times_providers.dart';
+import 'package:rafeeq/features/settings/presentation/provider/settings_notifcation_provider.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 import 'package:rafeeq/features/salat-times/data/models/hive/cached_salah_times_hive.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -48,22 +50,34 @@ Future<void> main() async {
 
   //------------------NOTIFICATIONS---------------
   await NotificationService.instance.init(); //init
-  final pending = await NotificationService.instance.plugin
-      .pendingNotificationRequests();
-
-  debugPrint('🔔 Pending notifications: ${pending.length}');
-  for (final p in pending) {
-    debugPrint('• id=${p.id}, title=${p.title}, body=${p.body}');
-  }
 
   runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends ConsumerWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context, ref) {
+  ConsumerState<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends ConsumerState<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _bootstrap();
+    });
+  }
+
+  Future<void> _bootstrap() async {
+    //ACTIVATE
+    ref.read(salahNotificationsControllerProvider);
+    ref.read(adhkarNotificationsControllerProvider);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final mode = ref.watch(themeModeProvider);
 
     return MaterialApp(
