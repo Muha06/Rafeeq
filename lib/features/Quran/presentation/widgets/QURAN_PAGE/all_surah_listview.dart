@@ -66,69 +66,70 @@ class SurahTile extends ConsumerWidget {
     final isDark = ref.watch(isDarkProvider);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          color: theme.scaffoldBackgroundColor,
-        ),
-        child: ListTile(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    // SurahPagerPage(surahs: surahs, initialIndex: index),
-                    FullSurahPage(surah: surah),
+      padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 8),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => FullSurahPage(surah: surah),
+            ),
+          );
+        },
+        child: Row(
+          children: [
+            SizedBox(
+              width: 44,
+              height: 44,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Image.asset(
+                    isDark
+                        ? 'assets/images/quran/surah_badge_dark.png'
+                        : 'assets/images/quran/surah_badge_light.png',
+                    width: 44,
+                    height: 44,
+                    fit: BoxFit.contain,
+                  ),
+                  Text(
+                    surah.id.toString(),
+                    style: theme.textTheme.bodySmall!.copyWith(
+                      color: isDark
+                          ? AppDarkColors.textPrimary
+                          : AppLightColors.textPrimary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
               ),
-            );
-          },
-          leading: SizedBox(
-            width: 44,
-            height: 44,
-            child: Stack(
-              alignment: Alignment.center,
+            ),
+
+            const SizedBox(width: 10),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.asset(
-                  isDark
-                      ? 'assets/images/quran/surah_badge_dark.png'
-                      : 'assets/images/quran/surah_badge_light.png',
-                  width: 44,
-                  height: 44,
-                  fit: BoxFit.contain,
+                Text(
+                  surah.nameTransliteration,
+                  style: theme.textTheme.titleMedium,
                 ),
                 Text(
-                  surah.id.toString(),
-                  style: theme.textTheme.bodySmall!.copyWith(
-                    color: isDark
-                        ? AppDarkColors.textPrimary
-                        : AppLightColors.textPrimary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
+                  "${surah.nameTransliteration} • Verses ${surah.versesCount} ",
+                  style: theme.textTheme.bodySmall,
                 ),
               ],
             ),
-          ),
 
-          contentPadding: const EdgeInsets.symmetric(
-            // horizontal: 14,
-            vertical: 8,
-          ),
-          title: Text(
-            surah.nameTransliteration,
-            style: theme.textTheme.titleMedium,
-          ),
-          subtitle: Text(
-            "${surah.nameTransliteration} • Verses ${surah.versesCount} ",
-            style: theme.textTheme.bodySmall,
-          ),
-          trailing: Text(
-            cleanAyah(surah.nameArabic.toString()),
-            style: theme.textTheme.bodyLarge!.copyWith(
-              fontWeight: FontWeight.bold,
+            const Spacer(),
+            Text(
+              cleanAyah(surah.nameArabic.toString()),
+              style: theme.textTheme.bodyLarge!.copyWith(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
