@@ -14,6 +14,7 @@ class AppLightColors {
 
   // Primary (cocoa brown)
   static const Color primary = Color(0xFF7A5A45);
+  static const Color onPrimary = Color(0xFFEDE3DD);
 
   // Primary pressed / darker
   static const Color primaryDark = Color(0xFF5E4333);

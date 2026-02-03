@@ -67,11 +67,11 @@ class _BookmarkPageState extends ConsumerState<BookmarkPage> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.60,
-                // padding: const EdgeInsets.all(4),
+                padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
                   color: isDark
                       ? AppDarkColors.darkSurface
-                      : AppLightColors.amberSoft,
+                      : AppLightColors.buttonPrimaryPressed,
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(color: theme.dividerColor),
                 ),
@@ -84,18 +84,18 @@ class _BookmarkPageState extends ConsumerState<BookmarkPage> {
                   indicator: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
                     color: isDark
-                        ? AppDarkColors.textSecondary
-                        : AppLightColors.buttonPrimaryPressed,
+                        ? AppDarkColors.iconDisabled
+                        : AppLightColors.onPrimary,
                   ),
 
                   // labelColor: isDark ? Colors.white : Colors.black,
                   unselectedLabelColor: isDark
-                      ? AppDarkColors.textBody
-                      : AppLightColors.textPrimary,
+                      ? AppDarkColors.iconPrimary
+                      : Colors.white,
 
-                  labelStyle: const TextStyle(
-                    fontWeight: FontWeight.w700,
-                    color: AppLightColors.snackbarText,
+                  labelStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: isDark ? AppDarkColors.iconPrimary : Colors.black,
                     fontSize: 13,
                   ),
                   unselectedLabelStyle: const TextStyle(
