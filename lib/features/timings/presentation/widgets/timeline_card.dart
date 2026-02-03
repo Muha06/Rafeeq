@@ -13,7 +13,7 @@ class TodayTimesCard extends ConsumerWidget {
     super.key,
     required this.assetsByPrayer,
     this.height = 180,
-    this.borderRadius = 20,
+    this.borderRadius = 16,
   });
 
   final Map<SalahPrayer, String> assetsByPrayer;
@@ -104,7 +104,7 @@ class _CardBody extends StatelessWidget {
                   end: Alignment.bottomCenter,
                   colors: [
                     Colors.black.withAlpha(125),
-                    Colors.black.withAlpha(65),
+                    Colors.black.withAlpha(100),
                     Colors.black.withAlpha(140),
                   ],
                 ),
@@ -173,9 +173,8 @@ class _CardBody extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Bottom: "Next salah in"
                           Text(
-                            'Next salah in:',
+                            'Next in:',
                             style: theme.textTheme.bodySmall?.copyWith(
                               color: onImage.withAlpha(230),
                               fontWeight: FontWeight.w600,

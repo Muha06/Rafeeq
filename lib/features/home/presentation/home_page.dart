@@ -34,12 +34,12 @@ class _HomePageState extends ConsumerState<HomePage> {
   final Map<SalahPrayer, String> assetByPrayer = {
     SalahPrayer.fajr: 'assets/images/salat/fajr.jpeg',
     SalahPrayer.sunrise: 'assets/images/salat/fajr.jpeg',
-    SalahPrayer.dhuha: 'assets/images/salat/daytime_3.jpeg',
+    SalahPrayer.dhuha: 'assets/images/salat/dhuhr.jpeg',
     SalahPrayer.dhuhr: 'assets/images/salat/dhuhr.jpeg',
-    SalahPrayer.asr: 'assets/images/salat/dhuhr.jpeg',
+    SalahPrayer.asr: 'assets/images/salat/asr.jpeg',
     SalahPrayer.maghrib: 'assets/images/salat/maghrib.jpeg',
-    SalahPrayer.isha: 'assets/images/salat/isha_2.jpeg',
-    SalahPrayer.midnight: 'assets/images/salat/isha_2.jpeg',
+    SalahPrayer.isha: 'assets/images/salat/night.jpeg',
+    SalahPrayer.midnight: 'assets/images/salat/night.jpeg',
     SalahPrayer.tahajjud: 'assets/images/salat/isha.jpeg',
   };
 
