@@ -1,6 +1,6 @@
-import 'package:rafeeq/features/salat-times/domain/entities/salah_prayer.dart';
-import 'package:rafeeq/features/salat-times/domain/entities/salah_status.dart';
-import 'package:rafeeq/features/salat-times/domain/entities/salah_times.dart';
+import 'package:rafeeq/features/timings/domain/entities/salah_prayer.dart';
+import 'package:rafeeq/features/timings/domain/entities/salah_status.dart';
+import 'package:rafeeq/features/timings/domain/entities/salah_times.dart';
 
 SalahStatusEntity computeSalahStatus({
   required SalahTimesEntity times,

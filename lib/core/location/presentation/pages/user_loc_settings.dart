@@ -9,7 +9,7 @@ import 'package:rafeeq/core/location/presentation/provider/user_location_provide
 import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/core/widgets/snackbars.dart';
-import 'package:rafeeq/features/salat-times/presentation/riverpod/salah_times_providers.dart';
+import 'package:rafeeq/features/timings/presentation/riverpod/salah_times_providers.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class UserLocSettingsPage extends ConsumerStatefulWidget {

@@ -1,4 +1,4 @@
-import 'package:rafeeq/features/salat-times/domain/entities/salah_times.dart';
+import 'package:rafeeq/features/timings/domain/entities/salah_times.dart';
 
 abstract class SalahTimesRepository {
   Future<SalahTimesEntity> getTodayByCity({

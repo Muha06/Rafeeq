@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/features/salat-times/domain/entities/salah_status.dart';
-import 'package:rafeeq/features/salat-times/domain/usecases/get_salah_status.dart';
+import 'package:rafeeq/features/timings/domain/entities/salah_status.dart';
+import 'package:rafeeq/features/timings/domain/usecases/get_salah_status.dart';
 
 import 'salah_times_providers.dart';
 

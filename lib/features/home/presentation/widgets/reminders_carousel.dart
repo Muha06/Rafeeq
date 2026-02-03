@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/features/home/presentation/widgets/friday_reminder_card.dart';
 import 'package:rafeeq/features/adhkar/presentation/widgets/adhkar_reminder_card.dart';
+import 'package:rafeeq/features/settings/presentation/provider/settings_notifcation_provider.dart';
 
 class HomeRemindersCarousel extends ConsumerWidget {
   const HomeRemindersCarousel({super.key});
@@ -27,8 +28,20 @@ class HomeRemindersCarousel extends ConsumerWidget {
 
     final items = <Widget>[];
 
-    bool isMorning = _isInWindow(now, hm(6, 30), hm(11, 30));
-    bool isEvening = _isInWindow(now, hm(17, 30), hm(22, 30));
+    const morningTime = kmorningAdhkarTime;
+    const eveningTime = keveningAdhkarTime;
+
+    bool isMorning = _isInWindow(
+      now,
+      hm(morningTime.hour, morningTime.minute),
+      hm(11, 30),
+    );
+    
+    bool isEvening = _isInWindow(
+      now,
+      hm(eveningTime.hour, eveningTime.minute),
+      hm(22, 30),
+    );
 
     // Morning: 05:00 – 10:00
     if (isMorning) {

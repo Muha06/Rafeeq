@@ -1,15 +1,16 @@
-import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
-import 'package:rafeeq/app/salat_notifications.dart';
+import 'package:rafeeq/app/salat_notifications_repo.dart';
 import 'package:rafeeq/core/location/presentation/provider/user_location_provider.dart';
-import 'package:rafeeq/features/salat-times/data/datasources/salah_remote_ds.dart';
-import 'package:rafeeq/features/salat-times/data/repository/salah_repo_impl.dart';
-import 'package:rafeeq/features/salat-times/domain/entities/salah_times.dart';
-import 'package:rafeeq/features/salat-times/domain/repository/get_today_salah_times_repo.dart';
-import 'package:rafeeq/features/salat-times/domain/usecases/get_today_salah_times.dart';
-import 'package:rafeeq/features/salat-times/presentation/riverpod/cached_salah_providers.dart';
+import 'package:rafeeq/features/timings/data/datasources/salah_remote_ds.dart';
+import 'package:rafeeq/features/timings/data/repository/salah_repo_impl.dart';
+import 'package:rafeeq/features/timings/domain/entities/salah_prayer.dart';
+import 'package:rafeeq/features/timings/domain/entities/salah_times.dart';
+import 'package:rafeeq/features/timings/domain/repository/get_today_salah_times_repo.dart';
+import 'package:rafeeq/features/timings/domain/usecases/get_today_salah_times.dart';
+import 'package:rafeeq/features/timings/presentation/riverpod/cached_salah_providers.dart';
 import 'package:rafeeq/features/settings/presentation/provider/settings_notifcation_provider.dart';
+import 'package:rafeeq/features/timings/presentation/riverpod/ignored_salat_provider.dart';
 
 /// 1) External client
 final httpClientProvider = Provider.autoDispose<http.Client>((ref) {
@@ -36,6 +37,7 @@ final getTodaySalahTimesProvider = Provider<GetTodaySalahTimes>((ref) {
 
 final salahMethodProvider = Provider<int>((ref) => 3);
 
+//Fetches salats timings
 final todaySalahTimesProvider = FutureProvider<SalahTimesEntity>((ref) async {
   final usecase = ref.read(getTodaySalahTimesProvider);
 
@@ -62,40 +64,58 @@ final todaySalahTimesProvider = FutureProvider<SalahTimesEntity>((ref) async {
   );
 });
 
-//SINGLE SCHEDULER CONTROLLER PROVIDER
+//SINGLE SALAT NOTIFICATIONS SCHEDULER CONTROLLER  PROVIDER
 final salahNotificationsControllerProvider = Provider<void>((ref) {
   ref.listen<AsyncValue<SalahTimesEntity>>(todaySalahTimesProvider, (
     prev,
     next,
-  ) async {
+  ) {
     final enabled = ref.read(salahNotifEnabledProvider);
 
     if (!enabled) {
-      debugPrint('☀️salah reminders settings: $enabled');
-      await SalahNotifications.instance.cancelAll();
+      SalahNotifications.instance.cancelAll();
       return;
     }
 
     next.whenData((times) async {
-      // re-check enabled again before scheduling (async safety)
       if (!ref.read(salahNotifEnabledProvider)) return;
-      debugPrint('salah reminders: allowed scheduling');
-      await SalahNotifications.instance.scheduleForToday(times: times);
+
+      final disabled = ref.read(disabledSalahPrayersProvider); // ✅ fresh
+      await SalahNotifications.instance.scheduleForToday(
+        times: times,
+        disabled: disabled,
+      );
     });
   });
 
-  //check if user allowed salah reminders settings
   ref.listen<bool>(salahNotifEnabledProvider, (prev, next) async {
     if (!next) {
-      debugPrint('☀️salah reminders: canceled, cancelling');
       await SalahNotifications.instance.cancelAll();
       return;
     }
 
     final times = await ref.read(todaySalahTimesProvider.future);
-    if (!ref.read(salahNotifEnabledProvider)) return; //off? dont set
+    if (!ref.read(salahNotifEnabledProvider)) return;
 
-    debugPrint('☀️salah reminders allowed: $next');
-    await SalahNotifications.instance.scheduleForToday(times: times);
+    final disabled = ref.read(disabledSalahPrayersProvider); // ✅ fresh
+    await SalahNotifications.instance.scheduleForToday(
+      times: times,
+      disabled: disabled,
+    );
+  });
+
+  ref.listen<Set<SalahPrayer>>(disabledSalahPrayersProvider, (
+    prev,
+    next,
+  ) async {
+    if (!ref.read(salahNotifEnabledProvider)) return;
+
+    final times = await ref.read(todaySalahTimesProvider.future);
+    if (!ref.read(salahNotifEnabledProvider)) return;
+
+    await SalahNotifications.instance.scheduleForToday(
+      times: times,
+      disabled: next,
+    );
   });
 });

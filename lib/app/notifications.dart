@@ -245,5 +245,7 @@ class NotificationService {
     return granted == true;
   }
 
-  Future<void> cancel(int id) => _plugin.cancel(id);
+  Future<void> cancel(int id) async {
+    await _plugin.cancel(id);
+  }
 }

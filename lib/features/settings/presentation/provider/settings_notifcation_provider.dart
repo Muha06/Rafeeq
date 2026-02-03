@@ -13,8 +13,8 @@ const asrNotifId = 103;
 const maghribNotifId = 104;
 const ishaNotifId = 105;
 
-const morningNotifId = 200;
-const eveningNotifId = 201;
+const morningNotifId = 205;
+const eveningNotifId = 206;
 
 const kmorningAdhkarTime = TimeOfDay(hour: 7, minute: 30);
 const keveningAdhkarTime = TimeOfDay(hour: 18, minute: 30);
@@ -33,7 +33,8 @@ final salahNotifEnabledProvider = StateProvider<bool>((ref) {
 
 //Listens to user adhkarsettingsprovider
 final adhkarNotificationsControllerProvider = Provider<void>((ref) async {
-  void schedule() async {
+  Future<void> schedule() async {
+    debugPrint('cancelling  ');
     await NotificationService.instance.cancel(morningNotifId);
     await NotificationService.instance.cancel(eveningNotifId);
 
@@ -57,18 +58,19 @@ final adhkarNotificationsControllerProvider = Provider<void>((ref) async {
   final enabled = ref.read(adhkarNotifEnabledProvider);
 
   if (enabled) {
-  debugPrint('enabled, scheduling $enabled');
-    schedule();
+    await schedule();
   }
 
   // then react to changes
   ref.listen<bool>(adhkarNotifEnabledProvider, (prev, next) async {
+    //if disabled -> only cancel
     if (!next) {
       await NotificationService.instance.cancel(morningNotifId);
       await NotificationService.instance.cancel(eveningNotifId);
       return;
     }
-    schedule();
+    //else -> schedule
+    await schedule();
   });
 });
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:rafeeq/app/notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
-import 'package:rafeeq/features/salat-times/domain/entities/salah_prayer.dart';
-import 'package:rafeeq/features/salat-times/domain/entities/salah_times.dart';
+import 'package:rafeeq/features/timings/domain/entities/salah_prayer.dart';
+import 'package:rafeeq/features/timings/domain/entities/salah_times.dart';
 
 class SalahNotifications {
   SalahNotifications._();
@@ -35,24 +35,22 @@ class SalahNotifications {
     }
   }
 
-  Future<void> scheduleForToday({required SalahTimesEntity times}) async {
-    // clear old first (prevents duplicates)
+  Future<void> scheduleForToday({
+    required SalahTimesEntity times,
+    Set<SalahPrayer> disabled = const {},
+  }) async {
     await cancelAll();
 
     final now = tz.TZDateTime.now(tz.local);
 
     for (final prayer in _adhanIds.keys) {
-      final salatTime = times.at(prayer);
+      if (disabled.contains(prayer)) continue;
 
-      // Convert to TZDateTime safely
-      var adhanTime = tz.TZDateTime.from(salatTime, tz.local);
-
-      // time passed -> take it tomorrow
+      var adhanTime = tz.TZDateTime.from(times.at(prayer), tz.local);
       if (!adhanTime.isAfter(now)) {
         adhanTime = adhanTime.add(const Duration(days: 1));
       }
 
-      // 1) MAIN: Adhan at prayer time
       await NotificationService.instance.scheduleSalah(
         id: _adhanIds[prayer]!,
         title: '${prayer.label} time',
@@ -61,7 +59,7 @@ class SalahNotifications {
         isFajr: prayer == SalahPrayer.fajr,
       );
     }
-    //Then debug print
+
     final pending = await NotificationService.instance.plugin
         .pendingNotificationRequests();
 

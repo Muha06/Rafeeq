@@ -11,10 +11,10 @@ import 'package:rafeeq/app/tabs_screen.dart';
 import 'package:rafeeq/features/asma_ul_husna/data/models/hive/name_hive_model.dart';
 import 'package:rafeeq/features/bookmarks/data/models/dhikr_bookmark_hive_model.dart';
 import 'package:rafeeq/features/bookmarks/data/models/quran_bookmark_hive_model.dart';
-import 'package:rafeeq/features/salat-times/presentation/riverpod/salah_times_providers.dart';
+import 'package:rafeeq/features/timings/presentation/riverpod/salah_times_providers.dart';
 import 'package:rafeeq/features/settings/presentation/provider/settings_notifcation_provider.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
-import 'package:rafeeq/features/salat-times/data/models/hive/cached_salah_times_hive.dart';
+import 'package:rafeeq/features/timings/data/models/hive/cached_salah_times_hive.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {

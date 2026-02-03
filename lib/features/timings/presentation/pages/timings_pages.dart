@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rafeeq/core/location/presentation/provider/user_location_provider.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
+import 'package:rafeeq/core/widgets/snackbars.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
+import 'package:rafeeq/features/timings/presentation/riverpod/ignored_salat_provider.dart';
 
 import '../../domain/entities/salah_prayer.dart';
 import '../riverpod/salah_times_providers.dart';
@@ -55,6 +58,7 @@ class _SalahTimingsPageState extends ConsumerState<SalahTimingsPage> {
             padding: const EdgeInsets.all(16),
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Chip(text: formattedDate, icon: Icons.date_range),
 
@@ -72,7 +76,11 @@ class _SalahTimingsPageState extends ConsumerState<SalahTimingsPage> {
 
               ...order.map((p) {
                 final t = times.at(p);
-                return _TimingTile(title: p.label, timeText: _formatHm(t));
+                return _TimingTile(
+                  prayer: p,
+                  title: p.label,
+                  timeText: _formatHm(t),
+                );
               }),
             ],
           );
@@ -99,9 +107,11 @@ class Chip extends ConsumerWidget {
         children: [
           Icon(icon, size: 18),
           const SizedBox(width: 8),
+
           Text(
             text,
             style: theme.textTheme.bodyMedium!.copyWith(
+              fontSize: 14,
               color: isDark
                   ? AppDarkColors.textPrimary
                   : AppLightColors.textPrimary,
@@ -114,15 +124,34 @@ class Chip extends ConsumerWidget {
   }
 }
 
-class _TimingTile extends StatelessWidget {
-  const _TimingTile({required this.title, required this.timeText});
+class _TimingTile extends ConsumerWidget {
+  const _TimingTile({
+    required this.prayer,
+    required this.title,
+    required this.timeText,
+  });
 
+  final SalahPrayer prayer;
   final String title;
   final String timeText;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final isDark = ref.watch(isDarkProvider);
+
+    final disabled = ref.watch(disabledSalahPrayersProvider);
+    final isDisabled = disabled.contains(prayer);
+
+    const actualSalats = {
+      SalahPrayer.fajr,
+      SalahPrayer.dhuhr,
+      SalahPrayer.asr,
+      SalahPrayer.maghrib,
+      SalahPrayer.isha,
+    };
+
+    final showBell = actualSalats.contains(prayer);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
@@ -132,21 +161,61 @@ class _TimingTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: Text(
-              title,
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w700,
+          FaIcon(
+            prayer.icon,
+            size: 16,
+            color: isDark
+                ? AppDarkColors.iconSecondary
+                : AppLightColors.iconSecondary,
+          ),
+          const SizedBox(width: 8),
+
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  height: 1,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                timeText,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ],
+          ),
+
+          const Spacer(),
+
+          if (showBell)
+            IconButton(
+              onPressed: () {
+                ref.read(disabledSalahPrayersProvider.notifier).toggle(prayer);
+
+                if (!isDisabled) {
+                  AppSnackBar.showSimple(
+                    context: context,
+                    isDark: isDark,
+                    message: 'Disabled reminders for ${prayer.label}',
+                  );
+                }
+              },
+
+              icon: FaIcon(
+                isDisabled ? FontAwesomeIcons.bellSlash : FontAwesomeIcons.bell,
+                color: isDisabled
+                    ? AppDarkColors.errorColor
+                    : theme.iconTheme.color,
               ),
             ),
-          ),
-          Text(
-            timeText,
-            style: theme.textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w800,
-            ),
-          ),
         ],
       ),
     );

@@ -16,8 +16,8 @@ import 'package:rafeeq/features/home/presentation/widgets/ayah_of_the_day.dart';
 import 'package:rafeeq/features/home/presentation/widgets/reminders_carousel.dart';
 import 'package:rafeeq/features/home/presentation/widgets/quick_action_row.dart';
 import 'package:rafeeq/features/settings/presentation/pages/settings_page.dart';
-import 'package:rafeeq/features/salat-times/domain/entities/salah_prayer.dart';
-import 'package:rafeeq/features/salat-times/presentation/widgets/timeline_card.dart';
+import 'package:rafeeq/features/timings/domain/entities/salah_prayer.dart';
+import 'package:rafeeq/features/timings/presentation/widgets/timeline_card.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class HomePage extends ConsumerStatefulWidget {
