@@ -78,7 +78,6 @@ class MosqueCard extends ConsumerWidget {
       child: InkWell(
         highlightColor: Colors.white.withAlpha(25),
         onTap: () async {
-          await Future.delayed(const Duration(milliseconds: 250));
           final liveUrl = mosqueName == 'Madinah' ? madinahLive : makkahLive;
           final title = mosqueName;
 

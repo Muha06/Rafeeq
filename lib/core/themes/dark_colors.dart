@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 
 class AppDarkColors {
   // ✅ Your base
-  static const Color darkBackground = Color(0xFF050C0E);
+  static const Color darkBackground = Color(0xFF071013); // #071013
   static const Color darkSurface = Color(0xCC0F1F25);
-  static const Color onDarkSurface = selectedCardBorder;
+  // static const Color onDarkSurface = selectedCardBorder;
+  static const Color onDarkSurface = Color(0xCC14262D); // #CC14262D
 
   static const Color darkSurfaceSolid = Color(0xFF0F1F25);
 
@@ -49,4 +50,23 @@ class AppDarkColors {
   static const Color errorColor = Color(0xFFFF5A6A);
   static const Color successColor = Color(0xFF2FD07F);
   static const Color warningColor = amber;
+
+  // 🔘 Switch (teal, calm, dark)
+  static const Color switchThumbOn = Color(0xFF1EAE93); // dim teal (ON thumb)
+  static const Color switchThumbOff = Color(0xFF93A9AB); // muted (OFF thumb)
+  static const Color switchThumbDisabled = Color(0xFF5E7376);
+
+  static const Color switchTrackOn = Color(0xFF0B2A2A); // deep teal track (ON)
+  static const Color switchTrackOff = Color(
+    0xFF14262D,
+  ); // same as onDarkSurface vibe
+  static const Color switchTrackDisabled = Color(0xFF1A2A2E);
+
+  static const Color switchOutlineOn = Color(0xFF1A6F63); // subtle teal outline
+  static const Color switchOutlineOff = Color(0xFF123238); // your border
+  static const Color switchOutlineDisabled = Color(0xFF0E2A2D);
+
+  static const Color switchOverlay = Color(
+    0x1A22C6A6,
+  ); // 10% teal ripple (pressed)
 }

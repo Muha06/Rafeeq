@@ -116,6 +116,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                     child: Chip(
                       label: Text(
                         userLocation?.city ?? '',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: theme.textTheme.bodyMedium!.copyWith(
                           fontWeight: FontWeight.w300,
                           height: 1.25,

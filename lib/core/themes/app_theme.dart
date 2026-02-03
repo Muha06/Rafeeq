@@ -86,11 +86,44 @@ class AppTheme {
       // ===== BUTTON THEME =====
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppDarkColors.amber,
-          foregroundColor: AppDarkColors.darkBackground,
+          backgroundColor: AppDarkColors.darkSurface,
+          foregroundColor: AppDarkColors.amber,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
         ),
+      ),
+
+      //======Switch=======
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.disabled)) {
+            return AppDarkColors.switchThumbDisabled;
+          }
+          if (states.contains(WidgetState.selected)) {
+            return AppDarkColors.switchThumbOn;
+          }
+          return AppDarkColors.switchThumbOff;
+        }),
+        trackColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.disabled)) {
+            return AppDarkColors.switchTrackDisabled;
+          }
+          if (states.contains(WidgetState.selected)) {
+            return AppDarkColors.switchTrackOn;
+          }
+          return AppDarkColors.switchTrackOff;
+        }),
+        trackOutlineColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.disabled)) {
+            return AppDarkColors.switchOutlineDisabled;
+          }
+          if (states.contains(WidgetState.selected)) {
+            return AppDarkColors.switchOutlineOn;
+          }
+          return AppDarkColors.switchOutlineOff;
+        }),
+        overlayColor: WidgetStateProperty.all(AppDarkColors.switchOverlay),
+        splashRadius: 20,
       ),
 
       outlinedButtonTheme: OutlinedButtonThemeData(

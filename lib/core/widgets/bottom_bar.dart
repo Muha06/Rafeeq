@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
 
@@ -15,11 +16,15 @@ class MyBottomBar extends StatelessWidget {
   });
 
   static const _items = [
-    (icon: Icons.home_outlined, active: Icons.home_rounded, label: 'Home'),
-    (icon: Icons.menu_book, active: Icons.menu_book_rounded, label: "Qur'an"),
+    (icon: FontAwesomeIcons.house, active: Icons.home_rounded, label: 'Home'),
     (
-      icon: Icons.self_improvement_outlined,
-      active: Icons.self_improvement_rounded,
+      icon: FontAwesomeIcons.bookQuran,
+      active: FontAwesomeIcons.bookQuran,
+      label: "Qur'an",
+    ),
+    (
+      icon: FontAwesomeIcons.handsPraying,
+      active: FontAwesomeIcons.handsPraying,
       label: 'Adhkār',
     ),
     (
@@ -35,14 +40,15 @@ class MyBottomBar extends StatelessWidget {
 
     return SafeArea(
       bottom: true,
-      //bg container
       child: Container(
         height: 61,
         decoration: BoxDecoration(
           color: isDarkMode
               ? AppDarkColors.bottomBar
               : AppLightColors.amberSoft,
-          border: Border(top: BorderSide(color: theme.dividerColor)),
+          border: Border(
+            top: BorderSide(color: theme.dividerColor.withAlpha(30)),
+          ),
         ),
         padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 12),
         child: Row(
@@ -57,6 +63,14 @@ class MyBottomBar extends StatelessWidget {
             final unselectedFg = isDarkMode
                 ? AppDarkColors.iconSecondary
                 : Colors.black54;
+
+            final selectedTextColors = isDarkMode
+                ? AppDarkColors.textBody
+                : AppLightColors.textPrimary;
+
+            final unselectedTextColors = isDarkMode
+                ? AppDarkColors.textSecondary
+                : AppLightColors.textSecondary;
 
             return Expanded(
               child: GestureDetector(
@@ -88,7 +102,9 @@ class MyBottomBar extends StatelessWidget {
                         duration: const Duration(milliseconds: 200),
                         curve: Curves.easeOut,
                         style: theme.textTheme.bodySmall!.copyWith(
-                          color: isSelected ? selectedFg : unselectedFg,
+                          color: isSelected
+                              ? selectedTextColors
+                              : unselectedTextColors,
                           fontSize: isSelected ? 12 : 11,
                           fontWeight: isSelected
                               ? FontWeight.w700
