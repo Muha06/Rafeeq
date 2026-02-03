@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 // ==== Light Theme ====
 class AppLightColors {
-  // Background (warm paper) 
+  // Background (warm paper)
   static const Color lightBackground = Colors.white;
 
   // Surface (cards/sheets) - slightly lighter than bg
@@ -74,7 +74,7 @@ class AppLightColors {
   // ON
   static const Color switchTrackOn = Color(0x267A5A45); // cocoa @ ~15%
   static const Color switchThumbOn = Color(0xFF7A5A45); // cocoa
-  static const Color switchOutlineOn = Color(0x1F7A5A45); // cocoa @ ~12%
+  static const Color switchOutlineOn = iconSecondary; // cocoa @ ~12%
 
   // OFF
   static const Color switchTrackOff = Color(0xFFD8CABB); // warm divider

@@ -18,7 +18,7 @@ import 'package:rafeeq/features/Quran/presentation/riverpod/last_read_provider.d
 import 'package:rafeeq/features/Quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/SURAH_PAGE/ayah_tile.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/SURAH_PAGE/surah_details.dart';
-import 'package:rafeeq/features/Quran/presentation/widgets/SURAH_PAGE/surah_settings.dart';
+import 'package:rafeeq/features/Quran/presentation/widgets/SURAH_PAGE/surah_settings_sheet.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
@@ -51,7 +51,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
   LastReadAyah? temporaryLastReadAyah;
 
   Timer? _autoTimer;
-  bool _autoOn = false;
+  bool _autoOn = false; //whether ticker is running or paused
 
   bool _autoTickBusy = false;
 
@@ -72,9 +72,13 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
 
   void _startAutoScroll() {
     if (_autoOn) return;
-    _autoOn = true;
+    setState(() {
+      _autoOn = true;
+    });
 
-    const tick = Duration(milliseconds: 300); //duration to wait b4 next scroll
+    ref.read(surahSettingsProvider.notifier).setAutoScrollEnabled(true);
+
+    const tick = Duration(milliseconds: 500); //duration to wait b4 next scroll
 
     _autoTimer?.cancel();
 
@@ -85,7 +89,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
 
       // ✅ stop if last item is already visible
       if (_isAtEnd()) {
-        _stopAutoScroll();
+        _exitAutoScroll();
         _autoTickBusy = false;
         return;
       }
@@ -102,18 +106,26 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
         _autoTickBusy = false;
       }
     });
-
-    setState(() {});
   }
 
-  void _stopAutoScroll() {
-    _autoOn = false;
+  void _pauseAutoScroll() {
+    if (!_autoOn) return;
+    setState(() => _autoOn = false);
+
     _autoTimer?.cancel();
     _autoTimer = null;
-    setState(() {});
   }
 
-  void _toggleAutoScroll() => _autoOn ? _stopAutoScroll() : _startAutoScroll();
+  void _exitAutoScroll() {
+    _autoTimer?.cancel();
+    _autoTimer = null;
+
+    ref.read(surahSettingsProvider.notifier).setAutoScrollEnabled(false);
+
+    setState(() => _autoOn = false);
+  }
+
+  void _toggleAutoScroll() => _autoOn ? _exitAutoScroll() : _startAutoScroll();
 
   @override
   void initState() {
@@ -168,7 +180,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
       (min, p) => p.itemLeadingEdge < min.itemLeadingEdge ? p : min,
     );
 
-    final currentAyahNumber = firstVisible.index + 1;
+    final currentAyahNumber = firstVisible.index;
 
     // Update temporary last read if needed
     if (!_suppressNextSave &&
@@ -238,6 +250,8 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
     final ayahsAsync = ref.watch(ayahsFutureProvider(surahId));
     final surahs = ref.watch(surahsFutureProvider).value;
 
+    final showControls = ref.watch(surahSettingsProvider).autoScrollEnabled;
+
     return PopScope(
       onPopInvokedWithResult: (didPop, result) async {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -251,8 +265,19 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
                 ref.refresh(lastReadAyahsProvider);
               });
         }
+
+        // ✅ reset UI state + provider when leaving page
+        ref.read(surahSettingsProvider.notifier).setAutoScrollEnabled(false);
       },
       child: Scaffold(
+        bottomNavigationBar: showControls
+            ? AutoScrollControlsBar(
+                onStart: _startAutoScroll,
+                autoOn: _autoOn, //for pause featre
+                onExit: _exitAutoScroll,
+                onPause: _pauseAutoScroll,
+              )
+            : null,
         appBar: AppBar(
           backgroundColor: theme.scaffoldBackgroundColor,
           title: Material(
@@ -311,18 +336,11 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
           actions: [
             IconButton(
               onPressed: () {
-                if (!ayahsAsync.hasValue) return;
-                _toggleAutoScroll();
-              },
-              icon: Icon(_autoOn ? Icons.pause : Icons.play_arrow),
-            ),
-
-            IconButton(
-              onPressed: () {
                 showModalBottomSheet(
                   context: context,
                   isScrollControlled: true,
-                  builder: (context) => const SurahSettingsSheet(),
+                  builder: (context) =>
+                      SurahSettingsSheet(onToggleAutoScroll: _toggleAutoScroll),
                 );
               },
               icon: const Icon(Icons.tune),
@@ -336,7 +354,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
             itemCount: ayahs.length + 1,
             itemBuilder: (context, index) {
               if (index == 0) {
-                return SurahDetails(surah: surah, isDark: isDark,);
+                return SurahDetails(surah: surah, isDark: isDark);
               }
               return AyahTile(ayah: ayahs[index - 1]);
             },
@@ -612,6 +630,107 @@ class _WheelCard extends ConsumerWidget {
           const SizedBox(height: 6),
           Expanded(child: child),
         ],
+      ),
+    );
+  }
+}
+
+class AutoScrollControlsBar extends ConsumerWidget {
+  const AutoScrollControlsBar({
+    super.key,
+    required this.onStart,
+    required this.onPause,
+    required this.autoOn,
+    required this.onExit,
+  });
+
+  final VoidCallback onStart;
+  final VoidCallback onPause;
+  final VoidCallback onExit;
+  final bool autoOn;
+
+  @override
+  Widget build(BuildContext context, ref) {
+    final theme = Theme.of(context);
+    final surahSettings = ref.watch(surahSettingsProvider);
+    final surahSettingsNotifier = ref.watch(surahSettingsProvider.notifier);
+    var speed = surahSettings.autoScrollSpeed;
+    final isDark = ref.watch(isDarkProvider);
+
+    final iconColor = isDark
+        ? AppDarkColors.iconSecondary
+        : AppLightColors.iconSecondary;
+    final fontSize = 16.0;
+
+    return SafeArea(
+      bottom: true,
+      child: Container(
+        height: 48,
+        decoration: BoxDecoration(
+          color: theme.bottomAppBarTheme.color,
+          border: Border(top: BorderSide(color: theme.dividerColor)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            //exit speed
+            IconButton(
+              onPressed: onExit,
+              icon: FaIcon(
+                FontAwesomeIcons.x,
+                color: iconColor,
+                size: fontSize,
+              ),
+            ),
+
+            Expanded(
+              child: Center(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    //reduce speed
+                    IconButton(
+                      onPressed: () {
+                        surahSettingsNotifier.decreaseSpeed();
+                      },
+                      icon: FaIcon(
+                        FontAwesomeIcons.minus,
+                        color: iconColor,
+                        size: fontSize,
+                      ),
+                    ),
+
+                    const SizedBox(width: 8),
+                    Text(speed.toString()),
+                    const SizedBox(width: 8),
+
+                    //increase speed
+                    IconButton(
+                      onPressed: () {
+                        surahSettingsNotifier.increaseSpeed();
+                      },
+                      icon: FaIcon(
+                        FontAwesomeIcons.plus,
+                        color: iconColor,
+                        size: fontSize,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            //pause
+            IconButton(
+              onPressed: autoOn ? onPause : onStart,
+              icon: FaIcon(
+                autoOn ? FontAwesomeIcons.pause : FontAwesomeIcons.play,
+                color: iconColor,
+                size: fontSize,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

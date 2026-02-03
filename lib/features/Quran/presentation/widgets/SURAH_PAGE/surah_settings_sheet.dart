@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class SurahSettingsSheet extends ConsumerStatefulWidget {
-  const SurahSettingsSheet({super.key});
+  const SurahSettingsSheet({super.key, required this.onToggleAutoScroll});
+  final VoidCallback onToggleAutoScroll;
   @override
   ConsumerState<SurahSettingsSheet> createState() => _SurahSettingsSheetState();
 }
@@ -31,6 +33,10 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
       surahSettingsProvider.select((s) => s.autoScrollSpeed),
     );
 
+    final autoScrollEnabled = ref.watch(
+      surahSettingsProvider.select((s) => s.autoScrollEnabled),
+    );
+
     final titleTextstyle = theme.textTheme.labelLarge!.copyWith(
       fontSize: 19,
       fontWeight: FontWeight.w300,
@@ -48,6 +54,45 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
             const SizedBox(height: 24),
             Text('Full Surah Settings', style: theme.textTheme.titleMedium),
             const SizedBox(height: 24),
+
+            //Auto scroll
+            _buildSettingBorder(
+              isDark: isDark,
+              children: [
+                SwitchListTile(
+                  title: Row(
+                    children: [
+                      Text('Auto scroll', style: titleTextstyle),
+
+                      const SizedBox(width: 24),
+
+                      Container(
+                        decoration: BoxDecoration(
+                          color: AppDarkColors.teal,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+
+                        padding: const EdgeInsets.all(4),
+                        child: Text(
+                          'New',
+                          style: theme.textTheme.bodySmall!.copyWith(
+                            fontSize: 12,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  value: autoScrollEnabled,
+                  contentPadding: EdgeInsets.zero,
+                  onChanged: (v) {
+                    sNotifier.setAutoScrollEnabled(v);
+                    widget.onToggleAutoScroll();
+                  },
+                ),
+              ],
+            ),
 
             //TRANSATION TOGGLE & FONT SIZE
             _buildSettingBorder(
@@ -96,23 +141,6 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
                   value: arabicFontSize,
                   onChanged: (value) {
                     sNotifier.setArabicFont(value);
-                  },
-                ),
-              ],
-            ),
-
-            _buildSettingBorder(
-              isDark: isDark,
-              children: [
-                Text('Auto-scroll speed', style: titleTextstyle),
-                Slider(
-                  min: 10,
-                  max: 120,
-                  divisions: 15,
-                  value: speed,
-                  label: '${speed.round()} px/s',
-                  onChanged: (value) {
-                    sNotifier.setAutoScrollSpeed(value);
                   },
                 ),
               ],

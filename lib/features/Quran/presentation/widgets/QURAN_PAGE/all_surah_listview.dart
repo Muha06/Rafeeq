@@ -68,6 +68,7 @@ class SurahTile extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 8),
       child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: () {
           Navigator.push(
             context,

@@ -100,7 +100,7 @@ class AppTheme {
             return AppDarkColors.switchThumbDisabled;
           }
           if (states.contains(WidgetState.selected)) {
-            return AppDarkColors.switchThumbOn;
+            return AppDarkColors.teal;
           }
           return AppDarkColors.switchThumbOff;
         }),
@@ -258,7 +258,7 @@ class AppTheme {
           return Colors.transparent;
         }),
         trackOutlineWidth: WidgetStateProperty.resolveWith((states) {
-          return 1.0; // keep thin
+          return 1.0;  
         }),
       ),
 
