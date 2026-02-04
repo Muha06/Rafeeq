@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
-import 'package:rafeeq/features/Quran/domain/entities/ayah.dart';
 
 final ayahShareControllerProvider = Provider<AyahShareController>((ref) {
   return AyahShareController(ref);

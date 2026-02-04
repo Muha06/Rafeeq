@@ -15,40 +15,37 @@ class HaramainCard extends ConsumerWidget {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
     return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(
         color: isDark ? AppDarkColors.darkSurface : AppLightColors.lightSurface,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(14),
       ),
 
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            //title
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const FaIcon(FontAwesomeIcons.kaaba),
-                const SizedBox(width: 8),
-                Text('Haramain • Live', style: textTheme.titleMedium),
-              ],
-            ),
-            const SizedBox(height: 4),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          //title
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const FaIcon(FontAwesomeIcons.kaaba),
+              const SizedBox(width: 8),
+              Text('Haramain • Live', style: textTheme.titleMedium),
+            ],
+          ),
+          const SizedBox(height: 4),
 
-            //subtitle
-            Text('Live from the sacred mosques', style: textTheme.bodyMedium),
-            const SizedBox(height: 8),
-            Divider(color: theme.dividerColor),
+          //subtitle
+          Text('Live from the sacred mosques', style: textTheme.bodyMedium),
+          const SizedBox(height: 8),
+ 
+          //cards
+          const MosqueCard(mosqueName: 'Makkah'),
 
-            //cards
-            const MosqueCard(mosqueName: 'Makkah'),
+          const SizedBox(height: 12),
 
-            const SizedBox(height: 12),
-
-            const MosqueCard(mosqueName: 'Madinah'),
-          ],
-        ),
+          const MosqueCard(mosqueName: 'Madinah'),
+        ],
       ),
     );
   }
@@ -73,7 +70,7 @@ class MosqueCard extends ConsumerWidget {
 
     return Material(
       color: bg,
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(14),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         highlightColor: Colors.white.withAlpha(25),

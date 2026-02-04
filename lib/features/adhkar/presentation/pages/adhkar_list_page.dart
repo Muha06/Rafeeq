@@ -170,56 +170,55 @@ class AdhkarListTile extends ConsumerWidget {
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 14),
-        child: SizedBox(
-          // height: 48,
-          child: Row(
-            children: [
-              Container(
-                height: 24,
-                width: 36,
-                decoration: BoxDecoration(
-                  color: isDark ? AppDarkColors.amber : AppDarkColors.amberSoft,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Center(
-                  child: Text(
-                    (index + 1).toString(),
-                    style: theme.textTheme.bodySmall!.copyWith(
-                      color: isDark
-                          ? AppDarkColors.darkBackground
-                          : AppLightColors.textPrimary,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
+        child: Row(
+          children: [
+            Container(
+              height: 24,
+              width: 36,
+              decoration: BoxDecoration(
+                color: isDark
+                    ? AppDarkColors.onDarkSurface
+                    : AppLightColors.onAmberSoft,
+                borderRadius: BorderRadius.circular(16),
               ),
-              const SizedBox(width: 16),
-
-              Expanded(
+              child: Center(
                 child: Text(
-                  dhikr.title.trim(),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
+                  (index + 1).toString(),
                   style: theme.textTheme.bodySmall!.copyWith(
-                    fontSize: 16,
                     color: isDark
                         ? AppDarkColors.textPrimary
                         : AppLightColors.textPrimary,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
+            ),
+            const SizedBox(width: 16),
 
-              const SizedBox(width: 8),
-              Icon(
-                CupertinoIcons.right_chevron,
-                size: 18,
-                color: isDark
-                    ? AppDarkColors.iconSecondary
-                    : AppLightColors.iconSecondary,
+            Expanded(
+              child: Text(
+                dhikr.title.trim(),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: theme.textTheme.bodySmall!.copyWith(
+                  fontSize: 16,
+                  color: isDark
+                      ? AppDarkColors.textPrimary
+                      : AppLightColors.textPrimary,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            ],
-          ),
+            ),
+
+            const SizedBox(width: 8),
+            Icon(
+              CupertinoIcons.right_chevron,
+              size: 18,
+              color: isDark
+                  ? AppDarkColors.iconSecondary
+                  : AppLightColors.iconSecondary,
+            ),
+          ],
         ),
       ),
     );

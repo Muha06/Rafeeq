@@ -46,8 +46,8 @@ class MyBottomBar extends StatelessWidget {
           color: isDarkMode
               ? AppDarkColors.bottomBar
               : AppLightColors.amberSoft,
-          border: Border(
-            top: BorderSide(color: theme.dividerColor.withAlpha(30)),
+          border: const Border(
+            // top: BorderSide(color: theme.dividerColor.withAlpha(30)),
           ),
         ),
         padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 12),
@@ -92,7 +92,7 @@ class MyBottomBar extends StatelessWidget {
                         child: Icon(
                           isSelected ? item.active : item.icon,
                           key: ValueKey('$index-$isSelected'),
-                          size: isSelected ? 21 : 19,
+                          size: isSelected ? 19 : 16,
                           color: isSelected ? selectedFg : unselectedFg,
                         ),
                       ),

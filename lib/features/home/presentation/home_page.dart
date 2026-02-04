@@ -28,6 +28,11 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
+  // Padding scale (single source of truth)
+  static const double _hPad = 12.0;
+  static const double _v16 = 12.0;
+  static const double _bottom24 = 24.0;
+
   final todayHijri = HijriDate.now();
   String get formattedHijri => todayHijri.toFormat('MMMM dd, yyyy h');
 
@@ -125,7 +130,6 @@ class _HomePageState extends ConsumerState<HomePage> {
                     ),
                   ),
                 ),
-
                 IconButton(
                   onPressed: () {
                     pushLeftPage(context, const SettingsPage());
@@ -136,39 +140,34 @@ class _HomePageState extends ConsumerState<HomePage> {
               bottom: appBarBottomDivider(context),
             ),
 
-            //GREETINGS
+            // GREETINGS
             SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  left: 12.0,
-                  right: 12,
-                  top: 16,
-                  bottom: 0,
-                ),
+              child: HomeSection(
+                padding: const EdgeInsets.fromLTRB(_hPad, _v16, _hPad, 0),
                 child: GreetingsRow(formattedHijri: formattedHijri),
               ),
             ),
 
+            // TODAY TIMES
             SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsetsGeometry.symmetric(
-                  horizontal: 12,
-                  vertical: 16,
+              child: HomeSection(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: _hPad,
+                  vertical: _v16,
                 ),
                 child: TodayTimesCard(assetsByPrayer: assetByPrayer),
               ),
             ),
 
-            //REMINDERs
+            // REMINDERS
             const SliverToBoxAdapter(child: HomeRemindersCarousel()),
 
-            //quick actions row
+            // QUICK LINKS ROW
             SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsetsGeometry.only(
-                  left: 12,
-                  right: 12,
-                  bottom: 24,
+              child: HomeSection(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: _hPad,
+                  vertical: _v16,
                 ),
                 child: HomeQuickActionsRow(
                   onQuran: () {
@@ -189,17 +188,42 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
             ),
 
+            // HARAMAIN CARD
             const SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+              child: HomeSection(
+                padding: EdgeInsets.symmetric(
+                  horizontal: _hPad,
+                  vertical: _v16,
+                ),
                 child: HaramainCard(),
               ),
             ),
-            //AYAH OF THE DAY
-            const SliverToBoxAdapter(child: AyahOfTheDay()),
+
+            // AYAH OF THE DAY
+            const SliverToBoxAdapter(
+              child: HomeSection(
+                padding: EdgeInsets.symmetric(
+                  horizontal: _hPad,
+                  vertical: _v16,
+                ),
+                child: AyahOfTheDay(),
+              ),
+            ),
           ],
         ),
       ),
     );
+  }
+}
+
+class HomeSection extends StatelessWidget {
+  const HomeSection({super.key, required this.child, required this.padding});
+
+  final Widget child;
+  final EdgeInsets padding;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(padding: padding, child: child);
   }
 }

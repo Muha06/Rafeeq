@@ -215,7 +215,7 @@ class AppTheme {
 
         //small text
         bodySmall: AppTextStyles.secondary.copyWith(
-          color: AppLightColors.textSecondary,
+          color: AppLightColors.textPrimary,
         ),
       ),
 

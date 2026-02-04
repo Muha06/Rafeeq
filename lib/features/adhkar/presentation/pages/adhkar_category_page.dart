@@ -20,9 +20,7 @@ class _AdhkarCategoryPageState extends ConsumerState<AdhkarCategoryPage> {
     final adhkarCategories = ref.watch(getAdhkarCategoriesProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Adhkars Categories'), 
-      ),
+      appBar: AppBar(title: const Text('Adhkars Categories')),
       body: ListView.builder(
         itemCount: adhkarCategories.length,
         itemBuilder: (context, index) {
@@ -46,7 +44,7 @@ class AdhkarCategoryTile extends ConsumerWidget {
     final isDark = ref.watch(isDarkProvider);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
       child: GestureDetector(
         onTap: () {
           Navigator.push(

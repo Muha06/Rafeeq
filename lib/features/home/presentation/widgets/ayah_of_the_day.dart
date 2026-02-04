@@ -23,23 +23,20 @@ class AyahOfTheDay extends ConsumerWidget {
         return FadeTransition(opacity: animation, child: child);
       },
       child: ayahAsync.when(
-        loading: () => Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8),
-          child: Container(
-            key: const ValueKey('loading'),
-            width: double.infinity,
-            height: 100,
-            decoration: BoxDecoration(
-              color: theme.cardColor,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            child: const Center(
-              child: CupertinoActivityIndicator(
-                color: AppDarkColors.amber,
-                animating: true,
-                radius: 18,
-              ),
+        loading: () => Container(
+          key: const ValueKey('loading'),
+          width: double.infinity,
+          height: 100,
+          decoration: BoxDecoration(
+            color: theme.cardColor,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          child: const Center(
+            child: CupertinoActivityIndicator(
+              color: AppDarkColors.amber,
+              animating: true,
+              radius: 18,
             ),
           ),
         ),
@@ -51,86 +48,80 @@ class AyahOfTheDay extends ConsumerWidget {
           final ayahSurah = ref.watch(ayahSurahProvider(ayah.surahId));
           if (ayahSurah == null) return const SizedBox();
 
-          return Padding(
-            padding: const EdgeInsets.only(left: 14.0, right: 14.0, bottom: 14),
-            child: GestureDetector(
-              key: const ValueKey('data'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => FullSurahPage(
-                      surah: ayahSurah,
-                      autoScrollAyah: ayah.ayahNumber,
+          return GestureDetector(
+            key: const ValueKey('data'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => FullSurahPage(
+                    surah: ayahSurah,
+                    autoScrollAyah: ayah.ayahNumber,
+                  ),
+                ),
+              );
+            },
+            child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: isDark
+                    ? AppDarkColors.darkSurface
+                    : AppLightColors.amberSoft,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Daily verse',
+                    textAlign: TextAlign.left,
+                    style: theme.textTheme.titleSmall,
+                  ),
+                  const SizedBox(height: 12),
+
+                  Divider(color: theme.dividerColor),
+                  const SizedBox(height: 8),
+
+                  //Ayah text
+                  Text(
+                    ayah.textEnglish,
+                    textAlign: TextAlign.left,
+                    style: theme.textTheme.bodyMedium!.copyWith(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
-                );
-              },
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: isDark
-                      ? AppDarkColors.darkSurface
-                      : AppLightColors.amberSoft,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 16,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Daily verse',
-                      textAlign: TextAlign.left,
-                      style: theme.textTheme.titleSmall,
-                    ),
-                    const SizedBox(height: 12),
+                  const SizedBox(height: 8),
 
-                    Divider(color: theme.dividerColor),
-                    const SizedBox(height: 8),
+                  Divider(color: theme.dividerColor),
+                  const SizedBox(height: 12),
 
-                    //Ayah text
-                    Text(
-                      ayah.textEnglish,
-                      textAlign: TextAlign.left,
-                      style: theme.textTheme.bodyMedium!.copyWith(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
+                  //refrence
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Quran ${ayahSurah.id}:${ayah.ayahNumber}',
+                        style: theme.textTheme.bodySmall!.copyWith(
+                          // color: AppLightColors.textBody,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 8),
 
-                    Divider(color: theme.dividerColor),
-                    const SizedBox(height: 12),
-
-                    //refrence
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Quran ${ayahSurah.id}:${ayah.ayahNumber}',
-                          style: theme.textTheme.bodySmall!.copyWith(
-                            // color: AppLightColors.textBody,
-                          ),
+                      Text(
+                        'Click to read more >',
+                        style: theme.textTheme.bodyMedium!.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: isDark
+                              ? AppDarkColors.amber
+                              : AppLightColors.textBody,
+                          height: 1,
+                          fontSize: 14,
                         ),
-
-                        Text(
-                          'Click to read more >',
-                          style: theme.textTheme.bodyMedium!.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: isDark
-                                ? AppDarkColors.amber
-                                : AppLightColors.textBody,
-                            height: 1,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           );

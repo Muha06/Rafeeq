@@ -18,30 +18,44 @@ class HomeQuickActionsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: _QuickActionCard(
-            title: "Qur’an",
-            imagePath: 'assets/images/home/quran.png',
-            onTap: onQuran,
+        Text(
+          ' Quick links',
+          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+            // fontWeight: FontWeight.w600,
+            // color: AppLightColors.textBody,
           ),
         ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: _QuickActionCard(
-            title: "Adhkār",
-            imagePath: 'assets/images/home/tasbih.png',
-            onTap: onAdhkar,
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: _QuickActionCard(
-            title: "Allah Names",
-            imagePath: 'assets/images/home/Allah_name.png',
-            onTap: onAllahNames,
-          ),
+        const SizedBox(height: 8),
+
+        Row(
+          children: [
+            Expanded(
+              child: _QuickActionCard(
+                title: "Qur’an",
+                imagePath: 'assets/images/home/quran.png',
+                onTap: onQuran,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _QuickActionCard(
+                title: "Adhkār",
+                imagePath: 'assets/images/home/tasbih.png',
+                onTap: onAdhkar,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _QuickActionCard(
+                title: "Allah Names",
+                imagePath: 'assets/images/home/Allah_name.png',
+                onTap: onAllahNames,
+              ),
+            ),
+          ],
         ),
       ],
     );
