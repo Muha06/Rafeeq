@@ -6,18 +6,27 @@ import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/core/widgets/snackbars.dart';
 import 'package:rafeeq/features/Quran/domain/entities/ayah.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/ayah_of_the_day.dart';
+import 'package:rafeeq/features/Quran/presentation/riverpod/ayah_share_cotroller_provider.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/quran_bookmark.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/Quran/execution_providers.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
+import 'package:widgets_to_image/widgets_to_image.dart';
 
-class AyahTile extends ConsumerWidget {
+class AyahTile extends ConsumerStatefulWidget {
   final Ayah ayah;
 
   const AyahTile({super.key, required this.ayah});
 
   @override
-  Widget build(BuildContext context, ref) {
+  ConsumerState<AyahTile> createState() => _AyahTileState();
+}
+
+class _AyahTileState extends ConsumerState<AyahTile> {
+  final controller = WidgetsToImageController();
+
+  @override
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = ref.watch(isDarkProvider);
     final settings = ref.watch(surahSettingsProvider);
@@ -26,7 +35,7 @@ class AyahTile extends ConsumerWidget {
     final arabicFontSize = settings.arabicFontSize;
     final translationFontSize = settings.translationFontSize;
 
-    final id = '${ayah.surahId}:${ayah.ayahNumber}';
+    final id = '${widget.ayah.surahId}:${widget.ayah.ayahNumber}';
     final bookmarkedIds = ref.watch(bookmarkedIdsProvider);
     final isBookmarked = bookmarkedIds.contains(id);
 
@@ -39,7 +48,7 @@ class AyahTile extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            //Controls ssection
+            //Controls section
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
@@ -52,7 +61,7 @@ class AyahTile extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    '${ayah.surahId}: ${ayah.ayahNumber.toString()}',
+                    '${widget.ayah.surahId}: ${widget.ayah.ayahNumber.toString()}',
                     textAlign: TextAlign.center,
                     style: theme.textTheme.bodySmall!.copyWith(
                       fontWeight: FontWeight.bold,
@@ -85,15 +94,15 @@ class AyahTile extends ConsumerWidget {
 
                         // add bookmark
                         final ayahSurah = ref.read(
-                          ayahSurahProvider(ayah.surahId),
+                          ayahSurahProvider(widget.ayah.surahId),
                         );
 
                         if (ayahSurah != null) {
                           final bookmark = QuranBookmarkEntity(
-                            id: '${ayah.surahId}:${ayah.ayahNumber}',
-                            surahId: ayah.surahId,
+                            id: '${widget.ayah.surahId}:${widget.ayah.ayahNumber}',
+                            surahId: widget.ayah.surahId,
                             surahEnglishName: ayahSurah.nameTransliteration,
-                            ayahNumber: ayah.ayahNumber,
+                            ayahNumber: widget.ayah.ayahNumber,
                             createdAt: DateTime.now(),
                           );
 
@@ -126,14 +135,39 @@ class AyahTile extends ConsumerWidget {
                           : AppLightColors.iconPrimary,
                     ),
                   ),
-                  IconButton(
-                    onPressed: () async {},
-                    icon: Icon(
-                      Icons.share,
-                      size: 22,
-                      color: isDark
-                          ? AppDarkColors.iconPrimary
-                          : AppLightColors.iconPrimary,
+                  Builder(
+                    builder: (btnCtx) => IconButton(
+                      onPressed: () async {
+                        final surah = ref.read(
+                          ayahSurahProvider(widget.ayah.surahId),
+                        );
+                        final surahName =
+                            surah?.nameTransliteration ?? 'Qur’an';
+
+                        final controller = ref.read(
+                          ayahShareControllerProvider,
+                        );
+
+                        final text = controller.buildText(
+                          englishText: widget.ayah.textEnglish,
+                          arabicText: widget.ayah.textArabic,
+                          ayahNumber: widget.ayah.ayahNumber,
+                          surahId: widget.ayah.surahId,
+                          surahName: surahName,
+                          includeTranslation: ref
+                              .read(surahSettingsProvider)
+                              .showTranslation,
+                        );
+
+                        await controller.share(context: btnCtx, text: text);
+                      },
+                      icon: Icon(
+                        Icons.share,
+                        size: 22,
+                        color: isDark
+                            ? AppDarkColors.iconPrimary
+                            : AppLightColors.iconPrimary,
+                      ),
                     ),
                   ),
                 ],
@@ -142,39 +176,49 @@ class AyahTile extends ConsumerWidget {
 
             const SizedBox(height: 24),
 
-            // arabic text (right)
-            Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                cleanAyah(ayah.textArabic),
-                textDirection: TextDirection.rtl,
-                style: theme.textTheme.bodyLarge!.copyWith(
-                  fontWeight: isDark ? FontWeight.w500 : FontWeight.w400,
-                  fontSize: arabicFontSize,
-                ),
+            WidgetsToImage(
+              controller: controller,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // arabic text (right)
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      cleanAyah(widget.ayah.textArabic),
+                      textDirection: TextDirection.rtl,
+                      style: theme.textTheme.bodyLarge!.copyWith(
+                        fontWeight: isDark ? FontWeight.w500 : FontWeight.w400,
+                        fontSize: arabicFontSize,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Translation
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 100),
+                    child: showTranslation
+                        ? Text(
+                            key: const ValueKey('translation'),
+                            widget.ayah.textEnglish,
+                            textAlign: TextAlign.left,
+                            style: theme.textTheme.bodyMedium!.copyWith(
+                              fontWeight: isDark
+                                  ? FontWeight.w400
+                                  : FontWeight.w500,
+                              color: isDark
+                                  ? AppDarkColors.textPrimary
+                                  : AppLightColors.textPrimary,
+                              fontSize: translationFontSize,
+                            ),
+                          )
+                        : const SizedBox.shrink(key: ValueKey('hide')),
+                  ),
+                  if (showTranslation) const SizedBox(height: 20),
+                ],
               ),
             ),
-            const SizedBox(height: 24),
-
-            // Translation
-            AnimatedSwitcher(
-              duration: const Duration(milliseconds: 100),
-              child: showTranslation
-                  ? Text(
-                      key: const ValueKey('translation'),
-                      ayah.textEnglish,
-                      textAlign: TextAlign.left,
-                      style: theme.textTheme.bodyMedium!.copyWith(
-                        fontWeight: isDark ? FontWeight.w400 : FontWeight.w500,
-                        color: isDark
-                            ? AppDarkColors.textPrimary
-                            : AppLightColors.textPrimary,
-                        fontSize: translationFontSize,
-                      ),
-                    )
-                  : const SizedBox.shrink(key: ValueKey('hide')),
-            ),
-            if (showTranslation) const SizedBox(height: 20),
           ],
         ),
       ),

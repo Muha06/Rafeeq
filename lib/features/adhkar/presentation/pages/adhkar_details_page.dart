@@ -15,15 +15,15 @@ class AdhkarDetailsPage extends ConsumerStatefulWidget {
   const AdhkarDetailsPage({
     super.key,
     required this.dhikr,
-    required this.adhkars,
     required this.assetPath,
-    required this.initialIndex,
+    this.adhkars,
+    this.initialIndex,
   });
 
   final Dhikr dhikr;
-  final List<Dhikr> adhkars;
-  final int initialIndex;
   final String assetPath;
+  final List<Dhikr>? adhkars;
+  final int? initialIndex;
   @override
   ConsumerState<AdhkarDetailsPage> createState() => _AdhkarDetailsPageState();
 }
@@ -35,8 +35,10 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
   @override
   void initState() {
     super.initState();
-    _currentIndex = widget.initialIndex;
-    _pageController = PageController(initialPage: _currentIndex);
+    if (widget.initialIndex != null) {
+      _currentIndex = widget.initialIndex!;
+      _pageController = PageController(initialPage: _currentIndex);
+    }
   }
 
   void openBottomSheet(Dhikr dhikr) {
@@ -91,7 +93,7 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
 
-    final dhikr = widget.adhkars[_currentIndex];
+    final dhikr = widget.adhkars?[_currentIndex] ?? widget.dhikr;
 
     return Scaffold(
       appBar: AppBar(
@@ -154,20 +156,27 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
         ],
       ),
       body: SafeArea(
-        child: PageView.builder(
-          controller: _pageController,
-          itemCount: widget.adhkars.length,
-          onPageChanged: (i) => setState(() => _currentIndex = i),
-          itemBuilder: (context, i) {
-            final dhikr = widget.adhkars[i];
-            return AdhkarDetailsTile(
-              key: ValueKey(dhikr.id),
-              isDark: isDark,
-              dhikr: dhikr,
-              textTheme: textTheme,
-            );
-          },
-        ),
+        child: widget.initialIndex != null
+            ? PageView.builder(
+                controller: _pageController,
+                itemCount: widget.adhkars?.length,
+                onPageChanged: (i) => setState(() => _currentIndex = i),
+                itemBuilder: (context, i) {
+                  final actaulDhikr = widget.adhkars?[i] ?? dhikr;
+                  return AdhkarDetailsTile(
+                    key: ValueKey(dhikr.id),
+                    isDark: isDark,
+                    dhikr: actaulDhikr,
+                    textTheme: textTheme,
+                  );
+                },
+              )
+            : AdhkarDetailsTile(
+                key: ValueKey(dhikr.id),
+                isDark: isDark,
+                dhikr: dhikr,
+                textTheme: textTheme,
+              ),
       ),
     );
   }

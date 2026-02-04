@@ -4,7 +4,6 @@ import 'package:rafeeq/features/Quran/presentation/pages/surah_page.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/ayah_of_the_day.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/Quran/execution_providers.dart';
 import 'package:rafeeq/features/bookmarks/widgets/bookmark_tile.dart';
-import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class QuranBookmarksTab extends ConsumerWidget {
   const QuranBookmarksTab({super.key});
@@ -12,7 +11,6 @@ class QuranBookmarksTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bookMarks = ref.watch(getAllQuranBookmarksProvider);
-    final isDark = ref.watch(isDarkProvider);
     final theme = Theme.of(context);
 
     return bookMarks.isEmpty
@@ -50,8 +48,7 @@ class QuranBookmarksTab extends ConsumerWidget {
                 },
                 child: BookmarkTile(
                   indexDisplay: indexDisplay,
-                  bookMark: bookMark,
-                  isDark: isDark,
+                  quranBookMark: bookMark,
                 ),
               );
             },

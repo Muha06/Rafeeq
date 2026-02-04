@@ -29,9 +29,6 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
     final translationSize = ref.watch(
       surahSettingsProvider.select((s) => s.translationFontSize),
     );
-    final speed = ref.watch(
-      surahSettingsProvider.select((s) => s.autoScrollSpeed),
-    );
 
     final autoScrollEnabled = ref.watch(
       surahSettingsProvider.select((s) => s.autoScrollEnabled),

@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/core/themes/dark_colors.dart';
-import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_details_page.dart';
 import 'package:rafeeq/features/adhkar/presentation/riverpod/get_adhkars_provider.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/dhikr/execution_providers.dart';
-import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
-
+import 'package:rafeeq/features/bookmarks/widgets/bookmark_tile.dart';
+ 
 class AdhkarBookmarksTab extends ConsumerStatefulWidget {
   const AdhkarBookmarksTab({super.key});
 
@@ -18,8 +16,7 @@ class _AdhkarBookmarksTabState extends ConsumerState<AdhkarBookmarksTab> {
   @override
   Widget build(BuildContext context) {
     final bookMarks = ref.watch(getAllDhikrBookmarksProvider);
-    final isDark = ref.watch(isDarkProvider);
-    final theme = Theme.of(context);
+     final theme = Theme.of(context);
 
     return bookMarks.isEmpty
         ? Center(
@@ -39,64 +36,32 @@ class _AdhkarBookmarksTabState extends ConsumerState<AdhkarBookmarksTab> {
 
               return GestureDetector(
                 behavior: HitTestBehavior.opaque,
-                onTap: () async {
-                  final adhkars = await ref.read(
-                    getAdhkarsProvider(bookMark.assetPath).future,
-                  );
+                onTap: () {
+                  //fetching adhkars
+                  final adhkars = ref
+                      .read(getAdhkarsProvider(bookMark.assetPath))
+                      .value;
 
-                  final initialIndex = adhkars.indexWhere(
-                    (d) => d.id == bookMark.dhikrId,
-                  );
-                  if (initialIndex == -1) return;
+                  //fetching actual dhikr
+                  if (adhkars != null) {
+                    final dhikr = adhkars.firstWhere(
+                      (dhikr) => dhikr.id == bookMark.dhikrId,
+                    );
 
-                  final dhikr = adhkars[initialIndex];
-
-                  if (!context.mounted) return;
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => AdhkarDetailsPage(
-                        dhikr: dhikr,
-                        adhkars: adhkars,
-                        assetPath: bookMark.assetPath,
-                        initialIndex: initialIndex,
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AdhkarDetailsPage(
+                          dhikr: dhikr,
+                          assetPath: bookMark.assetPath,
+                        ),
                       ),
-                    ),
-                  );
+                    );
+                  }
                 },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 12,
-                  ),
-                  child: Row(
-                    children: [
-                      SizedBox(width: 28, child: Text(indexDisplay.toString())),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          bookMark.title,
-                          style: theme.textTheme.titleSmall,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      IconButton(
-                        onPressed: () async {
-                          await ref.read(
-                            removeDhikrBookmarkActionProvider(bookMark.dhikrId),
-                          )();
-                        },
-                        icon: Icon(
-                          Icons.delete,
-                          color: isDark
-                              ? AppDarkColors.iconSecondary
-                              : AppLightColors.iconSecondary,
-                        ),
-                      ),
-                    ],
-                  ),
+                child: BookmarkTile(
+                  dhikrBookmark: bookMark,
+                  indexDisplay: indexDisplay,
                 ),
               );
             },
