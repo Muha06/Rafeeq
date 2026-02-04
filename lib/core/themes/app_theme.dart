@@ -86,7 +86,7 @@ class AppTheme {
       // ===== BUTTON THEME =====
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppDarkColors.darkSurface,
+          backgroundColor: AppDarkColors.onDarkSurface,
           foregroundColor: AppDarkColors.amber,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
@@ -139,7 +139,7 @@ class AppTheme {
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           iconColor: AppDarkColors.iconPrimary,
-          foregroundColor: AppDarkColors.amber,
+          foregroundColor: AppDarkColors.textPrimary,
           overlayColor: Colors.transparent,
           splashFactory: NoSplash.splashFactory,
           textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
@@ -156,8 +156,8 @@ class AppTheme {
       ),
 
       dialogTheme: DialogThemeData(
-        backgroundColor: AppDarkColors.darkSurfaceSolid,
-        surfaceTintColor: Colors.transparent, // removes M3 tint "wash"
+        backgroundColor: AppDarkColors.darkSurface.withAlpha(255),
+        surfaceTintColor: Colors.transparent,
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
@@ -258,7 +258,7 @@ class AppTheme {
           return Colors.transparent;
         }),
         trackOutlineWidth: WidgetStateProperty.resolveWith((states) {
-          return 1.0;  
+          return 1.0;
         }),
       ),
 
