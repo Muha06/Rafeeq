@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/features/calendar/presentation/providers/hijri_date_providers.dart';
+import 'package:hijri_date/hijri.dart';
+import 'package:rafeeq/core/themes/dark_colors.dart';
+import 'package:rafeeq/core/themes/light_colors.dart';
+import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
+import 'package:table_calendar/table_calendar.dart';
+
+import '../providers/hijri_date_providers.dart';
 
 class CalendarPage extends ConsumerStatefulWidget {
   const CalendarPage({super.key});
@@ -10,23 +16,48 @@ class CalendarPage extends ConsumerStatefulWidget {
 }
 
 class _CalendarPageState extends ConsumerState<CalendarPage> {
-  @override
-  void initState() {
-    super.initState();
-    Future.microtask(() {
-      ref.read(hijriDateProvider.notifier).refresh();
-    });
+  DateTime _focusedDay = DateTime.now();
+  DateTime? _selectedDay;
+
+  String _hijriMonthYearFor(DateTime date, int offsetDays) {
+    final h = HijriDate.fromDate(date);
+    final adjusted = offsetDays == 0 ? h : h.addDays(offsetDays);
+    return '${adjusted.longMonthName} ${adjusted.hYear}';
+  }
+
+  String hijriHeaderForFocusedMonth(DateTime focusedDay, int offsetDays) {
+    final first = DateTime(focusedDay.year, focusedDay.month, 1);
+    final last = DateTime(focusedDay.year, focusedDay.month + 1, 0);
+
+    final firstLabel = _hijriMonthYearFor(first, offsetDays);
+    final lastLabel = _hijriMonthYearFor(last, offsetDays);
+
+    return firstLabel == lastLabel ? firstLabel : firstLabel;
+  }
+
+  String _monthName(int m) {
+    const months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+    return months[m - 1];
   }
 
   @override
   Widget build(BuildContext context) {
     final hijriState = ref.watch(hijriDateProvider);
-
-    String offsetLabel(int v) {
-      if (v == 0) return 'Offset: 0 (accurate)';
-      final sign = v > 0 ? '+' : '';
-      return 'Offset: $sign$v day${v.abs() == 1 ? '' : 's'}';
-    }
+    final offset = hijriState.offsetDays;
+    final isDark = ref.watch(isDarkProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -34,31 +65,117 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.tune),
-            onPressed: () => _openOffsetSheet(context, ref),
+            onPressed: () => _openHijriOffsetSheet(context),
           ),
         ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              hijriState.formatted,
-              style: Theme.of(context).textTheme.headlineSmall,
+            // Header preview (Today)
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                color: isDark
+                    ? AppDarkColors.darkSurface
+                    : AppLightColors.lightSurface,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    hijriState.formatted,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  Text(
+                    offset == 0
+                        ? 'Offset: 0'
+                        : 'Offset: ${offset > 0 ? '+' : ''}$offset',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 8),
-            Text(
-              offsetLabel(hijriState.offsetDays),
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            const SizedBox(height: 20),
 
-            // Big obvious button too (not only the top icon)
-            FilledButton.icon(
-              onPressed: () => _openOffsetSheet(context, ref),
-              icon: const Icon(Icons.calendar_month),
-              label: const Text('Adjust Hijri Offset'),
+            const SizedBox(height: 14),
+
+            Expanded(
+              child: TableCalendar(
+                rowHeight: 52, // ✅ give room for 2 lines
+                daysOfWeekHeight: 32,
+                firstDay: DateTime.utc(2020, 1, 1),
+                lastDay: DateTime.utc(2035, 12, 31),
+                focusedDay: _focusedDay,
+
+                selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+                onDaySelected: (selectedDay, focusedDay) {
+                  setState(() {
+                    _selectedDay = selectedDay;
+                    _focusedDay = focusedDay;
+                  });
+                },
+                onPageChanged: (focusedDay) => _focusedDay = focusedDay,
+
+                calendarFormat: CalendarFormat.month, // ✅ force month view
+                availableCalendarFormats: const {
+                  CalendarFormat.month: 'Month', // ✅ only one option exists
+                },
+
+                //Day of week style
+                daysOfWeekStyle: DaysOfWeekStyle(
+                  weekdayStyle: Theme.of(context).textTheme.labelSmall!,
+                  weekendStyle: Theme.of(context).textTheme.labelSmall!,
+                ),
+
+                calendarBuilders: CalendarBuilders(
+                  //Month section
+                  headerTitleBuilder: (context, day) {
+                    final gregorianTitle =
+                        '${_monthName(day.month)} ${day.year}';
+                    final hijriTitle = hijriHeaderForFocusedMonth(day, offset);
+
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          gregorianTitle,
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          hijriTitle,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
+                    );
+                  },
+                  defaultBuilder: (context, day, focusedDay) => _DayCell(
+                    context,
+                    day,
+                    offset,
+                    isSelected: isSameDay(day, _selectedDay),
+                  ),
+                  todayBuilder: (context, day, focusedDay) => _DayCell(
+                    context,
+                    day,
+                    offset,
+                    isToday: true,
+                    isSelected: isSameDay(day, _selectedDay),
+                  ),
+                  selectedBuilder: (context, day, focusedDay) =>
+                      _DayCell(context, day, offset, isSelected: true),
+                  outsideBuilder: (context, day, focusedDay) => _DayCell(
+                    context,
+                    day,
+                    offset,
+                    isOutside: true,
+                    isSelected: isSameDay(day, _selectedDay),
+                  ),
+                ),
+              ),
             ),
           ],
         ),
@@ -66,119 +183,158 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
     );
   }
 
-  void _openOffsetSheet(BuildContext context, WidgetRef ref) {
+  void _openHijriOffsetSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
       useSafeArea: true,
       showDragHandle: true,
-      isScrollControlled: false,
-      builder: (ctx) {
-        return Consumer(
-          builder: (context, ref, _) {
-            final state = ref.watch(hijriDateProvider);
-            final notifier = ref.read(hijriDateProvider.notifier);
+      builder: (_) => Consumer(
+        builder: (context, ref, _) {
+          final state = ref.watch(hijriDateProvider);
+          final notifier = ref.read(hijriDateProvider.notifier);
 
-            return Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Hijri Offset',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    'Use this if your local moon sighting is ahead/behind.',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 16),
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Hijri Offset',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                const SizedBox(height: 8),
+                Text(state.formatted),
+                const SizedBox(height: 16),
 
-                  // Preview
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.surfaceContainerHighest,
-                      borderRadius: BorderRadius.circular(14),
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: state.offsetDays <= -2
+                          ? null
+                          : notifier.decrement,
+                      icon: const Icon(Icons.remove),
                     ),
-                    child: Column(
-                      children: [
-                        Text(
-                          state.formatted,
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          'Offset: ${state.offsetDays}',
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                      ],
+                    Expanded(
+                      child: Slider(
+                        min: -2,
+                        max: 2,
+                        divisions: 4,
+                        value: state.offsetDays.toDouble(),
+                        label: state.offsetDays.toString(),
+                        onChanged: (v) => notifier.setOffset(v.round()),
+                      ),
                     ),
-                  ),
+                    IconButton(
+                      onPressed: state.offsetDays >= 2
+                          ? null
+                          : notifier.increment,
+                      icon: const Icon(Icons.add),
+                    ),
+                  ],
+                ),
 
-                  const SizedBox(height: 16),
-
-                  // Slider -2..+2
-                  Row(
-                    children: [
-                      IconButton(
-                        onPressed: state.offsetDays <= -2
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: state.offsetDays == 0
                             ? null
-                            : () => notifier.setOffset(state.offsetDays - 1),
-                        icon: const Icon(Icons.remove),
+                            : notifier.reset,
+                        child: const Text('Reset'),
                       ),
-                      Expanded(
-                        child: Slider(
-                          value: state.offsetDays.toDouble(),
-                          min: -2,
-                          max: 2,
-                          divisions: 4,
-                          label: state.offsetDays.toString(),
-                          onChanged: (v) => notifier.setOffset(v.round()),
-                        ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: FilledButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text('Done'),
                       ),
-                      IconButton(
-                        onPressed: state.offsetDays >= 2
-                            ? null
-                            : () => notifier.setOffset(state.offsetDays + 1),
-                        icon: const Icon(Icons.add),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
 
-                  const SizedBox(height: 8),
+/// A day tile showing BOTH: Gregorian day + Hijri day (small)
+class _DayCell extends ConsumerWidget {
+  const _DayCell(
+    this.context,
+    this.day,
+    this.offsetDays, {
+    this.isToday = false,
+    this.isSelected = false,
+    this.isOutside = false,
+  });
 
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: state.offsetDays == 0
-                              ? null
-                              : notifier.reset,
-                          child: const Text('Reset'),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: FilledButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text('Done'),
-                        ),
-                      ),
-                    ],
-                  ),
+  final BuildContext context;
+  final DateTime day;
+  final int offsetDays;
+  final bool isToday;
+  final bool isSelected;
+  final bool isOutside;
 
-                  const SizedBox(height: 6),
-                ],
+  @override
+  Widget build(BuildContext context, ref) {
+    // Convert gregorian -> hijri, then apply offset
+    final hijri = HijriDate.fromDate(day);
+    final adjusted = offsetDays == 0 ? hijri : hijri.addDays(offsetDays);
+    final isDark = ref.watch(isDarkProvider);
+
+    final todayColors = isDark ? AppDarkColors.amber : AppLightColors.primary;
+    final todayTextColors = isDark
+        ? AppDarkColors.darkBackground
+        : Colors.white;
+
+    final selectedColor = isDark
+        ? AppDarkColors.onDarkSurface
+        : AppLightColors.amber;
+
+    final bg = isSelected
+        ? selectedColor
+        : isToday
+        ? todayColors
+        : Colors.transparent;
+
+    final opacity = isOutside ? 0.35 : 1.0;
+
+    return Opacity(
+      opacity: opacity,
+      child: Container(
+        margin: const EdgeInsets.all(4),
+        padding: const EdgeInsets.symmetric(vertical: 0),
+        decoration: BoxDecoration(
+          color: bg,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Gregorian day number
+            Text(
+              '${day.day}',
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                color: isToday ? todayTextColors : null,
+                fontWeight: FontWeight.bold,
               ),
-            );
-          },
-        );
-      },
+            ),
+            const SizedBox(height: 2),
+            // Hijri day number (small)
+            Text(
+              '${adjusted.hDay}',
+              style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                color: isToday ? todayTextColors : null,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
