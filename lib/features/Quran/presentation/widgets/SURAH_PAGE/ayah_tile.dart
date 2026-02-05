@@ -135,6 +135,8 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                           : AppLightColors.iconPrimary,
                     ),
                   ),
+
+                  //share
                   Builder(
                     builder: (btnCtx) => IconButton(
                       onPressed: () async {

@@ -105,7 +105,7 @@ class AppTheme {
       // ===== BUTTON THEME =====
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppDarkColors.onDarkSurface,
+          backgroundColor: const Color.fromARGB(204, 41, 58, 65),
           foregroundColor: AppDarkColors.amber,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
