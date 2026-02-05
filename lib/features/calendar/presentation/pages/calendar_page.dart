@@ -25,6 +25,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
     return '${adjusted.longMonthName} ${adjusted.hYear}';
   }
 
+  //return hijri year & month for specific date
   String hijriHeaderForFocusedMonth(DateTime focusedDay, int offsetDays) {
     final first = DateTime(focusedDay.year, focusedDay.month, 1);
     final last = DateTime(focusedDay.year, focusedDay.month + 1, 0);
@@ -32,7 +33,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
     final firstLabel = _hijriMonthYearFor(first, offsetDays);
     final lastLabel = _hijriMonthYearFor(last, offsetDays);
 
-    return firstLabel == lastLabel ? firstLabel : firstLabel;
+    return firstLabel == lastLabel ? firstLabel : '$firstLabel – $lastLabel';
   }
 
   String _monthName(int m) {
@@ -78,7 +79,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
               width: double.infinity,
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(14),
                 color: isDark
                     ? AppDarkColors.darkSurface
                     : AppLightColors.lightSurface,
@@ -104,11 +105,11 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
 
             Expanded(
               child: TableCalendar(
-                rowHeight: 52, // ✅ give room for 2 lines
+                rowHeight: 52, // each row height
                 daysOfWeekHeight: 32,
-                firstDay: DateTime.utc(2020, 1, 1),
+                firstDay: DateTime.utc(2025, 1, 1),
                 lastDay: DateTime.utc(2035, 12, 31),
-                focusedDay: _focusedDay,
+                focusedDay: _focusedDay, //today
 
                 selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
                 onDaySelected: (selectedDay, focusedDay) {
@@ -119,9 +120,9 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                 },
                 onPageChanged: (focusedDay) => _focusedDay = focusedDay,
 
-                calendarFormat: CalendarFormat.month, // ✅ force month view
+                calendarFormat: CalendarFormat.month, //  force month view
                 availableCalendarFormats: const {
-                  CalendarFormat.month: 'Month', // ✅ only one option exists
+                  CalendarFormat.month: 'Month', //  only one option exists
                 },
 
                 //Day of week style
@@ -130,11 +131,18 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                   weekendStyle: Theme.of(context).textTheme.labelSmall!,
                 ),
 
+                headerStyle: const HeaderStyle(
+                  formatButtonVisible: false,
+                  titleCentered: true,
+                ),
+
                 calendarBuilders: CalendarBuilders(
                   //Month section
                   headerTitleBuilder: (context, day) {
+                    //show Gregorion month & year
                     final gregorianTitle =
                         '${_monthName(day.month)} ${day.year}';
+                    //show Hijri month & year
                     final hijriTitle = hijriHeaderForFocusedMonth(day, offset);
 
                     return Column(
@@ -153,23 +161,23 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                     );
                   },
                   defaultBuilder: (context, day, focusedDay) => _DayCell(
-                    context,
                     day,
+                    isDark,
                     offset,
                     isSelected: isSameDay(day, _selectedDay),
                   ),
                   todayBuilder: (context, day, focusedDay) => _DayCell(
-                    context,
                     day,
+                    isDark,
                     offset,
                     isToday: true,
                     isSelected: isSameDay(day, _selectedDay),
                   ),
                   selectedBuilder: (context, day, focusedDay) =>
-                      _DayCell(context, day, offset, isSelected: true),
+                      _DayCell(day, isDark, offset, isSelected: true),
                   outsideBuilder: (context, day, focusedDay) => _DayCell(
-                    context,
                     day,
+                    isDark,
                     offset,
                     isOutside: true,
                     isSelected: isSameDay(day, _selectedDay),
@@ -211,7 +219,8 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                     IconButton(
                       onPressed: state.offsetDays <= -2
                           ? null
-                          : notifier.decrement,
+                          : () => notifier.decrement(),
+
                       icon: const Icon(Icons.remove),
                     ),
                     Expanded(
@@ -264,16 +273,16 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
 /// A day tile showing BOTH: Gregorian day + Hijri day (small)
 class _DayCell extends ConsumerWidget {
   const _DayCell(
-    this.context,
     this.day,
+    this.isDark,
     this.offsetDays, {
     this.isToday = false,
     this.isSelected = false,
     this.isOutside = false,
   });
 
-  final BuildContext context;
   final DateTime day;
+  final bool isDark;
   final int offsetDays;
   final bool isToday;
   final bool isSelected;
@@ -284,7 +293,6 @@ class _DayCell extends ConsumerWidget {
     // Convert gregorian -> hijri, then apply offset
     final hijri = HijriDate.fromDate(day);
     final adjusted = offsetDays == 0 ? hijri : hijri.addDays(offsetDays);
-    final isDark = ref.watch(isDarkProvider);
 
     final todayColors = isDark ? AppDarkColors.amber : AppLightColors.primary;
     final todayTextColors = isDark

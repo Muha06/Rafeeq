@@ -1,5 +1,12 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hijri_date/hijri.dart';
+import 'package:rafeeq/features/calendar/datasources/calender_local_ds.dart';
 import 'package:riverpod/legacy.dart';
+
+/// Storage provider
+final hijriOffsetStorageProvider = Provider<HijriOffsetStorage>((ref) {
+  return HijriOffsetStorage();
+});
 
 /// State model
 class TodayHijriDate {
@@ -21,37 +28,46 @@ class TodayHijriDate {
 
 /// Provider
 final hijriDateProvider =
-    StateNotifierProvider<HijriDateNotifier, TodayHijriDate>(
-      (ref) => HijriDateNotifier(),
-    );
+    StateNotifierProvider<HijriDateNotifier, TodayHijriDate>((ref) {
+      final storage = ref.read(hijriOffsetStorageProvider);
+      final savedOffset = storage.readOffset(); // ✅ load from Hive immediately
+      return HijriDateNotifier(storage: storage, initialOffset: savedOffset);
+    });
 
 /// Notifier
 class HijriDateNotifier extends StateNotifier<TodayHijriDate> {
-  HijriDateNotifier() : super(_buildState(offsetDays: 0));
+  HijriDateNotifier({
+    required HijriOffsetStorage storage,
+    required int initialOffset,
+  }) : _storage = storage,
+       super(_buildState(offsetDays: initialOffset));
+
+  final HijriOffsetStorage _storage;
 
   static TodayHijriDate _buildState({required int offsetDays}) {
     final today = HijriDate.now();
-
     final adjusted = offsetDays == 0
         ? today
-        : today.addDays(offsetDays); // ✅ capture returned date
-
+        : today.addDays(offsetDays); 
     return TodayHijriDate(hijri: adjusted, offsetDays: offsetDays);
   }
 
-  void setOffset(int newOffset) {
-    // clamp to -2..+2
+  Future<void> setOffset(int newOffset) async {
     final clamped = newOffset.clamp(-2, 2);
+
+    // update state (UI reacts instantly)
     state = _buildState(offsetDays: clamped);
+
+    // persist
+    await _storage.writeOffset(clamped);
   }
 
-  void increment() => setOffset(state.offsetDays + 1);
-  void decrement() => setOffset(state.offsetDays - 1);
+  Future<void> increment() => setOffset(state.offsetDays + 1);
+  Future<void> decrement() => setOffset(state.offsetDays - 1);
+  Future<void> reset() => setOffset(0);
 
-  /// Call this at midnight or when app resumes if you want it always fresh
   void refresh() {
+    // no persistence needed here
     state = _buildState(offsetDays: state.offsetDays);
   }
-
-  void reset() => setOffset(0);
 }
