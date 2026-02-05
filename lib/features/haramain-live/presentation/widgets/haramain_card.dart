@@ -14,6 +14,7 @@ class HaramainCard extends ConsumerWidget {
     final isDark = ref.watch(isDarkProvider);
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(
@@ -38,7 +39,7 @@ class HaramainCard extends ConsumerWidget {
           //subtitle
           Text('Live from the sacred mosques', style: textTheme.bodyMedium),
           const SizedBox(height: 8),
- 
+
           //cards
           const MosqueCard(mosqueName: 'Makkah'),
 
@@ -90,7 +91,7 @@ class MosqueCard extends ConsumerWidget {
         },
 
         child: Container(
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(14)),
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -100,10 +101,7 @@ class MosqueCard extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      mosqueName,
-                      style: theme.textTheme.titleSmall!.copyWith(fontSize: 16),
-                    ),
+                    Text(mosqueName, style: theme.textTheme.labelLarge),
                     const SizedBox(height: 4),
 
                     const LiveChip(),
@@ -113,7 +111,7 @@ class MosqueCard extends ConsumerWidget {
 
               const Spacer(),
 
-              const FaIcon(FontAwesomeIcons.chevronRight),
+              const FaIcon(FontAwesomeIcons.chevronRight, size: 16),
             ],
           ),
         ),
@@ -159,11 +157,7 @@ class _LiveChipState extends State<LiveChip>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final textStyle = theme.textTheme.labelSmall?.copyWith(
-      fontWeight: FontWeight.w800,
-      letterSpacing: 0.6,
-      color: Colors.white,
-    );
+    final textStyle = theme.textTheme.labelSmall!.copyWith(color: Colors.white);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),

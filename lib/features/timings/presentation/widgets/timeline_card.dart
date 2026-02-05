@@ -245,28 +245,24 @@ class _TopLabel extends StatelessWidget {
       children: [
         Text(
           title,
-          style: theme.textTheme.labelMedium?.copyWith(
-            color: color.withAlpha(210),
-            fontWeight: FontWeight.w700,
-          ),
+          style: theme.textTheme.labelLarge!.copyWith(color: Colors.white),
         ),
         const SizedBox(height: 2),
+
         Text(
           value,
           style: theme.textTheme.titleMedium?.copyWith(
             color: color,
-            fontWeight: isNext ? FontWeight.w500 : FontWeight.w800,
-            fontSize: isNext ? 13 : 16,
+            fontWeight: isNext ? FontWeight.bold : FontWeight.w800,
+            fontSize: isNext ? 12 : 14,
           ),
         ),
-
         const SizedBox(height: 6),
+
         Text(
           '${two(salatTime.hour)}:${two(salatTime.minute)}',
-          style: theme.textTheme.titleLarge?.copyWith(
-            color: Colors.amber,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
+          style: theme.textTheme.titleLarge!.copyWith(
+            color: Colors.amberAccent,
           ),
         ),
       ],

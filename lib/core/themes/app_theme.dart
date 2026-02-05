@@ -49,23 +49,42 @@ class AppTheme {
 
       //=====Text theme=======
       textTheme: TextTheme(
-        //title
+        // Big screen/page titles (Home, Quran, Settings)
         titleLarge: AppTextStyles.title.copyWith(
-          color: AppDarkColors.textPrimary, // for dark theme
-          // color: const Color(0xFF1F1A17),
-          height: 1,
+          color: AppDarkColors.textPrimary,
         ),
-        //arabic
+
+        // Card titles / section headers
+        titleMedium: AppTextStyles.section.copyWith(
+          color: AppDarkColors.textPrimary,
+        ),
+
+        // Small headings (like "Daily verse", "Explore")
+        titleSmall: AppTextStyles.section.copyWith(
+          color: AppDarkColors.textSecondary,
+        ),
+
+        // Qur'an Arabic (Uthmani)
         bodyLarge: AppTextStyles.quranBody.copyWith(
-          color: AppDarkColors.textPrimary, // dark
+          color: AppDarkColors.textPrimary.withAlpha(224), // ~0.88
         ),
-        //Normal body
-        bodyMedium: AppTextStyles.body.copyWith(
-          color: AppDarkColors.textBody, // white
+
+        // Main body text (most content)
+        bodyMedium: AppTextStyles.paragraph.copyWith(
+          color: AppDarkColors.textPrimary,
         ),
-        //small text
+
+        // Captions / metadata (date, references)
         bodySmall: AppTextStyles.secondary.copyWith(
-          color: AppDarkColors.textSecondary, // dark
+          color: AppDarkColors.textSecondary.withAlpha(199), // ~0.78
+        ),
+
+        // Chips, small UI labels (“Tap to read”, times)
+        labelMedium: AppTextStyles.label.copyWith(
+          color: AppDarkColors.textPrimary.withAlpha(217), // ~0.85
+        ),
+        labelSmall: AppTextStyles.label.copyWith(
+          color: AppDarkColors.textSecondary.withAlpha(191), // ~0.75
         ),
       ),
 
@@ -123,7 +142,9 @@ class AppTheme {
           return AppDarkColors.switchOutlineOff;
         }),
         overlayColor: WidgetStateProperty.all(AppDarkColors.switchOverlay),
-        splashRadius: 20,
+        splashRadius: 14,
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        padding: const EdgeInsets.all(4),
       ),
 
       outlinedButtonTheme: OutlinedButtonThemeData(
@@ -198,24 +219,40 @@ class AppTheme {
 
       //=====text theme========
       textTheme: TextTheme(
-        //title
+        // Page / AppBar titles
         titleLarge: AppTextStyles.title.copyWith(
           color: AppLightColors.textPrimary,
         ),
 
-        //Arabic
+        // Qur’an Arabic (Uthmani) — bodyLarge (as you requested)
         bodyLarge: AppTextStyles.quranBody.copyWith(
-          color: AppLightColors.textPrimary,
+          color: AppLightColors.textPrimary.withAlpha(224), // ~0.88
         ),
 
-        //Normal body(Translation)
-        bodyMedium: AppTextStyles.body.copyWith(
-          color: AppLightColors.textPrimary,
+        // Translation / paragraph / general content — bodyMedium
+        bodyMedium: AppTextStyles.paragraph.copyWith(
+          color: AppLightColors.textPrimary, // ~0.88
         ),
 
-        //small text
+        // Small / caption text
         bodySmall: AppTextStyles.secondary.copyWith(
+          color: AppLightColors.textSecondary.withAlpha(199), // ~0.78
+        ),
+
+        //labels (chips, times, "Tap to read")
+        labelMedium: AppTextStyles.label.copyWith(
+          color: AppLightColors.textPrimary.withAlpha(217), // ~0.85
+        ),
+        labelSmall: AppTextStyles.label.copyWith(
+          color: AppLightColors.textSecondary.withAlpha(191), // ~0.75
+        ),
+
+        // Optional: section headers (Daily verse, Explore)
+        titleMedium: AppTextStyles.section.copyWith(
           color: AppLightColors.textPrimary,
+        ),
+        titleSmall: AppTextStyles.section.copyWith(
+          color: AppLightColors.textSecondary,
         ),
       ),
 

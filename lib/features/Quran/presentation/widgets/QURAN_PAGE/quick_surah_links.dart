@@ -7,6 +7,45 @@ import 'package:rafeeq/features/Quran/presentation/pages/surah_page.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_surahs_provider.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
+class QuickSurahLinks extends ConsumerWidget {
+  const QuickSurahLinks({super.key});
+
+  @override
+  Widget build(BuildContext context, ref) {
+    final theme = Theme.of(context);
+
+    final quickSurahs = ref.watch(quickSurahLinksProvider);
+
+    if (quickSurahs.isEmpty) {
+      return const SizedBox.shrink();
+    }
+    final hasData = quickSurahs.isNotEmpty;
+
+    return SizedBox(
+      height: hasData ? 70 : 0,
+      child: hasData
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Quick links', style: theme.textTheme.titleMedium),
+                const SizedBox(height: 12),
+
+                SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: quickSurahs
+                        .map((surah) => SurahLink(surah: surah))
+                        .toList(),
+                  ),
+                ),
+              ],
+            )
+          : const SizedBox.shrink(),
+    );
+  }
+}
+
 class SurahLink extends ConsumerWidget {
   final Surah surah;
 
@@ -30,65 +69,20 @@ class SurahLink extends ConsumerWidget {
         },
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(14),
             color: isDark
                 ? AppDarkColors.darkSurface
                 : AppLightColors.lightSurface,
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
           child: Center(
             child: Text(
               surah.nameTransliteration,
-              style: theme.textTheme.bodyLarge!.copyWith(
-                fontWeight: FontWeight.w500,
-                fontSize: 14,
-                color: isDark
-                    ? AppDarkColors.textSecondary
-                    : AppLightColors.textBody,
-              ),
+              style: theme.textTheme.labelMedium,
             ),
           ),
         ),
       ),
-    );
-  }
-}
-
-class QuickSurahLinks extends ConsumerWidget {
-  const QuickSurahLinks({super.key});
-
-  @override
-  Widget build(BuildContext context, ref) {
-    final theme = Theme.of(context);
-
-    final quickSurahs = ref.watch(quickSurahLinksProvider);
-
-    if (quickSurahs.isEmpty) {
-      return const SizedBox.shrink();
-    }
-    final hasData = quickSurahs.isNotEmpty;
-
-    return SizedBox(
-      height: hasData ? 90 : 0,
-      child: hasData
-          ? Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Quick links', style: theme.textTheme.titleMedium),
-                const SizedBox(height: 12),
-
-                SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: quickSurahs
-                        .map((surah) => SurahLink(surah: surah))
-                        .toList(),
-                  ),
-                ),
-              ],
-            )
-          : const SizedBox.shrink(),
     );
   }
 }

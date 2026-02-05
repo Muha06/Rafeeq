@@ -90,15 +90,14 @@ class _SalahTimingsPageState extends ConsumerState<SalahTimingsPage> {
   }
 }
 
-class Chip extends ConsumerWidget {
+class Chip extends StatelessWidget {
   const Chip({super.key, required this.text, required this.icon});
   final IconData icon;
   final String text;
 
   @override
-  Widget build(BuildContext context, ref) {
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = ref.watch(isDarkProvider);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -108,16 +107,7 @@ class Chip extends ConsumerWidget {
           Icon(icon, size: 18),
           const SizedBox(width: 8),
 
-          Text(
-            text,
-            style: theme.textTheme.bodyMedium!.copyWith(
-              fontSize: 14,
-              color: isDark
-                  ? AppDarkColors.textPrimary
-                  : AppLightColors.textPrimary,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          Text(text, style: theme.textTheme.labelLarge),
         ],
       ),
     );
@@ -175,21 +165,12 @@ class _TimingTile extends ConsumerWidget {
 
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                title,
-                style: theme.textTheme.titleMedium?.copyWith(
-                  height: 1,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
+              Text(title, style: theme.textTheme.titleMedium),
               const SizedBox(height: 8),
-              Text(
-                timeText,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
+              //time
+              Text(timeText, style: theme.textTheme.labelMedium),
             ],
           ),
 

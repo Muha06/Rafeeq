@@ -36,24 +36,32 @@ class RamadanDailyCard extends ConsumerWidget {
                 : AppLightColors.lightSurface,
           ),
           padding: const EdgeInsets.all(14),
-          child: Row(
+          child: Column(
             children: [
-              Expanded(
-                child: BuildRamadanTimeCard(
-                  icon: FontAwesomeIcons.cloudSun,
-                  title: 'Suhur end',
-                  time: format12h(suhur),
-                  isDark: isDark,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: BuildRamadanTimeCard(
-                  icon: FontAwesomeIcons.utensils,
-                  title: 'Iftar',
-                  time: format12h(iftar),
-                  isDark: isDark,
-                ),
+              //Card title
+              const Text('Ramadan Reflection'),
+
+              Row(
+                children: [
+                  Expanded(
+                    child: BuildRamadanTimeCard(
+                      icon: FontAwesomeIcons.cloudSun,
+                      title: 'Suhur end',
+                      time: format12h(suhur),
+                      isDark: isDark,
+                    ),
+                  ),
+                  const Spacer(),
+
+                  Expanded(
+                    child: BuildRamadanTimeCard(
+                      icon: FontAwesomeIcons.utensils,
+                      title: 'Iftar',
+                      time: format12h(iftar),
+                      isDark: isDark,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -98,7 +106,8 @@ class BuildRamadanTimeCard extends StatelessWidget {
           const SizedBox(height: 8),
 
           //title
-          Text(title, style: textTheme.bodySmall),
+          Text(title, style: textTheme.bodyMedium),
+          const SizedBox(height: 4),
 
           Text(time, style: textTheme.titleMedium),
         ],

@@ -76,25 +76,18 @@ class AyahOfTheDay extends ConsumerWidget {
                   Text(
                     'Daily verse',
                     textAlign: TextAlign.left,
-                    style: theme.textTheme.titleSmall,
+                    style: theme.textTheme.titleMedium,
                   ),
-                  const SizedBox(height: 12),
 
-                  Divider(color: theme.dividerColor),
                   const SizedBox(height: 8),
+                  Divider(color: theme.dividerColor),
 
                   //Ayah text
                   Text(
                     ayah.textEnglish,
                     textAlign: TextAlign.left,
-                    style: theme.textTheme.bodyMedium!.copyWith(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                    ),
+                    style: theme.textTheme.bodyMedium,
                   ),
-                  const SizedBox(height: 8),
-
-                  Divider(color: theme.dividerColor),
                   const SizedBox(height: 12),
 
                   //refrence

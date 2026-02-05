@@ -66,7 +66,7 @@ class SurahTile extends ConsumerWidget {
     final isDark = ref.watch(isDarkProvider);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 12),
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {
@@ -115,6 +115,8 @@ class SurahTile extends ConsumerWidget {
                   surah.nameTransliteration,
                   style: theme.textTheme.titleMedium,
                 ),
+                const SizedBox(height: 6),
+
                 Text(
                   "${surah.nameTransliteration} • Verses ${surah.versesCount} ",
                   style: theme.textTheme.bodySmall,
@@ -127,7 +129,7 @@ class SurahTile extends ConsumerWidget {
               cleanAyah(surah.nameArabic.toString()),
               style: theme.textTheme.bodyLarge!.copyWith(
                 fontSize: 18,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ],

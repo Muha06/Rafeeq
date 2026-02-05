@@ -67,14 +67,19 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
         });
       },
       countryListTheme: CountryListThemeData(
-        backgroundColor: AppDarkColors.darkSurface,
-        textStyle: TextStyle(color: Colors.white.withAlpha(235)),
+        bottomSheetHeight: MediaQuery.of(context).size.height * 0.8,
+        backgroundColor: AppDarkColors.darkSurfaceSolid,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
+        textStyle: theme.textTheme.bodyMedium,
         inputDecoration: InputDecoration(
           hintText: 'Search country…',
           hintStyle: theme.textTheme.bodySmall,
           filled: true,
-          contentPadding: const EdgeInsets.symmetric(vertical: 4),
-          fillColor: Colors.white.withAlpha(15),
+          contentPadding: const EdgeInsets.symmetric(
+            vertical: 4,
+            horizontal: 4,
+          ),
+          fillColor: AppDarkColors.onDarkSurface,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
             borderSide: BorderSide(color: Colors.white.withAlpha(26)),
@@ -339,7 +344,7 @@ class _CitySearchSheetState extends ConsumerState<CitySearchSheet> {
 
   void _onChanged(String v) {
     _debounce?.cancel();
-    _debounce = Timer(const Duration(milliseconds: 300), () {
+    _debounce = Timer(const Duration(milliseconds: 200), () {
       setState(() => _q = v.trim());
     });
   }
@@ -358,10 +363,10 @@ class _CitySearchSheetState extends ConsumerState<CitySearchSheet> {
           );
 
     return Container(
-      height: MediaQuery.of(context).size.height,
-      decoration: const BoxDecoration(
-        color: AppDarkColors.bottomSheet,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
+      height: MediaQuery.of(context).size.height * 0.8,
+      decoration: BoxDecoration(
+        color: theme.bottomSheetTheme.backgroundColor,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
       ),
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
       child: Column(
@@ -384,14 +389,15 @@ class _CitySearchSheetState extends ConsumerState<CitySearchSheet> {
               fontWeight: FontWeight.w800,
             ),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
+
           TextField(
             controller: _ctrl,
             onChanged: _onChanged,
             style: theme.textTheme.bodyMedium,
             decoration: InputDecoration(
               hintText: 'Type city… (e.g. Nai)',
-              hintStyle: theme.textTheme.bodyMedium,
+              hintStyle: theme.textTheme.bodySmall,
               filled: true,
               fillColor: AppDarkColors.onDarkSurface,
               contentPadding: const EdgeInsets.symmetric(vertical: 4),
@@ -445,15 +451,12 @@ class _CitySearchSheetState extends ConsumerState<CitySearchSheet> {
                 return ListView.separated(
                   itemCount: places.length,
                   separatorBuilder: (_, _) =>
-                      Divider(color: Colors.white.withAlpha(15), height: 1),
+                      Divider(color: theme.dividerColor, height: 1),
                   itemBuilder: (_, i) {
                     final p = places[i];
                     return ListTile(
                       contentPadding: EdgeInsets.zero,
-                      title: Text(
-                        p.name,
-                        style: TextStyle(color: Colors.white.withAlpha(235)),
-                      ),
+                      title: Text(p.name, style: theme.textTheme.labelLarge),
                       subtitle: Text(
                         p.admin1 == null || p.admin1!.trim().isEmpty
                             ? p.country
@@ -477,14 +480,6 @@ class _CitySearchSheetState extends ConsumerState<CitySearchSheet> {
                   textAlign: TextAlign.center,
                 ),
               ),
-            ),
-          ),
-
-          const SizedBox(height: 6),
-          Text(
-            'Tip: pick from results (don’t freestyle).',
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: Colors.white.withAlpha(179),
             ),
           ),
         ],
@@ -543,17 +538,13 @@ class _SettingCard extends ConsumerWidget {
                     children: [
                       Text(
                         title,
-                        style: Theme.of(context).textTheme.titleMedium
-                            ?.copyWith(fontWeight: FontWeight.w700),
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
                       const SizedBox(height: 6),
                       Text(
                         description,
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          height: 1.35,
-                          color: isDark
-                              ? AppDarkColors.textPrimary
-                              : AppLightColors.textPrimary,
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          fontWeight: FontWeight.w100,
                         ),
                       ),
                     ],
@@ -602,7 +593,7 @@ class _ActionButton extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(
           color: isDark
-              ? Colors.white.withAlpha(enabled ? 15 : 8)
+              ? AppDarkColors.onDarkSurface
               : AppLightColors.lightSurface2,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: Colors.white.withAlpha(enabled ? 26 : 15)),

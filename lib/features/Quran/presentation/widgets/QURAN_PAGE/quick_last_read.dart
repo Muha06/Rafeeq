@@ -37,12 +37,12 @@ class QuickLastReadList extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Title
-            Text('Last read', style: theme.textTheme.titleMedium!.copyWith()),
+            Text('Last read', style: theme.textTheme.titleMedium),
             const SizedBox(height: 8),
 
             // Horizontal scrollable cards
             SizedBox(
-              height: 100,
+              height: 80,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: lastReadAyahs.length,
@@ -136,7 +136,7 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
                             .removeLastRead(lastRead.surahId);
 
                         if (context.mounted) {
-                          ref.refresh(lastReadAyahsProvider);
+                          ref.invalidate(lastReadAyahsProvider);
                         }
                         Navigator.pop(context);
                       },
@@ -194,47 +194,31 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
           _isSelected = false;
         });
       },
-      child: Stack(
-        children: [
-          Container(
-            alignment: Alignment.center,
-            margin: const EdgeInsets.only(top: 8, bottom: 8, right: 8),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            decoration: BoxDecoration(
-              color: isDark
-                  ? _isSelected
-                        ? AppDarkColors.divider
-                        : AppDarkColors.darkSurface
-                  : _isSelected
-                  ? AppLightColors.buttonSecondaryBorder
-                  : AppLightColors.lightSurface,
-              borderRadius: BorderRadius.circular(16),
+      child: Container(
+        margin: const EdgeInsets.only(top: 8, bottom: 8, right: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: isDark
+              ? _isSelected
+                    ? AppDarkColors.divider
+                    : AppDarkColors.darkSurface
+              : _isSelected
+              ? AppLightColors.buttonSecondaryBorder
+              : AppLightColors.lightSurface,
+          borderRadius: BorderRadius.circular(14),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(widget.lastRead.surahName, style: theme.textTheme.titleMedium),
+            const SizedBox(height: 4),
+            Text(
+              'Ayah ${widget.lastRead.ayahNumber} of ${widget.lastRead.verseCount}',
+              style: theme.textTheme.bodySmall,
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.lastRead.surahName,
-                  style: theme.textTheme.titleMedium,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Ayah ${widget.lastRead.ayahNumber} of ${widget.lastRead.verseCount}',
-                  style: theme.textTheme.bodySmall,
-                ),
-              ],
-            ),
-          ),
-          // Positioned(
-          //   bottom: 16,
-          //   right: 16,
-          //   child: Image.asset(
-          //     'assets/images/quran_book.png',
-          //     height: 26,
-          //     width: 26,
-          //   ),
-          // ),
-        ],
+          ],
+        ),
       ),
     );
   }

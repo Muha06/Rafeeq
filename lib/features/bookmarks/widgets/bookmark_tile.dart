@@ -85,7 +85,7 @@ class _BookmarkTileState extends ConsumerState<BookmarkTile> {
         children: [
           Text(
             widget.indexDisplay.toString(),
-            style: theme.textTheme.bodySmall,
+            style: theme.textTheme.titleMedium,
           ),
           const SizedBox(width: 16),
 
@@ -97,7 +97,7 @@ class _BookmarkTileState extends ConsumerState<BookmarkTile> {
                   title,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.titleSmall,
+                  style: theme.textTheme.titleMedium,
                 ),
 
                 if (quranBookmark != null) ...[

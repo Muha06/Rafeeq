@@ -338,7 +338,9 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
               onPressed: () {
                 showModalBottomSheet(
                   context: context,
+                  backgroundColor: theme.bottomSheetTheme.backgroundColor,
                   isScrollControlled: true,
+                  showDragHandle: true,
                   builder: (context) =>
                       SurahSettingsSheet(onToggleAutoScroll: _toggleAutoScroll),
                 );
