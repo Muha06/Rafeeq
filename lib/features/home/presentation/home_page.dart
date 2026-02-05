@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
- import 'package:hijri_date/hijri.dart';
 import 'package:rafeeq/app/providers/tabs_screen_provider.dart';
 import 'package:rafeeq/core/animations/navigation_animations.dart';
 import 'package:rafeeq/core/location/presentation/pages/user_loc_settings.dart';
@@ -32,10 +31,6 @@ class _HomePageState extends ConsumerState<HomePage> {
   // Padding scale (single source of truth)
   static const double _hPad = 12.0;
   static const double _v16 = 12.0;
-  // static const double _bottom24 = 24.0;
-
-  final todayHijri = HijriDate.now();
-  String get formattedHijri => todayHijri.toFormat('MMMM dd, yyyy h');
 
   final Map<SalahPrayer, String> assetByPrayer = {
     SalahPrayer.fajr: 'assets/images/salat/fajr.jpeg',
@@ -145,10 +140,10 @@ class _HomePageState extends ConsumerState<HomePage> {
             ),
 
             // GREETINGS
-            SliverToBoxAdapter(
+            const SliverToBoxAdapter(
               child: HomeSection(
-                padding: const EdgeInsets.fromLTRB(_hPad, _v16, _hPad, 0),
-                child: GreetingsRow(formattedHijri: formattedHijri),
+                padding: EdgeInsets.fromLTRB(_hPad, _v16, _hPad, 0),
+                child: GreetingsRow(),
               ),
             ),
 
