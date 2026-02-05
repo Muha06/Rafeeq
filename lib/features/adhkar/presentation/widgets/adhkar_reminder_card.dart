@@ -35,7 +35,7 @@ class AdhkarReminderCard extends ConsumerWidget {
               borderRadius: BorderRadius.circular(20),
               color: isDark
                   ? AppDarkColors.darkSurface
-                  : AppLightColors.amberSoft,
+                  : AppLightColors.lightSurface,
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),

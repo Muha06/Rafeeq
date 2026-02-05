@@ -54,7 +54,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
               decoration: BoxDecoration(
                 color: isDark
                     ? AppDarkColors.darkSurface
-                    : AppLightColors.amberSoft,
+                    : AppLightColors.lightSurface,
                 borderRadius: BorderRadius.circular(14),
               ),
               child: Row(

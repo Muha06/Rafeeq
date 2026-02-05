@@ -620,7 +620,9 @@ class _WheelCard extends ConsumerWidget {
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: isDark ? AppDarkColors.onDarkSurface : AppLightColors.amberSoft,
+        color: isDark
+            ? AppDarkColors.onDarkSurface
+            : AppLightColors.lightSurface,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(

@@ -33,7 +33,7 @@ class SurahLink extends ConsumerWidget {
             borderRadius: BorderRadius.circular(8),
             color: isDark
                 ? AppDarkColors.darkSurface
-                : AppLightColors.amberSoft,
+                : AppLightColors.lightSurface,
           ),
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           child: Center(

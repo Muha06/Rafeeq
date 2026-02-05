@@ -207,7 +207,7 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
                         : AppDarkColors.darkSurface
                   : _isSelected
                   ? AppLightColors.buttonSecondaryBorder
-                  : AppLightColors.amberSoft,
+                  : AppLightColors.lightSurface,
               borderRadius: BorderRadius.circular(16),
             ),
             child: Column(

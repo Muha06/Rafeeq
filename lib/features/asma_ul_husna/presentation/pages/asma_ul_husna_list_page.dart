@@ -171,7 +171,7 @@ class _NumberBadge extends ConsumerWidget {
       height: 42,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
-        color: isDark ? AppDarkColors.darkSurface : AppLightColors.amberSoft,
+        color: isDark ? AppDarkColors.darkSurface : AppLightColors.lightSurface,
         border: Border.all(
           color: isDark
               ? theme.colorScheme.primary.withOpacity(0.25)

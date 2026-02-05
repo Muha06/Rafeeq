@@ -63,7 +63,7 @@ class AdhkarCategoryTile extends ConsumerWidget {
               decoration: BoxDecoration(
                 color: isDark
                     ? AppDarkColors.darkSurface
-                    : AppLightColors.amberSoft,
+                    : AppLightColors.lightSurface,
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Text(

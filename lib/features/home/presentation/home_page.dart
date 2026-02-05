@@ -10,6 +10,7 @@ import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/QURAN_PAGE/greetings_row.dart';
+import 'package:rafeeq/features/Ramadan/presentation/widgets/ramadan_card.dart';
 import 'package:rafeeq/features/asma_ul_husna/presentation/pages/asma_ul_husna_list_page.dart';
 import 'package:rafeeq/features/haramain-live/presentation/widgets/haramain_card.dart';
 import 'package:rafeeq/features/home/presentation/widgets/ayah_of_the_day.dart';
@@ -96,7 +97,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     label: const CupertinoActivityIndicator(),
                     backgroundColor: isDark
                         ? AppDarkColors.darkSurface
-                        : AppLightColors.amberSoft,
+                        : AppLightColors.lightSurface,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24),
                       side: const BorderSide(color: Colors.transparent),
@@ -185,6 +186,17 @@ class _HomePageState extends ConsumerState<HomePage> {
                     );
                   },
                 ),
+              ),
+            ),
+
+            //Ramadan card
+            const SliverToBoxAdapter(
+              child: HomeSection(
+                padding: EdgeInsets.symmetric(
+                  horizontal: _hPad,
+                  vertical: _v16,
+                ),
+                child: RamadanDailyCard(),
               ),
             ),
 

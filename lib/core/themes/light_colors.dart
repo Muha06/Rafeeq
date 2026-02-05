@@ -6,8 +6,8 @@ class AppLightColors {
   static const Color lightBackground = Colors.white;
 
   // Surface (cards/sheets) - slightly lighter than bg
-  static const Color lightSurface = amberSoft;
-  // static const Color lightSurface2 = amberSoft;
+  static const Color lightSurface = Color(0x26FFC36A);
+  static const Color onLightSurface = Color(0x26FFC36A);
 
   // Surface 2 (chips/sections/containers)
   static const Color lightSurface2 = Color(0xFFF2E6D8);
@@ -24,7 +24,6 @@ class AppLightColors {
 
   // Accent (your amber for tiny highlights if needed)
   static const Color amber = Color(0xFFFFC36A);
-  static const Color amberSoft = Color(0x26FFC36A);
   static Color onAmberSoft = const Color(0x26FFC36A).withAlpha(155);
 
   // Text

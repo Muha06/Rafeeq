@@ -45,7 +45,7 @@ class MyBottomBar extends StatelessWidget {
         decoration: BoxDecoration(
           color: isDarkMode
               ? AppDarkColors.bottomBar
-              : AppLightColors.amberSoft,
+              : AppLightColors.lightSurface,
           border: const Border(
             // top: BorderSide(color: theme.dividerColor.withAlpha(30)),
           ),
