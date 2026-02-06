@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/features/Ramadan/domain/ramadan_times_entity.dart';
-import 'package:rafeeq/features/timings/domain/entities/salah_prayer.dart';
+ import 'package:rafeeq/features/timings/domain/entities/salah_prayer.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/salah_times_providers.dart';
 
 final ramadanTimesProvider = Provider<AsyncValue<RamadanTimesEntity>>((ref) {

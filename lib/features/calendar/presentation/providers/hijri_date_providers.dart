@@ -46,24 +46,20 @@ class HijriDateNotifier extends StateNotifier<TodayHijriDate> {
 
   static TodayHijriDate _buildState({required int offsetDays}) {
     final today = HijriDate.now();
-    final adjusted = offsetDays == 0
-        ? today
-        : today.addDays(offsetDays); 
+    final adjusted = offsetDays == 0 ? today : today.addDays(offsetDays);
     return TodayHijriDate(hijri: adjusted, offsetDays: offsetDays);
   }
 
   Future<void> setOffset(int newOffset) async {
     final clamped = newOffset.clamp(-2, 2);
-
-    // update state (UI reacts instantly)
     state = _buildState(offsetDays: clamped);
 
-    // persist
     await _storage.writeOffset(clamped);
   }
 
   Future<void> increment() => setOffset(state.offsetDays + 1);
   Future<void> decrement() => setOffset(state.offsetDays - 1);
+
   Future<void> reset() => setOffset(0);
 
   void refresh() {

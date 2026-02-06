@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hijri_date/hijri.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
-import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
+ import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../providers/hijri_date_providers.dart';
