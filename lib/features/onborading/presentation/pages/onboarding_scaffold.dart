@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/app/tabs_screen.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
-import 'package:rafeeq/features/home/presentation/home_page.dart';
-import 'package:rafeeq/features/onborading/presentation/provider/onboarding_provider.dart';
+ import 'package:rafeeq/features/onborading/presentation/provider/onboarding_provider.dart';
+import 'package:rafeeq/features/onborading/presentation/provider/providers.dart';
 import 'package:rafeeq/features/onborading/presentation/widgets/dots_indicator.dart';
 import 'package:rafeeq/features/onborading/presentation/widgets/slides.dart';
 
@@ -40,7 +40,7 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
   }
 
   Future<void> _finishOnboarding(BuildContext context) async {
-    //  await ref.read(setHasSeenOnboardingProvider).call();
+    await ref.read(setHasSeenOnboardingProvider).call();
     if (!context.mounted) return;
 
     Navigator.of(

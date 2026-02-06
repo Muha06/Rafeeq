@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:rafeeq/app/notifications.dart';
-import 'package:rafeeq/app/providers/general_notifications_provider.dart';
-import 'package:riverpod/legacy.dart';
+ import 'package:riverpod/legacy.dart';
 
 const kAdhkarEnabled = 'adhkar_notif_enabled'; //a setting inside hive
 const kSalahEnabled = 'salah_notif_enabled'; //a setting inside hive
@@ -67,8 +66,6 @@ final adhkarNotificationsControllerProvider = Provider<void>((ref) async {
   ref.listen<bool>(adhkarNotifEnabledProvider, (prev, next) async {
     //if disabled -> only cancel
     if (!next) {
-      print('Cancelling since is $next');
-
       await NotificationService.instance.cancel(morningNotifId);
       await NotificationService.instance.cancel(eveningNotifId);
       return;

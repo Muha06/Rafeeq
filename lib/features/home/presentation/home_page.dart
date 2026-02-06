@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/app/notifications.dart';
 import 'package:rafeeq/app/providers/tabs_screen_provider.dart';
 import 'package:rafeeq/core/animations/navigation_animations.dart';
 import 'package:rafeeq/core/location/presentation/pages/user_loc_settings.dart';
@@ -101,14 +100,12 @@ class _HomePageState extends ConsumerState<HomePage> {
                     ),
                   ),
                   data: (userLocation) => GestureDetector(
-                    onTap: () => NotificationService.instance.testAdhanNow(),
-
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => const UserLocSettingsPage(),
-                    //   ),
-                    // ),
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const UserLocSettingsPage(),
+                      ),
+                    ),
                     child: Chip(
                       label: Row(
                         children: [
