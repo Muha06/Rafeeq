@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:rafeeq/app/notifications.dart';
+import 'package:rafeeq/app/providers/general_notifications_provider.dart';
 import 'package:riverpod/legacy.dart';
 
 const kAdhkarEnabled = 'adhkar_notif_enabled'; //a setting inside hive
@@ -23,12 +24,13 @@ final settingsBoxProvider = Provider<Box>((ref) => Hive.box('settingsBox'));
 
 final adhkarNotifEnabledProvider = StateProvider<bool>((ref) {
   final box = ref.watch(settingsBoxProvider);
-  return box.get(kAdhkarEnabled, defaultValue: true) as bool;
+
+  return box.get(kAdhkarEnabled, defaultValue: false) as bool;
 });
 
 final salahNotifEnabledProvider = StateProvider<bool>((ref) {
   final box = ref.watch(settingsBoxProvider);
-  return box.get(kSalahEnabled, defaultValue: true) as bool;
+  return box.get(kSalahEnabled, defaultValue: false) as bool;
 });
 
 //Listens to user adhkarsettingsprovider
@@ -61,15 +63,17 @@ final adhkarNotificationsControllerProvider = Provider<void>((ref) async {
     await schedule();
   }
 
-  // then react to changes
+  // then react to usser settings changes
   ref.listen<bool>(adhkarNotifEnabledProvider, (prev, next) async {
     //if disabled -> only cancel
     if (!next) {
+      print('Cancelling since is $next');
+
       await NotificationService.instance.cancel(morningNotifId);
       await NotificationService.instance.cancel(eveningNotifId);
       return;
     }
-    //else -> schedule
+
     await schedule();
   });
 });

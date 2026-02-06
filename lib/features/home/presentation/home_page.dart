@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/app/notifications.dart';
 import 'package:rafeeq/app/providers/tabs_screen_provider.dart';
 import 'package:rafeeq/core/animations/navigation_animations.dart';
 import 'package:rafeeq/core/location/presentation/pages/user_loc_settings.dart';
@@ -9,7 +10,7 @@ import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/features/home/presentation/widgets/greetings_row.dart';
- import 'package:rafeeq/features/asma_ul_husna/presentation/pages/asma_ul_husna_list_page.dart';
+import 'package:rafeeq/features/asma_ul_husna/presentation/pages/asma_ul_husna_list_page.dart';
 import 'package:rafeeq/features/haramain-live/presentation/widgets/haramain_card.dart';
 import 'package:rafeeq/features/Quran/presentation/widgets/ayah_of_the_day.dart';
 import 'package:rafeeq/features/home/presentation/widgets/reminders_carousel.dart';
@@ -63,7 +64,9 @@ class _HomePageState extends ConsumerState<HomePage> {
               actions: [
                 userLocationAsync.when(
                   error: (error, stackTrace) => GestureDetector(
-                    onTap: () => ref.invalidate(userLocationProvider),
+                    onTap: () {
+                      ref.invalidate(userLocationProvider);
+                    },
                     child: Chip(
                       label: Row(
                         children: [
@@ -98,12 +101,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                     ),
                   ),
                   data: (userLocation) => GestureDetector(
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const UserLocSettingsPage(),
-                      ),
-                    ),
+                    onTap: () => NotificationService.instance.testAdhanNow(),
+
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => const UserLocSettingsPage(),
+                    //   ),
+                    // ),
                     child: Chip(
                       label: Row(
                         children: [

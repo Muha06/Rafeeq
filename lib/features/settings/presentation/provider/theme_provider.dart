@@ -5,7 +5,7 @@ import 'package:riverpod/legacy.dart';
 enum AppThemeMode { system, light, dark }
 
 final themeModeProvider = StateProvider<AppThemeMode>(
-  (ref) => AppThemeMode.system,
+  (ref) => AppThemeMode.dark,
 );
 
 //provider that listens when user changes phone theme

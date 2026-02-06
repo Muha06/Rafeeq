@@ -47,7 +47,11 @@ class TodayTimesCard extends ConsumerWidget {
           height: height,
           radius: borderRadius,
         ),
-        error: (e, _) => const SizedBox.shrink(key: ValueKey('error')),
+        error: (e, st) {
+          debugPrint(e.toString());
+          debugPrint(st.toString());
+          return Text('$e,$st ');
+        },
         data: (status) => _CardBody(
           key: ValueKey(
             'data-${status.current}-${assetsByPrayer[status.current]}',

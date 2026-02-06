@@ -5,16 +5,16 @@ class LocationGpsDataSource {
   Future<Position> getCurrentPosition() async {
     final enabled = await Geolocator.isLocationServiceEnabled();
     if (!enabled) {
-      await Geolocator.openLocationSettings();
+      throw Exception('Location services disabled');
     }
 
-    var perm = await Geolocator.checkPermission();
-    if (perm == LocationPermission.denied) {
-      perm = await Geolocator.requestPermission();
-    }
-    if (perm == LocationPermission.denied ||
-        perm == LocationPermission.deniedForever) {
-      throw Exception('Location permission denied');
+    final perm = await Geolocator.checkPermission();
+    final allowed =
+        perm == LocationPermission.whileInUse ||
+        perm == LocationPermission.always;
+
+    if (!allowed) {
+      throw Exception('Location permission not granted');
     }
 
     return Geolocator.getCurrentPosition(
@@ -42,6 +42,4 @@ class LocationGpsDataSource {
 
     return (city, country);
   }
-
-  
 }

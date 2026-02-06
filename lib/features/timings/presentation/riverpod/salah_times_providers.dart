@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:rafeeq/app/salat_notifications_repo.dart';
+import 'package:rafeeq/core/location/domain/user_location.dart';
 import 'package:rafeeq/core/location/presentation/provider/user_location_provider.dart';
 import 'package:rafeeq/features/timings/data/datasources/salah_remote_ds.dart';
 import 'package:rafeeq/features/timings/data/repository/salah_repo_impl.dart';
@@ -37,6 +38,15 @@ final getTodaySalahTimesProvider = Provider<GetTodaySalahTimes>((ref) {
 
 final salahMethodProvider = Provider<int>((ref) => 3);
 
+const kMadinahFallback = UserLocation(
+  lat: 24.4672,
+  lng: 39.6111,
+  city: 'Madinah',
+  country: 'Saudi Arabia',
+  timezone: 'Ksa/Medinah',
+  isAuto: false,
+);
+
 //Fetches salats timings
 final todaySalahTimesProvider = FutureProvider<SalahTimesEntity>((ref) async {
   final usecase = ref.read(getTodaySalahTimesProvider);
@@ -51,17 +61,27 @@ final todaySalahTimesProvider = FutureProvider<SalahTimesEntity>((ref) async {
     error: (e, st) => Future.error(e, st),
   );
 
+  //use fallback if null
   if (loc == null) {
-    throw Exception('Location not set. Turn on location and try again.');
+    await ref
+        .read(userLocationProvider.notifier)
+        .setManual(
+          lat: kMadinahFallback.lat,
+          lng: kMadinahFallback.lng,
+          city: kMadinahFallback.city,
+          country: kMadinahFallback.country,
+        );
   }
 
-  return usecase.call(
-    latitude: loc.lat,
-    longitude: loc.lng,
-    city: loc.city,
-    country: loc.country,
-    method: ref.read(salahMethodProvider),
-  );
+  return usecase
+      .call(
+        latitude: loc.lat,
+        longitude: loc.lng,
+        city: loc.city,
+        country: loc.country,
+        method: ref.read(salahMethodProvider),
+      )
+      .timeout(const Duration(seconds: 30));
 });
 
 //SINGLE SALAT NOTIFICATIONS SCHEDULER CONTROLLER  PROVIDER

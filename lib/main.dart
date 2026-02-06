@@ -7,10 +7,11 @@ import 'package:rafeeq/core/app_keys.dart';
 import 'package:rafeeq/core/themes/app_theme.dart';
 import 'package:rafeeq/features/Quran/data/models/ayah_hive.dart';
 import 'package:rafeeq/features/Quran/data/models/surah_hive.dart';
-import 'package:rafeeq/app/tabs_screen.dart';
 import 'package:rafeeq/features/asma_ul_husna/data/models/hive/name_hive_model.dart';
 import 'package:rafeeq/features/bookmarks/data/models/dhikr_bookmark_hive_model.dart';
 import 'package:rafeeq/features/bookmarks/data/models/quran_bookmark_hive_model.dart';
+import 'package:rafeeq/features/onborading/presentation/pages/onboarding_scaffold.dart';
+import 'package:rafeeq/features/onborading/presentation/provider/providers.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/salah_times_providers.dart';
 import 'package:rafeeq/features/settings/presentation/provider/settings_notifcation_provider.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
@@ -71,6 +72,9 @@ class _MyAppState extends ConsumerState<MyApp> {
   }
 
   Future<void> _bootstrap() async {
+    final hasSeenOnboarding = ref.read(hasSeenOnboardingProvider);
+    if (!hasSeenOnboarding) return;
+
     //ACTIVATE
     ref.read(salahNotificationsControllerProvider);
     ref.read(adhkarNotificationsControllerProvider);
@@ -91,7 +95,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       },
       debugShowCheckedModeBanner: false,
       scaffoldMessengerKey: scaffoldMessengerKey,
-      home: const TabsScreen(),
+      home: const OnboardingPage(),
     );
   }
 }

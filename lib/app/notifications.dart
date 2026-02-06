@@ -12,7 +12,37 @@ class NotificationService {
 
   FlutterLocalNotificationsPlugin get plugin => _plugin;
 
-  Future<bool> ensureExactAlarmsAllowed() => _ensureExactAlarmsAllowed();
+  Future<bool> ensureExactAlarmsAllowed() => canScheduleExactAlarms();
+
+  Future<bool> requestNotificationsPermission() async {
+    // iOS: ask via iOS plugin
+
+    final android = _plugin
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >();
+
+    bool granted = true;
+
+    // Android 13+ prompt
+    if (android != null) {
+      final aGranted = await android.requestNotificationsPermission() ?? true;
+      granted = granted && aGranted;
+    }
+
+    return granted;
+  }
+
+  Future<bool> areNotificationsEnabled() async {
+    final android = _plugin
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >();
+    if (android == null) {
+      return true;
+    } // iOS handled via requestPermissions result
+    return await android.areNotificationsEnabled() ?? true;
+  }
 
   Future<void> init() async {
     tzdata.initializeTimeZones();
@@ -20,8 +50,7 @@ class NotificationService {
     try {
       final tzInfo = await FlutterTimezone.getLocalTimezone();
       tz.setLocalLocation(tz.getLocation(tzInfo.identifier));
-      debugPrint('🕒 TZ = ${tz.local.name}');
-    } catch (e) {
+     } catch (e) {
       tz.setLocalLocation(tz.getLocation('UTC'));
     }
 
@@ -79,8 +108,8 @@ class NotificationService {
         ),
       );
 
-      // Android 13+ permission
-      await androidImpl.requestNotificationsPermission();
+      // Dont request here
+      // await androidImpl.requestNotificationsPermission();
     }
   }
 
@@ -156,7 +185,7 @@ class NotificationService {
       iOS: iosDetails,
     );
 
-    final exactAllowed = await _ensureExactAlarmsAllowed();
+    final exactAllowed = await canScheduleExactAlarms();
 
     await _plugin.zonedSchedule(
       id,
@@ -205,7 +234,7 @@ class NotificationService {
       iOS: DarwinNotificationDetails(),
     );
 
-    final exactAllowed = await _ensureExactAlarmsAllowed();
+    final exactAllowed = await canScheduleExactAlarms();
 
     await _plugin.zonedSchedule(
       id,
@@ -228,20 +257,22 @@ class NotificationService {
     }
   }
 
-  Future<bool> _ensureExactAlarmsAllowed() async {
+  Future<bool> canScheduleExactAlarms() async {
     final android = _plugin
         .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin
         >();
-
     if (android == null) return false;
+    return await android.canScheduleExactNotifications() ?? false;
+  }
 
-    final can = await android.canScheduleExactNotifications();
-    if (can == true) return true;
-
-    // This triggers the system flow/settings to allow exact alarms
+  Future<bool> requestExactAlarmsPermission() async {
+    final android = _plugin
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >();
+    if (android == null) return false;
     final granted = await android.requestExactAlarmsPermission();
-
     return granted == true;
   }
 

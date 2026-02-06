@@ -43,7 +43,7 @@ class LocationRepositoryImpl implements LocationRepository {
 
   @override
   Future<void> saveLocation(UserLocation loc) async {
-    debugPrint('❤️Saving User locationn to local');
+    debugPrint('❤️Saving User location to local');
     await local.write(loc);
   }
 
