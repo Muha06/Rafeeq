@@ -10,7 +10,7 @@ import 'package:rafeeq/features/Quran/presentation/riverpod/ayah_share_cotroller
 import 'package:rafeeq/features/Quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/quran_bookmark.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/Quran/execution_providers.dart';
-import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
+ import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class AyahTile extends ConsumerStatefulWidget {
   final Ayah ayah;
