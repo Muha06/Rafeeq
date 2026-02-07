@@ -1,4 +1,4 @@
-import 'package:rafeeq/features/Quran/domain/entities/surah.dart';
+import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 
 class SurahDto {
   final int id;

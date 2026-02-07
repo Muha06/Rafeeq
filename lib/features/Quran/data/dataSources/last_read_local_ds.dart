@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:rafeeq/features/Quran/domain/entities/last_read_ayah.dart';
+import 'package:rafeeq/features/quran/domain/entities/last_read_ayah.dart';
 
 abstract class LastReadLocalDataSource {
   Future<void> saveLastRead(LastReadAyah lastRead);

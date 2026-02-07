@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:rafeeq/features/Quran/domain/entities/ayah.dart';
+import 'package:rafeeq/features/quran/domain/entities/ayah.dart';
 
 part 'ayah_hive.g.dart';
 

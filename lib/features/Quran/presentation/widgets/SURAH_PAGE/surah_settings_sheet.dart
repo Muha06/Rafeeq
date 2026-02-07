@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
-import 'package:rafeeq/features/Quran/presentation/riverpod/surah_settings_provider.dart';
+import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
+import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
+import 'package:rafeeq/features/quran_audio/presentation/widgets/reciter_picker_sheet.dart';
+import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class SurahSettingsSheet extends ConsumerStatefulWidget {
   const SurahSettingsSheet({super.key, required this.onToggleAutoScroll});
@@ -37,6 +41,9 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
       fontWeight: FontWeight.w300,
     );
 
+    final selectedReciter = ref.watch(selectedReciterProvider);
+
+    final isDark = ref.watch(isDarkProvider);
     return AnimatedSize(
       duration: Durations.medium3,
       curve: Curves.easeInOut,
@@ -88,6 +95,45 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
               title: Text('Show Translation', style: titleTextstyle),
               onChanged: (value) {
                 sNotifier.setShowTranslation(value);
+              },
+            ),
+
+            const SizedBox(height: 4),
+
+            //select reciter
+            ListTile(
+              title: Text('Reciters', style: titleTextstyle),
+              contentPadding: EdgeInsets.zero,
+              trailing: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 220),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        selectedReciter.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.labelLarge,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    const FaIcon(
+                      FontAwesomeIcons.chevronRight,
+                      color: AppDarkColors.iconSecondary,
+                      size: 16,
+                    ),
+                  ],
+                ),
+              ),
+              onTap: () {
+                showModalBottomSheet(
+                  context: context,
+                  showDragHandle: true,
+                  isScrollControlled: true,
+                  backgroundColor: theme.bottomSheetTheme.backgroundColor,
+                  builder: (context) => const ReciterPickerSheet(),
+                );
               },
             ),
 

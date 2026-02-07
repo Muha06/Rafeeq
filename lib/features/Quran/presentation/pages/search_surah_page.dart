@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_surahs_provider.dart';
-import 'package:rafeeq/features/Quran/presentation/widgets/QURAN_PAGE/all_surah_listview.dart';
+import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provider.dart';
+import 'package:rafeeq/features/quran/presentation/widgets/QURAN_PAGE/all_surah_listview.dart';
 
 class SurahSearchPage extends ConsumerStatefulWidget {
   const SurahSearchPage({super.key});

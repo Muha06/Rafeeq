@@ -1,12 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:rafeeq/features/Quran/data/dataSources/Quran_remote_ds.dart';
-import 'package:rafeeq/features/Quran/data/models/ayah_hive.dart';
-import 'package:rafeeq/features/Quran/domain/entities/ayah.dart';
-import 'package:rafeeq/features/Quran/domain/repository/ayah_repo.dart';
+import 'package:rafeeq/features/quran/data/dataSources/quran_text_remote_ds.dart';
+import 'package:rafeeq/features/quran/data/models/ayah_hive.dart';
+import 'package:rafeeq/features/quran/domain/entities/ayah.dart';
+import 'package:rafeeq/features/quran/domain/repository/ayah_repo.dart';
 
 class AyahRepositoryImpl implements AyahRepository {
-  final QuranApiService remoteDS;
+  final QuranTextApiService remoteDS;
 
   AyahRepositoryImpl({required this.remoteDS});
 

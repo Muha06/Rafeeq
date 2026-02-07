@@ -1,8 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/features/Quran/domain/entities/surah.dart';
-import 'package:rafeeq/features/Quran/presentation/pages/surah_page.dart';
+import 'package:rafeeq/features/quran/domain/entities/surah.dart';
+import 'package:rafeeq/features/quran/presentation/pages/surah_page.dart';
 
 class SurahPagerPage extends ConsumerStatefulWidget {
   final List<Surah> surahs;

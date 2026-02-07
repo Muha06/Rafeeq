@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:rafeeq/features/Quran/data/dataSources/last_read_local_ds.dart';
-import 'package:rafeeq/features/Quran/data/repositories/last_read_repo_impl.dart';
-import 'package:rafeeq/features/Quran/domain/entities/last_read_ayah.dart';
-import 'package:rafeeq/features/Quran/domain/repository/last_read_repo.dart';
+import 'package:rafeeq/features/quran/data/dataSources/last_read_local_ds.dart';
+import 'package:rafeeq/features/quran/data/repositories/last_read_repo_impl.dart';
+import 'package:rafeeq/features/quran/domain/entities/last_read_ayah.dart';
+import 'package:rafeeq/features/quran/domain/repository/last_read_repo.dart';
 
 //LAST READ HIVE BOX provider
 final lastReadBoxProvider = Provider<Box>((ref) {

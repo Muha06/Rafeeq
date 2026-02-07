@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/features/Quran/presentation/pages/surah_page.dart';
-import 'package:rafeeq/features/Quran/presentation/riverpod/ayah_of_the_day.dart';
+import 'package:rafeeq/features/quran/presentation/pages/surah_page.dart';
+import 'package:rafeeq/features/quran/presentation/riverpod/ayah_of_the_day.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/Quran/execution_providers.dart';
 import 'package:rafeeq/features/bookmarks/widgets/bookmark_tile.dart';
 

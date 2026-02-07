@@ -1,5 +1,5 @@
-import 'package:rafeeq/features/Quran/domain/entities/surah.dart';
-import 'package:rafeeq/features/Quran/domain/repository/surah_repo.dart';
+import 'package:rafeeq/features/quran/domain/entities/surah.dart';
+import 'package:rafeeq/features/quran/domain/repository/surah_repo.dart';
 
 class GetSurahsUseCase {
   final SurahRepository repository;

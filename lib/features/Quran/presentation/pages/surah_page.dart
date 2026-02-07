@@ -1,24 +1,26 @@
-// ignore_for_file: unused_result
-
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:rafeeq/core/audio/domain/entities/audio_state.dart';
+import 'package:rafeeq/core/audio/providers/audio_controller.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/core/widgets/snackbars.dart';
-import 'package:rafeeq/features/Quran/domain/entities/last_read_ayah.dart';
-import 'package:rafeeq/features/Quran/domain/entities/surah.dart';
-import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_ayah_provider.dart';
-import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_surahs_provider.dart';
-import 'package:rafeeq/features/Quran/presentation/riverpod/last_read_provider.dart';
-import 'package:rafeeq/features/Quran/presentation/riverpod/surah_settings_provider.dart';
-import 'package:rafeeq/features/Quran/presentation/widgets/SURAH_PAGE/ayah_tile.dart';
-import 'package:rafeeq/features/Quran/presentation/widgets/SURAH_PAGE/surah_details.dart';
-import 'package:rafeeq/features/Quran/presentation/widgets/SURAH_PAGE/surah_settings_sheet.dart';
+import 'package:rafeeq/features/quran/domain/entities/last_read_ayah.dart';
+import 'package:rafeeq/features/quran/domain/entities/surah.dart';
+import 'package:rafeeq/features/quran/presentation/riverpod/fetch_ayah_provider.dart';
+import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provider.dart';
+import 'package:rafeeq/features/quran/presentation/riverpod/last_read_provider.dart';
+import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
+import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/ayah_tile.dart';
+import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_details.dart';
+import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_settings_sheet.dart';
+import 'package:rafeeq/features/quran_audio/data/datasources/quran_audio_remote_ds.dart';
+import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
+import 'package:rafeeq/features/quran_audio/presentation/providers/surah_audio_providers.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
@@ -238,6 +240,30 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
     super.dispose();
   }
 
+  Future<void> playSurahAudio({
+    required WidgetRef ref,
+    required int surahId,
+    required String surahName,
+  }) async {
+    final reciter = ref.read(selectedReciterProvider);
+    final getTrack = ref.read(getSurahAudioTrackProvider);
+
+    final track = await getTrack(
+      surahId: surahId,
+      surahName: surahName,
+      reciter: reciter,
+    );
+
+    await ref
+        .read(audioControllerProvider.notifier)
+        .playUrl(
+          id: surahName,
+          title: surahName,
+          source: AudioSourceType.quranSurah,
+          url: track.url,
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -334,6 +360,16 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
             ),
           ),
           actions: [
+            TextButton(
+              onPressed: () async {
+                playSurahAudio(
+                  ref: ref,
+                  surahId: surahId,
+                  surahName: surah.nameTransliteration,
+                );
+              },
+              child: const Text('Play surah'),
+            ),
             IconButton(
               onPressed: () {
                 showModalBottomSheet(

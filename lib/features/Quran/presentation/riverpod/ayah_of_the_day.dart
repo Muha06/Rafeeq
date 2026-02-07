@@ -1,9 +1,9 @@
 import 'package:collection/collection.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/features/Quran/domain/entities/ayah.dart';
-import 'package:rafeeq/features/Quran/domain/entities/surah.dart';
-import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_ayah_provider.dart';
-import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_surahs_provider.dart';
+import 'package:rafeeq/features/quran/domain/entities/ayah.dart';
+import 'package:rafeeq/features/quran/domain/entities/surah.dart';
+import 'package:rafeeq/features/quran/presentation/riverpod/fetch_ayah_provider.dart';
+import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provider.dart';
 import 'dart:math';
 
 final ayahOfTheDayProvider = FutureProvider<Ayah?>((ref) async {

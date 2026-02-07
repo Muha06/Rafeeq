@@ -1,13 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:rafeeq/features/Quran/data/dataSources/Quran_remote_ds.dart';
-import 'package:rafeeq/features/Quran/data/models/surah_dto.dart';
-import 'package:rafeeq/features/Quran/data/models/surah_hive.dart';
-import 'package:rafeeq/features/Quran/domain/entities/surah.dart';
-import 'package:rafeeq/features/Quran/domain/repository/surah_repo.dart';
+import 'package:rafeeq/features/quran/data/dataSources/quran_text_remote_ds.dart';
+import 'package:rafeeq/features/quran/data/models/surah_dto.dart';
+import 'package:rafeeq/features/quran/data/models/surah_hive.dart';
+import 'package:rafeeq/features/quran/domain/entities/surah.dart';
+import 'package:rafeeq/features/quran/domain/repository/surah_repo.dart';
 
 class SurahRepositoryImpl implements SurahRepository {
-  final QuranApiService apiService;
+  final QuranTextApiService apiService;
 
   SurahRepositoryImpl({required this.apiService});
 

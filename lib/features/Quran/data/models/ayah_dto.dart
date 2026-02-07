@@ -1,4 +1,4 @@
-import 'package:rafeeq/features/Quran/domain/entities/ayah.dart';
+import 'package:rafeeq/features/quran/domain/entities/ayah.dart';
 
 class AyahDto {
   final int id;

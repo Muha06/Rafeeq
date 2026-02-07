@@ -21,16 +21,16 @@ class AppTheme {
 
       dividerColor: AppDarkColors.divider,
       cardColor: AppDarkColors.darkSurface,
-      iconTheme: const IconThemeData(color: AppDarkColors.iconPrimary),
+      iconTheme: const IconThemeData(color: AppDarkColors.iconSecondary),
       iconButtonTheme: const IconButtonThemeData(
         style: ButtonStyle(
-          iconColor: WidgetStatePropertyAll(AppDarkColors.iconPrimary),
+          iconColor: WidgetStatePropertyAll(AppDarkColors.iconSecondary),
         ),
       ),
 
       colorScheme: const ColorScheme.dark(
         surface: AppDarkColors.darkBackground, //hide the navigation color
-        primary: AppDarkColors.amber,
+        primary: AppDarkColors.teal,
       ),
 
       //APPBAR
@@ -209,15 +209,25 @@ class AppTheme {
         selectionColor: AppDarkColors.amberSoft,
         selectionHandleColor: AppDarkColors.amber,
       ),
+
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppDarkColors.darkSurface,
         iconColor: AppDarkColors.iconSecondary,
         prefixIconColor: AppDarkColors.iconSecondary,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
 
-        hintStyle: AppTextStyles.secondary.copyWith(
+        isDense: true,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        constraints: const BoxConstraints(minHeight: 36),
+        prefixIconConstraints: const BoxConstraints(
+          minWidth: 36,
+          minHeight: 36,
+        ),
+
+        hintStyle: AppTextStyles.body.copyWith(
           fontWeight: FontWeight.w300,
+          height: 1,
+          fontSize: 16,
           color: AppDarkColors.textSecondary,
         ),
 
@@ -226,18 +236,6 @@ class AppTheme {
           borderSide: const BorderSide(color: Colors.transparent),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: Colors.transparent),
-        ),
-        disabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: Colors.transparent),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: Colors.transparent),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
           borderSide: const BorderSide(color: Colors.transparent),
         ),
@@ -411,6 +409,37 @@ class AppTheme {
           padding: EdgeInsets.zero, // remove all padding
           minimumSize: Size.zero, // optional: remove minimum size
           tapTargetSize: MaterialTapTargetSize.shrinkWrap, // shrink tap area
+        ),
+      ),
+
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: AppLightColors.lightSurface,
+        iconColor: AppLightColors.iconPrimary,
+        prefixIconColor: AppLightColors.iconPrimary,
+
+        isDense: true,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+        constraints: const BoxConstraints(minHeight: 36),
+        prefixIconConstraints: const BoxConstraints(
+          minWidth: 36,
+          minHeight: 36,
+        ),
+
+        hintStyle: AppTextStyles.body.copyWith(
+          fontWeight: FontWeight.w300,
+          height: 1,
+          fontSize: 16,
+          color: AppLightColors.textSecondary,
+        ),
+
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: const BorderSide(color: Colors.transparent),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: const BorderSide(color: Colors.transparent),
         ),
       ),
 

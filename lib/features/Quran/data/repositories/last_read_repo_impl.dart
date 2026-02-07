@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import 'package:rafeeq/features/Quran/data/dataSources/last_read_local_ds.dart';
-import 'package:rafeeq/features/Quran/domain/entities/last_read_ayah.dart';
-import 'package:rafeeq/features/Quran/domain/repository/last_read_repo.dart';
+import 'package:rafeeq/features/quran/data/dataSources/last_read_local_ds.dart';
+import 'package:rafeeq/features/quran/domain/entities/last_read_ayah.dart';
+import 'package:rafeeq/features/quran/domain/repository/last_read_repo.dart';
 
 class LastReadRepositoryImpl implements LastReadRepository {
   final LastReadLocalDataSource localDataSource;

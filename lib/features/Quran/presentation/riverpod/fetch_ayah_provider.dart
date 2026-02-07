@@ -1,9 +1,9 @@
 // 1️⃣ Provide repository (inject your remote DS here)
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/features/Quran/data/repositories/ayah_repo_impl.dart';
-import 'package:rafeeq/features/Quran/domain/entities/ayah.dart';
-import 'package:rafeeq/features/Quran/domain/repository/ayah_repo.dart';
-import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_surahs_provider.dart';
+import 'package:rafeeq/features/quran/data/repositories/ayah_repo_impl.dart';
+import 'package:rafeeq/features/quran/domain/entities/ayah.dart';
+import 'package:rafeeq/features/quran/domain/repository/ayah_repo.dart';
+import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provider.dart';
 
 final ayahRepositoryProvider = Provider<AyahRepository>((ref) {
   final remoteDS = ref.watch(

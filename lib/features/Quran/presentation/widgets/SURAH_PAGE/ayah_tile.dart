@@ -4,13 +4,13 @@ import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/core/widgets/snackbars.dart';
-import 'package:rafeeq/features/Quran/domain/entities/ayah.dart';
-import 'package:rafeeq/features/Quran/presentation/riverpod/ayah_of_the_day.dart';
-import 'package:rafeeq/features/Quran/presentation/riverpod/ayah_share_cotroller_provider.dart';
-import 'package:rafeeq/features/Quran/presentation/riverpod/surah_settings_provider.dart';
+import 'package:rafeeq/features/quran/domain/entities/ayah.dart';
+import 'package:rafeeq/features/quran/presentation/riverpod/ayah_of_the_day.dart';
+import 'package:rafeeq/features/quran/presentation/riverpod/ayah_share_cotroller_provider.dart';
+import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/quran_bookmark.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/Quran/execution_providers.dart';
- import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
+import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class AyahTile extends ConsumerStatefulWidget {
   final Ayah ayah;
@@ -187,7 +187,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                     textDirection: TextDirection.rtl,
                     style: theme.textTheme.bodyLarge!.copyWith(
                       fontWeight: isDark ? FontWeight.w500 : FontWeight.w500,
-                      color: Colors.white,
+                      // color: Colors.white, //todo: make dark theme color lighter
                       fontSize: arabicFontSize,
                     ),
                   ),
