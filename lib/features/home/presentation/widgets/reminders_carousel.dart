@@ -36,10 +36,11 @@ class HomeRemindersCarousel extends ConsumerWidget {
       hm(morningTime.hour, morningTime.minute),
       hm(11, 30),
     );
-    
+
     bool isEvening = _isInWindow(
       now,
-      hm(eveningTime.hour, eveningTime.minute),
+      // hm(eveningTime.hour, eveningTime.minute),
+      hm(17, 30),
       hm(22, 30),
     );
 

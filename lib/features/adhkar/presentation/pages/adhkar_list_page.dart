@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/core/audio/domain/entities/audio_state.dart';
+import 'package:rafeeq/core/audio/providers/audio_controller.dart';
 import 'package:rafeeq/core/audio/providers/just_audio_player_provider.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
@@ -9,7 +11,6 @@ import 'package:rafeeq/features/adhkar/domain/entities/adhkar_category.dart';
 import 'package:rafeeq/features/adhkar/domain/entities/dhikr.dart';
 import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_details_page.dart';
 import 'package:rafeeq/features/adhkar/presentation/riverpod/get_adhkars_provider.dart';
-import 'package:rafeeq/features/adhkar/presentation/widgets/adhkar_reminder_card.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class AdhkarListPage extends ConsumerStatefulWidget {
@@ -28,16 +29,15 @@ class _AdhkarListPageState extends ConsumerState<AdhkarListPage> {
     final assetPath = widget.category.assetPath;
     final adhkars = ref.watch(getAdhkarsProvider(assetPath));
     final theme = Theme.of(context);
-    final buffering = ref.watch(adhkarBufferingProvider).value ?? false;
-    final player = ref.watch(adhkarPlayerProvider);
-    final isDark = ref.watch(isDarkProvider);
     final category = widget.category;
-    final urlsAsync = ref.watch(adhkarAudioUrlsProvider);
-    final activeUrl = ref.watch(activeAdhkarUrlProvider);
-    final playing = ref.watch(adhkarPlayingProvider).value ?? false;
     final title = category.title.toLowerCase();
+
+    final urlsAsync = ref.watch(adhkarAudioUrlsProvider);
+
     final isMorningCat = title.contains('morning');
     final isEveningCat = title.contains('evening');
+
+    final audioState = ref.watch(audioControllerProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -57,7 +57,15 @@ class _AdhkarListPageState extends ConsumerState<AdhkarListPage> {
                     final url = isMorningCat
                         ? urls.morningUrl
                         : urls.eveningUrl;
-                    final isActive = activeUrl == url;
+
+                    final playing =
+                        ref.watch(audioPlayingProvider).value ?? false;
+                    final buffering =
+                        ref.watch(audioBufferingProvider).value ?? false;
+
+                    final isActive =
+                        audioState.source == AudioSourceType.adhkar &&
+                        audioState.url == url;
 
                     final showPause = isActive && playing;
 
@@ -65,40 +73,36 @@ class _AdhkarListPageState extends ConsumerState<AdhkarListPage> {
                       onPressed: buffering
                           ? null
                           : () async {
-                              await playAdhkar(
-                                ref,
-                                context,
-                                player,
-                                isMorning: isMorningCat,
-                              );
+                              if (showPause) {
+                                await ref
+                                    .read(audioControllerProvider.notifier)
+                                    .pause();
+                              } else {
+                                await ref
+                                    .read(audioControllerProvider.notifier)
+                                    .playUrl(
+                                      url: url,
+                                      source: AudioSourceType.adhkar,
+                                      id: isMorningCat
+                                          ? 'adhkar_morning'
+                                          : 'adhkar_evening',
+                                      title: isMorningCat
+                                          ? 'Morning Adhkār'
+                                          : 'Evening Adhkār',
+                                    );
+                              }
                             },
-                      style: theme.textButtonTheme.style!.copyWith(
-                        minimumSize: const WidgetStatePropertyAll(Size(0, 0)),
-
-                        padding: const WidgetStatePropertyAll(
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                        ),
-                      ),
                       icon: buffering
                           ? const CupertinoActivityIndicator()
                           : Icon(
                               showPause
                                   ? CupertinoIcons.pause
                                   : CupertinoIcons.play,
-                              color: isDark
-                                  ? AppDarkColors.amber
-                                  : AppLightColors.iconPrimary,
                             ),
                       label: Text(
                         buffering
                             ? 'Loading'
                             : (showPause ? 'Pause' : 'Listen'),
-                        style: theme.textTheme.bodySmall!.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: isDark
-                              ? AppDarkColors.amber
-                              : AppLightColors.iconPrimary,
-                        ),
                       ),
                     );
                   },

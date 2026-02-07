@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rafeeq/core/app_keys.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
+import 'package:rafeeq/features/adhkar/presentation/widgets/audio_player_sheet.dart';
 
 class AppSnackBar {
   static void showSimple({
@@ -78,5 +79,25 @@ class AppSnackBar {
         duration: duration,
       ),
     );
+  }
+
+  //show player
+  static void showPlayer() {
+    scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
+    scaffoldMessengerKey.currentState?.showSnackBar(
+      const SnackBar(
+        persist: true,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        margin: EdgeInsets.all(12),
+        content: AdhkarMiniPlayerSheet(),
+        dismissDirection: DismissDirection.none,
+      ),
+    );
+  }
+
+  static void hideSnackbars() {
+    scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
   }
 }
