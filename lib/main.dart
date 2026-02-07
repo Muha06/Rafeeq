@@ -85,8 +85,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   Widget build(BuildContext context) {
     final mode = ref.watch(themeModeProvider);
     final hasSeenOnboarding = ref.watch(hasSeenOnboardingProvider);
-
-    print(hasSeenOnboarding);
+ 
 
     return MaterialApp(
       title: 'Rafeeq',
