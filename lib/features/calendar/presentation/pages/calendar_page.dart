@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hijri_date/hijri.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
- import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
+import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../providers/hijri_date_providers.dart';
@@ -59,14 +59,25 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
     final hijriState = ref.watch(hijriDateProvider);
     final offset = hijriState.offsetDays;
     final isDark = ref.watch(isDarkProvider);
+    final theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Calendar'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.tune),
-            onPressed: () => _openHijriOffsetSheet(context),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: TextButton.icon(
+              icon: const Icon(Icons.tune),
+              label: Text(
+                'Adjust date',
+                style: theme.textTheme.bodySmall!.copyWith(
+                  color: theme.textTheme.bodyLarge!.color,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              onPressed: () => _openHijriOffsetSheet(context),
+            ),
           ),
         ],
       ),
@@ -202,12 +213,12 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
           final notifier = ref.read(hijriDateProvider.notifier);
 
           return Padding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Hijri Offset',
+                  'Adjust Hijri date',
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const SizedBox(height: 8),

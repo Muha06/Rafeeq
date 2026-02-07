@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rafeeq/core/themes/dark_colors.dart';
 
 class OnboardingSlide extends StatelessWidget {
   const OnboardingSlide({
@@ -6,21 +7,20 @@ class OnboardingSlide extends StatelessWidget {
     required this.imageAsset,
     required this.title,
     required this.subtitle,
-    this.accent,
+    required this.accent,
     this.child,
   });
 
   final String imageAsset;
   final String title;
   final String subtitle;
-  final Color? accent;
+  final Color accent;
   final Widget? child;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final acc = accent ?? const Color(0xFFE7C56A); // soft gold-ish default
-
+ 
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 26, 24, 18),
       child: Column(
@@ -36,9 +36,10 @@ class OnboardingSlide extends StatelessWidget {
           Text(
             title,
             textAlign: TextAlign.center,
-            style: theme.textTheme.headlineSmall?.copyWith(
+            style: theme.textTheme.headlineLarge?.copyWith(
               color: Colors.white,
               fontWeight: FontWeight.w800,
+              fontSize: 26,
               letterSpacing: -0.3,
             ),
           ),
@@ -50,21 +51,12 @@ class OnboardingSlide extends StatelessWidget {
             subtitle,
             textAlign: TextAlign.center,
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: Colors.white.withOpacity(.76),
+              color: AppDarkColors.textSecondary,
               height: 1.35,
             ),
           ),
 
-          if (child != null) ...[
-            const SizedBox(height: 18),
-            DefaultTextStyle(
-              style: theme.textTheme.bodyMedium!.copyWith(color: Colors.white),
-              child: IconTheme(
-                data: IconThemeData(color: acc),
-                child: child!,
-              ),
-            ),
-          ],
+          if (child != null) ...[const SizedBox(height: 18), child!],
 
           const Spacer(flex: 2),
         ],

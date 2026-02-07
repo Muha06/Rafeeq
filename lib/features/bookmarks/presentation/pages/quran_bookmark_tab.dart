@@ -40,8 +40,10 @@ class QuranBookmarksTab extends ConsumerWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            FullSurahPage(surah: bookMarkSurah),
+                        builder: (context) => FullSurahPage(
+                          surah: bookMarkSurah,
+                          autoScrollAyah: bookMark.ayahNumber,
+                        ),
                       ),
                     );
                   }

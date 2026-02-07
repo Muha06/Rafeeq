@@ -25,7 +25,7 @@ class _NotificationsPermissionCtaState
 
     // ✅ Already granted
     if (perm.notificationsAllowed) {
-      return FilledButton.icon(
+      return ElevatedButton.icon(
         onPressed: null,
         icon: const Icon(Icons.check_circle_rounded),
         label: const Text('Notifications Enabled'),
@@ -36,7 +36,7 @@ class _NotificationsPermissionCtaState
     if (perm.notifPermanentlyDenied) {
       return Column(
         children: [
-          FilledButton.icon(
+          ElevatedButton.icon(
             onPressed: () async => notifier.openSettings(),
             icon: const Icon(Icons.settings_rounded),
             label: const Text('Open Settings'),
@@ -52,7 +52,7 @@ class _NotificationsPermissionCtaState
     }
 
     // 🙏 Requestable denied / not yet asked
-    return FilledButton.icon(
+    return ElevatedButton.icon(
       onPressed: perm.isLoading
           ? null
           : () async {

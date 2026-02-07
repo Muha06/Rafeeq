@@ -10,8 +10,7 @@ import 'package:rafeeq/features/Quran/presentation/riverpod/ayah_share_cotroller
 import 'package:rafeeq/features/Quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/quran_bookmark.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/Quran/execution_providers.dart';
- import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
-import 'package:widgets_to_image/widgets_to_image.dart';
+import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class AyahTile extends ConsumerStatefulWidget {
   final Ayah ayah;
@@ -23,8 +22,6 @@ class AyahTile extends ConsumerStatefulWidget {
 }
 
 class _AyahTileState extends ConsumerState<AyahTile> {
-  final controller = WidgetsToImageController();
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -178,48 +175,44 @@ class _AyahTileState extends ConsumerState<AyahTile> {
 
             const SizedBox(height: 24),
 
-            WidgetsToImage(
-              controller: controller,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // arabic text (right)
-                  Align(
-                    alignment: Alignment.centerRight,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // arabic text (right)
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    cleanAyah(widget.ayah.textArabic),
+                    textDirection: TextDirection.rtl,
+                    style: theme.textTheme.bodyLarge!.copyWith(
+                      fontWeight: isDark ? FontWeight.w500 : FontWeight.w500,
+                      color: Colors.white,
+                      fontSize: arabicFontSize,
+                    ),
+                  ),
+                ),
+
+                // Translation
+                if (showTranslation) ...[
+                  const SizedBox(height: 24),
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 100),
                     child: Text(
-                      cleanAyah(widget.ayah.textArabic),
-                      textDirection: TextDirection.rtl,
-                      style: theme.textTheme.bodyLarge!.copyWith(
-                        fontWeight: isDark ? FontWeight.w500 : FontWeight.w400,
-                        fontSize: arabicFontSize,
+                      key: const ValueKey('translation'),
+                      widget.ayah.textEnglish,
+                      textAlign: TextAlign.left,
+                      style: theme.textTheme.bodyMedium!.copyWith(
+                        fontWeight: isDark ? FontWeight.w400 : FontWeight.w500,
+                        color: isDark
+                            ? AppDarkColors.textPrimary
+                            : AppLightColors.textPrimary,
+                        fontSize: translationFontSize,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 24),
-
-                  // Translation
-                  AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 100),
-                    child: showTranslation
-                        ? Text(
-                            key: const ValueKey('translation'),
-                            widget.ayah.textEnglish,
-                            textAlign: TextAlign.left,
-                            style: theme.textTheme.bodyMedium!.copyWith(
-                              fontWeight: isDark
-                                  ? FontWeight.w400
-                                  : FontWeight.w500,
-                              color: isDark
-                                  ? AppDarkColors.textPrimary
-                                  : AppLightColors.textPrimary,
-                              fontSize: translationFontSize,
-                            ),
-                          )
-                        : const SizedBox.shrink(key: ValueKey('hide')),
-                  ),
-                  if (showTranslation) const SizedBox(height: 20),
                 ],
-              ),
+              ],
             ),
           ],
         ),

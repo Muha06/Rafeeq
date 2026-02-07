@@ -84,6 +84,7 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
     });
     return showModalBottomSheet(
       context: context,
+      showDragHandle: true,
       backgroundColor: Colors.transparent,
       builder: (_) {
         final theme = Theme.of(context);

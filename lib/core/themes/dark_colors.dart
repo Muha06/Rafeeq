@@ -29,9 +29,7 @@ class AppDarkColors {
   static const Color iconDisabled = Color(0xFF5E7376);
 
   // 🎛 Buttons
-  static const Color buttonPrimary = amber;
-  static const Color buttonPrimaryPressed = amberSoft;
-  static const Color buttonSecondary = Color(0xFF0E2A2D); // teal-dark
+  static const Color buttonPrimary = amber; //Color(0xCC293A41);
   static const Color buttonDisabled = Color(0xFF1A2A2E);
 
   // 📌 Selected states / highlights

@@ -39,7 +39,7 @@ class HomeQuickActionsRow extends StatelessWidget {
                 onTap: onQuran,
               ),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: 10),
             Expanded(
               child: _QuickActionCard(
                 title: "Adhkār",
@@ -47,10 +47,10 @@ class HomeQuickActionsRow extends StatelessWidget {
                 onTap: onAdhkar,
               ),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: 10),
             Expanded(
               child: _QuickActionCard(
-                title: "Allah Names",
+                title: "Allah's Names",
                 imagePath: 'assets/images/home/Allah_name.png',
                 onTap: onAllahNames,
               ),
@@ -81,9 +81,8 @@ class _QuickActionCard extends ConsumerWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        // height: 120,
         width: 200,
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14),
           color: isDark ? theme.cardColor : AppLightColors.lightSurface,
@@ -96,16 +95,15 @@ class _QuickActionCard extends ConsumerWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: theme.textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w800,
-                fontSize: 13,
+                fontWeight: FontWeight.bold,
+                wordSpacing: 1,
+                fontSize: 12,
                 color: isDark
                     ? AppDarkColors.textPrimary
                     : AppLightColors.textPrimary,
               ),
             ),
-            // const SizedBox(height: 4),
 
-            //will change to image later
             Align(
               alignment: Alignment.bottomRight,
               child: Image.asset(imagePath, height: 40, width: 40),

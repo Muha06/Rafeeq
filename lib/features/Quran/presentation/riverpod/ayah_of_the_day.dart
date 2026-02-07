@@ -4,31 +4,37 @@ import 'package:rafeeq/features/Quran/domain/entities/ayah.dart';
 import 'package:rafeeq/features/Quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_ayah_provider.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_surahs_provider.dart';
+import 'dart:math';
 
 final ayahOfTheDayProvider = FutureProvider<Ayah?>((ref) async {
-  // 1️⃣ Pick a surah for today (you could pick randomly or based on day)
-  final surahs = ref
-      .watch(surahsFutureProvider)
-      .maybeWhen(data: (list) => list, orElse: () => []);
-
+  // Wait for surahs properly (no empty fallback)
+  final surahs = await ref.watch(surahsFutureProvider.future);
   if (surahs.isEmpty) return null;
 
-  // Example: pick surah based on day of month
-  final surahIndex = DateTime.now().day % surahs.length;
-  final surah = surahs[surahIndex];
+  final now = DateTime.now();
+  final dayOfYear = now.difference(DateTime(now.year, 1, 1)).inDays + 1;
 
-  // 2️⃣ Fetch ayahs for that surah using your existing provider
+  // Seed based on date (stable for the whole day)
+  final baseSeed = (now.year * 1000) + dayOfYear;
+
+  // Pick surah using seeded random (better distribution than day%len)
+  final rngSurah = Random(baseSeed);
+  final surah = surahs[rngSurah.nextInt(surahs.length)];
+
+  // Fetch ayahs
   final ayahs = await ref.watch(ayahsFutureProvider(surah.id).future);
-
   if (ayahs.isEmpty) return null;
 
-  // 3️⃣ Pick ayah based on day of month again
-  final ayahIndex = DateTime.now().day % ayahs.length;
-  return ayahs[ayahIndex];
+  // Different seed for ayah (so it doesn’t mirror surah selection)
+  final rngAyah = Random(baseSeed ^ surah.id); // XOR mixes it nicely
+  final ayah = ayahs[rngAyah.nextInt(ayahs.length)];
+
+  return ayah;
 });
 
-//get surah for the ayah
 
+
+//get surah for the ayah
 final ayahSurahProvider = Provider.family<Surah?, int>((ref, surahId) {
   final surahs = ref
       .watch(surahsFutureProvider)

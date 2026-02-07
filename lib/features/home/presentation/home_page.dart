@@ -46,8 +46,6 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final userLocationAsync = ref.watch(userLocationProvider);
-    final isDark = ref.watch(isDarkProvider);
 
     return Scaffold(
       body: SafeArea(
@@ -61,75 +59,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               toolbarHeight: theme.appBarTheme.toolbarHeight!,
               title: Text('Rafeeq', style: theme.appBarTheme.titleTextStyle),
               actions: [
-                userLocationAsync.when(
-                  error: (error, stackTrace) => GestureDetector(
-                    onTap: () {
-                      ref.invalidate(userLocationProvider);
-                    },
-                    child: Chip(
-                      label: Row(
-                        children: [
-                          Icon(
-                            Icons.error_outline,
-                            size: 18,
-                            color: isDark
-                                ? AppDarkColors.iconSecondary
-                                : AppLightColors.iconSecondary,
-                          ),
-                          const SizedBox(width: 4),
-                          Text('retry', style: theme.textTheme.labelLarge),
-                        ],
-                      ),
-                      backgroundColor: isDark
-                          ? AppDarkColors.darkSurface
-                          : AppLightColors.lightSurface,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24),
-                        side: const BorderSide(color: Colors.transparent),
-                      ),
-                    ),
-                  ),
-                  loading: () => Chip(
-                    label: const CupertinoActivityIndicator(),
-                    backgroundColor: isDark
-                        ? AppDarkColors.darkSurface
-                        : AppLightColors.lightSurface,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
-                      side: const BorderSide(color: Colors.transparent),
-                    ),
-                  ),
-                  data: (userLocation) => GestureDetector(
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const UserLocSettingsPage(),
-                      ),
-                    ),
-                    child: Chip(
-                      label: Row(
-                        children: [
-                          const Icon(Icons.my_location_outlined, size: 16),
-                          const SizedBox(width: 2),
-
-                          Text(
-                            userLocation?.city ?? '',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: theme.textTheme.labelLarge,
-                          ),
-                        ],
-                      ),
-                      backgroundColor: isDark
-                          ? AppDarkColors.darkSurface
-                          : AppLightColors.lightSurface,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24),
-                        side: const BorderSide(color: Colors.transparent),
-                      ),
-                    ),
-                  ),
-                ),
+                const UserLocationChip(),
                 IconButton(
                   onPressed: () {
                     pushLeftPage(context, const SettingsPage());
@@ -227,6 +157,99 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 }
 
+class UserLocationChip extends ConsumerWidget {
+  const UserLocationChip({super.key});
+
+  @override
+  Widget build(BuildContext context, ref) {
+    final theme = Theme.of(context);
+    final userLocationAsync = ref.watch(userLocationProvider);
+    final isDark = ref.watch(isDarkProvider);
+
+    return userLocationAsync.when(
+      error: (error, stackTrace) => GestureDetector(
+        onTap: () {
+          ref.invalidate(userLocationProvider);
+        },
+        child: Chip(
+          label: Row(
+            children: [
+              Icon(
+                Icons.error_outline,
+                size: 18,
+                color: isDark
+                    ? AppDarkColors.iconSecondary
+                    : AppLightColors.iconSecondary,
+              ),
+              const SizedBox(width: 4),
+              Text('retry', style: theme.textTheme.labelLarge),
+            ],
+          ),
+          backgroundColor: isDark
+              ? AppDarkColors.darkSurface
+              : AppLightColors.lightSurface,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+            side: const BorderSide(color: Colors.transparent),
+          ),
+        ),
+      ),
+      loading: () => Chip(
+        label: const CupertinoActivityIndicator(),
+        backgroundColor: isDark
+            ? AppDarkColors.darkSurface
+            : AppLightColors.lightSurface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
+          side: const BorderSide(color: Colors.transparent),
+        ),
+      ),
+      data: (userLocation) => GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const UserLocSettingsPage(),
+            ),
+          );
+        },
+        child: Chip(
+          label: Row(
+            children: [
+              Icon(
+                Icons.location_on_outlined,
+                size: 16,
+                color: isDark
+                    ? AppDarkColors.iconSecondary
+                    : AppLightColors.iconSecondary,
+              ),
+              const SizedBox(width: 2),
+
+              Text(
+                userLocation?.city ?? '',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.labelLarge!.copyWith(
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: isDark
+              ? AppDarkColors.darkSurface
+              : AppLightColors.lightSurface,
+          padding: const EdgeInsets.all(4),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+            side: const BorderSide(color: Colors.transparent),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+//padding to sections
 class HomeSection extends StatelessWidget {
   const HomeSection({super.key, required this.child, required this.padding});
 

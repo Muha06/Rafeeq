@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:rafeeq/core/themes/dark_colors.dart';
+import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/features/calendar/presentation/pages/calendar_page.dart';
 import 'package:rafeeq/features/calendar/presentation/providers/hijri_date_providers.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
@@ -23,14 +26,20 @@ class GreetingsRow extends ConsumerWidget {
           height: isDark ? 30 : 40,
         ),
 
-        TextButton(
+        TextButton.icon(
+          icon: FaIcon(
+            FontAwesomeIcons.calendar,
+            color: isDark
+                ? AppDarkColors.iconDisabled
+                : AppLightColors.iconSecondary,
+          ),
           onPressed: () {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const CalendarPage()),
             );
           },
-          child: Text(
+          label: Text(
             hijriState.formatted,
             style: theme.textTheme.bodySmall!.copyWith(fontSize: 14),
           ),

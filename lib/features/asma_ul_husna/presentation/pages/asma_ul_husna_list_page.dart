@@ -23,7 +23,7 @@ class _AllahNamesPageState extends ConsumerState<AllahNamesPage> {
       appBar: AppBar(
         title: const Text("Asma’ul Husna"),
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(80),
+          preferredSize: const Size.fromHeight(64),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
             child: _SearchBar(
@@ -43,10 +43,11 @@ class _AllahNamesPageState extends ConsumerState<AllahNamesPage> {
         data: (names) {
           final filtered = names.where((n) {
             if (_query.isEmpty) return true;
-            final q = _query.toLowerCase();
-            return n.arabic.contains(_query) ||
-                n.transliteration.toLowerCase().contains(q) ||
-                n.meaningEn.toLowerCase().contains(q) ||
+            final q = _query.toLowerCase().trim();
+
+            return n.arabic.trim().contains(_query) ||
+                n.transliteration.trim().toLowerCase().contains(q) ||
+                n.meaningEn.trim().toLowerCase().contains(q) ||
                 n.number.toString() == _query;
           }).toList();
 
@@ -124,29 +125,18 @@ class _AllahNameTile extends ConsumerWidget {
                         color: isDark
                             ? AppDarkColors.amber
                             : AppLightColors.textPrimary,
-                        height: 1.1,
+                        height: 1,
                       ),
                     ),
                   ),
                   const SizedBox(height: 8),
 
                   // Transliteration
-                  Text(
-                    transliteration,
-                    style: theme.textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+                  Text(transliteration, style: theme.textTheme.titleMedium),
                   const SizedBox(height: 6),
 
                   // Meaning
-                  Text(
-                    meaning,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurface.withOpacity(0.75),
-                      height: 1.25,
-                    ),
-                  ),
+                  Text(meaning, style: theme.textTheme.bodySmall),
                 ],
               ),
             ),
@@ -201,39 +191,14 @@ class _SearchBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final theme = Theme.of(context);
-    final isDark = ref.watch(isDarkProvider);
 
     return TextField(
       onChanged: onChanged,
       textInputAction: TextInputAction.search,
+      style: theme.textTheme.bodyMedium,
       decoration: InputDecoration(
         hintText: hintText,
-        hintStyle: theme.textTheme.bodySmall,
-        labelStyle: const TextStyle(fontSize: 14),
-        prefixIcon: Icon(
-          Icons.search_rounded,
-          color: isDark
-              ? AppDarkColors.iconPrimary
-              : AppLightColors.iconPrimary,
-        ),
-        filled: true,
-        fillColor: theme.colorScheme.surface,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 14,
-          vertical: 14,
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(
-            color: isDark ? AppDarkColors.border : AppLightColors.iconPrimary,
-          ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(
-            color: isDark ? AppDarkColors.border : AppLightColors.iconPrimary,
-          ),
-        ),
+        prefixIcon: const Icon(Icons.search_rounded),
       ),
     );
   }
@@ -257,7 +222,7 @@ class _EmptyState extends StatelessWidget {
             Icon(
               Icons.filter_alt_off_rounded,
               size: 34,
-              color: theme.colorScheme.onSurface.withOpacity(0.35),
+              color: theme.iconTheme.color,
             ),
             const SizedBox(height: 10),
             Text(
@@ -271,7 +236,7 @@ class _EmptyState extends StatelessWidget {
               subtitle,
               textAlign: TextAlign.center,
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.65),
+                color: theme.textTheme.bodySmall!.color,
               ),
             ),
           ],

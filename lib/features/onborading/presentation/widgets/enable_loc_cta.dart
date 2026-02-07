@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
- import 'package:rafeeq/features/onborading/presentation/provider/location_prov.dart';
+import 'package:rafeeq/features/onborading/presentation/provider/location_prov.dart';
 
 class LocationPermissionCta extends ConsumerStatefulWidget {
   const LocationPermissionCta({super.key});
@@ -20,7 +20,7 @@ class _LocationPermissionCtaState extends ConsumerState<LocationPermissionCta> {
 
     // ✅ Already granted
     if (perm.isGranted) {
-      return FilledButton.icon(
+      return ElevatedButton.icon(
         onPressed: null,
         icon: const Icon(Icons.check_circle_rounded),
         label: const Text('Location Enabled'),
@@ -31,11 +31,10 @@ class _LocationPermissionCtaState extends ConsumerState<LocationPermissionCta> {
     if (perm.isPermanentlyDenied) {
       return Column(
         children: [
-          FilledButton.icon(
+          ElevatedButton.icon(
             onPressed: () async {
               notifier.openSettings();
             },
-
             icon: const Icon(Icons.settings_rounded),
             label: const Text('Open Settings'),
           ),
@@ -50,7 +49,7 @@ class _LocationPermissionCtaState extends ConsumerState<LocationPermissionCta> {
     }
 
     // 🙏 Requestable denied
-    return FilledButton.icon(
+    return ElevatedButton.icon(
       onPressed: perm.isLoading
           ? null
           : () async {

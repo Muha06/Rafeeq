@@ -19,7 +19,7 @@ class HaramainCard extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(
         color: isDark ? AppDarkColors.darkSurface : AppLightColors.lightSurface,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(12),
       ),
 
       child: Column(
@@ -71,7 +71,7 @@ class MosqueCard extends ConsumerWidget {
 
     return Material(
       color: bg,
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: BorderRadius.circular(12),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         highlightColor: Colors.white.withAlpha(25),
@@ -101,8 +101,8 @@ class MosqueCard extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(mosqueName, style: theme.textTheme.labelLarge),
-                    const SizedBox(height: 4),
+                    Text(mosqueName, style: theme.textTheme.labelMedium),
+                    const SizedBox(height: 12),
 
                     const LiveChip(),
                   ],
@@ -111,7 +111,13 @@ class MosqueCard extends ConsumerWidget {
 
               const Spacer(),
 
-              const FaIcon(FontAwesomeIcons.chevronRight, size: 16),
+              FaIcon(
+                FontAwesomeIcons.chevronRight,
+                size: 16,
+                color: isDark
+                    ? AppDarkColors.iconSecondary
+                    : AppLightColors.iconSecondary,
+              ),
             ],
           ),
         ),
@@ -157,12 +163,16 @@ class _LiveChipState extends State<LiveChip>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final textStyle = theme.textTheme.labelSmall!.copyWith(color: Colors.white);
+    final textStyle = theme.textTheme.labelSmall!.copyWith(
+      color: Colors.white,
+      fontWeight: FontWeight.bold,
+      fontSize: 8,
+    );
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.red, // deep red/near-black
+        color: Colors.redAccent, // deep red/near-black
         borderRadius: BorderRadius.circular(999),
       ),
       child: Row(
@@ -178,7 +188,7 @@ class _LiveChipState extends State<LiveChip>
                   width: 8,
                   decoration: const BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.black,
+                    color: Colors.white,
                   ),
                 ),
               );

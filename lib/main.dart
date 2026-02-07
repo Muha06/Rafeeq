@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:rafeeq/app/notifications.dart';
+import 'package:rafeeq/app/tabs_screen.dart';
 import 'package:rafeeq/core/app_keys.dart';
 import 'package:rafeeq/core/themes/app_theme.dart';
 import 'package:rafeeq/features/Quran/data/models/ayah_hive.dart';
@@ -72,8 +73,8 @@ class _MyAppState extends ConsumerState<MyApp> {
   }
 
   Future<void> _bootstrap() async {
-    final hasSeenOnboarding = ref.read(hasSeenOnboardingProvider);
-    if (!hasSeenOnboarding) return;
+   final hasSeen = ref.read(hasSeenOnboardingProvider);
+    if (!hasSeen) return;
 
     //ACTIVATE
     ref.read(salahNotificationsControllerProvider);
@@ -83,6 +84,9 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   Widget build(BuildContext context) {
     final mode = ref.watch(themeModeProvider);
+    final hasSeenOnboarding = ref.watch(hasSeenOnboardingProvider);
+
+    print(hasSeenOnboarding);
 
     return MaterialApp(
       title: 'Rafeeq',
@@ -95,7 +99,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       },
       debugShowCheckedModeBanner: false,
       scaffoldMessengerKey: scaffoldMessengerKey,
-      home: const OnboardingPage(),
+      home: hasSeenOnboarding ? const TabsScreen() : const OnboardingPage(),
     );
   }
 }

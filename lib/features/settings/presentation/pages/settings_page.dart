@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rafeeq/app/providers/general_notifications_provider.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
@@ -20,6 +21,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   void showThemePicker(BuildContext context) {
     showModalBottomSheet(
       context: context,
+      showDragHandle: true,
+      useSafeArea: true,
       builder: (context) => const ThemePickerSheet(),
     );
   }
@@ -147,11 +150,11 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         bottom: appBarBottomDivider(context),
       ),
       body: ListView(
-        padding: const EdgeInsets.symmetric(vertical: 8),
+        // padding: const EdgeInsets.symmetric(0),
         children: [
           //theme preferences
           SettingsTile(
-            leading: const Icon(CupertinoIcons.paintbrush),
+            leading: const FaIcon(FontAwesomeIcons.paintbrush),
             title: 'App Theme',
             isDark: isDark,
             trailing: const Icon(Icons.keyboard_arrow_right),
@@ -160,7 +163,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           ),
 
           SettingsTile(
-            leading: const Icon(CupertinoIcons.bell),
+            leading: const FaIcon(FontAwesomeIcons.bell),
             title: 'Adhkar reminder',
             subtitle: 'Morning & evening adhkars',
             isDark: isDark,
@@ -173,8 +176,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           ),
 
           SettingsTile(
-            leading: const Icon(CupertinoIcons.bell),
+            leading: const FaIcon(FontAwesomeIcons.bell),
             title: 'Salah reminder',
+            subtitle: 'Get Salah times reminders',
             isDark: isDark,
             trailing: Switch(
               value: salahNotifOn,
@@ -261,7 +265,7 @@ class _ThemePickerSheetState extends ConsumerState<ThemePickerSheet> {
     final mode = ref.watch(themeModeProvider);
 
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: RadioGroup(
         groupValue: mode,
         onChanged: (value) {
@@ -273,22 +277,7 @@ class _ThemePickerSheetState extends ConsumerState<ThemePickerSheet> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              height: 6,
-              width: 48,
-              decoration: BoxDecoration(
-                color: AppLightColors.textSecondary,
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            Text(
-              'Theme',
-              style: theme.textTheme.titleSmall!.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            Text('Theme', style: theme.textTheme.titleMedium),
             const SizedBox(height: 16),
 
             const _ThemeOption(
@@ -351,7 +340,6 @@ class _ThemeOption extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     final theme = Theme.of(context);
     final mode = ref.watch(themeModeProvider);
-    final isDark = mode == AppThemeMode.dark;
     bool selected = mode == value;
 
     return Material(
@@ -360,9 +348,6 @@ class _ThemeOption extends ConsumerWidget {
       color: Colors.transparent,
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
-        splashColor: isDark
-            ? AppDarkColors.textSecondary.withAlpha(35)
-            : AppLightColors.textSecondary.withAlpha(35),
         onTap: () {
           RadioGroup.maybeOf<AppThemeMode>(context)?.onChanged.call(value);
         },
@@ -380,7 +365,7 @@ class _ThemeOption extends ConsumerWidget {
             children: [
               Icon(icon, size: 20),
               const SizedBox(width: 12),
-              Expanded(child: Text(title, style: theme.textTheme.titleSmall)),
+              Expanded(child: Text(title, style: theme.textTheme.labelLarge)),
               Radio<AppThemeMode>(value: value),
             ],
           ),
