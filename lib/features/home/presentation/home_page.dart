@@ -7,8 +7,7 @@ import 'package:rafeeq/core/location/presentation/pages/user_loc_settings.dart';
 import 'package:rafeeq/core/location/presentation/provider/user_location_provider.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
-import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
-import 'package:rafeeq/features/home/presentation/widgets/greetings_row.dart';
+import 'package:rafeeq/features/home/presentation/widgets/Hijri_date.dart';
 import 'package:rafeeq/features/asma_ul_husna/presentation/pages/asma_ul_husna_list_page.dart';
 import 'package:rafeeq/features/haramain-live/presentation/widgets/haramain_card.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/ayah_of_the_day.dart';
@@ -57,7 +56,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               floating: false,
               snap: false,
               toolbarHeight: theme.appBarTheme.toolbarHeight!,
-              title: Text('Rafeeq', style: theme.appBarTheme.titleTextStyle),
+              title: Text('Home', style: theme.appBarTheme.titleTextStyle),
               actions: [
                 const UserLocationChip(),
                 IconButton(
@@ -67,15 +66,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   icon: const Icon(CupertinoIcons.settings),
                 ),
               ],
-              bottom: appBarBottomDivider(context),
-            ),
-
-            // GREETINGS
-            const SliverToBoxAdapter(
-              child: HomeSection(
-                padding: EdgeInsets.fromLTRB(_hPad, _v16, _hPad, 0),
-                child: GreetingsRow(),
-              ),
+              bottom: buildlHijriDate(context, ref),
             ),
 
             // TODAY TIMES
