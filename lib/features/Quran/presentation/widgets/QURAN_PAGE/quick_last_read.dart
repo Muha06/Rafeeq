@@ -84,14 +84,12 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
     });
     return showModalBottomSheet(
       context: context,
-      showDragHandle: true,
-      backgroundColor: Colors.transparent,
       builder: (_) {
         final theme = Theme.of(context);
         final isDark = ref.watch(isDarkProvider);
 
         return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           decoration: BoxDecoration(
             color: isDark
                 ? AppDarkColors.bottomSheet
@@ -130,7 +128,7 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
                   const SizedBox(width: 12),
 
                   Expanded(
-                    child: ElevatedButton(
+                    child: FilledButton(
                       onPressed: () async {
                         await ref
                             .read(lastReadRepositoryProvider)
@@ -138,8 +136,8 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
 
                         if (context.mounted) {
                           ref.invalidate(lastReadAyahsProvider);
+                          Navigator.pop(context);
                         }
-                        Navigator.pop(context);
                       },
                       child: const Text('Delete'),
                     ),

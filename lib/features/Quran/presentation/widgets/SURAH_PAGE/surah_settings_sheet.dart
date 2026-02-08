@@ -5,8 +5,7 @@ import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
 import 'package:rafeeq/features/quran_audio/presentation/widgets/reciter_picker_sheet.dart';
-import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
-
+ 
 class SurahSettingsSheet extends ConsumerStatefulWidget {
   const SurahSettingsSheet({super.key, required this.onToggleAutoScroll});
   final VoidCallback onToggleAutoScroll;
@@ -37,14 +36,13 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
     );
 
     final titleTextstyle = theme.textTheme.labelLarge!.copyWith(
-      fontSize: 19,
+      fontSize: 20,
       fontWeight: FontWeight.w300,
     );
 
     final selectedReciter = ref.watch(selectedReciterProvider);
 
-    final isDark = ref.watch(isDarkProvider);
-    return AnimatedSize(
+     return AnimatedSize(
       duration: Durations.medium3,
       curve: Curves.easeInOut,
       child: Container(
@@ -84,6 +82,9 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
               onChanged: (v) {
                 sNotifier.setAutoScrollEnabled(v);
                 widget.onToggleAutoScroll();
+                if (v) {
+                  Navigator.pop(context);
+                }
               },
             ),
             const SizedBox(height: 4),

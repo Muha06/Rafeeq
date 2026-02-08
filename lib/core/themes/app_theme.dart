@@ -17,11 +17,12 @@ class AppTheme {
       ),
       brightness: Brightness.dark,
       scaffoldBackgroundColor: AppDarkColors.darkBackground,
-      canvasColor: AppDarkColors.darkBackground,
 
+      canvasColor: AppDarkColors.darkBackground,
       dividerColor: AppDarkColors.divider,
       cardColor: AppDarkColors.darkSurface,
-      iconTheme: const IconThemeData(color: AppDarkColors.iconSecondary),
+      iconTheme: const IconThemeData(color: AppDarkColors.iconPrimary),
+
       iconButtonTheme: const IconButtonThemeData(
         style: ButtonStyle(
           iconColor: WidgetStatePropertyAll(AppDarkColors.iconSecondary),
@@ -29,8 +30,10 @@ class AppTheme {
       ),
 
       colorScheme: const ColorScheme.dark(
-        surface: AppDarkColors.darkBackground, //hide the navigation color
-        primary: AppDarkColors.teal,
+        surface: AppDarkColors
+            .darkSurface, //change to bgcolor hide the navigation colors
+        onSurface: AppDarkColors.onDarkSurface,
+        primary: AppDarkColors.darkBackground,
       ),
 
       //APPBAR
@@ -94,6 +97,11 @@ class AppTheme {
         shadowColor: Colors.black.withAlpha(60),
         color: AppDarkColors.darkSurface,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      ),
+
+      progressIndicatorTheme: const ProgressIndicatorThemeData(
+        strokeWidth: 3.5,
+        color: AppDarkColors.amber,
       ),
 
       sliderTheme: const SliderThemeData(
@@ -189,7 +197,10 @@ class AppTheme {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
         ),
-        backgroundColor: AppDarkColors.darkSurfaceSolid,
+        backgroundColor: AppDarkColors.bottomSheet,
+        showDragHandle: true,
+        dragHandleColor: AppDarkColors.iconDisabled,
+        dragHandleSize: Size(48, 4),
       ),
 
       dialogTheme: DialogThemeData(
@@ -448,6 +459,9 @@ class AppTheme {
           borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
         ),
         backgroundColor: AppLightColors.lightBackground,
+        showDragHandle: true,
+        dragHandleColor: AppDarkColors.onDarkSurface,
+        dragHandleSize: Size(48, 6),
       ),
 
       dialogTheme: DialogThemeData(
