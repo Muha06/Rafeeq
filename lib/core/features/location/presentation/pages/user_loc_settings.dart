@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/core/location/domain/open_mateo.dart';
-import 'package:rafeeq/core/location/presentation/provider/open_mateo_provider.dart';
-import 'package:rafeeq/core/location/presentation/provider/user_location_provider.dart';
+import 'package:rafeeq/core/features/location/domain/open_mateo.dart';
+import 'package:rafeeq/core/features/location/presentation/provider/open_mateo_provider.dart';
+import 'package:rafeeq/core/features/location/presentation/provider/user_location_provider.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/core/widgets/snackbars.dart';
@@ -35,15 +35,6 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
   bool _verified = false;
 
   String? _verifiedCity;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-  //     final isAuto = ref.read(userLocationProvider).value?.isAuto ?? true;
-  //     if (!isAuto) setState(() => _manualExpanded = true);
-  //   });
-  // }
 
   void _resetVerification() {
     _verifyError = null;
@@ -169,6 +160,7 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = ref.watch(isDarkProvider);
+
     final isAuto = ref
         .watch(userLocationProvider)
         .maybeWhen(data: (loc) => loc?.isAuto ?? true, orElse: () => true);

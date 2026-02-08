@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/core/audio/domain/entities/audio_state.dart';
-import 'package:rafeeq/core/audio/providers/audio_controller.dart';
+import 'package:rafeeq/core/features/audio/domain/entities/audio_state.dart';
+import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_list_page.dart';
 import 'package:rafeeq/features/adhkar/presentation/riverpod/adhkar_categories.dart';
-import 'package:rafeeq/core/audio/providers/just_audio_player_provider.dart';
+import 'package:rafeeq/core/features/audio/providers/just_audio_player_provider.dart';
 import 'package:rafeeq/features/adhkar/presentation/riverpod/get_adhkars_provider.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 

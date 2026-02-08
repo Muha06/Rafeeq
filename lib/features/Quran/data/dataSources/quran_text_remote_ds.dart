@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:rafeeq/core/network/quran_auth_client.dart';
+import 'package:rafeeq/core/features/network/quran_auth_client.dart';
 import 'package:rafeeq/features/quran/data/models/ayah_dto.dart';
 import 'package:rafeeq/features/quran/data/models/surah_dto.dart';
 

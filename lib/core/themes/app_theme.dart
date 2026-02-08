@@ -23,12 +23,6 @@ class AppTheme {
       cardColor: AppDarkColors.darkSurface,
       iconTheme: const IconThemeData(color: AppDarkColors.iconPrimary),
 
-      iconButtonTheme: const IconButtonThemeData(
-        style: ButtonStyle(
-          iconColor: WidgetStatePropertyAll(AppDarkColors.iconSecondary),
-        ),
-      ),
-
       colorScheme: const ColorScheme.dark(
         surface: AppDarkColors
             .darkSurface, //change to bgcolor hide the navigation colors
@@ -47,7 +41,14 @@ class AppTheme {
           color: AppDarkColors.textPrimary, // for dark theme
           height: 1,
         ), //same with title large
+        actionsIconTheme: const IconThemeData(color: AppDarkColors.iconPrimary),
         iconTheme: const IconThemeData(color: AppDarkColors.iconPrimary),
+      ),
+
+      iconButtonTheme: const IconButtonThemeData(
+        style: ButtonStyle(
+          iconColor: WidgetStatePropertyAll(AppDarkColors.iconPrimary),
+        ),
       ),
 
       //=====Text theme=======
@@ -80,6 +81,10 @@ class AppTheme {
         // Captions / metadata (date, references)
         bodySmall: AppTextStyles.secondary.copyWith(
           color: AppDarkColors.textSecondary.withAlpha(199), // ~0.78
+        ),
+
+        labelLarge: AppTextStyles.body.copyWith(
+          color: AppDarkColors.textPrimary, // ~0.85
         ),
 
         // Chips, small UI labels (“Tap to read”, times)
@@ -178,6 +183,7 @@ class AppTheme {
           side: const BorderSide(color: AppDarkColors.iconDisabled),
           padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
           textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+          disabledForegroundColor: AppDarkColors.iconDisabled,
         ),
       ),
 

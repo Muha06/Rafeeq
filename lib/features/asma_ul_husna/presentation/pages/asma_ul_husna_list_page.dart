@@ -161,21 +161,15 @@ class _NumberBadge extends ConsumerWidget {
       height: 42,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
-        color: isDark ? AppDarkColors.darkSurface : AppLightColors.lightSurface,
-        border: Border.all(
-          color: isDark
-              ? theme.colorScheme.primary.withOpacity(0.25)
-              : AppLightColors.primary,
-        ),
+        color: isDark
+            ? AppDarkColors.onDarkSurface
+            : AppLightColors.lightSurface,
       ),
       alignment: Alignment.center,
       child: Text(
         '$number',
         style: theme.textTheme.titleSmall?.copyWith(
           fontWeight: FontWeight.w800,
-          color: isDark
-              ? theme.colorScheme.primary
-              : AppLightColors.textPrimary,
         ),
       ),
     );

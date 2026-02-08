@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:rafeeq/core/location/data/location_gps_ds.dart';
-import 'package:rafeeq/core/location/data/location_local_ds.dart';
-import 'package:rafeeq/core/location/domain/user_location.dart';
+import 'package:rafeeq/core/features/location/data/location_gps_ds.dart';
+import 'package:rafeeq/core/features/location/data/location_local_ds.dart';
+import 'package:rafeeq/core/features/location/domain/user_location.dart';
 
 abstract class LocationRepository {
   /// Returns cached location fast (or fallback if none)

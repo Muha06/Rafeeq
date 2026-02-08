@@ -2,7 +2,7 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/core/network/quran_auth_client.dart';
+import 'package:rafeeq/core/features/network/quran_auth_client.dart';
 import 'package:rafeeq/features/quran/data/dataSources/quran_text_remote_ds.dart';
 import 'package:rafeeq/features/quran/data/repositories/surah_repo_impl.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';

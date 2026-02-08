@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
-import 'package:rafeeq/core/location/data/open_mateo_ds.dart';
-import 'package:rafeeq/core/location/domain/open_mateo.dart';
+import 'package:rafeeq/core/features/location/data/open_mateo_ds.dart';
+import 'package:rafeeq/core/features/location/domain/open_mateo.dart';
 
 /// ----------------------
 /// Providers

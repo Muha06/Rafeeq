@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:rafeeq/core/location/presentation/provider/user_location_provider.dart';
+import 'package:rafeeq/core/features/location/presentation/provider/user_location_provider.dart';
 
 final locationPermissionProvider =
     NotifierProvider<LocationPermissionNotifier, LocationPermissionState>(

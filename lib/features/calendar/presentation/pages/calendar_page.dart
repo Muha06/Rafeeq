@@ -205,8 +205,6 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
   void _openHijriOffsetSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      useSafeArea: true,
-      showDragHandle: true,
       builder: (_) => Consumer(
         builder: (context, ref, _) {
           final state = ref.watch(hijriDateProvider);

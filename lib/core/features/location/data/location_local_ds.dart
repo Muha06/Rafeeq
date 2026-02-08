@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
-import 'package:rafeeq/core/location/domain/user_location.dart';
+import 'package:rafeeq/core/features/location/domain/user_location.dart';
 
 class LocationLocalDataSource {
   final Box settingsBox;

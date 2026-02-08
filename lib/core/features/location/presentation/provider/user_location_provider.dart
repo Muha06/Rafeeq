@@ -1,8 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/core/location/data/location_gps_ds.dart';
-import 'package:rafeeq/core/location/data/location_local_ds.dart';
-import 'package:rafeeq/core/location/domain/user_location.dart';
-import 'package:rafeeq/core/location/domain/user_location_repo.dart';
+import 'package:rafeeq/core/features/location/data/location_gps_ds.dart';
+import 'package:rafeeq/core/features/location/data/location_local_ds.dart';
+import 'package:rafeeq/core/features/location/domain/user_location.dart';
+import 'package:rafeeq/core/features/location/domain/user_location_repo.dart';
+import 'package:rafeeq/core/features/location/presentation/provider/general_location_permission_provider.dart';
 import 'package:rafeeq/features/settings/presentation/provider/settings_notifcation_provider.dart';
 
 // You already have something like this in your app:
@@ -62,18 +63,17 @@ class UserLocationNotifier extends AsyncNotifier<UserLocation?> {
 
   /// ✅ Switch back to auto mode (GPS)
   Future<void> setAuto() async {
+    final access = ref.read(systemLocationAccessProvider.notifier);
+
+    final ok = await access.requestLocation();
+    if (!ok) {
+      // don’t switch to GPS mode
+      // show a snackbar/dialog based on access.state
+      return;
+    }
+
     final repo = ref.read(locationRepositoryProvider);
-
-    final prev = state.value;
-    state = AsyncData(prev);
-
-    final loc = await repo.refreshLocation(); // this refetches user location
+    final loc = await repo.refreshLocation();
     state = AsyncData(loc);
-  }
-
-  Future<void> clear() async {
-    final repo = ref.read(locationRepositoryProvider);
-    await repo.clear();
-    state = const AsyncData(null);
   }
 }

@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:rafeeq/core/location/domain/open_mateo.dart';
+import 'package:rafeeq/core/features/location/domain/open_mateo.dart';
  
 /// ----------------------
 /// Data source

@@ -144,17 +144,20 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     final adhkarOn = ref.watch(adhkarNotifEnabledProvider);
     final salahNotifOn = ref.watch(salahNotifEnabledProvider);
 
+    final leadingColor = isDark
+        ? AppDarkColors.iconSecondary
+        : AppLightColors.iconSecondary;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings', style: theme.appBarTheme.titleTextStyle),
         bottom: appBarBottomDivider(context),
       ),
-      body: ListView(
-        // padding: const EdgeInsets.symmetric(0),
+      body: ListView( 
         children: [
           //theme preferences
           SettingsTile(
-            leading: const FaIcon(FontAwesomeIcons.paintbrush),
+            leading: FaIcon(FontAwesomeIcons.paintRoller, color: leadingColor),
             title: 'App Theme',
             isDark: isDark,
             trailing: const Icon(Icons.keyboard_arrow_right),
@@ -163,7 +166,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           ),
 
           SettingsTile(
-            leading: const FaIcon(FontAwesomeIcons.bell),
+            leading: FaIcon(FontAwesomeIcons.bell, color: leadingColor),
             title: 'Adhkar reminder',
             subtitle: 'Morning & evening adhkars',
             isDark: isDark,
@@ -176,7 +179,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           ),
 
           SettingsTile(
-            leading: const FaIcon(FontAwesomeIcons.bell),
+            leading: FaIcon(FontAwesomeIcons.bell, color: leadingColor),
             title: 'Salah reminder',
             subtitle: 'Get Salah times reminders',
             isDark: isDark,

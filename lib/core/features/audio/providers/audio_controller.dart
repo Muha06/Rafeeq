@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:rafeeq/core/audio/domain/entities/audio_state.dart';
-import 'package:rafeeq/core/audio/providers/just_audio_player_provider.dart';
+import 'package:rafeeq/core/features/audio/domain/entities/audio_state.dart';
+import 'package:rafeeq/core/features/audio/providers/just_audio_player_provider.dart';
 import 'package:rafeeq/core/widgets/snackbars.dart';
 
 final audioControllerProvider = NotifierProvider<AudioController, AudioState>(

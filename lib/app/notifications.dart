@@ -107,9 +107,7 @@ class NotificationService {
           importance: Importance.high,
         ),
       );
-
-      // Dont request here
-      // await androidImpl.requestNotificationsPermission();
+ 
     }
   }
 

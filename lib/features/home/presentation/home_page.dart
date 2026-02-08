@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/app/providers/tabs_screen_provider.dart';
 import 'package:rafeeq/core/animations/navigation_animations.dart';
-import 'package:rafeeq/core/location/presentation/pages/user_loc_settings.dart';
-import 'package:rafeeq/core/location/presentation/provider/user_location_provider.dart';
+import 'package:rafeeq/core/features/location/presentation/pages/user_loc_settings.dart';
+import 'package:rafeeq/core/features/location/presentation/provider/user_location_provider.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/features/home/presentation/widgets/Hijri_date.dart';
@@ -211,7 +211,7 @@ class UserLocationChip extends ConsumerWidget {
                 Icons.location_on_outlined,
                 size: 16,
                 color: isDark
-                    ? AppDarkColors.iconSecondary
+                    ? AppDarkColors.iconPrimary
                     : AppLightColors.iconSecondary,
               ),
               const SizedBox(width: 2),
@@ -220,9 +220,7 @@ class UserLocationChip extends ConsumerWidget {
                 userLocation?.city ?? '',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.labelLarge!.copyWith(
-                  fontWeight: FontWeight.w300,
-                ),
+                style: theme.textTheme.labelMedium!,
               ),
             ],
           ),

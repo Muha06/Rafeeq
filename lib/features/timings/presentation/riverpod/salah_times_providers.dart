@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:rafeeq/app/salat_notifications_repo.dart';
-import 'package:rafeeq/core/location/domain/user_location.dart';
-import 'package:rafeeq/core/location/presentation/provider/user_location_provider.dart';
+import 'package:rafeeq/core/features/location/domain/user_location.dart';
+import 'package:rafeeq/core/features/location/presentation/provider/user_location_provider.dart';
 import 'package:rafeeq/features/timings/data/datasources/salah_remote_ds.dart';
 import 'package:rafeeq/features/timings/data/repository/salah_repo_impl.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_prayer.dart';
