@@ -192,10 +192,25 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 8),
+
+                Text(
+                  key: const ValueKey('translit'),
+                  widget.ayah.transliteration,
+                  textAlign: TextAlign.left,
+                  style: theme.textTheme.bodyMedium!.copyWith(
+                    fontWeight: isDark ? FontWeight.w400 : FontWeight.w500,
+                    height: 1.4,
+                    color: isDark
+                        ? AppDarkColors.textSecondary
+                        : AppLightColors.textSecondary,
+                    fontSize: translationFontSize,
+                  ),
+                ),
 
                 // Translation
                 if (showTranslation) ...[
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 20),
                   AnimatedSwitcher(
                     duration: const Duration(milliseconds: 100),
                     child: Text(

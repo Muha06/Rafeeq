@@ -4,6 +4,7 @@ class Ayah {
   final int ayahNumber;
   final String textArabic; //
   final String textEnglish; //English translation
+  final String transliteration;
 
   const Ayah({
     required this.id,
@@ -11,5 +12,6 @@ class Ayah {
     required this.ayahNumber,
     required this.textArabic,
     required this.textEnglish,
+    required this.transliteration,
   });
 }

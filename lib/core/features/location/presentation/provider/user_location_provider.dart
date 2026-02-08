@@ -69,7 +69,6 @@ class UserLocationNotifier extends AsyncNotifier<UserLocation?> {
     if (!ok) {
       // don’t switch to GPS mode
       // show a snackbar/dialog based on access.state
-      return;
     }
 
     final repo = ref.read(locationRepositoryProvider);

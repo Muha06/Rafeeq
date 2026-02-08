@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:country_picker/country_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/features/location/domain/open_mateo.dart';
@@ -48,7 +49,6 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
 
     showCountryPicker(
       context: context,
-      showPhoneCode: false,
       onSelect: (Country c) {
         setState(() {
           _country = c.name;
@@ -59,26 +59,12 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
       },
       countryListTheme: CountryListThemeData(
         bottomSheetHeight: MediaQuery.of(context).size.height * 0.8,
-        backgroundColor: AppDarkColors.darkSurfaceSolid,
+        backgroundColor: theme.bottomSheetTheme.backgroundColor,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
         textStyle: theme.textTheme.bodyMedium,
-        inputDecoration: InputDecoration(
+        inputDecoration: const InputDecoration(
           hintText: 'Search country…',
-          hintStyle: theme.textTheme.bodySmall,
-          filled: true,
-          contentPadding: const EdgeInsets.symmetric(
-            vertical: 4,
-            horizontal: 4,
-          ),
-          fillColor: AppDarkColors.onDarkSurface,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: Colors.white.withAlpha(26)),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: Colors.white.withAlpha(26)),
-          ),
+          prefixIcon: Icon(CupertinoIcons.search),
         ),
       ),
     );
@@ -90,10 +76,8 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
 
     final picked = await showModalBottomSheet<GeoPlace>(
       context: context,
-      backgroundColor: Colors.transparent,
       isScrollControlled: true,
-      useSafeArea: true,
-      isDismissible: true,
+      backgroundColor: Theme.of(context).bottomSheetTheme.backgroundColor,
       builder: (_) =>
           CitySearchSheet(countryName: _country!, countryCode: _countryCode!),
     );
@@ -165,6 +149,8 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
         .watch(userLocationProvider)
         .maybeWhen(data: (loc) => loc?.isAuto ?? true, orElse: () => true);
 
+    final userLocState = ref.watch(userLocationProvider).value;
+
     final notifier = ref.read(userLocationProvider.notifier);
 
     return Scaffold(
@@ -179,7 +165,7 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
             selected: isAuto,
             baseColor: isDark ? darkSurface : lightSurface,
             selectedColor: isDark
-                ? AppDarkColors.onDarkSurface
+                ? AppDarkColors.selectedCardBorder
                 : AppLightColors.onAmberSoft,
             onTap: () async {
               setState(() {
@@ -215,7 +201,7 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
             selected: !isAuto,
             baseColor: isDark ? darkSurface : lightSurface,
             selectedColor: isDark
-                ? AppDarkColors.onDarkSurface
+                ? AppDarkColors.selectedCardBorder
                 : AppLightColors.onAmberSoft,
             onTap: () {
               setState(() => _manualExpanded = !_manualExpanded);
@@ -223,83 +209,90 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
             trailing: _manualExpanded
                 ? const Icon(Icons.expand_less_rounded)
                 : const Icon(Icons.expand_more_rounded),
-            child: AnimatedCrossFade(
-              firstChild: const SizedBox.shrink(),
-              secondChild: Padding(
-                padding: const EdgeInsets.only(top: 12),
-                child: Column(
-                  children: [
-                    _ActionButton(
-                      label: _country == null
-                          ? 'Select country'
-                          : 'Country: $_country',
-                      icon: Icons.public_rounded,
-                      onTap: _pickCountry,
-                    ),
-                    const SizedBox(height: 10),
-                    _ActionButton(
-                      label: _selectedPlace == null
-                          ? 'Select city'
-                          : 'City: ${_selectedPlace!.name}',
-                      icon: Icons.location_city_rounded,
-                      onTap: _countryCode == null
-                          ? null
-                          : _pickCityViaOpenMeteo,
-                    ),
-
-                    if (_verifying) ...[
-                      const SizedBox(height: 10),
-                      const LinearProgressIndicator(),
-                    ],
-
-                    if (_verifyError != null) ...[
-                      const SizedBox(height: 8),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          _verifyError!,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: Colors.redAccent.withAlpha(220),
+            child: _manualExpanded
+                ? AnimatedCrossFade(
+                    firstChild: const SizedBox.shrink(),
+                    secondChild: Padding(
+                      padding: const EdgeInsets.only(top: 12),
+                      child: Column(
+                        children: [
+                          _ActionButton(
+                            label: _country == null
+                                ? !isAuto
+                                      ? userLocState?.country ??
+                                            'Select country'
+                                      : 'Select country'
+                                : 'Country: $_country',
+                            icon: Icons.public_rounded,
+                            onTap: _pickCountry,
                           ),
-                        ),
-                      ),
-                    ],
+                          const SizedBox(height: 10),
+                          _ActionButton(
+                            label: _selectedPlace == null
+                                ? !isAuto
+                                      ? userLocState?.city ?? 'Select city'
+                                      : 'Select city'
+                                : 'City: ${_selectedPlace!.name}',
+                            icon: Icons.location_city_rounded,
+                            onTap: _countryCode == null
+                                ? null
+                                : _pickCityViaOpenMeteo,
+                          ),
 
-                    const SizedBox(height: 10),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        _country == null
-                            ? 'Pick a country to continue.'
-                            : (_selectedPlace == null
-                                  ? 'Now pick a city.'
-                                  : (_verified
-                                        ? 'City verified ✓,  '
-                                        : 'Verifying…')),
-                        style: theme.textTheme.bodySmall?.copyWith(),
+                          if (_verifying) ...[
+                            const SizedBox(height: 10),
+                            const LinearProgressIndicator(),
+                          ],
+
+                          if (_verifyError != null) ...[
+                            const SizedBox(height: 8),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                _verifyError!,
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: Colors.redAccent.withAlpha(220),
+                                ),
+                              ),
+                            ),
+                          ],
+
+                          const SizedBox(height: 10),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              _country == null
+                                  ? 'Pick a country to continue.'
+                                  : (_selectedPlace == null
+                                        ? 'Now pick a city.'
+                                        : (_verified
+                                              ? 'City verified ✓,  '
+                                              : 'Verifying…')),
+                              style: theme.textTheme.bodySmall?.copyWith(),
+                            ),
+                          ),
+
+                          if (_verifiedCity != null) ...[
+                            const SizedBox(height: 6),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'Will save: ${_country ?? _selectedPlace?.country}, $_verifiedCity',
+                                style: theme.textTheme.bodyMedium,
+                              ),
+                            ),
+                          ],
+                        ],
                       ),
                     ),
-
-                    if (_verifiedCity != null) ...[
-                      const SizedBox(height: 6),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Will save: ${_country ?? _selectedPlace?.country}, $_verifiedCity',
-                          style: theme.textTheme.bodyMedium,
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-              crossFadeState: _manualExpanded || !isAuto
-                  ? CrossFadeState.showSecond
-                  : CrossFadeState.showFirst,
-              duration: const Duration(milliseconds: 180),
-              firstCurve: Curves.easeOut,
-              secondCurve: Curves.easeOut,
-            ),
+                    crossFadeState: _manualExpanded || !isAuto
+                        ? CrossFadeState.showSecond
+                        : CrossFadeState.showFirst,
+                    duration: const Duration(milliseconds: 180),
+                    firstCurve: Curves.easeOut,
+                    secondCurve: Curves.easeOut,
+                  )
+                : null,
           ),
         ],
       ),
@@ -356,25 +349,10 @@ class _CitySearchSheetState extends ConsumerState<CitySearchSheet> {
 
     return Container(
       height: MediaQuery.of(context).size.height * 0.8,
-      decoration: BoxDecoration(
-        color: theme.bottomSheetTheme.backgroundColor,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
-      ),
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Center(
-            child: Container(
-              width: 36,
-              height: 4,
-              margin: const EdgeInsets.only(bottom: 10),
-              decoration: BoxDecoration(
-                color: Colors.white.withAlpha(64),
-                borderRadius: BorderRadius.circular(999),
-              ),
-            ),
-          ),
           Text(
             'Select city (${widget.countryName})',
             style: theme.textTheme.titleMedium?.copyWith(
@@ -390,28 +368,11 @@ class _CitySearchSheetState extends ConsumerState<CitySearchSheet> {
             decoration: InputDecoration(
               hintText: 'Type city… (e.g. Nai)',
               hintStyle: theme.textTheme.bodySmall,
-              filled: true,
-              fillColor: AppDarkColors.onDarkSurface,
-              contentPadding: const EdgeInsets.symmetric(vertical: 4),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Colors.white.withAlpha(26)),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Colors.white.withAlpha(26)),
-              ),
-              prefixIcon: Icon(
-                Icons.search_rounded,
-                color: Colors.white.withAlpha(170),
-              ),
+              prefixIcon: const Icon(Icons.search_rounded),
               suffixIcon: _ctrl.text.isEmpty
                   ? null
                   : IconButton(
-                      icon: Icon(
-                        Icons.close_rounded,
-                        color: Colors.white.withAlpha(200),
-                      ),
+                      icon: const Icon(Icons.close_rounded),
                       onPressed: () {
                         _ctrl.clear();
                         setState(() => _q = '');
@@ -453,12 +414,9 @@ class _CitySearchSheetState extends ConsumerState<CitySearchSheet> {
                         p.admin1 == null || p.admin1!.trim().isEmpty
                             ? p.country
                             : '${p.admin1}, ${p.country}',
-                        style: TextStyle(color: Colors.white.withAlpha(160)),
+                        style: theme.textTheme.bodySmall,
                       ),
-                      trailing: Icon(
-                        Icons.chevron_right_rounded,
-                        color: Colors.white.withAlpha(120),
-                      ),
+                      trailing: const Icon(Icons.chevron_right_rounded),
                       onTap: () => Navigator.pop(context, p),
                     );
                   },
@@ -554,7 +512,7 @@ class _SettingCard extends ConsumerWidget {
                 ),
               ],
             ),
-            ?child,
+            if (child != null) ...[child!],
           ],
         ),
       ),

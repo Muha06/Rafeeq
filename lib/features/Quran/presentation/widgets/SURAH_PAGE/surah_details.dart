@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:rafeeq/core/themes/dark_colors.dart';
+ import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
@@ -112,8 +111,6 @@ class PlayFullSurahBtn extends StatelessWidget {
   final VoidCallback onPlay;
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return OutlinedButton.icon(
       icon: const Icon(CupertinoIcons.play),
       onPressed: onPlay,

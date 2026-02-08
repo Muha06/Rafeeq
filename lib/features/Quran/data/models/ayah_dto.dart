@@ -6,6 +6,7 @@ class AyahDto {
   final int surahId;
   final String arabic;
   final String english;
+  final String tranliteration;
 
   AyahDto({
     required this.id,
@@ -13,19 +14,32 @@ class AyahDto {
     required this.surahId,
     required this.arabic,
     required this.english,
+    required this.tranliteration,
   });
 
   factory AyahDto.fromJson(Map<String, dynamic> json) {
-    final translations = json['translations'] as List<dynamic>?;
+    final translations = (json['translations'] as List<dynamic>?)
+        ?.cast<Map<String, dynamic>>();
+
+    String? textById(int id) {
+      final t = translations?.firstWhere(
+        (m) => m['resource_id'] == id,
+        orElse: () => const {},
+      );
+      final text = t?['text'];
+      return text is String ? text : null;
+    }
+
+    final englishRaw = textById(20);
+    final translitRaw = textById(57);
 
     return AyahDto(
-      id: json['id'],
-      ayahNumber: json['verse_number'],
-      surahId: int.parse(json['verse_key'].toString().split(':')[0]),
-      arabic: json['text_uthmani'] ?? '',
-      english: translations != null && translations.isNotEmpty
-          ? cleanTranslation(translations.first['text']) ?? ''
-          : '',
+      id: json['id'] as int,
+      ayahNumber: json['verse_number'] as int,
+      surahId: int.parse((json['verse_key'] as String).split(':')[0]),
+      arabic: (json['text_uthmani'] as String?) ?? '',
+      english: cleanTranslation(englishRaw ?? '') ?? '',
+      tranliteration: cleanTranslation(translitRaw ?? '') ?? '',
     );
   }
 
@@ -37,6 +51,7 @@ class AyahDto {
       ayahNumber: ayahNumber,
       textArabic: arabic,
       textEnglish: english,
+      transliteration: tranliteration,
     );
   }
 }

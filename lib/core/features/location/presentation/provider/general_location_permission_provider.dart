@@ -112,45 +112,54 @@ class SystemLocationAccessNotifier extends Notifier<SystemLocationAccessState> {
   Future<bool> requestLocation() async {
     state = state.copyWith(isLoading: true);
 
-    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    
-    if (!serviceEnabled) {
-      // can’t request “service enabled” directly; user must toggle it.
+    // 1) SERVICES
+    if (!await Geolocator.isLocationServiceEnabled()) {
+      await Geolocator.openLocationSettings();
+
+      final enabledNow = await Geolocator.isLocationServiceEnabled();
+      if (!enabledNow) {
+        await _persist(
+          serviceEnabled: false,
+          locationAllowed: false,
+          permanentlyDenied: state.permanentlyDenied,
+        );
+        state = state.copyWith(
+          serviceEnabled: false,
+          locationAllowed: false,
+          isLoading: false,
+        );
+        return false;
+      }
+
       await _persist(
+        serviceEnabled: true,
         locationAllowed: false,
-        serviceEnabled: false,
         permanentlyDenied: state.permanentlyDenied,
       );
-      state = state.copyWith(
-        serviceEnabled: false,
-        locationAllowed: false,
-        isLoading: false,
-      );
-      return false;
+      state = state.copyWith(serviceEnabled: true, locationAllowed: false);
     }
 
-    final current = await Geolocator.checkPermission();
+    // 2) PERMISSIONS
+    var perm = await Geolocator.checkPermission();
 
-    if (current == LocationPermission.deniedForever) {
+    if (perm == LocationPermission.deniedForever) {
       await _persist(
         locationAllowed: false,
         serviceEnabled: true,
         permanentlyDenied: true,
       );
       state = state.copyWith(
-        permanentlyDenied: true,
         locationAllowed: false,
+        permanentlyDenied: true,
         isLoading: false,
       );
       return false;
     }
 
-    // denied / unableToDetermine -> request
-    if (!_isGranted(current)) {
-      final res = await Geolocator.requestPermission();
-
-      if (!_isGranted(res)) {
-        final deniedForever = res == LocationPermission.deniedForever;
+    if (!_isGranted(perm)) {
+      perm = await Geolocator.requestPermission();
+      if (!_isGranted(perm)) {
+        final deniedForever = perm == LocationPermission.deniedForever;
         await _persist(
           locationAllowed: false,
           serviceEnabled: true,

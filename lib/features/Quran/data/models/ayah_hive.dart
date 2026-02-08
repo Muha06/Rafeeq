@@ -20,12 +20,16 @@ class AyahHive extends HiveObject {
   @HiveField(4)
   String textEnglish;
 
+  @HiveField(5)
+  String textTransliteration;
+
   AyahHive({
     required this.id,
     required this.surahId,
     required this.ayahNumber,
     required this.textArabic,
     required this.textEnglish,
+    required this.textTransliteration,
   });
 
   // helper to convert to Entity
@@ -36,6 +40,7 @@ class AyahHive extends HiveObject {
       ayahNumber: ayahNumber,
       textArabic: textArabic,
       textEnglish: textEnglish,
+      transliteration: textTransliteration,
     );
   }
 
@@ -47,6 +52,7 @@ class AyahHive extends HiveObject {
       ayahNumber: ayah.ayahNumber,
       textArabic: ayah.textArabic,
       textEnglish: ayah.textEnglish,
+      textTransliteration: ayah.transliteration,
     );
   }
 }

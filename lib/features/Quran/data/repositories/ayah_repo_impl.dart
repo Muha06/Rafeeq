@@ -64,6 +64,7 @@ Future<void> saveAyahsToLocal(List<Ayah> ayahs) async {
           textEnglish: ayah.textEnglish,
           ayahNumber: ayah.ayahNumber,
           surahId: ayah.surahId,
+          textTransliteration: ayah.transliteration
         ),
       ),
     ),
