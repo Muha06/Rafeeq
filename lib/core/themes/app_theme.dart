@@ -21,7 +21,7 @@ class AppTheme {
       canvasColor: AppDarkColors.darkBackground,
       dividerColor: AppDarkColors.divider,
       cardColor: AppDarkColors.darkSurface,
-      iconTheme: const IconThemeData(color: AppDarkColors.iconPrimary),
+      iconTheme: const IconThemeData(color: AppDarkColors.iconSecondary),
 
       colorScheme: const ColorScheme.dark(
         surface: AppDarkColors

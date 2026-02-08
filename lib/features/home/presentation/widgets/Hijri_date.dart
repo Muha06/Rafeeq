@@ -28,7 +28,11 @@ PreferredSizeWidget buildlHijriDate(BuildContext context, WidgetRef ref) {
               style: theme.textTheme.bodySmall!.copyWith(fontSize: 14),
             ),
             const Spacer(),
-            const FaIcon(FontAwesomeIcons.chevronRight, size: 16),
+            FaIcon(
+              FontAwesomeIcons.chevronRight,
+              size: 16,
+              color: theme.iconTheme.color,
+            ),
           ],
         ),
       ),

@@ -153,40 +153,40 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         title: Text('Settings', style: theme.appBarTheme.titleTextStyle),
         bottom: appBarBottomDivider(context),
       ),
-      body: ListView( 
+      body: ListView(
         children: [
           //theme preferences
           SettingsTile(
             leading: FaIcon(FontAwesomeIcons.paintRoller, color: leadingColor),
             title: 'App Theme',
             isDark: isDark,
-            trailing: const Icon(Icons.keyboard_arrow_right),
+            trailing: Icon(Icons.keyboard_arrow_right, color: leadingColor),
             subtitle: 'Change the app theme',
             onTap: () => showThemePicker(context),
           ),
 
           SettingsTile(
             leading: FaIcon(FontAwesomeIcons.bell, color: leadingColor),
-            title: 'Adhkar reminder',
-            subtitle: 'Morning & evening adhkars',
-            isDark: isDark,
-            trailing: Switch(
-              value: adhkarOn,
-              onChanged: (val) {
-                setAdhkarNotif(ref, val);
-              },
-            ),
-          ),
-
-          SettingsTile(
-            leading: FaIcon(FontAwesomeIcons.bell, color: leadingColor),
-            title: 'Salah reminder',
+            title: 'Salah reminders',
             subtitle: 'Get Salah times reminders',
             isDark: isDark,
             trailing: Switch(
               value: salahNotifOn,
               onChanged: (val) {
                 setSalahNotif(ref, val);
+              },
+            ),
+          ),
+
+          SettingsTile(
+            leading: FaIcon(FontAwesomeIcons.bell, color: leadingColor),
+            title: 'Adhkar reminders',
+            subtitle: 'Morning & evening adhkars',
+            isDark: isDark,
+            trailing: Switch(
+              value: adhkarOn,
+              onChanged: (val) {
+                setAdhkarNotif(ref, val);
               },
             ),
           ),
@@ -223,29 +223,23 @@ class SettingsTile extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Material(
-          color: Colors.transparent,
-          child: ListTile(
-            enabled: enabled,
-            splashColor: isDark
-                ? AppDarkColors.darkSurface
-                : AppLightColors.lightSurface,
-            onTap: enabled ? onTap : null,
-            contentPadding:
-                contentPadding ?? const EdgeInsets.symmetric(horizontal: 8),
-            leading: SizedBox(
-              height: 48,
-              width: 48,
-              child: Center(child: leading),
-            ),
-            title: Text(title, style: theme.textTheme.titleMedium),
-            subtitle: subtitle == null
-                ? null
-                : Text(subtitle!, style: theme.textTheme.bodySmall),
-            trailing:
-                trailing ?? const Icon(Icons.keyboard_arrow_right, size: 32),
-          ),
+        ListTile(
+          enabled: enabled,
+          splashColor: isDark
+              ? AppDarkColors.darkSurface
+              : AppLightColors.lightSurface,
+          onTap: enabled ? onTap : null,
+          contentPadding:
+              contentPadding ?? const EdgeInsets.symmetric(horizontal: 16),
+          leading: leading,
+          title: Text(title, style: theme.textTheme.titleMedium),
+          subtitle: subtitle == null
+              ? null
+              : Text(subtitle!, style: theme.textTheme.bodySmall),
+          trailing:
+              trailing ?? const Icon(Icons.keyboard_arrow_right, size: 32),
         ),
         Divider(color: theme.dividerColor),
       ],
