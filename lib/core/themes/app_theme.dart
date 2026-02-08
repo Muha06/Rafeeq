@@ -178,12 +178,12 @@ class AppTheme {
 
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: AppDarkColors.amber,
+          foregroundColor: AppDarkColors.textPrimary,
           iconColor: AppDarkColors.iconPrimary,
-          side: const BorderSide(color: AppDarkColors.iconDisabled),
-          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-          textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
           disabledForegroundColor: AppDarkColors.iconDisabled,
+          side: const BorderSide(color: AppDarkColors.iconDisabled),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+          textStyle: const TextStyle(fontWeight: FontWeight.w300, fontSize: 14),
         ),
       ),
 
@@ -387,15 +387,11 @@ class AppTheme {
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           backgroundColor: Colors.transparent,
-          shape: RoundedRectangleBorder(
-            side: const BorderSide(color: AppLightColors.buttonPrimary),
-            borderRadius: BorderRadius.circular(999),
-          ),
-          foregroundColor: AppLightColors.buttonPrimary,
+          foregroundColor: AppLightColors.textPrimary,
           iconColor: AppLightColors.iconPrimary,
-          side: const BorderSide(color: AppLightColors.iconPrimary),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          disabledForegroundColor: AppLightColors.iconPrimary,
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+          textStyle: const TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
           splashFactory: InkRipple.splashFactory, //splash
           overlayColor: AppLightColors.amber,
         ),

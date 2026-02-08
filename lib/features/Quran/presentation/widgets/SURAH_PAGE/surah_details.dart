@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
@@ -61,7 +63,6 @@ class SurahDetails extends ConsumerWidget {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      // const Spacer(),
                       const SizedBox(height: 14),
 
                       Row(
@@ -71,7 +72,6 @@ class SurahDetails extends ConsumerWidget {
                           _Chip(text: '$place • ${surah.versesCount} verses'),
                         ],
                       ),
-                      // optional: you can add a "Start reading" button row here later
                     ],
                   ),
                 ),
@@ -93,6 +93,7 @@ class SurahDetails extends ConsumerWidget {
         ),
         const SizedBox(height: 8),
 
+        //Bismillah
         Image.asset(
           isDark
               ? 'assets/images/quran/bismillah_dark.png'
@@ -101,6 +102,23 @@ class SurahDetails extends ConsumerWidget {
         ),
         const SizedBox(height: 8),
       ],
+    );
+  }
+}
+
+class PlayFullSurahBtn extends StatelessWidget {
+  const PlayFullSurahBtn({super.key, required this.onPlay});
+
+  final VoidCallback onPlay;
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return OutlinedButton.icon(
+      icon: const Icon(CupertinoIcons.play),
+      onPressed: onPlay,
+
+      label: const Text('Play surah'),
     );
   }
 }

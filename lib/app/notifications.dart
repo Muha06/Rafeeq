@@ -50,7 +50,7 @@ class NotificationService {
     try {
       final tzInfo = await FlutterTimezone.getLocalTimezone();
       tz.setLocalLocation(tz.getLocation(tzInfo.identifier));
-     } catch (e) {
+    } catch (e) {
       tz.setLocalLocation(tz.getLocation('UTC'));
     }
 
@@ -107,7 +107,6 @@ class NotificationService {
           importance: Importance.high,
         ),
       );
- 
     }
   }
 
@@ -128,7 +127,7 @@ class NotificationService {
       9999,
       'Test Adhan',
       'If you hear sound, we’re good ✅',
-      details,
+      details, 
     );
   }
 
@@ -184,6 +183,7 @@ class NotificationService {
     );
 
     final exactAllowed = await canScheduleExactAlarms();
+    debugPrint(exactAllowed.toString());
 
     await _plugin.zonedSchedule(
       id,
