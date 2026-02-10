@@ -1,4 +1,10 @@
 {
+<<<<<<< HEAD
     "cmake.ignoreCMakeListsMissing": true,
     "java.configuration.updateBuildConfiguration": "automatic"
 }
+=======
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "cmake.ignoreCMakeListsMissing": true
+}
+>>>>>>> f59ebafeb131df4a8ccc06f85d562d318e76c9fe
