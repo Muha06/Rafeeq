@@ -1,0 +1,80 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'cached_salah_times_hive.dart';
+
+// **************************************************************************
+// TypeAdapterGenerator
+// **************************************************************************
+
+class CachedSalahTimesHiveAdapter extends TypeAdapter<CachedSalahTimesHive> {
+  @override
+  final int typeId = 41;
+
+  @override
+  CachedSalahTimesHive read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return CachedSalahTimesHive(
+      date: fields[0] as DateTime,
+      city: fields[1] as String,
+      country: fields[2] as String,
+      method: fields[3] as int,
+      timezone: fields[4] as String,
+      fajr: fields[5] as DateTime,
+      sunrise: fields[6] as DateTime,
+      dhuhr: fields[8] as DateTime,
+      dhuha: fields[7] as DateTime,
+      asr: fields[9] as DateTime,
+      maghrib: fields[10] as DateTime,
+      isha: fields[11] as DateTime,
+      tahajjud: fields[12] as DateTime,
+      cachedAt: fields[13] as DateTime,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, CachedSalahTimesHive obj) {
+    writer
+      ..writeByte(14)
+      ..writeByte(0)
+      ..write(obj.date)
+      ..writeByte(1)
+      ..write(obj.city)
+      ..writeByte(2)
+      ..write(obj.country)
+      ..writeByte(3)
+      ..write(obj.method)
+      ..writeByte(4)
+      ..write(obj.timezone)
+      ..writeByte(5)
+      ..write(obj.fajr)
+      ..writeByte(6)
+      ..write(obj.sunrise)
+      ..writeByte(7)
+      ..write(obj.dhuha)
+      ..writeByte(8)
+      ..write(obj.dhuhr)
+      ..writeByte(9)
+      ..write(obj.asr)
+      ..writeByte(10)
+      ..write(obj.maghrib)
+      ..writeByte(11)
+      ..write(obj.isha)
+      ..writeByte(12)
+      ..write(obj.tahajjud)
+      ..writeByte(13)
+      ..write(obj.cachedAt);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CachedSalahTimesHiveAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
