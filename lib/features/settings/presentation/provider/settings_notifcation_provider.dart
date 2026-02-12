@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:rafeeq/app/notifications.dart';
- import 'package:riverpod/legacy.dart';
+import 'package:rafeeq/app/providers/general_notifications_provider.dart';
+import 'package:riverpod/legacy.dart';
 
 const kAdhkarEnabled = 'adhkar_notif_enabled'; //a setting inside hive
 const kSalahEnabled = 'salah_notif_enabled'; //a setting inside hive
@@ -24,12 +25,24 @@ final settingsBoxProvider = Provider<Box>((ref) => Hive.box('settingsBox'));
 final adhkarNotifEnabledProvider = StateProvider<bool>((ref) {
   final box = ref.watch(settingsBoxProvider);
 
-  return box.get(kAdhkarEnabled, defaultValue: false) as bool;
+  final on = box.get(kAdhkarEnabled, defaultValue: false) as bool;
+
+  //check system notifs os state
+  final allowed = ref.watch(systemNotifAccessProvider).notificationsAllowed;
+  //if system notifs are not allowed, force off
+  if (!allowed) return false;
+  return on;
 });
 
 final salahNotifEnabledProvider = StateProvider<bool>((ref) {
   final box = ref.watch(settingsBoxProvider);
-  return box.get(kSalahEnabled, defaultValue: false) as bool;
+  final on = box.get(kSalahEnabled, defaultValue: false) as bool;
+
+  //check system notifs os state
+  final allowed = ref.watch(systemNotifAccessProvider).notificationsAllowed;
+  //if system notifs are not allowed, force off
+  if (!allowed) return false;
+  return on;
 });
 
 //Listens to user adhkarsettingsprovider

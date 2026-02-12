@@ -33,7 +33,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     final updating = ref.read(salahNotifUpdatingProvider);
     if (updating) return;
 
-    // lock ASAP
     ref.read(salahNotifUpdatingProvider.notifier).state = true;
 
     try {
@@ -61,7 +60,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           AppSnackBar.showSimple(
             context: context,
             isDark: ref.read(isDarkProvider),
-            message: 'Permissions denied',
+            message: 'notofication permissions denied.',
           );
           return;
         }
@@ -129,7 +128,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       AppSnackBar.showSimple(
         context: context,
         isDark: ref.read(isDarkProvider),
-        message: '✅ Scheduling adhkar reminders...',
+        message: '✅ Turning on adhkar reminders...',
       );
     } finally {
       ref.read(adhkarNotifUpdatingProvider.notifier).state = false;

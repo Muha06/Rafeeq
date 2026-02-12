@@ -9,7 +9,7 @@
 
 
     <application
-        android:label="rafeeq"
+        android:label="Rafeeq"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:rafeeq/app/notifications.dart';
+import 'package:rafeeq/app/providers/general_notifications_provider.dart';
 import 'package:rafeeq/app/tabs_screen.dart';
 import 'package:rafeeq/core/app_keys.dart';
 import 'package:rafeeq/core/themes/app_theme.dart';
@@ -73,19 +74,20 @@ class _MyAppState extends ConsumerState<MyApp> {
   }
 
   Future<void> _bootstrap() async {
-   final hasSeen = ref.read(hasSeenOnboardingProvider);
+    final hasSeen = ref.read(hasSeenOnboardingProvider);
     if (!hasSeen) return;
 
     //ACTIVATE
     ref.read(salahNotificationsControllerProvider);
     ref.read(adhkarNotificationsControllerProvider);
+    //SYNC
+    await ref.read(systemNotifAccessProvider.notifier).sync();
   }
 
   @override
   Widget build(BuildContext context) {
     final mode = ref.watch(themeModeProvider);
     final hasSeenOnboarding = ref.watch(hasSeenOnboardingProvider);
- 
 
     return MaterialApp(
       title: 'Rafeeq',

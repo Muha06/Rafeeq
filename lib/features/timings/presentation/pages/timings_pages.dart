@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:rafeeq/app/providers/general_notifications_provider.dart';
-import 'package:rafeeq/core/features/location/presentation/provider/general_location_permission_provider.dart';
 import 'package:rafeeq/core/features/location/presentation/provider/user_location_provider.dart';
 import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/core/themes/light_colors.dart';
