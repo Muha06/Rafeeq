@@ -1,15 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/core/themes/dark_colors.dart';
-import 'package:rafeeq/core/themes/light_colors.dart';
-import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
+ import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/features/quran/presentation/pages/search_surah_page.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/QURAN_PAGE/all_surah_listview.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/QURAN_PAGE/quick_last_read.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/QURAN_PAGE/quick_surah_links.dart';
-import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
-
+ 
 class QuranPage extends ConsumerStatefulWidget {
   const QuranPage({super.key});
 
@@ -37,8 +34,7 @@ class _QuranPageState extends ConsumerState<QuranPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = ref.watch(isDarkProvider);
-
+ 
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
@@ -56,12 +52,7 @@ class _QuranPageState extends ConsumerState<QuranPage> {
               ),
               actions: [
                 IconButton(
-                  icon: Icon(
-                    CupertinoIcons.search,
-                    color: isDark
-                        ? AppDarkColors.iconPrimary
-                        : AppLightColors.iconPrimary,
-                  ),
+                  icon: const Icon(CupertinoIcons.search),
 
                   onPressed: () {
                     Navigator.push(

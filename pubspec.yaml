@@ -47,6 +47,7 @@ dependencies:
   widgets_to_image: ^2.0.1
   table_calendar: ^3.2.0
   permission_handler: ^12.0.1
+  phosphor_flutter: ^2.1.0
 
 dev_dependencies:
   flutter_test:

@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/core/themes/app_text_style.dart';
-import 'package:rafeeq/core/themes/dark_colors.dart';
-import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
-import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class ReciterPickerSheet extends ConsumerWidget {
   const ReciterPickerSheet({super.key});
@@ -12,7 +8,8 @@ class ReciterPickerSheet extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final theme = Theme.of(context);
-    final isDark = ref.watch(isDarkProvider);
+    final cs = theme.colorScheme;
+    final tTheme = theme.textTheme;
 
     return Consumer(
       builder: (context, ref, _) {
@@ -45,7 +42,7 @@ class ReciterPickerSheet extends ConsumerWidget {
                           Expanded(
                             child: Text(
                               'Choose reciter',
-                              style: theme.textTheme.titleMedium,
+                              style: tTheme.titleMedium,
                             ),
                           ),
                           IconButton(
@@ -63,8 +60,9 @@ class ReciterPickerSheet extends ConsumerWidget {
                         horizontal: 16,
                       ),
                       child: TextField(
-                        style: AppTextStyles.label.copyWith(
-                          fontSize: 19,
+                        style: tTheme.labelMedium!.copyWith(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w200,
                           height: 1.7,
                         ),
                         controller: searchCtrl,
@@ -89,16 +87,8 @@ class ReciterPickerSheet extends ConsumerWidget {
                           final r = filtered[i];
                           final isSelected = r.id == selected.id;
 
-                          final cardLightColor = isSelected
-                              ? AppLightColors.onLightSurface
-                              : AppLightColors.lightSurface;
-
-                          final cardDarkColor = isSelected
-                              ? AppDarkColors.onDarkSurface
-                              : AppDarkColors.darkSurface;
-
                           return Material(
-                            color: isDark ? cardDarkColor : cardLightColor,
+                            color: cs.surfaceContainerHighest,
                             borderRadius: BorderRadius.circular(16),
                             child: InkWell(
                               borderRadius: BorderRadius.circular(16),
@@ -117,16 +107,32 @@ class ReciterPickerSheet extends ConsumerWidget {
                                 child: Row(
                                   children: [
                                     // Leading "avatar"
-                                    CircleAvatar(
-                                      radius: 18,
-                                      backgroundColor: isDark
-                                          ? AppDarkColors.iconDisabled
-                                          : AppLightColors.onLightSurface,
-                                      child: Text(
-                                        r.name.trim().isNotEmpty
-                                            ? r.name.trim()[0].toUpperCase()
-                                            : '?',
-                                        style: theme.textTheme.labelLarge,
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.transparent,
+                                        border: Border.all(
+                                          color: cs.onSurfaceVariant.withAlpha(
+                                            120,
+                                          ),
+                                        ),
+                                        borderRadius: BorderRadius.circular(
+                                          999,
+                                        ),
+                                      ),
+                                      width: 36,
+                                      height: 36,
+                                      child: Center(
+                                        child: Text(
+                                          r.name.trim().isNotEmpty
+                                              ? r.name.trim()[0].toUpperCase()
+                                              : '?',
+                                          style: theme.textTheme.labelLarge!
+                                              .copyWith(
+                                                color: cs.onSurface,
+                                                fontSize: 12 ,
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                        ),
                                       ),
                                     ),
                                     const SizedBox(width: 12),
@@ -152,26 +158,24 @@ class ReciterPickerSheet extends ConsumerWidget {
                                           vertical: 6,
                                         ),
                                         decoration: BoxDecoration(
-                                          color: isDark
-                                              ? AppDarkColors.iconDisabled
-                                              : AppLightColors.primary,
                                           borderRadius: BorderRadius.circular(
                                             999,
                                           ),
+                                          color: cs.primary.withAlpha(200),
                                         ),
                                         child: Row(
                                           children: [
-                                            const Icon(
+                                            Icon(
                                               Icons.check_circle,
                                               size: 18,
-                                              color: AppDarkColors.amber,
+                                              color: cs.onPrimary,
                                             ),
                                             const SizedBox(width: 6),
                                             Text(
                                               'Selected',
                                               style: theme.textTheme.labelMedium
                                                   ?.copyWith(
-                                                    color: AppDarkColors.amber,
+                                                    color: cs.onPrimary,
                                                     fontWeight: FontWeight.w700,
                                                   ),
                                             ),

@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
-import 'package:rafeeq/core/themes/dark_colors.dart';
-import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/core/widgets/snackbars.dart';
 import 'package:rafeeq/features/adhkar/domain/entities/dhikr.dart';
@@ -41,46 +39,6 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
     }
   }
 
-  void openBottomSheet(Dhikr dhikr) {
-    showModalBottomSheet(
-      context: context,
-      enableDrag: true,
-      builder: (context) {
-        final theme = Theme.of(context);
-
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              //title
-              Text('Adhkar settings', style: theme.textTheme.titleMedium),
-              const SizedBox(height: 8),
-              //divider
-              Divider(color: theme.dividerColor),
-              const SizedBox(height: 8),
-
-              //copy
-              ListTile(
-                onTap: () {
-                  Clipboard.setData(
-                    ClipboardData(
-                      text:
-                          '${dhikr.title} \n ${dhikr.arabic} \n ${dhikr.translation!}',
-                    ),
-                  );
-                  Navigator.pop(context);
-                },
-                title: Text('Copy Dhikr', style: theme.textTheme.bodyLarge),
-                trailing: const Icon(Icons.copy),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
   @override
   void dispose() {
     _pageController.dispose();
@@ -94,6 +52,7 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
     final textTheme = theme.textTheme;
 
     final dhikr = widget.adhkars?[_currentIndex] ?? widget.dhikr;
+    final cs = theme.colorScheme;
 
     return Scaffold(
       appBar: AppBar(
@@ -133,15 +92,10 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
                 },
                 icon: Icon(
                   bookmarked
-                      ? Icons.bookmark_added_rounded
-                      : Icons.bookmark_add,
-                  color: bookmarked
-                      ? (isDark
-                            ? AppDarkColors.amber
-                            : AppLightColors.snackbarSuccessBg)
-                      : (isDark
-                            ? AppDarkColors.iconSecondary
-                            : AppLightColors.iconSecondary),
+                      ? Icons.bookmark_added_outlined
+                      : Icons.bookmark_add_outlined,
+                  color: bookmarked ? cs.primary : cs.onSurface,
+                  size: 28,
                 ),
               );
             },
@@ -149,9 +103,14 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
 
           IconButton(
             onPressed: () async {
-              openBottomSheet(dhikr);
+              Clipboard.setData(
+                ClipboardData(
+                  text:
+                      '${dhikr.title} \n ${dhikr.arabic} \n ${dhikr.translation!}',
+                ),
+              );
             },
-            icon: const Icon(Icons.tune),
+            icon: const Icon(Icons.copy_outlined),
           ),
         ],
       ),
@@ -196,11 +155,12 @@ class AdhkarDetailsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle headerStyle = textTheme.bodySmall!.copyWith(fontSize: 14);
+    final TextStyle headerStyle = textTheme.labelMedium!;
 
     final TextStyle bodyTextstyle = textTheme.bodyMedium!.copyWith(
-      color: isDark ? AppDarkColors.textBody : AppLightColors.textBody,
+      fontSize: 20,
     );
+    final cs = Theme.of(context).colorScheme;
 
     Widget section(String title, String? text) {
       final t = (text ?? '').trim();
@@ -211,12 +171,7 @@ class AdhkarDetailsTile extends StatelessWidget {
         children: [
           Text(
             title,
-            style: headerStyle.copyWith(
-              color: isDark
-                  ? AppDarkColors.textPrimary
-                  : AppLightColors.textPrimary,
-              fontWeight: FontWeight.bold,
-            ),
+            style: headerStyle.copyWith(fontWeight: FontWeight.bold),
           ), //header
           const SizedBox(height: 8),
           Text(t, style: bodyTextstyle), //text
@@ -227,17 +182,16 @@ class AdhkarDetailsTile extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        decoration: BoxDecoration(
-          color: isDark
-              ? AppDarkColors.darkSurface
-              : AppLightColors.lightSurface,
-          borderRadius: BorderRadius.circular(24),
-        ),
-        child: SingleChildScrollView(
+      child: SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(24),
+            color: cs.surface,
+          ),
           child: SelectionArea(
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 //title
@@ -279,7 +233,7 @@ class AdhkarDetailsTile extends StatelessWidget {
 
                 //source
                 if ((dhikr.source ?? '').trim().isNotEmpty) ...[
-                  Text('Source:', style: textTheme.labelLarge),
+                  Text('Source:', style: headerStyle),
                   const SizedBox(height: 8),
                   Text(
                     dhikr.source!.trim(),

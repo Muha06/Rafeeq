@@ -1,0 +1,3 @@
+class UiHelpers {
+  UiHelpers._();
+}

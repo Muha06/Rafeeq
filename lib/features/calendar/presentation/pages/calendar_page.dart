@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hijri_date/hijri.dart';
-import 'package:rafeeq/core/themes/dark_colors.dart';
-import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -91,9 +89,6 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(14),
-                color: isDark
-                    ? AppDarkColors.darkSurface
-                    : AppLightColors.lightSurface,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -303,22 +298,14 @@ class _DayCell extends ConsumerWidget {
     final hijri = HijriDate.fromDate(day);
     final adjusted = offsetDays == 0 ? hijri : hijri.addDays(offsetDays);
 
-    final todayColors = isDark ? AppDarkColors.amber : AppLightColors.primary;
-    final todayTextColors = isDark
-        ? AppDarkColors.darkBackground
-        : Colors.white;
-
-    final selectedColor = isDark
-        ? AppDarkColors.onDarkSurface
-        : AppLightColors.amber;
-
-    final bg = isSelected
-        ? selectedColor
-        : isToday
-        ? todayColors
-        : Colors.transparent;
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
 
     final opacity = isOutside ? 0.35 : 1.0;
+    final dateTextColor = isSelected ? cs.onPrimary : cs.onSurfaceVariant;
+    final todayBgColor = isToday
+        ? cs.surfaceContainerHighest
+        : Colors.transparent;
 
     return Opacity(
       opacity: opacity,
@@ -326,7 +313,11 @@ class _DayCell extends ConsumerWidget {
         margin: const EdgeInsets.all(4),
         padding: const EdgeInsets.symmetric(vertical: 0),
         decoration: BoxDecoration(
-          color: bg,
+          color: isToday
+              ? todayBgColor
+              : isSelected
+              ? cs.primary
+              : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
         ),
         alignment: Alignment.center,
@@ -337,17 +328,17 @@ class _DayCell extends ConsumerWidget {
             Text(
               '${day.day}',
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                color: isToday ? todayTextColors : null,
                 fontWeight: FontWeight.bold,
+                color: dateTextColor,
               ),
             ),
             const SizedBox(height: 2),
             // Hijri day number (small)
             Text(
               '${adjusted.hDay}',
-              style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                color: isToday ? todayTextColors : null,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall!.copyWith(color: dateTextColor),
             ),
           ],
         ),

@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/core/themes/dark_colors.dart';
-import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/dhikr_bookmark.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/quran_bookmark.dart';
-import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class BookmarkActionBottomSheet extends ConsumerWidget {
   const BookmarkActionBottomSheet({
@@ -76,18 +73,10 @@ class _ActionTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final theme = Theme.of(context);
-    final isDark = ref.watch(isDarkProvider);
-
-    final iconColor = isDark
-        ? AppDarkColors.iconSecondary
-        : AppLightColors.iconSecondary;
-
-    final titleColor = isDark
-        ? AppDarkColors.textPrimary
-        : AppLightColors.textPrimary;
+    final cs = theme.colorScheme;
 
     return Material(
-      color: isDark ? AppDarkColors.onDarkSurface : AppLightColors.lightSurface,
+      color: cs.surfaceContainerHighest,
       borderRadius: BorderRadius.circular(16),
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
@@ -100,10 +89,9 @@ class _ActionTile extends ConsumerWidget {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: iconColor.withAlpha(25),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(icon, color: iconColor),
+                child: Icon(icon),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -113,21 +101,18 @@ class _ActionTile extends ConsumerWidget {
                     Text(
                       title,
                       style: theme.textTheme.titleSmall?.copyWith(
-                        color: titleColor,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
                     const SizedBox(height: 2),
                     Text(
                       subtitle,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: titleColor.withAlpha(180),
-                      ),
+                      style: theme.textTheme.bodySmall?.copyWith(),
                     ),
                   ],
                 ),
               ),
-              Icon(Icons.chevron_right_rounded, color: iconColor),
+              const Icon(Icons.chevron_right_rounded),
             ],
           ),
         ),

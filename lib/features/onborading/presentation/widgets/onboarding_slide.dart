@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rafeeq/core/themes/dark_colors.dart';
-
+ 
 class OnboardingSlide extends StatelessWidget {
   const OnboardingSlide({
     super.key,
@@ -51,8 +50,7 @@ class OnboardingSlide extends StatelessWidget {
             subtitle,
             textAlign: TextAlign.center,
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: AppDarkColors.textSecondary,
-              height: 1.35,
+               height: 1.35,
             ),
           ),
 

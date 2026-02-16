@@ -4,8 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rafeeq/core/features/audio/domain/entities/audio_state.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
- import 'package:rafeeq/core/themes/dark_colors.dart';
-import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/core/widgets/snackbars.dart';
 import 'package:rafeeq/features/quran/domain/entities/last_read_ayah.dart';
@@ -258,6 +256,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
           title: surahName,
           source: AudioSourceType.quranSurah,
           url: track.url,
+          context: context,
         );
   }
 
@@ -403,9 +402,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
             scrollOffsetController: scrollOffsetController,
             scrollOffsetListener: scrollOffsetListener,
           ),
-          loading: () => const Center(
-            child: CircularProgressIndicator(color: AppDarkColors.amber),
-          ),
+          loading: () => const Center(child: CircularProgressIndicator()),
           error: (e, _) => Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -456,11 +453,7 @@ class AutoScrollControlsBar extends ConsumerWidget {
     final surahSettings = ref.watch(surahSettingsProvider);
     final surahSettingsNotifier = ref.watch(surahSettingsProvider.notifier);
     var speed = surahSettings.autoScrollSpeed;
-    final isDark = ref.watch(isDarkProvider);
 
-    final iconColor = isDark
-        ? AppDarkColors.iconSecondary
-        : AppLightColors.iconSecondary;
     final fontSize = 16.0;
 
     return SafeArea(
@@ -477,11 +470,7 @@ class AutoScrollControlsBar extends ConsumerWidget {
             //exit speed
             IconButton(
               onPressed: onExit,
-              icon: FaIcon(
-                FontAwesomeIcons.x,
-                color: iconColor,
-                size: fontSize,
-              ),
+              icon: FaIcon(FontAwesomeIcons.x, size: fontSize),
             ),
 
             Expanded(
@@ -494,11 +483,7 @@ class AutoScrollControlsBar extends ConsumerWidget {
                       onPressed: () {
                         surahSettingsNotifier.decreaseSpeed();
                       },
-                      icon: FaIcon(
-                        FontAwesomeIcons.minus,
-                        color: iconColor,
-                        size: fontSize,
-                      ),
+                      icon: FaIcon(FontAwesomeIcons.minus, size: fontSize),
                     ),
 
                     const SizedBox(width: 8),
@@ -510,11 +495,7 @@ class AutoScrollControlsBar extends ConsumerWidget {
                       onPressed: () {
                         surahSettingsNotifier.increaseSpeed();
                       },
-                      icon: FaIcon(
-                        FontAwesomeIcons.plus,
-                        color: iconColor,
-                        size: fontSize,
-                      ),
+                      icon: FaIcon(FontAwesomeIcons.plus, size: fontSize),
                     ),
                   ],
                 ),
@@ -526,7 +507,6 @@ class AutoScrollControlsBar extends ConsumerWidget {
               onPressed: autoOn ? onPause : onStart,
               icon: FaIcon(
                 autoOn ? FontAwesomeIcons.pause : FontAwesomeIcons.play,
-                color: iconColor,
                 size: fontSize,
               ),
             ),

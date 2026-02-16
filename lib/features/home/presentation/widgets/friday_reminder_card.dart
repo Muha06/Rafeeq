@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/core/themes/dark_colors.dart';
-import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/quran/presentation/pages/surah_page.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
@@ -17,15 +15,12 @@ class _FridayReminderCardState extends ConsumerState<FridayReminderCard> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
     final isDark = ref.watch(isDarkProvider);
 
     final TextStyle keyWordStyle = Theme.of(context).textTheme.bodyMedium!
-        .copyWith(
-          fontWeight: FontWeight.w800,
-          fontSize: 14,
-          height: 1.3,
-          color: isDark ? AppDarkColors.textPrimary : Colors.black,
-        );
+        .copyWith(fontWeight: FontWeight.w800, fontSize: 14, height: 1.3);
 
     const surahAlKahf = Surah(
       id: 18,
@@ -42,10 +37,8 @@ class _FridayReminderCardState extends ConsumerState<FridayReminderCard> {
         children: [
           Container(
             decoration: BoxDecoration(
+              color: cs.surface,
               borderRadius: BorderRadius.circular(20),
-              color: isDark
-                  ? AppDarkColors.darkSurface
-                  : AppLightColors.lightSurface,
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -91,9 +84,6 @@ class _FridayReminderCardState extends ConsumerState<FridayReminderCard> {
                           'View Friday virtues',
                           style: theme.textTheme.bodySmall!.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: isDark
-                                ? AppDarkColors.textPrimary
-                                : AppLightColors.textPrimary,
                           ),
                         ),
                       ),
@@ -110,8 +100,8 @@ class _FridayReminderCardState extends ConsumerState<FridayReminderCard> {
                         child: Text(
                           'Tap to read >',
                           style: theme.textTheme.bodySmall!.copyWith(
-                            color: isDark ? AppLightColors.amber : Colors.black,
                             fontWeight: FontWeight.bold,
+                            color: cs.primary,
                             height: 1,
                           ),
                         ),
@@ -150,11 +140,8 @@ void _showFridayVirtuesSheet(BuildContext context, bool isDark) {
         maxChildSize: 0.9,
         builder: (context, controller) {
           return Container(
-            decoration: BoxDecoration(
-              color: isDark ? AppDarkColors.bottomSheet : Colors.white,
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(22),
-              ),
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
             ),
             child: ListView(
               controller: controller,
@@ -237,18 +224,12 @@ class _VirtueTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final theme = Theme.of(context);
-    final isDark = ref.watch(isDarkProvider);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Container(
         padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          color: isDark
-              ? AppDarkColors.onDarkSurface
-              : AppLightColors.onAmberSoft,
-        ),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

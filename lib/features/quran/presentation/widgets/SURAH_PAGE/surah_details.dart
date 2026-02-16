@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
- import 'package:rafeeq/core/themes/dark_colors.dart';
-import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
@@ -18,9 +16,8 @@ class SurahDetails extends ConsumerWidget {
     final isDark = ref.watch(isDarkProvider);
     final isMakkan = surah.isMeccan;
 
-    final textColors = isDark
-        ? AppDarkColors.textPrimary
-        : AppLightColors.textPrimary;
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
 
     return Column(
       children: [
@@ -34,9 +31,7 @@ class SurahDetails extends ConsumerWidget {
               child: Container(
                 height: 160,
                 decoration: BoxDecoration(
-                  color: isDark
-                      ? AppDarkColors.darkSurface
-                      : AppLightColors.lightSurface,
+                  color: cs.surface,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Padding(
@@ -46,18 +41,14 @@ class SurahDetails extends ConsumerWidget {
                     children: [
                       Text(
                         surah.nameArabic,
-                        style: TextStyle(
-                          color: textColors,
-                          fontSize: 26,
-                          fontWeight: FontWeight.w800,
-                          height: 1.1,
+                        style: theme.textTheme.labelLarge!.copyWith(
+                          fontSize: 20,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         surah.nameEnglish,
-                        style: TextStyle(
-                          color: textColors,
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
@@ -126,26 +117,15 @@ class _Chip extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final isDark = ref.watch(isDarkProvider);
-
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: isDark
-            ? AppDarkColors.onDarkSurface
-            : AppLightColors.onAmberSoft,
         borderRadius: BorderRadius.circular(999),
         border: Border.all(color: Colors.white24),
       ),
       child: Text(
         text,
-        style: TextStyle(
-          color: isDark
-              ? AppDarkColors.textPrimary
-              : AppLightColors.textPrimary,
-          fontSize: 11,
-          fontWeight: FontWeight.w600,
-        ),
+        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
       ),
     );
   }

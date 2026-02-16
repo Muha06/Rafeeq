@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/core/themes/dark_colors.dart';
-import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/features/adhkar/domain/entities/adhkar_category.dart';
 import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_list_page.dart';
 import 'package:rafeeq/features/adhkar/presentation/riverpod/adhkar_categories.dart';
-import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class AdhkarCategoryPage extends ConsumerStatefulWidget {
   const AdhkarCategoryPage({super.key});
@@ -41,7 +38,7 @@ class AdhkarCategoryTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final theme = Theme.of(context);
-    final isDark = ref.watch(isDarkProvider);
+    final cs = theme.colorScheme;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
@@ -61,10 +58,8 @@ class AdhkarCategoryTile extends ConsumerWidget {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
               decoration: BoxDecoration(
-                color: isDark
-                    ? AppDarkColors.darkSurface
-                    : AppLightColors.lightSurface,
                 borderRadius: BorderRadius.circular(16),
+                color: cs.surface,
               ),
               child: Text(
                 category.title,

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
-import 'package:rafeeq/core/themes/dark_colors.dart';
-import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/core/widgets/snackbars.dart';
 import 'package:rafeeq/features/quran/domain/entities/ayah.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/ayah_of_the_day.dart';
@@ -35,6 +33,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
     final id = '${widget.ayah.surahId}:${widget.ayah.ayahNumber}';
     final bookmarkedIds = ref.watch(bookmarkedIdsProvider);
     final isBookmarked = bookmarkedIds.contains(id);
+    final cs = theme.colorScheme;
 
     return AnimatedSize(
       duration: const Duration(milliseconds: 450),
@@ -49,9 +48,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
-                color: isDark
-                    ? AppDarkColors.darkSurface
-                    : AppLightColors.lightSurface,
+                color: cs.surface,
                 borderRadius: BorderRadius.circular(14),
               ),
               child: Row(
@@ -62,9 +59,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                     textAlign: TextAlign.center,
                     style: theme.textTheme.bodySmall!.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: isDark
-                          ? AppDarkColors.textPrimary
-                          : AppLightColors.textPrimary,
+
                       fontSize: 16,
                     ),
                   ),
@@ -123,13 +118,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                           ? Icons.bookmark_added
                           : Icons.bookmark_add_outlined,
                       size: 22,
-                      color: isBookmarked
-                          ? isDark
-                                ? AppDarkColors.amber
-                                : AppLightColors.iconAccent
-                          : isDark
-                          ? AppDarkColors.iconPrimary
-                          : AppLightColors.iconPrimary,
+                      color: isBookmarked ? cs.primary : cs.onSurface,
                     ),
                   ),
 
@@ -160,13 +149,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
 
                         await controller.share(context: btnCtx, text: text);
                       },
-                      icon: Icon(
-                        Icons.share,
-                        size: 22,
-                        color: isDark
-                            ? AppDarkColors.iconPrimary
-                            : AppLightColors.iconPrimary,
-                      ),
+                      icon: const Icon(Icons.share, size: 22),
                     ),
                   ),
                 ],
@@ -201,9 +184,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                   style: theme.textTheme.bodyMedium!.copyWith(
                     fontWeight: isDark ? FontWeight.w400 : FontWeight.w500,
                     height: 1.4,
-                    color: isDark
-                        ? AppDarkColors.textSecondary
-                        : AppLightColors.textSecondary,
+
                     fontSize: translationFontSize,
                   ),
                 ),
@@ -219,9 +200,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                       textAlign: TextAlign.left,
                       style: theme.textTheme.bodyMedium!.copyWith(
                         fontWeight: isDark ? FontWeight.w400 : FontWeight.w500,
-                        color: isDark
-                            ? AppDarkColors.textPrimary
-                            : AppLightColors.textPrimary,
+
                         fontSize: translationFontSize,
                       ),
                     ),

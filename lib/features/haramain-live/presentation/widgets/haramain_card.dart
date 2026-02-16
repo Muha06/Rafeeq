@@ -1,25 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:rafeeq/core/themes/dark_colors.dart';
-import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/features/haramain-live/presentation/pages/haramain_live_page.dart';
-import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class HaramainCard extends ConsumerWidget {
   const HaramainCard({super.key});
 
   @override
   Widget build(BuildContext context, ref) {
-    final isDark = ref.watch(isDarkProvider);
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
+    final cs = theme.colorScheme;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(
-        color: isDark ? AppDarkColors.darkSurface : AppLightColors.lightSurface,
         borderRadius: BorderRadius.circular(12),
+        color: cs.surface,
       ),
 
       child: Column(
@@ -62,15 +59,10 @@ class MosqueCard extends ConsumerWidget {
     const makkahLive = 'https://makkahlive.net/makkahlive.aspx';
     const madinahLive = 'https://makkahlive.net/madinalive.aspx';
 
-    final isDark = ref.watch(isDarkProvider);
     final theme = Theme.of(context);
-
-    final bg = isDark
-        ? AppDarkColors.onDarkSurface
-        : AppLightColors.onAmberSoft.withAlpha(50);
+    final cs = theme.colorScheme;
 
     return Material(
-      color: bg,
       borderRadius: BorderRadius.circular(12),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -91,7 +83,10 @@ class MosqueCard extends ConsumerWidget {
         },
 
         child: Container(
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(14)),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            color: cs.surfaceContainerHighest,
+          ),
           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -111,13 +106,7 @@ class MosqueCard extends ConsumerWidget {
 
               const Spacer(),
 
-              FaIcon(
-                FontAwesomeIcons.chevronRight,
-                size: 16,
-                color: isDark
-                    ? AppDarkColors.iconSecondary
-                    : AppLightColors.iconSecondary,
-              ),
+              const FaIcon(FontAwesomeIcons.chevronRight, size: 16),
             ],
           ),
         ),

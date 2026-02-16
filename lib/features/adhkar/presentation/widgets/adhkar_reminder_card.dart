@@ -3,13 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/features/audio/domain/entities/audio_state.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
-import 'package:rafeeq/core/themes/dark_colors.dart';
-import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_list_page.dart';
 import 'package:rafeeq/features/adhkar/presentation/riverpod/adhkar_categories.dart';
 import 'package:rafeeq/core/features/audio/providers/just_audio_player_provider.dart';
 import 'package:rafeeq/features/adhkar/presentation/riverpod/get_adhkars_provider.dart';
-import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class AdhkarReminderCard extends ConsumerWidget {
   const AdhkarReminderCard({super.key, required this.isMorning});
@@ -17,8 +14,9 @@ class AdhkarReminderCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isDark = ref.watch(isDarkProvider);
     final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
     const String morningMsg =
         "Morning adhkār is a daily shield and a reminder that Allah ﷻ is with you. Take a minute, read, and listen";
     const String eveningMsg =
@@ -31,9 +29,7 @@ class AdhkarReminderCard extends ConsumerWidget {
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              color: isDark
-                  ? AppDarkColors.darkSurface
-                  : AppLightColors.lightSurface,
+              color: cs.surface,
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -80,9 +76,9 @@ class AdhkarReminderCard extends ConsumerWidget {
                         child: Text(
                           'Tap to read >',
                           style: theme.textTheme.bodySmall!.copyWith(
-                            color: isDark ? AppLightColors.amber : Colors.black,
                             fontWeight: FontWeight.bold,
                             height: 1,
+                            color: cs.primary,
                           ),
                         ),
                       ),
@@ -116,7 +112,6 @@ class AudioControlsChip extends ConsumerWidget {
     final urlsAsync = ref.watch(adhkarAudioUrlsProvider);
 
     final theme = Theme.of(context);
-    final isDark = ref.watch(isDarkProvider);
 
     final playing = ref.watch(audioPlayingProvider).value ?? false;
     final buffering = ref.watch(audioBufferingProvider).value ?? false;
@@ -149,9 +144,6 @@ class AudioControlsChip extends ConsumerWidget {
           'Retry',
           style: theme.textTheme.bodySmall!.copyWith(
             fontWeight: FontWeight.bold,
-            color: isDark
-                ? AppDarkColors.textPrimary
-                : AppLightColors.textPrimary,
           ),
         ),
       ),
@@ -176,6 +168,7 @@ class AudioControlsChip extends ConsumerWidget {
                       source: AudioSourceType.adhkar,
                       id: isMorning ? 'adhkar_morning' : 'adhkar_evening',
                       title: title,
+                      context: context,
                     );
                   }
                 },
@@ -194,9 +187,6 @@ class AudioControlsChip extends ConsumerWidget {
                   (showPause ? 'Pause' : 'Play'),
                   style: theme.textTheme.bodySmall!.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: isDark
-                        ? AppDarkColors.iconPrimary
-                        : AppLightColors.iconPrimary,
                   ),
                 ),
         );

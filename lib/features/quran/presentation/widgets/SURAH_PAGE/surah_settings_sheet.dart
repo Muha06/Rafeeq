@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:rafeeq/core/themes/dark_colors.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
 import 'package:rafeeq/features/quran_audio/presentation/widgets/reciter_picker_sheet.dart';
@@ -17,6 +16,7 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final cs = theme.colorScheme;
 
     final s = ref.watch(surahSettingsProvider);
     final sNotifier = ref.read(surahSettingsProvider.notifier);
@@ -50,30 +50,7 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
           children: [
             //Auto scroll
             SwitchListTile(
-              title: Row(
-                children: [
-                  Text('Auto scroll', style: titleTextstyle),
-
-                  const SizedBox(width: 24),
-
-                  Container(
-                    decoration: BoxDecoration(
-                      color: AppDarkColors.teal,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-
-                    padding: const EdgeInsets.all(4),
-                    child: Text(
-                      'New',
-                      style: theme.textTheme.bodySmall!.copyWith(
-                        fontSize: 12,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              title: Text('Auto scroll', style: titleTextstyle),
               value: autoScrollEnabled,
               contentPadding: EdgeInsets.zero,
               onChanged: (v) {
@@ -100,7 +77,29 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
 
             //select reciter
             ListTile(
-              title: Text('Reciters', style: titleTextstyle),
+              title: Row(
+                children: [
+                  Text('Reciters', style: titleTextstyle),
+                  const SizedBox(width: 12),
+
+                  Container(
+                    decoration: BoxDecoration(
+                      color: cs.primary.withAlpha(200),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+
+                    padding: const EdgeInsets.all(4),
+                    child: Text(
+                      '🔥 New',
+                      style: theme.textTheme.bodySmall!.copyWith(
+                        fontSize: 10,
+                        color: cs.onPrimary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               contentPadding: EdgeInsets.zero,
               trailing: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 220),
@@ -116,20 +115,14 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    const FaIcon(
-                      FontAwesomeIcons.chevronRight,
-                      color: AppDarkColors.iconSecondary,
-                      size: 16,
-                    ),
+                    const FaIcon(FontAwesomeIcons.chevronRight, size: 16),
                   ],
                 ),
               ),
               onTap: () {
                 showModalBottomSheet(
                   context: context,
-                  showDragHandle: true,
                   isScrollControlled: true,
-                  backgroundColor: theme.bottomSheetTheme.backgroundColor,
                   builder: (context) => const ReciterPickerSheet(),
                 );
               },

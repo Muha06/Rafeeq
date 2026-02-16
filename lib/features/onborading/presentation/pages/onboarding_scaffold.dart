@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/app/tabs_screen.dart';
-import 'package:rafeeq/core/themes/dark_colors.dart';
+import 'package:rafeeq/core/themes/dark_theme.dart';
 import 'package:rafeeq/features/onborading/presentation/provider/onboarding_provider.dart';
 import 'package:rafeeq/features/onborading/presentation/provider/providers.dart';
 import 'package:rafeeq/features/onborading/presentation/widgets/dots_indicator.dart';
@@ -51,9 +51,9 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
   @override
   Widget build(BuildContext context) {
     final index = ref.watch(onboardingIndexProvider);
-
+ 
     return Scaffold(
-      backgroundColor: AppDarkColors.darkBackground,
+      backgroundColor: AppDarkColors.canvas,
       body: SafeArea(
         child: Column(
           children: [

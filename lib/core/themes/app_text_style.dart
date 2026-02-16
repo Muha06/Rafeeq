@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppTextStyles {
   // Use ONE Latin font for the whole UI
-  static TextStyle get _base => GoogleFonts.plusJakartaSans(
+  static TextStyle get _base => GoogleFonts.lato(
     fontSize: 14,
     height: 1.35,
     letterSpacing: 0.1,

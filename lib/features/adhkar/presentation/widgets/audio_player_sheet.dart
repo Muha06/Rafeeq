@@ -3,19 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/features/audio/domain/entities/audio_state.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart'; 
-import 'package:rafeeq/core/themes/dark_colors.dart';
-import 'package:rafeeq/core/themes/light_colors.dart';
-import 'package:rafeeq/core/features/audio/providers/just_audio_player_provider.dart';
-import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
-
+  import 'package:rafeeq/core/features/audio/providers/just_audio_player_provider.dart';
+ 
 class AdhkarMiniPlayerSheet extends ConsumerWidget {
   const AdhkarMiniPlayerSheet({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final isDark = ref.watch(isDarkProvider);
-
+ 
     final audio = ref.watch(audioControllerProvider);
     final ctrl = ref.read(audioControllerProvider.notifier);
 
@@ -36,9 +32,7 @@ class AdhkarMiniPlayerSheet extends ConsumerWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
         decoration: BoxDecoration(
-          color: isDark
-              ? AppDarkColors.selectedCardBorder.withAlpha(200)
-              : AppLightColors.amber,
+      
           borderRadius: BorderRadius.circular(18),
         ),
         child: Row(

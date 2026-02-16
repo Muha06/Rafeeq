@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/core/themes/dark_colors.dart';
-import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/quran/presentation/pages/surah_page.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provider.dart';
-import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class QuickSurahLinks extends ConsumerWidget {
   const QuickSurahLinks({super.key});
@@ -54,7 +51,7 @@ class SurahLink extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final isDark = ref.watch(isDarkProvider);
+    final cs = theme.colorScheme;
 
     return Padding(
       padding: const EdgeInsets.only(right: 8.0),
@@ -69,10 +66,8 @@ class SurahLink extends ConsumerWidget {
         },
         child: Container(
           decoration: BoxDecoration(
+            color: cs.surface,
             borderRadius: BorderRadius.circular(14),
-            color: isDark
-                ? AppDarkColors.darkSurface
-                : AppLightColors.lightSurface,
           ),
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
           child: Center(

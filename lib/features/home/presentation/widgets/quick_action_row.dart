@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/core/themes/dark_colors.dart';
-import 'package:rafeeq/core/themes/light_colors.dart';
-import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class HomeQuickActionsRow extends StatelessWidget {
   final VoidCallback onQuran;
@@ -76,7 +73,7 @@ class _QuickActionCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final theme = Theme.of(context);
-    final isDark = ref.watch(isDarkProvider);
+    final cs = theme.colorScheme;
 
     return GestureDetector(
       onTap: onTap,
@@ -85,7 +82,7 @@ class _QuickActionCard extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14),
-          color: isDark ? theme.cardColor : AppLightColors.lightSurface,
+          color: cs.surface,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,9 +95,6 @@ class _QuickActionCard extends ConsumerWidget {
                 fontWeight: FontWeight.bold,
                 wordSpacing: 1,
                 fontSize: 12,
-                color: isDark
-                    ? AppDarkColors.textPrimary
-                    : AppLightColors.textPrimary,
               ),
             ),
 

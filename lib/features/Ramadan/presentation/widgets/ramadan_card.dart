@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:rafeeq/core/themes/dark_colors.dart';
-import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/features/Ramadan/domain/ramadan_reflection.dart';
 import 'package:rafeeq/features/Ramadan/presentation/providers/ramadan_timings_provider.dart';
 import 'package:rafeeq/features/Ramadan/presentation/providers/ramadan_reflections_provider.dart';
@@ -28,6 +26,9 @@ class _RamadanDailyCardState extends ConsumerState<RamadanDailyCard> {
   @override
   Widget build(BuildContext context) {
     final isDark = ref.watch(isDarkProvider);
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
     final ramadanAsync = ref.watch(ramadanTimesProvider);
     final hijri = ref.watch(hijriDateProvider).hijri;
 
@@ -47,9 +48,7 @@ class _RamadanDailyCardState extends ConsumerState<RamadanDailyCard> {
         return Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
-            color: isDark
-                ? AppDarkColors.darkSurface
-                : AppLightColors.lightSurface,
+            color: cs.surface,
           ),
           padding: const EdgeInsets.all(14),
           child: Column(
@@ -122,7 +121,7 @@ class _RamadanHeader extends StatelessWidget {
     return Row(
       children: [
         Expanded(child: Text('Ramadan Today', style: tt.titleMedium)),
-        TypeChip(label: 'Day ${reflection.day}', isDark: isDark),
+        TypeChip(label: 'Day ${reflection.day}'),
       ],
     );
   }
@@ -143,10 +142,7 @@ class RamadanReflectionPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tt = Theme.of(context).textTheme;
-
-    final bg = isDark
-        ? AppDarkColors.onDarkSurface
-        : AppLightColors.onLightSurface;
+    final cs = Theme.of(context).colorScheme;
 
     final label = switch (reflection.type) {
       ReminderType.quran => 'Qur’an',
@@ -159,8 +155,8 @@ class RamadanReflectionPreview extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: bg,
           borderRadius: BorderRadius.circular(14),
+          color: cs.surfaceContainerHighest,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,20 +164,16 @@ class RamadanReflectionPreview extends StatelessWidget {
             // Top row: type chip + "Read"
             Row(
               children: [
-                TypeChip(label: label, isDark: isDark),
+                TypeChip(label: label),
                 const Spacer(),
                 Text(
                   'Read',
-                  style: tt.labelMedium!.copyWith(
-                    color: isDark
-                        ? AppDarkColors.amber
-                        : AppLightColors.textPrimary,
-                  ),
+                  style: tt.labelMedium!.copyWith(color: cs.primary),
                 ),
               ],
             ),
 
-            const SizedBox(height: 10),
+            const SizedBox(height: 16),
 
             // Topic
             Text(reflection.topic, style: tt.titleMedium),
@@ -220,26 +212,20 @@ class RamadanReflectionPreview extends StatelessWidget {
 }
 
 class TypeChip extends StatelessWidget {
-  const TypeChip({super.key, required this.label, required this.isDark});
+  const TypeChip({super.key, required this.label});
 
   final String label;
-  final bool isDark;
 
   @override
   Widget build(BuildContext context) {
     final tt = Theme.of(context).textTheme;
+    final cs = Theme.of(context).colorScheme;
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(999),
-        color: (isDark ? AppDarkColors.tealSoft : AppLightColors.amber),
-      ),
-      child: Text(
-        label,
-        style: tt.labelMedium!.copyWith(
-          color: isDark ? AppDarkColors.textPrimary : Colors.black,
-        ),
+    return Text(
+      label,
+      style: tt.labelMedium!.copyWith(
+        fontWeight: FontWeight.bold,
+        color: cs.onSurface,
       ),
     );
   }
@@ -261,14 +247,13 @@ class BuildRamadanTimeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final cs = theme.colorScheme;
     final textTheme = theme.textTheme;
 
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
-        color: isDark
-            ? AppDarkColors.onDarkSurface
-            : AppLightColors.onLightSurface,
+        color: cs.surfaceContainerHighest,
       ),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
       child: Column(

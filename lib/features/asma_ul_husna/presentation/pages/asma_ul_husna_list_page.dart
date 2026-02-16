@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/core/themes/dark_colors.dart';
-import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/features/asma_ul_husna/presentation/providers/asma_ul_husna_provider.dart';
-import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
-
+ 
 class AllahNamesPage extends ConsumerStatefulWidget {
   const AllahNamesPage({super.key});
 
@@ -94,7 +91,6 @@ class _AllahNameTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final theme = Theme.of(context);
-    final isDark = ref.watch(isDarkProvider);
 
     return Container(
       decoration: BoxDecoration(
@@ -122,9 +118,7 @@ class _AllahNameTile extends ConsumerWidget {
                       textDirection: TextDirection.rtl,
                       style: theme.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.w700,
-                        color: isDark
-                            ? AppDarkColors.amber
-                            : AppLightColors.textPrimary,
+                        color: theme.colorScheme.primary,
                         height: 1,
                       ),
                     ),
@@ -154,16 +148,14 @@ class _NumberBadge extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final theme = Theme.of(context);
-    final isDark = ref.watch(isDarkProvider);
+    final cs = theme.colorScheme;
 
     return Container(
       width: 42,
       height: 42,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
-        color: isDark
-            ? AppDarkColors.onDarkSurface
-            : AppLightColors.lightSurface,
+        color: cs.surfaceContainerHighest,
       ),
       alignment: Alignment.center,
       child: Text(
@@ -189,7 +181,7 @@ class _SearchBar extends ConsumerWidget {
     return TextField(
       onChanged: onChanged,
       textInputAction: TextInputAction.search,
-      style: theme.textTheme.bodyMedium,
+      style: theme.textTheme.bodySmall,
       decoration: InputDecoration(
         hintText: hintText,
         prefixIcon: const Icon(Icons.search_rounded),
@@ -264,7 +256,7 @@ class _ErrorState extends StatelessWidget {
             Icon(
               Icons.wifi_off_rounded,
               size: 40,
-              color: theme.colorScheme.onSurface.withOpacity(0.35),
+              color: theme.colorScheme.onSurface.withAlpha(89),
             ),
             const SizedBox(height: 10),
             Text(
@@ -285,7 +277,7 @@ class _ErrorState extends StatelessWidget {
               details,
               textAlign: TextAlign.center,
               style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.55),
+                color: theme.colorScheme.onSurface.withAlpha(100),
               ),
               maxLines: 3,
               overflow: TextOverflow.ellipsis,

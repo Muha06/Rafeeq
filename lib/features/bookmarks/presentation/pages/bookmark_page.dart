@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/core/themes/dark_colors.dart';
-import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/core/widgets/snackbars.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/quran_bookmark.dart';
 import 'package:rafeeq/features/bookmarks/presentation/pages/adhkar_bookmark_tab.dart';
 import 'package:rafeeq/features/bookmarks/presentation/pages/quran_bookmark_tab.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/Quran/execution_providers.dart';
-import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class BookmarkPage extends ConsumerStatefulWidget {
   const BookmarkPage({super.key});
@@ -49,7 +46,6 @@ class _BookmarkPageState extends ConsumerState<BookmarkPage> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = ref.watch(isDarkProvider);
     final theme = Theme.of(context);
 
     return DefaultTabController(
@@ -69,9 +65,6 @@ class _BookmarkPageState extends ConsumerState<BookmarkPage> {
                 width: MediaQuery.of(context).size.width * 0.60,
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
-                  color: isDark
-                      ? AppDarkColors.darkSurface
-                      : AppLightColors.buttonPrimaryPressed,
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(color: theme.dividerColor),
                 ),
@@ -83,19 +76,10 @@ class _BookmarkPageState extends ConsumerState<BookmarkPage> {
                   indicatorSize: TabBarIndicatorSize.tab,
                   indicator: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    color: isDark
-                        ? AppDarkColors.iconDisabled
-                        : AppLightColors.onPrimary,
+                    color: theme.colorScheme.surfaceContainerHighest,
                   ),
-
-                  // labelColor: isDark ? Colors.white : Colors.black,
-                  unselectedLabelColor: isDark
-                      ? AppDarkColors.iconPrimary
-                      : Colors.white,
-
-                  labelStyle: TextStyle(
+                  labelStyle: const TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: isDark ? AppDarkColors.iconPrimary : Colors.black,
                     fontSize: 13,
                   ),
                   unselectedLabelStyle: const TextStyle(
@@ -160,12 +144,7 @@ class _BookmarkPageState extends ConsumerState<BookmarkPage> {
           }
         }
       },
-      icon: Icon(
-        Icons.delete_forever,
-        color: isDark
-            ? AppDarkColors.iconSecondary
-            : AppLightColors.iconPrimary,
-      ),
+      icon: const Icon(Icons.delete_forever),
     );
   }
 }

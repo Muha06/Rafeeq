@@ -30,7 +30,7 @@ class _SurahSearchPageState extends ConsumerState<SurahSearchPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
+ 
     final surahsAsync = ref.watch(surahsFutureProvider); // <surahs provider
     final searchSurahText = ref.watch(searchSurahTextProvider);
 
@@ -44,12 +44,8 @@ class _SurahSearchPageState extends ConsumerState<SurahSearchPage> {
         appBar: AppBar(
           titleSpacing: 12,
           title: Container(
-            height: 44, // close to SearchBar height
+            height: 44,
             padding: const EdgeInsets.symmetric(horizontal: 8),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surface,
-              borderRadius: BorderRadius.circular(16),
-            ),
             alignment: Alignment.center,
             child: TextField(
               focusNode: _focus,
@@ -59,12 +55,7 @@ class _SurahSearchPageState extends ConsumerState<SurahSearchPage> {
               style: theme.textTheme.bodyMedium,
               decoration: InputDecoration(
                 isDense: true,
-                border: InputBorder.none,
                 hintText: "Search surah (name / number)…",
-                hintStyle: theme.textTheme.bodySmall!.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-
                 suffixIcon: searchSurahText.trim().isEmpty
                     ? null
                     : IconButton(

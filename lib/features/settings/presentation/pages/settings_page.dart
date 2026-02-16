@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rafeeq/app/providers/general_notifications_provider.dart';
-import 'package:rafeeq/core/themes/dark_colors.dart';
-import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/core/widgets/snackbars.dart';
 import 'package:rafeeq/features/settings/presentation/provider/settings_notifcation_provider.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
+import 'package:rafeeq/features/settings/presentation/widgets/settings_page_widgets.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({super.key});
@@ -143,10 +142,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     final adhkarOn = ref.watch(adhkarNotifEnabledProvider);
     final salahNotifOn = ref.watch(salahNotifEnabledProvider);
 
-    final leadingColor = isDark
-        ? AppDarkColors.iconSecondary
-        : AppLightColors.iconSecondary;
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings', style: theme.appBarTheme.titleTextStyle),
@@ -156,16 +151,16 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         children: [
           //theme preferences
           SettingsTile(
-            leading: FaIcon(FontAwesomeIcons.paintRoller, color: leadingColor),
+            leading: const FaIcon(FontAwesomeIcons.paintRoller),
             title: 'App Theme',
             isDark: isDark,
-            trailing: Icon(Icons.keyboard_arrow_right, color: leadingColor),
+            trailing: const Icon(Icons.keyboard_arrow_right),
             subtitle: 'Change the app theme',
             onTap: () => showThemePicker(context),
           ),
 
           SettingsTile(
-            leading: FaIcon(FontAwesomeIcons.bell, color: leadingColor),
+            leading: const FaIcon(FontAwesomeIcons.bell),
             title: 'Salah reminders',
             subtitle: 'Get Salah times reminders',
             isDark: isDark,
@@ -178,7 +173,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           ),
 
           SettingsTile(
-            leading: FaIcon(FontAwesomeIcons.bell, color: leadingColor),
+            leading: const FaIcon(FontAwesomeIcons.bell),
             title: 'Adhkar reminders',
             subtitle: 'Morning & evening adhkars',
             isDark: isDark,
@@ -226,9 +221,7 @@ class SettingsTile extends StatelessWidget {
       children: [
         ListTile(
           enabled: enabled,
-          splashColor: isDark
-              ? AppDarkColors.darkSurface
-              : AppLightColors.lightSurface,
+
           onTap: enabled ? onTap : null,
           contentPadding:
               contentPadding ?? const EdgeInsets.symmetric(horizontal: 16),
@@ -236,7 +229,7 @@ class SettingsTile extends StatelessWidget {
           title: Text(title, style: theme.textTheme.titleMedium),
           subtitle: subtitle == null
               ? null
-              : Text(subtitle!, style: theme.textTheme.bodySmall),
+              : Text(subtitle!, style: theme.textTheme.labelMedium),
           trailing:
               trailing ?? const Icon(Icons.keyboard_arrow_right, size: 32),
         ),
@@ -276,21 +269,21 @@ class _ThemePickerSheetState extends ConsumerState<ThemePickerSheet> {
             Text('Theme', style: theme.textTheme.titleMedium),
             const SizedBox(height: 16),
 
-            const _ThemeOption(
+            const ThemeOption(
               title: 'Light mode',
               icon: CupertinoIcons.sun_max,
               value: AppThemeMode.light,
             ),
             const SizedBox(height: 12),
 
-            const _ThemeOption(
+            const ThemeOption(
               title: 'Dark mode',
               icon: CupertinoIcons.moon,
               value: AppThemeMode.dark,
             ),
             const SizedBox(height: 8),
 
-            const _ThemeOption(
+            const ThemeOption(
               title: 'Same as device theme',
               icon: CupertinoIcons.device_phone_portrait,
               value: AppThemeMode.system,
@@ -299,7 +292,6 @@ class _ThemePickerSheetState extends ConsumerState<ThemePickerSheet> {
 
             //divider
             Divider(color: theme.dividerColor),
-            const SizedBox(height: 0),
 
             //cancel btn
             TextButton(
@@ -313,58 +305,8 @@ class _ThemePickerSheetState extends ConsumerState<ThemePickerSheet> {
                 ),
               ),
             ),
+            const SizedBox(height: 16),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-//options
-class _ThemeOption extends ConsumerWidget {
-  final String title;
-  final IconData icon;
-  final AppThemeMode value;
-
-  const _ThemeOption({
-    required this.title,
-    required this.icon,
-    required this.value,
-  });
-
-  @override
-  Widget build(BuildContext context, ref) {
-    final theme = Theme.of(context);
-    final mode = ref.watch(themeModeProvider);
-    bool selected = mode == value;
-
-    return Material(
-      clipBehavior: Clip.hardEdge,
-      borderRadius: BorderRadius.circular(16),
-      color: Colors.transparent,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(16),
-        onTap: () {
-          RadioGroup.maybeOf<AppThemeMode>(context)?.onChanged.call(value);
-        },
-        child: AnimatedContainer(
-          duration: Durations.short2,
-          curve: Curves.easeOut,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: selected ? AppLightColors.amber : theme.dividerColor,
-            ),
-          ),
-          child: Row(
-            children: [
-              Icon(icon, size: 20),
-              const SizedBox(width: 12),
-              Expanded(child: Text(title, style: theme.textTheme.labelLarge)),
-              Radio<AppThemeMode>(value: value),
-            ],
-          ),
         ),
       ),
     );

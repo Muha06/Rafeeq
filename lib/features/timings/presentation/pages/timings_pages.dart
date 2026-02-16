@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rafeeq/core/features/location/presentation/provider/user_location_provider.dart';
-import 'package:rafeeq/core/themes/dark_colors.dart';
-import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/core/widgets/snackbars.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
@@ -128,7 +126,7 @@ class _TimingTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final isDark = ref.watch(isDarkProvider);
+    final cs = theme.colorScheme;
 
     final disabled = ref.watch(disabledSalahPrayersProvider);
     final isDisabled = disabled.contains(prayer);
@@ -154,23 +152,17 @@ class _TimingTile extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          FaIcon(
-            prayer.icon,
-            size: 16,
-            color: isDark
-                ? AppDarkColors.iconSecondary
-                : AppLightColors.iconSecondary,
-          ),
+          FaIcon(prayer.icon, size: 16),
           const SizedBox(width: 8),
 
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(title, style: theme.textTheme.titleMedium),
-              const SizedBox(height: 8),
+              Text(title, style: theme.textTheme.labelLarge),
+              const SizedBox(height: 12),
               //time
-              Text(timeText, style: theme.textTheme.labelMedium),
+              Text(timeText, style: theme.textTheme.titleMedium),
             ],
           ),
 
@@ -186,7 +178,7 @@ class _TimingTile extends ConsumerWidget {
                 if (!isDisabled) {
                   AppSnackBar.showSimple(
                     context: context,
-                    isDark: isDark,
+                    isDark: ref.read(isDarkProvider),
                     message: 'Disabled reminders for ${prayer.label}',
                   );
                 }
@@ -195,8 +187,8 @@ class _TimingTile extends ConsumerWidget {
               icon: FaIcon(
                 isDisabled ? FontAwesomeIcons.bellSlash : FontAwesomeIcons.bell,
                 color: isDisabled
-                    ? AppDarkColors.errorColor
-                    : theme.iconTheme.color,
+                    ? theme.colorScheme.error
+                    : theme.colorScheme.onSurface,
               ),
             ),
         ],

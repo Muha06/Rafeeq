@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/core/themes/dark_colors.dart';
-import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/ayah_share_cotroller_provider.dart';
 import 'package:rafeeq/features/Ramadan/domain/ramadan_reflection.dart';
 import 'package:rafeeq/features/Ramadan/presentation/widgets/ramadan_card.dart';
@@ -17,10 +15,6 @@ class RamadanReflectionSheet extends ConsumerWidget {
     final theme = Theme.of(context);
     final tt = theme.textTheme;
     final isDark = ref.watch(isDarkProvider);
-
-    final cardBg = isDark
-        ? AppDarkColors.onDarkSurface
-        : AppLightColors.onLightSurface;
 
     final label = switch (reflection.type) {
       ReminderType.quran => 'Qur’an',
@@ -59,7 +53,7 @@ class RamadanReflectionSheet extends ConsumerWidget {
                 child: Row(
                   children: [
                     Expanded(child: Text('Reflection', style: tt.titleMedium)),
-                    TypeChip(label: label, isDark: isDark),
+                    TypeChip(label: label),
                   ],
                 ),
               ),
@@ -73,7 +67,6 @@ class RamadanReflectionSheet extends ConsumerWidget {
                   children: [
                     _SheetCard(
                       isDark: isDark,
-                      background: cardBg,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -88,7 +81,6 @@ class RamadanReflectionSheet extends ConsumerWidget {
 
                     _SheetCard(
                       isDark: isDark,
-                      background: cardBg,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -107,7 +99,6 @@ class RamadanReflectionSheet extends ConsumerWidget {
                       const SizedBox(height: 12),
                       _SheetCard(
                         isDark: isDark,
-                        background: cardBg,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -126,7 +117,6 @@ class RamadanReflectionSheet extends ConsumerWidget {
 
                     _SheetCard(
                       isDark: isDark,
-                      background: cardBg,
                       child: Row(
                         children: [
                           Expanded(
@@ -201,22 +191,19 @@ class RamadanReflectionSheet extends ConsumerWidget {
 }
 
 class _SheetCard extends StatelessWidget {
-  const _SheetCard({
-    required this.child,
-    required this.isDark,
-    required this.background,
-  });
+  const _SheetCard({required this.child, required this.isDark});
 
   final Widget child;
   final bool isDark;
-  final Color background;
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: background,
+        color: cs.surfaceContainerHigh,
         borderRadius: BorderRadius.circular(16),
       ),
       child: child,

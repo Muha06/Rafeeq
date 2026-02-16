@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rafeeq/core/app_keys.dart';
-import 'package:rafeeq/core/themes/dark_colors.dart';
-import 'package:rafeeq/core/themes/light_colors.dart';
-import 'package:rafeeq/features/adhkar/presentation/widgets/audio_player_sheet.dart';
+ import 'package:rafeeq/features/adhkar/presentation/widgets/audio_player_sheet.dart';
 
 class AppSnackBar {
   static void showSimple({
@@ -13,9 +11,7 @@ class AppSnackBar {
     Color? lightText,
     Duration duration = const Duration(seconds: 3),
   }) {
-    final darkBg = AppDarkColors.iconPrimary;
-    final lightBg = lightBgColor ?? AppLightColors.snackbarInfoBg;
-    final theme = Theme.of(context);
+     final theme = Theme.of(context);
 
     scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
     scaffoldMessengerKey.currentState?.clearSnackBars();
@@ -23,13 +19,10 @@ class AppSnackBar {
       SnackBar(
         elevation: 3,
         persist: false,
-        backgroundColor: isDark ? darkBg : lightBg,
-        content: Text(
+         content: Text(
           message,
           style: theme.textTheme.bodySmall!.copyWith(
-            color: isDark
-                ? AppDarkColors.darkBackground
-                : lightText ?? AppLightColors.snackbarText,
+            
             fontWeight: FontWeight.bold,
             fontSize: 14,
           ),
@@ -49,32 +42,26 @@ class AppSnackBar {
     Duration duration = const Duration(seconds: 3),
   }) {
     final theme = Theme.of(context);
-    final darkBg = AppDarkColors.darkSurfaceSolid;
-    final lightBg = AppLightColors.snackbarInfoBg;
-
+ 
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        backgroundColor: isDark ? darkBg : lightBg,
-        shape: Border(
+         shape: const Border(
           top: BorderSide(
-            color: isDark ? AppDarkColors.border : AppLightColors.border,
-          ),
+           ),
         ),
         persist: false,
         content: Text(
           message,
           style: theme.textTheme.bodySmall!.copyWith(
-            color: isDark ? AppDarkColors.textPrimary : Colors.white,
-            fontWeight: FontWeight.bold,
+             fontWeight: FontWeight.bold,
             fontSize: 14,
           ),
         ),
         action: SnackBarAction(
           label: actionLabel,
-          textColor: AppDarkColors.successColor,
-          onPressed: onAction,
+           onPressed: onAction,
         ),
         duration: duration,
       ),

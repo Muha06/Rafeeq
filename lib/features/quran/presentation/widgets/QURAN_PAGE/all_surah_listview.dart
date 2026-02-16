@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
-import 'package:rafeeq/core/themes/dark_colors.dart';
-import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/quran/presentation/pages/surah_page.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provider.dart';
@@ -66,7 +64,7 @@ class SurahTile extends ConsumerWidget {
     final isDark = ref.watch(isDarkProvider);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 14),
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {
@@ -96,9 +94,6 @@ class SurahTile extends ConsumerWidget {
                   Text(
                     surah.id.toString(),
                     style: theme.textTheme.bodySmall!.copyWith(
-                      color: isDark
-                          ? AppDarkColors.textPrimary
-                          : AppLightColors.textPrimary,
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                     ),
@@ -160,7 +155,7 @@ class SurahTileShimmer extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppDarkColors.darkSurface),
+            border: Border.all(),
             //color: isDark ? AppColors.darkSurface : AppColors.darkSurface,
           ),
           child: ListTile(

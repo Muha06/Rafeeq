@@ -7,8 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/features/location/domain/open_mateo.dart';
 import 'package:rafeeq/core/features/location/presentation/provider/open_mateo_provider.dart';
 import 'package:rafeeq/core/features/location/presentation/provider/user_location_provider.dart';
-import 'package:rafeeq/core/themes/dark_colors.dart';
-import 'package:rafeeq/core/themes/light_colors.dart';
 import 'package:rafeeq/core/widgets/snackbars.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/salah_times_providers.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
@@ -27,9 +25,6 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
   String? _country;
   String? _countryCode; // ✅ needed for Open-Meteo country filter
   GeoPlace? _selectedPlace; // ✅ selected from Open-Meteo
-
-  Color get darkSurface => AppDarkColors.darkSurface;
-  Color get lightSurface => AppLightColors.lightSurface;
 
   bool _verifying = false;
   String? _verifyError;
@@ -152,6 +147,7 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
     final userLocState = ref.watch(userLocationProvider).value;
 
     final notifier = ref.read(userLocationProvider.notifier);
+    final cs = theme.colorScheme;
 
     return Scaffold(
       appBar: AppBar(title: const Text('My location')),
@@ -163,10 +159,8 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
             description:
                 'We’ll detect your location and compute prayer times for where you are.',
             selected: isAuto,
-            baseColor: isDark ? darkSurface : lightSurface,
-            selectedColor: isDark
-                ? AppDarkColors.selectedCardBorder
-                : AppLightColors.onAmberSoft,
+            selectedColor: cs.surfaceContainerHighest,
+            baseColor: cs.surface,
             onTap: () async {
               setState(() {
                 _manualExpanded = false;
@@ -199,10 +193,8 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
             description:
                 'Stable and predictable. No location permission needed.',
             selected: !isAuto,
-            baseColor: isDark ? darkSurface : lightSurface,
-            selectedColor: isDark
-                ? AppDarkColors.selectedCardBorder
-                : AppLightColors.onAmberSoft,
+            selectedColor: cs.surfaceContainerHighest,
+            baseColor: cs.surface,
             onTap: () {
               setState(() => _manualExpanded = !_manualExpanded);
             },
@@ -439,7 +431,6 @@ class _CitySearchSheetState extends ConsumerState<CitySearchSheet> {
 }
 
 /// ---------- UI bits ----------
-
 class _SettingCard extends ConsumerWidget {
   const _SettingCard({
     required this.title,
@@ -463,9 +454,6 @@ class _SettingCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final bg = selected ? selectedColor : baseColor;
-    final isDark = ref.watch(isDarkProvider);
-
     return InkWell(
       borderRadius: BorderRadius.circular(16),
       onTap: onTap,
@@ -474,8 +462,8 @@ class _SettingCard extends ConsumerWidget {
         curve: Curves.easeOut,
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: bg,
           borderRadius: BorderRadius.circular(16),
+          color: selected ? selectedColor : baseColor,
         ),
         child: Column(
           children: [
@@ -501,15 +489,7 @@ class _SettingCard extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(width: 10),
-                IconTheme(
-                  data: IconThemeData(
-                    color: isDark
-                        ? AppDarkColors.iconPrimary
-                        : AppLightColors.iconPrimary,
-                    size: 22,
-                  ),
-                  child: trailing,
-                ),
+                trailing,
               ],
             ),
             if (child != null) ...[child!],
@@ -534,7 +514,6 @@ class _ActionButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final enabled = onTap != null;
-    final isDark = ref.watch(isDarkProvider);
 
     return InkWell(
       borderRadius: BorderRadius.circular(12),
@@ -542,33 +521,21 @@ class _ActionButton extends ConsumerWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(
-          color: isDark
-              ? AppDarkColors.onDarkSurface
-              : AppLightColors.lightSurface2,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: Colors.white.withAlpha(enabled ? 26 : 15)),
         ),
         child: Row(
           children: [
-            Icon(
-              icon,
-              size: 18,
-              color: isDark
-                  ? AppDarkColors.iconPrimary
-                  : AppLightColors.iconPrimary,
-            ),
+            Icon(icon, size: 18),
             const SizedBox(width: 8),
             Expanded(
               child: Text(
                 label,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.w300,
-                  color: isDark
-                      ? AppDarkColors.textPrimary
-                      : AppLightColors.textBody,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w300),
               ),
             ),
           ],
