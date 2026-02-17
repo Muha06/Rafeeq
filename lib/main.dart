@@ -6,7 +6,7 @@ import 'package:rafeeq/app/notifications.dart';
 import 'package:rafeeq/app/providers/general_notifications_provider.dart';
 import 'package:rafeeq/app/tabs_screen.dart';
 import 'package:rafeeq/core/app_keys.dart';
- import 'package:rafeeq/core/themes/dark_theme.dart';
+import 'package:rafeeq/core/themes/dark_theme.dart';
 import 'package:rafeeq/core/themes/light_theme.dart';
 import 'package:rafeeq/features/quran/data/models/ayah_hive.dart';
 import 'package:rafeeq/features/quran/data/models/surah_hive.dart';
@@ -15,6 +15,8 @@ import 'package:rafeeq/features/bookmarks/data/models/dhikr_bookmark_hive_model.
 import 'package:rafeeq/features/bookmarks/data/models/quran_bookmark_hive_model.dart';
 import 'package:rafeeq/features/onborading/presentation/pages/onboarding_scaffold.dart';
 import 'package:rafeeq/features/onborading/presentation/provider/providers.dart';
+import 'package:rafeeq/features/quran_goal/data/models/quran_goal_hive.dart';
+import 'package:rafeeq/features/quran_goal/data/models/quran_log_hive.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/salah_times_providers.dart';
 import 'package:rafeeq/features/settings/presentation/provider/settings_notifcation_provider.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
@@ -41,7 +43,13 @@ Future<void> main() async {
   Hive.registerAdapter(CachedSalahTimesHiveAdapter());
   Hive.registerAdapter(AllahNameHiveAdapter());
 
-  //open boxes
+  Hive.registerAdapter(QuranHiveGoalAdapter());
+  Hive.registerAdapter(QuranHiveLogAdapter());
+
+  // Open boxes
+  await Hive.openBox<QuranHiveGoal>('quran_goal');
+  await Hive.openBox<QuranHiveLog>('quran_logs');
+
   await Hive.openBox<SurahHive>('surahs');
   await Hive.openBox<AyahHive>('ayahs');
   await Hive.openBox<QuranBookmarkHiveModel>('quran_bookmarks_box');

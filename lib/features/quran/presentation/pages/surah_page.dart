@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/core/features/audio/domain/entities/audio_state.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
@@ -16,6 +17,7 @@ import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/ayah_tile.
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_ayah_dialog.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_details.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_settings_sheet.dart';
+import 'package:rafeeq/features/quran/presentation/widgets/log_ayah_bottomsheet.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/surah_audio_providers.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
@@ -314,7 +316,6 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
                   surahs: list,
                   initialSurahIndex: surah.id - 1,
                   initialAyahIndex: 0,
-                  isDark: isDark,
                   onGo: (surahId, ayahNumber) async {
                     final targetSurah = list.firstWhere((s) => s.id == surahId);
 
@@ -356,6 +357,13 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
             ),
           ),
           actions: [
+            TextButton.icon(
+              icon: PhosphorIcon(PhosphorIcons.floppyDisk()),
+              label: const Text('Save'),
+              onPressed: () {
+                showAyahLogSheet(context, ref);
+              },
+            ),
             IconButton(
               onPressed: () {
                 showModalBottomSheet(

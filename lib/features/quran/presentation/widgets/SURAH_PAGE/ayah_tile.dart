@@ -184,7 +184,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                   style: theme.textTheme.bodyMedium!.copyWith(
                     fontWeight: isDark ? FontWeight.w400 : FontWeight.w500,
                     height: 1.4,
-
+                    color: theme.colorScheme.onSurfaceVariant,
                     fontSize: translationFontSize,
                   ),
                 ),

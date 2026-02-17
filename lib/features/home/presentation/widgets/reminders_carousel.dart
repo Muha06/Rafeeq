@@ -43,8 +43,8 @@ class HomeRemindersCarousel extends ConsumerWidget {
       hm(22, 30),
     );
 
-    // Morning: 05:00 – 10:00
-    if (isMorning) {
+    // Morning: 05:00 – 11:30
+    if (!isMorning) {
       items.add(AdhkarReminderCard(isMorning: isMorning));
     }
 
@@ -62,20 +62,18 @@ class HomeRemindersCarousel extends ConsumerWidget {
 
     final canAutoPlay = items.length > 1;
 
-    return Padding(
-      padding: const EdgeInsets.only(top: 6),
-      child: CarouselSlider(
-        items: items,
-        options: CarouselOptions(
-          height: 205, // match your card height area
-          viewportFraction: 1, // full width (banner style)
-          enlargeCenterPage: false,
-          enableInfiniteScroll: canAutoPlay,
-          autoPlay: canAutoPlay,
-          pauseAutoPlayOnTouch: true,
-          autoPlayInterval: const Duration(seconds: 5),
-          autoPlayAnimationDuration: const Duration(milliseconds: 650),
-        ),
+    return CarouselSlider(
+      items: items,
+      options: CarouselOptions(
+        padEnds: false,
+        height: 180, // match your card height area
+        viewportFraction: 1, // full width (banner style)
+        enlargeCenterPage: false,
+        enableInfiniteScroll: canAutoPlay,
+        autoPlay: canAutoPlay,
+        pauseAutoPlayOnTouch: true,
+        autoPlayInterval: const Duration(seconds: 5),
+        autoPlayAnimationDuration: const Duration(milliseconds: 650),
       ),
     );
   }

@@ -12,6 +12,7 @@ import 'package:rafeeq/features/haramain-live/presentation/widgets/haramain_card
 import 'package:rafeeq/features/quran/presentation/widgets/ayah_of_the_day.dart';
 import 'package:rafeeq/features/home/presentation/widgets/reminders_carousel.dart';
 import 'package:rafeeq/features/home/presentation/widgets/quick_action_row.dart';
+import 'package:rafeeq/features/quran_goal/presentation/widgets/quran_qoal_home_card.dart';
 import 'package:rafeeq/features/settings/presentation/pages/settings_page.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_prayer.dart';
 import 'package:rafeeq/features/timings/presentation/widgets/timeline_card.dart';
@@ -26,7 +27,7 @@ class HomePage extends ConsumerStatefulWidget {
 class _HomePageState extends ConsumerState<HomePage> {
   // Padding scale (single source of truth)
   static const double _hPad = 12.0;
-  static const double _v16 = 12.0;
+  static const double _v10 = 10.0;
 
   final Map<SalahPrayer, String> assetByPrayer = {
     SalahPrayer.fajr: 'assets/images/salat/fajr.jpeg',
@@ -72,21 +73,18 @@ class _HomePageState extends ConsumerState<HomePage> {
               child: HomeSection(
                 padding: const EdgeInsets.symmetric(
                   horizontal: _hPad,
-                  vertical: _v16,
+                  vertical: _v10,
                 ),
                 child: TodayTimesCard(assetsByPrayer: assetByPrayer),
               ),
             ),
-
-            // REMINDERS
-            const SliverToBoxAdapter(child: HomeRemindersCarousel()),
 
             // QUICK LINKS ROW
             SliverToBoxAdapter(
               child: HomeSection(
                 padding: const EdgeInsets.symmetric(
                   horizontal: _hPad,
-                  vertical: _v16,
+                  vertical: _v10,
                 ),
                 child: HomeQuickActionsRow(
                   onQuran: () {
@@ -107,12 +105,34 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
             ),
 
+            // REMINDERS
+            const SliverToBoxAdapter(
+              child: HomeSection(
+                padding: EdgeInsets.symmetric(
+                  horizontal: _hPad,
+                  vertical: _v10,
+                ),
+                child: HomeRemindersCarousel(),
+              ),
+            ),
+
+            //QURAN GOAL CARD
+            const SliverToBoxAdapter(
+              child: HomeSection(
+                padding: EdgeInsets.symmetric(
+                  horizontal: _hPad,
+                  vertical: _v10,
+                ),
+                child: QuranGoalCard(),
+              ),
+            ),
+
             //Ramadan card
             const SliverToBoxAdapter(
               child: HomeSection(
                 padding: EdgeInsets.symmetric(
                   horizontal: _hPad,
-                  vertical: _v16,
+                  // vertical: _v10,
                 ),
                 child: RamadanDailyCard(),
               ),
@@ -123,7 +143,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               child: HomeSection(
                 padding: EdgeInsets.symmetric(
                   horizontal: _hPad,
-                  vertical: _v16,
+                  vertical: _v10,
                 ),
                 child: HaramainCard(),
               ),
@@ -134,7 +154,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               child: HomeSection(
                 padding: EdgeInsets.symmetric(
                   horizontal: _hPad,
-                  vertical: _v16,
+                  vertical: _v10,
                 ),
                 child: AyahOfTheDay(),
               ),

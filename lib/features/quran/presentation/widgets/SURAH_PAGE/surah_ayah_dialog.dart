@@ -6,7 +6,6 @@ import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 Future<void> showSurahAyahPickerDialog({
   required BuildContext context,
   required List<Surah> surahs,
-  required bool isDark,
   int initialSurahIndex = 0,
   int initialAyahIndex = 0, // 0-based
   required void Function(int surahId, int ayahNumber)

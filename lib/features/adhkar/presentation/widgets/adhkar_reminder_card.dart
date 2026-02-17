@@ -22,83 +22,79 @@ class AdhkarReminderCard extends ConsumerWidget {
     const String eveningMsg =
         'Evening adhkār is your nightly shield — protection, calm, and barakah by Allah ﷻ. Read along, breathe, and listen.';
 
-    return Padding(
-      padding: const EdgeInsets.only(left: 14.0, right: 14, top: 4, bottom: 16),
-      child: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: cs.surface,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    isMorning ? "Morning Adhkār ☀️" : 'Evening Adhkar 🌙',
-                    style: theme.textTheme.titleSmall,
+    return Stack(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: cs.surface,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  isMorning ? "Morning Adhkār ☀️" : 'Evening Adhkar 🌙',
+                  style: theme.textTheme.titleSmall,
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  isMorning ? morningMsg : eveningMsg,
+                  style: theme.textTheme.bodyMedium!.copyWith(
+                    fontSize: 14,
+                    height: 1.2,
                   ),
-                  const SizedBox(height: 10),
-                  Text(
-                    isMorning ? morningMsg : eveningMsg,
-                    style: theme.textTheme.bodyMedium!.copyWith(
-                      fontSize: 14,
-                      height: 1.2,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(child: AudioControlsChip(isMorning: isMorning)),
-                      const Spacer(),
-                      GestureDetector(
-                        onTap: () {
-                          final categories = ref.read(
-                            getAdhkarCategoriesProvider,
-                          );
-                          final keyword = isMorning ? 'morning' : 'evening';
-                          final category = categories.firstWhere(
-                            (c) => c.title.toLowerCase().contains(keyword),
-                            orElse: () => categories.first,
-                          );
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(child: AudioControlsChip(isMorning: isMorning)),
+                    const Spacer(),
+                    GestureDetector(
+                      onTap: () {
+                        final categories = ref.read(
+                          getAdhkarCategoriesProvider,
+                        );
+                        final keyword = isMorning ? 'morning' : 'evening';
+                        final category = categories.firstWhere(
+                          (c) => c.title.toLowerCase().contains(keyword),
+                          orElse: () => categories.first,
+                        );
 
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  AdhkarListPage(category: category),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          'Tap to read >',
-                          style: theme.textTheme.bodySmall!.copyWith(
-                            fontWeight: FontWeight.bold,
-                            height: 1,
-                            color: cs.primary,
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => AdhkarListPage(category: category),
                           ),
+                        );
+                      },
+                      child: Text(
+                        'Tap to read >',
+                        style: theme.textTheme.bodySmall!.copyWith(
+                          fontWeight: FontWeight.bold,
+                          height: 1,
+                          color: cs.primary,
                         ),
                       ),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
-          Positioned(
-            top: 8,
-            right: 8,
-            child: Image.asset(
-              'assets/images/adhkar/mosque.png',
-              height: 30,
-              width: 30,
-            ),
+        ),
+        Positioned(
+          top: 8,
+          right: 8,
+          child: Image.asset(
+            'assets/images/adhkar/mosque.png',
+            height: 30,
+            width: 30,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
