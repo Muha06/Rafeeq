@@ -22,12 +22,17 @@ class QuranGoalNotifier extends Notifier<QuranGoal> {
   }
 
   void setGoal(int target) {
-    final goal = QuranGoal(dailyTarget: target, createdAt: DateTime.now());
+    final active = target > 0; // 0 target → inactive
+    final goal = QuranGoal(
+      dailyTarget: target,
+      createdAt: DateTime.now(),
+      isActive: active,
+    );
+
     state = goal;
 
-    // Save to Hive using Hive model
+    // Save to Hive as usual
     final hiveGoal = mapDomainGoal(goal);
-
     box.put('goal', hiveGoal);
   }
 }

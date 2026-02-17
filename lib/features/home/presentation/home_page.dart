@@ -12,6 +12,7 @@ import 'package:rafeeq/features/haramain-live/presentation/widgets/haramain_card
 import 'package:rafeeq/features/quran/presentation/widgets/ayah_of_the_day.dart';
 import 'package:rafeeq/features/home/presentation/widgets/reminders_carousel.dart';
 import 'package:rafeeq/features/home/presentation/widgets/quick_action_row.dart';
+import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/quran_qoal_home_card.dart';
 import 'package:rafeeq/features/settings/presentation/pages/settings_page.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_prayer.dart';
@@ -25,7 +26,6 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
-  // Padding scale (single source of truth)
   static const double _hPad = 12.0;
   static const double _v10 = 10.0;
 
@@ -44,6 +44,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final goal = ref.watch(quranGoalProvider);
 
     return Scaffold(
       body: SafeArea(
@@ -117,23 +118,21 @@ class _HomePageState extends ConsumerState<HomePage> {
             ),
 
             //QURAN GOAL CARD
-            const SliverToBoxAdapter(
-              child: HomeSection(
-                padding: EdgeInsets.symmetric(
-                  horizontal: _hPad,
-                  vertical: _v10,
+            if (goal.isActive)
+              const SliverToBoxAdapter(
+                child: HomeSection(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: _hPad,
+                    vertical: _v10,
+                  ),
+                  child: QuranGoalCard(),
                 ),
-                child: QuranGoalCard(),
               ),
-            ),
 
             //Ramadan card
             const SliverToBoxAdapter(
               child: HomeSection(
-                padding: EdgeInsets.symmetric(
-                  horizontal: _hPad,
-                  // vertical: _v10,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: _hPad),
                 child: RamadanDailyCard(),
               ),
             ),

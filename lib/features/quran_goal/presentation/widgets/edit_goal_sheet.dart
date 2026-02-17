@@ -1,0 +1,119 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:rafeeq/features/quran_goal/domain/entities/quran_goal.dart';
+import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
+
+class EditQuranGoalSheet extends ConsumerStatefulWidget {
+  final QuranGoal goal;
+  const EditQuranGoalSheet({super.key, required this.goal});
+
+  @override
+  ConsumerState<EditQuranGoalSheet> createState() => _EditQuranGoalSheetState();
+}
+
+class _EditQuranGoalSheetState extends ConsumerState<EditQuranGoalSheet> {
+  late int targetAyahs;
+
+  @override
+  void initState() {
+    super.initState();
+    targetAyahs = widget.goal.dailyTarget;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
+    return Padding(
+      padding: EdgeInsets.only(
+        left: 16,
+        right: 16,
+        top: 0,
+        bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // --- Islamic-friendly title ---
+          Text(
+            "Adjust My Qur'an Goal",
+            style: theme.textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+
+          Center(
+            child: Text(
+              "Set how many ayahs you aim to read daily, Insha'Allah.",
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: cs.onSurfaceVariant,
+                fontSize: 16,
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // --- Number selector with buttons ---
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                onPressed: targetAyahs > 1
+                    ? () => setState(() => targetAyahs--)
+                    : null,
+                icon: PhosphorIcon(
+                  PhosphorIcons.minus(),
+                  color: targetAyahs > 1 ? cs.primary : cs.onSurfaceVariant,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Text(
+                '$targetAyahs',
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  color: cs.onSurface,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(width: 16),
+              IconButton(
+                onPressed: () => setState(() => targetAyahs++),
+                icon: Icon(PhosphorIcons.plus(), color: cs.primary),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 24),
+
+          // --- Action buttons ---
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text("Cancel"),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: FilledButton(
+                  onPressed: () {
+                    if (targetAyahs > 0) {
+                      ref.read(quranGoalProvider.notifier).setGoal(targetAyahs);
+                      Navigator.pop(context);
+                    }
+                  },
+                  child: const Text("Save Goal"),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}

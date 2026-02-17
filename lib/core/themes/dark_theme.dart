@@ -117,7 +117,7 @@ ThemeData appDarkThemeData() {
     filledButtonTheme: FilledButtonThemeData(
       style: ButtonStyle(
         backgroundColor: WidgetStatePropertyAll(scheme.surfaceContainerHigh),
-        foregroundColor: WidgetStatePropertyAll(scheme.primary),
+        foregroundColor: WidgetStatePropertyAll(scheme.primary.withAlpha(210)),
         padding: const WidgetStatePropertyAll(
           EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         ),
@@ -260,7 +260,7 @@ class AppDarkColors {
   static const outline = Color(0xFF123238);
   static const outlineVariant = Color(0xFF0E2A2D);
 
-  static const brand = Color(0xFFFFC36A);
+  static const brand = Color(0xFFFFD700);
 
   static const onSurface = Color(0xFFEAF2F2);
   static const onSurface2 = Color(0xFFCAD6D8);
