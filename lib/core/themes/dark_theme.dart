@@ -93,6 +93,8 @@ ThemeData appDarkThemeData() {
 
     progressIndicatorTheme: ProgressIndicatorThemeData(
       strokeWidth: 3.5,
+      linearTrackColor: scheme.surfaceContainerHighest,
+      borderRadius: BorderRadius.circular(999),
       color: scheme.primary,
     ),
 
@@ -134,12 +136,16 @@ ThemeData appDarkThemeData() {
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
         backgroundColor: Colors.transparent,
-        foregroundColor: scheme.onSurface,
-        iconColor: scheme.onSurface,
+        foregroundColor: scheme.primary,
+        iconColor: scheme.primary,
         disabledForegroundColor: scheme.onSurfaceVariant,
-        side: BorderSide(color: scheme.outline),
+        side: BorderSide(color: scheme.onSurface.withAlpha(100)),
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-        textStyle: const TextStyle(fontWeight: FontWeight.w300, fontSize: 14),
+        textStyle: TextStyle(
+          fontWeight: FontWeight.w300,
+          fontSize: 14,
+          color: scheme.primary,
+        ),
       ),
     ),
 

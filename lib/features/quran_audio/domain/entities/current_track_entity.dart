@@ -1,5 +1,5 @@
-import 'package:rafeeq/features/quran_goal/data/models/quran_audio/data/models/audio_file_dto.dart';
-import 'package:rafeeq/features/quran_goal/data/models/quran_audio/domain/entities/reciter_entity.dart';
+import 'package:rafeeq/features/quran_audio/data/models/audio_file_dto.dart';
+import 'package:rafeeq/features/quran_audio/domain/entities/reciter_entity.dart';
 
 class QuranTrackEntity {
   final String trackId;

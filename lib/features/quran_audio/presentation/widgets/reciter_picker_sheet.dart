@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/features/quran_goal/data/models/quran_audio/presentation/providers/reciters_provider.dart';
+import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
 
 class ReciterPickerSheet extends ConsumerWidget {
   const ReciterPickerSheet({super.key});
@@ -129,7 +129,7 @@ class ReciterPickerSheet extends ConsumerWidget {
                                           style: theme.textTheme.labelLarge!
                                               .copyWith(
                                                 color: cs.onSurface,
-                                                fontSize: 12 ,
+                                                fontSize: 12,
                                                 fontWeight: FontWeight.w700,
                                               ),
                                         ),
@@ -141,6 +141,7 @@ class ReciterPickerSheet extends ConsumerWidget {
                                     Expanded(
                                       child: Text(
                                         r.name,
+                                        maxLines: 2,
                                         style: theme.textTheme.labelLarge
                                             ?.copyWith(
                                               fontWeight: isSelected

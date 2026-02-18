@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:rafeeq/core/features/network/quran_auth_client.dart';
-import 'package:rafeeq/features/quran_goal/data/models/quran_audio/data/models/audio_file_dto.dart';
-import 'package:rafeeq/features/quran_goal/data/models/quran_audio/data/models/chapter_file_response.dart';
-import 'package:rafeeq/features/quran_goal/data/models/quran_audio/domain/entities/reciter_entity.dart';
+import 'package:rafeeq/features/quran_audio/data/models/audio_file_dto.dart';
+import 'package:rafeeq/features/quran_audio/data/models/chapter_file_response.dart';
+import 'package:rafeeq/features/quran_audio/domain/entities/reciter_entity.dart';
 
 class QuranAudioApiService {
   static const String baseUrl = 'https://apis.quran.foundation/content/api/v4';

@@ -25,6 +25,7 @@ class AudioController extends Notifier<AudioState> {
     required AudioSourceType source,
     required String id,
     required String title,
+    bool showPlayer = true,
     required BuildContext context,
   }) async {
     // Same track? If paused, just resume.
@@ -40,7 +41,11 @@ class AudioController extends Notifier<AudioState> {
 
     try {
       await _player.setUrl(url);
-      AppSnackBar.showPlayer();
+      
+      if (showPlayer) {
+        AppSnackBar.showPlayer();
+      }
+
       await _player.play();
     } catch (e) {
       debugPrint('Error playing audio: $e');

@@ -13,7 +13,7 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true, // handles keyboard
-    backgroundColor: Colors.transparent, // for rounded corners
+    showDragHandle: true,
     builder: (context) => StatefulBuilder(
       builder: (context, setState) {
         // calculate progress
@@ -27,18 +27,28 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
           ),
         );
 
+        final totalAfterLog = todayProgress.totalRead + ayahsRead;
+        final progressPercent = (totalAfterLog / goal.dailyTarget).clamp(
+          0.0,
+          1.0,
+        );
+
+        String encouragement;
+        if (progressPercent < 0.5) {
+          encouragement = "Keep going, you got this!";
+        } else if (progressPercent < 1.0) {
+          encouragement = "Masha’Allah, almost there!";
+        } else {
+          encouragement = "Goal complete! JazakAllahu Khair!";
+        }
+
         return Padding(
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
           child: Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: cs.surface,
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(16),
-              ),
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 14),
+            decoration: BoxDecoration(color: cs.surface),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -51,6 +61,32 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
                   ),
                 ),
                 const SizedBox(height: 16),
+
+                // Progress info
+                Text(
+                  '$totalAfterLog / ${goal.dailyTarget} ayahs today',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(color: cs.onSurfaceVariant),
+                ),
+                const SizedBox(height: 8),
+
+                LinearProgressIndicator(
+                  value: progressPercent,
+                  minHeight: 8,
+                  color: cs.primary,
+                ),
+                const SizedBox(height: 16),
+
+                Text(
+                  encouragement,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: cs.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 16),
+
                 // Increment / Decrement row
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -65,6 +101,7 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
                       ),
                     ),
                     const SizedBox(width: 16),
+
                     Text(
                       '$ayahsRead',
                       style: Theme.of(context).textTheme.headlineSmall
@@ -74,6 +111,7 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
                           ),
                     ),
                     const SizedBox(width: 16),
+
                     IconButton(
                       onPressed: () => setState(() => ayahsRead++),
                       icon: Icon(PhosphorIcons.plus(), color: cs.primary),
@@ -104,13 +142,6 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
 
                     icon: Icon(PhosphorIcons.floppyDisk()),
                     label: const Text('Save'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: cs.primary,
-                      foregroundColor: cs.onPrimary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
                   ),
                 ),
                 const SizedBox(height: 16),

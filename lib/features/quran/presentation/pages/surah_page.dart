@@ -12,14 +12,16 @@ import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/fetch_ayah_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/last_read_provider.dart';
+import 'package:rafeeq/features/quran/presentation/riverpod/show_audio_controls_bar_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/ayah_tile.dart';
+import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/quran_audio_controls_bar.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_ayah_dialog.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_details.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_settings_sheet.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/log_ayah_bottomsheet.dart';
-import 'package:rafeeq/features/quran_goal/data/models/quran_audio/presentation/providers/reciters_provider.dart';
-import 'package:rafeeq/features/quran_goal/data/models/quran_audio/presentation/providers/surah_audio_providers.dart';
+import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
+import 'package:rafeeq/features/quran_audio/presentation/providers/surah_audio_providers.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
@@ -258,8 +260,12 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
           title: surahName,
           source: AudioSourceType.quranSurah,
           url: track.url,
+          showPlayer: false,
           context: context,
         );
+
+    //show cntrols
+    ref.read(showControlsProvider.notifier).state = true;
   }
 
   @override
@@ -275,6 +281,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
     final surahs = ref.watch(surahsFutureProvider).value;
 
     final showControls = ref.watch(surahSettingsProvider).autoScrollEnabled;
+    final showAudioControls = ref.watch(showControlsProvider);
 
     return PopScope(
       onPopInvokedWithResult: (didPop, result) async {
@@ -294,14 +301,18 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
         ref.read(surahSettingsProvider.notifier).setAutoScrollEnabled(false);
       },
       child: Scaffold(
-        bottomNavigationBar: showControls
-            ? AutoScrollControlsBar(
-                onStart: _startAutoScroll,
-                autoOn: _autoOn, //for pause featre
-                onExit: _exitAutoScroll,
-                onPause: _pauseAutoScroll,
-              )
+        bottomNavigationBar: showAudioControls
+            ? QuranAudioControlsBar(surah: surah)
             : null,
+
+        //  showControls
+        //     ? AutoScrollControlsBar(
+        //         onStart: _startAutoScroll,
+        //         autoOn: _autoOn, //for pause featre
+        //         onExit: _exitAutoScroll,
+        //         onPause: _pauseAutoScroll,
+        //       )
+        //     : null,
         appBar: AppBar(
           backgroundColor: theme.scaffoldBackgroundColor,
           title: Material(

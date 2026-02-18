@@ -1,4 +1,4 @@
-import 'package:rafeeq/features/quran_goal/data/models/quran_audio/data/models/audio_file_dto.dart';
+import 'package:rafeeq/features/quran_audio/data/models/audio_file_dto.dart';
 
 //converts raw response to DTO (optional)
 class ChapterRecitationResponseDto {

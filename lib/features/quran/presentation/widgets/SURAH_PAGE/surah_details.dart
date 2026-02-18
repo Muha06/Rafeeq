@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/core/features/audio/providers/just_audio_player_provider.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
@@ -96,17 +97,21 @@ class SurahDetails extends ConsumerWidget {
   }
 }
 
-class PlayFullSurahBtn extends StatelessWidget {
+class PlayFullSurahBtn extends ConsumerWidget {
   const PlayFullSurahBtn({super.key, required this.onPlay});
 
   final VoidCallback onPlay;
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
+    final loading = ref.watch(audioBufferingProvider).value;
+
     return OutlinedButton.icon(
-      icon: const Icon(CupertinoIcons.play),
+      icon: (loading != null && loading)
+          ? const SizedBox(height: 12, child: CupertinoActivityIndicator())
+          : const Icon(CupertinoIcons.play),
       onPressed: onPlay,
 
-      label: const Text('Play surah'),
+      label: Text((loading != null && loading) ? 'Loading...' : 'Play surah'),
     );
   }
 }

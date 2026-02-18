@@ -6,7 +6,6 @@ import 'package:rafeeq/core/themes/app_text_style.dart';
 import 'package:rafeeq/features/calendar/presentation/widgets/day_cell.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 import 'package:table_calendar/table_calendar.dart';
-
 import '../providers/hijri_date_providers.dart';
 
 class CalendarPage extends ConsumerStatefulWidget {
@@ -169,13 +168,12 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
         title: const Text('Calendar'),
         actions: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 12.0),
             child: TextButton.icon(
               icon: const Icon(Icons.tune),
               label: Text(
                 'Adjust date',
                 style: theme.textTheme.bodySmall!.copyWith(
-                  color: theme.textTheme.bodyLarge!.color,
                   fontWeight: FontWeight.bold,
                 ),
               ),
