@@ -62,53 +62,48 @@ class MosqueCard extends ConsumerWidget {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
-    return Material(
-      borderRadius: BorderRadius.circular(12),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        highlightColor: Colors.white.withAlpha(25),
-        onTap: () async {
-          final liveUrl = mosqueName == 'Madinah' ? madinahLive : makkahLive;
-          final title = mosqueName;
+    return GestureDetector(
+      onTap: () async {
+        final liveUrl = mosqueName == 'Madinah' ? madinahLive : makkahLive;
+        final title = mosqueName;
 
-          if (context.mounted) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    HaramainAloulaLivePage(title: title, liveUrl: liveUrl),
+        if (context.mounted) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  HaramainAloulaLivePage(title: title, liveUrl: liveUrl),
+            ),
+          );
+        }
+      },
+
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(14),
+          color: cs.surfaceContainerHighest,
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(mosqueName, style: theme.textTheme.labelLarge),
+                  const SizedBox(height: 8),
+
+                  const LiveChip(),
+                ],
               ),
-            );
-          }
-        },
+            ),
 
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
-            color: cs.surfaceContainerHighest,
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(mosqueName, style: theme.textTheme.labelMedium),
-                    const SizedBox(height: 12),
+            const Spacer(),
 
-                    const LiveChip(),
-                  ],
-                ),
-              ),
-
-              const Spacer(),
-
-              const FaIcon(FontAwesomeIcons.chevronRight, size: 16),
-            ],
-          ),
+            const FaIcon(FontAwesomeIcons.chevronRight, size: 16),
+          ],
         ),
       ),
     );

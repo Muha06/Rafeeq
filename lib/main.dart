@@ -7,7 +7,6 @@ import 'package:rafeeq/app/providers/general_notifications_provider.dart';
 import 'package:rafeeq/app/tabs_screen.dart';
 import 'package:rafeeq/core/app_keys.dart';
 import 'package:rafeeq/core/themes/dark_theme.dart';
-import 'package:rafeeq/core/themes/light_theme.dart';
 import 'package:rafeeq/features/quran/data/models/ayah_hive.dart';
 import 'package:rafeeq/features/quran/data/models/surah_hive.dart';
 import 'package:rafeeq/features/asma_ul_husna/data/models/hive/name_hive_model.dart';
@@ -100,7 +99,7 @@ class _MyAppState extends ConsumerState<MyApp> {
 
     return MaterialApp(
       title: 'Rafeeq',
-      theme: appLightThemeData(),
+      // theme: appLightThemeData(),
       darkTheme: appDarkThemeData(),
       themeMode: switch (mode) {
         AppThemeMode.dark => ThemeMode.dark,

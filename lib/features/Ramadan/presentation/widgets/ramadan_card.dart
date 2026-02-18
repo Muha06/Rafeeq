@@ -50,7 +50,7 @@ class _RamadanDailyCardState extends ConsumerState<RamadanDailyCard> {
             borderRadius: BorderRadius.circular(14),
             color: cs.surface,
           ),
-          padding: EdgeInsets.zero,
+          padding: const EdgeInsets.all(14),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

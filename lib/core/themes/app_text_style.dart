@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:rafeeq/core/themes/dark_theme.dart';
 
 class AppTextStyles {
-  // Use ONE Latin font for the whole UI
-  static TextStyle get _base => GoogleFonts.lato(
+  // Base Manrope style
+  static const TextStyle _base = TextStyle(
+    fontFamily: 'Manrope',
     fontSize: 14,
     height: 1.35,
     letterSpacing: 0.1,
     fontWeight: FontWeight.w400,
   );
 
-  // AppBar / page titles (not screaming)
+  // AppBar / page titles
   static TextStyle get title => _base.copyWith(
     fontSize: 18,
     fontWeight: FontWeight.w600,
@@ -18,7 +19,7 @@ class AppTextStyles {
     letterSpacing: 0.0,
   );
 
-  // Section headers: "Today", "Explore", "Daily verse"
+  // Section headers
   static TextStyle get section => _base.copyWith(
     fontSize: 13,
     fontWeight: FontWeight.w600,
@@ -26,15 +27,15 @@ class AppTextStyles {
     height: 1.1,
   );
 
-  // Normal UI body (most text)
+  // Normal body text
   static TextStyle get body =>
       _base.copyWith(fontSize: 14, fontWeight: FontWeight.w400, height: 1.45);
 
-  // Longer paragraphs (verse translations / descriptions)
+  // Longer paragraphs
   static TextStyle get paragraph =>
       _base.copyWith(fontSize: 14, height: 1.6, letterSpacing: 0.15);
 
-  // Captions / secondary
+  // Secondary / captions
   static TextStyle get secondary => _base.copyWith(
     fontSize: 12.5,
     fontWeight: FontWeight.w500,
@@ -42,7 +43,7 @@ class AppTextStyles {
     letterSpacing: 0.2,
   );
 
-  // Tiny labels (times, chips, "Tap to read")
+  // Labels
   static TextStyle get label => _base.copyWith(
     fontSize: 12,
     fontWeight: FontWeight.w600,
@@ -50,20 +51,24 @@ class AppTextStyles {
     height: 1.1,
   );
 
-  // Qur'an Arabic (keep your Uthmani)
-  static const TextStyle quranBody = TextStyle(
+  // Qur'an Arabic
+  static const TextStyle quranAyah = TextStyle(
     fontFamily: 'Uthmani',
-    fontSize: 30,
-    height: 1.85,
-    wordSpacing: 2,
+    fontSize: 24,
+    height: 1.9,
+    wordSpacing: 3,
+    fontWeight: FontWeight.w300,
+    color: AppDarkColors.onSurface,
     fontFamilyFallback: ['NotoNaskhArabic', 'Amiri'],
   );
 
-  // General Arabic UI text (not Qur’an script)
+  // Arabic UI (non-Qur'an)
   static TextStyle get arabicUi => const TextStyle(
-    fontFamily: 'NotoKufiArabic',
-    fontSize: 16,
+    fontFamily: 'Uthmani',
+    fontSize: 24,
     height: 1.4,
-    fontWeight: FontWeight.w500,
+    wordSpacing: 2.5,
+    color: AppDarkColors.onSurface,
+    fontWeight: FontWeight.w300,
   );
 }

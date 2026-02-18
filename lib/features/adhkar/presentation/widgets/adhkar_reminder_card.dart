@@ -22,79 +22,84 @@ class AdhkarReminderCard extends ConsumerWidget {
     const String eveningMsg =
         'Evening adhkār is your nightly shield — protection, calm, and barakah by Allah ﷻ. Read along, breathe, and listen.';
 
-    return Stack(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: cs.surface,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  isMorning ? "Morning Adhkār ☀️" : 'Evening Adhkar 🌙',
-                  style: theme.textTheme.titleSmall,
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  isMorning ? morningMsg : eveningMsg,
-                  style: theme.textTheme.bodyMedium!.copyWith(
-                    fontSize: 14,
-                    height: 1.2,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 14.0),
+      child: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: cs.surface,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    isMorning ? "Morning Adhkār" : 'Evening Adhkar',
+                    style: theme.textTheme.labelLarge,
                   ),
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(child: AudioControlsChip(isMorning: isMorning)),
-                    const Spacer(),
-                    GestureDetector(
-                      onTap: () {
-                        final categories = ref.read(
-                          getAdhkarCategoriesProvider,
-                        );
-                        final keyword = isMorning ? 'morning' : 'evening';
-                        final category = categories.firstWhere(
-                          (c) => c.title.toLowerCase().contains(keyword),
-                          orElse: () => categories.first,
-                        );
 
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => AdhkarListPage(category: category),
+                  const SizedBox(height: 10),
+                  Text(
+                    isMorning ? morningMsg : eveningMsg,
+                    style: theme.textTheme.bodyMedium!,
+                  ),
+                  const SizedBox(height: 14),
+
+                  //Actions
+                  Row(
+                    children: [
+                      AudioControlsChip(isMorning: isMorning),
+
+                      const Spacer(),
+
+                      GestureDetector(
+                        onTap: () {
+                          final categories = ref.read(
+                            getAdhkarCategoriesProvider,
+                          );
+                          final keyword = isMorning ? 'morning' : 'evening';
+                          final category = categories.firstWhere(
+                            (c) => c.title.toLowerCase().contains(keyword),
+                            orElse: () => categories.first,
+                          );
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  AdhkarListPage(category: category),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'Tap to read >',
+                          style: theme.textTheme.bodySmall!.copyWith(
+                            fontWeight: FontWeight.bold,
+                            height: 1,
+                            color: cs.primary,
                           ),
-                        );
-                      },
-                      child: Text(
-                        'Tap to read >',
-                        style: theme.textTheme.bodySmall!.copyWith(
-                          fontWeight: FontWeight.bold,
-                          height: 1,
-                          color: cs.primary,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-        Positioned(
-          top: 8,
-          right: 8,
-          child: Image.asset(
-            'assets/images/adhkar/mosque.png',
-            height: 30,
-            width: 30,
+          Positioned(
+            top: 8,
+            right: 8,
+            child: Image.asset(
+              'assets/images/adhkar/mosque.png',
+              height: 30,
+              width: 30,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -116,30 +121,23 @@ class AudioControlsChip extends ConsumerWidget {
     final ctrl = ref.watch(audioControllerProvider.notifier);
 
     return urlsAsync.when(
-      loading: () => OutlinedButton.icon(
+      loading: () => TextButton.icon(
         key: const ValueKey('loading'),
         onPressed: null,
-        style: theme.outlinedButtonTheme.style!.copyWith(
-          padding: const WidgetStatePropertyAll(
-            EdgeInsets.symmetric(horizontal: 16),
-          ),
-        ),
+        style: theme.textButtonTheme.style!,
         icon: const CupertinoActivityIndicator(),
         label: Text('Loading', style: theme.textTheme.bodySmall!),
       ),
-      error: (e, st) => OutlinedButton.icon(
+      error: (e, st) => TextButton.icon(
         key: const ValueKey('error'),
         onPressed: () => ref.invalidate(adhkarAudioUrlsProvider),
-        style: theme.outlinedButtonTheme.style!.copyWith(
-          padding: const WidgetStatePropertyAll(
-            EdgeInsets.symmetric(horizontal: 16),
-          ),
-        ),
+        style: theme.textButtonTheme.style!.copyWith(),
         icon: const Icon(CupertinoIcons.exclamationmark_triangle),
         label: Text(
           'Retry',
           style: theme.textTheme.bodySmall!.copyWith(
             fontWeight: FontWeight.bold,
+            color: theme.colorScheme.primary,
           ),
         ),
       ),
@@ -152,7 +150,7 @@ class AudioControlsChip extends ConsumerWidget {
 
         final showPause = playing && isActive;
 
-        return OutlinedButton.icon(
+        return TextButton.icon(
           onPressed: buffering
               ? null
               : () {
@@ -169,11 +167,7 @@ class AudioControlsChip extends ConsumerWidget {
                   }
                 },
 
-          style: theme.outlinedButtonTheme.style!.copyWith(
-            padding: const WidgetStatePropertyAll(
-              EdgeInsets.symmetric(horizontal: 6),
-            ),
-          ),
+          style: theme.textButtonTheme.style,
           icon: buffering
               ? const CupertinoActivityIndicator()
               : Icon(showPause ? CupertinoIcons.pause : CupertinoIcons.play),
@@ -183,6 +177,7 @@ class AudioControlsChip extends ConsumerWidget {
                   (showPause ? 'Pause' : 'Play'),
                   style: theme.textTheme.bodySmall!.copyWith(
                     fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onSurface,
                   ),
                 ),
         );

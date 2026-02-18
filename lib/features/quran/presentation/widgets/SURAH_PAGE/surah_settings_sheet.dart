@@ -16,8 +16,7 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final cs = theme.colorScheme;
-
+ 
     final s = ref.watch(surahSettingsProvider);
     final sNotifier = ref.read(surahSettingsProvider.notifier);
 
@@ -77,29 +76,7 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
 
             //select reciter
             ListTile(
-              title: Row(
-                children: [
-                  Text('Reciters', style: titleTextstyle),
-                  const SizedBox(width: 12),
-
-                  Container(
-                    decoration: BoxDecoration(
-                      color: cs.primary.withAlpha(200),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-
-                    padding: const EdgeInsets.all(4),
-                    child: Text(
-                      '🔥 New',
-                      style: theme.textTheme.bodySmall!.copyWith(
-                        fontSize: 10,
-                        color: cs.onPrimary,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              title: Text('Reciters', style: titleTextstyle),
               contentPadding: EdgeInsets.zero,
               trailing: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 220),

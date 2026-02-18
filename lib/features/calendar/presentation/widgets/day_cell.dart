@@ -56,12 +56,13 @@ class DayCell extends ConsumerWidget {
             // Gregorian day number
             Text(
               '${day.day}',
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(
+              style: Theme.of(context).textTheme.labelLarge!.copyWith(
                 fontWeight: FontWeight.bold,
                 color: dateTextColor,
               ),
             ),
             const SizedBox(height: 2),
+            
             // Hijri day number (small)
             Text(
               '${adjusted.hDay}',

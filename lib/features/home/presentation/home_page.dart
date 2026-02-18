@@ -110,7 +110,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             const SliverToBoxAdapter(
               child: HomeSection(
                 padding: EdgeInsets.symmetric(
-                  horizontal: _hPad,
+                  // horizontal: _hPad,
                   vertical: _v10,
                 ),
                 child: HomeRemindersCarousel(),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rafeeq/core/themes/app_text_style.dart';
-
+ 
 ThemeData appDarkThemeData() {
   final scheme =
       const ColorScheme.dark(
@@ -23,6 +22,8 @@ ThemeData appDarkThemeData() {
         outlineVariant: AppDarkColors.outlineVariant, // subtle borders/dividers
         onSurfaceVariant: AppDarkColors.onSurface2, // quieter text/icons
       );
+
+  final base = Typography.material2021().black.apply(fontFamily: 'Manrope');
 
   return ThemeData(
     useMaterial3: true,
@@ -209,42 +210,47 @@ ThemeData appDarkThemeData() {
       overlayColor: const WidgetStatePropertyAll(AppDarkColors.switchRipple),
     ),
 
-    textTheme: TextTheme(
-      // Big screen/page titles (Home, Quran, Settings)
-      titleLarge: AppTextStyles.title.copyWith(color: scheme.onSurface),
-
-      // Card titles / section headers
-      titleMedium: AppTextStyles.section.copyWith(color: scheme.onSurface),
-
-      // Small headings (like "Daily verse", "Explore")
-      titleSmall: AppTextStyles.section.copyWith(
+    textTheme: base.copyWith(
+      titleLarge: base.titleLarge?.copyWith(
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+        color: scheme.onSurface,
+      ),
+      titleMedium: base.titleMedium?.copyWith(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        color: scheme.onSurface,
+      ),
+      titleSmall: base.titleSmall?.copyWith(
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
         color: scheme.onSurfaceVariant,
       ),
-
-      // Qur'an Arabic (Uthmani)
-      bodyLarge: AppTextStyles.quranBody.copyWith(color: scheme.onSurface),
-
-      // Main body text (most content)
-      bodyMedium: AppTextStyles.paragraph.copyWith(color: scheme.onSurface),
-
-      // Captions / metadata (date, references)
-      bodySmall: AppTextStyles.secondary.copyWith(
+      bodyLarge: base.bodyLarge?.copyWith(
+        fontSize: 15,
+        height: 1.5,
+        color: scheme.onSurface,
+      ),
+      bodyMedium: base.bodyMedium?.copyWith(
+        fontSize: 14,
+        height: 1.55,
+        color: scheme.onSurface,
+      ),
+      bodySmall: base.bodySmall?.copyWith(
+        fontSize: 12.5,
         color: scheme.onSurfaceVariant,
       ),
-
-      labelLarge: AppTextStyles.body.copyWith(
-        color: scheme.onSurface, // ~0.85
+      labelLarge: base.labelLarge?.copyWith(
+        fontWeight: FontWeight.w500,
+        color: scheme.onSurface,
       ),
-
-      // Chips, small UI labels (“Tap to read”, times)
-      labelMedium: AppTextStyles.label.copyWith(
-        color: scheme.onSurfaceVariant.withAlpha(217), // ~0.85
+      labelMedium: base.labelMedium?.copyWith(
+        fontWeight: FontWeight.w600,
+        color: scheme.onSurfaceVariant,
       ),
-
-      labelSmall: AppTextStyles.label.copyWith(
-        color: scheme.onSurfaceVariant.withAlpha(
-          210,
-        ), // slightly dim, not too much
+      labelSmall: base.labelSmall?.copyWith(
+        fontWeight: FontWeight.w600,
+        color: scheme.onSurfaceVariant.withAlpha(210),
       ),
     ),
   );

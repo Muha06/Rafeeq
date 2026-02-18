@@ -5,7 +5,7 @@ import 'package:rafeeq/features/quran/domain/entities/last_read_ayah.dart';
 import 'package:rafeeq/features/quran/presentation/pages/surah_page.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/last_read_provider.dart';
- 
+
 class QuickLastReadList extends ConsumerWidget {
   const QuickLastReadList({super.key});
 
@@ -182,7 +182,7 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
       },
       child: Container(
         margin: const EdgeInsets.only(top: 8, bottom: 8, right: 8),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
           color: _isSelected ? cs.surfaceContainerHighest : cs.surface,
           borderRadius: BorderRadius.circular(14),
@@ -191,8 +191,7 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(widget.lastRead.surahName, style: theme.textTheme.titleMedium),
-            const SizedBox(height: 4),
+            Text(widget.lastRead.surahName, style: theme.textTheme.labelLarge),
             Text(
               'Ayah ${widget.lastRead.ayahNumber} of ${widget.lastRead.verseCount}',
               style: theme.textTheme.bodySmall,

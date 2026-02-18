@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
+import 'package:rafeeq/core/themes/app_text_style.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/quran/presentation/pages/surah_page.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provider.dart';
@@ -120,12 +121,10 @@ class SurahTile extends ConsumerWidget {
             ),
 
             const Spacer(),
+
             Text(
               cleanAyah(surah.nameArabic.toString()),
-              style: theme.textTheme.bodyLarge!.copyWith(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-              ),
+              style: AppTextStyles.quranAyah,
             ),
           ],
         ),

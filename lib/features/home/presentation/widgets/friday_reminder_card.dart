@@ -32,7 +32,7 @@ class _FridayReminderCardState extends ConsumerState<FridayReminderCard> {
     );
 
     return Padding(
-      padding: const EdgeInsets.only(left: 14.0, right: 14, top: 4, bottom: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 12.0),
       child: Stack(
         children: [
           Container(
@@ -45,36 +45,33 @@ class _FridayReminderCardState extends ConsumerState<FridayReminderCard> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Friday Reminder', style: theme.textTheme.titleSmall),
-                  const SizedBox(height: 24),
+                  Text('Friday Reminder', style: theme.textTheme.labelLarge),
+                  const SizedBox(height: 12),
 
                   Text.rich(
                     TextSpan(
                       text: "Friday is a gift from Allah ﷻ. Recite ",
-                      style: Theme.of(
-                        context,
-                      ).textTheme.bodyMedium!.copyWith(height: 1, fontSize: 14),
+                      style: Theme.of(context).textTheme.bodyMedium!,
                       children: [
                         TextSpan(text: 'Sūrah Al-Kahf,', style: keyWordStyle),
                         TextSpan(
                           text: " increase",
-                          style: Theme.of(context).textTheme.bodyMedium!
-                              .copyWith(height: 1, fontSize: 14),
+                          style: Theme.of(context).textTheme.bodyMedium,
                         ),
                         TextSpan(text: ' dhikr', style: keyWordStyle),
                         TextSpan(
                           text: ' and take a moment for',
-                          style: Theme.of(context).textTheme.bodyMedium!
-                              .copyWith(height: 1, fontSize: 14),
+                          style: Theme.of(context).textTheme.bodyMedium!,
                         ),
                         TextSpan(text: ' duʿā.', style: keyWordStyle),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 12),
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       TextButton.icon(
                         onPressed: () =>
@@ -84,6 +81,7 @@ class _FridayReminderCardState extends ConsumerState<FridayReminderCard> {
                           'View Friday virtues',
                           style: theme.textTheme.bodySmall!.copyWith(
                             fontWeight: FontWeight.bold,
+                            color: theme.colorScheme.onSurface,
                           ),
                         ),
                       ),

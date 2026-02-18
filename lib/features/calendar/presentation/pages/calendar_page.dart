@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hijri_date/hijri.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
+import 'package:rafeeq/core/themes/app_text_style.dart';
 import 'package:rafeeq/features/calendar/presentation/widgets/day_cell.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -28,18 +29,32 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
           final notifier = ref.read(hijriDateProvider.notifier);
 
           return Padding(
-            padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Adjust Hijri date',
-                  style: Theme.of(context).textTheme.titleLarge,
+                  'Adjust Hijri Date',
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
                 const SizedBox(height: 8),
-                Text(state.formatted),
-                const SizedBox(height: 16),
 
+                Text(
+                  'Hijri dates can vary slightly depending on your region.',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+
+                const SizedBox(height: 8),
+
+                Text(
+                  state.formatted,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+
+                const SizedBox(height: 16),
                 Row(
                   children: [
                     IconButton(
@@ -133,17 +148,11 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
   // Return list of upcoming Hijri events for next n days
   List<IslamicEvent> _monthEvents() {
     final today = ref.read(hijriDateProvider);
-    final currentDay = today.hijri.hDay;
     final currentMonth = today.hijri.hMonth;
 
     final events = HijriDate.getEventsForMonth(currentMonth);
 
-    // Only keep events whose day >= today
-    final filtered = events.where((event) {
-      return event.days.any((day) => day >= currentDay);
-    }).toList();
-
-    return filtered;
+    return events;
   }
 
   @override
@@ -153,7 +162,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
     final isDark = ref.watch(isDarkProvider);
     final theme = Theme.of(context);
 
-    debugPrint(_monthEvents().length.toString());
+    final events = _monthEvents();
 
     return Scaffold(
       appBar: AppBar(
@@ -192,8 +201,9 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                   children: [
                     Text(
                       hijriState.formatted,
-                      style: Theme.of(context).textTheme.titleMedium,
+                      style: Theme.of(context).textTheme.labelLarge,
                     ),
+
                     Text(
                       offset == 0
                           ? 'Offset: 0'
@@ -287,19 +297,30 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "Upcoming Events in ${hijriState.hijri.longMonthName}",
-                      style: Theme.of(context).textTheme.titleMedium,
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Events in ${hijriState.hijri.longMonthName}",
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
                     ),
                     const SizedBox(height: 16),
 
-                    Column(
-                      children: _monthEvents().map((event) {
-                        final today = ref.read(hijriDateProvider).hijri.hDay;
-                        final isToday = event.days.contains(today);
-                        return IslamicEventTile(isToday: isToday, event: event);
-                      }).toList(),
-                    ),
+                    events.isNotEmpty
+                        ? Column(
+                            children: events.map((event) {
+                              final today = ref
+                                  .read(hijriDateProvider)
+                                  .hijri
+                                  .hDay;
+                              final isToday = event.days.contains(today);
+                              return IslamicEventTile(
+                                isToday: isToday,
+                                event: event,
+                              );
+                            }).toList(),
+                          )
+                        : const Text('No events this month'),
                   ],
                 ),
               ),
@@ -347,7 +368,6 @@ class IslamicEventTile extends StatelessWidget {
                       shape: BoxShape.circle,
                     ),
                   ),
-                  // vertical line fills remaining space
                   Expanded(
                     child: Container(
                       width: 2,
@@ -357,14 +377,13 @@ class IslamicEventTile extends StatelessWidget {
                 ],
               ),
               const SizedBox(width: 12),
+
               // Content
               Expanded(
                 child: Text(
                   event.getTitle('en'),
-                  style: TextStyle(
-                    fontWeight: isToday ? FontWeight.bold : FontWeight.w500,
-                    fontSize: 16,
-                    color: cs.onSurface,
+                  style: theme.textTheme.bodyLarge!.copyWith(
+                    fontWeight: isToday ? FontWeight.bold : FontWeight.w300,
                   ),
                 ),
               ),
@@ -394,48 +413,59 @@ void _showEventDetailsSheet(BuildContext context, IslamicEvent event) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
-    backgroundColor: theme.colorScheme.surface,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-    ),
     builder: (ctx) => Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // English & Arabic titles
-            Text(
-              event.titleEnglish,
-              style: theme.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
+            Center(
+              child: Text(
+                event.titleEnglish,
+                style: theme.textTheme.titleMedium,
               ),
             ),
             const SizedBox(height: 4),
-            Text(
-              event.titleArabic,
-              style: theme.textTheme.titleMedium?.copyWith(
-                color: theme.colorScheme.primary,
+
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                cleanDhikr(event.titleArabic),
+                style: AppTextStyles.arabicUi,
+              ),
+            ),
+
+            const SizedBox(height: 16),
+
+            Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(text: 'Type: ', style: theme.textTheme.bodySmall),
+                  TextSpan(
+                    text: '${event.type.name}\n',
+                    style: theme.textTheme.bodyMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  TextSpan(text: 'Month: ', style: theme.textTheme.bodySmall),
+                  TextSpan(
+                    text: '${event.month}\n',
+                    style: theme.textTheme.bodyMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  TextSpan(text: 'Days: ', style: theme.textTheme.bodySmall),
+                  TextSpan(
+                    text: event.days.join(', '),
+                    style: theme.textTheme.bodyMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 16),
-
-            // Event type
-            Text(
-              'Type: ${event.type.name}', // you can map this to human-friendly string if needed
-              style: theme.textTheme.bodyMedium,
-            ),
-            const SizedBox(height: 6),
-
-            // Event dates
-            Text('Month: ${event.month}', style: theme.textTheme.bodyMedium),
-            const SizedBox(height: 6),
-
-            Text(
-              'Days: ${event.days.join(', ')}',
-              style: theme.textTheme.bodyMedium,
-            ),
-            const SizedBox(height: 12),
 
             // Hadiths section
             if (event.hadiths.isNotEmpty)
@@ -450,9 +480,7 @@ void _showEventDetailsSheet(BuildContext context, IslamicEvent event) {
                   children: [
                     Text(
                       'Hadiths & References',
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        decoration: TextDecoration.underline,
-                      ),
+                      style: theme.textTheme.labelLarge,
                     ),
                     const SizedBox(height: 8),
                     ...event.hadiths.map(
@@ -460,7 +488,8 @@ void _showEventDetailsSheet(BuildContext context, IslamicEvent event) {
                         padding: const EdgeInsets.only(bottom: 8),
                         child: Text(
                           cleanDhikr(h.hadith),
-                          style: theme.textTheme.bodyLarge,
+                          style: AppTextStyles.arabicUi,
+                          textDirection: TextDirection.rtl,
                         ),
                       ),
                     ),

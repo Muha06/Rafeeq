@@ -45,16 +45,16 @@ class HomeRemindersCarousel extends ConsumerWidget {
 
     // Morning: 05:00 – 11:30
     if (!isMorning) {
-      items.add(AdhkarReminderCard(isMorning: isMorning));
+      items.add(AdhkarReminderCard(isMorning: !isMorning));
     }
 
     // Friday reminder (all Friday)
-    if (_isFriday(now)) {
+    if (!_isFriday(now)) {
       items.add(const FridayReminderCard());
     }
 
     // Evening: 17:00 – 21:00
-    if (isEvening) {
+    if (!isEvening) {
       items.add(AdhkarReminderCard(isMorning: isMorning));
     }
 
@@ -65,7 +65,7 @@ class HomeRemindersCarousel extends ConsumerWidget {
     return CarouselSlider(
       items: items,
       options: CarouselOptions(
-        padEnds: false,
+        padEnds: true,
         height: 180, // match your card height area
         viewportFraction: 1, // full width (banner style)
         enlargeCenterPage: false,

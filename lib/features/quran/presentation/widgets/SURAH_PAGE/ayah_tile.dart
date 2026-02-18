@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
+import 'package:rafeeq/core/themes/app_text_style.dart';
 import 'package:rafeeq/core/widgets/snackbars.dart';
 import 'package:rafeeq/features/quran/domain/entities/ayah.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/ayah_of_the_day.dart';
@@ -168,9 +169,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                   child: Text(
                     cleanAyah(widget.ayah.textArabic),
                     textDirection: TextDirection.rtl,
-                    style: theme.textTheme.bodyLarge!.copyWith(
-                      fontWeight: isDark ? FontWeight.w500 : FontWeight.w500,
-                      // color: Colors.white, //todo: make dark theme color lighter
+                    style: AppTextStyles.quranAyah.copyWith(
                       fontSize: arabicFontSize,
                     ),
                   ),
@@ -199,8 +198,6 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                       widget.ayah.textEnglish,
                       textAlign: TextAlign.left,
                       style: theme.textTheme.bodyMedium!.copyWith(
-                        fontWeight: isDark ? FontWeight.w400 : FontWeight.w500,
-
                         fontSize: translationFontSize,
                       ),
                     ),
