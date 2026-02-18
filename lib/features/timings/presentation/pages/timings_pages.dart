@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rafeeq/core/features/location/presentation/provider/user_location_provider.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
-import 'package:rafeeq/core/widgets/snackbars.dart';
+import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/disable_salah_reminders_provider.dart';
 
@@ -41,14 +41,17 @@ class _SalahTimingsPageState extends ConsumerState<SalahTimingsPage> {
           ),
         ),
         data: (times) {
-          final order = const [
+          const salats = [
             SalahPrayer.fajr,
-            SalahPrayer.sunrise,
-            SalahPrayer.dhuha,
             SalahPrayer.dhuhr,
             SalahPrayer.asr,
             SalahPrayer.maghrib,
             SalahPrayer.isha,
+          ];
+
+          const otherTimes = [
+            SalahPrayer.sunrise,
+            SalahPrayer.dhuha,
             SalahPrayer.tahajjud,
           ];
 
@@ -72,7 +75,26 @@ class _SalahTimingsPageState extends ConsumerState<SalahTimingsPage> {
               ),
               const SizedBox(height: 12),
 
-              ...order.map((p) {
+              // 🕌 Obligatory prayers
+              Text('Obligatory Prayers', style: theme.textTheme.bodySmall),
+              const SizedBox(height: 12),
+
+              ...salats.map((p) {
+                final t = times.at(p);
+                return _TimingTile(
+                  prayer: p,
+                  title: p.label,
+                  timeText: _formatHm(t),
+                );
+              }),
+
+              const SizedBox(height: 16),
+
+              // 🌤️ Other times
+              Text('Other Times', style: theme.textTheme.bodySmall),
+              const SizedBox(height: 12),
+
+              ...otherTimes.map((p) {
                 final t = times.at(p);
                 return _TimingTile(
                   prayer: p,
@@ -105,7 +127,12 @@ class Chip extends StatelessWidget {
           Icon(icon, size: 18),
           const SizedBox(width: 8),
 
-          Text(text, style: theme.textTheme.labelLarge),
+          Text(
+            text,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            style: theme.textTheme.labelLarge,
+          ),
         ],
       ),
     );
@@ -126,8 +153,7 @@ class _TimingTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final cs = theme.colorScheme;
-
+ 
     final disabled = ref.watch(disabledSalahPrayersProvider);
     final isDisabled = disabled.contains(prayer);
 

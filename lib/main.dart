@@ -18,7 +18,6 @@ import 'package:rafeeq/features/quran_goal/data/models/quran_goal_hive.dart';
 import 'package:rafeeq/features/quran_goal/data/models/quran_log_hive.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/salah_times_providers.dart';
 import 'package:rafeeq/features/settings/presentation/provider/settings_notifcation_provider.dart';
-import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 import 'package:rafeeq/features/timings/data/models/hive/cached_salah_times_hive.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -94,18 +93,12 @@ class _MyAppState extends ConsumerState<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    final mode = ref.watch(themeModeProvider);
     final hasSeenOnboarding = ref.watch(hasSeenOnboardingProvider);
 
     return MaterialApp(
       title: 'Rafeeq',
-      // theme: appLightThemeData(),
       darkTheme: appDarkThemeData(),
-      themeMode: switch (mode) {
-        AppThemeMode.dark => ThemeMode.dark,
-        AppThemeMode.light => ThemeMode.light,
-        AppThemeMode.system => ThemeMode.system,
-      },
+      themeMode: ThemeMode.dark,
       debugShowCheckedModeBanner: false,
       scaffoldMessengerKey: scaffoldMessengerKey,
       home: hasSeenOnboarding ? const TabsScreen() : const OnboardingPage(),

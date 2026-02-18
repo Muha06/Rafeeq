@@ -13,7 +13,7 @@ class TodayTimesCard extends ConsumerWidget {
     super.key,
     required this.assetsByPrayer,
     this.height = 180,
-    this.borderRadius = 16,
+    this.borderRadius = 14,
   });
 
   final Map<SalahPrayer, String> assetsByPrayer;
@@ -257,8 +257,8 @@ class _TopLabel extends StatelessWidget {
           value,
           style: theme.textTheme.titleMedium?.copyWith(
             color: color,
-            fontWeight: isNext ? FontWeight.bold : FontWeight.w800,
-            fontSize: isNext ? 12 : 14,
+            fontWeight: isNext ? FontWeight.w600 : FontWeight.w300,
+            fontSize: isNext ? 15 : 14,
           ),
         ),
         const SizedBox(height: 6),

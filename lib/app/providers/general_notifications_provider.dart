@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -88,9 +87,7 @@ class SystemNotifAccessNotifier extends Notifier<SystemNotifAccessState> {
     final exactAlarmsAllowed = await NotificationService.instance
         .canScheduleExactAlarms();
 
-    debugPrint(
-      '✅ Persisting notifications as $notificationsAllowed , $exactAlarmsAllowed',
-    );
+    
 
     await _persist(
       notificationsAllowed: notificationsAllowed,

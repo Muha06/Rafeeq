@@ -66,7 +66,7 @@ class AppTextStyles {
   static TextStyle get arabicUi => const TextStyle(
     fontFamily: 'Uthmani',
     fontSize: 24,
-    height: 1.4,
+    height: 1.6,
     wordSpacing: 2.5,
     color: AppDarkColors.onSurface,
     fontWeight: FontWeight.w300,

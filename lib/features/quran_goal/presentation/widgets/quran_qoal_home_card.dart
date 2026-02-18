@@ -26,16 +26,15 @@ class QuranGoalCard extends ConsumerWidget {
 
     final cs = Theme.of(context).colorScheme;
 
-    if (!goal.isActive) return const SizedBox.shrink();
-
     return GestureDetector(
       onTap: () => AppNav.push(context, const QuranGoalStatsPage()),
-      child: Card(
-        color: cs.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        elevation: 2,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(14),
+          color: cs.surface,
+        ),
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -44,11 +43,12 @@ class QuranGoalCard extends ConsumerWidget {
                 children: [
                   Text(
                     'My Quran Goal',
-                    style: Theme.of(context).textTheme.titleMedium,
+                    style: Theme.of(context).textTheme.labelLarge,
                   ),
                   const Spacer(),
 
                   IconButton(
+                    visualDensity: VisualDensity.compact,
                     onPressed: () {
                       AppNav.push(context, const QuranGoalStatsPage());
                     },

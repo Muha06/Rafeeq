@@ -34,7 +34,7 @@ class QuickLastReadList extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Title
-            Text('Last read', style: theme.textTheme.titleMedium),
+            Text('Last read', style: theme.textTheme.bodySmall),
             const SizedBox(height: 8),
 
             // Horizontal scrollable cards

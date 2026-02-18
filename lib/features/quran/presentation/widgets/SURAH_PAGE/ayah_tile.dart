@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
 import 'package:rafeeq/core/themes/app_text_style.dart';
-import 'package:rafeeq/core/widgets/snackbars.dart';
+import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/quran/domain/entities/ayah.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/ayah_of_the_day.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/ayah_share_cotroller_provider.dart';

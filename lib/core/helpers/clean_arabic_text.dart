@@ -9,5 +9,5 @@ String cleanAyah(String text) {
 }
 
 String cleanDhikr(String s) {
-  return s.replaceAll('،', ' ');
+  return s.replaceAll('،', '');
 }

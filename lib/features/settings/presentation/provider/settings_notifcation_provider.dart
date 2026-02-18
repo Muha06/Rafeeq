@@ -18,7 +18,7 @@ const morningNotifId = 205;
 const eveningNotifId = 206;
 
 const kmorningAdhkarTime = TimeOfDay(hour: 6, minute: 00);
-const keveningAdhkarTime = TimeOfDay(hour: 18, minute: 30);
+const keveningAdhkarTime = TimeOfDay(hour: 17, minute: 30);
 
 final settingsBoxProvider = Provider<Box>((ref) => Hive.box('settingsBox'));
 

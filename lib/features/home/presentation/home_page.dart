@@ -9,6 +9,7 @@ import 'package:rafeeq/features/Ramadan/presentation/widgets/ramadan_card.dart';
 import 'package:rafeeq/features/home/presentation/widgets/hijri_date.dart';
 import 'package:rafeeq/features/asma_ul_husna/presentation/pages/asma_ul_husna_list_page.dart';
 import 'package:rafeeq/features/haramain-live/presentation/widgets/haramain_card.dart';
+import 'package:rafeeq/features/home/providers/reminder_providers.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/ayah_of_the_day.dart';
 import 'package:rafeeq/features/home/presentation/widgets/reminders_carousel.dart';
 import 'package:rafeeq/features/home/presentation/widgets/quick_action_row.dart';
@@ -45,6 +46,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final goal = ref.watch(quranGoalProvider);
+    final reminders = ref.watch(homeRemindersProvider);
 
     return Scaffold(
       body: SafeArea(
@@ -107,15 +109,13 @@ class _HomePageState extends ConsumerState<HomePage> {
             ),
 
             // REMINDERS
-            const SliverToBoxAdapter(
-              child: HomeSection(
-                padding: EdgeInsets.symmetric(
-                  // horizontal: _hPad,
-                  vertical: _v10,
+            if (reminders.isNotEmpty)
+              const SliverToBoxAdapter(
+                child: HomeSection(
+                  padding: EdgeInsets.symmetric(vertical: _v10),
+                  child: HomeRemindersCarousel(),
                 ),
-                child: HomeRemindersCarousel(),
               ),
-            ),
 
             //QURAN GOAL CARD
             if (goal.isActive)

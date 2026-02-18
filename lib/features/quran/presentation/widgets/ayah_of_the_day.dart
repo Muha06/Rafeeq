@@ -58,7 +58,7 @@ class AyahOfTheDay extends ConsumerWidget {
               width: double.infinity,
               decoration: BoxDecoration(
                 color: cs.surface,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(14),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: Column(
@@ -67,11 +67,10 @@ class AyahOfTheDay extends ConsumerWidget {
                   Text(
                     'Verse of the day',
                     textAlign: TextAlign.left,
-                    style: theme.textTheme.titleMedium,
+                    style: theme.textTheme.labelLarge,
                   ),
 
                   const SizedBox(height: 8),
-                  Divider(color: theme.dividerColor),
 
                   //Ayah text
                   Text(
@@ -94,11 +93,9 @@ class AyahOfTheDay extends ConsumerWidget {
 
                       Text(
                         'Click to read more >',
-                        style: theme.textTheme.bodyMedium!.copyWith(
-                          fontWeight: FontWeight.bold,
+                        style: theme.textTheme.bodySmall!.copyWith(
                           color: cs.primary,
-                          height: 1,
-                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ],

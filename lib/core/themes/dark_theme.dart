@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
- 
+
 ThemeData appDarkThemeData() {
   final scheme =
       const ColorScheme.dark(
@@ -110,7 +110,7 @@ ThemeData appDarkThemeData() {
         disabledBackgroundColor: scheme.surfaceContainerHigh,
         disabledForegroundColor: scheme.onSurfaceVariant,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-        textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+        textStyle: const TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
       ),
     ),
@@ -266,7 +266,7 @@ class AppDarkColors {
   static const outline = Color(0xFF123238);
   static const outlineVariant = Color(0xFF0E2A2D);
 
-  static const brand = Color(0xFFFFD700);
+  static const brand = Color(0xFFDAB36D);
 
   static const onSurface = Color(0xFFEAF2F2);
   static const onSurface2 = Color(0xFFCAD6D8);

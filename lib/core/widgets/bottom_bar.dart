@@ -55,9 +55,7 @@ class MyBottomBar extends StatelessWidget {
                 onTap: () => onTap(index),
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 8),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
+
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

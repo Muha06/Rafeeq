@@ -198,10 +198,7 @@ class AdhkarListTile extends ConsumerWidget {
                 dhikr.title.trim(),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
-                style: theme.textTheme.bodySmall!.copyWith(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: theme.textTheme.labelLarge,
               ),
             ),
 

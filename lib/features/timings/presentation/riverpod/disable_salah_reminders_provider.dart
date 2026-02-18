@@ -3,6 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/app/providers/general_notifications_provider.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_prayer.dart';
 
+final disabledSalahPrayersProvider =
+    NotifierProvider<DisabledSalahPrayersNotifier, Set<SalahPrayer>>(
+      DisabledSalahPrayersNotifier.new,
+    );
+
+
 const actualSalats = <SalahPrayer>{
   SalahPrayer.fajr,
   SalahPrayer.dhuhr,
@@ -10,11 +16,6 @@ const actualSalats = <SalahPrayer>{
   SalahPrayer.maghrib,
   SalahPrayer.isha,
 };
-
-final disabledSalahPrayersProvider =
-    NotifierProvider<DisabledSalahPrayersNotifier, Set<SalahPrayer>>(
-      DisabledSalahPrayersNotifier.new,
-    );
 
 class DisabledSalahPrayersNotifier extends Notifier<Set<SalahPrayer>> {
   final Set<SalahPrayer> _userDisabled = <SalahPrayer>{};

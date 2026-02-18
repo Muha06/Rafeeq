@@ -1,4 +1,4 @@
-import 'package:rafeeq/features/quran_audio/domain/entities/reciter_entity.dart';
+import 'package:rafeeq/features/quran_goal/data/models/quran_audio/domain/entities/reciter_entity.dart';
 
 /// Hardcoded reciters (from /resources/chapter_reciters).
 /// Keep duplicates if IDs differ (they can map to different audio sets/variants).

@@ -1,6 +1,6 @@
-import 'package:rafeeq/features/quran_audio/domain/entities/current_track_entity.dart';
-import 'package:rafeeq/features/quran_audio/domain/entities/reciter_entity.dart';
-import 'package:rafeeq/features/quran_audio/domain/repos/quran_audio_repo.dart';
+import 'package:rafeeq/features/quran_goal/data/models/quran_audio/domain/entities/current_track_entity.dart';
+import 'package:rafeeq/features/quran_goal/data/models/quran_audio/domain/entities/reciter_entity.dart';
+import 'package:rafeeq/features/quran_goal/data/models/quran_audio/domain/repos/quran_audio_repo.dart';
 
 class GetSurahAudioTrack {
   final QuranAudioRepository repo;

@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
+import 'package:rafeeq/core/themes/app_text_style.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
-import 'package:rafeeq/core/widgets/snackbars.dart';
+import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/adhkar/domain/entities/dhikr.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/dhikr_bookmark.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/dhikr/execution_providers.dart';
@@ -92,10 +93,10 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
                 },
                 icon: Icon(
                   bookmarked
-                      ? Icons.bookmark_added_outlined
+                      ? Icons.bookmark_added
                       : Icons.bookmark_add_outlined,
                   color: bookmarked ? cs.primary : cs.onSurface,
-                  size: 28,
+                  size: 24,
                 ),
               );
             },
@@ -110,7 +111,7 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
                 ),
               );
             },
-            icon: const Icon(Icons.copy_outlined),
+            icon: Icon(Icons.copy_outlined, color: cs.onSurface, size: 24),
           ),
         ],
       ),
@@ -155,12 +156,13 @@ class AdhkarDetailsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle headerStyle = textTheme.labelMedium!;
+    final theme = Theme.of(context);
+    final TextStyle headerStyle = textTheme.labelLarge!;
 
     final TextStyle bodyTextstyle = textTheme.bodyMedium!.copyWith(
-      fontSize: 20,
+      fontSize: 18,
     );
-    final cs = Theme.of(context).colorScheme;
+    final cs = theme.colorScheme;
 
     Widget section(String title, String? text) {
       final t = (text ?? '').trim();
@@ -169,11 +171,9 @@ class AdhkarDetailsTile extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: headerStyle.copyWith(fontWeight: FontWeight.bold),
-          ), //header
+          Text(title, style: textTheme.bodySmall), //header
           const SizedBox(height: 8),
+
           Text(t, style: bodyTextstyle), //text
           const SizedBox(height: 24),
         ],
@@ -186,7 +186,7 @@ class AdhkarDetailsTile extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(14),
             color: cs.surface,
           ),
           child: SelectionArea(
@@ -210,7 +210,7 @@ class AdhkarDetailsTile extends StatelessWidget {
                   child: Text(
                     cleanDhikr(dhikr.arabic),
                     textDirection: TextDirection.rtl,
-                    style: textTheme.bodyLarge!.copyWith(fontSize: 28),
+                    style: AppTextStyles.arabicUi.copyWith(fontSize: 24),
                   ),
                 ),
                 const SizedBox(height: 32),

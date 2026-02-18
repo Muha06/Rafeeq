@@ -16,15 +16,10 @@ class HomeQuickActionsRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          ' Quick links',
-          style: Theme.of(context).textTheme.bodySmall!.copyWith(
-            // fontWeight: FontWeight.w600,
-            // color: AppLightColors.textBody,
-          ),
-        ),
+        Text(' Quick links', style: Theme.of(context).textTheme.bodySmall),
         const SizedBox(height: 8),
 
         Row(

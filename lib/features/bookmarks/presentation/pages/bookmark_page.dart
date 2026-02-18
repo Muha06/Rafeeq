@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
-import 'package:rafeeq/core/widgets/snackbars.dart';
+import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/quran_bookmark.dart';
 import 'package:rafeeq/features/bookmarks/presentation/pages/adhkar_bookmark_tab.dart';
 import 'package:rafeeq/features/bookmarks/presentation/pages/quran_bookmark_tab.dart';

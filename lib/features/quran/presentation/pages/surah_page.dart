@@ -6,7 +6,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/core/features/audio/domain/entities/audio_state.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
-import 'package:rafeeq/core/widgets/snackbars.dart';
+import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/quran/domain/entities/last_read_ayah.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/fetch_ayah_provider.dart';
@@ -18,8 +18,8 @@ import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_ayah
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_details.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_settings_sheet.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/log_ayah_bottomsheet.dart';
-import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
-import 'package:rafeeq/features/quran_audio/presentation/providers/surah_audio_providers.dart';
+import 'package:rafeeq/features/quran_goal/data/models/quran_audio/presentation/providers/reciters_provider.dart';
+import 'package:rafeeq/features/quran_goal/data/models/quran_audio/presentation/providers/surah_audio_providers.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 

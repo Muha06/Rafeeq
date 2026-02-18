@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/edit_goal_sheet.dart';
+import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class QuranGoalStatsPage extends StatefulWidget {
   const QuranGoalStatsPage({super.key});
@@ -32,10 +34,11 @@ class MyQuranGoalCard extends ConsumerWidget {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      color: cs.surface,
-      elevation: 2,
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(14),
+        color: cs.surface,
+      ),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -45,7 +48,7 @@ class MyQuranGoalCard extends ConsumerWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("My Goal", style: theme.textTheme.titleMedium),
+                Text("My Goal", style: theme.textTheme.labelLarge),
 
                 Container(
                   padding: const EdgeInsets.symmetric(
@@ -135,17 +138,20 @@ class MyQuranGoalCard extends ConsumerWidget {
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: FilledButton.icon(
+                  child: FilledButton(
                     onPressed: () {
-                      ref.read(quranGoalProvider.notifier).setGoal(0);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Goal deleted")),
+                      ref.read(quranGoalProvider.notifier).toggleGoalActivity();
+                      AppSnackBar.showSimple(
+                        context: context,
+                        isDark: ref.read(isDarkProvider),
+                        message: goal.isActive
+                            ? "Goal paused"
+                            : "Unpaused goal",
                       );
                     },
-                    icon: const Icon(Icons.delete),
-                    label: Text(
-                      "Pause goal",
-                      style: theme.textTheme.labelSmall!.copyWith(
+                    child: Text(
+                      goal.isActive ? "Pause goal" : "Un pause",
+                      style: theme.textTheme.labelLarge!.copyWith(
                         color: cs.primary,
                       ),
                     ),

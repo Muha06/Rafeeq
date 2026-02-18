@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
+import 'package:rafeeq/features/quran_goal/data/models/quran_audio/presentation/providers/reciters_provider.dart';
 
 class ReciterPickerSheet extends ConsumerWidget {
   const ReciterPickerSheet({super.key});
