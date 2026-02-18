@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:rafeeq/app/providers/general_notifications_provider.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
-import 'package:rafeeq/core/widgets/snackbars.dart';
-import 'package:rafeeq/features/settings/presentation/provider/settings_notifcation_provider.dart';
+import 'package:rafeeq/features/settings/presentation/provider/notiffications_controller.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 import 'package:rafeeq/features/settings/presentation/widgets/settings_page_widgets.dart';
 
@@ -26,121 +24,10 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     );
   }
 
-  //called when user toggles salah reminder settings
-  // Add/ remove salah reminders
-  Future<void> setSalahNotif(WidgetRef ref, bool enabled) async {
-    final updating = ref.read(salahNotifUpdatingProvider);
-    if (updating) return;
-
-    ref.read(salahNotifUpdatingProvider.notifier).state = true;
-
-    try {
-      final access = ref.read(systemNotifAccessProvider);
-      final sys = ref.read(systemNotifAccessProvider.notifier);
-
-      // If user is disabling: no permission drama needed.
-      if (!enabled) {
-        final box = ref.read(settingsBoxProvider);
-        await box.put(kSalahEnabled, false);
-        ref.read(salahNotifEnabledProvider.notifier).state = false;
-        return;
-      }
-
-      // Enabling: ensure required permissions exist
-      if (!access.notificationsAllowed || !access.exactAlarmsAllowed) {
-        final allAllowed = await sys.requestAll(includeExactAlarms: true);
-
-        if (!allAllowed) {
-          // Permission denied -> keep feature OFF (and revert UI toggle)
-          final box = ref.read(settingsBoxProvider);
-          await box.put(kSalahEnabled, false);
-          ref.read(salahNotifEnabledProvider.notifier).state = false;
-
-          AppSnackBar.showSimple(
-            context: context,
-            isDark: ref.read(isDarkProvider),
-            message: 'notofication permissions denied.',
-          );
-          return;
-        }
-      }
-
-      // Now safe to enable
-      final box = ref.read(settingsBoxProvider);
-      await box.put(kSalahEnabled, true);
-      ref.read(salahNotifEnabledProvider.notifier).state = true;
-
-      AppSnackBar.showSimple(
-        context: context,
-        isDark: ref.read(isDarkProvider),
-        message: '✅ Scheduling salah reminders...',
-      );
-    } finally {
-      ref.read(salahNotifUpdatingProvider.notifier).state = false;
-    }
-  }
-
-  //Add/ remove adhkar reminders
-  Future<void> setAdhkarNotif(WidgetRef ref, bool enabled) async {
-    final updating = ref.read(adhkarNotifUpdatingProvider);
-    if (updating) return;
-
-    // lock ASAP
-    ref.read(adhkarNotifUpdatingProvider.notifier).state = true;
-
-    try {
-      final access = ref.read(systemNotifAccessProvider);
-      final sys = ref.read(systemNotifAccessProvider.notifier);
-
-      // If user is disabling: no permission drama needed.
-      if (!enabled) {
-        final box = ref.read(settingsBoxProvider);
-        await box.put(kAdhkarEnabled, false);
-        ref.read(adhkarNotifEnabledProvider.notifier).state = false;
-        return;
-      }
-
-      // Enabling: ensure required permissions exist
-      if (!access.notificationsAllowed || !access.exactAlarmsAllowed) {
-        final allAllowed = await sys.requestAll(includeExactAlarms: true);
-
-        if (!allAllowed) {
-          // Permission denied -> keep feature OFF (and ideally revert UI toggle)
-          final box = ref.read(settingsBoxProvider);
-          await box.put(kAdhkarEnabled, false);
-          ref.read(adhkarNotifEnabledProvider.notifier).state = false;
-
-          AppSnackBar.showSimple(
-            context: context,
-            isDark: ref.read(isDarkProvider),
-            message: 'Permissions denied',
-          );
-          return;
-        }
-      }
-
-      // Now safe to enable
-      final box = ref.read(settingsBoxProvider);
-      await box.put(kAdhkarEnabled, true);
-      ref.read(adhkarNotifEnabledProvider.notifier).state = true;
-
-      AppSnackBar.showSimple(
-        context: context,
-        isDark: ref.read(isDarkProvider),
-        message: '✅ Turning on adhkar reminders...',
-      );
-    } finally {
-      ref.read(adhkarNotifUpdatingProvider.notifier).state = false;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = ref.watch(isDarkProvider);
-
-    final adhkarOn = ref.watch(adhkarNotifEnabledProvider);
-    final salahNotifOn = ref.watch(salahNotifEnabledProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -149,38 +36,44 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       ),
       body: ListView(
         children: [
-          //theme preferences
           SettingsTile(
-            leading: const FaIcon(FontAwesomeIcons.paintRoller),
-            title: 'App Theme',
-            isDark: isDark,
-            trailing: const Icon(Icons.keyboard_arrow_right),
-            subtitle: 'Change the app theme',
-            onTap: () => showThemePicker(context),
-          ),
-
-          SettingsTile(
-            leading: const FaIcon(FontAwesomeIcons.bell),
+            leading: PhosphorIcon(PhosphorIcons.bell()),
             title: 'Salah reminders',
             subtitle: 'Get Salah times reminders',
             isDark: isDark,
-            trailing: Switch(
-              value: salahNotifOn,
-              onChanged: (val) {
-                setSalahNotif(ref, val);
+            trailing: Consumer(
+              builder: (context, ref, _) {
+                final enabled = ref.watch(salahNotifControllerProvider);
+                final controller = ref.read(
+                  salahNotifControllerProvider.notifier,
+                );
+
+                return Switch(
+                  value: enabled,
+                  onChanged: (val) =>
+                      controller.toggleSalahReminders(val, context),
+                );
               },
             ),
           ),
 
           SettingsTile(
-            leading: const FaIcon(FontAwesomeIcons.bell),
+            leading: PhosphorIcon(PhosphorIcons.bell()),
             title: 'Adhkar reminders',
             subtitle: 'Morning & evening adhkars',
             isDark: isDark,
-            trailing: Switch(
-              value: adhkarOn,
-              onChanged: (val) {
-                setAdhkarNotif(ref, val);
+            trailing: Consumer(
+              builder: (context, ref, _) {
+                final enabled = ref.watch(adhkarNotifControllerProvider);
+                final controller = ref.read(
+                  adhkarNotifControllerProvider.notifier,
+                );
+
+                return Switch(
+                  value: enabled,
+                  onChanged: (val) =>
+                      controller.toggleAdhkarReminders(val, context),
+                );
               },
             ),
           ),
@@ -221,7 +114,6 @@ class SettingsTile extends StatelessWidget {
       children: [
         ListTile(
           enabled: enabled,
-
           onTap: enabled ? onTap : null,
           contentPadding:
               contentPadding ?? const EdgeInsets.symmetric(horizontal: 16),

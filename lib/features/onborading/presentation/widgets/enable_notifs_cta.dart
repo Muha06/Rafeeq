@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/app/providers/general_notifications_provider.dart';
+import 'package:rafeeq/features/settings/presentation/provider/notiffications_controller.dart';
 
 class NotificationsPermissionCta extends ConsumerStatefulWidget {
   const NotificationsPermissionCta({super.key});
@@ -56,9 +57,30 @@ class _NotificationsPermissionCtaState
       onPressed: perm.isLoading
           ? null
           : () async {
-              await ref
+              final permitted = await ref
                   .read(systemNotifAccessProvider.notifier)
                   .requestAll(includeExactAlarms: true);
+
+              //Auto toggle reminders
+              final controller = ref.read(
+                salahNotifControllerProvider.notifier,
+              );
+              final adhkarController = ref.read(
+                adhkarNotifControllerProvider.notifier,
+              );
+
+              if (permitted) {
+                await controller.toggleSalahReminders(
+                  true,
+                  showSnack: false,
+                  context,
+                );
+                await adhkarController.toggleAdhkarReminders(
+                  true,
+                  showSnack: false,
+                  context,
+                );
+              }
             },
 
       icon: perm.isLoading

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:rafeeq/app/notifications.dart';
-import 'package:rafeeq/app/providers/general_notifications_provider.dart';
+import 'package:rafeeq/features/settings/presentation/provider/notiffications_controller.dart';
 import 'package:riverpod/legacy.dart';
 
 const kAdhkarEnabled = 'adhkar_notif_enabled'; //a setting inside hive
@@ -21,29 +21,6 @@ const kmorningAdhkarTime = TimeOfDay(hour: 6, minute: 00);
 const keveningAdhkarTime = TimeOfDay(hour: 18, minute: 30);
 
 final settingsBoxProvider = Provider<Box>((ref) => Hive.box('settingsBox'));
-
-final adhkarNotifEnabledProvider = StateProvider<bool>((ref) {
-  final box = ref.watch(settingsBoxProvider);
-
-  final on = box.get(kAdhkarEnabled, defaultValue: false) as bool;
-
-  //check system notifs os state
-  final allowed = ref.watch(systemNotifAccessProvider).notificationsAllowed;
-  //if system notifs are not allowed, force off
-  if (!allowed) return false;
-  return on;
-});
-
-final salahNotifEnabledProvider = StateProvider<bool>((ref) {
-  final box = ref.watch(settingsBoxProvider);
-  final on = box.get(kSalahEnabled, defaultValue: false) as bool;
-
-  //check system notifs os state
-  final allowed = ref.watch(systemNotifAccessProvider).notificationsAllowed;
-  //if system notifs are not allowed, force off
-  if (!allowed) return false;
-  return on;
-});
 
 //Listens to user adhkarsettingsprovider
 final adhkarNotificationsControllerProvider = Provider<void>((ref) async {
@@ -69,14 +46,14 @@ final adhkarNotificationsControllerProvider = Provider<void>((ref) async {
     );
   }
 
-  final enabled = ref.read(adhkarNotifEnabledProvider);
+  final enabled = ref.read(adhkarNotifControllerProvider);
 
   if (enabled) {
     await schedule();
   }
 
   // then react to usser settings changes
-  ref.listen<bool>(adhkarNotifEnabledProvider, (prev, next) async {
+  ref.listen<bool>(adhkarNotifControllerProvider, (prev, next) async {
     //if disabled -> only cancel
     if (!next) {
       await NotificationService.instance.cancel(morningNotifId);

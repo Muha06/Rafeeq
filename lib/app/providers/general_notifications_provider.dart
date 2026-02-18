@@ -89,7 +89,7 @@ class SystemNotifAccessNotifier extends Notifier<SystemNotifAccessState> {
         .canScheduleExactAlarms();
 
     debugPrint(
-      'Persisting notifications as $notificationsAllowed , $exactAlarmsAllowed',
+      '✅ Persisting notifications as $notificationsAllowed , $exactAlarmsAllowed',
     );
 
     await _persist(
