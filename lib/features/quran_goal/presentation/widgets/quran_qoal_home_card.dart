@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/helpers/ui_helpers.dart';
-import 'package:rafeeq/features/quran_tempt/presentation/pages/surah_page.dart';
-import 'package:rafeeq/features/quran_tempt/presentation/riverpod/fetch_surahs_provider.dart';
-import 'package:rafeeq/features/quran_tempt/presentation/widgets/SURAH_PAGE/surah_ayah_dialog.dart';
+import 'package:rafeeq/features/quran/presentation/pages/surah_page.dart';
+import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provider.dart';
+import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_ayah_dialog.dart';
 import 'package:rafeeq/features/quran_goal/presentation/pages/quran_goal_stats.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/progress_provider.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
