@@ -62,7 +62,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               actions: [
                 const UserLocationChip(),
                 IconButton(
-                  onPressed: () {
+                  onPressed: () async {
                     pushLeftPage(context, const SettingsPage());
                   },
                   icon: const Icon(CupertinoIcons.settings),

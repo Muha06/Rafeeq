@@ -53,8 +53,8 @@ class SalahNotifications {
 
       await NotificationService.instance.scheduleSalah(
         id: _adhanIds[prayer]!,
-        title: '${prayer.label} time',
-        body: 'It’s time for ${prayer.label}.',
+        title: prayer.label,
+        body: 'Time for ${prayer.label}',
         scheduled: adhanTime,
         isFajr: prayer == SalahPrayer.fajr,
       );

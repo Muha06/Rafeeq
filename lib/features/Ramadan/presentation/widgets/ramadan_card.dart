@@ -31,79 +31,77 @@ class _RamadanDailyCardState extends ConsumerState<RamadanDailyCard> {
 
     final ramadanAsync = ref.watch(ramadanTimesProvider);
     final hijri = ref.watch(hijriDateProvider).hijri;
+    final reflectionAsync = ref.watch(ramadanReflectionByDayProvider(hijri));
 
-    final reflection = ref.watch(ramadanReflectionByDayProvider(hijri));
+    return reflectionAsync.when(
+      data: (reflection) {
+        if (reflection == null) return const SizedBox.shrink();
 
-    if (reflection == null) {
-      return const SizedBox.shrink();
-    }
-
-    return ramadanAsync.when(
-      loading: () => const SizedBox.shrink(),
-      error: (_, _) => const SizedBox.shrink(),
-      data: (times) {
-        final suhur = times.suhurEnd;
-        final iftar = times.iftar;
-
-        return Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
-            color: cs.surface,
-          ),
-          padding: const EdgeInsets.all(14),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _RamadanHeader(isDark: isDark, reflection: reflection),
-
-              const SizedBox(height: 12),
-
-              Row(
+        return ramadanAsync.when(
+          loading: () => const SizedBox.shrink(),
+          error: (_, __) => const SizedBox.shrink(),
+          data: (times) {
+            final suhur = times.suhurEnd;
+            final iftar = times.iftar;
+            return Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(14),
+                color: cs.surface,
+              ),
+              padding: const EdgeInsets.all(14),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: BuildRamadanTimeCard(
-                      icon: FontAwesomeIcons.cloudSun,
-                      title: 'Suhur end',
-                      time: format12h(suhur),
-                      isDark: isDark,
-                    ),
+                  _RamadanHeader(isDark: isDark, reflection: reflection),
+
+                  const SizedBox(height: 12),
+
+                  Row(
+                    children: [
+                      Expanded(
+                        child: BuildRamadanTimeCard(
+                          icon: FontAwesomeIcons.cloudSun,
+                          title: 'Suhur end',
+                          time: format12h(suhur),
+                          isDark: isDark,
+                        ),
+                      ),
+                      const Spacer(),
+                      Expanded(
+                        child: BuildRamadanTimeCard(
+                          icon: FontAwesomeIcons.utensils,
+                          title: 'Iftar',
+                          time: format12h(iftar),
+                          isDark: isDark,
+                        ),
+                      ),
+                    ],
                   ),
-                  const Spacer(),
-                  Expanded(
-                    child: BuildRamadanTimeCard(
-                      icon: FontAwesomeIcons.utensils,
-                      title: 'Iftar',
-                      time: format12h(iftar),
-                      isDark: isDark,
+
+                  const SizedBox(height: 12),
+
+                  const Divider(),
+
+                  const SizedBox(height: 12),
+
+                  RamadanReflectionPreview(
+                    reflection: reflection,
+                    isDark: isDark,
+                    onTap: () => showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (_) =>
+                          RamadanReflectionSheet(reflection: reflection),
                     ),
                   ),
                 ],
               ),
-
-              const SizedBox(height: 12),
-
-              Divider(
-                height: 1,
-                thickness: 1,
-                color: (isDark ? Colors.white : Colors.black).withAlpha(18),
-              ),
-
-              const SizedBox(height: 12),
-
-              RamadanReflectionPreview(
-                reflection: reflection,
-                isDark: isDark,
-                onTap: () => showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  builder: (_) =>
-                      RamadanReflectionSheet(reflection: reflection),
-                ),
-              ),
-            ],
-          ),
+            );
+          },
         );
       },
+      loading: () => const SizedBox.shrink(),
+      error: (_, __) => const SizedBox.shrink(),
     );
   }
 }

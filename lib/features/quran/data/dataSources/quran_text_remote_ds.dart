@@ -1,6 +1,5 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+ import 'package:http/http.dart' as http;
 import 'package:rafeeq/core/features/network/quran_auth_client.dart';
 import 'package:rafeeq/features/quran/data/models/ayah_dto.dart';
 import 'package:rafeeq/features/quran/data/models/surah_dto.dart';
@@ -62,10 +61,9 @@ class QuranTextApiService {
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body) as Map<String, dynamic>;
-      debugPrint('data $data', wrapWidth: 2000);
 
       final verses = data['verses'] as List<dynamic>;
-       return verses.map((json) => AyahDto.fromJson(json)).toList();
+      return verses.map((json) => AyahDto.fromJson(json)).toList();
     } else {
       throw Exception(
         'Failed to fetch ayahs: ${response.statusCode} ${response.body}',

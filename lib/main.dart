@@ -89,6 +89,14 @@ class _MyAppState extends ConsumerState<MyApp> {
     ref.read(adhkarNotificationsControllerProvider);
     //SYNC
     await ref.read(systemNotifAccessProvider.notifier).sync();
+
+    final pending = await NotificationService.instance.plugin
+        .pendingNotificationRequests();
+
+    debugPrint('🕌 Pending Salat TOTAL: ${pending.length}');
+    for (final p in pending) {
+      debugPrint('• id=${p.id}, title=${p.title}');
+    }
   }
 
   @override
