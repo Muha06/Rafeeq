@@ -253,6 +253,9 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
       reciter: reciter,
     );
 
+    //show cntrols
+    ref.read(showAudioControlsProvider.notifier).state = true;
+
     await ref
         .read(audioControllerProvider.notifier)
         .playUrl(
@@ -263,9 +266,6 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
           showPlayer: false,
           context: context,
         );
-
-    //show cntrols
-    ref.read(showControlsProvider.notifier).state = true;
   }
 
   @override
@@ -280,8 +280,10 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
     final ayahsAsync = ref.watch(ayahsFutureProvider(surahId));
     final surahs = ref.watch(surahsFutureProvider).value;
 
-    final showControls = ref.watch(surahSettingsProvider).autoScrollEnabled;
-    final showAudioControls = ref.watch(showControlsProvider);
+    final showAudioControls = ref.watch(showAudioControlsProvider);
+    final showSpeedControls = ref
+        .watch(surahSettingsProvider)
+        .autoScrollEnabled;
 
     return PopScope(
       onPopInvokedWithResult: (didPop, result) async {
@@ -301,18 +303,17 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
         ref.read(surahSettingsProvider.notifier).setAutoScrollEnabled(false);
       },
       child: Scaffold(
-        bottomNavigationBar: showAudioControls
-            ? QuranAudioControlsBar(surah: surah)
+        bottomNavigationBar: (showAudioControls || showSpeedControls)
+            ? QuranAudioControlsBar(
+                onStart: _startAutoScroll,
+                onPause: _pauseAutoScroll,
+                autoOn: _autoOn,
+                onExit: _exitAutoScroll,
+                showAudioControls: showAudioControls,
+                showSpeedControls: showSpeedControls,
+              )
             : null,
 
-        //  showControls
-        //     ? AutoScrollControlsBar(
-        //         onStart: _startAutoScroll,
-        //         autoOn: _autoOn, //for pause featre
-        //         onExit: _exitAutoScroll,
-        //         onPause: _pauseAutoScroll,
-        //       )
-        //     : null,
         appBar: AppBar(
           backgroundColor: theme.scaffoldBackgroundColor,
           title: Material(
@@ -446,90 +447,6 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class AutoScrollControlsBar extends ConsumerWidget {
-  const AutoScrollControlsBar({
-    super.key,
-    required this.onStart,
-    required this.onPause,
-    required this.autoOn,
-    required this.onExit,
-  });
-
-  final VoidCallback onStart;
-  final VoidCallback onPause;
-  final VoidCallback onExit;
-  final bool autoOn;
-
-  @override
-  Widget build(BuildContext context, ref) {
-    final theme = Theme.of(context);
-    final surahSettings = ref.watch(surahSettingsProvider);
-    final surahSettingsNotifier = ref.watch(surahSettingsProvider.notifier);
-    var speed = surahSettings.autoScrollSpeed;
-
-    final fontSize = 16.0;
-
-    return SafeArea(
-      bottom: true,
-      child: Container(
-        height: 48,
-        decoration: BoxDecoration(
-          color: theme.bottomAppBarTheme.color,
-          border: Border(top: BorderSide(color: theme.dividerColor)),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            //exit speed
-            IconButton(
-              onPressed: onExit,
-              icon: FaIcon(FontAwesomeIcons.x, size: fontSize),
-            ),
-
-            Expanded(
-              child: Center(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    //reduce speed
-                    IconButton(
-                      onPressed: () {
-                        surahSettingsNotifier.decreaseSpeed();
-                      },
-                      icon: FaIcon(FontAwesomeIcons.minus, size: fontSize),
-                    ),
-
-                    const SizedBox(width: 8),
-                    Text(speed.toString()),
-                    const SizedBox(width: 8),
-
-                    //increase speed
-                    IconButton(
-                      onPressed: () {
-                        surahSettingsNotifier.increaseSpeed();
-                      },
-                      icon: FaIcon(FontAwesomeIcons.plus, size: fontSize),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-            //pause
-            IconButton(
-              onPressed: autoOn ? onPause : onStart,
-              icon: FaIcon(
-                autoOn ? FontAwesomeIcons.pause : FontAwesomeIcons.play,
-                size: fontSize,
-              ),
-            ),
-          ],
         ),
       ),
     );
