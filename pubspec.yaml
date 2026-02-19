@@ -2,7 +2,7 @@ name: rafeeq
 description: "An Islamic companion app."
 publish_to: "none"
 
-version: 1.0.14+4
+version: 1.0.15+6
 
 environment:
   sdk: ^3.10.4
