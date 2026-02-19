@@ -16,12 +16,16 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
- 
+
     final s = ref.watch(surahSettingsProvider);
     final sNotifier = ref.read(surahSettingsProvider.notifier);
 
     final showTranslation = ref.watch(
       surahSettingsProvider.select((s) => s.showTranslation),
+    );
+
+    final showTranslit = ref.watch(
+      surahSettingsProvider.select((s) => s.showTranslit),
     );
     final arabicFontSize = ref.watch(
       surahSettingsProvider.select((s) => s.arabicFontSize),
@@ -62,13 +66,24 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
             ),
             const SizedBox(height: 4),
 
-            //TRANSATION TOGGLE & FONT SIZE
+            //TRANSATION TOGGLE
             SwitchListTile(
               value: showTranslation,
               contentPadding: EdgeInsets.zero,
               title: Text('Show Translation', style: titleTextstyle),
               onChanged: (value) {
                 sNotifier.setShowTranslation(value);
+              },
+            ),
+            const SizedBox(height: 4),
+
+            //TRANSILT TOGGLE
+            SwitchListTile(
+              value: showTranslit,
+              contentPadding: EdgeInsets.zero,
+              title: Text('Show Transliteration', style: titleTextstyle),
+              onChanged: (value) {
+                sNotifier.setShowTranslit(value);
               },
             ),
 

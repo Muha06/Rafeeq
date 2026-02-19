@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:rafeeq/core/helpers/snackbars.dart';
+import 'package:rafeeq/core/helpers/ui_helpers.dart';
 import 'package:rafeeq/features/quran_goal/domain/entities/quran_goal.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
+import 'package:rafeeq/features/quran_goal/presentation/widgets/log_ayah_bottomsheet.dart';
+import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class EditQuranGoalSheet extends ConsumerStatefulWidget {
   final QuranGoal goal;
@@ -14,11 +18,24 @@ class EditQuranGoalSheet extends ConsumerStatefulWidget {
 
 class _EditQuranGoalSheetState extends ConsumerState<EditQuranGoalSheet> {
   late int targetAyahs;
-
+  late TextEditingController targetAyahController;
   @override
   void initState() {
     super.initState();
     targetAyahs = widget.goal.dailyTarget;
+    targetAyahController = TextEditingController(
+      text: widget.goal.dailyTarget.toString(),
+    );
+  }
+
+  // Whenever we update target ayahs programmatically, update controller
+  void updateController(int value) {
+    targetAyahs = value;
+    targetAyahController.text = value.toString();
+    // move cursor to end
+    targetAyahController.selection = TextSelection.fromPosition(
+      TextPosition(offset: targetAyahController.text.length),
+    );
   }
 
   @override
@@ -64,7 +81,10 @@ class _EditQuranGoalSheetState extends ConsumerState<EditQuranGoalSheet> {
             children: [
               IconButton(
                 onPressed: targetAyahs > 1
-                    ? () => setState(() => targetAyahs--)
+                    ? () => setState(() {
+                        targetAyahs--;
+                        updateController(targetAyahs);
+                      })
                     : null,
                 icon: PhosphorIcon(
                   PhosphorIcons.minus(),
@@ -72,21 +92,27 @@ class _EditQuranGoalSheetState extends ConsumerState<EditQuranGoalSheet> {
                 ),
               ),
               const SizedBox(width: 16),
-              Text(
-                '$targetAyahs',
-                style: theme.textTheme.headlineSmall?.copyWith(
-                  color: cs.onSurface,
-                  fontWeight: FontWeight.bold,
-                ),
+
+              LogSetGoalTextfield(
+                controller: targetAyahController,
+                onChanged: (value) {
+                  final parsed = int.tryParse(value);
+                  if (parsed != null && parsed > 0) {
+                    setState(() => updateController(parsed));
+                  }
+                },
               ),
               const SizedBox(width: 16),
+              
               IconButton(
-                onPressed: () => setState(() => targetAyahs++),
+                onPressed: () => setState(() {
+                  targetAyahs++;
+                  updateController(targetAyahs);
+                }),
                 icon: Icon(PhosphorIcons.plus(), color: cs.primary),
               ),
             ],
           ),
-
           const SizedBox(height: 24),
 
           // --- Action buttons ---
@@ -102,10 +128,21 @@ class _EditQuranGoalSheetState extends ConsumerState<EditQuranGoalSheet> {
               Expanded(
                 child: FilledButton(
                   onPressed: () {
-                    if (targetAyahs > 0) {
-                      ref.read(quranGoalProvider.notifier).setGoal(targetAyahs);
-                      Navigator.pop(context);
+                    final parsed = int.tryParse(targetAyahController.text);
+
+                    if (parsed != null && parsed <= 0) {
+                      //just use the prev target & dont update
+                      AppNav.pop(context);
+                      AppSnackBar.showSimple(
+                        context: context,
+                        isDark: ref.read(isDarkProvider),
+                        message: "Active goal target must be greater than 1",
+                      );
+                      return;
                     }
+
+                    AppNav.pop(context);
+                    ref.read(quranGoalProvider.notifier).setGoal(targetAyahs);
                   },
                   child: const Text("Save Goal"),
                 ),

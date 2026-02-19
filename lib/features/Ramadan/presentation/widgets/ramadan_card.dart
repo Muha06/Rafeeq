@@ -96,7 +96,6 @@ class _RamadanDailyCardState extends ConsumerState<RamadanDailyCard> {
                 onTap: () => showModalBottomSheet(
                   context: context,
                   isScrollControlled: true,
-                  backgroundColor: Colors.transparent,
                   builder: (_) =>
                       RamadanReflectionSheet(reflection: reflection),
                 ),

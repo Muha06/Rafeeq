@@ -28,7 +28,7 @@ class AdhkarReminderCard extends ConsumerWidget {
         children: [
           Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(14),
               color: cs.surface,
             ),
             child: Padding(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/progress_provider.dart';
@@ -9,6 +10,7 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
   final cs = Theme.of(context).colorScheme;
 
   int ayahsRead = 1;
+  final ayahController = TextEditingController(text: ayahsRead.toString());
 
   showModalBottomSheet(
     context: context,
@@ -16,6 +18,16 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
     showDragHandle: true,
     builder: (context) => StatefulBuilder(
       builder: (context, setState) {
+        // Whenever we update ayahsRead programmatically, update controller
+        void updateController(int value) {
+          ayahsRead = value;
+          ayahController.text = value.toString();
+          // move cursor to end
+          ayahController.selection = TextSelection.fromPosition(
+            TextPosition(offset: ayahController.text.length),
+          );
+        }
+
         // calculate progress
         final goal = ref.read(quranGoalProvider);
         final todayProgress = ref.read(
@@ -102,14 +114,17 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
                     ),
                     const SizedBox(width: 16),
 
-                    Text(
-                      '$ayahsRead',
-                      style: Theme.of(context).textTheme.headlineSmall
-                          ?.copyWith(
-                            color: cs.onSurface,
-                            fontWeight: FontWeight.bold,
-                          ),
+                    // TextField for Ayahs Read
+                    LogSetGoalTextfield(
+                      controller: ayahController,
+                      onChanged: (value) {
+                        final parsed = int.tryParse(value);
+                        if (parsed != null && parsed > 0) {
+                          setState(() => updateController(parsed));
+                        }
+                      },
                     ),
+
                     const SizedBox(width: 16),
 
                     IconButton(
@@ -152,6 +167,46 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
       },
     ),
   );
+}
+
+class LogSetGoalTextfield extends StatelessWidget {
+  const LogSetGoalTextfield({
+    super.key,
+    required this.controller,
+    required this.onChanged,
+  });
+
+  final TextEditingController controller;
+  final ValueChanged<String> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          minWidth: 52,
+          maxWidth: 64,
+          maxHeight: 52,
+        ),
+        child: TextField(
+          keyboardType: TextInputType.number,
+          textAlign: TextAlign.center,
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          decoration: const InputDecoration(contentPadding: EdgeInsets.zero),
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+            color: cs.onSurface,
+            fontWeight: FontWeight.bold,
+            fontSize: 14,
+          ),
+          onChanged: onChanged,
+          controller: controller,
+        ),
+      ),
+    );
+  }
 }
 
 void showGoalCompletedDialog(BuildContext context, int dailyTarget) {

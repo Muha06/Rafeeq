@@ -19,7 +19,7 @@ import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/quran_audi
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_ayah_dialog.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_details.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_settings_sheet.dart';
-import 'package:rafeeq/features/quran/presentation/widgets/log_ayah_bottomsheet.dart';
+import 'package:rafeeq/features/quran_goal/presentation/widgets/log_ayah_bottomsheet.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/surah_audio_providers.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';

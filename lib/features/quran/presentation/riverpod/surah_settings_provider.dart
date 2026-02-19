@@ -3,6 +3,7 @@ import 'package:riverpod/legacy.dart';
 
 class SurahSettings {
   final bool showTranslation;
+  final bool showTranslit;
   final double arabicFontSize;
   final double translationFontSize;
   final double autoScrollSpeed; // ayahs per minute
@@ -14,6 +15,7 @@ class SurahSettings {
     required this.translationFontSize,
     required this.autoScrollSpeed,
     required this.autoScrollEnabled,
+    required this.showTranslit
   });
 
   SurahSettings copyWith({
@@ -22,6 +24,7 @@ class SurahSettings {
     double? translationFontSize,
     double? autoScrollSpeed,
     bool? autoScrollEnabled,
+    bool? showTranslit
   }) {
     return SurahSettings(
       showTranslation: showTranslation ?? this.showTranslation,
@@ -29,6 +32,7 @@ class SurahSettings {
       translationFontSize: translationFontSize ?? this.translationFontSize,
       autoScrollSpeed: autoScrollSpeed ?? this.autoScrollSpeed,
       autoScrollEnabled: autoScrollEnabled ?? this.autoScrollEnabled,
+      showTranslit: showTranslit?? this.showTranslit
     );
   }
 }
@@ -47,10 +51,12 @@ class SurahSettingsNotifier extends StateNotifier<SurahSettings> {
           translationFontSize: 16,
           autoScrollSpeed: 20,
           autoScrollEnabled: false,
+          showTranslit: true
         ),
       );
 
   void setShowTranslation(bool v) => state = state.copyWith(showTranslation: v);
+  void setShowTranslit(bool v) => state = state.copyWith(showTranslit: v);
 
   void setArabicFont(double v) => state = state.copyWith(arabicFontSize: v);
 
