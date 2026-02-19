@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/app/providers/tabs_screen_provider.dart';
 import 'package:rafeeq/core/widgets/bottom_bar.dart';
 import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_category_page.dart';
-import 'package:rafeeq/features/quran/presentation/pages/quran_page.dart';
+import 'package:rafeeq/features/quran_tempt/presentation/pages/quran_page.dart';
 import 'package:rafeeq/features/home/presentation/home_page.dart';
 import 'package:rafeeq/features/bookmarks/presentation/pages/bookmark_page.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';

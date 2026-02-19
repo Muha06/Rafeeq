@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provider.dart';
+import 'package:rafeeq/features/quran_tempt/presentation/riverpod/fetch_surahs_provider.dart';
 import 'package:rafeeq/features/quran_audio/data/datasources/quran_audio_remote_ds.dart';
 import 'package:rafeeq/features/quran_audio/data/repos/quran_audio_repo_impl.dart';
 import 'package:rafeeq/features/quran_audio/domain/repos/quran_audio_repo.dart';
