@@ -14,7 +14,10 @@ class OnboardingLocalDataSourceImpl implements OnboardingLocalDataSource {
   static const _key = 'seen_onboarding';
 
   @override
-  bool hasSeenOnboarding() => _box.get(_key, defaultValue: false) as bool;
+  bool hasSeenOnboarding() {
+    final seen = _box.get(_key, defaultValue: false) as bool;
+    return seen;
+  }
 
   @override
   Future<void> setSeenOnboarding() async {

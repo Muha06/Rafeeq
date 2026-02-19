@@ -65,8 +65,7 @@ class QuranTextApiService {
       debugPrint('data $data', wrapWidth: 2000);
 
       final verses = data['verses'] as List<dynamic>;
-      debugPrint('verses ${verses[1]}', wrapWidth: 2000);
-      return verses.map((json) => AyahDto.fromJson(json)).toList();
+       return verses.map((json) => AyahDto.fromJson(json)).toList();
     } else {
       throw Exception(
         'Failed to fetch ayahs: ${response.statusCode} ${response.body}',

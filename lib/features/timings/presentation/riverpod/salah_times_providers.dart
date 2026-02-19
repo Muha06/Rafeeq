@@ -85,6 +85,7 @@ final todaySalahTimesProvider = FutureProvider<SalahTimesEntity>((ref) async {
 });
 
 //SINGLE SALAT NOTIFICATIONS SCHEDULER CONTROLLER  PROVIDER
+//LISTENS TO 2 PROVIDERS: TIMESPROVIDER & USER SET SETTINGS
 final salahNotificationsControllerProvider = Provider<void>((ref) {
   ref.listen<AsyncValue<SalahTimesEntity>>(todaySalahTimesProvider, (
     prev,
