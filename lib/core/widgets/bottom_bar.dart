@@ -51,45 +51,43 @@ class MyBottomBar extends StatelessWidget {
             final isSelected = currentIndex == index;
 
             return Expanded(
-              child: GestureDetector(
-                onTap: () => onTap(index),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 120),
-                        switchInCurve: Curves.easeOutBack,
-                        switchOutCurve: Curves.easeIn,
-                        transitionBuilder: (child, anim) =>
-                            ScaleTransition(scale: anim, child: child),
-                        child: Icon(
-                          isSelected ? item.active : item.icon,
-                          color: isSelected ? cs.primary : cs.onSurfaceVariant,
-                          key: ValueKey('$index-$isSelected'),
-                          size: isSelected ? 19 : 16,
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: () => onTap(index),
+                  highlightColor: Colors.transparent,
+                  splashColor: Colors.transparent,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 120),
+                          child: Icon(
+                            isSelected ? item.active : item.icon,
+                            key: ValueKey(isSelected), // simpler
+                            color: isSelected
+                                ? cs.primary
+                                : cs.onSurfaceVariant,
+                            size: isSelected ? 19 : 16,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 6),
-
-                      AnimatedDefaultTextStyle(
-                        duration: const Duration(milliseconds: 200),
-                        curve: Curves.easeOut,
-                        style: theme.textTheme.bodySmall!.copyWith(
-                          fontSize: isSelected ? 12 : 11,
-                          fontWeight: isSelected
-                              ? FontWeight.w700
-                              : FontWeight.w700,
+                        const SizedBox(height: 6),
+                        AnimatedDefaultTextStyle(
+                          duration: const Duration(milliseconds: 200),
+                          style: theme.textTheme.bodySmall!.copyWith(
+                            fontSize: isSelected ? 12 : 11,
+                            fontWeight: FontWeight.w700,
+                          ),
+                          child: Text(
+                            item.label,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
-                        child: Text(
-                          item.label,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
