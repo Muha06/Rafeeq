@@ -84,9 +84,6 @@ class _MyAppState extends ConsumerState<MyApp> {
     final hasSeen = ref.read(hasSeenOnboardingProvider);
     if (!hasSeen) return;
 
-    //ACTIVATE
-    ref.read(salahNotificationsControllerProvider);
-    ref.read(adhkarNotificationsControllerProvider);
     //SYNC
     await ref.read(systemNotifAccessProvider.notifier).sync();
 
@@ -102,6 +99,10 @@ class _MyAppState extends ConsumerState<MyApp> {
   @override
   Widget build(BuildContext context) {
     final hasSeenOnboarding = ref.watch(hasSeenOnboardingProvider);
+
+    //ACTIVATE
+    ref.watch(salahNotificationsControllerProvider);
+    ref.watch(adhkarNotificationsControllerProvider);
 
     return MaterialApp(
       title: 'Rafeeq',
