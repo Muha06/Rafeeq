@@ -99,15 +99,13 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
       final usecase = ref.read(getTodaySalahTimesProvider);
       final method = ref.read(salahMethodProvider);
 
-      final times = await usecase.call(
+      await usecase.call(
         latitude: p.lat,
         longitude: p.lng,
         city: p.name,
         country: _country ?? p.country,
         method: method,
       );
-
-      debugPrint(times.times.toString());
 
       setState(() {
         _verified = true;
@@ -163,7 +161,7 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
             baseColor: cs.surface,
             onTap: () async {
               if (isAuto) return;
-              
+
               setState(() {
                 _manualExpanded = false;
                 _country = null;
@@ -175,7 +173,7 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
               AppSnackBar.showSimple(
                 context: context,
                 isDark: isDark,
-                duration: const Duration(seconds: 4),
+                duration: const Duration(seconds: 3),
                 message: 'Setting to GPS mode...',
               );
 
@@ -262,7 +260,7 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
                                         : (_verified
                                               ? 'City verified ✓,  '
                                               : 'Verifying…')),
-                              style: theme.textTheme.bodySmall?.copyWith(),
+                              style: theme.textTheme.bodySmall,
                             ),
                           ),
 

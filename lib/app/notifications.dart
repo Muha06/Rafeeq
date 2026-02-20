@@ -127,7 +127,7 @@ class NotificationService {
       9999,
       'Test Adhan',
       'If you hear sound, we’re good ✅',
-      details, 
+      details,
     );
   }
 
@@ -183,7 +183,8 @@ class NotificationService {
     );
 
     final exactAllowed = await canScheduleExactAlarms();
-    debugPrint(exactAllowed.toString());
+    
+    debugPrint("Exact allowed: ${exactAllowed.toString()}");
 
     await _plugin.zonedSchedule(
       id,

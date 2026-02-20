@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:rafeeq/app/connectivity_plus/ap_wrapper.dart';
+import 'package:rafeeq/app/connectivity_plus/app_wrapper.dart';
 import 'package:rafeeq/app/notifications.dart';
 import 'package:rafeeq/app/providers/general_notifications_provider.dart';
 import 'package:rafeeq/app/tabs_screen.dart';
