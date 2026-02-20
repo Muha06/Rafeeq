@@ -130,7 +130,6 @@ void _showFridayVirtuesSheet(BuildContext context, bool isDark) {
     context: context,
     isScrollControlled: true,
     useSafeArea: false,
-    backgroundColor: Colors.transparent,
     builder: (_) {
       return DraggableScrollableSheet(
         initialChildSize: 0.8,
