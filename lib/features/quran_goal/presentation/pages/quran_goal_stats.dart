@@ -50,6 +50,7 @@ class ProgressBars extends StatelessWidget {
     final cs = theme.colorScheme;
 
     return Container(
+      width: double.infinity,
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
@@ -57,17 +58,25 @@ class ProgressBars extends StatelessWidget {
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text('Overview', style: theme.textTheme.labelLarge),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text('Overview', style: theme.textTheme.labelLarge),
+          ),
           const SizedBox(height: 16),
 
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          Wrap(
+            alignment: WrapAlignment.spaceEvenly,
+            spacing: 0,
             children: bars,
           ),
+          // Row(
+          //   crossAxisAlignment: CrossAxisAlignment.center,
+
+          //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          //   children: bars,
+          // ),
         ],
       ),
     );
@@ -109,7 +118,7 @@ class MyQuranGoalCard extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
-                    goal.isActive ? "Active Goal" : "Paused Goal",
+                    goal.isActive ? "Goal Active" : "Goal Paused",
                     style: theme.textTheme.bodySmall!.copyWith(
                       color: cs.primary,
                       fontWeight: FontWeight.bold,
@@ -189,13 +198,16 @@ class MyQuranGoalCard extends ConsumerWidget {
                 Expanded(
                   child: FilledButton(
                     onPressed: () {
-                      ref.read(quranGoalProvider.notifier).toggleGoalActivity();
+                      final notifier = ref.read(quranGoalProvider.notifier);
+                      notifier.toggleGoalActivity();
+
+                      final updated = ref.read(quranGoalProvider);
                       AppSnackBar.showSimple(
                         context: context,
                         isDark: ref.read(isDarkProvider),
-                        message: goal.isActive
-                            ? "Goal paused"
-                            : "Unpaused goal",
+                        message: updated.isActive
+                            ? "Goal unpaused"
+                            : "Goal paused",
                       );
                     },
                     child: Text(
