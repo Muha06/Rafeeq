@@ -1,4 +1,4 @@
-import 'package:arc_progress_bar_new/arc_progress_bar_new.dart';
+ import 'package:arc_progress_bar_new/arc_progress_bar_new.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/today_progress_provider.dart';
