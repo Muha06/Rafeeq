@@ -49,6 +49,7 @@ dependencies:
   phosphor_flutter: ^2.1.0  
   arc_progress_bar_new: ^1.0.4
   fl_chart: ^1.1.1
+  connectivity_plus: ^7.0.0
 
 dev_dependencies:
   flutter_test:

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/features/asma_ul_husna/presentation/providers/asma_ul_husna_provider.dart';
- 
+
 class AllahNamesPage extends ConsumerStatefulWidget {
   const AllahNamesPage({super.key});
 
@@ -271,16 +271,6 @@ class _ErrorState extends StatelessWidget {
               onPressed: onRetry,
               icon: const Icon(Icons.refresh_rounded),
               label: const Text("Retry"),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              details,
-              textAlign: TextAlign.center,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurface.withAlpha(100),
-              ),
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),

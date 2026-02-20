@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/core/helpers/salat_times.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_status.dart';
 import 'package:rafeeq/features/timings/presentation/pages/timings_pages.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/salah_status_provider.dart';
-
+import 'package:rafeeq/features/timings/presentation/riverpod/salah_times_providers.dart';
 import '../../domain/entities/salah_prayer.dart';
 
 class TodayTimesCard extends ConsumerWidget {
@@ -50,7 +51,7 @@ class TodayTimesCard extends ConsumerWidget {
         error: (e, st) {
           debugPrint(e.toString());
           debugPrint(st.toString());
-          return Text('$e,$st ');
+          return const _ErrorCard();
         },
         data: (status) => _CardBody(
           key: ValueKey(
@@ -61,6 +62,51 @@ class TodayTimesCard extends ConsumerWidget {
           height: height,
           radius: borderRadius,
           bgAsset: assetsByPrayer[status.current],
+        ),
+      ),
+    );
+  }
+}
+
+class _ErrorCard extends ConsumerWidget {
+  const _ErrorCard();
+
+  @override
+  Widget build(BuildContext context, ref) {
+    final theme = Theme.of(context);
+
+    return Container(
+      height: 200,
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            PhosphorIcon(
+              PhosphorIcons.wifiSlash(),
+              size: 32,
+              color: theme.colorScheme.error,
+            ),
+            const SizedBox(height: 12),
+
+            Text(
+              'Error loading times. Please check your Internet connection',
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodyLarge,
+            ),
+            const SizedBox(height: 16),
+
+            ElevatedButton(
+              onPressed: () {
+                ref.refresh(todaySalahTimesProvider);
+              },
+              child: const Text('Reload'),
+            ),
+          ],
         ),
       ),
     );

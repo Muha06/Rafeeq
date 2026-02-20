@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:rafeeq/app/connectivity_plus/ap_wrapper.dart';
 import 'package:rafeeq/app/notifications.dart';
 import 'package:rafeeq/app/providers/general_notifications_provider.dart';
 import 'package:rafeeq/app/tabs_screen.dart';
@@ -102,7 +103,9 @@ class _MyAppState extends ConsumerState<MyApp> {
       themeMode: ThemeMode.dark,
       debugShowCheckedModeBanner: false,
       scaffoldMessengerKey: scaffoldMessengerKey,
-      home: hasSeenOnboarding ? const TabsScreen() : const OnboardingPage(),
+      home: hasSeenOnboarding
+          ? const AppWrapper(child: TabsScreen())
+          : const OnboardingPage(),
     );
   }
 }

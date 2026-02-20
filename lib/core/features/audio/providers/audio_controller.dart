@@ -41,7 +41,7 @@ class AudioController extends Notifier<AudioState> {
 
     try {
       await _player.setUrl(url);
-      
+
       if (showPlayer) {
         AppSnackBar.showPlayer();
       }
@@ -52,7 +52,7 @@ class AudioController extends Notifier<AudioState> {
       AppSnackBar.showSimple(
         context: context,
         isDark: ref.read(isDarkProvider),
-        message: 'Error playing audio',
+        message: 'Error playing audio. Please recheck your internet connection',
       );
     }
   }
