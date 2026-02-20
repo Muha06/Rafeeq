@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
+import 'package:rafeeq/features/quran_goal/presentation/widgets/daily_progress_bar.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/edit_goal_sheet.dart';
+import 'package:rafeeq/features/quran_goal/presentation/widgets/monthly_progress_bar.dart';
+import 'package:rafeeq/features/quran_goal/presentation/widgets/weekly_progress_bar.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class QuranGoalStatsPage extends StatefulWidget {
@@ -19,7 +22,53 @@ class _QuranGoalStatsPageState extends State<QuranGoalStatsPage> {
       appBar: AppBar(title: const Text('My stats')),
       body: const Padding(
         padding: EdgeInsets.symmetric(horizontal: 12.0),
-        child: Column(children: [MyQuranGoalCard()]),
+        child: Column(
+          children: [
+            MyQuranGoalCard(),
+            SizedBox(height: 8),
+
+            ProgressBars(
+              bars: [
+                TodayQuranProgressArc(),
+                WeeklyQuranProgressArc(),
+                MonthlyQuranProgressArc(),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ProgressBars extends StatelessWidget {
+  const ProgressBars({super.key, required this.bars});
+  final List<Widget> bars;
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(14),
+        color: cs.surface,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Overview', style: theme.textTheme.labelLarge),
+          const SizedBox(height: 16),
+
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: bars,
+          ),
+        ],
       ),
     );
   }
@@ -60,7 +109,7 @@ class MyQuranGoalCard extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
-                    goal.isActive ? "Active" : "Paused",
+                    goal.isActive ? "Active Goal" : "Paused Goal",
                     style: theme.textTheme.bodySmall!.copyWith(
                       color: cs.primary,
                       fontWeight: FontWeight.bold,
