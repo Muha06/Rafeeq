@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/app/providers/general_notifications_provider.dart';
+import 'package:rafeeq/app/salat_notifications_repo.dart';
 import 'package:rafeeq/features/settings/presentation/provider/notiffications_controller.dart';
+import 'package:rafeeq/features/timings/presentation/riverpod/disable_salah_reminders_provider.dart';
+import 'package:rafeeq/features/timings/presentation/riverpod/salah_times_providers.dart';
 
 class NotificationsPermissionCta extends ConsumerStatefulWidget {
   const NotificationsPermissionCta({super.key});
@@ -81,6 +84,14 @@ class _NotificationsPermissionCtaState
                   context,
                 );
               }
+              //force schedule
+              final times = await ref.read(todaySalahTimesProvider.future);
+              final disabled = ref.read(disabledSalahPrayersProvider);
+
+              await SalahNotifications.instance.scheduleForToday(
+                times: times,
+                disabled: disabled,
+              );
             },
 
       icon: perm.isLoading

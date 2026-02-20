@@ -162,6 +162,8 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
             selectedColor: cs.surfaceContainerHighest,
             baseColor: cs.surface,
             onTap: () async {
+              if (isAuto) return;
+              
               setState(() {
                 _manualExpanded = false;
                 _country = null;

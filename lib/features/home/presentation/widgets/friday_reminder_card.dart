@@ -129,80 +129,56 @@ void _showFridayVirtuesSheet(BuildContext context, bool isDark) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
-    useSafeArea: false,
-    backgroundColor: Colors.transparent,
+    useSafeArea: true,
     builder: (_) {
-      return DraggableScrollableSheet(
-        initialChildSize: 0.8,
-        minChildSize: 0.35,
-        maxChildSize: 0.9,
-        builder: (context, controller) {
-          return Container(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
+      return Container(
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+          children: [
+            Text(
+              'Friday Virtues',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
-            child: ListView(
-              controller: controller,
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
-              children: [
-                Center(
-                  child: Container(
-                    width: 40,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: isDark ? Colors.white24 : Colors.black12,
-                      borderRadius: BorderRadius.circular(99),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  'Friday Virtues',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  'A few Sunnah reminders to make your Jumu‘ah count.',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                const SizedBox(height: 16),
-
-                const _VirtueTile(
-                  title: 'Recite Sūrah Al-Kahf',
-                  body:
-                      'A beautiful Friday habit. If you can’t finish, start and continue — consistency wins.',
-                  icon: Icons.menu_book_outlined,
-                ),
-                const _VirtueTile(
-                  title: 'Send ṣalawāt',
-                  body:
-                      'Increase blessings by sending prayers upon the Prophet ﷺ throughout the day.',
-                  icon: Icons.favorite_border,
-                ),
-
-                const _VirtueTile(
-                  title: 'Ghusl + early Jumu‘ah',
-                  body:
-                      'Prepare for Jumu‘ah like it matters — because it does.',
-                  icon: Icons.water_drop_outlined,
-                ),
-                const _VirtueTile(
-                  title: 'Make duʿā',
-                  body:
-                      'Keep a short duʿā list. Ask for guidance, forgiveness, and barakah in your time.',
-                  icon: Icons.volunteer_activism_outlined,
-                ),
-                const SizedBox(height: 14),
-                FilledButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('Got it'),
-                ),
-              ],
+            const SizedBox(height: 12),
+            Text(
+              'A few Sunnah reminders to make your Jumu‘ah count.',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
-          );
-        },
+            const SizedBox(height: 16),
+
+            const _VirtueTile(
+              title: 'Recite Sūrah Al-Kahf',
+              body:
+                  'A beautiful Friday habit. If you can’t finish, start and continue — consistency wins.',
+              icon: Icons.menu_book_outlined,
+            ),
+            const _VirtueTile(
+              title: 'Send ṣalawāt',
+              body:
+                  'Increase blessings by sending prayers upon the Prophet ﷺ throughout the day.',
+              icon: Icons.favorite_border,
+            ),
+
+            const _VirtueTile(
+              title: 'Ghusl + early Jumu‘ah',
+              body: 'Prepare for Jumu‘ah like it matters — because it does.',
+              icon: Icons.water_drop_outlined,
+            ),
+            const _VirtueTile(
+              title: 'Make duʿā',
+              body:
+                  'Keep a short duʿā list. Ask for guidance, forgiveness, and barakah in your time.',
+              icon: Icons.volunteer_activism_outlined,
+            ),
+            const SizedBox(height: 14),
+            FilledButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Got it'),
+            ),
+          ],
+        ),
       );
     },
   );
@@ -227,7 +203,10 @@ class _VirtueTile extends ConsumerWidget {
       padding: const EdgeInsets.only(bottom: 12),
       child: Container(
         padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: theme.colorScheme.surfaceContainerHighest,
+        ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

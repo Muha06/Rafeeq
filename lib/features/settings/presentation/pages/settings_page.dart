@@ -15,14 +15,14 @@ class SettingsPage extends ConsumerStatefulWidget {
 }
 
 class _SettingsPageState extends ConsumerState<SettingsPage> {
-  void showThemePicker(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      showDragHandle: true,
-      useSafeArea: true,
-      builder: (context) => const ThemePickerSheet(),
-    );
-  }
+  // void showThemePicker(BuildContext context) {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     showDragHandle: true,
+  //     useSafeArea: true,
+  //     builder: (context) => const ThemePickerSheet(),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {

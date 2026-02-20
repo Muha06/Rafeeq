@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:rafeeq/app/salat_notifications_repo.dart';
@@ -106,7 +107,7 @@ final salahNotificationsControllerProvider = Provider<void>((ref) {
       final disabled = ref.read(
         disabledSalahPrayersProvider,
       ); // ✅ fresh disabled salahs
-      
+
       await SalahNotifications.instance.scheduleForToday(
         times: times,
         disabled: disabled,
@@ -124,6 +125,9 @@ final salahNotificationsControllerProvider = Provider<void>((ref) {
     if (!ref.read(salahNotifControllerProvider)) return;
 
     final disabled = ref.read(disabledSalahPrayersProvider); // ✅ fresh
+    
+    debugPrint('✅ SALAH CONTROLLER SCHEDULING FOR TODAY');
+
     await SalahNotifications.instance.scheduleForToday(
       times: times,
       disabled: disabled,
