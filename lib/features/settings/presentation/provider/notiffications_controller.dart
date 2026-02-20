@@ -48,6 +48,7 @@ class SalahNotifController extends Notifier<bool> {
           // Permission denied, keep OFF
           await box.put(kSalahEnabled, false);
           state = false;
+          debugPrint('Permissions not granted not toggling salah reminders');
 
           if (showSnack != null && showSnack) {
             AppSnackBar.showSimple(

@@ -84,24 +84,17 @@ class _MyAppState extends ConsumerState<MyApp> {
     final hasSeen = ref.read(hasSeenOnboardingProvider);
     if (!hasSeen) return;
 
-    //ACTIVATE
-    ref.read(salahNotificationsControllerProvider);
-    ref.read(adhkarNotificationsControllerProvider);
     //SYNC
     await ref.read(systemNotifAccessProvider.notifier).sync();
-
-    final pending = await NotificationService.instance.plugin
-        .pendingNotificationRequests();
-
-    debugPrint('🕌 Pending Salat TOTAL: ${pending.length}');
-    for (final p in pending) {
-      debugPrint('• id=${p.id}, title=${p.title}');
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     final hasSeenOnboarding = ref.watch(hasSeenOnboardingProvider);
+
+    //ACTIVATE
+    ref.watch(salahNotificationsControllerProvider);
+    ref.watch(adhkarNotificationsControllerProvider);
 
     return MaterialApp(
       title: 'Rafeeq',

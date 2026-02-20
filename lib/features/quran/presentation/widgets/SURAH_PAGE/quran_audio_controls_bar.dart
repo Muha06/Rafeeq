@@ -43,7 +43,10 @@ class QuranAudioControlsBar extends ConsumerWidget {
       top: false,
       child: Container(
         // height: 72,
-        decoration: BoxDecoration(color: cs.surfaceContainerHighest),
+        decoration: BoxDecoration(
+          color: cs.surfaceContainerHighest,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(14)),
+        ),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
         child: Column(
           mainAxisSize: MainAxisSize.min,

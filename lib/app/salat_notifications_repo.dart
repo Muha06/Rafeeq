@@ -47,6 +47,7 @@ class SalahNotifications {
       if (disabled.contains(prayer)) continue;
 
       var adhanTime = tz.TZDateTime.from(times.at(prayer), tz.local);
+      
       if (!adhanTime.isAfter(now)) {
         adhanTime = adhanTime.add(const Duration(days: 1));
       }

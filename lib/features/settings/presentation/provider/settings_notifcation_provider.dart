@@ -5,7 +5,8 @@ import 'package:rafeeq/app/notifications.dart';
 import 'package:rafeeq/features/settings/presentation/provider/notiffications_controller.dart';
 import 'package:riverpod/legacy.dart';
 
-const kAdhkarEnabled = 'adhkar_notif_enabled'; //a setting inside hive
+const kAdhkarEnabled =
+    'adhkar_notif_enabled'; //a setting inside hive (For user settings)
 const kSalahEnabled = 'salah_notif_enabled'; //a setting inside hive
 
 const fajrNotifId = 101;
