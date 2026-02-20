@@ -5,6 +5,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/progress_provider.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/quran_log_provider.dart';
+import 'package:rafeeq/features/quran_goal/presentation/providers/today_progress_provider.dart';
 
 void showAyahLogSheet(BuildContext context, WidgetRef ref) {
   final cs = Theme.of(context).colorScheme;
@@ -29,15 +30,9 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
         }
 
         // calculate progress
+        final todayRange = ref.read(todayRangeProvider);
         final goal = ref.read(quranGoalProvider);
-        final todayProgress = ref.read(
-          progressProvider(
-            DateTimeRange(
-              start: DateTime.now(),
-              end: DateTime.now().copyWith(hour: 23, minute: 59, second: 59),
-            ),
-          ),
-        );
+        final todayProgress = ref.watch(progressProvider(todayRange));
 
         final totalAfterLog = todayProgress.totalRead + ayahsRead;
         final progressPercent = (totalAfterLog / goal.dailyTarget).clamp(
@@ -145,9 +140,15 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
                       // Close bottom sheet first
                       Navigator.pop(context);
 
+                      // Re-read AFTER saving
+
+                      final updatedProgress = ref.read(
+                        progressProvider(todayRange),
+                      );
+
                       debugPrint(todayProgress.totalRead.toString());
 
-                      if (todayProgress.totalRead >= goal.dailyTarget) {
+                      if (updatedProgress.totalRead >= goal.dailyTarget) {
                         showGoalCompletedDialog(
                           context, // can use rootNavigator: true inside dialog if needed
                           goal.dailyTarget,

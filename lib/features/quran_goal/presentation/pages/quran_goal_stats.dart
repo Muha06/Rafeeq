@@ -1,25 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
+import 'package:rafeeq/features/quran_goal/presentation/providers/quran_log_provider.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/daily_progress_bar.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/edit_goal_sheet.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/monthly_progress_bar.dart';
+import 'package:rafeeq/features/quran_goal/presentation/widgets/weekly_chart.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/weekly_progress_bar.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
-class QuranGoalStatsPage extends StatefulWidget {
+class QuranGoalStatsPage extends ConsumerWidget {
   const QuranGoalStatsPage({super.key});
 
   @override
-  State<QuranGoalStatsPage> createState() => _QuranGoalStatsPageState();
-}
-
-class _QuranGoalStatsPageState extends State<QuranGoalStatsPage> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     return Scaffold(
-      appBar: AppBar(title: const Text('My stats')),
+      appBar: AppBar(
+        title: const Text('My stats'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              AppSheets.showConfirmSheet(
+                context: context,
+                title: "Reset stats?",
+                description: "This will clear all your recorded ayahs.",
+                destructive: true,
+                confirmText: "Reset",
+                onConfirm: () {
+                  ref.read(quranLogProvider.notifier).resetLogs();
+                },
+              );
+            },
+            icon: PhosphorIcon(PhosphorIcons.arrowClockwise()),
+            tooltip: 'Reset stats',
+          ),
+        ],
+      ),
       body: const Padding(
         padding: EdgeInsets.symmetric(horizontal: 12.0),
         child: Column(
@@ -34,6 +53,9 @@ class _QuranGoalStatsPageState extends State<QuranGoalStatsPage> {
                 MonthlyQuranProgressArc(),
               ],
             ),
+            SizedBox(height: 8),
+
+            WeeklyQuranChart(),
           ],
         ),
       ),
@@ -44,6 +66,7 @@ class _QuranGoalStatsPageState extends State<QuranGoalStatsPage> {
 class ProgressBars extends StatelessWidget {
   const ProgressBars({super.key, required this.bars});
   final List<Widget> bars;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
