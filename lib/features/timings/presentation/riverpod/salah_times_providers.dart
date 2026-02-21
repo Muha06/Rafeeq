@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:rafeeq/app/salat_notifications_repo.dart';
@@ -50,19 +49,12 @@ const kMadinahFallback = UserLocation(
 
 //Fetches salats timings
 final todaySalahTimesProvider = FutureProvider<SalahTimesEntity>((ref) async {
-  final usecase = ref.read(getTodaySalahTimesProvider);
+  final usecase = ref.watch(getTodaySalahTimesProvider);
 
-  // watch location state (reactive)
-  final locAsync = ref.watch(userLocationProvider);
+  // Just await the future directly
+  var loc = await ref.watch(userLocationProvider.future);
 
-  // if it's loading/error, just await the future once
-  final loc = await locAsync.when(
-    data: (v) async => v,
-    loading: () => ref.watch(userLocationProvider.future),
-    error: (e, st) => Future.error(e, st),
-  );
-
-  //use fallback if null
+  // If null → set fallback
   if (loc == null) {
     await ref
         .read(userLocationProvider.notifier)
@@ -72,17 +64,18 @@ final todaySalahTimesProvider = FutureProvider<SalahTimesEntity>((ref) async {
           city: kMadinahFallback.city,
           country: kMadinahFallback.country,
         );
+
+    // re-read updated value
+    loc = await ref.watch(userLocationProvider.future);
   }
 
-  return usecase
-      .call(
-        latitude: loc.lat,
-        longitude: loc.lng,
-        city: loc.city,
-        country: loc.country,
-        method: ref.read(salahMethodProvider),
-      )
-      .timeout(const Duration(seconds: 30));
+  return usecase(
+    latitude: loc!.lat,
+    longitude: loc.lng,
+    city: loc.city,
+    country: loc.country,
+    method: ref.read(salahMethodProvider),
+  ).timeout(const Duration(seconds: 30));
 });
 
 //SINGLE SALAT NOTIFICATIONS SCHEDULER CONTROLLER  PROVIDER
@@ -125,8 +118,6 @@ final salahNotificationsControllerProvider = Provider<void>((ref) {
     if (!ref.read(salahNotifControllerProvider)) return;
 
     final disabled = ref.read(disabledSalahPrayersProvider); // ✅ fresh
-    
-    debugPrint('✅ SALAH CONTROLLER SCHEDULING FOR TODAY');
 
     await SalahNotifications.instance.scheduleForToday(
       times: times,

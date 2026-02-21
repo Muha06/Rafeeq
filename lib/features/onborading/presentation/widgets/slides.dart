@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_ayah_provider.dart';
+import 'package:rafeeq/features/asma_ul_husna/presentation/providers/asma_ul_husna_provider.dart';
 import 'package:rafeeq/features/onborading/presentation/widgets/enable_loc_cta.dart';
 import 'package:rafeeq/features/onborading/presentation/widgets/enable_notifs_cta.dart';
 import '../widgets/onboarding_slide.dart';
@@ -11,7 +12,13 @@ class WelcomeSlide extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final repo = ref.read(ayahRepositoryProvider);
-    Future.microtask(() => repo.prefetchAllAyahs());
+    Future.microtask(() {
+      // Quran prefetch
+      repo.prefetchAllAyahs();
+
+      // Allah names prefetch
+      ref.read(allahNamesProvider.future);
+    });
 
     return OnboardingSlide(
       imageAsset: 'assets/images/onboarding/welcome.png',

@@ -35,7 +35,7 @@ class _RamadanDailyCardState extends ConsumerState<RamadanDailyCard> {
 
     return reflectionAsync.when(
       data: (reflection) {
-        if (reflection == null) return const SizedBox.shrink();
+        if (reflection == null) return const SizedBox.shrink(); //not Ramadan
 
         return ramadanAsync.when(
           loading: () => const SizedBox.shrink(),
@@ -101,7 +101,7 @@ class _RamadanDailyCardState extends ConsumerState<RamadanDailyCard> {
         );
       },
       loading: () => const SizedBox.shrink(),
-      error: (_, __) => const SizedBox.shrink(),
+      error: (_, _) => const SizedBox.shrink(),
     );
   }
 }
@@ -262,7 +262,7 @@ class BuildRamadanTimeCard extends StatelessWidget {
           const SizedBox(height: 8),
 
           //title
-          Text(title, style: textTheme.bodyMedium),
+          Text(title, style: textTheme.labelLarge),
           const SizedBox(height: 4),
 
           Text(time, style: textTheme.titleMedium),

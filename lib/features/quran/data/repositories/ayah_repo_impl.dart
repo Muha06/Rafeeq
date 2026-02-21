@@ -17,13 +17,10 @@ class AyahRepositoryImpl implements AyahRepository {
         await Future.microtask(
           () => fetchAyahs(surahId),
         ); // repo handles local check + save
-
-        debugPrint('Surah $surahId downloaded ✅');
       } catch (e) {
-        debugPrint('Failed to download surah $surahId: $e');
+        rethrow;
       }
     }
-    debugPrint('All surahs downloaded 🌙');
   }
 
   @override
@@ -49,10 +46,9 @@ class AyahRepositoryImpl implements AyahRepository {
 
       // convert DTO → Entity
       return ayahs;
-    } catch (e, st) {
+    } catch (e) {
       if (kDebugMode) {
-        print('Error fetching ayahs: $e');
-        print(st);
+        debugPrint('Error fetching ayahs: $e');
       }
       throw Exception('Failed to get ayahs');
     }

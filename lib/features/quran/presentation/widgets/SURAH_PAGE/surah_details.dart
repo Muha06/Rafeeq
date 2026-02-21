@@ -85,13 +85,15 @@ class SurahDetails extends ConsumerWidget {
         const SizedBox(height: 8),
 
         //Bismillah
-        Image.asset(
-          isDark
-              ? 'assets/images/quran/bismillah_dark.png'
-              : 'assets/images/quran/bismillah_light.png',
-          height: 60,
-        ),
-        const SizedBox(height: 8),
+        if (surah.id != 9) ...[
+          Image.asset(
+            isDark
+                ? 'assets/images/quran/bismillah_dark.png'
+                : 'assets/images/quran/bismillah_light.png',
+            height: 60,
+          ),
+          const SizedBox(height: 8),
+        ],
       ],
     );
   }

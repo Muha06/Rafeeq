@@ -267,7 +267,7 @@ class AppDarkColors {
 
   static const surface = Color(0xFF0F1F25);
   static const surfaceDim = Color(0xFF081214);
-  static const surfaceHigh = Color(0xFF14262D);
+  static const surfaceHigh = Color(0xFF122A32);
 
   static const outline = Color(0xFF123238);
   static const outlineVariant = Color(0xFF0E2A2D);

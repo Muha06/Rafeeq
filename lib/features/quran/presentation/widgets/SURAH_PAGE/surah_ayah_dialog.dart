@@ -57,7 +57,7 @@ Future<void> showSurahAyahPickerDialog({
                     const SizedBox(height: 4),
                     Text(
                       'Go to',
-                      style: Theme.of(context).textTheme.titleLarge,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                     const SizedBox(height: 14),
 
@@ -72,17 +72,10 @@ Future<void> showSurahAyahPickerDialog({
                               title: 'Surah',
                               child: CupertinoPicker(
                                 scrollController: surahController,
-                                itemExtent: 44,
-                                magnification: 1.08,
+                                itemExtent: 36,
+                                magnification: 0.9,
                                 useMagnifier: true,
-                                selectionOverlay: Container(
-                                  margin: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(14),
-                                  ),
-                                ),
+                                selectionOverlay: null,
                                 onSelectedItemChanged: (i) {
                                   setState(() {
                                     surahIndex = i;
@@ -156,9 +149,7 @@ Future<void> showSurahAyahPickerDialog({
 
                     Text(
                       '${selectedSurah.nameTransliteration} • Ayah ${ayahIndex + 1}',
-                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                        color: theme.textTheme.labelLarge!.color,
-                      ),
+                      style: Theme.of(context).textTheme.labelLarge,
                     ),
 
                     const SizedBox(height: 14),
@@ -174,7 +165,7 @@ Future<void> showSurahAyahPickerDialog({
                         ),
                         const SizedBox(width: 12),
                         Expanded(
-                          child: ElevatedButton(
+                          child: FilledButton(
                             onPressed: () {
                               final s = surahs[surahIndex];
                               Navigator.pop(context);

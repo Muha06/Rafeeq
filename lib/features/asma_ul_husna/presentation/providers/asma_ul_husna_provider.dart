@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:rafeeq/features/asma_ul_husna/data/datasources/asma_ul_husna_ds.dart';
 import 'package:rafeeq/features/asma_ul_husna/data/datasources/local_ds.dart';
@@ -7,7 +7,7 @@ import 'package:rafeeq/features/asma_ul_husna/data/repository/repository_impl.da
 import 'package:rafeeq/features/asma_ul_husna/domain/entities/name_entity.dart';
 import 'package:rafeeq/features/asma_ul_husna/domain/repository/repository.dart';
 import 'package:dio/dio.dart';
- 
+
 final dioProvider = Provider<Dio>((ref) {
   return Dio(
     BaseOptions(
@@ -28,9 +28,7 @@ final allahNamesremoteDsProvider = Provider<AllahNamesRemoteDataSource>((ref) {
 
 final allahNamesLocaDSProvider = Provider<AllahNamesLocalDataSource>((ref) {
   final box = ref.watch(allahNamesBoxProvider);
-  return AllahNamesLocalDataSourceImpl(
-    namesBox: box, 
-  );
+  return AllahNamesLocalDataSourceImpl(namesBox: box);
 });
 
 final allahNamesRepositoryProvider = Provider<AllahNamesRepository>((ref) {
@@ -42,6 +40,6 @@ final allahNamesRepositoryProvider = Provider<AllahNamesRepository>((ref) {
 final allahNamesProvider = FutureProvider.autoDispose<List<AllahName>>((
   ref,
 ) async {
-  final repo = ref.watch(allahNamesRepositoryProvider);
+   final repo = ref.watch(allahNamesRepositoryProvider);
   return repo.getAllahNames();
 });
