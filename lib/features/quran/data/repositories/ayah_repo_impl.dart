@@ -7,14 +7,30 @@ import 'package:rafeeq/features/quran/domain/repository/ayah_repo.dart';
 
 class AyahRepositoryImpl implements AyahRepository {
   final QuranTextApiService remoteDS;
- 
+
   AyahRepositoryImpl({required this.remoteDS});
+
+  @override
+  Future<void> prefetchAllAyahs() async {
+    for (int surahId = 1; surahId <= 114; surahId++) {
+      try {
+        await Future.microtask(
+          () => fetchAyahs(surahId),
+        ); // repo handles local check + save
+
+        debugPrint('Surah $surahId downloaded ✅');
+      } catch (e) {
+        debugPrint('Failed to download surah $surahId: $e');
+      }
+    }
+    debugPrint('All surahs downloaded 🌙');
+  }
 
   @override
   Future<List<Ayah>> fetchAyahs(int surahId) async {
     try {
       //FIRST CHECK LOCAL
-      final localHiveAyahs = _getAyahsFromLocal()
+      final localHiveAyahs = getAyahsFromLocal()
           .where((ayah) => ayah.surahId == surahId)
           .toList();
 
@@ -41,34 +57,34 @@ class AyahRepositoryImpl implements AyahRepository {
       throw Exception('Failed to get ayahs');
     }
   }
-}
 
-List<AyahHive> _getAyahsFromLocal() {
-  final box = Hive.box<AyahHive>('ayahs');
+  @override
+  Future<void> saveAyahsToLocal(List<Ayah> ayahs) async {
+    final box = Hive.box<AyahHive>('ayahs');
 
-  if (box.isEmpty) return [];
-
-  return box.values.toList();
-}
-
-Future<void> saveAyahsToLocal(List<Ayah> ayahs) async {
-  final box = Hive.box<AyahHive>('ayahs');
-
-  await Future.wait(
-    ayahs.map(
-      (ayah) => box.put(
-        ayah.id,
-        AyahHive(
-          id: ayah.id,
-          textArabic: ayah.textArabic,
-          textEnglish: ayah.textEnglish,
-          ayahNumber: ayah.ayahNumber,
-          surahId: ayah.surahId,
-          textTransliteration: ayah.transliteration
+    await Future.wait(
+      ayahs.map(
+        (ayah) => box.put(
+          ayah.id,
+          AyahHive(
+            id: ayah.id,
+            textArabic: ayah.textArabic,
+            textEnglish: ayah.textEnglish,
+            ayahNumber: ayah.ayahNumber,
+            surahId: ayah.surahId,
+            textTransliteration: ayah.transliteration,
+          ),
         ),
       ),
-    ),
-  );
+    );
+  }
 
-  print('✅ ayahs saved from API to Hive!, ${box.length}');
+  @override
+  List<AyahHive> getAyahsFromLocal() {
+    final box = Hive.box<AyahHive>('ayahs');
+
+    if (box.isEmpty) return [];
+
+    return box.values.toList();
+  }
 }

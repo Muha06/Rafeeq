@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
- import 'package:rafeeq/features/onborading/presentation/widgets/enable_loc_cta.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/features/Quran/presentation/riverpod/fetch_ayah_provider.dart';
+import 'package:rafeeq/features/onborading/presentation/widgets/enable_loc_cta.dart';
 import 'package:rafeeq/features/onborading/presentation/widgets/enable_notifs_cta.dart';
 import '../widgets/onboarding_slide.dart';
 
-class WelcomeSlide extends StatelessWidget {
+class WelcomeSlide extends ConsumerWidget {
   const WelcomeSlide({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
+    final repo = ref.read(ayahRepositoryProvider);
+    Future.microtask(() => repo.prefetchAllAyahs());
+
     return OnboardingSlide(
       imageAsset: 'assets/images/onboarding/welcome.png',
       title: 'Rafeeq',
