@@ -7,7 +7,7 @@ import 'package:rafeeq/features/quran/domain/repository/ayah_repo.dart';
 
 class AyahRepositoryImpl implements AyahRepository {
   final QuranTextApiService remoteDS;
-
+ 
   AyahRepositoryImpl({required this.remoteDS});
 
   @override
