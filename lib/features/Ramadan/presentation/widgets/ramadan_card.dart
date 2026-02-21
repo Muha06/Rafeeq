@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/features/Ramadan/domain/ramadan_reflection.dart';
 import 'package:rafeeq/features/Ramadan/presentation/providers/ramadan_timings_provider.dart';
 import 'package:rafeeq/features/Ramadan/presentation/providers/ramadan_reflections_provider.dart';
@@ -60,7 +60,7 @@ class _RamadanDailyCardState extends ConsumerState<RamadanDailyCard> {
                     children: [
                       Expanded(
                         child: BuildRamadanTimeCard(
-                          icon: FontAwesomeIcons.cloudSun,
+                          icon: PhosphorIcons.sunHorizon(),
                           title: 'Suhur end',
                           time: format12h(suhur),
                           isDark: isDark,
@@ -69,7 +69,7 @@ class _RamadanDailyCardState extends ConsumerState<RamadanDailyCard> {
                       const Spacer(),
                       Expanded(
                         child: BuildRamadanTimeCard(
-                          icon: FontAwesomeIcons.utensils,
+                          icon: PhosphorIcons.bowlFood(),
                           title: 'Iftar',
                           time: format12h(iftar),
                           isDark: isDark,
@@ -77,10 +77,6 @@ class _RamadanDailyCardState extends ConsumerState<RamadanDailyCard> {
                       ),
                     ],
                   ),
-
-                  const SizedBox(height: 12),
-
-                  const Divider(),
 
                   const SizedBox(height: 12),
 
@@ -258,11 +254,11 @@ class BuildRamadanTimeCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           //icon
-          FaIcon(icon, size: 18),
+          PhosphorIcon(icon, size: 18),
           const SizedBox(height: 8),
 
           //title
-          Text(title, style: textTheme.labelLarge),
+          Text(title, style: textTheme.labelMedium),
           const SizedBox(height: 4),
 
           Text(time, style: textTheme.titleMedium),
