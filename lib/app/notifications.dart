@@ -157,22 +157,17 @@ class NotificationService {
     required String title,
     required String body,
     required tz.TZDateTime scheduled,
-    bool isFajr = false,
   }) async {
-    final channelId = isFajr
-        ? 'rafeeq_salah_adhan_fajr_v1'
-        : 'rafeeq_salah_adhan_v1';
+    final channelId = 'rafeeq_salah_adhan_v1';
 
     final androidDetails = AndroidNotificationDetails(
       channelId,
-      isFajr ? 'Salah (Adhan - Fajr)' : 'Salah (Adhan)',
+      'Salah (Adhan)',
       channelDescription: 'Salah notifications with adhan sound',
       importance: Importance.max,
       priority: Priority.high,
       playSound: true,
-      sound: RawResourceAndroidNotificationSound(
-        isFajr ? 'adhan_fajr' : 'adhan_normal',
-      ),
+      sound: const RawResourceAndroidNotificationSound('adhan_normal'),
     );
 
     const iosDetails = DarwinNotificationDetails(presentSound: true);
@@ -183,7 +178,7 @@ class NotificationService {
     );
 
     final exactAllowed = await canScheduleExactAlarms();
-    
+
     debugPrint("Exact allowed: ${exactAllowed.toString()}");
 
     await _plugin.zonedSchedule(
@@ -246,14 +241,6 @@ class NotificationService {
           : AndroidScheduleMode.inexactAllowWhileIdle, // fallback
       matchDateTimeComponents: DateTimeComponents.time,
     );
-
-    final pending = await NotificationService.instance.plugin
-        .pendingNotificationRequests();
-
-    debugPrint('🔔 Pending adhkar notifications: ${pending.length}');
-    for (final p in pending) {
-      debugPrint('• id=${p.id}, title=${p.title}, body=${p.body}');
-    }
   }
 
   Future<bool> canScheduleExactAlarms() async {

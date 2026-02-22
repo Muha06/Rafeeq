@@ -50,14 +50,13 @@ class SalahNotifications {
       
       if (!adhanTime.isAfter(now)) {
         adhanTime = adhanTime.add(const Duration(days: 1));
-      }
+      } 
 
       await NotificationService.instance.scheduleSalah(
         id: _adhanIds[prayer]!,
-        title: prayer.label,
+        title: "Salat time -${prayer.label}",
         body: 'Time for ${prayer.label}',
-        scheduled: adhanTime,
-        isFajr: prayer == SalahPrayer.fajr,
+        scheduled: adhanTime, 
       );
     }
 
