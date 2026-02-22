@@ -372,6 +372,11 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
             TextButton.icon(
               icon: PhosphorIcon(PhosphorIcons.floppyDisk()),
               label: const Text('Save'),
+              style: theme.textButtonTheme.style!.copyWith(
+                foregroundColor: WidgetStatePropertyAll(
+                  theme.colorScheme.onSurface,
+                ),
+              ),
               onPressed: () {
                 showAyahLogSheet(context, ref);
               },
