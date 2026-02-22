@@ -72,7 +72,7 @@ class NotificationService {
 
     //Nomal adhan channed
     const AndroidNotificationChannel adhanChannel = AndroidNotificationChannel(
-      'rafeeq_salah_adhan_v1',
+      'rafeeq_salah_adhan_v2',
       'Salah (Adhan)',
       description: 'Salah notifications with adhan sound',
       importance: Importance.max,
@@ -158,7 +158,7 @@ class NotificationService {
     required String body,
     required tz.TZDateTime scheduled,
   }) async {
-    final channelId = 'rafeeq_salah_adhan_v1';
+    final channelId = 'rafeeq_salah_adhan_v2';
 
     final androidDetails = AndroidNotificationDetails(
       channelId,
