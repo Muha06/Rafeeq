@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:rafeeq/app/providers/tabs_screen_provider.dart';
+import 'package:rafeeq/features/bookmarks/presentation/pages/bookmark_page.dart';
 import 'package:rafeeq/features/quran/presentation/pages/surah_page.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/ayah_of_the_day.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/Quran/execution_providers.dart';
@@ -15,9 +18,14 @@ class QuranBookmarksTab extends ConsumerWidget {
 
     return bookMarks.isEmpty
         ? Center(
-            child: Text(
-              'No bookmarks yet',
-              style: theme.textTheme.bodySmall!.copyWith(fontSize: 16),
+            child: EmptyState(
+              icon: PhosphorIcons.book(),
+              subtitle:
+                  'You have no saved bookmarks yet. Start boorkmarking your favorite ayahs to easily read the later.',
+              buttonText: 'Read Quran',
+              onPressed: () {
+                ref.read(tabsScreenIndexProvider.notifier).state = 1;
+              },
             ),
           )
         : ListView.separated(

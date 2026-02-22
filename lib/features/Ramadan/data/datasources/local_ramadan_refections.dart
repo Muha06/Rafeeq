@@ -164,7 +164,7 @@ const List<RamadanReflection> kRamadanReflections = [
         'Keep Allah ﷻ in your remembrance much — that’s the path to real success.',
     sourceLabel: 'Qur’an 62:10 (meaning)',
     lesson:
-        'Your fast isn’t just hunger. It’s a dhikr upgrade: a few seconds here and there adds up fast.',
+        'Fasting is more than abstaining from food; it is an opportunity to increase remembrance of Allah ﷻ and cultivate mindfulness throughout the day.',
     type: ReminderType.quran,
     tags: ['ramadan', 'dhikr', 'success'],
   ),
@@ -238,7 +238,7 @@ const List<RamadanReflection> kRamadanReflections = [
         'The righteous restrain anger and forgive people — and Allah ﷻ loves those who do good.',
     sourceLabel: 'Qur’an 3:134 (meaning)',
     lesson:
-        'If fasting makes you snappy, that’s the test. Pause, breathe, forgive. You’re training a better self.',
+        'Fasting teaches self-restraint. Use it to control anger, forgive sincerely, and cultivate a character that pleases Allah ﷻ.',
     type: ReminderType.quran,
     tags: ['ramadan', 'forgiveness', 'character'],
   ),

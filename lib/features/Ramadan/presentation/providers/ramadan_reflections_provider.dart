@@ -26,7 +26,7 @@ final ramadanReflectionByDayProvider =
         id: ramadhanNotifId,
         title: 'Ramadan Reflection',
         body: 'Take a moment for today’s reflection.',
-        time: const TimeOfDay(hour: 14, minute: 45),
+        time: const TimeOfDay(hour: 12, minute: 15),
       );
 
       return match;

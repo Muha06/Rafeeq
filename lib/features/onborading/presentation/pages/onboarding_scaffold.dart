@@ -51,7 +51,7 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
   @override
   Widget build(BuildContext context) {
     final index = ref.watch(onboardingIndexProvider);
- 
+
     return Scaffold(
       backgroundColor: AppDarkColors.canvas,
       body: SafeArea(
@@ -81,16 +81,6 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
                   const Spacer(),
 
                   // Skip (hide on last page)
-                  if (index != _pageCount - 1)
-                    TextButton(
-                      onPressed: () {
-                        _finishOnboarding(context);
-                      },
-                      child: const Text('Skip'),
-                    ),
-
-                  const SizedBox(width: 10),
-
                   ElevatedButton(
                     onPressed: () async {
                       if (index < _pageCount - 1) {

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:rafeeq/app/providers/tabs_screen_provider.dart';
 import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_details_page.dart';
 import 'package:rafeeq/features/adhkar/presentation/riverpod/get_adhkars_provider.dart';
+import 'package:rafeeq/features/bookmarks/presentation/pages/bookmark_page.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/dhikr/execution_providers.dart';
 import 'package:rafeeq/features/bookmarks/widgets/bookmark_tile.dart';
- 
+
 class AdhkarBookmarksTab extends ConsumerStatefulWidget {
   const AdhkarBookmarksTab({super.key});
 
@@ -16,13 +19,18 @@ class _AdhkarBookmarksTabState extends ConsumerState<AdhkarBookmarksTab> {
   @override
   Widget build(BuildContext context) {
     final bookMarks = ref.watch(getAllDhikrBookmarksProvider);
-     final theme = Theme.of(context);
+    final theme = Theme.of(context);
 
     return bookMarks.isEmpty
         ? Center(
-            child: Text(
-              'No bookmarks yet',
-              style: theme.textTheme.bodySmall!.copyWith(fontSize: 16),
+            child: EmptyState(
+              icon: PhosphorIcons.handsPraying(),
+              subtitle:
+                  "You haven't bookamarked any Duas yet. bookmark your best Adhkars to find them instantly.",
+              buttonText: 'Explore Adhkars',
+              onPressed: () {
+                ref.read(tabsScreenIndexProvider.notifier).state = 2;
+              },
             ),
           )
         : ListView.separated(

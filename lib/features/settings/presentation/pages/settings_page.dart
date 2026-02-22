@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
+import 'package:rafeeq/features/feedback/presentation/pages/feedback_page.dart';
 import 'package:rafeeq/features/settings/presentation/provider/notiffications_controller.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 import 'package:rafeeq/features/settings/presentation/widgets/settings_page_widgets.dart';
@@ -76,6 +78,16 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 );
               },
             ),
+          ),
+
+          //send feedback
+          SettingsTile(
+            leading: PhosphorIcon(PhosphorIcons.chatTeardropText()),
+            title: 'Share Your Thoughts',
+            subtitle:
+                'Share your suggestions and make Rafeeq more beneficial, In shaa Allah',
+            isDark: isDark,
+            onTap: () => AppNav.push(context, const FeedbackPage()),
           ),
         ],
       ),

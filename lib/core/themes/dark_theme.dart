@@ -106,7 +106,7 @@ ThemeData appDarkThemeData() {
 
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: scheme.primary.withAlpha(200),
+        backgroundColor: scheme.primary,
         foregroundColor: scheme.onPrimary,
         iconColor: scheme.onPrimary,
         disabledBackgroundColor: scheme.surfaceContainerHigh,
@@ -152,7 +152,7 @@ ThemeData appDarkThemeData() {
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         iconColor: scheme.onSurface,
-        foregroundColor: scheme.onSurface,
+        foregroundColor: scheme.primary,
         overlayColor: Colors.transparent,
         splashFactory: NoSplash.splashFactory,
         textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),

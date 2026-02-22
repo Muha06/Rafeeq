@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
-import 'package:rafeeq/core/helpers/snackbars.dart';
-import 'package:rafeeq/features/bookmarks/domain/entities/quran_bookmark.dart';
 import 'package:rafeeq/features/bookmarks/presentation/pages/adhkar_bookmark_tab.dart';
 import 'package:rafeeq/features/bookmarks/presentation/pages/quran_bookmark_tab.dart';
-import 'package:rafeeq/features/bookmarks/presentation/riverpod/Quran/execution_providers.dart';
 
 class BookmarkPage extends ConsumerStatefulWidget {
   const BookmarkPage({super.key});
@@ -15,35 +12,6 @@ class BookmarkPage extends ConsumerStatefulWidget {
 }
 
 class _BookmarkPageState extends ConsumerState<BookmarkPage> {
-  Future<bool> _confirmClearAll(BuildContext context) async {
-    final theme = Theme.of(context);
-
-    final result = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text('Clear all bookmarks?', style: theme.textTheme.titleMedium),
-        content: Text(
-          'This will remove all saved bookmarks.',
-          style: theme.textTheme.bodyMedium,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Cancel'),
-          ),
-          const SizedBox(width: 8),
-
-          ElevatedButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Clear'),
-          ),
-        ],
-      ),
-    );
-
-    return result ?? false;
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -58,7 +26,6 @@ class _BookmarkPageState extends ConsumerState<BookmarkPage> {
         body: Column(
           children: [
             const SizedBox(height: 8),
-
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Container(
@@ -107,44 +74,54 @@ class _BookmarkPageState extends ConsumerState<BookmarkPage> {
       ),
     );
   }
+}
 
-  IconButton icn(
-    List<QuranBookmarkEntity> bookMarks,
-    BuildContext context,
-    bool isDark,
-  ) {
-    return IconButton(
-      onPressed: () async {
-        if (bookMarks.isEmpty) return;
+class EmptyState extends StatelessWidget {
+  final String subtitle; // Optional smaller message
+  final String buttonText; // CTA button text
+  final VoidCallback onPressed; // CTA action
+  final IconData? icon; // Optional icon to show on top
 
-        final ok = await _confirmClearAll(context);
-        if (!ok) return;
+  const EmptyState({
+    super.key,
+    required this.buttonText,
+    required this.onPressed,
+    required this.subtitle,
+    this.icon,
+  });
 
-        try {
-          await ref.read(
-            clearAllBookmarksActionProvider,
-          )(); //clear all bookmarks
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
-          if (context.mounted) {
-            AppSnackBar.showSimple(
-              context: context,
-              isDark: isDark,
-              message: 'All bookmarks cleared 🗑️',
-              duration: const Duration(seconds: 2),
-            );
-          }
-        } catch (e) {
-          if (context.mounted) {
-            AppSnackBar.showSimple(
-              context: context,
-              isDark: isDark,
-              message: 'Failed to clear bookmarks: $e',
-              duration: const Duration(seconds: 3),
-            );
-          }
-        }
-      },
-      icon: const Icon(Icons.delete_forever),
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (icon != null) ...[
+              Icon(icon, size: 64, color: colorScheme.primary),
+              const SizedBox(height: 16),
+            ],
+
+            const SizedBox(height: 8),
+
+            Text(
+              subtitle,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodyMedium?.copyWith(),
+            ),
+
+            const SizedBox(height: 24),
+            SizedBox(
+              width: 200,
+              child: TextButton(onPressed: onPressed, child: Text(buttonText)),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
