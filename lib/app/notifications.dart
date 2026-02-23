@@ -119,7 +119,9 @@ class NotificationService {
         importance: Importance.max,
         priority: Priority.high,
         playSound: true,
-        sound: RawResourceAndroidNotificationSound('adhan_normal'),
+        sound: UriAndroidNotificationSound(
+          'asset:///assets/audio/adhan_normal.mp3',
+        ),
       ),
     );
 
@@ -167,7 +169,9 @@ class NotificationService {
       importance: Importance.max,
       priority: Priority.high,
       playSound: true,
-      sound: const RawResourceAndroidNotificationSound('adhan_normal'),
+      sound: const UriAndroidNotificationSound(
+        'asset:///assets/audios/adhan_normal.mp3',
+      ),
     );
 
     const iosDetails = DarwinNotificationDetails(presentSound: true);

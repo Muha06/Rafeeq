@@ -26,7 +26,7 @@ class _AdhkarBookmarksTabState extends ConsumerState<AdhkarBookmarksTab> {
             child: EmptyState(
               icon: PhosphorIcons.handsPraying(),
               subtitle:
-                  "You haven't bookamarked any Duas yet. bookmark your best Adhkars to find them instantly.",
+                  "You haven't bookmarked any Dhikr yet. bookmark your best Adhkars to find them instantly.",
               buttonText: 'Explore Adhkars',
               onPressed: () {
                 ref.read(tabsScreenIndexProvider.notifier).state = 2;

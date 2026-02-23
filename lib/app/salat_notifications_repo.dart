@@ -47,16 +47,16 @@ class SalahNotifications {
       if (disabled.contains(prayer)) continue;
 
       var adhanTime = tz.TZDateTime.from(times.at(prayer), tz.local);
-      
+
       if (!adhanTime.isAfter(now)) {
         adhanTime = adhanTime.add(const Duration(days: 1));
-      } 
+      }
 
       await NotificationService.instance.scheduleSalah(
         id: _adhanIds[prayer]!,
         title: "Salat time -${prayer.label}",
         body: 'Time for ${prayer.label}',
-        scheduled: adhanTime, 
+        scheduled: adhanTime,
       );
     }
 

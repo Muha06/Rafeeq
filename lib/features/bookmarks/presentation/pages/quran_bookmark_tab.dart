@@ -21,7 +21,7 @@ class QuranBookmarksTab extends ConsumerWidget {
             child: EmptyState(
               icon: PhosphorIcons.book(),
               subtitle:
-                  'You have no saved bookmarks yet. Start boorkmarking your favorite ayahs to easily read the later.',
+                  'You have no saved bookmarks yet. Start boorkmarking your favorite ayahs to easily read them later.',
               buttonText: 'Read Quran',
               onPressed: () {
                 ref.read(tabsScreenIndexProvider.notifier).state = 1;
