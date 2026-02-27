@@ -44,29 +44,29 @@ class _AdhkarBookmarksTabState extends ConsumerState<AdhkarBookmarksTab> {
 
               return GestureDetector(
                 behavior: HitTestBehavior.opaque,
-                onTap: () {
-                  //fetching adhkars
-                  final adhkars = ref
-                      .read(getAdhkarsProvider(bookMark.assetPath))
-                      .value;
+                // onTap: () {
+                //   //fetching adhkars
+                //   final adhkars = ref
+                //       .read(getAdhkarsProvider(bookMark.dhikrId))
+                //       .value;
 
-                  //fetching actual dhikr
-                  if (adhkars != null) {
-                    final dhikr = adhkars.firstWhere(
-                      (dhikr) => dhikr.id == bookMark.dhikrId,
-                    );
+                //   //fetching actual dhikr
+                //   if (adhkars != null) {
+                //     final dhikr = adhkars.firstWhere(
+                //       (dhikr) => dhikr. == bookMark.dhikrId,
+                //     );
 
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AdhkarDetailsPage(
-                          dhikr: dhikr,
-                          assetPath: bookMark.assetPath,
-                        ),
-                      ),
-                    );
-                  }
-                },
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //         builder: (context) => AdhkarDetailsPage(
+                //           dhikr: dhikr,
+                //           assetPath: bookMark.assetPath,
+                //         ),
+                //       ),
+                //     );
+                //   }
+                // },
                 child: BookmarkTile(
                   dhikrBookmark: bookMark,
                   indexDisplay: indexDisplay,

@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/features/audio/domain/entities/audio_state.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
-import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_list_page.dart';
-import 'package:rafeeq/features/adhkar/presentation/riverpod/adhkar_categories.dart';
 import 'package:rafeeq/core/features/audio/providers/just_audio_player_provider.dart';
+import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_details_page.dart';
 import 'package:rafeeq/features/adhkar/presentation/riverpod/get_adhkars_provider.dart';
 
 class AdhkarReminderCard extends ConsumerWidget {
@@ -58,11 +57,13 @@ class AdhkarReminderCard extends ConsumerWidget {
                       GestureDetector(
                         onTap: () {
                           final categories = ref.read(
-                            getAdhkarCategoriesProvider,
+                            adhkarCategoriesProviders,
                           );
-                          final keyword = isMorning ? 'morning' : 'evening';
+                          
+                          final keyword = 'morning';
+
                           final category = categories.firstWhere(
-                            (c) => c.title.toLowerCase().contains(keyword),
+                            (c) => c.name.toLowerCase().contains(keyword),
                             orElse: () => categories.first,
                           );
 
@@ -70,7 +71,7 @@ class AdhkarReminderCard extends ConsumerWidget {
                             context,
                             MaterialPageRoute(
                               builder: (_) =>
-                                  AdhkarListPage(category: category),
+                                  AdhkarDetailsPage(categoryId: category.id),
                             ),
                           );
                         },

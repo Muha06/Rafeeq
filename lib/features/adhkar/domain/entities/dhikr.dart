@@ -1,39 +1,20 @@
-class Dhikr {
-  final String id;
-  final String title;
-  final String arabic;
-  final String? latin;
-  final String? translation;
-  final String? notes;
-  final String? benefits;
-  final String? source;
-  final String? fawaid;
+// Entity (used across the app, pure domain)
+class DhikrEntity {
+  final int id;
+  final String arabicText;
+  final String transliteration;
+  final String translation;
+  final int repeat;
+  final String audioUrl;
+  final int categoryId;
 
-  const Dhikr({
+  const DhikrEntity({
     required this.id,
-    required this.title,
-    required this.arabic,
-    this.latin,
-    this.translation,
-    this.notes,
-    this.benefits,
-    this.source,
-    this.fawaid,
+    required this.arabicText,
+    required this.transliteration,
+    required this.translation,
+    required this.repeat,
+    required this.audioUrl,
+    required this.categoryId,
   });
-
-  factory Dhikr.fromJson(Map<String, dynamic> json) {
-    String? s(dynamic v) => v?.toString();
-
-    return Dhikr(
-      id: (json['id'] ?? '').toString(),
-      title: (json['title'] ?? '').toString(),
-      arabic: (json['arabic'] ?? '').toString(),
-      latin: s(json['latin']),
-      translation: s(json['translation']),
-      notes: s(json['notes']),
-      benefits: s(json['benefits']),
-      source: s(json['source']),
-      fawaid: s(json['fawaid']),
-    );
-  }
 }

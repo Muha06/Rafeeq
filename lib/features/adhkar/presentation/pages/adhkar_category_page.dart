@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/features/adhkar/domain/entities/adhkar_category.dart';
-import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_list_page.dart';
-import 'package:rafeeq/features/adhkar/presentation/riverpod/adhkar_categories.dart';
+import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_details_page.dart';
+import 'package:rafeeq/features/adhkar/presentation/riverpod/get_adhkars_provider.dart';
 
 class AdhkarCategoryPage extends ConsumerStatefulWidget {
   const AdhkarCategoryPage({super.key});
@@ -14,10 +14,10 @@ class AdhkarCategoryPage extends ConsumerStatefulWidget {
 class _AdhkarCategoryPageState extends ConsumerState<AdhkarCategoryPage> {
   @override
   Widget build(BuildContext context) {
-    final adhkarCategories = ref.watch(getAdhkarCategoriesProvider);
+    final adhkarCategories = ref.watch(adhkarCategoriesProviders);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Adhkars Categories')),
+      appBar: AppBar(title: const Text('Adhkars')),
       body: ListView.builder(
         itemCount: adhkarCategories.length,
         itemBuilder: (context, index) {
@@ -33,7 +33,7 @@ class _AdhkarCategoryPageState extends ConsumerState<AdhkarCategoryPage> {
 class AdhkarCategoryTile extends ConsumerWidget {
   const AdhkarCategoryTile({super.key, required this.category});
 
-  final AdhkarCategory category;
+  final DhikrCategory category;
 
   @override
   Widget build(BuildContext context, ref) {
@@ -47,31 +47,22 @@ class AdhkarCategoryTile extends ConsumerWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AdhkarListPage(category: category),
+              builder: (context) => AdhkarDetailsPage(categoryId: category.id),
             ),
           );
         },
-        child: Stack(
-          children: [
-            Container(
-              height: 80,
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                color: cs.surface,
-              ),
-              child: Text(
-                category.title,
-                style: theme.textTheme.bodyLarge!.copyWith(fontSize: 18),
-              ),
-            ),
-            Positioned(
-              bottom: 16,
-              right: 16,
-              child: Image.asset(category.imagePath, height: 48, width: 48),
-            ),
-          ],
+        child: Container(
+          height: 80,
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            color: cs.surface,
+          ),
+          child: Text(
+            category.name,
+            style: theme.textTheme.bodyLarge!.copyWith(fontSize: 18),
+          ),
         ),
       ),
     );

@@ -6,137 +6,101 @@ import 'package:rafeeq/core/themes/app_text_style.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/adhkar/domain/entities/dhikr.dart';
+import 'package:rafeeq/features/adhkar/presentation/riverpod/get_adhkars_provider.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/dhikr_bookmark.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/dhikr/execution_providers.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class AdhkarDetailsPage extends ConsumerStatefulWidget {
-  const AdhkarDetailsPage({
-    super.key,
-    required this.dhikr,
-    required this.assetPath,
-    this.adhkars,
-    this.initialIndex,
-  });
+  const AdhkarDetailsPage({super.key, required this.categoryId});
 
-  final Dhikr dhikr;
-  final String assetPath;
-  final List<Dhikr>? adhkars;
-  final int? initialIndex;
+  final int categoryId;
   @override
   ConsumerState<AdhkarDetailsPage> createState() => _AdhkarDetailsPageState();
 }
 
 class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
-  late PageController _pageController;
-  late int _currentIndex;
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.initialIndex != null) {
-      _currentIndex = widget.initialIndex!;
-      _pageController = PageController(initialPage: _currentIndex);
-    }
-  }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     final isDark = ref.watch(isDarkProvider);
     final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
 
-    final dhikr = widget.adhkars?[_currentIndex] ?? widget.dhikr;
+    final adhkarsState = ref.watch(getAdhkarsProvider(widget.categoryId));
+
     final cs = theme.colorScheme;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(dhikr.title),
         bottom: appBarBottomDivider(context),
         actions: [
           //bookmark
-          Consumer(
-            builder: (context, ref, child) {
-              final bookmarked = ref.watch(
-                isDhikrBookmarkedProvider(dhikr.id),
-              ); // ✅ watch
+          // Consumer(
+          //   builder: (context, ref, child) {
+          //     final bookmarked = ref.watch(
+          //       isDhikrBookmarkedProvider(dhikr.id.toString()),
+          //     ); // ✅ watch
 
-              return IconButton(
-                onPressed: () async {
-                  final bookMark = DhikrBookmark(
-                    dhikrId: dhikr.id,
-                    title: dhikr.title,
-                    assetPath: widget.assetPath,
-                    createdAt: DateTime.now(),
-                  );
+          //     return IconButton(
+          //       onPressed: () async {
+          //         final bookMark = DhikrBookmark(
+          //           dhikrId: dhikr.id.toString(),
+          //           title: dhikr.transliteration,
+          //           assetPath: widget.assetPath,
+          //           createdAt: DateTime.now(),
+          //         );
 
-                  final toggle = ref.read(
-                    toggleDhikrBookmarkProvider(bookMark),
-                  ); // ✅ read
-                  final nowBookmarked = await toggle();
+          //         final toggle = ref.read(
+          //           toggleDhikrBookmarkProvider(bookMark),
+          //         ); // ✅ read
+          //         final nowBookmarked = await toggle();
 
-                  if (context.mounted) {
-                    AppSnackBar.showSimple(
-                      context: context,
-                      isDark: isDark,
-                      message: nowBookmarked
-                          ? 'Added dhikr to bookmarks'
-                          : 'Removed dhikr from bookmarks',
-                    );
-                  }
-                },
-                icon: Icon(
-                  bookmarked
-                      ? Icons.bookmark_added
-                      : Icons.bookmark_add_outlined,
-                  color: bookmarked ? cs.primary : cs.onSurface,
-                  size: 24,
-                ),
-              );
-            },
-          ),
+          //         if (context.mounted) {
+          //           AppSnackBar.showSimple(
+          //             context: context,
+          //             isDark: isDark,
+          //             message: nowBookmarked
+          //                 ? 'Added dhikr to bookmarks'
+          //                 : 'Removed dhikr from bookmarks',
+          //           );
+          //         }
+          //       },
+          //       icon: Icon(
+          //         bookmarked
+          //             ? Icons.bookmark_added
+          //             : Icons.bookmark_add_outlined,
+          //         color: bookmarked ? cs.primary : cs.onSurface,
+          //         size: 24,
+          //       ),
+          //     );
+          //   },
+          // ),
 
-          IconButton(
-            onPressed: () async {
-              Clipboard.setData(
-                ClipboardData(
-                  text:
-                      '${dhikr.title} \n ${dhikr.arabic} \n ${dhikr.translation!}',
-                ),
-              );
-            },
-            icon: Icon(Icons.copy_outlined, color: cs.onSurface, size: 24),
-          ),
+          // IconButton(
+          //   onPressed: () async {
+          //     Clipboard.setData(
+          //       ClipboardData(
+          //         text:
+          //             '${dhikr.translation} \n ${dhikr.arabicText} \n ${dhikr.translation}',
+          //       ),
+          //     );
+          //   },
+          //   icon: Icon(Icons.copy_outlined, color: cs.onSurface, size: 24),
+          // ),
         ],
       ),
-      body: SafeArea(
-        child: widget.initialIndex != null
-            ? PageView.builder(
-                controller: _pageController,
-                itemCount: widget.adhkars?.length,
-                onPageChanged: (i) => setState(() => _currentIndex = i),
-                itemBuilder: (context, i) {
-                  final actaulDhikr = widget.adhkars?[i] ?? dhikr;
-                  return AdhkarDetailsTile(
-                    key: ValueKey(dhikr.id),
-                    isDark: isDark,
-                    dhikr: actaulDhikr,
-                    textTheme: textTheme,
-                  );
-                },
-              )
-            : AdhkarDetailsTile(
-                key: ValueKey(dhikr.id),
-                isDark: isDark,
-                dhikr: dhikr,
-                textTheme: textTheme,
-              ),
+      body: adhkarsState.when(
+        error: (error, stackTrace) => Text("$error"),
+        loading: () => const CircularProgressIndicator(),
+        data: (adhkars) {
+          return ListView.builder(
+            itemCount: adhkars.length,
+            itemBuilder: (context, i) {
+              final dhikr = adhkars[i];
+
+              return AdhkarDetailsTile(isDark: isDark, dhikr: dhikr);
+            },
+          );
+        },
       ),
     );
   }
@@ -147,17 +111,15 @@ class AdhkarDetailsTile extends StatelessWidget {
     super.key,
     required this.isDark,
     required this.dhikr,
-    required this.textTheme,
   });
 
   final bool isDark;
-  final Dhikr dhikr;
-  final TextTheme textTheme;
+  final DhikrEntity dhikr;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final TextStyle headerStyle = textTheme.labelLarge!;
+    final textTheme = theme.textTheme;
 
     final TextStyle bodyTextstyle = textTheme.bodyMedium!.copyWith(
       fontSize: 18,
@@ -194,21 +156,11 @@ class AdhkarDetailsTile extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                //title
-                Center(
-                  child: Text(
-                    dhikr.title,
-                    textAlign: TextAlign.center,
-                    style: textTheme.titleMedium!,
-                  ),
-                ),
-                const SizedBox(height: 20),
-
                 //arabic
                 Align(
                   alignment: Alignment.centerRight,
                   child: Text(
-                    cleanDhikr(dhikr.arabic),
+                    cleanDhikr(dhikr.arabicText),
                     textDirection: TextDirection.rtl,
                     style: AppTextStyles.arabicUi.copyWith(fontSize: 24),
                   ),
@@ -216,31 +168,13 @@ class AdhkarDetailsTile extends StatelessWidget {
                 const SizedBox(height: 32),
 
                 //transliteration
-                section('Transliteration', dhikr.latin),
+                section('Transliteration', dhikr.transliteration),
 
                 //english
                 section('Translation', dhikr.translation),
 
                 //note
-                section('Notes', dhikr.notes),
-
-                //benefit
-                section('Benefit', dhikr.benefits),
-
-                //fawaid
-                if (dhikr.benefits != dhikr.fawaid)
-                  section('Fawaid', dhikr.fawaid),
-
-                //source
-                if ((dhikr.source ?? '').trim().isNotEmpty) ...[
-                  Text('Source:', style: headerStyle),
-                  const SizedBox(height: 8),
-                  Text(
-                    dhikr.source!.trim(),
-                    style: textTheme.bodySmall!.copyWith(fontSize: 16),
-                  ),
-                  const SizedBox(height: 16),
-                ],
+                section('Notes', dhikr.repeat.toString()),
               ],
             ),
           ),

@@ -1,16 +1,15 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-abstract class AdhkarRemoteDataSource {
+abstract class DhikrAudioRemoteDataSource {
   Future<String> getMorningUrl();
   Future<String> getEveningUrl();
 }
 
-class AdhkarRemoteDsImpl implements AdhkarRemoteDataSource {
+class DhikrAudioRemoteDsImpl implements DhikrAudioRemoteDataSource {
   final SupabaseClient client;
-  AdhkarRemoteDsImpl(this.client);
+  DhikrAudioRemoteDsImpl(this.client);
 
-  String get _bucket => dotenv.env['SUPABASE_AUDIO_BUCKET'] ?? 'audios';
+  String get _bucket => 'audios';
 
   @override
   Future<String> getMorningUrl() async {
