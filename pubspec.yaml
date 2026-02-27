@@ -2,7 +2,7 @@ name: rafeeq
 description: "An Islamic companion app."
 publish_to: "none"
 
-version: 1.3.1+16
+version: 1.3.3+18
 
 environment:
   sdk: ^3.10.4
@@ -83,7 +83,6 @@ flutter:
     - assets/images/salat/
     - assets/images/onboarding/
     - assets/adhkar/ 
-    - assets/audios/adhan_normal.mp3
     - .env
 
 flutter_launcher_icons:

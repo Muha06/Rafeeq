@@ -70,24 +70,16 @@ class NotificationService {
     );
     await _plugin.initialize(initSettings); // init plugin
 
-    //Nomal adhan channed
-    const AndroidNotificationChannel adhanChannel = AndroidNotificationChannel(
-      'rafeeq_salah_adhan_v2',
+    //adhan channed
+    // ignore: prefer_const_constructors
+   final AndroidNotificationChannel adhanChannel = AndroidNotificationChannel(
+      'rafeeq_salah_adhan_v5',
       'Salah (Adhan)',
       description: 'Salah notifications with adhan sound',
       importance: Importance.max,
       playSound: true,
+      // ignore: prefer_const_constructors
       sound: RawResourceAndroidNotificationSound('adhan_normal'),
-    );
-
-    //Special fajr adhan channel
-    const fajrChannel = AndroidNotificationChannel(
-      'rafeeq_salah_adhan_fajr_v1',
-      'Salah (Adhan - Fajr)',
-      description: 'Fajr notifications with fajr adhan sound',
-      importance: Importance.max,
-      playSound: true,
-      sound: RawResourceAndroidNotificationSound('adhan_fajr'),
     );
 
     final androidImpl = _plugin
@@ -97,7 +89,6 @@ class NotificationService {
 
     if (androidImpl != null) {
       await androidImpl.createNotificationChannel(adhanChannel);
-      await androidImpl.createNotificationChannel(fajrChannel);
 
       await androidImpl.createNotificationChannel(
         const AndroidNotificationChannel(
@@ -111,17 +102,18 @@ class NotificationService {
   }
 
   Future<void> testAdhanNow() async {
-    const details = NotificationDetails(
+   // ignore: prefer_const_constructors
+   final details = NotificationDetails(
+      // ignore: prefer_const_constructors
       android: AndroidNotificationDetails(
-        'rafeeq_salah_adhan_v1',
+        'rafeeq_salah_adhan_v5',
         'Salah (Adhan)',
         channelDescription: 'Salah notifications with adhan sound',
         importance: Importance.max,
         priority: Priority.high,
         playSound: true,
-        sound: UriAndroidNotificationSound(
-          'asset:///assets/audio/adhan_normal.mp3',
-        ),
+        // ignore: prefer_const_constructors
+        sound: RawResourceAndroidNotificationSound('adhan_normal'),
       ),
     );
 
@@ -133,26 +125,6 @@ class NotificationService {
     );
   }
 
-  Future<void> testFajrNow() async {
-    const details = NotificationDetails(
-      android: AndroidNotificationDetails(
-        'rafeeq_salah_adhan_fajr_v1',
-        'Salah (Adhan - Fajr)',
-        importance: Importance.max,
-        priority: Priority.high,
-        playSound: true,
-        sound: RawResourceAndroidNotificationSound('adhan_fajr'),
-      ),
-    );
-
-    await _plugin.show(
-      9998,
-      'Test Fajr Adhan',
-      'If this sounds different, we’re cooking ✅',
-      details,
-    );
-  }
-
   //FOR SALAH
   Future<void> scheduleSalah({
     required int id,
@@ -160,18 +132,18 @@ class NotificationService {
     required String body,
     required tz.TZDateTime scheduled,
   }) async {
-    final channelId = 'rafeeq_salah_adhan_v2';
+    final channelId = 'rafeeq_salah_adhan_v5';
 
-    final androidDetails = AndroidNotificationDetails(
+  final androidDetails = AndroidNotificationDetails(
       channelId,
       'Salah (Adhan)',
       channelDescription: 'Salah notifications with adhan sound',
       importance: Importance.max,
       priority: Priority.high,
       playSound: true,
-      sound: const UriAndroidNotificationSound(
-        'asset:///assets/audios/adhan_normal.mp3',
-      ),
+      enableVibration: true,
+      // ignore: prefer_const_constructors
+      sound: RawResourceAndroidNotificationSound('adhan_normal'),
     );
 
     const iosDetails = DarwinNotificationDetails(presentSound: true);
