@@ -1,6 +1,8 @@
 import 'package:rafeeq/features/adhkar/domain/entities/dhikr.dart';
 
 abstract class DhikrTextRepository {
-  /// Fetch dhikr for a given category id
-  Future<List<DhikrEntity>> getDhikrByCategoryId(int categoryId);
+  Future<List<DhikrEntity>> getDhikrByCategoryId(
+    int categoryId,
+  ); //fetches categoory for an id
+  Future<List<DhikrEntity>> getDhikrByCategoryIds(List<int> ids); 
 }

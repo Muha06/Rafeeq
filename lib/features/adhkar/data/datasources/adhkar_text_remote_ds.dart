@@ -4,7 +4,7 @@ import 'package:rafeeq/features/adhkar/data/models/dhikr_model.dart';
 
 abstract class DhikrTextRemoteDataSource {
   /// Fetch dhikr for a single category id
-  Future<List<DhikrModel>> fetchDhikrByCategoryId(int categoryId);
+  Future<List<DhikrModel>> fetchSubcategoryById(int categoryId);
 }
 
 class DhikrTextRemoteDataSourceImpl implements DhikrTextRemoteDataSource {
@@ -16,8 +16,9 @@ class DhikrTextRemoteDataSourceImpl implements DhikrTextRemoteDataSource {
     this.baseUrl = 'https://www.hisnmuslim.com/api/en/',
   });
 
+  //returns subcategory and list of adhkars
   @override
-  Future<List<DhikrModel>> fetchDhikrByCategoryId(int categoryId) async {
+  Future<List<DhikrModel>> fetchSubcategoryById(int categoryId) async {
     final url = Uri.parse('$baseUrl$categoryId.json');
     final response = await client.get(url);
 
@@ -27,9 +28,16 @@ class DhikrTextRemoteDataSourceImpl implements DhikrTextRemoteDataSource {
 
     final Map<String, dynamic> data = json.decode(response.body);
 
+    final categoryTitle = data.keys.first;
+
     // The API returns an object with category title as key and list of dhikr as value
     final dhikrListJson = data.values.first as List<dynamic>;
 
-    return dhikrListJson.map((json) => DhikrModel.fromJson(json)).toList();
+    return dhikrListJson
+        .map(
+          (json) =>
+              DhikrModel.fromJson(json: json, categoryTitle: categoryTitle),
+        )
+        .toList();
   }
 }

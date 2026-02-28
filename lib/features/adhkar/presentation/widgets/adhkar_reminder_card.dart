@@ -55,26 +55,26 @@ class AdhkarReminderCard extends ConsumerWidget {
                       const Spacer(),
 
                       GestureDetector(
-                        onTap: () {
-                          final categories = ref.read(
-                            adhkarCategoriesProviders,
-                          );
-                          
-                          final keyword = 'morning';
+                        // onTap: () {
+                        //   final categories = ref.read(
+                        //     adhkarCategoriesProviders,
+                        //   );
 
-                          final category = categories.firstWhere(
-                            (c) => c.name.toLowerCase().contains(keyword),
-                            orElse: () => categories.first,
-                          );
+                        //   final keyword = 'morning';
 
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  AdhkarDetailsPage(categoryId: category.id),
-                            ),
-                          );
-                        },
+                        //   final category = categories.firstWhere(
+                        //     (c) => c.name.toLowerCase().contains(keyword),
+                        //     orElse: () => categories.first,
+                        //   );
+
+                        //   Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //       builder: (_) =>
+                        //           AdhkarDetailsPage(categoryId: category.id),
+                        //     ),
+                        //   );
+                        // },
                         child: Text(
                           'Tap to read >',
                           style: theme.textTheme.bodySmall!.copyWith(

@@ -46,10 +46,10 @@ final dhikrTextRepositoryProvider = Provider<DhikrTextRepository>((ref) {
 });
 
 //Dhikr usecase
-final dhikrTextUseCaseProvider = Provider<GetAdhkarsUsecase>((ref) {
+final dhikrTextUseCaseProvider = Provider<GetGroupedAdhkarsUsecase>((ref) {
   final repo = ref.watch(dhikrTextRepositoryProvider);
 
-  return GetAdhkarsUsecase(repo: repo);
+  return GetGroupedAdhkarsUsecase(repo: repo);
 });
 
 //audio usecase

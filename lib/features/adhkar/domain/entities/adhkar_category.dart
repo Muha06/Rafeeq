@@ -1,6 +1,6 @@
 class DhikrCategory {
-  final int id;
+  final List<int> categoryIds;
   final String name;
 
-  const DhikrCategory({required this.id, required this.name});
+  const DhikrCategory({required this.categoryIds, required this.name});
 }

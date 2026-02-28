@@ -8,6 +8,7 @@ class DhikrModel {
   final String translation;
   final int repeat;
   final String audioUrl;
+  final String categoryTitle;
 
   DhikrModel({
     required this.id,
@@ -16,11 +17,16 @@ class DhikrModel {
     required this.translation,
     required this.repeat,
     required this.audioUrl,
+    required this.categoryTitle,
   });
 
-  factory DhikrModel.fromJson(Map<String, dynamic> json) {
+  factory DhikrModel.fromJson({
+    required Map<String, dynamic> json,
+    required String categoryTitle,
+  }) {
     return DhikrModel(
       id: json['ID'] as int,
+      categoryTitle: categoryTitle,
       arabicText: json['ARABIC_TEXT'] as String,
       transliteration: json['LANGUAGE_ARABIC_TRANSLATED_TEXT'] as String? ?? '',
       translation: json['TRANSLATED_TEXT'] as String? ?? '',
@@ -32,6 +38,7 @@ class DhikrModel {
   DhikrEntity toEntity({required int categoryId}) {
     return DhikrEntity(
       id: id,
+      categoryTitle: categoryTitle,
       arabicText: arabicText,
       transliteration: transliteration,
       translation: translation,

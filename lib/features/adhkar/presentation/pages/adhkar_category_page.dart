@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/features/adhkar/domain/entities/adhkar_category.dart';
-import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_details_page.dart';
+import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_titles_pages.dart';
 import 'package:rafeeq/features/adhkar/presentation/riverpod/get_adhkars_provider.dart';
 
 class AdhkarCategoryPage extends ConsumerStatefulWidget {
@@ -23,7 +24,16 @@ class _AdhkarCategoryPageState extends ConsumerState<AdhkarCategoryPage> {
         itemBuilder: (context, index) {
           final category = adhkarCategories[index];
 
-          return AdhkarCategoryTile(category: category);
+          return GestureDetector(
+            onTap: () => AppNav.push(
+              context,
+              AdhkarTitlesPages(
+                categoryTitle: category.name,
+                categoryIds: category.categoryIds,
+              ),
+            ),
+            child: AdhkarCategoryTile(category: category),
+          );
         },
       ),
     );
@@ -42,27 +52,17 @@ class AdhkarCategoryTile extends ConsumerWidget {
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
-      child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AdhkarDetailsPage(categoryId: category.id),
-            ),
-          );
-        },
-        child: Container(
-          height: 80,
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            color: cs.surface,
-          ),
-          child: Text(
-            category.name,
-            style: theme.textTheme.bodyLarge!.copyWith(fontSize: 18),
-          ),
+      child: Container(
+        height: 80,
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: cs.surface,
+        ),
+        child: Text(
+          category.name,
+          style: theme.textTheme.bodyLarge!.copyWith(fontSize: 18),
         ),
       ),
     );

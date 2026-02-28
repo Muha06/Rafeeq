@@ -1,6 +1,7 @@
 // Entity (used across the app, pure domain)
 class DhikrEntity {
   final int id;
+  final String categoryTitle;
   final String arabicText;
   final String transliteration;
   final String translation;
@@ -10,6 +11,7 @@ class DhikrEntity {
 
   const DhikrEntity({
     required this.id,
+    required this.categoryTitle,
     required this.arabicText,
     required this.transliteration,
     required this.translation,

@@ -9,3 +9,12 @@ class GetAdhkarsUsecase {
     return repo.getDhikrByCategoryId(categoryId);
   }
 }
+
+class GetGroupedAdhkarsUsecase {
+  final DhikrTextRepository repo;
+  const GetGroupedAdhkarsUsecase({required this.repo});
+
+  Future<List<DhikrEntity>> call(List<int> categoryIds) {
+    return repo.getDhikrByCategoryIds(categoryIds);
+  }
+}

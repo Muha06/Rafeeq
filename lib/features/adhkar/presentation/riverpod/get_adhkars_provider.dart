@@ -17,11 +17,11 @@ final adhkarAudioUrlsProvider = FutureProvider<AdhkarAudioUrls>((ref) async {
 });
 
 //get adhkars
-final getAdhkarsProvider = FutureProvider.family<List<DhikrEntity>, int>((
+final getAdhkarsProvider = FutureProvider.family<List<DhikrEntity>, List<int>>((
   ref,
-  categoryId,
+  categoryIds,
 ) {
   final usecase = ref.watch(dhikrTextUseCaseProvider);
 
-  return usecase.call(categoryId);
+  return usecase.call(categoryIds);
 });

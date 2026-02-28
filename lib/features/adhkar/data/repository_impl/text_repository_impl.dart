@@ -12,8 +12,9 @@ class DhikrTextRepositoryImpl implements DhikrTextRepository {
   @override
   Future<List<DhikrEntity>> getDhikrByCategoryId(int categoryId) async {
     try {
-      final List<DhikrModel> dhikrModels = await remoteDs
-          .fetchDhikrByCategoryId(categoryId);
+      final List<DhikrModel> dhikrModels = await remoteDs.fetchSubcategoryById(
+        categoryId,
+      );
 
       // Convert models to entities and attach categoryId
       final dhikrEntities = dhikrModels
@@ -25,5 +26,29 @@ class DhikrTextRepositoryImpl implements DhikrTextRepository {
       debugPrint('Error fetching dhikr for category $categoryId: $e');
       rethrow;
     }
+  }
+
+  //each id (subcategory) returns list<DhikrEntity>
+  @override
+  Future<List<DhikrEntity>> getDhikrByCategoryIds(List<int> ids) async {
+    final List<DhikrEntity> adhkars = [];
+
+    try {
+      for (final id in ids) {
+        final res = await getDhikrByCategoryId(id); // List<DhikrEntity>
+
+        // Add each dhikr individually, but prevent duplicates by ID
+        for (final dhikr in res) {
+          if (!adhkars.any((d) => d.id == dhikr.id)) {
+            adhkars.add(dhikr);
+          }
+        }
+      }
+    } catch (e) {
+      debugPrint('Error fetching grouped categories: $e');
+      rethrow;
+    }
+
+    return adhkars;
   }
 }

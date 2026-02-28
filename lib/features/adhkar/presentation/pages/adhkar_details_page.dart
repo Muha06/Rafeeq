@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
 import 'package:rafeeq/core/themes/app_text_style.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
-import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/adhkar/domain/entities/dhikr.dart';
-import 'package:rafeeq/features/adhkar/presentation/riverpod/get_adhkars_provider.dart';
-import 'package:rafeeq/features/bookmarks/domain/entities/dhikr_bookmark.dart';
-import 'package:rafeeq/features/bookmarks/presentation/riverpod/dhikr/execution_providers.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class AdhkarDetailsPage extends ConsumerStatefulWidget {
-  const AdhkarDetailsPage({super.key, required this.categoryId});
+  const AdhkarDetailsPage({
+    super.key,
+    required this.adhkars,
+    required this.title,
+  });
 
-  final int categoryId;
+  final List<DhikrEntity> adhkars;
+  final String title;
   @override
   ConsumerState<AdhkarDetailsPage> createState() => _AdhkarDetailsPageState();
 }
@@ -23,14 +23,12 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
   @override
   Widget build(BuildContext context) {
     final isDark = ref.watch(isDarkProvider);
+    final adhkars = widget.adhkars;
     final theme = Theme.of(context);
-
-    final adhkarsState = ref.watch(getAdhkarsProvider(widget.categoryId));
-
-    final cs = theme.colorScheme;
 
     return Scaffold(
       appBar: AppBar(
+        title: Text(widget.title, style: theme.textTheme.labelLarge),
         bottom: appBarBottomDivider(context),
         actions: [
           //bookmark
@@ -88,18 +86,12 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
           // ),
         ],
       ),
-      body: adhkarsState.when(
-        error: (error, stackTrace) => Text("$error"),
-        loading: () => const CircularProgressIndicator(),
-        data: (adhkars) {
-          return ListView.builder(
-            itemCount: adhkars.length,
-            itemBuilder: (context, i) {
-              final dhikr = adhkars[i];
+      body: ListView.builder(
+        itemCount: adhkars.length,
+        itemBuilder: (context, i) {
+          final dhikr = adhkars[i];
 
-              return AdhkarDetailsTile(isDark: isDark, dhikr: dhikr);
-            },
-          );
+          return AdhkarDetailsTile(isDark: isDark, dhikr: dhikr);
         },
       ),
     );
@@ -162,7 +154,10 @@ class AdhkarDetailsTile extends StatelessWidget {
                   child: Text(
                     cleanDhikr(dhikr.arabicText),
                     textDirection: TextDirection.rtl,
-                    style: AppTextStyles.arabicUi.copyWith(fontSize: 24),
+                    style: AppTextStyles.arabicUi.copyWith(
+                      // fontSize: 24,
+                      height: 1.8,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 32),
@@ -174,7 +169,7 @@ class AdhkarDetailsTile extends StatelessWidget {
                 section('Translation', dhikr.translation),
 
                 //note
-                section('Notes', dhikr.repeat.toString()),
+                section('Notes', 'Repeat ${dhikr.repeat} times'),
               ],
             ),
           ),
