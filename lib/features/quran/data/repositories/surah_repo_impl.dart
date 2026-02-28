@@ -80,5 +80,4 @@ Future<void> saveSurahsTLocal(List<Surah> surahs) async {
     );
   }
 
-  print('✅ Surahs saved from API to Hive!, ${box.length}');
-}
+ }

@@ -24,12 +24,23 @@ class DhikrModel {
     required Map<String, dynamic> json,
     required String categoryTitle,
   }) {
+    String cleanTexts(String? text) {
+      if (text == null) return '';
+      text = text.trim();
+      if (text.startsWith('(') && text.endsWith(')')) {
+        text = text.substring(1, text.length - 1).trim();
+      }
+      return text;
+    }
+
     return DhikrModel(
       id: json['ID'] as int,
       categoryTitle: categoryTitle,
-      arabicText: json['ARABIC_TEXT'] as String,
-      transliteration: json['LANGUAGE_ARABIC_TRANSLATED_TEXT'] as String? ?? '',
-      translation: json['TRANSLATED_TEXT'] as String? ?? '',
+      arabicText: cleanTexts(json['ARABIC_TEXT'] as String),
+      transliteration: cleanTexts(
+        json['LANGUAGE_ARABIC_TRANSLATED_TEXT'] as String? ?? '',
+      ),
+      translation: cleanTexts(json['TRANSLATED_TEXT'] as String? ?? ''),
       repeat: json['REPEAT'] as int? ?? 1,
       audioUrl: json['AUDIO'] as String? ?? '',
     );

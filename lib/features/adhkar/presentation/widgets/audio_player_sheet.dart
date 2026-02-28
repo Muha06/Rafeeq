@@ -38,44 +38,58 @@ class AdhkarMiniPlayerSheet extends ConsumerWidget {
         ),
         child: Row(
           children: [
-            Icon(icon),
-            const SizedBox(width: 10),
             Expanded(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    audio.title ?? 'Now playing',
-                    style: theme.textTheme.titleMedium,
+                  Row(
+                    children: [
+                      Icon(icon),
+                      const SizedBox(width: 10),
+
+                      Expanded(
+                        child: Text(
+                          audio.title ?? 'Now playing',
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.bodyLarge,
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 2),
-                  Text(
-                    buffering ? 'Buffering…' : 'Tap pause anytime',
-                    style: theme.textTheme.bodyMedium,
+
+                  Row(
+                    children: [
+                      Text(
+                        buffering ? 'Buffering…' : 'Tap pause anytime',
+                        style: theme.textTheme.bodySmall,
+                      ),
+                      const Spacer(),
+                      IconButton(
+                        onPressed: buffering
+                            ? null
+                            : () => showPause ? ctrl.pause() : ctrl.resume(),
+
+                        icon: buffering
+                            ? const CupertinoActivityIndicator()
+                            : Icon(
+                                showPause
+                                    ? CupertinoIcons.pause_fill
+                                    : CupertinoIcons.play_fill,
+                              ),
+                      ),
+                      IconButton(
+                        onPressed: () async {
+                          await ctrl.stop();
+                        },
+
+                        icon: const Icon(CupertinoIcons.xmark),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ),
-            IconButton(
-              onPressed: buffering
-                  ? null
-                  : () => showPause ? ctrl.pause() : ctrl.resume(),
-
-              icon: buffering
-                  ? const CupertinoActivityIndicator()
-                  : Icon(
-                      showPause
-                          ? CupertinoIcons.pause_fill
-                          : CupertinoIcons.play_fill,
-                    ),
-            ),
-            IconButton(
-              onPressed: () async {
-                await ctrl.stop();
-              },
-
-              icon: const Icon(CupertinoIcons.xmark),
             ),
           ],
         ),

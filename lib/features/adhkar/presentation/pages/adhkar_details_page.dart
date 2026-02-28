@@ -1,5 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:rafeeq/core/features/audio/domain/entities/audio_state.dart';
+import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
+import 'package:rafeeq/core/features/audio/providers/just_audio_player_provider.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
 import 'package:rafeeq/core/themes/app_text_style.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
@@ -28,63 +33,8 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title, style: theme.textTheme.labelLarge),
+        title: Text(widget.title, style: theme.textTheme.titleMedium),
         bottom: appBarBottomDivider(context),
-        actions: [
-          //bookmark
-          // Consumer(
-          //   builder: (context, ref, child) {
-          //     final bookmarked = ref.watch(
-          //       isDhikrBookmarkedProvider(dhikr.id.toString()),
-          //     ); // ✅ watch
-
-          //     return IconButton(
-          //       onPressed: () async {
-          //         final bookMark = DhikrBookmark(
-          //           dhikrId: dhikr.id.toString(),
-          //           title: dhikr.transliteration,
-          //           assetPath: widget.assetPath,
-          //           createdAt: DateTime.now(),
-          //         );
-
-          //         final toggle = ref.read(
-          //           toggleDhikrBookmarkProvider(bookMark),
-          //         ); // ✅ read
-          //         final nowBookmarked = await toggle();
-
-          //         if (context.mounted) {
-          //           AppSnackBar.showSimple(
-          //             context: context,
-          //             isDark: isDark,
-          //             message: nowBookmarked
-          //                 ? 'Added dhikr to bookmarks'
-          //                 : 'Removed dhikr from bookmarks',
-          //           );
-          //         }
-          //       },
-          //       icon: Icon(
-          //         bookmarked
-          //             ? Icons.bookmark_added
-          //             : Icons.bookmark_add_outlined,
-          //         color: bookmarked ? cs.primary : cs.onSurface,
-          //         size: 24,
-          //       ),
-          //     );
-          //   },
-          // ),
-
-          // IconButton(
-          //   onPressed: () async {
-          //     Clipboard.setData(
-          //       ClipboardData(
-          //         text:
-          //             '${dhikr.translation} \n ${dhikr.arabicText} \n ${dhikr.translation}',
-          //       ),
-          //     );
-          //   },
-          //   icon: Icon(Icons.copy_outlined, color: cs.onSurface, size: 24),
-          // ),
-        ],
       ),
       body: ListView.builder(
         itemCount: adhkars.length,
@@ -98,7 +48,7 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
   }
 }
 
-class AdhkarDetailsTile extends StatelessWidget {
+class AdhkarDetailsTile extends ConsumerStatefulWidget {
   const AdhkarDetailsTile({
     super.key,
     required this.isDark,
@@ -109,9 +59,28 @@ class AdhkarDetailsTile extends StatelessWidget {
   final DhikrEntity dhikr;
 
   @override
+  ConsumerState<AdhkarDetailsTile> createState() => _AdhkarDetailsTileState();
+}
+
+class _AdhkarDetailsTileState extends ConsumerState<AdhkarDetailsTile> {
+  Future<void> playAudio() async {}
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
+    final dhikr = widget.dhikr;
+
+    final playing = ref.watch(audioPlayingProvider).value ?? false;
+    final buffering = ref.watch(audioBufferingProvider).value ?? false;
+
+    final audio = ref.watch(audioControllerProvider);
+    final ctrl = ref.watch(audioControllerProvider.notifier);
+
+    final isActive =
+        audio.source == AudioSourceType.adhkar && audio.url == dhikr.audioUrl;
+
+    final showPause = playing && isActive;
 
     final TextStyle bodyTextstyle = textTheme.bodyMedium!.copyWith(
       fontSize: 18,
@@ -152,7 +121,7 @@ class AdhkarDetailsTile extends StatelessWidget {
                 Align(
                   alignment: Alignment.centerRight,
                   child: Text(
-                    cleanDhikr(dhikr.arabicText),
+                    cleanDhikr(widget.dhikr.arabicText),
                     textDirection: TextDirection.rtl,
                     style: AppTextStyles.arabicUi.copyWith(
                       // fontSize: 24,
@@ -163,13 +132,48 @@ class AdhkarDetailsTile extends StatelessWidget {
                 const SizedBox(height: 32),
 
                 //transliteration
-                section('Transliteration', dhikr.transliteration),
+                section('Transliteration', widget.dhikr.transliteration),
 
                 //english
-                section('Translation', dhikr.translation),
+                section('Translation', widget.dhikr.translation),
 
                 //note
-                section('Notes', 'Repeat ${dhikr.repeat} times'),
+                section('Notes', 'Repeat ${widget.dhikr.repeat} times'),
+
+                const Divider(height: 8),
+
+                //controls section
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    IconButton(
+                      visualDensity: VisualDensity.compact,
+                      iconSize: 20,
+                      onPressed: buffering
+                          ? null
+                          : () {
+                              if (showPause) {
+                                ctrl.pause();
+                              } else {
+                                ctrl.playUrl(
+                                  url: dhikr.audioUrl,
+                                  source: AudioSourceType.adhkar,
+                                  id: "dhikr.id",
+                                  title: dhikr.categoryTitle,
+                                  context: context,
+                                );
+                              }
+                            },
+                      icon: buffering
+                          ? const CupertinoActivityIndicator()
+                          : PhosphorIcon(
+                              showPause
+                                  ? PhosphorIcons.pause()
+                                  : PhosphorIcons.play(),
+                            ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),

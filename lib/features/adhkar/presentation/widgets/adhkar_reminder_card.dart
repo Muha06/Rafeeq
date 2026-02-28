@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/features/audio/domain/entities/audio_state.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
 import 'package:rafeeq/core/features/audio/providers/just_audio_player_provider.dart';
-import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_details_page.dart';
 import 'package:rafeeq/features/adhkar/presentation/riverpod/get_adhkars_provider.dart';
 
 class AdhkarReminderCard extends ConsumerWidget {
@@ -55,26 +54,6 @@ class AdhkarReminderCard extends ConsumerWidget {
                       const Spacer(),
 
                       GestureDetector(
-                        // onTap: () {
-                        //   final categories = ref.read(
-                        //     adhkarCategoriesProviders,
-                        //   );
-
-                        //   final keyword = 'morning';
-
-                        //   final category = categories.firstWhere(
-                        //     (c) => c.name.toLowerCase().contains(keyword),
-                        //     orElse: () => categories.first,
-                        //   );
-
-                        //   Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //       builder: (_) =>
-                        //           AdhkarDetailsPage(categoryId: category.id),
-                        //     ),
-                        //   );
-                        // },
                         child: Text(
                           'Tap to read >',
                           style: theme.textTheme.bodySmall!.copyWith(

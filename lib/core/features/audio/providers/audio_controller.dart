@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:rafeeq/core/features/audio/domain/entities/audio_state.dart';
 import 'package:rafeeq/core/features/audio/providers/just_audio_player_provider.dart';
+import 'package:rafeeq/core/helpers/audio_helpers.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
@@ -40,15 +41,17 @@ class AudioController extends Notifier<AudioState> {
     state = state.copyWith(source: source, id: id, title: title, url: url);
 
     try {
-      await _player.setUrl(url);
+      debugPrint(url);
+
+      await _player.setUrl(AudioHelpers.secureUrl(url));
 
       if (showPlayer) {
         AppSnackBar.showPlayer();
       }
 
       await _player.play();
-    } catch (e) {
-      debugPrint('Error playing audio: $e');
+    } catch (e, st) {
+      debugPrint('Error playing audio: $e, $st');
       AppSnackBar.showSimple(
         context: context,
         isDark: ref.read(isDarkProvider),

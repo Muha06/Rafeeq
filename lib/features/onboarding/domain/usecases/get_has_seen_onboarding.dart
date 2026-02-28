@@ -1,4 +1,4 @@
-import 'package:rafeeq/features/onborading/domain/repos/onboarding_repo.dart';
+import 'package:rafeeq/features/onboarding/domain/repos/onboarding_repo.dart';
 
  
 class GetHasSeenOnboarding {

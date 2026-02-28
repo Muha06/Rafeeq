@@ -70,7 +70,7 @@ class AppSnackBar {
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        margin: EdgeInsets.all(12),
+        margin: EdgeInsets.symmetric(vertical: 8, horizontal: 0),
         content: AdhkarMiniPlayerSheet(),
         dismissDirection: DismissDirection.none,
       ),

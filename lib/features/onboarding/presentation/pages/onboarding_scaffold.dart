@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/app/tabs_screen.dart';
 import 'package:rafeeq/core/themes/dark_theme.dart';
-import 'package:rafeeq/features/onborading/presentation/provider/onboarding_provider.dart';
-import 'package:rafeeq/features/onborading/presentation/provider/providers.dart';
-import 'package:rafeeq/features/onborading/presentation/widgets/dots_indicator.dart';
-import 'package:rafeeq/features/onborading/presentation/widgets/slides.dart';
+import 'package:rafeeq/features/onboarding/presentation/provider/onboarding_provider.dart';
+import 'package:rafeeq/features/onboarding/presentation/provider/providers.dart';
+import 'package:rafeeq/features/onboarding/presentation/widgets/dots_indicator.dart';
+import 'package:rafeeq/features/onboarding/presentation/widgets/slides.dart';
 
 class OnboardingPage extends ConsumerStatefulWidget {
   const OnboardingPage({super.key});
