@@ -11,13 +11,13 @@ import 'package:rafeeq/features/bookmarks/domain/usecases/is_bookmarked.dart';
 import 'package:rafeeq/features/bookmarks/domain/usecases/remove_bookmark.dart';
  
 //BOX PROVIDER
-final dhikrBoxProvider = Provider<Box<DhikrBookmarkHiveModel>>((ref) {
+final dhikrBookmarksBoxProvider = Provider<Box<DhikrBookmarkHiveModel>>((ref) {
   return Hive.box<DhikrBookmarkHiveModel>('dhikr_bookmarks_box');
 });
 
 //LOCAL DS PROVIDER
 final dhikrLocalDsProvider = Provider<DhikrBookmarksLocalDataSource>((ref) {
-  final box = ref.read(dhikrBoxProvider);
+  final box = ref.read(dhikrBookmarksBoxProvider);
   return DhikrBookmarksLocalDataSourceImpl(box);
 });
 

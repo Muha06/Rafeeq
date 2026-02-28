@@ -8,6 +8,7 @@ import 'package:rafeeq/app/providers/general_notifications_provider.dart';
 import 'package:rafeeq/app/tabs_screen.dart';
 import 'package:rafeeq/core/app_keys.dart';
 import 'package:rafeeq/core/themes/dark_theme.dart';
+import 'package:rafeeq/features/adhkar/data/models/dhikr_hive_model.dart';
 import 'package:rafeeq/features/quran/data/models/ayah_hive.dart';
 import 'package:rafeeq/features/quran/data/models/surah_hive.dart';
 import 'package:rafeeq/features/asma_ul_husna/data/models/hive/name_hive_model.dart';
@@ -39,6 +40,7 @@ Future<void> main() async {
   Hive.registerAdapter(AyahHiveAdapter());
   Hive.registerAdapter(QuranBookmarkHiveModelAdapter());
   Hive.registerAdapter(DhikrBookmarkHiveModelAdapter());
+  Hive.registerAdapter(DhikrHiveModelAdapter());
   Hive.registerAdapter(CachedSalahTimesHiveAdapter());
   Hive.registerAdapter(AllahNameHiveAdapter());
 
@@ -53,6 +55,7 @@ Future<void> main() async {
   await Hive.openBox<AyahHive>('ayahs');
   await Hive.openBox<QuranBookmarkHiveModel>('quran_bookmarks_box');
   await Hive.openBox<DhikrBookmarkHiveModel>('dhikr_bookmarks_box');
+  await Hive.openBox<List<dynamic>>('adhkar_cache');
   await Hive.openBox('lastReadBox'); // for LastReadAyah
 
   await Hive.openBox<AllahNameHive>('allah_names_box');
