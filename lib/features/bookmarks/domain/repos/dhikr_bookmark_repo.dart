@@ -5,10 +5,10 @@ abstract class DhikrBookmarksRepository {
   Future<void> addBookmark(DhikrBookmark dhikrHiveModel);
 
   //REMOVE BOOKMARK
-  Future<void> removeBookmark(String dhikrId);
+  Future<void> removeBookmark(int dhikrId);
 
   //is bookmarked
-  bool isBookmarked(String dhikrId);
+  bool isBookmarked(int dhikrId);
 
   //GET ALL BOOKMARKS
   List<DhikrBookmark> getAllBookmarks();

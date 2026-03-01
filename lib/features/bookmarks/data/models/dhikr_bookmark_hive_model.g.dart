@@ -18,10 +18,10 @@ class DhikrBookmarkHiveModelAdapter
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return DhikrBookmarkHiveModel(
-      dhikrId: fields[0] as String,
+      dhikrId: fields[0] as int,
       dhikrTitle: fields[1] as String,
       createdAtMillis: fields[2] as int,
-      assetPath: fields[3] as String,
+      categoryId: fields[3] as int,
     );
   }
 
@@ -36,7 +36,7 @@ class DhikrBookmarkHiveModelAdapter
       ..writeByte(2)
       ..write(obj.createdAtMillis)
       ..writeByte(3)
-      ..write(obj.assetPath);
+      ..write(obj.categoryId);
   }
 
   @override

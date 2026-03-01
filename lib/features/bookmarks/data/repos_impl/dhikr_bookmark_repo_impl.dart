@@ -16,12 +16,12 @@ class DhikrBookmarksRepositoryImpl implements DhikrBookmarksRepository {
 
   //REMOVE BOOKMARK
   @override
-  Future<void> removeBookmark(String dhikrId) {
+  Future<void> removeBookmark(int dhikrId) {
     return local.remove(dhikrId);
   }
 
   @override
-  bool isBookmarked(String dhikrId) {
+  bool isBookmarked(int dhikrId) {
     return local.isBookMarked(dhikrId);
   }
 
@@ -42,7 +42,7 @@ class DhikrBookmarksRepositoryImpl implements DhikrBookmarksRepository {
     return DhikrBookmarkHiveModel(
       dhikrId: e.dhikrId,
       dhikrTitle: e.title,
-      assetPath: e.assetPath,
+      categoryId: e.categoryId,
       createdAtMillis: e.createdAt.millisecondsSinceEpoch,
     );
   }
@@ -50,8 +50,8 @@ class DhikrBookmarksRepositoryImpl implements DhikrBookmarksRepository {
   DhikrBookmark _toEntity(DhikrBookmarkHiveModel m) {
     return DhikrBookmark(
       dhikrId: m.dhikrId,
+      categoryId: m.categoryId,
       title: m.dhikrTitle,
-      assetPath: m.assetPath,
       createdAt: DateTime.fromMillisecondsSinceEpoch(m.createdAtMillis),
     );
   }

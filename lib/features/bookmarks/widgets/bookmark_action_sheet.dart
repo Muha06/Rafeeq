@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/dhikr_bookmark.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/quran_bookmark.dart';
 
@@ -16,25 +17,11 @@ class BookmarkActionBottomSheet extends ConsumerWidget {
   final VoidCallback onDeleteBookmark;
   @override
   Widget build(BuildContext context, ref) {
-    final theme = Theme.of(context);
-
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Title / subtitle (optional but modern)
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              'Actions',
-              style: theme.textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-
           _ActionTile(
             icon: Icons.delete_outline_rounded,
             title: 'Delete',
@@ -91,19 +78,14 @@ class _ActionTile extends ConsumerWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(icon),
+                child: PhosphorIcon(icon),
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      title,
-                      style: theme.textTheme.titleSmall?.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
+                    Text(title, style: theme.textTheme.labelLarge),
                     const SizedBox(height: 2),
                     Text(
                       subtitle,

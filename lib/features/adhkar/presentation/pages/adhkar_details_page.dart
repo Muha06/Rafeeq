@@ -1,14 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/core/features/audio/domain/entities/audio_state.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
 import 'package:rafeeq/core/features/audio/providers/just_audio_player_provider.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
+import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/core/themes/app_text_style.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/features/adhkar/domain/entities/dhikr.dart';
+import 'package:rafeeq/features/bookmarks/domain/entities/dhikr_bookmark.dart';
+import 'package:rafeeq/features/bookmarks/presentation/riverpod/dhikr/dhikr_notifier_provider.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class AdhkarDetailsPage extends ConsumerStatefulWidget {
@@ -171,6 +175,76 @@ class _AdhkarDetailsTileState extends ConsumerState<AdhkarDetailsTile> {
                                   ? PhosphorIcons.pause()
                                   : PhosphorIcons.play(),
                             ),
+                    ),
+                    const SizedBox(),
+
+                    IconButton(
+                      visualDensity: VisualDensity.compact,
+                      iconSize: 22,
+                      onPressed: () async {
+                        final buffer = StringBuffer();
+
+                        // Arabic
+                        buffer.writeln(cleanDhikr(dhikr.arabicText));
+                        buffer.writeln();
+
+                        // Transliteration
+                        if ((dhikr.transliteration).trim().isNotEmpty) {
+                          buffer.writeln("Transliteration:");
+                          buffer.writeln(dhikr.transliteration.trim());
+                          buffer.writeln();
+                        }
+
+                        // Translation
+                        if ((dhikr.translation).trim().isNotEmpty) {
+                          buffer.writeln("Translation:");
+                          buffer.writeln(dhikr.translation.trim());
+                          buffer.writeln();
+                        }
+
+                        // Repeat
+                        buffer.writeln("Repeat ${dhikr.repeat} times");
+
+                        await Clipboard.setData(
+                          ClipboardData(text: buffer.toString().trim()),
+                        );
+
+                        if (context.mounted) {
+                          AppSnackBar.showSimple(
+                            context: context,
+                            isDark: ref.read(isDarkProvider),
+                            message: "Dhikr copied",
+                          );
+                        }
+                      },
+                      icon: PhosphorIcon(PhosphorIcons.copy()),
+                    ),
+
+                    Consumer(
+                      builder: (context, ref, child) {
+                        final isBookmarked = ref.watch(
+                          isDhikrBookmarkedProvider(dhikr.id),
+                        );
+
+                        return IconButton(
+                          onPressed: () {
+                            final bookmark = DhikrBookmark(
+                              dhikrId: dhikr.id,
+                              title: dhikr.categoryTitle,
+                              categoryId: dhikr.categoryId,
+                              createdAt: DateTime.now(),
+                            );
+
+                            ref
+                                .read(dhikrBookmarksProvider.notifier)
+                                .toggle(bookmark);
+                          },
+                          icon: PhosphorIcon(
+                            PhosphorIcons.bookmark(),
+                            color: isBookmarked ? cs.primary : cs.onSurface,
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),

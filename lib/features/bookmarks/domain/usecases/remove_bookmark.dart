@@ -14,7 +14,7 @@ class RemoveDhikrBookmarkUseCase {
   final DhikrBookmarksRepository repo;
   RemoveDhikrBookmarkUseCase(this.repo);
 
-  Future<void> call(String dhikrId) {
+  Future<void> call(int dhikrId) {
     return repo.removeBookmark(dhikrId);
   }
 }

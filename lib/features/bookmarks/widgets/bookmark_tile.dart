@@ -5,6 +5,7 @@ import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/dhikr_bookmark.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/quran_bookmark.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/Quran/execution_providers.dart';
+import 'package:rafeeq/features/bookmarks/presentation/riverpod/dhikr/dhikr_notifier_provider.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/dhikr/execution_providers.dart';
 import 'package:rafeeq/features/bookmarks/widgets/bookmark_action_sheet.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
@@ -44,9 +45,9 @@ class _BookmarkTileState extends ConsumerState<BookmarkTile> {
     try {
       //delete dhikr bookmark
       if (dhikrBookmark != null) {
-        await ref.read(
-          removeDhikrBookmarkActionProvider(dhikrBookmark.dhikrId),
-        )();
+        await ref
+            .read(dhikrBookmarksProvider.notifier)
+            .remove(dhikrBookmark.dhikrId);
       } else {
         await ref.read(removeQuranBookmarkProvider(quranBookmark!.id))();
       }

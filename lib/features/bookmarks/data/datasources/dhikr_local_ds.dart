@@ -4,11 +4,11 @@ import 'package:rafeeq/features/bookmarks/data/models/dhikr_bookmark_hive_model.
 abstract class DhikrBookmarksLocalDataSource {
   Future<void> add(DhikrBookmarkHiveModel hiveModel); //add
 
-  Future<void> remove(String dhikrId); //remove
+  Future<void> remove(int dhikrId); //remove
 
   Future<void> clear(); //clear all
 
-  bool isBookMarked(String dhikrId); //check if bookmark exists
+  bool isBookMarked(int dhikrId); //check if bookmark exists
 
   List<DhikrBookmarkHiveModel> getAll(); //get all bookmarks
 }
@@ -26,12 +26,12 @@ class DhikrBookmarksLocalDataSourceImpl
 
   //REMOVE BOOKMARK
   @override
-  Future<void> remove(String dhikrId) async {
+  Future<void> remove(int dhikrId) async {
     await box.delete(dhikrId);
   }
 
   @override
-  bool isBookMarked(String dhikrId) {
+  bool isBookMarked(int dhikrId) {
     return box.containsKey(dhikrId);
   }
 
