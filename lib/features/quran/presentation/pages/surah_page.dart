@@ -1,3 +1,5 @@
+// ignore_for_file: unused_result
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,6 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/core/features/audio/domain/entities/audio_state.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
+import 'package:rafeeq/core/helpers/rafeeq_analytics.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/quran/domain/entities/last_read_ayah.dart';
@@ -377,8 +380,9 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
                   theme.colorScheme.onSurface,
                 ),
               ),
-              onPressed: () {
+              onPressed: () async {
                 showAyahLogSheet(context, ref);
+                RafeeqAnalytics.logFeature('logged_Quran_progress');
               },
             ),
             IconButton(
@@ -409,12 +413,14 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
                     const SizedBox(height: 8),
 
                     PlayFullSurahBtn(
-                      onPlay: () {
+                      onPlay: () async {
                         playSurahAudio(
                           ref: ref,
                           surahId: surahId,
                           surahName: surah.nameTransliteration,
                         );
+
+                        await RafeeqAnalytics.logFeature("Play-surah-audio");
                       },
                     ),
                   ],

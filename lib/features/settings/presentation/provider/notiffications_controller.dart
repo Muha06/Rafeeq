@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/app/providers/general_notifications_provider.dart';
+import 'package:rafeeq/core/helpers/rafeeq_analytics.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/settings/presentation/provider/settings_notifcation_provider.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
@@ -38,6 +39,7 @@ class SalahNotifController extends Notifier<bool> {
       if (!enabled) {
         await box.put(kSalahEnabled, false);
         state = false; // update provider state for UI
+        RafeeqAnalytics.logFeature("disable_salah_reminders");
         return;
       }
 
@@ -64,6 +66,7 @@ class SalahNotifController extends Notifier<bool> {
       // Permission ok -> enable
       await box.put(kSalahEnabled, true);
       state = true; // update UI
+      RafeeqAnalytics.logFeature("enable_salah_reminders");
 
       if (showSnack != null && showSnack) {
         AppSnackBar.showSimple(
@@ -113,6 +116,7 @@ class AdhkarNotifController extends Notifier<bool> {
       if (!enabled) {
         await box.put(kAdhkarEnabled, false);
         state = false;
+        RafeeqAnalytics.logFeature("disable_adhkar_reminders");
         return;
       }
 
@@ -137,6 +141,8 @@ class AdhkarNotifController extends Notifier<bool> {
       // Permission ok -> enable
       await box.put(kAdhkarEnabled, true);
       state = true;
+      RafeeqAnalytics.logFeature("enable_adhkar_reminders");
+
 
       if (showSnack) {
         AppSnackBar.showSimple(

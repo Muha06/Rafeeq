@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
+import 'package:rafeeq/core/helpers/rafeeq_analytics.dart';
 import 'package:rafeeq/core/themes/app_text_style.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/quran/presentation/pages/surah_page.dart';
@@ -69,12 +71,10 @@ class SurahTile extends ConsumerWidget {
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {
-          Navigator.push(
+          AppNav.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => FullSurahPage(surah: surah),
-            ),
-          );
+            FullSurahPage(surah: surah),
+          ).then((value) => RafeeqAnalytics.logScreenView('surah_page'));
         },
         child: Row(
           children: [

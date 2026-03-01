@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:rafeeq/core/helpers/app_nav.dart';
+import 'package:rafeeq/core/helpers/rafeeq_analytics.dart';
 import 'package:rafeeq/features/haramain-live/presentation/pages/haramain_live_page.dart';
 
 class HaramainCard extends ConsumerWidget {
@@ -68,13 +70,10 @@ class MosqueCard extends ConsumerWidget {
         final title = mosqueName;
 
         if (context.mounted) {
-          Navigator.push(
+          AppNav.push(
             context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  HaramainAloulaLivePage(title: title, liveUrl: liveUrl),
-            ),
-          );
+            HaramainAloulaLivePage(title: title, liveUrl: liveUrl),
+          ).then((value) => RafeeqAnalytics.logScreenView("haramain_live"));
         }
       },
 

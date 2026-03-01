@@ -7,6 +7,7 @@ import 'package:rafeeq/core/features/audio/domain/entities/audio_state.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
 import 'package:rafeeq/core/features/audio/providers/just_audio_player_provider.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
+import 'package:rafeeq/core/helpers/rafeeq_analytics.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/core/themes/app_text_style.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
@@ -238,6 +239,8 @@ class _AdhkarDetailsTileState extends ConsumerState<AdhkarDetailsTile> {
                             ref
                                 .read(dhikrBookmarksProvider.notifier)
                                 .toggle(bookmark);
+                                
+                            RafeeqAnalytics.logFeature('bookmarked_dhikr');
                           },
                           icon: PhosphorIcon(
                             PhosphorIcons.bookmark(),

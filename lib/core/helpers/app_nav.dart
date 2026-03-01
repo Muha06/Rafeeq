@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
-
+ 
 class AppNav {
-  AppNav._();
+  AppNav._(); // private constructor
 
-  static void push(BuildContext context, Widget page) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => page));
+  /// Push a page and return a Future of the result
+  static Future<T?> push<T>(BuildContext context, Widget page) {
+    return Navigator.push<T>(context, MaterialPageRoute(builder: (_) => page));
   }
 
-  static void pop(BuildContext context) {
-    Navigator.pop(context);
+  /// Pop the current page with an optional result
+  static Future<void> pop<T>(BuildContext context, [T? result]) async {
+    Navigator.pop<T>(context, result);
+  }
+
+  /// Push a dialog and return the result
+  static Future<T?> pushDialog<T>(BuildContext context, Widget dialog) {
+    return showDialog<T>(context: context, builder: (_) => dialog);
   }
 }

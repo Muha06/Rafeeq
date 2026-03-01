@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
+import 'package:rafeeq/core/helpers/rafeeq_analytics.dart';
 import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_details_page.dart';
 import 'package:rafeeq/features/adhkar/presentation/riverpod/get_adhkars_provider.dart';
 import 'package:rafeeq/features/adhkar/domain/entities/dhikr.dart';
@@ -19,7 +20,6 @@ class AdhkarTitlesPages extends ConsumerWidget {
     final adhkarAsync = ref.watch(getAdhkarsProvider(categoryIds));
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
-
 
     return Scaffold(
       appBar: AppBar(title: Text(categoryTitle)),
@@ -43,13 +43,18 @@ class AdhkarTitlesPages extends ConsumerWidget {
 
               return GestureDetector(
                 behavior: HitTestBehavior.opaque,
-                onTap: () => AppNav.push(
-                  context,
-                  AdhkarDetailsPage(
-                    adhkars: adhkarsForCategory,
-                    title: adhkarsForCategory.first.categoryTitle,
-                  ),
-                ),
+                onTap: () =>
+                    AppNav.push(
+                      context,
+                      AdhkarDetailsPage(
+                        adhkars: adhkarsForCategory,
+                        title: adhkarsForCategory.first.categoryTitle,
+                      ),
+                    ).then(
+                      (value) => RafeeqAnalytics.logScreenView(
+                        'adhkar_details_page',
+                      ),
+                    ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 12.0,

@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/features/location/domain/open_mateo.dart';
 import 'package:rafeeq/core/features/location/presentation/provider/open_mateo_provider.dart';
 import 'package:rafeeq/core/features/location/presentation/provider/user_location_provider.dart';
+import 'package:rafeeq/core/helpers/rafeeq_analytics.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/salah_times_providers.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
@@ -125,6 +126,7 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
       setState(() => _manualExpanded = true);
 
       ref.invalidate(todaySalahTimesProvider);
+      RafeeqAnalytics.logFeature("location_set_manual");
     } catch (e) {
       setState(() {
         _verifyError = 'Couldn’t verify timings. Try another city.';
@@ -180,6 +182,8 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
               //Save as auto
               await notifier.setAuto();
               ref.invalidate(todaySalahTimesProvider);
+
+              RafeeqAnalytics.logFeature("location_set_auto");
             },
             trailing: isAuto
                 ? const Icon(Icons.check_circle_rounded)

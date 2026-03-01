@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/core/helpers/app_nav.dart';
+import 'package:rafeeq/core/helpers/rafeeq_analytics.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/features/quran/presentation/pages/search_surah_page.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/QURAN_PAGE/all_surah_listview.dart';
@@ -114,9 +116,10 @@ class ViewQuranGoalStats extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           // navigate to goal stats page
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const QuranGoalStatsPage()),
+          AppNav.push(context, const QuranGoalStatsPage()).then(
+            (value) => RafeeqAnalytics.logScreenView(
+              'Quran_progress_stats_page',
+            ),
           );
         },
         child: Container(

@@ -1,7 +1,11 @@
+// ignore_for_file: unused_result
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:rafeeq/core/helpers/app_nav.dart';
+import 'package:rafeeq/core/helpers/rafeeq_analytics.dart';
 import 'package:rafeeq/core/helpers/salat_times.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_status.dart';
 import 'package:rafeeq/features/timings/presentation/pages/timings_pages.dart';
@@ -248,10 +252,9 @@ class _CardBody extends StatelessWidget {
 
                       ShowTodayTimesChip(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const SalahTimingsPage(),
+                          AppNav.push(context, const SalahTimingsPage()).then(
+                            (value) => RafeeqAnalytics.logScreenView(
+                              "salah_times_page",
                             ),
                           );
                         },

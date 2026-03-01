@@ -1,3 +1,5 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,6 +23,7 @@ import 'package:rafeeq/features/quran_goal/data/models/quran_log_hive.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/salah_times_providers.dart';
 import 'package:rafeeq/features/settings/presentation/provider/settings_notifcation_provider.dart';
 import 'package:rafeeq/features/timings/data/models/hive/cached_salah_times_hive.dart';
+import 'package:rafeeq/firebase_options.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
@@ -34,6 +37,7 @@ Future<void> main() async {
     url: dotenv.env['SUPABASE_URL']!,
     anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
   );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   //register adapters
   Hive.registerAdapter(SurahHiveAdapter());
@@ -94,6 +98,7 @@ class _MyAppState extends ConsumerState<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     final hasSeenOnboarding = ref.watch(hasSeenOnboardingProvider);
 
     //ACTIVATE
@@ -102,6 +107,7 @@ class _MyAppState extends ConsumerState<MyApp> {
 
     return MaterialApp(
       title: 'Rafeeq',
+      navigatorObservers: [FirebaseAnalyticsObserver(analytics: analytics)],
       darkTheme: appDarkThemeData(),
       themeMode: ThemeMode.dark,
       debugShowCheckedModeBanner: false,
