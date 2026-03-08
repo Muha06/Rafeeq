@@ -12,14 +12,14 @@ class MushafEntryPage extends StatelessWidget {
       appBar: AppBar(title: const Text('Select Page')),
       body: Padding(
         padding: const EdgeInsets.all(12),
-        child: ListView.builder(
+        child: GridView.builder(
           itemCount: totalPages,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 6,
             mainAxisSpacing: 8,
             crossAxisSpacing: 8,
           ),
-          itemBuilder: (context, index) {
+          itemBuilder: (context, index) { 
             return GestureDetector(
               onTap: () {
                 Navigator.push(
