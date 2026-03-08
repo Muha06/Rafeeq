@@ -7,6 +7,9 @@ class AyahDto {
   final String arabic;
   final String english;
   final String tranliteration;
+  final int pageNumber;
+  final int lineNumber;
+  final int juz;
 
   AyahDto({
     required this.id,
@@ -15,6 +18,9 @@ class AyahDto {
     required this.arabic,
     required this.english,
     required this.tranliteration,
+    required this.pageNumber,
+    required this.lineNumber,
+    required this.juz,
   });
 
   factory AyahDto.fromJson(Map<String, dynamic> json) {
@@ -40,10 +46,12 @@ class AyahDto {
       arabic: (json['text_uthmani'] as String?) ?? '',
       english: cleanTranslation(englishRaw ?? '') ?? '',
       tranliteration: cleanTranslation(translitRaw ?? '') ?? '',
+      pageNumber: json['page_number'] as int, // new
+      lineNumber: json['line_number'] as int? ?? 1, // new
+      juz: json['juz_number'] as int, // new
     );
   }
 
-  // Convert to your entity
   Ayah toEntity() {
     return Ayah(
       id: id,
@@ -52,6 +60,9 @@ class AyahDto {
       textArabic: arabic,
       textEnglish: english,
       transliteration: tranliteration,
+      pageNumber: pageNumber,
+      lineNumber: lineNumber,
+      juz: juz,
     );
   }
 }

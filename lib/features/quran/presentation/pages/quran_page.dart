@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/rafeeq_analytics.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
+import 'package:rafeeq/features/quran/presentation/pages/all_mushaf_pages.dart';
 import 'package:rafeeq/features/quran/presentation/pages/search_surah_page.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/QURAN_PAGE/all_surah_listview.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/QURAN_PAGE/quick_last_read.dart';
@@ -116,11 +117,12 @@ class ViewQuranGoalStats extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           // navigate to goal stats page
-          AppNav.push(context, const QuranGoalStatsPage()).then(
-            (value) => RafeeqAnalytics.logScreenView(
-              'Quran_progress_stats_page',
-            ),
-          );
+          // AppNav.push(context, const QuranGoalStatsPage()).then(
+          //   (value) => RafeeqAnalytics.logScreenView(
+          //     'Quran_progress_stats_page',
+          //   ),
+          // );
+          AppNav.push(context, MushafEntryPage());
         },
         child: Container(
           height: 64,

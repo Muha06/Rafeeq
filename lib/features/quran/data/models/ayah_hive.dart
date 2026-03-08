@@ -23,6 +23,15 @@ class AyahHive extends HiveObject {
   @HiveField(5)
   String textTransliteration;
 
+  @HiveField(6)
+  int? lineNumber;
+
+  @HiveField(7)
+  int? pageNumber;
+
+  @HiveField(8)
+  int? juz;
+
   AyahHive({
     required this.id,
     required this.surahId,
@@ -30,6 +39,9 @@ class AyahHive extends HiveObject {
     required this.textArabic,
     required this.textEnglish,
     required this.textTransliteration,
+    required this.lineNumber,
+    required this.pageNumber,
+    required this.juz,
   });
 
   // helper to convert to Entity
@@ -41,6 +53,9 @@ class AyahHive extends HiveObject {
       textArabic: textArabic,
       textEnglish: textEnglish,
       transliteration: textTransliteration,
+      lineNumber: lineNumber,
+      pageNumber: pageNumber,
+      juz: juz,
     );
   }
 
@@ -53,6 +68,9 @@ class AyahHive extends HiveObject {
       textArabic: ayah.textArabic,
       textEnglish: ayah.textEnglish,
       textTransliteration: ayah.transliteration,
+      lineNumber: ayah.lineNumber,
+      pageNumber: ayah.pageNumber,
+      juz: ayah.juz,
     );
   }
 }

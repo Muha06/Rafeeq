@@ -3,12 +3,19 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:rafeeq/features/quran/data/dataSources/quran_text_remote_ds.dart';
 import 'package:rafeeq/features/quran/data/models/ayah_hive.dart';
 import 'package:rafeeq/features/quran/domain/entities/ayah.dart';
+import 'package:rafeeq/features/quran/domain/entities/mushaf_page.dart';
 import 'package:rafeeq/features/quran/domain/repository/ayah_repo.dart';
 
 class AyahRepositoryImpl implements AyahRepository {
   final QuranTextApiService remoteDS;
 
   AyahRepositoryImpl({required this.remoteDS});
+
+  @override
+  Future<MushafPage> fetchMushafPage(int page) async {
+    final mushafPages = await remoteDS.fetchMushafPage(page);
+    return mushafPages;
+  }
 
   @override
   Future<void> prefetchAllAyahs() async {
@@ -69,6 +76,9 @@ class AyahRepositoryImpl implements AyahRepository {
             ayahNumber: ayah.ayahNumber,
             surahId: ayah.surahId,
             textTransliteration: ayah.transliteration,
+            lineNumber: ayah.lineNumber,
+            pageNumber: ayah.pageNumber,
+            juz: ayah.juz,
           ),
         ),
       ),

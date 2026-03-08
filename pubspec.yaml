@@ -54,6 +54,9 @@ dependencies:
   firebase_analytics: ^12.1.2
   firebase_core: ^4.4.0
   firebase_crashlytics: ^5.0.7
+  qcf_quran: ^0.0.5
+  flutter_screenutil: ^5.9.3
+  cached_network_image: ^3.4.1
 
 dev_dependencies:
   flutter_test:
@@ -83,6 +86,7 @@ flutter:
     - assets/images/category/
     - assets/images/home/
     - assets/images/quran/
+    - assets/images/quran/quran_images/
     - assets/images/salat/
     - assets/images/onboarding/
     - assets/adhkar/ 
