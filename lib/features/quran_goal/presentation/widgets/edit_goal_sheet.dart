@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:rafeeq/core/helpers/rafeeq_analytics.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/features/quran_goal/domain/entities/quran_goal.dart';
@@ -103,7 +104,7 @@ class _EditQuranGoalSheetState extends ConsumerState<EditQuranGoalSheet> {
                 },
               ),
               const SizedBox(width: 16),
-              
+
               IconButton(
                 onPressed: () => setState(() {
                   targetAyahs++;
@@ -143,6 +144,7 @@ class _EditQuranGoalSheetState extends ConsumerState<EditQuranGoalSheet> {
 
                     AppNav.pop(context);
                     ref.read(quranGoalProvider.notifier).setGoal(targetAyahs);
+                    RafeeqAnalytics.logFeature('edit_Quran_goal');
                   },
                   child: const Text("Save Goal"),
                 ),

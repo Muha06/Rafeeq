@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -38,6 +41,8 @@ Future<void> main() async {
     anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
   );
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // Catch Flutter framework errors
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
 
   //register adapters
   Hive.registerAdapter(SurahHiveAdapter());
@@ -68,8 +73,14 @@ Future<void> main() async {
 
   //------------------NOTIFICATIONS---------------
   await NotificationService.instance.init(); //init
-
-  runApp(const ProviderScope(child: MyApp()));
+  await runZonedGuarded(
+    () async {
+      runApp(const ProviderScope(child: MyApp()));
+    },
+    (error, stack) {
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    },
+  );
 }
 
 class MyApp extends ConsumerStatefulWidget {

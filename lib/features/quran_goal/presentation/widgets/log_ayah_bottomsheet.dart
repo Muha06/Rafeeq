@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:rafeeq/core/helpers/rafeeq_analytics.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/progress_provider.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/quran_log_provider.dart';
@@ -146,14 +147,13 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
                         progressProvider(todayRange),
                       );
 
-                      debugPrint(todayProgress.totalRead.toString());
-
                       if (updatedProgress.totalRead >= goal.dailyTarget) {
                         showGoalCompletedDialog(
                           context, // can use rootNavigator: true inside dialog if needed
                           goal.dailyTarget,
                         );
                       }
+                      RafeeqAnalytics.logFeature('logged_Quran_progress');
                     },
 
                     icon: Icon(PhosphorIcons.floppyDisk()),

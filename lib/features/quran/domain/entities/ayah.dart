@@ -14,4 +14,5 @@ class Ayah {
     required this.textEnglish,
     required this.transliteration,
   });
+ 
 }

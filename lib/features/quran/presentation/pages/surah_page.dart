@@ -382,7 +382,6 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
               ),
               onPressed: () async {
                 showAyahLogSheet(context, ref);
-                RafeeqAnalytics.logFeature('logged_Quran_progress');
               },
             ),
             IconButton(
