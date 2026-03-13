@@ -13,6 +13,7 @@ import 'package:rafeeq/app/providers/general_notifications_provider.dart';
 import 'package:rafeeq/app/tabs_screen.dart';
 import 'package:rafeeq/core/app_keys.dart';
 import 'package:rafeeq/core/themes/dark_theme.dart';
+import 'package:rafeeq/core/themes/light_theme.dart';
 import 'package:rafeeq/features/adhkar/data/models/dhikr_hive_model.dart';
 import 'package:rafeeq/features/quran/data/models/ayah_hive.dart';
 import 'package:rafeeq/features/quran/data/models/surah_hive.dart';
@@ -132,8 +133,9 @@ class _MyAppState extends ConsumerState<MyApp> {
     return MaterialApp(
       title: 'Rafeeq',
       navigatorObservers: [FirebaseAnalyticsObserver(analytics: analytics)],
+      theme: appLightThemeData(),
       darkTheme: appDarkThemeData(),
-      themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       scaffoldMessengerKey: scaffoldMessengerKey,
       home: hasSeenOnboarding

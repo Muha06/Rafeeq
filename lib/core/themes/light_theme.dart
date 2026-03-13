@@ -1,238 +1,289 @@
-// import 'package:flutter/material.dart';
-// import 'package:rafeeq/core/themes/app_text_style.dart';
+import 'package:flutter/material.dart';
 
-// ThemeData appLightThemeData() {
-//   final scheme =
-//       const ColorScheme.light(
-//         brightness: Brightness.light,
-//         primary: AppLightColors.brand,
-//         onPrimary: AppLightColors.canvas,
-//         surface: AppLightColors.surface,
-//         onSurface: AppLightColors.onSurface,
-//         error: AppLightColors.error,
-//         onError: Colors.white,
-//         outline: AppLightColors.outline,
-//       ).copyWith(
-//         surfaceContainerLowest: AppLightColors.canvas,
-//         surfaceContainerLow: AppLightColors.surfaceDim,
-//         surfaceContainer: AppLightColors.surface,
-//         surfaceContainerHigh: AppLightColors.surfaceHigh,
-//         surfaceContainerHighest: AppLightColors.surfaceHigh,
-//         outlineVariant: AppLightColors.outlineVariant,
-//         onSurfaceVariant: AppLightColors.onSurface2,
-//       );
+ThemeData appLightThemeData() {
+  final scheme =
+      const ColorScheme.light(
+        brightness: Brightness.light,
+        primary: AppLightColors.brand,
+        onPrimary: Colors.white,
+        surface: AppLightColors.surface,
+        onSurface: AppLightColors.onSurface,
+        error: AppLightColors.error,
+        onError: Colors.white,
+        outline: AppLightColors.outline,
+      ).copyWith(
+        // Material 3 container ladder
+        surfaceContainerLowest: AppLightColors.canvas, // page bg
+        surfaceContainerLow: AppLightColors.surfaceDim, // sheets / sections
+        surfaceContainer: AppLightColors.surface, // cards
+        surfaceContainerHigh: AppLightColors.surfaceHigh, // elevated containers
+        surfaceContainerHighest:
+            AppLightColors.surfaceHigh, // dialogs/menus (same for now)
 
-//   return ThemeData(
-//     useMaterial3: true,
-//     brightness: Brightness.light,
-//     colorScheme: scheme,
-//     scaffoldBackgroundColor: scheme.surfaceContainerLowest,
-//     canvasColor: scheme.surfaceContainerLowest,
-//     hintColor: scheme.onSurfaceVariant,
-//     disabledColor: scheme.onSurfaceVariant.withAlpha(140),
-//     dividerColor: scheme.outlineVariant,
-//     dividerTheme: DividerThemeData(color: scheme.outlineVariant),
-//     iconTheme: IconThemeData(color: scheme.onSurfaceVariant),
-//     iconButtonTheme: IconButtonThemeData(
-//       style: ButtonStyle(
-//         iconColor: WidgetStatePropertyAll(scheme.onSurface),
-//         overlayColor: WidgetStatePropertyAll(scheme.onSurface.withAlpha(18)),
-//       ),
-//     ),
+        outlineVariant:
+            AppLightColors.outlineVariant, // subtle borders/dividers
+        onSurfaceVariant: AppLightColors.onSurface2, // quieter text/icons
+      );
 
-//     appBarTheme: AppBarTheme(
-//       backgroundColor: scheme.surfaceContainerLowest,
-//       toolbarHeight: 52,
-//       foregroundColor: scheme.onSurface,
-//       elevation: 0,
-//       surfaceTintColor: Colors.transparent,
-//     ),
+  final base = Typography.material2021().black.apply(fontFamily: 'Manrope');
 
-//     cardTheme: CardThemeData(
-//       color: scheme.surfaceContainer,
-//       elevation: 2,
-//       shadowColor: Colors.black.withAlpha(60),
-//       surfaceTintColor: Colors.transparent,
-//       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-//     ),
+  return ThemeData(
+    useMaterial3: true,
+    brightness: Brightness.light,
+    colorScheme: scheme,
 
-//     chipTheme: ChipThemeData(
-//       backgroundColor: scheme.surface,
-//       labelStyle: TextStyle(color: scheme.onSurfaceVariant),
-//       iconTheme: IconThemeData(color: scheme.onSurfaceVariant),
-//       shape: RoundedRectangleBorder(
-//         borderRadius: BorderRadius.circular(999),
-//         side: const BorderSide(color: Colors.transparent),
-//       ),
-//     ),
+    pageTransitionsTheme: const PageTransitionsTheme(
+      builders: {
+        TargetPlatform.android: ZoomPageTransitionsBuilder(),
+        TargetPlatform.iOS: ZoomPageTransitionsBuilder(),
+      },
+    ),
 
-//     bottomSheetTheme: BottomSheetThemeData(
-//       backgroundColor: scheme.surface,
-//       showDragHandle: true,
-//       modalBackgroundColor: scheme.surface,
-//       surfaceTintColor: Colors.transparent,
-//       shape: const RoundedRectangleBorder(
-//         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-//       ),
-//     ),
+    scaffoldBackgroundColor: scheme.surfaceContainerLowest,
+    canvasColor: scheme.surfaceContainerLowest,
+    hintColor: scheme.onSurfaceVariant,
+    disabledColor: scheme.onSurfaceVariant.withAlpha(140),
 
-//     progressIndicatorTheme: ProgressIndicatorThemeData(
-//       strokeWidth: 3.5,
-//       color: scheme.primary,
-//     ),
+    dividerColor: scheme.outlineVariant,
+    dividerTheme: DividerThemeData(color: scheme.outlineVariant),
 
-//     sliderTheme: SliderThemeData(
-//       activeTrackColor: scheme.primary,
-//       thumbColor: scheme.primary,
-//       inactiveTrackColor: Colors.grey.withAlpha(100),
-//     ),
+    iconTheme: IconThemeData(color: scheme.onSurfaceVariant),
+    iconButtonTheme: IconButtonThemeData(
+      style: ButtonStyle(
+        iconColor: WidgetStatePropertyAll(scheme.onSurface),
+        overlayColor: WidgetStatePropertyAll(
+          scheme.onSurface.withAlpha(18), // subtle ripple
+        ),
+      ),
+    ),
 
-//     elevatedButtonTheme: ElevatedButtonThemeData(
-//       style: ElevatedButton.styleFrom(
-//         backgroundColor: scheme.primary,
-//         foregroundColor: scheme.onPrimary,
-//         iconColor: scheme.onPrimary,
-//         disabledBackgroundColor: scheme.surfaceContainerHigh,
-//         disabledForegroundColor: scheme.onSurfaceVariant,
-//         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-//         textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-//         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
-//       ),
-//     ),
+    appBarTheme: AppBarTheme(
+      backgroundColor: scheme.surfaceContainerLowest,
+      toolbarHeight: 52,
+      foregroundColor: scheme.onSurface,
+      elevation: 0,
+      surfaceTintColor: Colors.transparent,
+    ),
 
-//     filledButtonTheme: FilledButtonThemeData(
-//       style: ButtonStyle(
-//         backgroundColor: WidgetStatePropertyAll(scheme.primary),
-//         foregroundColor: WidgetStatePropertyAll(scheme.onPrimary),
-//         padding: const WidgetStatePropertyAll(
-//           EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-//         ),
-//         textStyle: const WidgetStatePropertyAll(
-//           TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-//         ),
-//         shape: WidgetStatePropertyAll(
-//           RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
-//         ),
-//       ),
-//     ),
+    cardTheme: CardThemeData(
+      color: scheme.surfaceContainer,
+      elevation: 2,
+      shadowColor: Colors.black.withAlpha(20),
+      surfaceTintColor: Colors.transparent,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    ),
 
-//     outlinedButtonTheme: OutlinedButtonThemeData(
-//       style: OutlinedButton.styleFrom(
-//         backgroundColor: Colors.transparent,
-//         foregroundColor: scheme.onSurface,
-//         iconColor: scheme.onSurface,
-//         disabledForegroundColor: scheme.onSurfaceVariant,
-//         side: BorderSide(color: scheme.outline),
-//         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-//         textStyle: const TextStyle(fontWeight: FontWeight.w300, fontSize: 14),
-//       ),
-//     ),
+    chipTheme: ChipThemeData(
+      backgroundColor: scheme.surfaceContainerHigh,
+      labelStyle: TextStyle(color: scheme.onSurfaceVariant),
+      iconTheme: IconThemeData(color: scheme.onSurfaceVariant),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(999),
+        side: const BorderSide(color: Colors.transparent),
+      ),
+    ),
 
-//     textButtonTheme: TextButtonThemeData(
-//       style: TextButton.styleFrom(
-//         iconColor: scheme.onSurface,
-//         foregroundColor: scheme.onSurface,
-//         overlayColor: Colors.transparent,
-//         splashFactory: NoSplash.splashFactory,
-//         textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-//         padding: EdgeInsets.zero,
-//         minimumSize: Size.zero,
-//         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-//       ),
-//     ),
+    bottomSheetTheme: BottomSheetThemeData(
+      backgroundColor: scheme.surface,
+      showDragHandle: true,
+      modalBackgroundColor: scheme.surface,
+      surfaceTintColor: Colors.transparent,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+    ),
 
-//     dialogTheme: DialogThemeData(
-//       backgroundColor: scheme.surface,
-//       surfaceTintColor: Colors.transparent,
-//       elevation: 0,
-//       shape: RoundedRectangleBorder(
-//         borderRadius: BorderRadius.circular(20),
-//         side: BorderSide(color: scheme.outlineVariant),
-//       ),
-//     ),
+    progressIndicatorTheme: ProgressIndicatorThemeData(
+      strokeWidth: 3.5,
+      linearTrackColor: scheme.surfaceContainerHighest,
+      borderRadius: BorderRadius.circular(999),
+      color: scheme.primary,
+    ),
 
-//     textSelectionTheme: TextSelectionThemeData(
-//       cursorColor: scheme.onSurfaceVariant,
-//       selectionColor: scheme.primary.withAlpha(51), // ~20%
-//       selectionHandleColor: scheme.primary,
-//     ),
+    sliderTheme: SliderThemeData(
+      activeTrackColor: scheme.primary,
+      thumbColor: scheme.primary,
+      inactiveTrackColor: Colors.grey.withAlpha(100),
+    ),
 
-//     inputDecorationTheme: InputDecorationTheme(
-//       filled: true,
-//       fillColor: scheme.surfaceContainerHighest,
-//       hintStyle: TextStyle(color: scheme.onSurfaceVariant),
-//       border: OutlineInputBorder(
-//         borderRadius: BorderRadius.circular(14),
-//         borderSide: BorderSide(color: scheme.outlineVariant),
-//       ),
-//       enabledBorder: OutlineInputBorder(
-//         borderRadius: BorderRadius.circular(14),
-//         borderSide: BorderSide(color: scheme.outlineVariant),
-//       ),
-//       focusedBorder: OutlineInputBorder(
-//         borderRadius: BorderRadius.circular(14),
-//         borderSide: BorderSide(color: scheme.primary),
-//       ),
-//     ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: scheme.primary,
+        foregroundColor: scheme.onPrimary,
+        iconColor: scheme.onPrimary,
+        disabledBackgroundColor: scheme.surfaceContainerHigh,
+        disabledForegroundColor: scheme.onSurfaceVariant,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        textStyle: const TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
+      ),
+    ),
 
-//     listTileTheme: ListTileThemeData(
-//       iconColor: scheme.onSurfaceVariant,
-//       textColor: scheme.onSurface,
-//       subtitleTextStyle: TextStyle(color: scheme.onSurfaceVariant),
-//     ),
+    filledButtonTheme: FilledButtonThemeData(
+      style: ButtonStyle(
+        backgroundColor: WidgetStatePropertyAll(scheme.surfaceContainerHigh),
+        foregroundColor: WidgetStatePropertyAll(scheme.primary.withAlpha(210)),
+        padding: const WidgetStatePropertyAll(
+          EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        ),
+        textStyle: const WidgetStatePropertyAll(
+          TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+        ),
+        shape: WidgetStatePropertyAll(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
+        ),
+      ),
+    ),
 
-//     switchTheme: SwitchThemeData(
-//       thumbColor: WidgetStateProperty.resolveWith((s) {
-//         if (s.contains(WidgetState.disabled)) return scheme.onSurfaceVariant;
-//         if (s.contains(WidgetState.selected)) return AppLightColors.switchOn;
-//         return scheme.onSurfaceVariant;
-//       }),
-//       trackColor: WidgetStateProperty.resolveWith((s) {
-//         if (s.contains(WidgetState.disabled)) return scheme.surfaceContainer;
-//         if (s.contains(WidgetState.selected)) return AppLightColors.switchOnBg;
-//         return scheme.surfaceContainerHigh;
-//       }),
-//       overlayColor: const WidgetStatePropertyAll(AppLightColors.switchRipple),
-//     ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        backgroundColor: Colors.transparent,
+        foregroundColor: scheme.primary,
+        iconColor: scheme.primary,
+        disabledForegroundColor: scheme.onSurfaceVariant,
+        side: BorderSide(color: scheme.onSurface.withAlpha(100)),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+        textStyle: TextStyle(
+          fontWeight: FontWeight.w300,
+          fontSize: 14,
+          color: scheme.primary,
+        ),
+      ),
+    ),
 
-//     textTheme: TextTheme(
-//       titleLarge: AppTextStyles.title.copyWith(color: scheme.onSurface),
-//       titleMedium: AppTextStyles.section.copyWith(color: scheme.onSurface),
-//       titleSmall: AppTextStyles.section.copyWith(
-//         color: scheme.onSurfaceVariant,
-//       ),
-//       bodyLarge: AppTextStyles.quranBody.copyWith(color: scheme.onSurface),
-//       bodyMedium: AppTextStyles.paragraph.copyWith(color: scheme.onSurface),
-//       bodySmall: AppTextStyles.secondary.copyWith(color: scheme.onSurface),
-//       labelLarge: AppTextStyles.body.copyWith(color: scheme.onSurface),
-//       labelMedium: AppTextStyles.label.copyWith(
-//         color: scheme.onSurfaceVariant.withAlpha(217),
-//       ),
-//       labelSmall: AppTextStyles.label.copyWith(
-//         color: scheme.onSurfaceVariant.withAlpha(210),
-//       ),
-//     ),
-//   );
-// }
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        iconColor: scheme.onSurface,
+        foregroundColor: scheme.primary,
+        overlayColor: Colors.transparent,
+        splashFactory: NoSplash.splashFactory,
+        textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+        padding: EdgeInsets.zero,
+        minimumSize: Size.zero,
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      ),
+    ),
 
-// class AppLightColors {
-//   static const canvas = Color(0xFFF9F5F0);
+    dialogTheme: DialogThemeData(
+      backgroundColor: scheme.surface,
+      surfaceTintColor: Colors.transparent,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+        side: BorderSide(color: scheme.outlineVariant),
+      ),
+    ),
 
-//   static const surface = Color(0xFFFCF4E9);
-//   static const surfaceDim = Color(0xFFFBE8DD);
-//   static const surfaceHigh = Color(0xFFFDEDDD);
+    textSelectionTheme: TextSelectionThemeData(
+      cursorColor: scheme.onSurfaceVariant,
+      selectionColor: scheme.primary.withAlpha(51), // ~20%
+      selectionHandleColor: scheme.primary,
+    ),
 
-//   static const outline = brand;
-//   static const outlineVariant = Color(0xFFD8CABF);
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+      fillColor: scheme.surfaceContainerHighest,
+      hintStyle: TextStyle(color: scheme.onSurfaceVariant),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide(color: scheme.outlineVariant),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide(color: scheme.outlineVariant),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide(color: scheme.primary),
+      ),
+    ),
 
-//   static const brand = Color(0xFF795449); // new earthy warm brand
+    listTileTheme: ListTileThemeData(
+      iconColor: scheme.onSurfaceVariant,
+      textColor: scheme.onSurface,
+      subtitleTextStyle: TextStyle(color: scheme.onSurfaceVariant),
+    ),
 
-//   static const onSurface = Color(0xFF1D1D1B);
-//   static const onSurface2 = Color(0xFF6E6A62);
+    switchTheme: SwitchThemeData(
+      thumbColor: WidgetStateProperty.resolveWith((s) {
+        if (s.contains(WidgetState.disabled)) return scheme.onSurfaceVariant;
+        if (s.contains(WidgetState.selected)) return AppLightColors.switchOn;
+        return scheme.onSurfaceVariant;
+      }),
+      trackColor: WidgetStateProperty.resolveWith((s) {
+        if (s.contains(WidgetState.disabled)) return scheme.surfaceContainer;
+        if (s.contains(WidgetState.selected)) return AppLightColors.switchOnBg;
+        return scheme.surfaceContainerHigh;
+      }),
+      overlayColor: const WidgetStatePropertyAll(AppLightColors.switchRipple),
+    ),
 
-//   static const error = Color(0xFFFF5A6A);
+    textTheme: base.copyWith(
+      titleLarge: base.titleLarge?.copyWith(
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+        color: scheme.onSurface,
+      ),
+      titleMedium: base.titleMedium?.copyWith(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        color: scheme.onSurface,
+      ),
+      titleSmall: base.titleSmall?.copyWith(
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+        color: scheme.onSurfaceVariant,
+      ),
+      bodyLarge: base.bodyLarge?.copyWith(
+        fontSize: 15,
+        height: 1.5,
+        color: scheme.onSurface,
+      ),
+      bodyMedium: base.bodyMedium?.copyWith(
+        fontSize: 14,
+        height: 1.55,
+        color: scheme.onSurface,
+      ),
+      bodySmall: base.bodySmall?.copyWith(
+        fontSize: 12.5,
+        color: scheme.onSurfaceVariant,
+      ),
+      labelLarge: base.labelLarge?.copyWith(
+        fontWeight: FontWeight.w500,
+        color: scheme.onSurface,
+      ),
+      labelMedium: base.labelMedium?.copyWith(
+        fontWeight: FontWeight.w600,
+        color: scheme.onSurfaceVariant,
+      ),
+      labelSmall: base.labelSmall?.copyWith(
+        fontWeight: FontWeight.w600,
+        color: scheme.onSurfaceVariant.withAlpha(210),
+      ),
+    ),
+  );
+}
 
-//   static const switchOn = Color(0xFF795449); // match brand
-//   static const switchOnBg = Color(0xFFFDECDD); // gentle warm highlight
-//   static const switchRipple = Color(0x1A795449);
-// }
+class AppLightColors {
+  static const canvas = Colors.white; // background
+
+  static const surfaceDim = Color(0xFFE6E6E6); // sections
+  static const surface = Color(0xFFF5F5F5); // cards
+
+  static const surfaceHigh = Color(0xFFE5E5E5); // elevated containers
+  static const surfaceHighest = Color(0xFFEFEFEF); // dialogs/menus
+
+  static const outline = Color(0xFFDADADA);
+  static const outlineVariant = Color(0xFFE9E9E9);
+
+  static const brand = Color(0xFF1EAE93);
+
+  static const onSurface = Color(0xFF0F1A1C);
+  static const onSurface2 = Color(0xFF506A6D);
+
+  static const error = Color(0xFFE54858);
+
+  static const switchOn = Color(0xFF1EAE93);
+  static const switchOnBg = Color(0xFFDFF5F2);
+  static const switchRipple = Color(0x1A22C6A6);
+}
