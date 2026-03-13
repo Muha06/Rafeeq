@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,52 +29,65 @@ import 'package:rafeeq/features/timings/data/models/hive/cached_salah_times_hive
 import 'package:rafeeq/firebase_options.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-Future<void> main() async {
+void main() {
+  // Make zone errors fatal before binding init
+  BindingBase.debugZoneErrorsAreFatal = false;
+
+  // Ensure Flutter bindings in the root zone
   WidgetsFlutterBinding.ensureInitialized();
 
-  await dotenv.load(fileName: ".env");
-
-  //Init HIVE
-  await Hive.initFlutter();
-  await Supabase.initialize(
-    url: dotenv.env['SUPABASE_URL']!,
-    anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
-  );
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  // Catch Flutter framework errors
-  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
-
-  //register adapters
-  Hive.registerAdapter(SurahHiveAdapter());
-  Hive.registerAdapter(AyahHiveAdapter());
-  Hive.registerAdapter(QuranBookmarkHiveModelAdapter());
-  Hive.registerAdapter(DhikrBookmarkHiveModelAdapter());
-  Hive.registerAdapter(DhikrHiveModelAdapter());
-  Hive.registerAdapter(CachedSalahTimesHiveAdapter());
-  Hive.registerAdapter(AllahNameHiveAdapter());
-
-  Hive.registerAdapter(QuranHiveGoalAdapter());
-  Hive.registerAdapter(QuranHiveLogAdapter());
-
-  // Open boxes
-  await Hive.openBox<QuranHiveGoal>('quran_goal');
-  await Hive.openBox<QuranHiveLog>('quran_logs');
-
-  await Hive.openBox<SurahHive>('surahs');
-  await Hive.openBox<AyahHive>('ayahs');
-  await Hive.openBox<QuranBookmarkHiveModel>('quran_bookmarks_box');
-  await Hive.openBox<DhikrBookmarkHiveModel>('dhikr_bookmarks_box');
-  await Hive.openBox<List<dynamic>>('adhkar_cache');
-  await Hive.openBox('lastReadBox'); // for LastReadAyah
-
-  await Hive.openBox<AllahNameHive>('allah_names_box');
-  await Hive.openBox<CachedSalahTimesHive>('salah_times_cache_box');
-  await Hive.openBox('settingsBox'); //settings
-
-  //------------------NOTIFICATIONS---------------
-  await NotificationService.instance.init(); //init
-  await runZonedGuarded(
+  // Run everything in a single guarded zone
+  runZonedGuarded(
     () async {
+      // Load env
+      await dotenv.load(fileName: ".env");
+
+      // Initialize Hive
+      await Hive.initFlutter();
+
+      // Initialize Supabase
+      await Supabase.initialize(
+        url: dotenv.env['SUPABASE_URL']!,
+        anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
+      );
+
+      // Initialize Firebase
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+
+      // Flutter errors → Crashlytics
+      FlutterError.onError =
+          FirebaseCrashlytics.instance.recordFlutterFatalError;
+
+      // Register Hive adapters
+      Hive.registerAdapter(SurahHiveAdapter());
+      Hive.registerAdapter(AyahHiveAdapter());
+      Hive.registerAdapter(QuranBookmarkHiveModelAdapter());
+      Hive.registerAdapter(DhikrBookmarkHiveModelAdapter());
+      Hive.registerAdapter(DhikrHiveModelAdapter());
+      Hive.registerAdapter(CachedSalahTimesHiveAdapter());
+      Hive.registerAdapter(AllahNameHiveAdapter());
+      Hive.registerAdapter(QuranHiveGoalAdapter());
+      Hive.registerAdapter(QuranHiveLogAdapter());
+
+      // Open Hive boxes
+      await Hive.openBox<QuranHiveGoal>('quran_goal');
+      await Hive.openBox<QuranHiveLog>('quran_logs');
+      await Hive.openBox<SurahHive>('surahs');
+      await Hive.openBox<AyahHive>('ayahs');
+      await Hive.openBox<QuranBookmarkHiveModel>('quran_bookmarks_box');
+      await Hive.openBox<DhikrBookmarkHiveModel>('dhikr_bookmarks_box');
+      await Hive.openBox<List<dynamic>>('adhkar_cache');
+      await Hive.openBox('lastReadBox');
+      await Hive.openBox<AllahNameHive>('allah_names_box');
+      await Hive.openBox<CachedSalahTimesHive>('salah_times_cache_box');
+      await Hive.openBox('settingsBox');
+
+      // Notifications
+      await NotificationService.instance.init();
+
+      // ✅ Finally, run the app synchronously inside the same zone
       runApp(const ProviderScope(child: MyApp()));
     },
     (error, stack) {

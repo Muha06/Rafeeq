@@ -5,8 +5,7 @@ import 'package:rafeeq/app/providers/general_notifications_provider.dart';
 import 'package:rafeeq/core/helpers/rafeeq_analytics.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/settings/presentation/provider/settings_notifcation_provider.dart';
-import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
-
+ 
 /// ---------------- Salah Notif Controller ----------------
 /// Manages Salah reminder state + Hive persistence + permission handling
 class SalahNotifController extends Notifier<bool> {
@@ -55,7 +54,6 @@ class SalahNotifController extends Notifier<bool> {
           if (showSnack != null && showSnack) {
             AppSnackBar.showSimple(
               context: context,
-              isDark: ref.read(isDarkProvider),
               message: 'Notification permissions denied.',
             );
           }
@@ -71,7 +69,6 @@ class SalahNotifController extends Notifier<bool> {
       if (showSnack != null && showSnack) {
         AppSnackBar.showSimple(
           context: context,
-          isDark: ref.read(isDarkProvider),
           message: 'Scheduling Salah reminders...',
         );
       }
@@ -130,7 +127,6 @@ class AdhkarNotifController extends Notifier<bool> {
           if (showSnack) {
             AppSnackBar.showSimple(
               context: context,
-              isDark: ref.read(isDarkProvider),
               message: 'Notification permissions denied.',
             );
           }
@@ -143,11 +139,9 @@ class AdhkarNotifController extends Notifier<bool> {
       state = true;
       RafeeqAnalytics.logFeature("enable_adhkar_reminders");
 
-
       if (showSnack) {
         AppSnackBar.showSimple(
           context: context,
-          isDark: ref.read(isDarkProvider),
           message: '✅ Turning on Adhkar reminders...',
         );
       }

@@ -4,8 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rafeeq/core/features/location/presentation/provider/user_location_provider.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
-import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
-import 'package:rafeeq/features/timings/presentation/riverpod/disable_salah_reminders_provider.dart';
+ import 'package:rafeeq/features/timings/presentation/riverpod/disable_salah_reminders_provider.dart';
 
 import '../../domain/entities/salah_prayer.dart';
 import '../riverpod/salah_times_providers.dart';
@@ -153,7 +152,7 @@ class _TimingTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
- 
+
     final disabled = ref.watch(disabledSalahPrayersProvider);
     final isDisabled = disabled.contains(prayer);
 
@@ -204,7 +203,6 @@ class _TimingTile extends ConsumerWidget {
                 if (!isDisabled) {
                   AppSnackBar.showSimple(
                     context: context,
-                    isDark: ref.read(isDarkProvider),
                     message: 'Disabled reminders for ${prayer.label}',
                   );
                 }

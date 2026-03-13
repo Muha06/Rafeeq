@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
+ import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
 import 'package:rafeeq/features/quran_audio/presentation/widgets/reciter_picker_sheet.dart';
 
@@ -38,138 +38,149 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
       surahSettingsProvider.select((s) => s.autoScrollEnabled),
     );
 
+    final mushafMode = ref.watch(
+      surahSettingsProvider.select((s) => s.mushafMode),
+    );
+
     final titleTextstyle = theme.textTheme.labelLarge!.copyWith(fontSize: 18);
 
     final selectedReciter = ref.watch(selectedReciterProvider);
 
-    return AnimatedSize(
-      duration: Durations.medium3,
-      curve: Curves.easeInOut,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            //Auto scroll
-            SwitchListTile(
-              title: Text('Auto scroll', style: titleTextstyle),
-              value: autoScrollEnabled,
-              contentPadding: EdgeInsets.zero,
-              onChanged: (v) {
-                sNotifier.setAutoScrollEnabled(v);
-                widget.onToggleAutoScroll();
-                if (v) {
-                  Navigator.pop(context);
-                }
-              },
-            ),
-            const SizedBox(height: 4),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SwitchListTile(
+            title: Text('Mushaf mode', style: titleTextstyle),
+            value: mushafMode,
+            contentPadding: EdgeInsets.zero,
+            onChanged: (v) {
+              sNotifier.setMushafMode(v);
+               
+            },
+          ),
+          const SizedBox(height: 4),
 
-            //TRANSATION TOGGLE
-            SwitchListTile(
-              value: showTranslation,
-              contentPadding: EdgeInsets.zero,
-              title: Text('Show Translation', style: titleTextstyle),
-              onChanged: (value) {
-                sNotifier.setShowTranslation(value);
-              },
-            ),
-            const SizedBox(height: 4),
+          //Auto scroll
+          SwitchListTile(
+            title: Text('Auto scroll', style: titleTextstyle),
+            value: autoScrollEnabled,
+            contentPadding: EdgeInsets.zero,
+            onChanged: (v) {
+              sNotifier.setAutoScrollEnabled(v);
+              widget.onToggleAutoScroll();
+              if (v) {
+                Navigator.pop(context);
+              }
+            },
+          ),
+          const SizedBox(height: 4),
 
-            //TRANSILT TOGGLE
-            SwitchListTile(
-              value: showTranslit,
-              contentPadding: EdgeInsets.zero,
-              title: Text('Show Transliteration', style: titleTextstyle),
-              onChanged: (value) {
-                sNotifier.setShowTranslit(value);
-              },
-            ),
+          //TRANSATION TOGGLE
+          SwitchListTile(
+            value: showTranslation,
+            contentPadding: EdgeInsets.zero,
+            title: Text('Show Translation', style: titleTextstyle),
+            onChanged: (value) {
+              sNotifier.setShowTranslation(value);
+            },
+          ),
+          const SizedBox(height: 4),
 
-            const SizedBox(height: 4),
+          //TRANSILT TOGGLE
+          SwitchListTile(
+            value: showTranslit,
+            contentPadding: EdgeInsets.zero,
+            title: Text('Show Transliteration', style: titleTextstyle),
+            onChanged: (value) {
+              sNotifier.setShowTranslit(value);
+            },
+          ),
 
-            //select reciter
-            ListTile(
-              title: Text('Reciters', style: titleTextstyle),
-              contentPadding: EdgeInsets.zero,
-              trailing: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 220),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Flexible(
-                      child: Text(
-                        selectedReciter.name,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: theme.textTheme.labelLarge,
-                      ),
+          const SizedBox(height: 4),
+
+          //select reciter
+          ListTile(
+            title: Text('Reciters', style: titleTextstyle),
+            contentPadding: EdgeInsets.zero,
+            trailing: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 220),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Flexible(
+                    child: Text(
+                      selectedReciter.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.labelLarge,
                     ),
-                    const SizedBox(width: 8),
-                    const FaIcon(FontAwesomeIcons.chevronRight, size: 16),
-                  ],
-                ),
+                  ),
+                  const SizedBox(width: 8),
+                  const FaIcon(FontAwesomeIcons.chevronRight, size: 16),
+                ],
               ),
-              onTap: () {
-                showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  builder: (context) => const ReciterPickerSheet(),
-                );
-              },
             ),
+            onTap: () {
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                builder: (context) => const ReciterPickerSheet(),
+              );
+            },
+          ),
 
-            const SizedBox(height: 4),
+          const SizedBox(height: 4),
 
-            // Font size slider (Arabic)
+          // Font size slider (Arabic)
+          Text(
+            'Arabic Font Size: ${arabicFontSize.toInt()}',
+            style: titleTextstyle,
+          ),
+          Slider(
+            min: 16,
+            max: 36,
+            value: arabicFontSize,
+            onChanged: (value) {
+              sNotifier.setArabicFont(value);
+            },
+          ),
+
+          // Font size slider (Translation)
+          if (s.showTranslation) ...[
+            const SizedBox(height: 8),
             Text(
-              'Arabic Font Size: ${arabicFontSize.toInt()}',
+              'Translation Font Size: ${translationSize.toInt()}',
               style: titleTextstyle,
             ),
             Slider(
-              min: 16,
-              max: 36,
-              value: arabicFontSize,
+              min: 12,
+              max: 28,
+              value: translationSize,
               onChanged: (value) {
-                sNotifier.setArabicFont(value);
+                sNotifier.setTranslationFont(value);
               },
             ),
 
-            // Font size slider (Translation)
-            if (s.showTranslation) ...[
-              const SizedBox(height: 8),
-              Text(
-                'Translation Font Size: ${translationSize.toInt()}',
-                style: titleTextstyle,
-              ),
-              Slider(
-                min: 12,
-                max: 28,
-                value: translationSize,
-                onChanged: (value) {
-                  sNotifier.setTranslationFont(value);
+            //cancel btn
+            Center(
+              child: TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
                 },
-              ),
-
-              //cancel btn
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    'Close',
-                    style: theme.textTheme.bodyMedium!.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                child: Text(
+                  'Close',
+                  style: theme.textTheme.bodyMedium!.copyWith(
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
-            ],
+            ),
+            const SizedBox(height: 24),
           ],
-        ),
+        ],
       ),
     );
   }

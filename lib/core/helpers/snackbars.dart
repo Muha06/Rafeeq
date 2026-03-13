@@ -5,14 +5,14 @@ import 'package:rafeeq/features/adhkar/presentation/widgets/audio_player_sheet.d
 class AppSnackBar {
   static void showSimple({
     required BuildContext context,
-    required bool isDark,
-    required String message,
+     required String message,
     Color? lightBgColor,
     Color? lightText,
     Duration duration = const Duration(seconds: 3),
   }) {
     final theme = Theme.of(context);
-
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+     
     scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
     scaffoldMessengerKey.currentState?.clearSnackBars();
     scaffoldMessengerKey.currentState?.showSnackBar(
