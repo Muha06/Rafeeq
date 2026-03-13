@@ -117,9 +117,8 @@ class ViewQuranGoalStats extends StatelessWidget {
         onTap: () {
           // navigate to goal stats page
           AppNav.push(context, const QuranGoalStatsPage()).then(
-            (value) => RafeeqAnalytics.logScreenView(
-              'Quran_progress_stats_page',
-            ),
+            (value) =>
+                RafeeqAnalytics.logScreenView('Quran_progress_stats_page'),
           );
         },
         child: Container(

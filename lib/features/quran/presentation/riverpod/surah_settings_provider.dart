@@ -8,6 +8,7 @@ class SurahSettings {
   final double translationFontSize;
   final double autoScrollSpeed; // ayahs per minute
   final bool autoScrollEnabled;
+  final bool mushafMode;
 
   const SurahSettings({
     required this.showTranslation,
@@ -15,7 +16,8 @@ class SurahSettings {
     required this.translationFontSize,
     required this.autoScrollSpeed,
     required this.autoScrollEnabled,
-    required this.showTranslit
+    required this.showTranslit,
+    required this.mushafMode,
   });
 
   SurahSettings copyWith({
@@ -24,7 +26,8 @@ class SurahSettings {
     double? translationFontSize,
     double? autoScrollSpeed,
     bool? autoScrollEnabled,
-    bool? showTranslit
+    bool? showTranslit,
+    bool? mushafMode,
   }) {
     return SurahSettings(
       showTranslation: showTranslation ?? this.showTranslation,
@@ -32,7 +35,8 @@ class SurahSettings {
       translationFontSize: translationFontSize ?? this.translationFontSize,
       autoScrollSpeed: autoScrollSpeed ?? this.autoScrollSpeed,
       autoScrollEnabled: autoScrollEnabled ?? this.autoScrollEnabled,
-      showTranslit: showTranslit?? this.showTranslit
+      showTranslit: showTranslit ?? this.showTranslit,
+      mushafMode: mushafMode ?? this.mushafMode,
     );
   }
 }
@@ -51,12 +55,15 @@ class SurahSettingsNotifier extends StateNotifier<SurahSettings> {
           translationFontSize: 16,
           autoScrollSpeed: 20,
           autoScrollEnabled: false,
-          showTranslit: true
+          showTranslit: true,
+          mushafMode: false,
         ),
       );
 
   void setShowTranslation(bool v) => state = state.copyWith(showTranslation: v);
   void setShowTranslit(bool v) => state = state.copyWith(showTranslit: v);
+
+  void setMushafMode(bool v) => state = state.copyWith(mushafMode: v);
 
   void setArabicFont(double v) => state = state.copyWith(arabicFontSize: v);
 

@@ -7,7 +7,6 @@ import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/features/quran_goal/domain/entities/quran_goal.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/log_ayah_bottomsheet.dart';
-import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class EditQuranGoalSheet extends ConsumerStatefulWidget {
   final QuranGoal goal;
@@ -136,7 +135,6 @@ class _EditQuranGoalSheetState extends ConsumerState<EditQuranGoalSheet> {
                       AppNav.pop(context);
                       AppSnackBar.showSimple(
                         context: context,
-                        isDark: ref.read(isDarkProvider),
                         message: "Active goal target must be greater than 1",
                       );
                       return;

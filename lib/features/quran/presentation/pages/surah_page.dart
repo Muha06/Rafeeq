@@ -61,6 +61,18 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
 
   bool _autoTickBusy = false;
 
+  @override
+  void initState() {
+    super.initState();
+
+    itemPositionsListener.itemPositions.addListener(_onVisibleAyahsChanged);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkLastRead();
+      _autoScrollToAyah();
+    });
+  }
+
   bool _isAtEnd() {
     final positions = itemPositionsListener.itemPositions.value;
     if (positions.isEmpty) return false;
@@ -133,18 +145,6 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
 
   void _toggleAutoScroll() => _autoOn ? _exitAutoScroll() : _startAutoScroll();
 
-  @override
-  void initState() {
-    super.initState();
-
-    itemPositionsListener.itemPositions.addListener(_onVisibleAyahsChanged);
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _checkLastRead();
-      _autoScrollToAyah();
-    });
-  }
-
   void _autoScrollToAyah() {
     if (widget.autoScrollAyah != null) {
       _jumpToAyah(widget.autoScrollAyah!);
@@ -164,31 +164,41 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
   }
 
   // Called whenever visible items change
-  void _onVisibleAyahsChanged() {
+  void _onVisibleAyahsChanged() async {
     if (_isSaving) return;
     _isSaving = true;
 
     final positions = itemPositionsListener.itemPositions.value;
+
     if (positions.isEmpty) {
       _isSaving = false;
       return;
     }
 
-    // Track first fully visible ayah
-    final visible = positions.where((p) => p.itemLeadingEdge >= 0).toList();
+    // Find first visible item
+    final firstVisible = positions
+        .where((p) => p.itemTrailingEdge > 0)
+        .reduce((min, p) => p.index < min.index ? p : min);
 
-    if (visible.isEmpty) {
+    final currentIndex = firstVisible.index;
+
+    // Skip SurahDetails (index 0)
+    if (currentIndex <= 0) {
       _isSaving = false;
       return;
     }
 
-    final firstVisible = visible.reduce(
-      (min, p) => p.itemLeadingEdge < min.itemLeadingEdge ? p : min,
-    );
+    final ayahs = ref.read(ayahsFutureProvider(widget.surah.id)).value;
 
-    final currentAyahNumber = firstVisible.index;
+    if (ayahs == null || currentIndex > ayahs.length) {
+      _isSaving = false;
+      return;
+    }
 
-    // Update temporary last read if needed
+    final ayah = ayahs[currentIndex - 1];
+    final currentAyahNumber = ayah.ayahNumber;
+
+    // Update temporary last read
     if (!_suppressNextSave &&
         currentAyahNumber != _lastSavedAyah &&
         currentAyahNumber > skipInitialAyahs &&
@@ -200,6 +210,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
         verseCount: widget.surah.versesCount,
         updatedAt: DateTime.now(),
       );
+
       _lastSavedAyah = currentAyahNumber;
     }
 
@@ -353,7 +364,6 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
                   },
                 );
               },
-
               borderRadius: BorderRadius.circular(10),
               child: SizedBox(
                 height: kToolbarHeight, // fills AppBar height
@@ -372,9 +382,8 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
             ),
           ),
           actions: [
-            TextButton.icon(
+            IconButton(
               icon: PhosphorIcon(PhosphorIcons.floppyDisk()),
-              label: const Text('Save'),
               style: theme.textButtonTheme.style!.copyWith(
                 foregroundColor: WidgetStatePropertyAll(
                   theme.colorScheme.onSurface,
@@ -395,44 +404,14 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
                       SurahSettingsSheet(onToggleAutoScroll: _toggleAutoScroll),
                 );
               },
-              icon: const Icon(Icons.tune),
+              icon: PhosphorIcon(PhosphorIcons.gear()),
             ),
           ],
           bottom: appBarBottomDivider(context),
         ),
-
         body: ayahsAsync.when(
-          data: (ayahs) => ScrollablePositionedList.builder(
-            itemCount: ayahs.length + 1,
-            itemBuilder: (context, index) {
-              if (index == 0) {
-                return Column(
-                  children: [
-                    SurahDetails(surah: surah, isDark: isDark),
-                    const SizedBox(height: 8),
-
-                    PlayFullSurahBtn(
-                      onPlay: () async {
-                        playSurahAudio(
-                          ref: ref,
-                          surahId: surahId,
-                          surahName: surah.nameTransliteration,
-                        );
-
-                        await RafeeqAnalytics.logFeature("Play-surah-audio");
-                      },
-                    ),
-                  ],
-                );
-              }
-              return AyahTile(ayah: ayahs[index - 1]);
-            },
-            itemScrollController: itemScrollController,
-            itemPositionsListener: itemPositionsListener,
-            scrollOffsetController: scrollOffsetController,
-            scrollOffsetListener: scrollOffsetListener,
-          ),
           loading: () => const Center(child: CircularProgressIndicator()),
+
           error: (e, _) => Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -440,14 +419,12 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Icon(Icons.cloud_off_sharp, size: 120),
-
                 Text(
                   'Failed to load surahs.\n Please try again',
                   textAlign: TextAlign.center,
                   style: theme.textTheme.titleMedium,
                 ),
                 const SizedBox(height: 16),
-
                 ElevatedButton(
                   onPressed: () {
                     ref.invalidate(ayahsFutureProvider(surahId));
@@ -457,6 +434,42 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
               ],
             ),
           ),
+
+          data: (ayahs) {
+            return ScrollablePositionedList.builder(
+              itemCount: ayahs.length + 1,
+
+              itemScrollController: itemScrollController,
+              itemPositionsListener: itemPositionsListener,
+              scrollOffsetController: scrollOffsetController,
+              scrollOffsetListener: scrollOffsetListener,
+
+              itemBuilder: (context, index) {
+                if (index == 0) {
+                  return Column(
+                    children: [
+                      SurahDetails(surah: surah, isDark: isDark),
+                      const SizedBox(height: 8),
+
+                      PlayFullSurahBtn(
+                        onPlay: () async {
+                          playSurahAudio(
+                            ref: ref,
+                            surahId: surahId,
+                            surahName: surah.nameTransliteration,
+                          );
+
+                          await RafeeqAnalytics.logFeature("Play-surah-audio");
+                        },
+                      ),
+                    ],
+                  );
+                }
+
+                return AyahTile(ayah: ayahs[index - 1]);
+              },
+            );
+          },
         ),
       ),
     );

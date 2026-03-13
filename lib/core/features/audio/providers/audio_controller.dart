@@ -5,8 +5,7 @@ import 'package:rafeeq/core/features/audio/domain/entities/audio_state.dart';
 import 'package:rafeeq/core/features/audio/providers/just_audio_player_provider.dart';
 import 'package:rafeeq/core/helpers/audio_helpers.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
-import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
-
+ 
 final audioControllerProvider = NotifierProvider<AudioController, AudioState>(
   AudioController.new,
 );
@@ -54,7 +53,6 @@ class AudioController extends Notifier<AudioState> {
       debugPrint('Error playing audio: $e, $st');
       AppSnackBar.showSimple(
         context: context,
-        isDark: ref.read(isDarkProvider),
         message: 'Error playing audio. Please recheck your internet connection',
       );
     }

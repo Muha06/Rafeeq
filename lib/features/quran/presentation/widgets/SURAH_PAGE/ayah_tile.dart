@@ -72,8 +72,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
 
                         AppSnackBar.showSimple(
                           context: context,
-                          isDark: isDark,
-                          message: 'Bookmark removed ❌',
+                           message: 'Bookmark removed ❌',
                           duration: const Duration(seconds: 3),
                         );
 
@@ -99,8 +98,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
 
                       AppSnackBar.showSimple(
                         context: context,
-                        isDark: isDark,
-                        message: 'Bookmark added ✅',
+                         message: 'Bookmark added ✅',
                         duration: const Duration(seconds: 3),
                       );
                     } catch (e) {

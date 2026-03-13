@@ -6,13 +6,21 @@ class Ayah {
   final String textEnglish; //English translation
   final String transliteration;
 
-  const Ayah({
+  final int? pageNumber;
+  int? lineNumber;
+  final int? juz;
+
+    Ayah({
     required this.id,
     required this.surahId,
     required this.ayahNumber,
     required this.textArabic,
     required this.textEnglish,
     required this.transliteration,
+    required this.pageNumber,
+    required this.lineNumber,
+    required this.juz,
   });
- 
+
+  String get verseKey => "$surahId:$ayahNumber";
 }

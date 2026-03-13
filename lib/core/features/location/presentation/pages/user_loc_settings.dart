@@ -10,7 +10,6 @@ import 'package:rafeeq/core/features/location/presentation/provider/user_locatio
 import 'package:rafeeq/core/helpers/rafeeq_analytics.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/salah_times_providers.dart';
-import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class UserLocSettingsPage extends ConsumerStatefulWidget {
   const UserLocSettingsPage({super.key});
@@ -138,7 +137,6 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = ref.watch(isDarkProvider);
 
     final isAuto = ref
         .watch(userLocationProvider)
@@ -174,7 +172,6 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
 
               AppSnackBar.showSimple(
                 context: context,
-                isDark: isDark,
                 duration: const Duration(seconds: 3),
                 message: 'Setting to GPS mode...',
               );

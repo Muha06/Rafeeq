@@ -23,13 +23,16 @@ class AyahHiveAdapter extends TypeAdapter<AyahHive> {
       textArabic: fields[3] as String,
       textEnglish: fields[4] as String,
       textTransliteration: fields[5] as String,
+      lineNumber: fields[6] as int?,
+      pageNumber: fields[7] as int?,
+      juz: fields[8] as int?,
     );
   }
 
   @override
   void write(BinaryWriter writer, AyahHive obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -41,7 +44,13 @@ class AyahHiveAdapter extends TypeAdapter<AyahHive> {
       ..writeByte(4)
       ..write(obj.textEnglish)
       ..writeByte(5)
-      ..write(obj.textTransliteration);
+      ..write(obj.textTransliteration)
+      ..writeByte(6)
+      ..write(obj.lineNumber)
+      ..writeByte(7)
+      ..write(obj.pageNumber)
+      ..writeByte(8)
+      ..write(obj.juz);
   }
 
   @override

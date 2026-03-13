@@ -10,8 +10,7 @@ import 'package:rafeeq/features/quran_goal/presentation/widgets/edit_goal_sheet.
 import 'package:rafeeq/features/quran_goal/presentation/widgets/monthly_progress_bar.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/weekly_chart.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/weekly_progress_bar.dart';
-import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
-
+ 
 class QuranGoalStatsPage extends ConsumerWidget {
   const QuranGoalStatsPage({super.key});
 
@@ -227,8 +226,7 @@ class MyQuranGoalCard extends ConsumerWidget {
                       final updated = ref.read(quranGoalProvider);
                       AppSnackBar.showSimple(
                         context: context,
-                        isDark: ref.read(isDarkProvider),
-                        message: updated.isActive
+                         message: updated.isActive
                             ? "Goal unpaused"
                             : "Goal paused",
                       );

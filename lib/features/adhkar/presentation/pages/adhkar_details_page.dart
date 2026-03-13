@@ -213,7 +213,6 @@ class _AdhkarDetailsTileState extends ConsumerState<AdhkarDetailsTile> {
                         if (context.mounted) {
                           AppSnackBar.showSimple(
                             context: context,
-                            isDark: ref.read(isDarkProvider),
                             message: "Dhikr copied",
                           );
                         }
@@ -239,7 +238,7 @@ class _AdhkarDetailsTileState extends ConsumerState<AdhkarDetailsTile> {
                             ref
                                 .read(dhikrBookmarksProvider.notifier)
                                 .toggle(bookmark);
-                                
+
                             RafeeqAnalytics.logFeature('bookmarked_dhikr');
                           },
                           icon: PhosphorIcon(

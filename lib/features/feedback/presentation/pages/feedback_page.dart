@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/feedback/data/models/feedback_model.dart';
 import 'package:rafeeq/features/feedback/presentation/providers/wiring_providers.dart';
-import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 class FeedbackPage extends ConsumerStatefulWidget {
@@ -63,7 +62,6 @@ class _FeedbackPageState extends ConsumerState<FeedbackPage> {
         Navigator.pop(context);
         AppSnackBar.showSimple(
           context: context,
-          isDark: ref.read(isDarkProvider),
           message: "'Thank you for helping improve Rafeeq 🤍",
         );
       });
