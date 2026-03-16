@@ -7,11 +7,15 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/core/features/audio/domain/entities/audio_state.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
+import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/rafeeq_analytics.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/quran/domain/entities/last_read_ayah.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
+import 'package:rafeeq/features/quran/presentation/pages/mushaf_page.dart';
+import 'package:rafeeq/features/quran/presentation/pages/mushaf_reader.dart';
+import 'package:rafeeq/features/quran/presentation/riverpod/current_reading_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/fetch_ayah_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/last_read_provider.dart';
@@ -22,7 +26,6 @@ import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/quran_audi
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_ayah_dialog.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_details.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_settings_sheet.dart';
-import 'package:rafeeq/features/quran_goal/presentation/widgets/log_ayah_bottomsheet.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/surah_audio_providers.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
@@ -197,6 +200,12 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
 
     final ayah = ayahs[currentIndex - 1];
     final currentAyahNumber = ayah.ayahNumber;
+
+    ref.read(currentReadingProvider.notifier).state = QuranReadingPosition(
+      surahId: widget.surah.id,
+      ayahNumber: currentAyahNumber,
+      page: ayah.pageNumber ?? 1,
+    );
 
     // Update temporary last read
     if (!_suppressNextSave &&
@@ -390,7 +399,11 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
                 ),
               ),
               onPressed: () async {
-                showAyahLogSheet(context, ref);
+                // showAyahLogSheet(context, ref);
+                AppNav.push(
+                  context,
+                  const MushafScrollView(startPage: 1, endPage: 604),
+                );
               },
             ),
             IconButton(
