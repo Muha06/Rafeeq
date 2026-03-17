@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
- import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
+import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
 import 'package:rafeeq/features/quran_audio/presentation/widgets/reciter_picker_sheet.dart';
 
@@ -53,12 +53,11 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
         mainAxisSize: MainAxisSize.min,
         children: [
           SwitchListTile(
-            title: Text('Mushaf mode', style: titleTextstyle),
+            title: Text('Reading mode', style: titleTextstyle),
             value: mushafMode,
             contentPadding: EdgeInsets.zero,
             onChanged: (v) {
               sNotifier.setMushafMode(v);
-               
             },
           ),
           const SizedBox(height: 4),

@@ -13,8 +13,7 @@ import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/quran/domain/entities/last_read_ayah.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
-import 'package:rafeeq/features/quran/presentation/pages/mushaf_page.dart';
-import 'package:rafeeq/features/quran/presentation/pages/mushaf_reader.dart';
+import 'package:rafeeq/features/quran/presentation/pages/mushaf_scrollview.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/current_reading_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/fetch_ayah_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provider.dart';
@@ -28,6 +27,7 @@ import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_deta
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_settings_sheet.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/surah_audio_providers.dart';
+import 'package:rafeeq/features/quran_goal/presentation/widgets/log_ayah_bottomsheet.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
@@ -308,6 +308,8 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
         .watch(surahSettingsProvider)
         .autoScrollEnabled;
 
+    final mushafMode = ref.watch(surahSettingsProvider).mushafMode;
+
     return PopScope(
       onPopInvokedWithResult: (didPop, result) async {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -399,8 +401,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
                 ),
               ),
               onPressed: () async {
-                // showAyahLogSheet(context, ref);
-                AppNav.push(context, MushafScrollView(surah: surah));
+                showAyahLogSheet(context, ref);
               },
             ),
             IconButton(
@@ -419,68 +420,72 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
           ],
           bottom: appBarBottomDivider(context),
         ),
-        body: ayahsAsync.when(
-          loading: () => const Center(child: CircularProgressIndicator()),
+        body: mushafMode
+            ? MushafScrollView(surah: surah)
+            : ayahsAsync.when(
+                loading: () => const Center(child: CircularProgressIndicator()),
 
-          error: (e, _) => Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(Icons.cloud_off_sharp, size: 120),
-                Text(
-                  'Failed to load surahs.\n Please try again',
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.titleMedium,
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    ref.invalidate(ayahsFutureProvider(surahId));
-                  },
-                  child: const Text('Refresh'),
-                ),
-              ],
-            ),
-          ),
-
-          data: (ayahs) {
-            return ScrollablePositionedList.builder(
-              itemCount: ayahs.length + 1,
-
-              itemScrollController: itemScrollController,
-              itemPositionsListener: itemPositionsListener,
-              scrollOffsetController: scrollOffsetController,
-              scrollOffsetListener: scrollOffsetListener,
-
-              itemBuilder: (context, index) {
-                if (index == 0) {
-                  return Column(
+                error: (e, _) => Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      SurahDetails(surah: surah, isDark: isDark),
-                      const SizedBox(height: 8),
-
-                      PlayFullSurahBtn(
-                        onPlay: () async {
-                          playSurahAudio(
-                            ref: ref,
-                            surahId: surahId,
-                            surahName: surah.nameTransliteration,
-                          );
-
-                          await RafeeqAnalytics.logFeature("Play-surah-audio");
+                      const Icon(Icons.cloud_off_sharp, size: 120),
+                      Text(
+                        'Failed to load surahs.\n Please try again',
+                        textAlign: TextAlign.center,
+                        style: theme.textTheme.titleMedium,
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          ref.invalidate(ayahsFutureProvider(surahId));
                         },
+                        child: const Text('Refresh'),
                       ),
                     ],
-                  );
-                }
+                  ),
+                ),
 
-                return AyahTile(ayah: ayahs[index - 1], surah: surah);
-              },
-            );
-          },
-        ),
+                data: (ayahs) {
+                  return ScrollablePositionedList.builder(
+                    itemCount: ayahs.length + 1,
+
+                    itemScrollController: itemScrollController,
+                    itemPositionsListener: itemPositionsListener,
+                    scrollOffsetController: scrollOffsetController,
+                    scrollOffsetListener: scrollOffsetListener,
+
+                    itemBuilder: (context, index) {
+                      if (index == 0) {
+                        return Column(
+                          children: [
+                            SurahDetails(surah: surah, isDark: isDark),
+                            const SizedBox(height: 8),
+
+                            PlayFullSurahBtn(
+                              onPlay: () async {
+                                playSurahAudio(
+                                  ref: ref,
+                                  surahId: surahId,
+                                  surahName: surah.nameTransliteration,
+                                );
+
+                                await RafeeqAnalytics.logFeature(
+                                  "Play-surah-audio",
+                                );
+                              },
+                            ),
+                          ],
+                        );
+                      }
+
+                      return AyahTile(ayah: ayahs[index - 1], surah: surah);
+                    },
+                  );
+                },
+              ),
       ),
     );
   }

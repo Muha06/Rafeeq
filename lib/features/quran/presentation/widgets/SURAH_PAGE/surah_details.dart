@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/features/audio/providers/just_audio_player_provider.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
-import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class SurahDetails extends ConsumerWidget {
   const SurahDetails({super.key, required this.surah, required this.isDark});
@@ -14,7 +13,6 @@ class SurahDetails extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final place = surah.isMeccan ? 'Makkah' : 'Madinah';
-    final isDark = ref.watch(isDarkProvider);
     final isMakkan = surah.isMeccan;
 
     final theme = Theme.of(context);
@@ -87,9 +85,8 @@ class SurahDetails extends ConsumerWidget {
         //Bismillah
         if (surah.id != 9) ...[
           Image.asset(
-            isDark
-                ? 'assets/images/quran/bismillah_dark.png'
-                : 'assets/images/quran/bismillah_light.png',
+            'assets/images/quran/bismillah.png',
+            color: cs.onSurface,
             height: 60,
           ),
           const SizedBox(height: 8),

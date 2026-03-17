@@ -1,4 +1,4 @@
- import 'package:riverpod/legacy.dart';
+import 'package:riverpod/legacy.dart';
 
 class QuranReadingPosition {
   final int surahId;
@@ -24,4 +24,6 @@ final currentReadingProvider = StateProvider<QuranReadingPosition?>(
   (ref) => null,
 );
 
-
+final mushafModeProvider = StateProvider<bool>((ref) {
+  return false;
+});

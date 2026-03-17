@@ -53,7 +53,7 @@ class AppTextStyles {
 
   // Qur'an Arabic
   static const TextStyle quranAyah = TextStyle(
-    fontFamily: 'Uthmani',
+    fontFamily: 'Uthmani2',
     fontSize: 24,
     height: 1.9,
     wordSpacing: 3,

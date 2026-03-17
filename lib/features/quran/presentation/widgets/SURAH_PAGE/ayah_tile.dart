@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:quran/quran_text.dart';
-import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
-import 'package:rafeeq/core/themes/app_text_style.dart';
+ import 'package:rafeeq/core/themes/app_text_style.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/quran/domain/entities/ayah.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
@@ -40,6 +38,10 @@ class _AyahTileState extends ConsumerState<AyahTile> {
     final bookmarkedIds = ref.watch(bookmarkedIdsProvider);
     final isBookmarked = bookmarkedIds.contains(id);
     final cs = theme.colorScheme;
+
+    final ayah = quran
+        .getVerse(widget.surah.id, widget.ayah.ayahNumber, verseEndSymbol: true)
+        .replaceAll('۝', '');
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8),
@@ -164,17 +166,17 @@ class _AyahTileState extends ConsumerState<AyahTile> {
               Align(
                 alignment: Alignment.centerRight,
                 child: Text(
-                  quran
-                      .getVerse(
-                        widget.surah.id,
-                        widget.ayah.ayahNumber,
-                        verseEndSymbol: true,
-                      )
-                      .replaceAll('۝', ''),
+                  ayah.startsWith('بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ')
+                      ? ayah
+                            .replaceFirst(
+                              'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ',
+                              '',
+                            )
+                            .trim()
+                      : ayah,
                   textDirection: TextDirection.rtl,
                   style: AppTextStyles.quranAyah.copyWith(
                     fontSize: arabicFontSize,
-                    fontFamily: 'Uthmani2',
                     color: cs.onSurface,
                   ),
                 ),

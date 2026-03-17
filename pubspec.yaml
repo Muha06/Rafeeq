@@ -72,11 +72,7 @@ flutter:
     - family: Uthmani
       fonts:
         - asset: assets/fonts/Uthmani.otf
-
-    - family: hafs
-      fonts:
-        - asset: assets/fonts/hafs.ttf
-
+ 
     - family: Uthmani2
       fonts:
         - asset: assets/fonts/uthmani_hafs_2.ttf

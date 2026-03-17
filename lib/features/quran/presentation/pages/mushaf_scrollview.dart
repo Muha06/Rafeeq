@@ -57,12 +57,13 @@ class MushafScrollView extends ConsumerWidget {
     final pages = getSurahPages(
       surah.id,
     ); //get range of pages surah in eg: 1 - 49
+    
+     final pagesVerses = ref.watch(pageVersesProvider(pages));
 
-    final pagesVerses = ref.watch(pageVersesProvider(pages));
-
-    return Scaffold(
-      appBar: AppBar(),
-      body: ListView.builder(
+    return Scrollbar(
+      interactive: true,
+      thickness: 14,
+      child: ListView.builder(
         itemCount: pagesVerses.length + 1,
         itemBuilder: (context, index) {
           if (index == 0) {
@@ -71,7 +72,10 @@ class MushafScrollView extends ConsumerWidget {
 
           final pageVerses = pagesVerses[index - 1];
 
-          return MushafPageUI(versesList: pageVerses);
+          return MushafPageUI(
+            versesList: pageVerses,
+            page: pages.startPage + index - 1,
+          );
         },
       ),
     );
@@ -96,7 +100,6 @@ class PageSurahNameCard extends StatelessWidget {
           children: [
             Image.asset(
               'assets/images/quran/surah_header.png',
-              // height: 80,
               color: cs.onSurface,
               width: double.infinity,
               fit: BoxFit.contain,
@@ -111,14 +114,17 @@ class PageSurahNameCard extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: theme.textTheme.labelLarge,
                   ),
+
                   const Spacer(),
                   Text('~', style: theme.textTheme.titleLarge),
 
                   const Spacer(),
+
                   Text(
                     surah.nameArabic,
-                    textAlign: TextAlign.center,
-                    style: AppTextStyles.arabicUi.copyWith(color: cs.onSurface),
+                    style: AppTextStyles.quranAyah.copyWith(
+                      color: cs.onSurface,
+                    ),
                   ),
                 ],
               ),
