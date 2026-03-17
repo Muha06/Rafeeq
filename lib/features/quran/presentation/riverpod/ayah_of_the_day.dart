@@ -8,7 +8,7 @@ import 'dart:math';
 
 final ayahOfTheDayProvider = FutureProvider<Ayah?>((ref) async {
   // Wait for surahs properly (no empty fallback)
-  final surahs = await ref.watch(surahsFutureProvider.future);
+  final surahs = ref.watch(surahsProvider);
   if (surahs.isEmpty) return null;
 
   final now = DateTime.now();
@@ -32,13 +32,9 @@ final ayahOfTheDayProvider = FutureProvider<Ayah?>((ref) async {
   return ayah;
 });
 
-
-
 //get surah for the ayah
 final ayahSurahProvider = Provider.family<Surah?, int>((ref, surahId) {
-  final surahs = ref
-      .watch(surahsFutureProvider)
-      .maybeWhen(data: (list) => list, orElse: () => []);
+  final surahs = ref.watch(surahsProvider);
 
   return surahs.firstWhereOrNull((s) => s.id == surahId);
 });

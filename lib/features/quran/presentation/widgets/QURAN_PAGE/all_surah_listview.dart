@@ -20,30 +20,16 @@ class AllSurahsList extends ConsumerStatefulWidget {
 class _AllSurahsListState extends ConsumerState<AllSurahsList> {
   @override
   Widget build(BuildContext context) {
-    final surahAsync = ref.watch(surahsFutureProvider);
+    final surahs = ref.watch(surahsProvider);
 
-    return surahAsync.when(
-      error: (e, st) => const SliverToBoxAdapter(
-        child: Center(child: Text('Error loading surahs')),
-      ),
-      loading: () => SliverList(
-        delegate: SliverChildBuilderDelegate(
-          (context, index) => const SurahTileShimmer(),
-          childCount: 8,
-        ),
-      ),
-      data: (data) {
-        final surahs = data;
+    return SliverList.separated(
+      itemCount: surahs.length,
+      separatorBuilder: (context, index) =>
+          Divider(thickness: 1, color: Theme.of(context).dividerColor),
+      itemBuilder: (context, index) {
+        final surah = surahs[index];
 
-        return SliverList.separated(
-          itemCount: surahs.length,
-          separatorBuilder: (context, index) =>
-              Divider(thickness: 1, color: Theme.of(context).dividerColor),
-          itemBuilder: (context, index) {
-            final surah = surahs[index];
-            return SurahTile(surah: surah, surahs: surahs, index: index);
-          },
-        );
+        return SurahTile(surah: surah, surahs: surahs, index: index);
       },
     );
   }

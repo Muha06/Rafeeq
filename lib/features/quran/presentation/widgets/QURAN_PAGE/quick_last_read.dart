@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/features/quran/domain/entities/last_read_ayah.dart';
 import 'package:rafeeq/features/quran/presentation/pages/surah_page.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provider.dart';
@@ -146,23 +147,17 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
     return GestureDetector(
       onTap: () {
         // Fetch the Surah from the cached surahs in hive
-        final surah = ref
-            .watch(surahsFutureProvider)
-            .maybeWhen(
-              data: (surahs) => surahs.firstWhere(
-                (s) => s.id == widget.lastRead.surahId,
-                orElse: () => throw Exception('Surah not found in cache'),
-              ),
-              orElse: () => throw Exception('Failed to fetch surahs'),
-            );
+        final surahs = ref.watch(surahsProvider);
 
-        Navigator.push(
+        final surah = surahs.firstWhere(
+          (surah) => surah.id == widget.lastRead.surahId,
+        );
+
+        AppNav.push(
           context,
-          MaterialPageRoute(
-            builder: (context) => FullSurahPage(
-              surah: surah,
-              autoScrollAyah: widget.lastRead.ayahNumber,
-            ),
+          FullSurahPage(
+            surah: surah,
+            autoScrollAyah: widget.lastRead.ayahNumber,
           ),
         );
       },

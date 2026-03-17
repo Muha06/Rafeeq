@@ -57,7 +57,7 @@ class MushafScrollView extends ConsumerWidget {
     final pages = getSurahPages(
       surah.id,
     ); //get range of pages surah in eg: 1 - 49
-    
+
      final pagesVerses = ref.watch(pageVersesProvider(pages));
 
     return Scrollbar(
@@ -69,8 +69,7 @@ class MushafScrollView extends ConsumerWidget {
           if (index == 0) {
             return PageSurahNameCard(surah: surah);
           }
-
-          final pageVerses = pagesVerses[index - 1];
+           final pageVerses = pagesVerses[index - 1];
 
           return MushafPageUI(
             versesList: pageVerses,

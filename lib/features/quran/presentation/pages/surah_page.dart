@@ -7,7 +7,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/core/features/audio/domain/entities/audio_state.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
-import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/rafeeq_analytics.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
@@ -301,7 +300,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
 
     final surahId = widget.surah.id;
     final ayahsAsync = ref.watch(ayahsFutureProvider(surahId));
-    final surahs = ref.watch(surahsFutureProvider).value;
+    final surahs = ref.watch(surahsProvider);
 
     final showAudioControls = ref.watch(showAudioControlsProvider);
     final showSpeedControls = ref
@@ -346,7 +345,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
             child: InkWell(
               onTap: () {
                 final list = surahs;
-                if (list == null || list.isEmpty) return;
+                if (list.isEmpty) return;
 
                 showSurahAyahPickerDialog(
                   context: context,
@@ -481,7 +480,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
                         );
                       }
 
-                      return AyahTile(ayah: ayahs[index - 1], surah: surah);
+                      return AyahTile(surah: surah, ayahNumber: index + 1);
                     },
                   );
                 },

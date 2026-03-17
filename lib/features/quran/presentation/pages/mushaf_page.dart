@@ -6,7 +6,10 @@ import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provi
 import 'package:riverpod/legacy.dart';
 
 // Track the currently highlighted ayah
-final highlightedAyahProvider = StateProvider<int?>((ref) => null);
+final highlightedAyahProvider = StateProvider<int?>((ref) {
+  debugPrint("Highlighted");
+  return null;
+});
 
 class MushafPageUI extends ConsumerWidget {
   final List<String> versesList;
@@ -42,7 +45,15 @@ class MushafPageUI extends ConsumerWidget {
                 children: [
                   for (var v in versesList) ...[
                     TextSpan(
-                      text: v.replaceAll('۝', ''),
+                      text: v
+                          .replaceFirst(
+                            'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ',
+                            '',
+                          )
+                          .replaceAll(
+                            '۝',
+                            '',
+                          ), //Uthmani font unnecessarily adds it
                       style: baseStyle.copyWith(
                         backgroundColor:
                             highlightedAyah != null &&
@@ -55,9 +66,12 @@ class MushafPageUI extends ConsumerWidget {
                           final match = RegExp(
                             r'\((\d+)\)',
                           ).firstMatch(v)?.group(1);
+
                           if (match != null) {
                             ref.read(highlightedAyahProvider.notifier).state =
                                 int.parse(match);
+
+                            debugPrint("Dne: $match");
                           }
                         },
                     ),

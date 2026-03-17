@@ -94,9 +94,7 @@ class QuranGoalCard extends ConsumerWidget {
                 width: double.infinity,
                 child: FilledButton(
                   onPressed: () async {
-                    final surahs = ref.read(surahsFutureProvider).value;
-
-                    if (surahs == null) return;
+                    final surahs = ref.read(surahsProvider);
 
                     showSurahAyahPickerDialog(
                       context: context,

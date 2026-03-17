@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/features/quran/data/dataSources/quran_auth_client.dart';
+import 'package:rafeeq/features/quran/data/dataSources/quran_text_local.dart';
 import 'package:rafeeq/features/quran/data/dataSources/quran_text_remote_ds.dart';
 import 'package:rafeeq/features/quran/data/repositories/surah_repo_impl.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
@@ -42,11 +43,14 @@ final quranremoteApiServiceProvider = Provider((ref) {
   );
 });
 
+final quranLocalDsProvider = Provider<QuranLocalDataSource>((ref) {
+  return QuranLocalDataSource();
+});
+
 //repository
 final surahRepositoryProvider = Provider<SurahRepository>((ref) {
-  final apiService = ref.watch(quranremoteApiServiceProvider);
-
-  return SurahRepositoryImpl(apiService: apiService);
+  final local = ref.watch(quranLocalDsProvider);
+  return SurahRepositoryImpl(local: local);
 });
 
 // UseCase provider
@@ -56,24 +60,18 @@ final getSurahsUseCaseProvider = Provider<GetSurahsUseCase>((ref) {
 });
 
 // FutureProvider fetches the actual list of Surahs
-final surahsFutureProvider = FutureProvider<List<Surah>>((ref) async {
+final surahsProvider = Provider<List<Surah>>((ref) {
   final useCase = ref.read(getSurahsUseCaseProvider);
 
-  return await useCase.execute();
+  return useCase.call();
 });
 
 //Quick surah links
 final quickSurahLinksProvider = Provider<List<Surah>>((ref) {
-  final surahsAsync = ref.watch(surahsFutureProvider);
+  final surahs = ref.watch(surahsProvider);
+  const quickSurahIds = [1, 18, 36, 55, 67];
 
-  return surahsAsync.maybeWhen(
-    data: (surahs) {
-      const quickSurahIds = [1, 18, 36, 55, 67];
-
-      return surahs.where((s) => quickSurahIds.contains(s.id)).toList();
-    },
-    orElse: () => [],
-  );
+  return surahs.where((s) => quickSurahIds.contains(s.id)).toList();
 });
 
 final searchSurahTextProvider = StateProvider.autoDispose((ref) {

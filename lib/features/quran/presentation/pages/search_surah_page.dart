@@ -30,9 +30,23 @@ class _SurahSearchPageState extends ConsumerState<SurahSearchPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
- 
-    final surahsAsync = ref.watch(surahsFutureProvider); // <surahs provider
+
+    final surahs = ref.watch(surahsProvider); // <surahs provider
     final searchSurahText = ref.watch(searchSurahTextProvider);
+    final q = searchSurahText.trim().toLowerCase();
+
+    final filtered = q.isEmpty
+        ? surahs
+        : surahs.where((s) {
+            final t = s.nameTransliteration.toLowerCase();
+            final e = s.nameEnglish.toLowerCase();
+            final n = s.id.toString();
+            return t.contains(q) || e.contains(q) || n == q;
+          }).toList();
+
+    if (q.isNotEmpty && filtered.isEmpty) {
+      return const Center(child: Text('No surahs found'));
+    }
 
     return PopScope(
       onPopInvokedWithResult: (didPop, result) {
@@ -78,43 +92,20 @@ class _SurahSearchPageState extends ConsumerState<SurahSearchPage> {
         ),
         body: GestureDetector(
           onTap: () => _focus.unfocus(),
-          child: surahsAsync.when(
-            data: (surahs) {
-              final q = searchSurahText.trim().toLowerCase();
+          child: ListView.builder(
+            itemCount: filtered.length,
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            itemBuilder: (context, index) {
+              final surah = filtered[index];
 
-              final filtered = q.isEmpty
-                  ? surahs
-                  : surahs.where((s) {
-                      final t = s.nameTransliteration.toLowerCase();
-                      final e = s.nameEnglish.toLowerCase();
-                      final n = s.id.toString();
-                      return t.contains(q) || e.contains(q) || n == q;
-                    }).toList();
+              final realSurahIndex = surahs.indexWhere((s) => s.id == surah.id);
 
-              if (q.isNotEmpty && filtered.isEmpty) {
-                return const Center(child: Text('No surahs found'));
-              }
-
-              return ListView.builder(
-                itemCount: filtered.length,
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                itemBuilder: (context, index) {
-                  final surah = filtered[index];
-
-                  final realSurahIndex = surahs.indexWhere(
-                    (s) => s.id == surah.id,
-                  );
-
-                  return SurahTile(
-                    surah: surah,
-                    surahs: surahs,
-                    index: realSurahIndex,
-                  );
-                },
+              return SurahTile(
+                surah: surah,
+                surahs: surahs,
+                index: realSurahIndex,
               );
             },
-            error: (error, stackTrace) => const Text('Error'),
-            loading: () => const Center(child: CircularProgressIndicator()),
           ),
         ),
       ),

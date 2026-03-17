@@ -7,9 +7,9 @@ class GetSurahsUseCase {
   GetSurahsUseCase({required this.repository});
 
   /// Fetch all Surahs
-  Future<List<Surah>> execute() async {
+  List<Surah> call() {
     try {
-      final surahs = await repository.getSurahs();
+      final surahs = repository.getSurahs();
       return surahs;
     } catch (e) {
       // Rethrow, UI will handle errors
