@@ -43,11 +43,10 @@ class _AyahTileState extends ConsumerState<AyahTile> {
         .getVerse(widget.surah.id, ayahNumber, verseEndSymbol: true)
         .replaceAll('۝', ''); //my font automatically adds it
 
-    final cleanedAyah =
-        (ayah.contains('بِسْمِ اللَّهِ') && widget.surah.id != 1)
+    final cleanedAyah = (ayah.contains('بِسْمِ اللَّهِ') && surah.id != 1)
         ? ayah
               .replaceFirst(
-                RegExp(r'بِسْمِ اللَّهِ.*?الرَّحْمَ.?نِ الرَّحِيمِ'),
+                RegExp(r'بِسْمِ اللَّهِ الرَّحْم[^\s]*نِ الرَّحِيمِ'),
                 '',
               )
               .trim()

@@ -109,8 +109,10 @@ class SurahTile extends ConsumerWidget {
             const Spacer(),
 
             Text(
-              cleanAyah(surah.nameArabic.toString()),
-              style: AppTextStyles.quranAyah,
+              cleanAyah(surah.nameArabic),
+              style: AppTextStyles.quranAyah.copyWith(
+                color: theme.colorScheme.onSurface,
+              ),
             ),
           ],
         ),

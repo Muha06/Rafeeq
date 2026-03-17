@@ -480,7 +480,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
                         );
                       }
 
-                      return AyahTile(surah: surah, ayahNumber: index + 1);
+                      return AyahTile(surah: surah, ayahNumber: index);
                     },
                   );
                 },

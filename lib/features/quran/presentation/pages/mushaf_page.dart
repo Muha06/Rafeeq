@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/themes/app_text_style.dart';
+import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:riverpod/legacy.dart';
 
@@ -11,10 +12,30 @@ final highlightedAyahProvider = StateProvider<int?>((ref) {
   return null;
 });
 
+String cleanAyahText(String ayah, int surahId) {
+  // Remove Basmala if not Surah 1
+  String cleaned = (ayah.contains('بِسْمِ اللَّهِ') && surahId != 1)
+      ? ayah.replaceFirst(
+          RegExp(r'بِسْمِ اللَّهِ الرَّحْم[^\s]*نِ الرَّحِيمِ'),
+          '',
+        )
+      : ayah;
+
+  // Remove extra symbols
+  cleaned = cleaned.replaceAll('۝', '').trim();
+  return cleaned;
+}
+
 class MushafPageUI extends ConsumerWidget {
   final List<String> versesList;
   final int page;
-  const MushafPageUI({super.key, required this.versesList, required this.page});
+  final Surah surah;
+  const MushafPageUI({
+    super.key,
+    required this.versesList,
+    required this.page,
+    required this.surah,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -45,15 +66,7 @@ class MushafPageUI extends ConsumerWidget {
                 children: [
                   for (var v in versesList) ...[
                     TextSpan(
-                      text: v
-                          .replaceFirst(
-                            'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ',
-                            '',
-                          )
-                          .replaceAll(
-                            '۝',
-                            '',
-                          ), //Uthmani font unnecessarily adds it
+                      text: cleanAyahText(v, surah.id),
                       style: baseStyle.copyWith(
                         backgroundColor:
                             highlightedAyah != null &&
