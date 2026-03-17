@@ -2,27 +2,25 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/themes/app_text_style.dart';
-import 'package:rafeeq/features/quran/presentation/riverpod/current_reading_provider.dart';
 import 'package:riverpod/legacy.dart';
 
 // Track the currently highlighted ayah
 final highlightedAyahProvider = StateProvider<int?>((ref) => null);
 
-
-
 class MushafPageUI extends ConsumerWidget {
-  final int pageNumber;
-  const MushafPageUI({super.key, required this.pageNumber});
+  final List<String> versesList;
+  const MushafPageUI({super.key, required this.versesList});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final highlightedAyah = ref.watch(highlightedAyahProvider);
-    final versesList = ref.watch(pageVersesProvider);
+    final cs = Theme.of(context).colorScheme;
 
     final baseStyle = AppTextStyles.quranAyah.copyWith(
       fontSize: 32,
+      fontFamily: 'Hafs',
       height: 1.6,
-      color: Colors.black,
+      color: cs.onSurface,
     );
 
     return Padding(
@@ -37,12 +35,12 @@ class MushafPageUI extends ConsumerWidget {
             children: [
               for (var v in versesList) ...[
                 TextSpan(
-                  text: '$v ',
+                  text: '$v '.replaceAll('۝', ''),
                   style: baseStyle.copyWith(
                     backgroundColor:
                         highlightedAyah != null &&
                             v.contains('($highlightedAyah)')
-                        ? Colors.yellow.withOpacity(0.3)
+                        ? Colors.yellow.withAlpha(60)
                         : null,
                   ),
                   recognizer: LongPressGestureRecognizer()

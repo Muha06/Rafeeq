@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:quran/quran_text.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
 import 'package:rafeeq/core/themes/app_text_style.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/quran/domain/entities/ayah.dart';
+import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/ayah_of_the_day.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/ayah_share_cotroller_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/quran_bookmark.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/Quran/execution_providers.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
+import 'package:quran/quran.dart' as quran;
 
 class AyahTile extends ConsumerStatefulWidget {
   final Ayah ayah;
-
-  const AyahTile({super.key, required this.ayah});
+  final Surah surah;
+  const AyahTile({super.key, required this.ayah, required this.surah});
 
   @override
   ConsumerState<AyahTile> createState() => _AyahTileState();
@@ -72,7 +75,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
 
                         AppSnackBar.showSimple(
                           context: context,
-                           message: 'Bookmark removed ❌',
+                          message: 'Bookmark removed ❌',
                           duration: const Duration(seconds: 3),
                         );
 
@@ -98,7 +101,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
 
                       AppSnackBar.showSimple(
                         context: context,
-                         message: 'Bookmark added ✅',
+                        message: 'Bookmark added ✅',
                         duration: const Duration(seconds: 3),
                       );
                     } catch (e) {
@@ -161,10 +164,18 @@ class _AyahTileState extends ConsumerState<AyahTile> {
               Align(
                 alignment: Alignment.centerRight,
                 child: Text(
-                  cleanAyah(widget.ayah.textArabic),
+                  quran
+                      .getVerse(
+                        widget.surah.id,
+                        widget.ayah.ayahNumber,
+                        verseEndSymbol: true,
+                      )
+                      .replaceAll('۝', ''),
                   textDirection: TextDirection.rtl,
                   style: AppTextStyles.quranAyah.copyWith(
                     fontSize: arabicFontSize,
+                    fontFamily: 'Uthmani2',
+                    color: cs.onSurface,
                   ),
                 ),
               ),

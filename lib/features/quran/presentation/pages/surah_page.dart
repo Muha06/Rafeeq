@@ -400,10 +400,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
               ),
               onPressed: () async {
                 // showAyahLogSheet(context, ref);
-                AppNav.push(
-                  context,
-                  const MushafScrollView(startPage: 1, endPage: 604),
-                );
+                AppNav.push(context, MushafScrollView(surah: surah));
               },
             ),
             IconButton(
@@ -479,7 +476,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
                   );
                 }
 
-                return AyahTile(ayah: ayahs[index - 1]);
+                return AyahTile(ayah: ayahs[index - 1], surah: surah);
               },
             );
           },

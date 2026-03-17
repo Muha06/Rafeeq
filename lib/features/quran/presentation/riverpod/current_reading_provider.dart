@@ -1,6 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod/legacy.dart';
-import 'package:quran/quran.dart' as quran;
+ import 'package:riverpod/legacy.dart';
 
 class QuranReadingPosition {
   final int surahId;
@@ -26,13 +24,4 @@ final currentReadingProvider = StateProvider<QuranReadingPosition?>(
   (ref) => null,
 );
 
-// Provider that returns all verses as strings
-final pageVersesProvider = Provider<List<String>>((ref) {
-  final page = ref.watch(currentReadingProvider)?.page;
 
-  return quran.getVersesTextByPage(
-    page ?? 1,
-    verseEndSymbol: true,
-    surahSeperator: quran.SurahSeperator.none,
-  );
-});
