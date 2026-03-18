@@ -26,6 +26,11 @@ String cleanAyahText(String ayah, int surahId) {
   return cleaned;
 }
 
+
+
+
+
+
 class MushafPageUI extends ConsumerWidget {
   final List<String> versesList;
   final int page;

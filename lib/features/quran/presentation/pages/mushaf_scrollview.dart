@@ -1,137 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/core/themes/app_text_style.dart';
-import 'package:rafeeq/features/quran/domain/entities/surah.dart';
-import 'package:rafeeq/features/quran/presentation/pages/mushaf_page.dart';
-import 'package:quran/quran.dart' as quran;
 
-class SurahPages {
-  final int startPage;
-  final int endPage;
+class MushafPageView extends ConsumerStatefulWidget {
+  final int page;
 
-  SurahPages({required this.startPage, required this.endPage});
-
-  int get totalPages => endPage - startPage + 1;
-}
-
-SurahPages getSurahPages(int surahNumber) {
-  const firstVerse = 1;
-  final lastVerse = quran.getVerseCount(surahNumber);
-
-  final startPage = quran.getPageNumber(surahNumber, firstVerse);
-  debugPrint("Start page: $startPage");
-
-  final endPage = quran.getPageNumber(surahNumber, lastVerse);
-  debugPrint("End page: $endPage");
-
-  return SurahPages(startPage: startPage, endPage: endPage);
-}
-
-// Provider that returns all verses as strings
-final pageVersesProvider = Provider.family<List<List<String>>, SurahPages>((
-  ref,
-  pages,
-) {
-  final allPages = <List<String>>[];
-
-  for (int page = pages.startPage; page <= pages.endPage; page++) {
-    final verses = quran.getVersesTextByPage(
-      page,
-      verseEndSymbol: true,
-      surahSeperator: quran.SurahSeperator.none,
-    );
-
-    allPages.add(verses);
-  }
-
-  return allPages;
-});
-
-class MushafScrollView extends ConsumerWidget {
-  final Surah surah;
-
-  const MushafScrollView({super.key, required this.surah});
+  const MushafPageView({super.key, required this.page});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final pages = getSurahPages(
-      surah.id,
-    ); //get range of pages surah in eg: 1 - 49
-
-    final pagesVerses = ref.watch(pageVersesProvider(pages));
-
-    return Scrollbar(
-      interactive: true,
-      thickness: 14,
-      child: ListView.builder(
-        itemCount: pagesVerses.length + 1,
-        itemBuilder: (context, index) {
-          if (index == 0) {
-            return PageSurahNameCard(surah: surah);
-          }
-          final pageVerses = pagesVerses[index - 1];
-
-          return MushafPageUI(
-            versesList: pageVerses,
-            surah: surah,
-            page: pages.startPage + index - 1,
-          );
-        },
-      ),
-    );
-  }
+  ConsumerState<MushafPageView> createState() => _MushafPageViewState();
 }
 
-class PageSurahNameCard extends StatelessWidget {
-  const PageSurahNameCard({super.key, required this.surah});
+class _MushafPageViewState extends ConsumerState<MushafPageView> {
+  late PageController pageController;
 
-  final Surah surah;
+  @override
+  void initState() {
+    super.initState();
+    pageController = PageController(initialPage: widget.page - 1);
+  }
+
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
+  }
+
+  void onPageChanged(int index) {
+    final currentPage = index + 1;
+    print("User swiped to page $currentPage");
+
+    // Here you can check which Surah is on this page
+    // Example:
+    // final newSurah = getSurahForPage(currentPage);
+    // update your state or Riverpod provider
+  }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final cs = theme.colorScheme;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Center(
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            Image.asset(
-              'assets/images/quran/surah_header.png',
-              color: cs.onSurface,
-              width: double.infinity,
-              fit: BoxFit.contain,
-            ),
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 48),
-              child: Row(
-                children: [
-                  Text(
-                    surah.nameTransliteration,
-                    textAlign: TextAlign.center,
-                    style: theme.textTheme.labelLarge,
-                  ),
-
-                  const Spacer(),
-                  Text('~', style: theme.textTheme.titleLarge),
-
-                  const Spacer(),
-
-                  Text(
-                    surah.nameArabic,
-                    style: AppTextStyles.quranAyah.copyWith(
-                      color: cs.onSurface,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+    return PageView.builder(
+      controller: pageController,
+      itemCount: 604,
+      reverse: true,
+      onPageChanged: onPageChanged,
+      itemBuilder: (context, index) {
+        final pageNumber = index + 1; // adjust if reverse
+        return Image.asset(
+          "assets/pages2/page${pageNumber.toString().padLeft(3, '0')}.png",
+          filterQuality: FilterQuality.high,
+        );
+      },
     );
   }
 }

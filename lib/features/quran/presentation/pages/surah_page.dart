@@ -29,6 +29,7 @@ import 'package:rafeeq/features/quran_audio/presentation/providers/surah_audio_p
 import 'package:rafeeq/features/quran_goal/presentation/widgets/log_ayah_bottomsheet.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:quran/quran.dart' as quran;
 
 class FullSurahPage extends ConsumerStatefulWidget {
   final Surah surah;
@@ -308,7 +309,9 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
         .autoScrollEnabled;
 
     final mushafMode = ref.watch(surahSettingsProvider).mushafMode;
+    final page = quran.getPageNumber(surah.id, 1);
 
+    quran.getSurahPages(5);
     return PopScope(
       onPopInvokedWithResult: (didPop, result) async {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -420,7 +423,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
           bottom: appBarBottomDivider(context),
         ),
         body: mushafMode
-            ? MushafScrollView(surah: surah)
+            ? MushafPageView(page: page)
             : ayahsAsync.when(
                 loading: () => const Center(child: CircularProgressIndicator()),
 

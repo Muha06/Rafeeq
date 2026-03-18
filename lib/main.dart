@@ -41,8 +41,12 @@ void main() {
   runZonedGuarded(
     () async {
       // Load env
-      await dotenv.load(fileName: ".env");
-
+      try {
+        await dotenv.load(fileName: ".env");
+      } catch (e) {
+        debugPrint('dotenv failed to load: $e');
+      }
+      
       // Initialize Hive
       await Hive.initFlutter();
 
@@ -56,6 +60,8 @@ void main() {
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       );
+
+      debugPrint('Firebase apps: ${Firebase.apps.length}');
 
       // Flutter errors → Crashlytics
       FlutterError.onError =
@@ -92,7 +98,12 @@ void main() {
       runApp(const ProviderScope(child: MyApp()));
     },
     (error, stack) {
-      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      debugPrint("Error, $stack");
+      try {
+        FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      } catch (_) {
+        debugPrint('Crashlytics not ready yet');
+      }
     },
   );
 }
