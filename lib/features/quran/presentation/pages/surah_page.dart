@@ -310,8 +310,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
 
     final mushafMode = ref.watch(surahSettingsProvider).mushafMode;
     final page = quran.getPageNumber(surah.id, 1);
-
-    quran.getSurahPages(5);
+ 
     return PopScope(
       onPopInvokedWithResult: (didPop, result) async {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
