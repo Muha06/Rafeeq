@@ -106,7 +106,7 @@ class QuranGoalCard extends ConsumerWidget {
                         AppNav.push(
                           context,
                           FullSurahPage(
-                            surah: selectedSurah,
+                            initialSurah: selectedSurah,
                             autoScrollAyah: surahVerse,
                           ),
                         );

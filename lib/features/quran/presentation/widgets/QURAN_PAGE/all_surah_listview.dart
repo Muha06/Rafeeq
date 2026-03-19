@@ -59,7 +59,7 @@ class SurahTile extends ConsumerWidget {
         onTap: () {
           AppNav.push(
             context,
-            FullSurahPage(surah: surah),
+            FullSurahPage(initialSurah: surah),
           ).then((value) => RafeeqAnalytics.logScreenView('surah_page'));
         },
         child: Row(

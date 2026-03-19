@@ -156,7 +156,7 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
         AppNav.push(
           context,
           FullSurahPage(
-            surah: surah,
+            initialSurah: surah,
             autoScrollAyah: widget.lastRead.ayahNumber,
           ),
         );

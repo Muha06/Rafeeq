@@ -12,8 +12,8 @@ import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/quran/domain/entities/last_read_ayah.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
-import 'package:rafeeq/features/quran/presentation/pages/mushaf_scrollview.dart';
-import 'package:rafeeq/features/quran/presentation/riverpod/current_reading_provider.dart';
+import 'package:rafeeq/features/quran/presentation/pages/mushaf_pageview.dart';
+import 'package:rafeeq/features/quran/presentation/riverpod/reading_position_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/fetch_ayah_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/last_read_provider.dart';
@@ -32,10 +32,14 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:quran/quran.dart' as quran;
 
 class FullSurahPage extends ConsumerStatefulWidget {
-  final Surah surah;
+  final Surah initialSurah;
   final int? autoScrollAyah;
 
-  const FullSurahPage({super.key, required this.surah, this.autoScrollAyah});
+  const FullSurahPage({
+    super.key,
+    required this.initialSurah,
+    this.autoScrollAyah,
+  });
 
   @override
   ConsumerState<FullSurahPage> createState() => _FullSurahPageState();
@@ -71,9 +75,17 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
     itemPositionsListener.itemPositions.addListener(_onVisibleAyahsChanged);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      _setInitialReadingPosition();
       _checkLastRead();
-      _autoScrollToAyah();
+      if (widget.autoScrollAyah != null) _jumpToAyah(widget.autoScrollAyah!);
     });
+  }
+
+  void _setInitialReadingPosition() {
+    //set surah & first ayah
+    ref
+        .read(readingPositionProvider.notifier)
+        .update(surahId: widget.initialSurah.id, ayahNumber: 1);
   }
 
   bool _isAtEnd() {
@@ -82,7 +94,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
 
     // Your list has: SurahDetails at index 0 + ayahs
     final lastIndex =
-        widget.surah.versesCount; // because itemCount = versesCount + 1
+        widget.initialSurah.versesCount; // because itemCount = versesCount + 1
 
     final last = positions.where((p) => p.index == lastIndex).toList();
     if (last.isEmpty) return false;
@@ -148,12 +160,6 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
 
   void _toggleAutoScroll() => _autoOn ? _exitAutoScroll() : _startAutoScroll();
 
-  void _autoScrollToAyah() {
-    if (widget.autoScrollAyah != null) {
-      _jumpToAyah(widget.autoScrollAyah!);
-    }
-  }
-
   Future<void> _jumpToAyah(int ayahNumber, {bool suppressSave = false}) async {
     if (suppressSave) _suppressNextSave = true;
 
@@ -162,6 +168,11 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
       duration: const Duration(milliseconds: 600),
       curve: Curves.easeInOut,
     );
+
+    //update reading position provider
+    ref
+        .read(readingPositionProvider.notifier)
+        .update(surahId: widget.initialSurah.id, ayahNumber: ayahNumber);
 
     _suppressNextSave = false;
   }
@@ -191,7 +202,9 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
       return;
     }
 
-    final ayahs = ref.read(ayahsFutureProvider(widget.surah.id)).value;
+    final surah = widget.initialSurah;
+
+    final ayahs = ref.read(ayahsFutureProvider(surah.id)).value;
 
     if (ayahs == null || currentIndex > ayahs.length) {
       _isSaving = false;
@@ -201,44 +214,42 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
     final ayah = ayahs[currentIndex - 1];
     final currentAyahNumber = ayah.ayahNumber;
 
-    ref.read(currentReadingProvider.notifier).state = QuranReadingPosition(
-      surahId: widget.surah.id,
-      ayahNumber: currentAyahNumber,
-      page: ayah.pageNumber ?? 1,
-    );
-
     // Update temporary last read
     if (!_suppressNextSave &&
         currentAyahNumber != _lastSavedAyah &&
         currentAyahNumber > skipInitialAyahs &&
-        currentAyahNumber < (widget.surah.versesCount - 3)) {
+        currentAyahNumber < (surah.versesCount - 3)) {
       temporaryLastReadAyah = LastReadAyah(
-        surahId: widget.surah.id,
+        surahId: surah.id,
         ayahNumber: currentAyahNumber,
-        surahName: widget.surah.nameTransliteration,
-        verseCount: widget.surah.versesCount,
+        surahName: surah.nameTransliteration,
+        verseCount: surah.versesCount,
         updatedAt: DateTime.now(),
       );
 
       _lastSavedAyah = currentAyahNumber;
     }
 
+    //Update reading position
+    ref
+        .read(readingPositionProvider.notifier)
+        .update(surahId: surah.id, ayahNumber: currentAyahNumber);
+
     _isSaving = false;
   }
 
   void _checkLastRead() async {
     final isDark = ref.read(isDarkProvider);
+    final surah = widget.initialSurah;
 
-    final lastRead = ref
-        .read(lastReadRepositoryProvider)
-        .getLastRead(widget.surah.id);
+    final lastRead = ref.read(lastReadRepositoryProvider).getLastRead(surah.id);
 
     if (lastRead == null) return;
     if (widget.autoScrollAyah != null) return; //dont check
 
     if (!mounted) return;
 
-    if (lastRead.surahId == widget.surah.id) {
+    if (lastRead.surahId == surah.id) {
       // Show SnackBar with Go button
       AppSnackBar.showAction(
         context: context,
@@ -247,8 +258,6 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
         actionLabel: 'Go',
         onAction: () async {
           await _jumpToAyah(lastRead.ayahNumber, suppressSave: true);
-
-          // ref.refresh(lastReadAyahsProvider.future); //refresh last read
         },
       );
     }
@@ -297,9 +306,9 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
 
     final theme = Theme.of(context);
     final isDark = ref.watch(isDarkProvider);
-    var surah = widget.surah;
+    final surah = ref.watch(readingPositionProvider.notifier).currentSurah!;
 
-    final surahId = widget.surah.id;
+    final surahId = surah.id;
     final ayahsAsync = ref.watch(ayahsFutureProvider(surahId));
     final surahs = ref.watch(surahsProvider);
 
@@ -308,9 +317,10 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
         .watch(surahSettingsProvider)
         .autoScrollEnabled;
 
+    final readingPos = ref.watch(readingPositionProvider);
     final mushafMode = ref.watch(surahSettingsProvider).mushafMode;
     final page = quran.getPageNumber(surah.id, 1);
- 
+
     return PopScope(
       onPopInvokedWithResult: (didPop, result) async {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -357,7 +367,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
                   onGo: (surahId, ayahNumber) async {
                     final targetSurah = list.firstWhere((s) => s.id == surahId);
 
-                    if (surahId == widget.surah.id) {
+                    if (surahId == surah.id) {
                       // same surah: just scroll
                       await _jumpToAyah(ayahNumber, suppressSave: true);
                       return;
@@ -368,7 +378,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         builder: (_) => FullSurahPage(
-                          surah: targetSurah,
+                          initialSurah: targetSurah,
                           autoScrollAyah: ayahNumber, // ✅ scroll after load
                         ),
                       ),
@@ -383,7 +393,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      "${surah.id}. ${surah.nameTransliteration}",
+                      "${readingPos?.surahId}. ${surah.nameTransliteration}",
                       style: theme.textTheme.titleLarge!.copyWith(fontSize: 16),
                     ),
                     const SizedBox(width: 6),

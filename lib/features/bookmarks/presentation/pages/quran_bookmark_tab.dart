@@ -49,7 +49,7 @@ class QuranBookmarksTab extends ConsumerWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) => FullSurahPage(
-                          surah: bookMarkSurah,
+                          initialSurah: bookMarkSurah,
                           autoScrollAyah: bookMark.ayahNumber,
                         ),
                       ),

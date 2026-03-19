@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/features/quran/presentation/riverpod/reading_position_provider.dart';
 
 class MushafPageView extends ConsumerStatefulWidget {
   final int page;
@@ -26,17 +27,17 @@ class _MushafPageViewState extends ConsumerState<MushafPageView> {
   }
 
   void onPageChanged(int index) {
-    final currentPage = index + 1;
-    print("User swiped to page $currentPage");
+    final newPage = index + 1;
+    debugPrint("User swiped to page $newPage");
 
-    // Here you can check which Surah is on this page
-    // Example:
-    // final newSurah = getSurahForPage(currentPage);
-    // update your state or Riverpod provider
+    //update provider
+    ref.read(readingPositionProvider.notifier).updateFromPage(newPage);
   }
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+
     return PageView.builder(
       controller: pageController,
       itemCount: 604,
@@ -46,6 +47,7 @@ class _MushafPageViewState extends ConsumerState<MushafPageView> {
         final pageNumber = index + 1; // adjust if reverse
         return Image.asset(
           "assets/pages2/page${pageNumber.toString().padLeft(3, '0')}.png",
+          color: cs.onSurface,
           filterQuality: FilterQuality.high,
         );
       },
