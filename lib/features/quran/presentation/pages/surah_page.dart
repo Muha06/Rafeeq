@@ -202,7 +202,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
       return;
     }
 
-    final surah = widget.initialSurah;
+    final surah = ref.read(readingPositionProvider.notifier).currentSurah!;
 
     final ayahs = ref.read(ayahsFutureProvider(surah.id)).value;
 

@@ -1,3 +1,4 @@
+import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quran/quran.dart' as quran;
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
@@ -27,7 +28,12 @@ class ReadingPositionNotifier extends Notifier<ReadingPosition?> {
     final pos = state;
     if (pos == null) return null;
 
-    return ref.read(surahsProvider).firstWhere((s) => s.id == pos.surahId);
+    final surah = ref
+        .read(surahsProvider)
+        .firstWhere((s) => s.id == pos.surahId);
+    debugPrint("Current Surah: ${surah.nameTransliteration}");
+    
+    return surah;
   }
 
   // 🔄 Main update (list mode)
@@ -46,9 +52,12 @@ class ReadingPositionNotifier extends Notifier<ReadingPosition?> {
     // Take the first surah segment on the page
     final firstSegment = segments.first;
 
-    final surah = firstSegment['surah'] as int;
-    final ayah = firstSegment['start'] as int;
+    final surahId = firstSegment['surah'] as int;
+    final ayahNumber = firstSegment['start'] as int;
 
-    state = ReadingPosition(surahId: surah, ayahNumber: ayah);
+    debugPrint("Saving surahId as :$surahId, ayahNumber: $ayahNumber ");
+
+    state = ReadingPosition(surahId: surahId, ayahNumber: ayahNumber);
+    debugPrint("State: ${state?.surahId}, ayahNumber: ${state?.ayahNumber} ");
   }
 }

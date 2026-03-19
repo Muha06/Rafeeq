@@ -32,6 +32,10 @@ class _MushafPageViewState extends ConsumerState<MushafPageView> {
 
     //update provider
     ref.read(readingPositionProvider.notifier).updateFromPage(newPage);
+
+    debugPrint(
+      "${ref.read(readingPositionProvider.notifier).currentSurah?.nameTransliteration}",
+    );
   }
 
   @override
