@@ -13,11 +13,13 @@ class MushafPageView extends ConsumerStatefulWidget {
 
 class _MushafPageViewState extends ConsumerState<MushafPageView> {
   late PageController pageController;
+  int _currentPage = 0;
 
   @override
   void initState() {
     super.initState();
     pageController = PageController(initialPage: widget.page - 1);
+    _currentPage = widget.page;
   }
 
   @override
@@ -30,6 +32,7 @@ class _MushafPageViewState extends ConsumerState<MushafPageView> {
     final newPage = index + 1;
     debugPrint("User swiped to page $newPage");
 
+    _currentPage = newPage;
     //update provider
     ref.read(readingPositionProvider.notifier).updateFromPage(newPage);
 
@@ -41,20 +44,35 @@ class _MushafPageViewState extends ConsumerState<MushafPageView> {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
+    final page = ref.watch(readingPositionProvider)?.page ?? 1;
 
-    return PageView.builder(
-      controller: pageController,
-      itemCount: 604,
-      reverse: true,
-      onPageChanged: onPageChanged,
-      itemBuilder: (context, index) {
-        final pageNumber = index + 1; // adjust if reverse
-        return Image.asset(
-          "assets/pages2/page${pageNumber.toString().padLeft(3, '0')}.png",
-          color: cs.onSurface,
-          filterQuality: FilterQuality.high,
-        );
-      },
+    return Column(
+      children: [
+        Expanded(
+          child: PageView.builder(
+            controller: pageController,
+            itemCount: 604,
+            reverse: true,
+            onPageChanged: onPageChanged,
+            itemBuilder: (context, index) {
+              final pageNumber = index + 1;
+
+              return Image.asset(
+                "assets/pages2/page${pageNumber.toString().padLeft(3, '0')}.png",
+                color: cs.onSurface,
+                filterQuality: FilterQuality.high,
+              );
+            },
+          ),
+        ),
+
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.all(28),
+            child: Text("Page:$_currentPage "),
+          ),
+        ),
+      ],
     );
   }
 }

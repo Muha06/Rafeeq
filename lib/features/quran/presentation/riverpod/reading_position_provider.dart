@@ -31,9 +31,14 @@ class ReadingPositionNotifier extends Notifier<ReadingPosition?> {
     final surah = ref
         .read(surahsProvider)
         .firstWhere((s) => s.id == pos.surahId);
-    debugPrint("Current Surah: ${surah.nameTransliteration}");
-    
+
     return surah;
+  }
+
+  void initIfNeeded(int surahId) {
+    if (state == null) {
+      state = ReadingPosition(surahId: surahId, ayahNumber: 1);
+    }
   }
 
   // 🔄 Main update (list mode)
@@ -41,6 +46,9 @@ class ReadingPositionNotifier extends Notifier<ReadingPosition?> {
     if (state?.surahId == surahId && state?.ayahNumber == ayahNumber) return;
 
     state = ReadingPosition(surahId: surahId, ayahNumber: ayahNumber);
+    debugPrint(
+      "Updating: ${state?.surahId}, ${state?.ayahNumber} page: ${state?.page}",
+    );
   }
 
   // 📖 From mushaf page

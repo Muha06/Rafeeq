@@ -1,12 +1,14 @@
 // ignore_for_file: unused_result
 
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/core/features/audio/domain/entities/audio_state.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
+import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/rafeeq_analytics.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
@@ -57,7 +59,9 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
   final scrollOffsetController = ScrollOffsetController();
   final scrollOffsetListener = ScrollOffsetListener.create();
 
+  int? _currentVisibleAyah;
   int? _lastSavedAyah;
+
   bool _isSaving = false; // Throttle last read saving
   bool _suppressNextSave = false;
   static const int skipInitialAyahs = 2;
@@ -75,7 +79,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
     itemPositionsListener.itemPositions.addListener(_onVisibleAyahsChanged);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _setInitialReadingPosition();
+      _setInitialReadingPosition(); //before first frame
       _checkLastRead();
       if (widget.autoScrollAyah != null) _jumpToAyah(widget.autoScrollAyah!);
     });
@@ -177,7 +181,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
     _suppressNextSave = false;
   }
 
-  // Called whenever visible items change
+  // Called whenever ayahs items change
   void _onVisibleAyahsChanged() async {
     if (_isSaving) return;
     _isSaving = true;
@@ -216,9 +220,10 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
 
     // Update temporary last read
     if (!_suppressNextSave &&
-        currentAyahNumber != _lastSavedAyah &&
-        currentAyahNumber > skipInitialAyahs &&
-        currentAyahNumber < (surah.versesCount - 3)) {
+        currentAyahNumber != _lastSavedAyah && //only different ayah
+        currentAyahNumber < (surah.versesCount - 3) && //skip last ayhs
+        currentAyahNumber > skipInitialAyahs) //skip initial
+    {
       temporaryLastReadAyah = LastReadAyah(
         surahId: surah.id,
         ayahNumber: currentAyahNumber,
@@ -230,10 +235,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
       _lastSavedAyah = currentAyahNumber;
     }
 
-    //Update reading position
-    ref
-        .read(readingPositionProvider.notifier)
-        .update(surahId: surah.id, ayahNumber: currentAyahNumber);
+    _currentVisibleAyah = currentAyahNumber;
 
     _isSaving = false;
   }
@@ -303,10 +305,13 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final readingPos = ref.watch(readingPositionProvider);
+    final surah = readingPos == null
+        ? widget.initialSurah
+        : ref.watch(readingPositionProvider.notifier).currentSurah!;
 
     final theme = Theme.of(context);
     final isDark = ref.watch(isDarkProvider);
-    final surah = ref.watch(readingPositionProvider.notifier).currentSurah!;
 
     final surahId = surah.id;
     final ayahsAsync = ref.watch(ayahsFutureProvider(surahId));
@@ -317,9 +322,8 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
         .watch(surahSettingsProvider)
         .autoScrollEnabled;
 
-    final readingPos = ref.watch(readingPositionProvider);
     final mushafMode = ref.watch(surahSettingsProvider).mushafMode;
-    final page = quran.getPageNumber(surah.id, 1);
+    final mushafPage = quran.getPageNumber(surah.id, _currentVisibleAyah ?? 1);
 
     return PopScope(
       onPopInvokedWithResult: (didPop, result) async {
@@ -375,6 +379,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
 
                     // different surah: navigate
                     if (!mounted) return;
+
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         builder: (_) => FullSurahPage(
@@ -417,9 +422,16 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
             ),
             IconButton(
               onPressed: () {
+                //update provider
+                ref
+                    .read(readingPositionProvider.notifier)
+                    .update(
+                      surahId: surahId,
+                      ayahNumber: _currentVisibleAyah ?? 1,
+                    );
+
                 showModalBottomSheet(
                   context: context,
-                  backgroundColor: theme.bottomSheetTheme.backgroundColor,
                   isScrollControlled: true,
                   showDragHandle: true,
                   builder: (context) =>
@@ -432,7 +444,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
           bottom: appBarBottomDivider(context),
         ),
         body: mushafMode
-            ? MushafPageView(page: page)
+            ? MushafPageView(page: mushafPage ?? 1)
             : ayahsAsync.when(
                 loading: () => const Center(child: CircularProgressIndicator()),
 
