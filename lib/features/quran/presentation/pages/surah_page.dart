@@ -4,7 +4,6 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/core/features/audio/domain/entities/audio_state.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
@@ -81,7 +80,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _setInitialReadingPosition(); //before first frame
       _checkLastRead();
-      if (widget.autoScrollAyah != null) _jumpToAyah(widget.autoScrollAyah!);
+      if (widget.autoScrollAyah != null) jumpToAyah(widget.autoScrollAyah!);
     });
   }
 
@@ -164,7 +163,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
 
   void _toggleAutoScroll() => _autoOn ? _exitAutoScroll() : _startAutoScroll();
 
-  Future<void> _jumpToAyah(int ayahNumber, {bool suppressSave = false}) async {
+  Future<void> jumpToAyah(int ayahNumber, {bool suppressSave = false}) async {
     if (suppressSave) _suppressNextSave = true;
 
     await itemScrollController.scrollTo(
@@ -259,7 +258,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
         message: 'Jump to last-read Ayah ${lastRead.ayahNumber}?',
         actionLabel: 'Go',
         onAction: () async {
-          await _jumpToAyah(lastRead.ayahNumber, suppressSave: true);
+          await jumpToAyah(lastRead.ayahNumber, suppressSave: true);
         },
       );
     }
@@ -312,17 +311,16 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
 
     final theme = Theme.of(context);
     final isDark = ref.watch(isDarkProvider);
+    final isconStyle = PhosphorIconsStyle.light;
 
     final surahId = surah.id;
     final ayahsAsync = ref.watch(ayahsFutureProvider(surahId));
-    final surahs = ref.watch(surahsProvider);
 
     final showAudioControls = ref.watch(showAudioControlsProvider);
     final showSpeedControls = ref
         .watch(surahSettingsProvider)
         .autoScrollEnabled;
 
-    final mushafMode = ref.watch(surahSettingsProvider).mushafMode;
     final mushafPage = quran.getPageNumber(surah.id, _currentVisibleAyah ?? 1);
 
     return PopScope(
@@ -356,70 +354,18 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
 
         appBar: AppBar(
           backgroundColor: theme.scaffoldBackgroundColor,
-          title: Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: () {
-                final list = surahs;
-                if (list.isEmpty) return;
+          title: AppbarSurahPicker(jumpToAyah: jumpToAyah),
 
-                showSurahAyahPickerDialog(
-                  context: context,
-                  surahs: list,
-                  initialSurahIndex: surah.id - 1,
-                  initialAyahIndex: 0,
-                  onGo: (surahId, ayahNumber) async {
-                    final targetSurah = list.firstWhere((s) => s.id == surahId);
-
-                    if (surahId == surah.id) {
-                      // same surah: just scroll
-                      await _jumpToAyah(ayahNumber, suppressSave: true);
-                      return;
-                    }
-
-                    // different surah: navigate
-                    if (!mounted) return;
-
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (_) => FullSurahPage(
-                          initialSurah: targetSurah,
-                          autoScrollAyah: ayahNumber, // ✅ scroll after load
-                        ),
-                      ),
-                    );
-                  },
-                );
-              },
-              borderRadius: BorderRadius.circular(10),
-              child: SizedBox(
-                height: kToolbarHeight, // fills AppBar height
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      "${readingPos?.surahId}. ${surah.nameTransliteration}",
-                      style: theme.textTheme.titleLarge!.copyWith(fontSize: 16),
-                    ),
-                    const SizedBox(width: 6),
-                    const FaIcon(FontAwesomeIcons.chevronDown, size: 16),
-                  ],
-                ),
-              ),
-            ),
-          ),
           actions: [
+            //Ayah log
             IconButton(
-              icon: PhosphorIcon(PhosphorIcons.floppyDisk()),
-              style: theme.textButtonTheme.style!.copyWith(
-                foregroundColor: WidgetStatePropertyAll(
-                  theme.colorScheme.onSurface,
-                ),
-              ),
+              icon: PhosphorIcon(PhosphorIcons.floppyDisk(isconStyle)),
               onPressed: () async {
                 showAyahLogSheet(context, ref);
               },
             ),
+
+            //Mushaf mode
             IconButton(
               onPressed: () {
                 //update provider
@@ -430,6 +376,28 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
                       ayahNumber: _currentVisibleAyah ?? 1,
                     );
 
+                final page = AppNav.push(
+                  context,
+                  MushafPageView(
+                    page: mushafPage,
+                    surah: surah,
+                    jumpToAyah: jumpToAyah,
+                  ),
+                );
+
+                final ayahNumber = ref
+                    .read(readingPositionProvider)
+                    ?.ayahNumber;
+                    
+                jumpToAyah(ayahNumber ?? 1);
+              },
+              visualDensity: VisualDensity.compact,
+              icon: PhosphorIcon(PhosphorIcons.bookOpenText(isconStyle)),
+            ),
+
+            //Surah settings
+            IconButton(
+              onPressed: () {
                 showModalBottomSheet(
                   context: context,
                   isScrollControlled: true,
@@ -438,78 +406,144 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
                       SurahSettingsSheet(onToggleAutoScroll: _toggleAutoScroll),
                 );
               },
-              icon: PhosphorIcon(PhosphorIcons.gear()),
+              icon: PhosphorIcon(PhosphorIcons.gear(isconStyle)),
             ),
           ],
           bottom: appBarBottomDivider(context),
         ),
-        body: mushafMode
-            ? MushafPageView(page: mushafPage ?? 1)
-            : ayahsAsync.when(
-                loading: () => const Center(child: CircularProgressIndicator()),
+        body: ayahsAsync.when(
+          loading: () => const Center(child: CircularProgressIndicator()),
 
-                error: (e, _) => Center(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
+          error: (e, _) => Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.cloud_off_sharp, size: 120),
+                Text(
+                  'Failed to load surahs.\n Please try again',
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.titleMedium,
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    ref.invalidate(ayahsFutureProvider(surahId));
+                  },
+                  child: const Text('Refresh'),
+                ),
+              ],
+            ),
+          ),
+
+          data: (ayahs) {
+            return ScrollablePositionedList.builder(
+              itemCount: ayahs.length + 1,
+              itemScrollController: itemScrollController,
+              itemPositionsListener: itemPositionsListener,
+              scrollOffsetController: scrollOffsetController,
+              scrollOffsetListener: scrollOffsetListener,
+
+              itemBuilder: (context, index) {
+                if (index == 0) {
+                  return Column(
                     children: [
-                      const Icon(Icons.cloud_off_sharp, size: 120),
-                      Text(
-                        'Failed to load surahs.\n Please try again',
-                        textAlign: TextAlign.center,
-                        style: theme.textTheme.titleMedium,
-                      ),
-                      const SizedBox(height: 16),
-                      ElevatedButton(
-                        onPressed: () {
-                          ref.invalidate(ayahsFutureProvider(surahId));
+                      SurahDetails(surah: surah, isDark: isDark),
+                      const SizedBox(height: 8),
+
+                      PlayFullSurahBtn(
+                        onPlay: () async {
+                          playSurahAudio(
+                            ref: ref,
+                            surahId: surahId,
+                            surahName: surah.nameTransliteration,
+                          );
+
+                          await RafeeqAnalytics.logFeature("Play-surah-audio");
                         },
-                        child: const Text('Refresh'),
                       ),
                     ],
-                  ),
-                ),
+                  );
+                }
 
-                data: (ayahs) {
-                  return ScrollablePositionedList.builder(
-                    itemCount: ayahs.length + 1,
+                return AyahTile(surah: surah, ayahNumber: index);
+              },
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
 
-                    itemScrollController: itemScrollController,
-                    itemPositionsListener: itemPositionsListener,
-                    scrollOffsetController: scrollOffsetController,
-                    scrollOffsetListener: scrollOffsetListener,
+class AppbarSurahPicker extends ConsumerWidget {
+  const AppbarSurahPicker({super.key, required this.jumpToAyah});
 
-                    itemBuilder: (context, index) {
-                      if (index == 0) {
-                        return Column(
-                          children: [
-                            SurahDetails(surah: surah, isDark: isDark),
-                            const SizedBox(height: 8),
+  final Function(int ayahNumber, {bool suppressSave}) jumpToAyah;
 
-                            PlayFullSurahBtn(
-                              onPlay: () async {
-                                playSurahAudio(
-                                  ref: ref,
-                                  surahId: surahId,
-                                  surahName: surah.nameTransliteration,
-                                );
+  @override
+  Widget build(BuildContext context, ref) {
+    final readingPos = ref.watch(readingPositionProvider);
+    final currentSurahId = readingPos?.surahId ?? 1;
 
-                                await RafeeqAnalytics.logFeature(
-                                  "Play-surah-audio",
-                                );
-                              },
-                            ),
-                          ],
-                        );
-                      }
+    final theme = Theme.of(context);
 
-                      return AyahTile(surah: surah, ayahNumber: index);
-                    },
+    return Consumer(
+      builder: (context, ref, child) {
+        final surahs = ref.watch(surahsProvider);
+        final surah = surahs.firstWhere((s) => s.id == currentSurahId);
+
+        return Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () {
+              if (surahs.isEmpty) return;
+
+              showSurahAyahPickerDialog(
+                context: context,
+                surahs: surahs,
+                initialSurahIndex: surah.id - 1,
+                initialAyahIndex: 0,
+                onGo: (surahId, ayahNumber) async {
+                  if (surahId == surah.id) {
+                    // same surah: just scroll
+                    await jumpToAyah(ayahNumber, suppressSave: true);
+                    return;
+                  }
+
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (_) => FullSurahPage(
+                        initialSurah: surah,
+                        autoScrollAyah: ayahNumber, // ✅ scroll after load
+                      ),
+                    ),
                   );
                 },
+              );
+            },
+            borderRadius: BorderRadius.circular(10),
+            child: SizedBox(
+              height: kToolbarHeight, // fills AppBar height
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "${readingPos?.surahId}. ${surah.nameTransliteration}",
+                    style: theme.textTheme.titleLarge!.copyWith(fontSize: 16),
+                  ),
+                  const SizedBox(width: 6),
+
+                  PhosphorIcon(
+                    PhosphorIcons.caretDown(PhosphorIconsStyle.light),
+                  ),
+                ],
               ),
-      ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
