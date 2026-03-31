@@ -23,63 +23,71 @@ class AdhkarReminderCard extends ConsumerWidget {
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 14.0),
-      child: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(14),
-              color: cs.surface,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    isMorning ? "Morning Adhkār" : 'Evening Adhkar',
-                    style: theme.textTheme.labelLarge,
-                  ),
+      child: GestureDetector(
+        onTap: () {
+          //TODO: Navigate to Morining / Evening adhkar page
+        },
+        child: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(14),
+                color: cs.surface,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 16,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      isMorning ? "Morning Adhkār" : 'Evening Adhkar',
+                      style: theme.textTheme.labelLarge,
+                    ),
 
-                  const SizedBox(height: 10),
-                  Text(
-                    isMorning ? morningMsg : eveningMsg,
-                    style: theme.textTheme.bodyMedium!,
-                  ),
-                  const SizedBox(height: 14),
+                    const SizedBox(height: 10),
+                    Text(
+                      isMorning ? morningMsg : eveningMsg,
+                      style: theme.textTheme.bodyMedium!,
+                    ),
+                    const SizedBox(height: 14),
 
-                  //Actions
-                  Row(
-                    children: [
-                      AudioControlsChip(isMorning: isMorning),
+                    //Actions
+                    Row(
+                      children: [
+                        AudioControlsChip(isMorning: isMorning),
 
-                      const Spacer(),
+                        const Spacer(),
 
-                      GestureDetector(
-                        child: Text(
-                          'Tap to read >',
-                          style: theme.textTheme.bodySmall!.copyWith(
-                            fontWeight: FontWeight.bold,
-                            height: 1,
-                            color: cs.primary,
+                        GestureDetector(
+                          child: Text(
+                            'Tap to read >',
+                            style: theme.textTheme.bodySmall!.copyWith(
+                              fontWeight: FontWeight.bold,
+                              height: 1,
+                              color: cs.primary,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          Positioned(
-            top: 8,
-            right: 8,
-            child: Image.asset(
-              'assets/images/adhkar/mosque.png',
-              height: 30,
-              width: 30,
+            Positioned(
+              top: 8,
+              right: 8,
+              child: Image.asset(
+                'assets/images/adhkar/mosque.png',
+                height: 30,
+                width: 30,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

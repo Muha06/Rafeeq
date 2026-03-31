@@ -48,7 +48,7 @@ class AyahOfTheDay extends ConsumerWidget {
                 context,
                 MaterialPageRoute(
                   builder: (_) => FullSurahPage(
-                    initialSurah: ayahSurah,
+                    surah: ayahSurah,
                     autoScrollAyah: ayah.ayahNumber,
                   ),
                 ),

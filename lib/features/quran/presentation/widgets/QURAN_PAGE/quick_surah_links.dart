@@ -58,7 +58,7 @@ class SurahLink extends ConsumerWidget {
       padding: const EdgeInsets.only(right: 8.0),
       child: GestureDetector(
         onTap: () {
-          AppNav.push(context, FullSurahPage(initialSurah: surah));
+          AppNav.push(context, FullSurahPage(surah: surah));
         },
         child: Container(
           decoration: BoxDecoration(

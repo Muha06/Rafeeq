@@ -90,9 +90,8 @@ class _FridayReminderCardState extends ConsumerState<FridayReminderCard> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const FullSurahPage(
-                                initialSurah: surahAlKahf,
-                              ),
+                              builder: (context) =>
+                                  const FullSurahPage(surah: surahAlKahf),
                             ),
                           );
                         },
