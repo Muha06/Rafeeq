@@ -10,7 +10,7 @@ import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/rafeeq_analytics.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
- import 'package:rafeeq/features/quran/domain/entities/last_read_ayah.dart';
+import 'package:rafeeq/features/quran/domain/entities/last_read_ayah.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/quran/presentation/pages/mushaf_pageview.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/fetch_ayah_provider.dart';
@@ -40,11 +40,7 @@ class FullSurahPage extends ConsumerStatefulWidget {
   ConsumerState<FullSurahPage> createState() => _FullSurahPageState();
 }
 
-class _FullSurahPageState extends ConsumerState<FullSurahPage>
-    with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
-
+class _FullSurahPageState extends ConsumerState<FullSurahPage> {
   // ScrollablePositionedList controllers
   final ItemScrollController itemScrollController = ItemScrollController();
   final ItemPositionsListener itemPositionsListener =
@@ -290,8 +286,6 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-
     final surahId = widget.surah.id;
 
     final theme = Theme.of(context);
