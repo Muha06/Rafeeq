@@ -57,6 +57,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
   LastReadAyah? temporaryLastReadAyah;
 
   Timer? _autoTimer;
+  Timer? _lastReadDebounce;
   bool _autoOn = false; //whether ticker is running or paused
 
   bool _autoTickBusy = false;
@@ -66,7 +67,10 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
     super.initState();
 
     itemPositionsListener.itemPositions.addListener(_onVisibleAyahsChanged);
-    // _initializeSurah();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _handleInitialNavigation();
+    });
   }
 
   Surah get surah {
@@ -107,7 +111,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
       if (_autoTickBusy) return; // prevent overlapping animations
       _autoTickBusy = true;
 
-      // ✅ stop if last item is already visible
+      // stop if last item is already visible
       if (_isAtEnd()) {
         _exitAutoScroll();
         _autoTickBusy = false;
@@ -150,7 +154,10 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
   Future<void> jumpToAyah(int ayahNumber, {bool suppressSave = false}) async {
     if (!itemScrollController.isAttached) return;
 
-    if (suppressSave) _suppressNextSave = true;
+    if (suppressSave) {
+      _suppressNextSave = true;
+      _lastReadDebounce?.cancel(); // cancel any pending save
+    }
 
     await itemScrollController.scrollTo(
       index: ayahNumber,
@@ -161,7 +168,9 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
     _suppressNextSave = false;
   }
 
-  // Called whenever ayahs items change
+  /// Called whenever ayahs items change
+  /// Determines currently visible ayah and updates temporary last read
+  /// Throttled to prevent excessive writes
   void _onVisibleAyahsChanged() async {
     if (_isSaving) return;
     _isSaving = true;
@@ -186,36 +195,52 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
       return;
     }
 
-    final ayahs = ref.read(ayahsProvider(surah.id)).value;
-
-    if (ayahs == null || currentIndex > ayahs.length) {
-      _isSaving = false;
-      return;
-    }
-
-    final ayah = ayahs[currentIndex - 1];
-    final currentAyahNumber = ayah.ayahNumber;
-
     // Update temporary last read
     if (!_suppressNextSave &&
-        currentAyahNumber != _lastSavedAyah && //only different ayah
-        currentAyahNumber < (surah.versesCount - 3) && //skip last ayhs
-        currentAyahNumber > skipInitialAyahs) //skip initial
+        currentIndex != _lastSavedAyah && //only different ayah
+        currentIndex < (surah.versesCount - 3) && //skip last ayhs
+        currentIndex > skipInitialAyahs) //skip initial
     {
       temporaryLastReadAyah = LastReadAyah(
         surahId: surah.id,
-        ayahNumber: currentAyahNumber,
+        ayahNumber: currentIndex,
         surahName: surah.nameTransliteration,
         verseCount: surah.versesCount,
         updatedAt: DateTime.now(),
       );
 
-      _lastSavedAyah = currentAyahNumber;
+      _lastSavedAyah = currentIndex;
+      _scheduleLastReadSave();
     }
 
-    _currentVisibleAyah = currentAyahNumber;
+    _currentVisibleAyah = currentIndex;
 
     _isSaving = false;
+  }
+
+  void saveLastRead() {
+    if (temporaryLastReadAyah != null) {
+      ref.read(lastReadRepositoryProvider).saveLastRead(temporaryLastReadAyah!);
+    }
+  }
+
+  void _scheduleLastReadSave() {
+    _lastReadDebounce?.cancel();
+
+    _lastReadDebounce = Timer(const Duration(seconds: 2), () {
+      if (!mounted) return;
+      saveLastRead(); //save last read after user stops scrolling for 2 seconds
+      ref.refresh(lastReadAyahsProvider);
+    });
+  }
+
+  Future<void> _handleInitialNavigation() async {
+    if (widget.autoScrollAyah != null) {
+      await jumpToAyah(widget.autoScrollAyah!, suppressSave: true);
+      return;
+    }
+
+    _checkLastRead();
   }
 
   void _checkLastRead() async {
@@ -223,21 +248,20 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
 
     final currentSurah = surah;
 
-    final isDark = ref.read(isDarkProvider);
-
     final lastRead = ref
         .read(lastReadRepositoryProvider)
         .getLastRead(currentSurah.id);
 
-    if (lastRead == null) return;
+    debugPrint(
+      "Last read for Surah ${currentSurah.id}: Ayah ${lastRead?.ayahNumber}",
+    );
 
-    if (!mounted) return;
+    if (lastRead == null || !mounted) return;
 
     if (lastRead.surahId == currentSurah.id) {
       // Show SnackBar with Go button
       AppSnackBar.showAction(
         context: context,
-        isDark: isDark,
         message: 'Jump to last-read Ayah ${lastRead.ayahNumber}?',
         actionLabel: 'Go',
         onAction: () async {
@@ -250,6 +274,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
   @override
   void dispose() {
     _autoTimer?.cancel();
+    _lastReadDebounce?.cancel();
     itemPositionsListener.itemPositions.removeListener(_onVisibleAyahsChanged);
 
     super.dispose();
@@ -405,16 +430,6 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
           ),
 
           data: (ayahs) {
-            WidgetsBinding.instance.addPostFrameCallback((_) async {
-              if (!mounted) return;
-
-              _checkLastRead();
-
-              if (widget.autoScrollAyah != null) {
-                await jumpToAyah(widget.autoScrollAyah!, suppressSave: true);
-              }
-            });
-
             return ScrollablePositionedList.builder(
               itemCount: ayahs.length + 1,
               itemScrollController: itemScrollController,
@@ -445,7 +460,11 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
                 }
 
                 final ayah = ayahs[index - 1];
-                return AyahTile(surah: surah, ayah: ayah, ayahNumber: index);
+                return AyahTile(
+                  surahNameTranslit: surah.nameTransliteration,
+                  ayah: ayah,
+                  ayahNumber: index,
+                );
               },
             );
           },

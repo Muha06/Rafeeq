@@ -4,7 +4,6 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/core/themes/app_text_style.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/quran/domain/entities/ayah.dart';
-import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/ayah_of_the_day.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/ayah_share_cotroller_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
@@ -12,15 +11,15 @@ import 'package:rafeeq/features/bookmarks/domain/entities/quran_bookmark.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/Quran/execution_providers.dart';
 
 class AyahTile extends ConsumerStatefulWidget {
-  final Surah surah;
+  final String surahNameTranslit;
   final Ayah ayah;
   final int ayahNumber;
 
   const AyahTile({
     super.key,
     required this.ayahNumber,
+    required this.surahNameTranslit,
     required this.ayah,
-    required this.surah,
   });
 
   @override
@@ -31,21 +30,13 @@ class _AyahTileState extends ConsumerState<AyahTile> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final settings = ref.watch(surahSettingsProvider);
 
-    final surah = widget.surah;
     final ayahNumber = widget.ayahNumber;
 
-    final showTranslation = settings.showTranslation;
-    final arabicFontSize = settings.arabicFontSize;
-    final translationFontSize = settings.translationFontSize;
-
-    final ayahId = '${surah.id}:$ayahNumber';
-    final bookmarkedIds = ref.watch(bookmarkedIdsProvider);
-    final isBookmarked = bookmarkedIds.contains(ayahId);
-    final cs = theme.colorScheme;
-
     final ayah = widget.ayah;
+    final ayahId = '${ayah.surahId}:$ayahNumber';
+
+    final cs = theme.colorScheme;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8),
@@ -63,7 +54,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  '${surah.id}: ${ayahNumber.toString()}',
+                  '${ayah.surahId}: ${ayahNumber.toString()}',
                   textAlign: TextAlign.center,
                   style: theme.textTheme.labelLarge,
                 ),
@@ -91,12 +82,14 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                       }
 
                       // add bookmark
-                      final ayahSurah = ref.read(ayahSurahProvider(surah.id));
+                      final ayahSurah = ref.read(
+                        ayahSurahProvider(ayah.surahId),
+                      );
 
                       if (ayahSurah != null) {
                         final bookmark = QuranBookmarkEntity(
-                          id: '${surah.id}:$ayahNumber',
-                          surahId: surah.id,
+                          id: '${ayah.surahId}:$ayahNumber',
+                          surahId: ayah.surahId,
                           surahEnglishName: ayahSurah.nameTransliteration,
                           ayahNumber: ayahNumber,
                           createdAt: DateTime.now(),
@@ -116,12 +109,20 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                       );
                     }
                   },
-                  icon: PhosphorIcon(
-                    isBookmarked
-                        ? PhosphorIcons.bookBookmark(PhosphorIconsStyle.fill)
-                        : PhosphorIcons.bookBookmark(),
-                    size: 22,
-                    color: isBookmarked ? cs.primary : cs.onSurfaceVariant,
+                  icon: Consumer(
+                    builder: (context, ref, child) {
+                      final bookmarkedIds = ref.watch(bookmarkedIdsProvider);
+                      final isBookmarked = bookmarkedIds.contains(ayahId);
+                      return PhosphorIcon(
+                        isBookmarked
+                            ? PhosphorIcons.bookBookmark(
+                                PhosphorIconsStyle.fill,
+                              )
+                            : PhosphorIcons.bookBookmark(),
+                        size: 22,
+                        color: isBookmarked ? cs.primary : cs.onSurfaceVariant,
+                      );
+                    },
                   ),
                 ),
 
@@ -130,7 +131,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                   builder: (btnCtx) => IconButton(
                     visualDensity: VisualDensity.compact,
                     onPressed: () async {
-                      final surahName = surah.nameTransliteration;
+                      final surahName = widget.surahNameTranslit;
 
                       final controller = ref.read(ayahShareControllerProvider);
 
@@ -138,7 +139,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                         englishText: ayah.textEnglish,
                         arabicText: ayah.textArabic,
                         ayahNumber: ayahNumber,
-                        surahId: surah.id,
+                        surahId: ayah.surahId,
                         surahName: surahName,
                         includeTranslation: ref
                             .read(surahSettingsProvider)
@@ -159,39 +160,49 @@ class _AyahTileState extends ConsumerState<AyahTile> {
 
           const SizedBox(height: 24),
 
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // arabic text (right)
-              Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  ayah.textArabic,
-                  textDirection: TextDirection.rtl,
-                  style: AppTextStyles.quranAyah.copyWith(
-                    fontSize: arabicFontSize,
-                    color: cs.onSurface,
-                  ),
-                ),
-              ),
+          Consumer(
+            builder: (context, ref, child) {
+              final settings = ref.watch(surahSettingsProvider);
 
-              // TRANSLATION
-              if (showTranslation) ...[
-                const SizedBox(height: 20),
-                AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 100),
-                  child: Text(
-                    key: const ValueKey('translation'),
-                    ayah.textEnglish,
-                    textAlign: TextAlign.left,
-                    style: theme.textTheme.bodyMedium!.copyWith(
-                      fontSize: translationFontSize,
+              final showTranslation = settings.showTranslation;
+              final arabicFontSize = settings.arabicFontSize;
+              final translationFontSize = settings.translationFontSize;
+
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // arabic text (right)
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      ayah.textArabic,
+                      textDirection: TextDirection.rtl,
+                      style: AppTextStyles.quranAyah.copyWith(
+                        fontSize: arabicFontSize,
+                        color: cs.onSurface,
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ],
+
+                  // TRANSLATION
+                  if (showTranslation) ...[
+                    const SizedBox(height: 20),
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 100),
+                      child: Text(
+                        key: const ValueKey('translation'),
+                        ayah.textEnglish,
+                        textAlign: TextAlign.left,
+                        style: theme.textTheme.bodyMedium!.copyWith(
+                          fontSize: translationFontSize,
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
+              );
+            },
           ),
         ],
       ),
