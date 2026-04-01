@@ -10,10 +10,10 @@ import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/rafeeq_analytics.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
-import 'package:rafeeq/features/quran/domain/entities/last_read_ayah.dart';
+ import 'package:rafeeq/features/quran/domain/entities/last_read_ayah.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/quran/presentation/pages/mushaf_pageview.dart';
- import 'package:rafeeq/features/quran/presentation/riverpod/fetch_ayah_provider.dart';
+import 'package:rafeeq/features/quran/presentation/riverpod/fetch_ayah_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/last_read_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/show_audio_controls_bar_provider.dart';
@@ -190,7 +190,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
       return;
     }
 
-    final ayahs = ref.read(ayahsFutureProvider(surah.id)).value;
+    final ayahs = ref.read(ayahsProvider(surah.id)).value;
 
     if (ayahs == null || currentIndex > ayahs.length) {
       _isSaving = false;
@@ -298,7 +298,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
     final isDark = ref.watch(isDarkProvider);
     final isconStyle = PhosphorIconsStyle.light;
 
-    final ayahsAsync = ref.watch(ayahsFutureProvider(surahId));
+    final ayahsAsync = ref.watch(ayahsProvider(surahId));
 
     final showAudioControls = ref.watch(showAudioControlsProvider);
     final showSpeedControls = ref
@@ -402,7 +402,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
-                    ref.invalidate(ayahsFutureProvider(surahId));
+                    ref.invalidate(ayahsProvider(surahId));
                   },
                   child: const Text('Refresh'),
                 ),
@@ -450,7 +450,8 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage>
                   );
                 }
 
-                return AyahTile(surah: surah, ayahNumber: index);
+                final ayah = ayahs[index - 1];
+                return AyahTile(surah: surah, ayah: ayah, ayahNumber: index);
               },
             );
           },
@@ -472,14 +473,11 @@ class AppbarSurahPicker extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    // final readingPos = ref.watch(readingPositionProvider);
-    // final currentSurahId = readingPos?.surahId ?? 1;
-
     final theme = Theme.of(context);
 
     return Consumer(
       builder: (context, ref, child) {
-        final surahs = ref.watch(surahsProvider);
+        final surahs = ref.watch(surahsProvider).value ?? [];
 
         return Material(
           color: Colors.transparent,

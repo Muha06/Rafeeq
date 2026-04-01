@@ -3,19 +3,25 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/core/themes/app_text_style.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
+import 'package:rafeeq/features/quran/domain/entities/ayah.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/ayah_of_the_day.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/ayah_share_cotroller_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/quran_bookmark.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/Quran/execution_providers.dart';
-import 'package:quran/quran.dart' as quran;
 
 class AyahTile extends ConsumerStatefulWidget {
   final Surah surah;
+  final Ayah ayah;
   final int ayahNumber;
 
-  const AyahTile({super.key, required this.ayahNumber, required this.surah});
+  const AyahTile({
+    super.key,
+    required this.ayahNumber,
+    required this.ayah,
+    required this.surah,
+  });
 
   @override
   ConsumerState<AyahTile> createState() => _AyahTileState();
@@ -39,20 +45,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
     final isBookmarked = bookmarkedIds.contains(ayahId);
     final cs = theme.colorScheme;
 
-    final ayah = quran
-        .getVerse(widget.surah.id, ayahNumber, verseEndSymbol: true)
-        .replaceAll('۝', ''); //my font automatically adds it
-
-    final cleanedAyah = (ayah.contains('بِسْمِ اللَّهِ') && surah.id != 1)
-        ? ayah
-              .replaceFirst(
-                RegExp(r'بِسْمِ اللَّهِ الرَّحْم[^\s]*نِ الرَّحِيمِ'),
-                '',
-              )
-              .trim()
-        : ayah;
-
-    final ayahTranslation = quran.getVerseTranslation(surah.id, ayahNumber);
+    final ayah = widget.ayah;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8),
@@ -142,8 +135,8 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                       final controller = ref.read(ayahShareControllerProvider);
 
                       final text = controller.buildText(
-                        englishText: ayahTranslation,
-                        arabicText: cleanedAyah,
+                        englishText: ayah.textEnglish,
+                        arabicText: ayah.textArabic,
                         ayahNumber: ayahNumber,
                         surahId: surah.id,
                         surahName: surahName,
@@ -174,7 +167,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
               Align(
                 alignment: Alignment.centerRight,
                 child: Text(
-                  cleanedAyah,
+                  ayah.textArabic,
                   textDirection: TextDirection.rtl,
                   style: AppTextStyles.quranAyah.copyWith(
                     fontSize: arabicFontSize,
@@ -190,8 +183,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                   duration: const Duration(milliseconds: 100),
                   child: Text(
                     key: const ValueKey('translation'),
-                    ayahTranslation,
-
+                    ayah.textEnglish,
                     textAlign: TextAlign.left,
                     style: theme.textTheme.bodyMedium!.copyWith(
                       fontSize: translationFontSize,

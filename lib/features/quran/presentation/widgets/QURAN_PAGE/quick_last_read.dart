@@ -146,7 +146,7 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
 
     return GestureDetector(
       onTap: () {
-        final surahs = ref.read(surahsProvider);
+        final surahs = ref.read(surahsProvider).value ?? [];
         final surah = surahs.firstWhere((s) => s.id == widget.lastRead.surahId);
 
         AppNav.push(

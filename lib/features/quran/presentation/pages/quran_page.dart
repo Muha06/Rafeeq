@@ -91,10 +91,7 @@ class _QuranPageState extends ConsumerState<QuranPage> {
             ),
 
             //Surah listview
-            const SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: 12.0),
-              sliver: AllSurahsList(),
-            ),
+            const SliverToBoxAdapter(child: AllSurahsList()),
           ],
         ),
       ),

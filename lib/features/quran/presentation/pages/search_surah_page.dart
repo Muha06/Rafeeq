@@ -31,7 +31,7 @@ class _SurahSearchPageState extends ConsumerState<SurahSearchPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final surahs = ref.watch(surahsProvider); // <surahs provider
+    final surahs = ref.watch(surahsProvider).value ?? []; // <surahs provider
     final searchSurahText = ref.watch(searchSurahTextProvider);
     final q = searchSurahText.trim().toLowerCase();
 

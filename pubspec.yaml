@@ -60,7 +60,7 @@ dependencies:
   path: ^1.9.1
   quran: ^1.4.1
   quran_pages_with_ayah_detector: ^1.2.0
-  
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -72,7 +72,7 @@ flutter:
     - family: Uthmani
       fonts:
         - asset: assets/fonts/Uthmani.otf
- 
+
     - family: Uthmani2
       fonts:
         - asset: assets/fonts/uthmani_hafs_2.ttf
@@ -98,8 +98,8 @@ flutter:
     - assets/images/onboarding/
     - assets/adhkar/
     - assets/pages2/
+    - assets/db/
     - .env
-
 
 flutter_launcher_icons:
   android: true

@@ -10,27 +10,32 @@ import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provide
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 import 'package:shimmer/shimmer.dart';
 
-class AllSurahsList extends ConsumerStatefulWidget {
+class AllSurahsList extends ConsumerWidget {
   const AllSurahsList({super.key});
 
   @override
-  ConsumerState<AllSurahsList> createState() => _AllSurahsListState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final surahsAsync = ref.watch(surahsProvider);
 
-class _AllSurahsListState extends ConsumerState<AllSurahsList> {
-  @override
-  Widget build(BuildContext context) {
-    final surahs = ref.watch(surahsProvider);
+    return surahsAsync.when(
+      data: (surahs) {
+        if (surahs.isEmpty) {
+          return const Center(child: Text('No surahs found.'));
+        }
 
-    return SliverList.separated(
-      itemCount: surahs.length,
-      separatorBuilder: (context, index) =>
-          Divider(thickness: 1, color: Theme.of(context).dividerColor),
-      itemBuilder: (context, index) {
-        final surah = surahs[index];
+        return ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: surahs.length,
+          itemBuilder: (context, index) {
+            final surah = surahs[index];
 
-        return SurahTile(surah: surah, surahs: surahs, index: index);
+            return SurahTile(surah: surah, surahs: surahs, index: index);
+          },
+        );
       },
+      error: (error, stackTrace) => Text('Error loadng surahs $error'),
+      loading: () => const CircularProgressIndicator(),
     );
   }
 }

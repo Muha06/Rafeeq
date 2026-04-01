@@ -8,7 +8,7 @@ import 'package:rafeeq/features/adhkar/domain/repository/audio_repo.dart';
 import 'package:rafeeq/features/adhkar/domain/repository/repository.dart';
 import 'package:rafeeq/features/adhkar/domain/usecases/get_adhkar_audio_urls.dart';
 import 'package:rafeeq/features/adhkar/domain/usecases/get_adhkars_usecase.dart';
-import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provider.dart';
+import 'package:rafeeq/features/quran/presentation/riverpod/wiring_providers.dart';
 import 'package:riverpod/riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
