@@ -32,38 +32,33 @@ class _MushafPageViewState extends ConsumerState<MushafPageView> {
     super.dispose();
   }
 
-  void onPageChanged(int index) {}
-
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
 
     return Scaffold(
       appBar: AppBar(),
-      body: Expanded(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0),
-          child: PageView.builder(
-            controller: pageController,
-            itemCount: 604,
-            reverse: true,
-            onPageChanged: onPageChanged,
-            itemBuilder: (context, index) {
-              final pageNumber = index + 1;
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        child: PageView.builder(
+          controller: pageController,
+          itemCount: 604,
+          reverse: true,
+          itemBuilder: (context, index) {
+            final pageNumber = index + 1;
 
-              return Column(
-                children: [
-                  Image.asset(
-                    "assets/pages2/page${pageNumber.toString().padLeft(3, '0')}.png",
-                    color: cs.onSurface,
-                    filterQuality: FilterQuality.high,
-                  ),
+            return Column(
+              children: [
+                Image.asset(
+                  "assets/pages2/page${pageNumber.toString().padLeft(3, '0')}.png",
+                  color: cs.onSurface,
+                  filterQuality: FilterQuality.high,
+                ),
 
-                  Text("Page:$pageNumber "),
-                ],
-              );
-            },
-          ),
+                Text("Page:$pageNumber "),
+              ],
+            );
+          },
         ),
       ),
     );

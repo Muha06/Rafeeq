@@ -44,117 +44,123 @@ class _AyahTileState extends ConsumerState<AyahTile> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           //Controls section
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            decoration: BoxDecoration(
-              color: cs.surface,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  '${ayah.surahId}: ${ayahNumber.toString()}',
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.labelLarge,
-                ),
-                const Spacer(),
+          Card(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              decoration: BoxDecoration(
+                color: cs.surface,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    '${ayah.surahId}: ${ayahNumber.toString()}',
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.labelLarge,
+                  ),
+                  const Spacer(),
 
-                IconButton(
-                  visualDensity: VisualDensity.compact,
-                  onPressed: () async {
-                    try {
-                      final isBookmarked = ref.read(
-                        isBookmarkedProvider(ayahId),
-                      );
+                  IconButton(
+                    visualDensity: VisualDensity.compact,
+                    onPressed: () async {
+                      try {
+                        final isBookmarked = ref.read(
+                          isBookmarkedProvider(ayahId),
+                        );
 
-                      if (isBookmarked) {
-                        // remove bookmark
-                        await ref.read(removeQuranBookmarkProvider(ayahId))();
+                        if (isBookmarked) {
+                          // remove bookmark
+                          await ref.read(removeQuranBookmarkProvider(ayahId))();
+
+                          AppSnackBar.showSimple(
+                            context: context,
+                            message: 'Bookmark removed ❌',
+                            duration: const Duration(seconds: 3),
+                          );
+
+                          return;
+                        }
+
+                        // add bookmark
+                        final ayahSurah = ref.read(
+                          ayahSurahProvider(ayah.surahId),
+                        );
+
+                        if (ayahSurah != null) {
+                          final bookmark = QuranBookmarkEntity(
+                            id: '${ayah.surahId}:$ayahNumber',
+                            surahId: ayah.surahId,
+                            surahEnglishName: ayahSurah.nameTransliteration,
+                            ayahNumber: ayahNumber,
+                            createdAt: DateTime.now(),
+                          );
+
+                          await ref.read(addQuranBookmarkProvider(bookmark))();
+                        }
 
                         AppSnackBar.showSimple(
                           context: context,
-                          message: 'Bookmark removed ❌',
+                          message: 'Bookmark added ✅',
                           duration: const Duration(seconds: 3),
                         );
-
-                        return;
-                      }
-
-                      // add bookmark
-                      final ayahSurah = ref.read(
-                        ayahSurahProvider(ayah.surahId),
-                      );
-
-                      if (ayahSurah != null) {
-                        final bookmark = QuranBookmarkEntity(
-                          id: '${ayah.surahId}:$ayahNumber',
-                          surahId: ayah.surahId,
-                          surahEnglishName: ayahSurah.nameTransliteration,
-                          ayahNumber: ayahNumber,
-                          createdAt: DateTime.now(),
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Bookmark failed: $e')),
                         );
-
-                        await ref.read(addQuranBookmarkProvider(bookmark))();
                       }
-
-                      AppSnackBar.showSimple(
-                        context: context,
-                        message: 'Bookmark added ✅',
-                        duration: const Duration(seconds: 3),
-                      );
-                    } catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Bookmark failed: $e')),
-                      );
-                    }
-                  },
-                  icon: Consumer(
-                    builder: (context, ref, child) {
-                      final bookmarkedIds = ref.watch(bookmarkedIdsProvider);
-                      final isBookmarked = bookmarkedIds.contains(ayahId);
-                      return PhosphorIcon(
-                        isBookmarked
-                            ? PhosphorIcons.bookBookmark(
-                                PhosphorIconsStyle.fill,
-                              )
-                            : PhosphorIcons.bookBookmark(),
-                        size: 22,
-                        color: isBookmarked ? cs.primary : cs.onSurfaceVariant,
-                      );
                     },
-                  ),
-                ),
-
-                //share
-                Builder(
-                  builder: (btnCtx) => IconButton(
-                    visualDensity: VisualDensity.compact,
-                    onPressed: () async {
-                      final surahName = widget.surahNameTranslit;
-
-                      final controller = ref.read(ayahShareControllerProvider);
-
-                      final text = controller.buildText(
-                        englishText: ayah.textEnglish,
-                        arabicText: ayah.textArabic,
-                        ayahNumber: ayahNumber,
-                        surahId: ayah.surahId,
-                        surahName: surahName,
-                        includeTranslation: ref
-                            .read(surahSettingsProvider)
-                            .showTranslation,
-                      );
-
-                      await controller.share(context: btnCtx, text: text);
-                    },
-                    icon: PhosphorIcon(
-                      PhosphorIcons.share(),
-                      color: cs.onSurfaceVariant,
+                    icon: Consumer(
+                      builder: (context, ref, child) {
+                        final bookmarkedIds = ref.watch(bookmarkedIdsProvider);
+                        final isBookmarked = bookmarkedIds.contains(ayahId);
+                        return PhosphorIcon(
+                          isBookmarked
+                              ? PhosphorIcons.bookBookmark(
+                                  PhosphorIconsStyle.fill,
+                                )
+                              : PhosphorIcons.bookBookmark(),
+                          size: 22,
+                          color: isBookmarked
+                              ? cs.primary
+                              : cs.onSurfaceVariant,
+                        );
+                      },
                     ),
                   ),
-                ),
-              ],
+
+                  //share
+                  Builder(
+                    builder: (btnCtx) => IconButton(
+                      visualDensity: VisualDensity.compact,
+                      onPressed: () async {
+                        final surahName = widget.surahNameTranslit;
+
+                        final controller = ref.read(
+                          ayahShareControllerProvider,
+                        );
+
+                        final text = controller.buildText(
+                          englishText: ayah.textEnglish,
+                          arabicText: ayah.textArabic,
+                          ayahNumber: ayahNumber,
+                          surahId: ayah.surahId,
+                          surahName: surahName,
+                          includeTranslation: ref
+                              .read(surahSettingsProvider)
+                              .showTranslation,
+                        );
+
+                        await controller.share(context: btnCtx, text: text);
+                      },
+                      icon: PhosphorIcon(
+                        PhosphorIcons.share(),
+                        color: cs.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
 

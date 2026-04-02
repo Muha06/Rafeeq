@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
 import 'package:rafeeq/core/helpers/rafeeq_analytics.dart';
 import 'package:rafeeq/core/themes/app_text_style.dart';
+import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/quran/presentation/pages/surah_page.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provider.dart';
@@ -34,7 +36,17 @@ class AllSurahsList extends ConsumerWidget {
           },
         );
       },
-      error: (error, stackTrace) => Text('Error loadng surahs $error'),
+      error: (error, stackTrace) {
+        RafeeqAnalytics.logError(error.toString(), stack: stackTrace);
+
+        return AppStateView(
+          icon: PhosphorIcons.warningCircle(),
+          title: "Something went wrong",
+          message: "We couldn't load the surahs. Please try again.",
+          buttonText: "Retry",
+          onPressed: () => ref.refresh(surahsProvider),
+        );
+      },
       loading: () => const CircularProgressIndicator(),
     );
   }
@@ -58,7 +70,7 @@ class SurahTile extends ConsumerWidget {
     final isDark = ref.watch(isDarkProvider);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 14),
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {

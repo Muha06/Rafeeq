@@ -43,10 +43,11 @@ class _BookmarkPageState extends ConsumerState<BookmarkPage> {
                   indicatorSize: TabBarIndicatorSize.tab,
                   indicator: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    color: theme.colorScheme.surfaceContainerHighest,
+                    color: theme.colorScheme.primary,
                   ),
-                  labelStyle: const TextStyle(
+                  labelStyle: TextStyle(
                     fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onPrimary,
                     fontSize: 13,
                   ),
                   unselectedLabelStyle: const TextStyle(
@@ -68,56 +69,6 @@ class _BookmarkPageState extends ConsumerState<BookmarkPage> {
               child: TabBarView(
                 children: [QuranBookmarksTab(), AdhkarBookmarksTab()],
               ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class EmptyState extends StatelessWidget {
-  final String subtitle; // Optional smaller message
-  final String buttonText; // CTA button text
-  final VoidCallback onPressed; // CTA action
-  final IconData? icon; // Optional icon to show on top
-
-  const EmptyState({
-    super.key,
-    required this.buttonText,
-    required this.onPressed,
-    required this.subtitle,
-    this.icon,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (icon != null) ...[
-              Icon(icon, size: 64, color: colorScheme.primary),
-              const SizedBox(height: 16),
-            ],
-
-            const SizedBox(height: 8),
-
-            Text(
-              subtitle,
-              textAlign: TextAlign.center,
-              style: theme.textTheme.bodyMedium?.copyWith(),
-            ),
-
-            const SizedBox(height: 24),
-            SizedBox(
-              width: 200,
-              child: TextButton(onPressed: onPressed, child: Text(buttonText)),
             ),
           ],
         ),

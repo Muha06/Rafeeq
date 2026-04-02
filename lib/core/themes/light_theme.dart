@@ -6,23 +6,26 @@ ThemeData appLightThemeData() {
         brightness: Brightness.light,
         primary: AppLightColors.brand,
         onPrimary: Colors.white,
+
+        //  Accent is reserved for subtle highlights, not interactive elements
+        tertiary: AppLightColors.accent,
+
         surface: AppLightColors.surface,
         onSurface: AppLightColors.onSurface,
+
         error: AppLightColors.error,
         onError: Colors.white,
+
         outline: AppLightColors.outline,
       ).copyWith(
-        // Material 3 container ladder
-        surfaceContainerLowest: AppLightColors.canvas, // page bg
-        surfaceContainerLow: AppLightColors.surfaceDim, // sheets / sections
-        surfaceContainer: AppLightColors.surface, // cards
-        surfaceContainerHigh: AppLightColors.surfaceHigh, // elevated containers
-        surfaceContainerHighest:
-            AppLightColors.surfaceHigh, // dialogs/menus (same for now)
+        surfaceContainerLowest: AppLightColors.canvas,
+        surfaceContainerLow: AppLightColors.surfaceDim,
+        surfaceContainer: AppLightColors.surface,
+        surfaceContainerHigh: AppLightColors.surfaceHigh,
+        surfaceContainerHighest: AppLightColors.surfaceHighest,
 
-        outlineVariant:
-            AppLightColors.outlineVariant, // subtle borders/dividers
-        onSurfaceVariant: AppLightColors.onSurface2, // quieter text/icons
+        outlineVariant: AppLightColors.outlineVariant,
+        onSurfaceVariant: AppLightColors.onSurface2,
       );
 
   final base = Typography.material2021().black.apply(fontFamily: 'Manrope');
@@ -67,16 +70,17 @@ ThemeData appLightThemeData() {
 
     cardTheme: CardThemeData(
       color: scheme.surfaceContainer,
+      shadowColor: Colors.black.withAlpha(80),
       elevation: 2,
-      shadowColor: Colors.black.withAlpha(20),
       surfaceTintColor: Colors.transparent,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
     ),
 
     chipTheme: ChipThemeData(
-      backgroundColor: scheme.surfaceContainerHigh,
+      backgroundColor: scheme.primary.withAlpha(48),
       labelStyle: TextStyle(color: scheme.onSurfaceVariant),
       iconTheme: IconThemeData(color: scheme.onSurfaceVariant),
+      padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 0),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(999),
         side: const BorderSide(color: Colors.transparent),
@@ -121,8 +125,8 @@ ThemeData appLightThemeData() {
 
     filledButtonTheme: FilledButtonThemeData(
       style: ButtonStyle(
-        backgroundColor: WidgetStatePropertyAll(scheme.surfaceContainerHigh),
-        foregroundColor: WidgetStatePropertyAll(scheme.primary.withAlpha(210)),
+        backgroundColor: WidgetStatePropertyAll(scheme.primary),
+        foregroundColor: WidgetStatePropertyAll(scheme.onPrimary),
         padding: const WidgetStatePropertyAll(
           EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         ),
@@ -141,13 +145,9 @@ ThemeData appLightThemeData() {
         foregroundColor: scheme.primary,
         iconColor: scheme.primary,
         disabledForegroundColor: scheme.onSurfaceVariant,
-        side: BorderSide(color: scheme.onSurface.withAlpha(100)),
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-        textStyle: TextStyle(
-          fontWeight: FontWeight.w300,
-          fontSize: 14,
-          color: scheme.primary,
-        ),
+        side: BorderSide(color: scheme.onSurfaceVariant, width: 1.5),
+        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
+        textStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
       ),
     ),
 
@@ -265,25 +265,42 @@ ThemeData appLightThemeData() {
 }
 
 class AppLightColors {
-  static const canvas = Colors.white; // background
+  // 🌤️ BACKGROUND (soft warm, not pure white)
+  static const canvas = Color(0xFFFAFAF7);
+  // feels like paper, reduces eye strain
 
-  static const surfaceDim = Color(0xFFE6E6E6); // sections
-  static const surface = Color(0xFFF5F5F5); // cards
+  // 🧱 SURFACES (Material 3 ladder tuned warm)
+  static const surface = Color(0xFFFFFFFF);
+  // main cards (clean white pops on warm bg)
 
-  static const surfaceHigh = Color(0xFFE5E5E5); // elevated containers
-  static const surfaceHighest = Color(0xFFEFEFEF); // dialogs/menus
+  static const surfaceDim = Color(0xFFF1F1ED);
+  // sections / grouped areas
 
-  static const outline = Color(0xFFDADADA);
-  static const outlineVariant = Color(0xFFE9E9E9);
+  static const surfaceHigh = Color(0xFFF7F7F3);
+  // elevated containers (subtle lift)
 
-  static const brand = Color(0xFF1EAE93);
+  static const surfaceHighest = Color(0xFFEEEEEA);
+  // dialogs / menus (slightly separated)
 
-  static const onSurface = Color(0xFF0F1A1C);
-  static const onSurface2 = Color(0xFF506A6D);
+  // ➖ BORDERS / DIVIDERS (soft, not harsh)
+  static const outline = Color(0xFFE3E3DF);
+  static const outlineVariant = Color(0xFFEDEDE8);
 
-  static const error = Color(0xFFE54858);
+  // 🟢 PRIMARY (muted teal, calm & premium)
+  static const brand = Color(0xFF27687e);
 
-  static const switchOn = Color(0xFF1EAE93);
-  static const switchOnBg = Color(0xFFDFF5F2);
-  static const switchRipple = Color(0x1A22C6A6);
+  // 🟡 ACCENT (gold — highlights only, NOT actions)
+  static const accent = Color(0xFFC9A24A);
+
+  // ✍️ TEXT (softer contrast for premium feel)
+  static const onSurface = Color(0xFF1F2A2C);
+  static const onSurface2 = Color(0xFF6B7C7E);
+
+  // ❌ ERROR (slightly softened red)
+  static const error = Color(0xFFD64545);
+
+  // 🔘 SWITCH (aligned with brand)
+  static const switchOn = brand;
+  static const switchOnBg = Color(0xFFDCEEEE);
+  static const switchRipple = Color(0x1A2F6F73);
 }

@@ -10,7 +10,7 @@ import 'package:rafeeq/features/quran_goal/presentation/widgets/edit_goal_sheet.
 import 'package:rafeeq/features/quran_goal/presentation/widgets/monthly_progress_bar.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/weekly_chart.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/weekly_progress_bar.dart';
- 
+
 class QuranGoalStatsPage extends ConsumerWidget {
   const QuranGoalStatsPage({super.key});
 
@@ -93,12 +93,7 @@ class ProgressBars extends StatelessWidget {
             spacing: 0,
             children: bars,
           ),
-          // Row(
-          //   crossAxisAlignment: CrossAxisAlignment.center,
-
-          //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          //   children: bars,
-          // ),
+          
         ],
       ),
     );
@@ -130,16 +125,8 @@ class MyQuranGoalCard extends ConsumerWidget {
               children: [
                 Text("My Goal", style: theme.textTheme.labelLarge),
 
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: cs.primaryContainer.withAlpha(80),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Text(
+                Chip(
+                  label: Text(
                     goal.isActive ? "Goal Active" : "Goal Paused",
                     style: theme.textTheme.bodySmall!.copyWith(
                       color: cs.primary,
@@ -226,17 +213,12 @@ class MyQuranGoalCard extends ConsumerWidget {
                       final updated = ref.read(quranGoalProvider);
                       AppSnackBar.showSimple(
                         context: context,
-                         message: updated.isActive
+                        message: updated.isActive
                             ? "Goal unpaused"
                             : "Goal paused",
                       );
                     },
-                    child: Text(
-                      goal.isActive ? "Pause goal" : "Un pause",
-                      style: theme.textTheme.labelLarge!.copyWith(
-                        color: cs.primary,
-                      ),
-                    ),
+                    child: Text(goal.isActive ? "Pause goal" : "Un pause"),
                   ),
                 ),
               ],

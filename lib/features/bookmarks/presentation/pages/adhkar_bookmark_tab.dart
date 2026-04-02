@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/app/providers/tabs_screen_provider.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
+import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_details_page.dart';
 import 'package:rafeeq/features/adhkar/presentation/riverpod/get_adhkars_provider.dart';
-import 'package:rafeeq/features/bookmarks/presentation/pages/bookmark_page.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/dhikr/dhikr_notifier_provider.dart';
 import 'package:rafeeq/features/bookmarks/widgets/bookmark_tile.dart';
 
@@ -24,11 +24,12 @@ class _AdhkarBookmarksTabState extends ConsumerState<AdhkarBookmarksTab> {
 
     return bookMarks.isEmpty
         ? Center(
-            child: EmptyState(
+            child: AppStateView(
               icon: PhosphorIcons.handsPraying(),
-              subtitle:
+              title: 'No Bookmarks',
+              message:
                   "You haven't bookmarked any Dhikr yet. bookmark your best Adhkars to find them instantly.",
-              buttonText: 'Explore Adhkars',
+              buttonText: "Explore Adhkars",
               onPressed: () {
                 ref.read(tabsScreenIndexProvider.notifier).state = 2;
               },
@@ -55,7 +56,7 @@ class _AdhkarBookmarksTabState extends ConsumerState<AdhkarBookmarksTab> {
                   final dhikr = adhkars.firstWhere(
                     (dhikr) => dhikr.id == bookMark.dhikrId,
                   );
-                  
+
                   if (!context.mounted) return;
 
                   AppNav.push(

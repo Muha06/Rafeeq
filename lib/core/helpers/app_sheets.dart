@@ -79,7 +79,12 @@ class AppSheets {
                       Navigator.pop(context);
                       onConfirm();
                     },
-                    child: Text(confirmText, style: theme.textTheme.bodyMedium),
+                    child: Text(
+                      confirmText,
+                      style: theme.textTheme.bodyMedium!.copyWith(
+                        color: destructive ? cs.onError : cs.onPrimary,
+                      ),
+                    ),
                   ),
                 ),
               ],

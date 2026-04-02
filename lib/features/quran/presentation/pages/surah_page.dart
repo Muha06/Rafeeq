@@ -8,6 +8,7 @@ import 'package:rafeeq/core/features/audio/domain/entities/audio_state.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/rafeeq_analytics.dart';
+import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/quran/domain/entities/last_read_ayah.dart';
@@ -406,29 +407,13 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
         body: ayahsAsync.when(
           loading: () => const Center(child: CircularProgressIndicator()),
 
-          error: (e, _) => Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(Icons.cloud_off_sharp, size: 120),
-                Text(
-                  'Failed to load surahs.\n Please try again',
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.titleMedium,
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    ref.invalidate(ayahsProvider(surahId));
-                  },
-                  child: const Text('Refresh'),
-                ),
-              ],
-            ),
+          error: (e, _) => AppStateView(
+            icon: PhosphorIcons.warningCircle(),
+            title: "Something went wrong",
+            message: "We couldn't load the ayahs. Please try again.",
+            buttonText: "Retry",
+            onPressed: () => ref.refresh(ayahsProvider(surahId)),
           ),
-
           data: (ayahs) {
             return ScrollablePositionedList.builder(
               itemCount: ayahs.length + 1,

@@ -10,6 +10,8 @@ ThemeData appDarkThemeData() {
         error: AppDarkColors.error,
         onError: Colors.white,
         outline: AppDarkColors.outline, // outlines
+        tertiary: AppDarkColors
+            .tertiary, // used for chips and highlights above primary
       ).copyWith(
         // Material 3 container ladder
         surfaceContainerLowest: AppDarkColors.canvas, // page bg
@@ -271,6 +273,8 @@ class AppDarkColors {
 
   static const outline = Color(0xFF123238);
   static const outlineVariant = Color(0xFF0E2A2D);
+
+  static const tertiary = Color(0xFF4FA3A8);
 
   static const brand = Color(0xFFDAB36D);
 
