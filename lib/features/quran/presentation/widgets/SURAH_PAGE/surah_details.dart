@@ -30,7 +30,7 @@ class SurahDetails extends ConsumerWidget {
               child: Container(
                 height: 160,
                 decoration: BoxDecoration(
-                  color: cs.surface,
+                  color: cs.primary,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Padding(
@@ -42,14 +42,14 @@ class SurahDetails extends ConsumerWidget {
                         surah.nameArabic,
                         style: theme.textTheme.labelLarge!.copyWith(
                           fontSize: 20,
+                          color: cs.onPrimary,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         surah.nameEnglish,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
+                        style: theme.textTheme.titleMedium!.copyWith(
+                          color: cs.onPrimary,
                         ),
                       ),
                       const SizedBox(height: 14),
@@ -121,15 +121,18 @@ class _Chip extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: Colors.white24),
+        border: Border.all(color: cs.onPrimary.withAlpha(100)),
       ),
       child: Text(
         text,
-        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
+        style: theme.textTheme.labelSmall!.copyWith(color: cs.tertiary),
       ),
     );
   }

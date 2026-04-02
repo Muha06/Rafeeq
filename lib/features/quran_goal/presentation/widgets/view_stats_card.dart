@@ -25,27 +25,27 @@ class ViewQuranGoalStats extends StatelessWidget {
           height: 64,
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: theme.colorScheme.surface,
+            color: theme.colorScheme.primary,
             borderRadius: BorderRadius.circular(14),
           ),
           child: Row(
             children: [
               Icon(
                 CupertinoIcons.chart_bar,
-                color: theme.colorScheme.onSurfaceVariant,
+                color: theme.colorScheme.onPrimary,
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
                   'View your Quran Goal stats',
                   style: theme.textTheme.titleMedium?.copyWith(
-                    color: theme.colorScheme.onSurface,
+                    color: theme.colorScheme.onPrimary,
                   ),
                 ),
               ),
               Icon(
                 CupertinoIcons.chevron_forward,
-                color: theme.colorScheme.onSurface,
+                color: theme.colorScheme.onPrimary,
               ),
             ],
           ),

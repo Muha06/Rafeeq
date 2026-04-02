@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/features/quran/presentation/pages/surah_page.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/ayah_of_the_day.dart';
 
@@ -44,13 +45,11 @@ class AyahOfTheDay extends ConsumerWidget {
           return GestureDetector(
             key: const ValueKey('data'),
             onTap: () {
-              Navigator.push(
+              AppNav.push(
                 context,
-                MaterialPageRoute(
-                  builder: (_) => FullSurahPage(
-                    surah: ayahSurah,
-                    autoScrollAyah: ayah.ayahNumber,
-                  ),
+                FullSurahPage(
+                  surah: ayahSurah,
+                  autoScrollAyah: ayah.ayahNumber,
                 ),
               );
             },
@@ -65,7 +64,7 @@ class AyahOfTheDay extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Verse of the day',
+                    'Verse of the day:',
                     textAlign: TextAlign.left,
                     style: theme.textTheme.labelLarge,
                   ),
@@ -74,7 +73,7 @@ class AyahOfTheDay extends ConsumerWidget {
 
                   //Ayah text
                   Text(
-                    ayah.textEnglish,
+                    '"${ayah.textEnglish}"',
                     textAlign: TextAlign.left,
                     style: theme.textTheme.bodyMedium,
                   ),

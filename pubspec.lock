@@ -1248,6 +1248,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.1"
+  quran_pages_with_ayah_detector:
+    dependency: "direct main"
+    description:
+      name: quran_pages_with_ayah_detector
+      sha256: "54e47f9638e8fdb95a11020c696fac4a233dfbe6b3d67158280a501c273da693"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.0"
   realtime_client:
     dependency: transitive
     description:
@@ -1861,6 +1869,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.3"
+  yaml_edit:
+    dependency: transitive
+    description:
+      name: yaml_edit
+      sha256: "07c9e63ba42519745182b88ca12264a7ba2484d8239958778dfe4d44fe760488"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.4"
   yet_another_json_isolate:
     dependency: transitive
     description:

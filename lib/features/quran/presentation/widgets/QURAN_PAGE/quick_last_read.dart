@@ -146,18 +146,14 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
 
     return GestureDetector(
       onTap: () {
-        // Fetch the Surah from the cached surahs in hive
-        final surahs = ref.watch(surahsProvider);
-
-        final surah = surahs.firstWhere(
-          (surah) => surah.id == widget.lastRead.surahId,
-        );
+        final surahs = ref.read(surahsProvider).value ?? [];
+        final surah = surahs.firstWhere((s) => s.id == widget.lastRead.surahId);
 
         AppNav.push(
           context,
           FullSurahPage(
-            surah: surah,
             autoScrollAyah: widget.lastRead.ayahNumber,
+            surah: surah,
           ),
         );
       },

@@ -146,7 +146,7 @@ void _showFridayVirtuesSheet(BuildContext context, bool isDark) {
             style: Theme.of(context).textTheme.bodyMedium,
           ),
           const SizedBox(height: 16),
-      
+
           const _VirtueTile(
             title: 'Recite Sūrah Al-Kahf',
             body:
@@ -159,7 +159,7 @@ void _showFridayVirtuesSheet(BuildContext context, bool isDark) {
                 'Increase blessings by sending prayers upon the Prophet ﷺ throughout the day.',
             icon: Icons.favorite_border,
           ),
-      
+
           const _VirtueTile(
             title: 'Ghusl + early Jumu‘ah',
             body: 'Prepare for Jumu‘ah like it matters — because it does.',

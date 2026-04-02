@@ -54,13 +54,11 @@ class SurahLink extends ConsumerWidget {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
-    return Padding(
-      padding: const EdgeInsets.only(right: 8.0),
-      child: GestureDetector(
-        onTap: () {
-          AppNav.push(context, FullSurahPage(surah: surah));
-          
-        },
+    return GestureDetector(
+      onTap: () {
+        AppNav.push(context, FullSurahPage(surah: surah));
+      },
+      child: Card(
         child: Container(
           decoration: BoxDecoration(
             color: cs.surface,

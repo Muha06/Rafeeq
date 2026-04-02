@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provider.dart';
-import 'package:rafeeq/features/quran/presentation/widgets/QURAN_PAGE/all_surah_listview.dart';
+import 'package:rafeeq/features/quran/presentation/widgets/QURAN_PAGE/surah_listview.dart';
 
 class SurahSearchPage extends ConsumerStatefulWidget {
   const SurahSearchPage({super.key});
@@ -31,7 +31,7 @@ class _SurahSearchPageState extends ConsumerState<SurahSearchPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final surahs = ref.watch(surahsProvider); // <surahs provider
+    final surahs = ref.watch(surahsProvider).value ?? []; // <surahs provider
     final searchSurahText = ref.watch(searchSurahTextProvider);
     final q = searchSurahText.trim().toLowerCase();
 
