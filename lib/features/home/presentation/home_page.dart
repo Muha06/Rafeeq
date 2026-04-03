@@ -51,31 +51,13 @@ class _HomePageState extends ConsumerState<HomePage> {
       body: CustomScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
-          // SliverAppBar(
-          //   pinned: false,
-          //   floating: false,
-          //   snap: false,
-          //   toolbarHeight: theme.appBarTheme.toolbarHeight!,
-          //   title: Text('Home', style: theme.appBarTheme.titleTextStyle),
-          //   actions: [
-          //     const UserLocationChip(),
-          //     IconButton(
-          //       onPressed: () async {
-          //         pushLeftPage(context, const SettingsPage());
-          //       },
-          //       icon: const Icon(CupertinoIcons.settings),
-          //     ),
-          //   ],
-          //   bottom: buildlHijriDate(context, ref),
-          // ),
-
           // TIMESCARD + QUICK ACTIONS
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.only(
-                bottom: 48,
+                bottom: 58,
               ), // to accommodate quick actions overlap
-              child: TodayTimesCard(assetsByPrayer: assetByPrayer, height: 340),
+              child: TodayTimesCard(assetsByPrayer: assetByPrayer, height: 320),
             ),
           ),
 
