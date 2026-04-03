@@ -52,16 +52,6 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          SwitchListTile(
-            title: Text('Reading mode', style: titleTextstyle),
-            value: mushafMode,
-            contentPadding: EdgeInsets.zero,
-            onChanged: (v) {
-              sNotifier.setMushafMode(v);
-            },
-          ),
-          const SizedBox(height: 4),
-
           //Auto scroll
           SwitchListTile(
             title: Text('Auto scroll', style: titleTextstyle),
@@ -88,17 +78,16 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
           ),
           const SizedBox(height: 4),
 
-          //TRANSILT TOGGLE
-          SwitchListTile(
-            value: showTranslit,
-            contentPadding: EdgeInsets.zero,
-            title: Text('Show Transliteration', style: titleTextstyle),
-            onChanged: (value) {
-              sNotifier.setShowTranslit(value);
-            },
-          ),
-
-          const SizedBox(height: 4),
+          //TRANSILT TOGGLE TODO: Will add later
+          // SwitchListTile(
+          //   value: showTranslit,
+          //   contentPadding: EdgeInsets.zero,
+          //   title: Text('Show Transliteration', style: titleTextstyle),
+          //   onChanged: (value) {
+          //     sNotifier.setShowTranslit(value);
+          //   },
+          // ),
+          // const SizedBox(height: 4),
 
           //select reciter
           ListTile(

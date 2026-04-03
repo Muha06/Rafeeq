@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class HomeQuickActionsRow extends StatelessWidget {
   final VoidCallback onQuran;
@@ -15,46 +14,53 @@ class HomeQuickActionsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(' Quick links', style: Theme.of(context).textTheme.bodySmall),
-        const SizedBox(height: 8),
+    final cs = Theme.of(context).colorScheme;
 
-        Row(
-          children: [
-            Expanded(
-              child: _QuickActionCard(
-                title: "Qur’an",
-                imagePath: 'assets/images/home/quran.png',
-                onTap: onQuran,
-              ),
+    return Container(
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: cs.surfaceContainer, // 👈 depth
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: cs.shadow.withAlpha(100),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: _QuickActionCard(
+              title: "Qur’an",
+              imagePath: 'assets/images/home/quran.png',
+              onTap: onQuran,
             ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: _QuickActionCard(
-                title: "Adhkār",
-                imagePath: 'assets/images/home/tasbih.png',
-                onTap: onAdhkar,
-              ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: _QuickActionCard(
+              title: "Adhkār",
+              imagePath: 'assets/images/home/tasbih.png',
+              onTap: onAdhkar,
             ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: _QuickActionCard(
-                title: "Allah's Names",
-                imagePath: 'assets/images/home/Allah_name.png',
-                onTap: onAllahNames,
-              ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: _QuickActionCard(
+              title: "Names",
+              imagePath: 'assets/images/home/Allah_name.png',
+              onTap: onAllahNames,
             ),
-          ],
-        ),
-      ],
+          ),
+        ],
+      ),
     );
   }
 }
 
-class _QuickActionCard extends ConsumerWidget {
+class _QuickActionCard extends StatelessWidget {
   final String title;
   final String imagePath;
   final VoidCallback onTap;
@@ -66,38 +72,44 @@ class _QuickActionCard extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, ref) {
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 200,
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(14),
-          color: cs.surface,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                wordSpacing: 1,
-                fontSize: 12,
+    return Material(
+      color: cs.surface,
+      borderRadius: BorderRadius.circular(14),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(14),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              /// Icon/Image
+              Image.asset(
+                imagePath,
+                height: 32,
+                width: 32,
+                fit: BoxFit.contain,
               ),
-            ),
 
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Image.asset(imagePath, height: 40, width: 40),
-            ),
-          ],
+              const SizedBox(height: 8),
+
+              /// Title
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.labelMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: cs.onSurface,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

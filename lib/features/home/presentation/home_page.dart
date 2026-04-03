@@ -44,122 +44,78 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final goal = ref.watch(quranGoalProvider);
     final reminders = ref.watch(homeRemindersProvider);
 
     return Scaffold(
-      body: SafeArea(
-        child: CustomScrollView(
-          physics: const BouncingScrollPhysics(),
-          slivers: [
-            SliverAppBar(
-              pinned: false,
-              floating: false,
-              snap: false,
-              toolbarHeight: theme.appBarTheme.toolbarHeight!,
-              title: Text('Home', style: theme.appBarTheme.titleTextStyle),
-              actions: [
-                const UserLocationChip(),
-                IconButton(
-                  onPressed: () async {
-                    pushLeftPage(context, const SettingsPage());
-                  },
-                  icon: const Icon(CupertinoIcons.settings),
-                ),
-              ],
-              bottom: buildlHijriDate(context, ref),
+      body: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        slivers: [
+          // SliverAppBar(
+          //   pinned: false,
+          //   floating: false,
+          //   snap: false,
+          //   toolbarHeight: theme.appBarTheme.toolbarHeight!,
+          //   title: Text('Home', style: theme.appBarTheme.titleTextStyle),
+          //   actions: [
+          //     const UserLocationChip(),
+          //     IconButton(
+          //       onPressed: () async {
+          //         pushLeftPage(context, const SettingsPage());
+          //       },
+          //       icon: const Icon(CupertinoIcons.settings),
+          //     ),
+          //   ],
+          //   bottom: buildlHijriDate(context, ref),
+          // ),
+
+          // TIMESCARD + QUICK ACTIONS
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.only(
+                bottom: 48,
+              ), // to accommodate quick actions overlap
+              child: TodayTimesCard(assetsByPrayer: assetByPrayer, height: 340),
             ),
+          ),
 
-            // TODAY TIMES
-            SliverToBoxAdapter(
-              child: HomeSection(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: _hPad,
-                  vertical: _v10,
-                ),
-                child: TodayTimesCard(assetsByPrayer: assetByPrayer),
-              ),
-            ),
-
-            // QUICK LINKS ROW
-            SliverToBoxAdapter(
-              child: HomeSection(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: _hPad,
-                  vertical: _v10,
-                ),
-                child: HomeQuickActionsRow(
-                  onQuran: () {
-                    ref.read(tabsScreenIndexProvider.notifier).state = 1;
-                  },
-                  onAdhkar: () {
-                    ref.read(tabsScreenIndexProvider.notifier).state = 2;
-                  },
-                  onAllahNames: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const AllahNamesPage(),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
-
-            // REMINDERS
-            if (reminders.isNotEmpty)
-              const SliverToBoxAdapter(
-                child: HomeSection(
-                  padding: EdgeInsets.symmetric(vertical: _v10),
-                  child: HomeRemindersCarousel(),
-                ),
-              ),
-
-            //QURAN GOAL CARD
-            if (goal.isActive)
-              const SliverToBoxAdapter(
-                child: HomeSection(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: _hPad,
-                    vertical: _v10,
-                  ),
-                  child: QuranGoalCard(),
-                ),
-              ),
-
-            //Ramadan card
+          // REMINDERS
+          if (reminders.isNotEmpty)
             const SliverToBoxAdapter(
               child: HomeSection(
-                padding: EdgeInsets.symmetric(horizontal: _hPad),
-                child: RamadanDailyCard(),
+                padding: EdgeInsets.symmetric(vertical: _v10),
+                child: HomeRemindersCarousel(),
               ),
             ),
 
-            // HARAMAIN CARD
+          //QURAN GOAL CARD
+          if (goal.isActive)
             const SliverToBoxAdapter(
               child: HomeSection(
                 padding: EdgeInsets.symmetric(
                   horizontal: _hPad,
                   vertical: _v10,
                 ),
-                child: HaramainCard(),
+                child: QuranGoalCard(),
               ),
             ),
 
-            // AYAH OF THE DAY
-            const SliverToBoxAdapter(
-              child: HomeSection(
-                padding: EdgeInsets.symmetric(
-                  horizontal: _hPad,
-                  vertical: _v10,
-                ),
-                child: AyahOfTheDay(),
-              ),
+          // HARAMAIN CARD
+          const SliverToBoxAdapter(
+            child: HomeSection(
+              padding: EdgeInsets.symmetric(horizontal: _hPad, vertical: _v10),
+              child: HaramainCard(),
             ),
-          ],
-        ),
+          ),
+
+          // AYAH OF THE DAY
+          const SliverToBoxAdapter(
+            child: HomeSection(
+              padding: EdgeInsets.symmetric(horizontal: _hPad, vertical: _v10),
+              child: AyahOfTheDay(),
+            ),
+          ),
+        ],
       ),
     );
   }

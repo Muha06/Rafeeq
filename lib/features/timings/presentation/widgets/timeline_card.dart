@@ -1,400 +1,240 @@
 // ignore_for_file: unused_result
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:rafeeq/app/providers/tabs_screen_provider.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/rafeeq_analytics.dart';
-import 'package:rafeeq/core/helpers/salat_times.dart';
-import 'package:rafeeq/features/timings/domain/entities/salah_status.dart';
+import 'package:rafeeq/core/widgets/app_state_view.dart';
+import 'package:rafeeq/features/asma_ul_husna/presentation/pages/asma_ul_husna_list_page.dart';
+import 'package:rafeeq/features/home/presentation/widgets/quick_action_row.dart';
 import 'package:rafeeq/features/timings/presentation/pages/timings_pages.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/salah_status_provider.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/salah_times_providers.dart';
 import '../../domain/entities/salah_prayer.dart';
+import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
 class TodayTimesCard extends ConsumerWidget {
   const TodayTimesCard({
     super.key,
     required this.assetsByPrayer,
-    this.height = 180,
-    this.borderRadius = 14,
+    this.height = 340, // content height
   });
 
   final Map<SalahPrayer, String> assetsByPrayer;
-
   final double height;
-  final double borderRadius;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
-    final statusAsync = ref.watch(salahStatusProvider); //salah status
-
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 250),
-      switchInCurve: Curves.easeOut,
-      switchOutCurve: Curves.easeIn,
-      transitionBuilder: (child, anim) {
-        final fade = FadeTransition(opacity: anim, child: child);
-        final slide = SlideTransition(
-          position: Tween<Offset>(
-            begin: const Offset(0, 0.03), // tiny lift
-            end: Offset.zero,
-          ).animate(anim),
-          child: fade,
-        );
-        return slide;
-      },
-      child: statusAsync.when(
-        loading: () => _SkeletonCard(
-          key: const ValueKey('loading'),
-          height: height,
-          radius: borderRadius,
-        ),
-        error: (e, st) {
-          debugPrint(e.toString());
-          debugPrint(st.toString());
-          return const _ErrorCard();
-        },
-        data: (status) => _CardBody(
-          key: ValueKey(
-            'data-${status.current}-${assetsByPrayer[status.current]}',
-          ),
-          status: status,
-          theme: theme,
-          height: height,
-          radius: borderRadius,
-          bgAsset: assetsByPrayer[status.current],
-        ),
-      ),
-    );
+    return _CardBody(height: height);
   }
 }
 
-class _ErrorCard extends ConsumerWidget {
-  const _ErrorCard();
+class _CardBody extends ConsumerWidget {
+  const _CardBody({required this.height});
 
-  @override
-  Widget build(BuildContext context, ref) {
-    final theme = Theme.of(context);
-
-    return Container(
-      height: 200,
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(14),
-      ),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            PhosphorIcon(
-              PhosphorIcons.wifiSlash(),
-              size: 32,
-              color: theme.colorScheme.error,
-            ),
-            const SizedBox(height: 12),
-
-            Text(
-              'Error loading times. Please check your Internet connection',
-              textAlign: TextAlign.center,
-              style: theme.textTheme.bodyLarge,
-            ),
-            const SizedBox(height: 16),
-
-            ElevatedButton(
-              onPressed: () {
-                ref.refresh(todaySalahTimesProvider);
-              },
-              child: const Text('Reload'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _CardBody extends StatelessWidget {
-  const _CardBody({
-    super.key,
-    required this.status,
-    required this.theme,
-    required this.height,
-    required this.radius,
-    required this.bgAsset,
-  });
-
-  final SalahStatusEntity status;
-  final ThemeData theme;
   final double height;
-  final double radius;
-  final String? bgAsset;
 
   @override
-  Widget build(BuildContext context) {
-    final onImage = Colors.white;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final statusAsync = ref.watch(salahStatusProvider);
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(radius),
-      child: SizedBox(
-        height: height,
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            // Background image
-            if (bgAsset != null)
-              Image.asset(bgAsset!, fit: BoxFit.cover)
-            else
-              Container(color: theme.cardColor),
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
 
-            // Gradient overlay (keeps text readable)
-            DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.black.withAlpha(125),
-                    Colors.black.withAlpha(100),
-                    Colors.black.withAlpha(140),
-                  ],
-                ),
-              ),
-            ),
+    final isDark = theme.brightness == Brightness.dark;
 
-            // Content
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // Top row: current | progress | next
-                  Row(
-                    children: [
-                      _TopLabel(
-                        title: 'Current',
-                        value: status.current.label,
-                        salatTime: status.currentStart,
-                        color: onImage,
-                        align: CrossAxisAlignment.start,
+    final fg = isDark ? cs.onSurface : cs.onPrimary;
+    final highlightColor = isDark ? cs.primary : cs.tertiary;
+
+    return SizedBox(
+      height: height,
+      width: double.infinity,
+      child: statusAsync.when(
+        data: (status) => SalahCardStack(
+          content: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                RepaintBoundary(
+                  // prevent slider from repainting unnecessarily
+                  child: SleekCircularSlider(
+                    min: 0,
+                    max: 1,
+                    initialValue: status.progress.clamp(0, 1),
+
+                    appearance: CircularSliderAppearance(
+                      size: 120, // width
+                      startAngle: 180,
+                      angleRange: 180, //  makes it a semicircle
+
+                      customWidths: CustomSliderWidths(
+                        trackWidth: 6,
+                        progressBarWidth: 6,
                       ),
 
-                      const SizedBox(width: 12),
+                      customColors: CustomSliderColors(
+                        progressBarColor: highlightColor,
+                        trackColor: cs.surface.withAlpha(90),
+                      ),
+                    ),
 
-                      //progress
-                      Expanded(
+                    innerWidget: (_) {
+                      return Center(
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            const SizedBox(height: 10),
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(999),
-                              child: LinearProgressIndicator(
-                                value: status.progress.isNaN
-                                    ? 0
-                                    : status.progress.clamp(0.0, 1.0),
-                                minHeight: 8,
-                                backgroundColor: Colors.white.withAlpha(62),
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  status.progress < 0.7
-                                      ? Colors.white
-                                      : Colors.red,
-                                ),
+                            //Current salat time
+                            Text(
+                              status.current.label,
+                              style: theme.textTheme.labelLarge?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: fg,
+                                fontSize: 20,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+
+                            //View times button
+                            InkWell(
+                              onTap: () {
+                                AppNav.push(
+                                  context,
+                                  const SalahTimingsPage(),
+                                ).then(
+                                  (_) => RafeeqAnalytics.logScreenView(
+                                    "salah_times_page",
+                                  ),
+                                );
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'View times',
+                                    style: theme.textTheme.labelMedium!
+                                        .copyWith(
+                                          color: highlightColor,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                  ),
+                                  Icon(
+                                    PhosphorIcons.caretRight(),
+                                    size: 16,
+                                    color: highlightColor,
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
-                      ),
-
-                      const SizedBox(width: 12),
-
-                      //next salah
-                      _TopLabel(
-                        title: 'Next',
-                        value: status.next.label,
-                        salatTime: status.nextStart,
-                        color: onImage,
-                        align: CrossAxisAlignment.end,
-                      ),
-                    ],
+                      );
+                    },
                   ),
-
-                  const Spacer(),
-                  Row(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Next in:',
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: onImage.withAlpha(230),
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-
-                          const SizedBox(height: 6),
-
-                          Text(
-                            formatHms(status.timeToNext),
-                            textAlign: TextAlign.left,
-                            style: theme.textTheme.headlineMedium?.copyWith(
-                              color: onImage,
-                              fontWeight: FontWeight.w800,
-                              height: 1.0,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const Spacer(),
-
-                      ShowTodayTimesChip(
-                        onTap: () {
-                          AppNav.push(context, const SalahTimingsPage()).then(
-                            (value) => RafeeqAnalytics.logScreenView(
-                              "salah_times_page",
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _TopLabel extends StatelessWidget {
-  const _TopLabel({
-    required this.title,
-    required this.value,
-    required this.salatTime,
-    required this.color,
-    required this.align,
-  });
-
-  final String title;
-  final String value;
-  final DateTime salatTime;
-  final Color color;
-  final CrossAxisAlignment align;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    String two(int n) => n.toString().padLeft(2, '0');
-
-    final isNext = title == 'Next';
-
-    return Column(
-      crossAxisAlignment: align,
-      children: [
-        Text(
-          title,
-          style: theme.textTheme.labelLarge!.copyWith(color: Colors.white),
-        ),
-        const SizedBox(height: 2),
-
-        Text(
-          value,
-          style: theme.textTheme.titleMedium?.copyWith(
-            color: color,
-            fontWeight: isNext ? FontWeight.w600 : FontWeight.w300,
-            fontSize: isNext ? 15 : 14,
-          ),
-        ),
-        const SizedBox(height: 6),
-
-        Text(
-          '${two(salatTime.hour)}:${two(salatTime.minute)}',
-          style: theme.textTheme.titleLarge!.copyWith(
-            color: Colors.amberAccent,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class ShowTodayTimesChip extends StatelessWidget {
-  const ShowTodayTimesChip({super.key, required this.onTap});
-
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(999),
-        child: Ink(
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.18),
-            borderRadius: BorderRadius.circular(999),
-            border: Border.all(color: Colors.white.withOpacity(0.28)),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.schedule_rounded,
-                  size: 16,
-                  color: Colors.white.withOpacity(0.95),
                 ),
-                const SizedBox(width: 6),
-                Text(
-                  "See today’s times",
-                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                    color: Colors.white.withOpacity(0.95),
-                    fontWeight: FontWeight.w700,
+
+                RichText(
+                  text: TextSpan(
+                    text: "${status.next.label} is approaching in ",
+                    style: theme.textTheme.bodyMedium!.copyWith(color: fg),
+                    children: [
+                      TextSpan(
+                        text: formatRemaining(status.timeToNext),
+                        style: theme.textTheme.bodyMedium!.copyWith(
+                          color: highlightColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
           ),
         ),
+        error: (error, stackTrace) => SalahCardStack(
+          content: AppStateView(
+            icon: PhosphorIcons.warning(),
+            title: "Error loading times",
+            message: "Please check your Internet connection and try again.",
+            buttonText: "Refetch",
+            onPressed: () => ref.refresh(todaySalahTimesProvider),
+          ),
+        ),
+
+        loading: () => const SalahCardStack(
+          content: Center(child: CircularProgressIndicator()),
+        ),
       ),
     );
   }
 }
 
-class _SkeletonCard extends StatelessWidget {
-  const _SkeletonCard({super.key, required this.height, required this.radius});
+class SalahCardStack extends ConsumerStatefulWidget {
+  const SalahCardStack({super.key, required this.content});
+  final Widget content;
 
-  final double height;
-  final double radius;
+  @override
+  ConsumerState<SalahCardStack> createState() => _SalahCardStackState();
+}
+
+class _SalahCardStackState extends ConsumerState<SalahCardStack> {
+  final _imageBg = "assets/images/home/mosque2.jpeg";
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    return SizedBox(
+      height: 348,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Positioned.fill(child: Image.asset(_imageBg, fit: BoxFit.cover)),
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(radius),
-      child: Container(
-        height: height,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(color: theme.cardColor),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const CupertinoActivityIndicator(radius: 18),
-            const SizedBox(height: 8),
-            Text('Loading today\'s times...', style: theme.textTheme.bodySmall),
-          ],
-        ),
+          // 2. Color overlay
+          Positioned.fill(child: Container(color: Colors.black.withAlpha(120))),
+
+          // Content
+          widget.content,
+
+          // Quick actions
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: -48,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14.0),
+              child: HomeQuickActionsRow(
+                onQuran: () {
+                  ref.read(tabsScreenIndexProvider.notifier).state = 1;
+                },
+                onAdhkar: () {
+                  ref.read(tabsScreenIndexProvider.notifier).state = 2;
+                },
+                onAllahNames: () {
+                  AppNav.push(context, const AllahNamesPage());
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
+  }
+}
+
+String formatRemaining(Duration d) {
+  final hours = d.inHours;
+  final minutes = d.inMinutes.remainder(60);
+
+  if (hours == 0) {
+    return "$minutes min";
+  } else if (minutes == 0) {
+    return "$hours hr";
+  } else {
+    return "$hours hr $minutes min";
   }
 }

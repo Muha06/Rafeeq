@@ -60,6 +60,8 @@ dependencies:
   path: ^1.9.1
   quran: ^1.4.1
   quran_pages_with_ayah_detector: ^1.2.0
+  percent_indicator: ^4.2.5
+  sleek_circular_slider: ^2.1.0
 
 dev_dependencies:
   flutter_test:
