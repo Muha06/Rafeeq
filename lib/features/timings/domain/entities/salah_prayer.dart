@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 enum SalahPrayer {
   fajr,
@@ -32,23 +32,31 @@ extension SalahPrayerUi on SalahPrayer {
   IconData get icon {
     switch (this) {
       case SalahPrayer.fajr:
-        return FontAwesomeIcons.cloudMoon;
+        return PhosphorIcons.moonStars(); // calm night prayer vibe
+
       case SalahPrayer.sunrise:
-        return FontAwesomeIcons.solidSun;
+        return PhosphorIcons.sunHorizon(); // sunrise moment
+
       case SalahPrayer.dhuha:
-        return FontAwesomeIcons.sun;
+        return PhosphorIcons.sun(); // mid-morning sun
+
       case SalahPrayer.dhuhr:
-        return FontAwesomeIcons.solidSun;
+        return PhosphorIcons.sun(); // strong noon sun
+
       case SalahPrayer.asr:
-        return FontAwesomeIcons.cloudSun;
+        return PhosphorIcons.sunDim(); // softer afternoon light
+
       case SalahPrayer.maghrib:
-        return FontAwesomeIcons.solidMoon;  
+        return PhosphorIcons.sunHorizon(); // sunset transition
+
       case SalahPrayer.isha:
-        return FontAwesomeIcons.moon;
+        return PhosphorIcons.moon(); // night
+
       case SalahPrayer.midnight:
-        return FontAwesomeIcons.clock;  
+        return PhosphorIcons.clock(); // time-based neutral
+
       case SalahPrayer.tahajjud:
-        return FontAwesomeIcons.starAndCrescent;
+        return PhosphorIcons.starFour(); // spiritual night energy
     }
   }
 }

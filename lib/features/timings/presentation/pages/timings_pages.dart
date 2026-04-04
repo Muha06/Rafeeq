@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_times.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/disable_salah_reminders_provider.dart';
+import 'package:rafeeq/features/timings/presentation/riverpod/salah_status_provider.dart';
 
 import '../../domain/entities/salah_prayer.dart';
 import '../riverpod/salah_times_providers.dart';
@@ -51,21 +53,23 @@ class _SalahTimingsPageState extends ConsumerState<SalahTimingsPage> {
           SalahPrayer.dhuha,
           SalahPrayer.tahajjud,
         ];
+        final status = ref.watch(salahStatusProvider).value;
+        final current = status?.current;
 
         return Scaffold(
           appBar: AppBar(
             title: const Text('Today\'s Timings'),
             bottom: appBarBottomDivider(context),
           ),
-
           body: Column(
             children: [
               Positioned.fill(
                 child: SafeArea(
                   bottom: false,
+                  top: false,
                   child: SizedBox(
-                    height: 180,
-                    child: AllSalatTimingsCard(times: times),
+                    height: 200,
+                    child: AllSalatTimingsCard(times: times, current: current),
                   ),
                 ),
               ),
@@ -119,13 +123,18 @@ class _SalahTimingsPageState extends ConsumerState<SalahTimingsPage> {
 }
 
 class AllSalatTimingsCard extends StatelessWidget {
-  const AllSalatTimingsCard({super.key, required this.times});
+  const AllSalatTimingsCard({
+    super.key,
+    required this.times,
+    required this.current,
+  });
 
   final SalahTimesEntity times;
-
+  final SalahPrayer? current;
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final cs = theme.colorScheme;
 
     const salats = [
       SalahPrayer.fajr,
@@ -135,43 +144,61 @@ class AllSalatTimingsCard extends StatelessWidget {
       SalahPrayer.isha,
     ];
 
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-      decoration: BoxDecoration(color: theme.colorScheme.primary),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: salats.map((p) {
-          final t = times.at(p);
+    return Stack(
+      children: [
+        //image
+        Positioned.fill(
+          child: Image.asset(
+            "assets/images/home/mosque2.jpeg",
+            fit: BoxFit.cover,
+          ),
+        ),
 
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                p.label,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.labelSmall?.copyWith(
-                  color: theme.colorScheme.onPrimary,
-                ),
-              ),
-              const SizedBox(height: 4),
+        //DARK OVERLAY
+        Positioned.fill(child: Container(color: Colors.black.withAlpha(120))),
 
-              FaIcon(p.icon, size: 18, color: theme.colorScheme.onPrimary),
+        Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: salats.map((p) {
+              final t = times.at(p);
+              final isCurrent = p == current;
 
-              const SizedBox(height: 4),
+              final lightColors = isCurrent ? cs.tertiary : cs.onPrimary;
+              final darkColors = isCurrent ? cs.tertiary : cs.onSurface;
 
-              Text(
-                _formatHm(t),
-                style: theme.textTheme.titleSmall?.copyWith(
-                  color: theme.colorScheme.onPrimary,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          );
-        }).toList(),
-      ),
+              final isDark = theme.brightness == Brightness.dark;
+
+              final color = isDark ? darkColors : lightColors;
+
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    p.label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.labelSmall?.copyWith(color: color),
+                  ),
+                  const SizedBox(height: 4),
+
+                  PhosphorIcon(p.icon, size: 24, color: color),
+
+                  const SizedBox(height: 4),
+
+                  Text(
+                    _formatHm(t),
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      color: color,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              );
+            }).toList(),
+          ),
+        ),
+      ],
     );
   }
 }
