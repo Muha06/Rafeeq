@@ -24,9 +24,9 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
       surahSettingsProvider.select((s) => s.showTranslation),
     );
 
-    final showTranslit = ref.watch(
-      surahSettingsProvider.select((s) => s.showTranslit),
-    );
+    // final showTranslit = ref.watch(
+    //   surahSettingsProvider.select((s) => s.showTranslit),
+    // );
     final arabicFontSize = ref.watch(
       surahSettingsProvider.select((s) => s.arabicFontSize),
     );
@@ -38,10 +38,7 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
       surahSettingsProvider.select((s) => s.autoScrollEnabled),
     );
 
-    final mushafMode = ref.watch(
-      surahSettingsProvider.select((s) => s.mushafMode),
-    );
-
+  
     final titleTextstyle = theme.textTheme.labelLarge!.copyWith(fontSize: 18);
 
     final selectedReciter = ref.watch(selectedReciterProvider);

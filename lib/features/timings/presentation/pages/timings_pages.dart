@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:rafeeq/core/features/location/presentation/provider/user_location_provider.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
- import 'package:rafeeq/features/timings/presentation/riverpod/disable_salah_reminders_provider.dart';
+import 'package:rafeeq/features/timings/domain/entities/salah_times.dart';
+import 'package:rafeeq/features/timings/presentation/riverpod/disable_salah_reminders_provider.dart';
 
 import '../../domain/entities/salah_prayer.dart';
 import '../riverpod/salah_times_providers.dart';
@@ -22,117 +22,155 @@ class _SalahTimingsPageState extends ConsumerState<SalahTimingsPage> {
     final theme = Theme.of(context);
 
     final timesAsync = ref.watch(todaySalahTimesProvider);
-    final userLoc = ref.watch(userLocationProvider);
-    final formattedDate = _formatDate(DateTime.now());
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Today\'s Timings'),
-        bottom: appBarBottomDivider(context),
-      ),
-      body: timesAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Padding(
+    return timesAsync.when(
+      loading: () =>
+          const Scaffold(body: Center(child: CircularProgressIndicator())),
+
+      error: (e, _) => Scaffold(
+        body: Padding(
           padding: const EdgeInsets.all(16),
           child: Text(
             'Failed to load timings.\n$e',
             style: theme.textTheme.bodyMedium,
           ),
         ),
-        data: (times) {
-          const salats = [
-            SalahPrayer.fajr,
-            SalahPrayer.dhuhr,
-            SalahPrayer.asr,
-            SalahPrayer.maghrib,
-            SalahPrayer.isha,
-          ];
-
-          const otherTimes = [
-            SalahPrayer.sunrise,
-            SalahPrayer.dhuha,
-            SalahPrayer.tahajjud,
-          ];
-
-          return ListView(
-            padding: const EdgeInsets.all(16),
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  MyChip(text: formattedDate, icon: Icons.date_range),
-
-                  MyChip(
-                    text: userLoc.when(
-                      loading: () => 'Loading',
-                      error: (error, stackTrace) => 'Unknown',
-                      data: (loc) => '${loc?.country}/${loc?.city}',
-                    ),
-                    icon: Icons.pin_drop_outlined,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-
-              // 🕌 Obligatory prayers
-              Text('Obligatory Prayers', style: theme.textTheme.bodySmall),
-              const SizedBox(height: 12),
-
-              ...salats.map((p) {
-                final t = times.at(p);
-                return _TimingTile(
-                  prayer: p,
-                  title: p.label,
-                  timeText: _formatHm(t),
-                );
-              }),
-
-              const SizedBox(height: 16),
-
-              // 🌤️ Other times
-              Text('Other Times', style: theme.textTheme.bodySmall),
-              const SizedBox(height: 12),
-
-              ...otherTimes.map((p) {
-                final t = times.at(p);
-                return _TimingTile(
-                  prayer: p,
-                  title: p.label,
-                  timeText: _formatHm(t),
-                );
-              }),
-            ],
-          );
-        },
       ),
+
+      data: (times) {
+        const salats = [
+          SalahPrayer.fajr,
+          SalahPrayer.dhuhr,
+          SalahPrayer.asr,
+          SalahPrayer.maghrib,
+          SalahPrayer.isha,
+        ];
+
+        const otherTimes = [
+          SalahPrayer.sunrise,
+          SalahPrayer.dhuha,
+          SalahPrayer.tahajjud,
+        ];
+
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Today\'s Timings'),
+            bottom: appBarBottomDivider(context),
+          ),
+
+          body: Column(
+            children: [
+              Positioned.fill(
+                child: SafeArea(
+                  bottom: false,
+                  child: SizedBox(
+                    height: 180,
+                    child: AllSalatTimingsCard(times: times),
+                  ),
+                ),
+              ),
+
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: ListView(
+                    padding: const EdgeInsets.fromLTRB(16, 20, 16, 16),
+                    children: [
+                      // 🕌 Obligatory prayers
+                      Text(
+                        'Obligatory Prayers',
+                        style: theme.textTheme.bodySmall,
+                      ),
+                      const SizedBox(height: 12),
+
+                      ...salats.map((p) {
+                        final t = times.at(p);
+                        return _TimingTile(
+                          prayer: p,
+                          title: p.label,
+                          timeText: _formatHm(t),
+                        );
+                      }),
+
+                      const SizedBox(height: 16),
+
+                      // 🌤️ Other times
+                      Text('Other Times', style: theme.textTheme.bodySmall),
+                      const SizedBox(height: 12),
+
+                      ...otherTimes.map((p) {
+                        final t = times.at(p);
+                        return _TimingTile(
+                          prayer: p,
+                          title: p.label,
+                          timeText: _formatHm(t),
+                        );
+                      }),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
 
-class MyChip extends StatelessWidget {
-  const MyChip({super.key, required this.text, required this.icon});
-  final IconData icon;
-  final String text;
+class AllSalatTimingsCard extends StatelessWidget {
+  const AllSalatTimingsCard({super.key, required this.times});
+
+  final SalahTimesEntity times;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 18),
-          const SizedBox(width: 8),
+    const salats = [
+      SalahPrayer.fajr,
+      SalahPrayer.dhuhr,
+      SalahPrayer.asr,
+      SalahPrayer.maghrib,
+      SalahPrayer.isha,
+    ];
 
-          Text(
-            text,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-            style: theme.textTheme.labelLarge,
-          ),
-        ],
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+      decoration: BoxDecoration(color: theme.colorScheme.primary),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: salats.map((p) {
+          final t = times.at(p);
+
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                p.label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: theme.colorScheme.onPrimary,
+                ),
+              ),
+              const SizedBox(height: 4),
+
+              FaIcon(p.icon, size: 18, color: theme.colorScheme.onPrimary),
+
+              const SizedBox(height: 4),
+
+              Text(
+                _formatHm(t),
+                style: theme.textTheme.titleSmall?.copyWith(
+                  color: theme.colorScheme.onPrimary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          );
+        }).toList(),
       ),
     );
   }
@@ -224,5 +262,3 @@ class _TimingTile extends ConsumerWidget {
 String _two(int n) => n.toString().padLeft(2, '0');
 
 String _formatHm(DateTime t) => '${_two(t.hour)}:${_two(t.minute)}';
-
-String _formatDate(DateTime d) => '${_two(d.day)}-${_two(d.month)}-${d.year}';

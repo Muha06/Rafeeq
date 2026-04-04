@@ -19,8 +19,8 @@ class HomeQuickActionsRow extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: cs.surfaceContainer, // 👈 depth
-        borderRadius: BorderRadius.circular(16),
+        color: cs.surfaceContainer,
+        borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
             color: cs.shadow.withAlpha(100),

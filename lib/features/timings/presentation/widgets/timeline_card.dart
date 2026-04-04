@@ -26,11 +26,9 @@ const String _bg = "assets/images/home/mosque2.jpeg";
 class TodayTimesCard extends ConsumerWidget {
   const TodayTimesCard({
     super.key,
-    required this.assetsByPrayer,
     this.height = 360, // content height
   });
 
-  final Map<SalahPrayer, String> assetsByPrayer;
   final double height;
 
   @override

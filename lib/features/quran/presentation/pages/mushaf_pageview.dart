@@ -50,7 +50,7 @@ class _MushafPageViewState extends ConsumerState<MushafPageView> {
             return Column(
               children: [
                 Image.asset(
-                  "assets/pages2/page${pageNumber.toString().padLeft(3, '0')}.png",
+                  "assets/images/quran/pages/$pageNumber.png",
                   color: cs.onSurface,
                   filterQuality: FilterQuality.high,
                 ),

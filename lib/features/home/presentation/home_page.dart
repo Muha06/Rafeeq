@@ -6,8 +6,7 @@ import 'package:rafeeq/features/quran/presentation/widgets/ayah_of_the_day.dart'
 import 'package:rafeeq/features/home/presentation/widgets/reminders_carousel.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/quran_qoal_home_card.dart';
-import 'package:rafeeq/features/timings/domain/entities/salah_prayer.dart';
-import 'package:rafeeq/features/timings/presentation/widgets/timeline_card.dart';
+ import 'package:rafeeq/features/timings/presentation/widgets/timeline_card.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -20,18 +19,6 @@ class _HomePageState extends ConsumerState<HomePage> {
   static const double _hPad = 12.0;
   static const double _v10 = 10.0;
 
-  final Map<SalahPrayer, String> assetByPrayer = {
-    SalahPrayer.fajr: 'assets/images/salat/fajr.jpeg',
-    SalahPrayer.sunrise: 'assets/images/salat/fajr.jpeg',
-    SalahPrayer.dhuha: 'assets/images/salat/dhuhr.jpeg',
-    SalahPrayer.dhuhr: 'assets/images/salat/dhuhr.jpeg',
-    SalahPrayer.asr: 'assets/images/salat/asr.jpeg',
-    SalahPrayer.maghrib: 'assets/images/salat/maghrib.jpeg',
-    SalahPrayer.isha: 'assets/images/salat/night.jpeg',
-    SalahPrayer.midnight: 'assets/images/salat/night.jpeg',
-    SalahPrayer.tahajjud: 'assets/images/salat/isha.jpeg',
-  };
-
   @override
   Widget build(BuildContext context) {
     final goal = ref.watch(quranGoalProvider);
@@ -42,12 +29,12 @@ class _HomePageState extends ConsumerState<HomePage> {
         physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
           // TIMESCARD + QUICK ACTIONS
-          SliverToBoxAdapter(
+          const SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.only(
+              padding: EdgeInsets.only(
                 bottom: 58,
               ), // to accommodate quick actions overlap
-              child: TodayTimesCard(assetsByPrayer: assetByPrayer, height: 320),
+              child: TodayTimesCard(height: 320),
             ),
           ),
 

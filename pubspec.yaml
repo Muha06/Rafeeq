@@ -96,10 +96,10 @@ flutter:
     - assets/images/category/
     - assets/images/home/
     - assets/images/quran/
+    - assets/images/quran/pages/
     - assets/images/salat/
     - assets/images/onboarding/
     - assets/adhkar/
-    - assets/pages2/
     - assets/db/
     - .env
 
