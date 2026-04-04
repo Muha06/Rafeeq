@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:rafeeq/features/timings/data/models/salah_times_model.dart';
 
@@ -34,10 +33,6 @@ class SalahRemoteDataSourceImpl implements SalahRemoteDataSource {
       'method': method.toString(),
     });
 
-    debugPrint("fetching with city/country for user in : $country, $city");
-
-    print("❤️${uri.toString()}");
-
     final res = await client.get(uri);
     if (res.statusCode != 200) {
       throw Exception('Failed to fetch timings: ${res.statusCode}');
@@ -46,16 +41,16 @@ class SalahRemoteDataSourceImpl implements SalahRemoteDataSource {
     final jsonMap = json.decode(res.body) as Map<String, dynamic>;
     final data = jsonMap['data'] as Map<String, dynamic>;
 
-    final timingsJson = data['timings'] as Map<String, dynamic>; //salat timings
-    final metaJson =
+    final timingsMap = data['timings'] as Map<String, dynamic>; //salat timings
+    final metaMap =
         data['meta'] as Map<String, dynamic>; // meatadata: timezones
-    final dateJson =
-        data['date'] as Map<String, dynamic>; // date when sending report
+    final dateMap =
+        data['date'] as Map<String, dynamic>; // date for the timings
 
     return AladhanTimingsModel.fromJson(
-      timingsJson: timingsJson,
-      metaJson: metaJson,
-      dateJson: dateJson,
+      timingsJson: timingsMap,
+      metaJson: metaMap,
+      dateJson: dateMap,
     );
   }
 
@@ -71,10 +66,6 @@ class SalahRemoteDataSourceImpl implements SalahRemoteDataSource {
       'longitude': longitude.toString(),
       'method': method.toString(),
     });
-
-    debugPrint("fethcing salah for user in (coords) : $latitude, $longitude");
-
-    debugPrint("❤️${uri.toString()}");
 
     final res = await client.get(uri);
     if (res.statusCode != 200) {

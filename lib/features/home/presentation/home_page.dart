@@ -1,21 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/app/providers/tabs_screen_provider.dart';
-import 'package:rafeeq/core/animations/navigation_animations.dart';
-import 'package:rafeeq/core/features/location/presentation/pages/user_loc_settings.dart';
-import 'package:rafeeq/core/features/location/presentation/provider/user_location_provider.dart';
-import 'package:rafeeq/features/Ramadan/presentation/widgets/ramadan_card.dart';
-import 'package:rafeeq/features/home/presentation/widgets/hijri_date.dart';
-import 'package:rafeeq/features/asma_ul_husna/presentation/pages/asma_ul_husna_list_page.dart';
 import 'package:rafeeq/features/haramain-live/presentation/widgets/haramain_card.dart';
 import 'package:rafeeq/features/home/providers/reminder_providers.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/ayah_of_the_day.dart';
 import 'package:rafeeq/features/home/presentation/widgets/reminders_carousel.dart';
-import 'package:rafeeq/features/home/presentation/widgets/quick_action_row.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/quran_qoal_home_card.dart';
-import 'package:rafeeq/features/settings/presentation/pages/settings_page.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_prayer.dart';
 import 'package:rafeeq/features/timings/presentation/widgets/timeline_card.dart';
 
@@ -98,57 +88,6 @@ class _HomePageState extends ConsumerState<HomePage> {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class UserLocationChip extends ConsumerWidget {
-  const UserLocationChip({super.key});
-
-  @override
-  Widget build(BuildContext context, ref) {
-    final userLocationAsync = ref.watch(userLocationProvider);
-
-    return userLocationAsync.when(
-      error: (error, stackTrace) => GestureDetector(
-        onTap: () {
-          ref.invalidate(userLocationProvider);
-        },
-        child: const Chip(
-          label: Row(
-            children: [
-              Icon(Icons.error_outline, size: 18),
-              SizedBox(width: 4),
-              Text('retry'),
-            ],
-          ),
-        ),
-      ),
-      loading: () => const Chip(label: CupertinoActivityIndicator()),
-      data: (userLocation) => GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const UserLocSettingsPage(),
-            ),
-          );
-        },
-        child: Chip(
-          label: Row(
-            children: [
-              const Icon(Icons.location_on_outlined, size: 16),
-              const SizedBox(width: 2),
-
-              Text(
-                userLocation?.city ?? '',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

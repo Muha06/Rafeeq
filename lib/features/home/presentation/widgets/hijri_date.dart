@@ -31,15 +31,12 @@ class HijriDateToday extends ConsumerWidget {
             style: theme.textTheme.bodySmall!.copyWith(
               color: foregroundColor,
               fontSize: fontSize,
+              height: 1,
             ),
           ),
           const SizedBox(width: 8),
 
-          Icon(
-            PhosphorIcons.caretRight(),
-            size: 16,
-            color: theme.iconTheme.color,
-          ),
+          Icon(PhosphorIcons.caretRight(), size: 16, color: foregroundColor),
         ],
       ),
     );

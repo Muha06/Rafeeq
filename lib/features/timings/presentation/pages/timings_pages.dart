@@ -60,9 +60,9 @@ class _SalahTimingsPageState extends ConsumerState<SalahTimingsPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Chip(text: formattedDate, icon: Icons.date_range),
+                  MyChip(text: formattedDate, icon: Icons.date_range),
 
-                  Chip(
+                  MyChip(
                     text: userLoc.when(
                       loading: () => 'Loading',
                       error: (error, stackTrace) => 'Unknown',
@@ -109,8 +109,8 @@ class _SalahTimingsPageState extends ConsumerState<SalahTimingsPage> {
   }
 }
 
-class Chip extends StatelessWidget {
-  const Chip({super.key, required this.text, required this.icon});
+class MyChip extends StatelessWidget {
+  const MyChip({super.key, required this.text, required this.icon});
   final IconData icon;
   final String text;
 
