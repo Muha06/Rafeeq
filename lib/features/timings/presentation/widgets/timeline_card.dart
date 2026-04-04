@@ -15,7 +15,6 @@ import 'package:rafeeq/features/asma_ul_husna/presentation/pages/asma_ul_husna_l
 import 'package:rafeeq/features/home/presentation/widgets/hijri_date.dart';
 import 'package:rafeeq/features/home/presentation/widgets/quick_action_row.dart';
 import 'package:rafeeq/features/settings/presentation/pages/settings_page.dart';
-import 'package:rafeeq/features/timings/domain/entities/salah_status.dart';
 import 'package:rafeeq/features/timings/presentation/pages/timings_pages.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/salah_status_provider.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/salah_times_providers.dart';
@@ -120,6 +119,13 @@ class TimingsStatus extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final statusAsync = ref.watch(salahStatusProvider);
+    final progress = ref.watch(
+      salahStatusProvider.select((s) => s.value?.progress ?? 0),
+    );
+
+    final current = ref.watch(
+      salahStatusProvider.select((s) => s.value?.current),
+    );
 
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
@@ -134,7 +140,7 @@ class TimingsStatus extends ConsumerWidget {
               child: SleekCircularSlider(
                 min: 0,
                 max: 1,
-                initialValue: status.progress.clamp(0, 1),
+                initialValue: progress.clamp(0, 1),
                 appearance: CircularSliderAppearance(
                   size: 120,
                   startAngle: 180,
@@ -147,6 +153,7 @@ class TimingsStatus extends ConsumerWidget {
                     progressBarColor: highlightColor,
                     trackColor: cs.surface.withAlpha(90),
                   ),
+                  animationEnabled: false,
                 ),
                 innerWidget: (_) {
                   return Center(
@@ -154,7 +161,7 @@ class TimingsStatus extends ConsumerWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          status.current.label,
+                          current?.label ?? '',
                           style: theme.textTheme.labelLarge?.copyWith(
                             fontWeight: FontWeight.bold,
                             color: fg,
@@ -198,7 +205,6 @@ class TimingsStatus extends ConsumerWidget {
             ),
 
             _NextPrayerText(
-              status: status,
               theme: theme,
               fg: fg,
               highlightColor: highlightColor,
@@ -220,32 +226,33 @@ class TimingsStatus extends ConsumerWidget {
   }
 }
 
-class _NextPrayerText extends StatelessWidget {
+class _NextPrayerText extends ConsumerWidget {
   const _NextPrayerText({
     required this.theme,
     required this.fg,
     required this.highlightColor,
-    required this.status,
   });
 
   final ThemeData theme;
   final Color fg;
   final Color highlightColor;
-  final SalahStatusEntity status;
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
+    final next = ref.watch(salahStatusProvider.select((s) => s.value));
+
     return RichText(
       text: TextSpan(
-        text: "${status.next.label} is approaching in ",
+        text: "${next?.next.label ?? 'null'} is approaching in ",
         style: theme.textTheme.bodyMedium!.copyWith(color: fg),
         children: [
-          TextSpan(
-            text: formatRemaining(status.timeToNext),
-            style: theme.textTheme.bodyMedium!.copyWith(
-              color: highlightColor,
-              fontWeight: FontWeight.bold,
+          if (next?.timeToNext != null)
+            TextSpan(
+              text: formatRemaining(next!.timeToNext),
+              style: theme.textTheme.bodyMedium!.copyWith(
+                color: highlightColor,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
         ],
       ),
     );

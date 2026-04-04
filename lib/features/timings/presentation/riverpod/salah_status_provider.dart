@@ -2,46 +2,63 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_status.dart';
 import 'package:rafeeq/features/timings/domain/usecases/get_salah_status.dart';
-
 import 'salah_times_providers.dart';
 
-/// emits DateTime.now() every second
-final salahTickerProvider = StreamProvider<DateTime>((ref) {
-  final controller = StreamController<DateTime>();
+final salahTickerProvider = NotifierProvider<SalahTickerNotifier, DateTime>(
+  SalahTickerNotifier.new,
+);
 
-  // emit immediately
-  controller.add(DateTime.now());
+class SalahTickerNotifier extends Notifier<DateTime> {
+  Timer? _timer;
 
-  //Timer that emits after every 1 second
-  final timer = Timer.periodic(const Duration(seconds: 1), (_) {
-    controller.add(DateTime.now()); //emit
-  });
+  @override
+  DateTime build() {
+    _scheduleNextTick();
+    return DateTime.now();
+  }
 
-  ref.onDispose(() {
-    timer.cancel();
-    controller.close();
-  });
+  void _scheduleNextTick() {
+    final now = DateTime.now();
 
-  return controller.stream;
-});
+    final nextMinute = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      now.hour,
+      now.minute + 1,
+    );
+
+    final delay = nextMinute.difference(now);
+
+    _timer?.cancel();
+
+    //schedule
+    _timer = Timer(delay, () {
+      state = DateTime.now();
+
+      // reschedule forever
+      _scheduleNextTick();
+    });
+
+    ref.onDispose(() {
+      _timer?.cancel();
+    });
+  }
+}
+
+final salahStatusProvider =
+    AsyncNotifierProvider<SalahStatusNotifier, SalahStatusEntity>(
+      SalahStatusNotifier.new,
+    );
 
 /// combines (today timings + now) -> SalahStatusEntity
-final salahStatusProvider = Provider<AsyncValue<SalahStatusEntity>>((ref) {
-  final timesAsync = ref.watch(
-    todaySalahTimesProvider,
-  ); //salahTimesEntity (times)
+class SalahStatusNotifier extends AsyncNotifier<SalahStatusEntity> {
+  @override
+  Future<SalahStatusEntity> build() async {
+    final times = await ref.watch(todaySalahTimesProvider.future);
 
-  final nowAsync = ref.watch(salahTickerProvider); //stream of datetime.now()
+    final now = ref.watch(salahTickerProvider);
 
-  return timesAsync.when(
-    loading: () => const AsyncLoading(),
-    error: (e, st) => AsyncError(e, st),
-    data: (times) => nowAsync.when(
-      //times -> SalahTimesEntity
-      loading: () => const AsyncLoading(),
-      error: (e, st) => AsyncError(e, st),
-      data: (now) =>
-          AsyncData(computeSalahStatus(times: times, now: now)), //return
-    ),
-  );
-});
+    return computeSalahStatus(times: times, now: now);
+  }
+}
