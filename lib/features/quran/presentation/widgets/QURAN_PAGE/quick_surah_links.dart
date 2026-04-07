@@ -64,11 +64,11 @@ class SurahLink extends ConsumerWidget {
             color: cs.surface,
             borderRadius: BorderRadius.circular(14),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           child: Center(
             child: Text(
               surah.nameTransliteration,
-              style: theme.textTheme.labelMedium,
+              style: theme.textTheme.bodySmall,
             ),
           ),
         ),

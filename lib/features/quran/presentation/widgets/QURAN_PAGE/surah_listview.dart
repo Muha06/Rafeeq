@@ -39,15 +39,20 @@ class AllSurahsList extends ConsumerWidget {
       error: (error, stackTrace) {
         RafeeqAnalytics.logError(error.toString(), stack: stackTrace);
 
-        return AppStateView(
-          icon: PhosphorIcons.warningCircle(),
-          title: "Something went wrong",
-          message: "We couldn't load the surahs. Please try again.",
-          buttonText: "Retry",
-          onPressed: () => ref.refresh(surahsProvider),
+        return Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: AppStateView(
+              icon: PhosphorIcons.warningCircle(),
+              title: "Something went wrong",
+              message: "We couldn't load the surahs. Please try again Later.",
+              buttonText: "Retry",
+              onPressed: () => ref.refresh(surahsProvider),
+            ),
+          ),
         );
       },
-      loading: () => const CircularProgressIndicator(),
+      loading: () => const SurahTileShimmer(),
     );
   }
 }
@@ -144,63 +149,65 @@ class SurahTileShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
 
-    final baseColor = isDark
-        ? theme.cardColor.withAlpha(150)
-        : Colors.grey.shade300;
-    final highlightColor = isDark ? Colors.grey[800]! : Colors.grey.shade100;
+    final baseColor = theme.colorScheme.surface.withAlpha(64);
+    final highlightColor = theme.colorScheme.onSurface.withAlpha(64);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Shimmer.fromColors(
-        baseColor: baseColor,
-        highlightColor: highlightColor,
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(),
-            //color: isDark ? AppColors.darkSurface : AppColors.darkSurface,
-          ),
-          child: ListTile(
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 14,
-              vertical: 8,
+    return ListView.builder(
+      itemCount: 7,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemBuilder: (context, index) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: Shimmer.fromColors(
+          baseColor: baseColor,
+          highlightColor: highlightColor,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(),
+              //color: isDark ? AppColors.darkSurface : AppColors.darkSurface,
             ),
-
-            // Leading circle (surah number)
-            leading: const CircleAvatar(backgroundColor: Colors.white),
-
-            // Title shimmer
-            title: Container(
-              height: 16,
-              width: 140,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(6),
+            child: ListTile(
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 14,
+                vertical: 8,
               ),
-            ),
 
-            // Subtitle shimmer
-            subtitle: Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: Container(
-                height: 12,
-                width: 40,
+              // Leading circle (surah number)
+              leading: const CircleAvatar(backgroundColor: Colors.white),
+
+              // Title shimmer
+              title: Container(
+                height: 16,
+                width: 140,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(6),
                 ),
               ),
-            ),
 
-            // Trailing ayah count
-            trailing: Container(
-              height: 12,
-              width: 24,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(6),
+              // Subtitle shimmer
+              subtitle: Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Container(
+                  height: 12,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                ),
+              ),
+
+              // Trailing ayah count
+              trailing: Container(
+                height: 12,
+                width: 24,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(6),
+                ),
               ),
             ),
           ),

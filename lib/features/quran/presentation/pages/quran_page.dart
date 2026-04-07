@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/features/quran/presentation/pages/search_surah_page.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/QURAN_PAGE/surah_listview.dart';
@@ -53,7 +54,7 @@ class _QuranPageState extends ConsumerState<QuranPage> {
               ),
               actions: [
                 IconButton(
-                  icon: const Icon(CupertinoIcons.search),
+                  icon: Icon(PhosphorIcons.magnifyingGlass()),
 
                   onPressed: () {
                     Navigator.push(

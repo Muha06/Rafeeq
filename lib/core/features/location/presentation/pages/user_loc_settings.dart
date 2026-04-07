@@ -1,7 +1,5 @@
 import 'dart:async';
-
 import 'package:country_picker/country_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/features/location/domain/open_mateo.dart';
@@ -10,6 +8,7 @@ import 'package:rafeeq/core/features/location/presentation/provider/user_locatio
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/salah_times_providers.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class UserLocSettingsPage extends ConsumerStatefulWidget {
   const UserLocSettingsPage({super.key});
@@ -57,9 +56,9 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
         backgroundColor: theme.bottomSheetTheme.backgroundColor,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
         textStyle: theme.textTheme.bodyMedium,
-        inputDecoration: const InputDecoration(
+        inputDecoration: InputDecoration(
           hintText: 'Search country…',
-          prefixIcon: Icon(CupertinoIcons.search),
+          prefixIcon: Icon(PhosphorIcons.magnifyingGlass()),
         ),
       ),
     );
@@ -482,9 +481,7 @@ class _SettingCard extends ConsumerWidget {
                       const SizedBox(height: 6),
                       Text(
                         description,
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          fontWeight: FontWeight.w100,
-                        ),
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],
                   ),
@@ -514,7 +511,7 @@ class _ActionButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final enabled = onTap != null;
+     final cs = Theme.of(context).colorScheme;
 
     return InkWell(
       borderRadius: BorderRadius.circular(12),
@@ -523,7 +520,7 @@ class _ActionButton extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.white.withAlpha(enabled ? 26 : 15)),
+          border: Border.all(color: cs.onSurfaceVariant.withAlpha(64)),
         ),
         child: Row(
           children: [
@@ -534,9 +531,7 @@ class _ActionButton extends ConsumerWidget {
                 label,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w300),
+                style: Theme.of(context).textTheme.labelLarge,
               ),
             ),
           ],

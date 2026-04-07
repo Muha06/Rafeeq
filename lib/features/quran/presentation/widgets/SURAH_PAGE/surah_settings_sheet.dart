@@ -39,7 +39,7 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
       surahSettingsProvider.select((s) => s.autoScrollEnabled),
     );
 
-    final titleTextstyle = theme.textTheme.labelLarge!.copyWith(fontSize: 18);
+    final titleTextstyle = theme.textTheme.titleMedium;
 
     final selectedReciter = ref.watch(selectedReciterProvider);
 

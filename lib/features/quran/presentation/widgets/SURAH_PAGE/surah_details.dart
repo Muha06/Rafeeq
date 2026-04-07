@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/core/features/audio/providers/just_audio_player_provider.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 
@@ -24,7 +25,7 @@ class SurahDetails extends ConsumerWidget {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
+                horizontal: 12.0,
                 vertical: 16,
               ),
               child: Container(
@@ -34,7 +35,7 @@ class SurahDetails extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 24, 20, 16),
+                  padding: const EdgeInsets.fromLTRB(16, 24, 20, 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -48,6 +49,7 @@ class SurahDetails extends ConsumerWidget {
                       const SizedBox(height: 4),
                       Text(
                         surah.nameEnglish,
+                        maxLines: 2,
                         style: theme.textTheme.titleMedium!.copyWith(
                           color: cs.onPrimary,
                         ),
@@ -69,7 +71,7 @@ class SurahDetails extends ConsumerWidget {
 
             Positioned(
               top: isMakkan ? 36 : 35,
-              right: 24,
+              right: 20,
               child: Image.asset(
                 isMakkan
                     ? 'assets/images/quran/makkan.png'
@@ -107,7 +109,7 @@ class PlayFullSurahBtn extends ConsumerWidget {
     return OutlinedButton.icon(
       icon: (loading != null && loading)
           ? const SizedBox(height: 12, child: CupertinoActivityIndicator())
-          : const Icon(CupertinoIcons.play),
+          : Icon(PhosphorIcons.play()),
       onPressed: onPlay,
 
       label: Text((loading != null && loading) ? 'Loading...' : 'Play surah'),
@@ -132,7 +134,7 @@ class _Chip extends ConsumerWidget {
       ),
       child: Text(
         text,
-        style: theme.textTheme.labelSmall!.copyWith(color: cs.tertiary),
+        style: theme.textTheme.labelSmall!.copyWith(color: cs.onPrimary),
       ),
     );
   }

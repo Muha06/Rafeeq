@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class MyBottomBar extends StatelessWidget {
   final ValueChanged<int> onTap;
@@ -13,29 +13,33 @@ class MyBottomBar extends StatelessWidget {
     required this.isDarkMode,
   });
 
-  static const _items = [
-    (icon: FontAwesomeIcons.house, active: Icons.home_rounded, label: 'Home'),
-    (
-      icon: FontAwesomeIcons.bookQuran,
-      active: FontAwesomeIcons.bookQuran,
-      label: "Qur'an",
-    ),
-    (
-      icon: FontAwesomeIcons.handsPraying,
-      active: FontAwesomeIcons.handsPraying,
-      label: 'Adhkār',
-    ),
-    (
-      icon: Icons.bookmark_outline,
-      active: Icons.bookmark_rounded,
-      label: 'Bookmarks',
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
+
+    final List<({IconData icon, IconData active, String label})> items = [
+      (
+        icon: PhosphorIcons.house(),
+        active: PhosphorIcons.house(PhosphorIconsStyle.fill),
+        label: 'Home',
+      ),
+      (
+        icon: PhosphorIcons.bookOpenText(),
+        active: PhosphorIcons.bookOpenText(PhosphorIconsStyle.fill),
+        label: "Qur'an",
+      ),
+      (
+        icon: PhosphorIcons.handsPraying(),
+        active: PhosphorIcons.handsPraying(PhosphorIconsStyle.fill),
+        label: 'Adhkār',
+      ),
+      (
+        icon: PhosphorIcons.bookmark(),
+        active: PhosphorIcons.bookmark(PhosphorIconsStyle.fill),
+        label: 'Bookmarks',
+      ),
+    ];
 
     return SafeArea(
       bottom: true,
@@ -46,8 +50,8 @@ class MyBottomBar extends StatelessWidget {
         ),
         padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 12),
         child: Row(
-          children: List.generate(_items.length, (index) {
-            final item = _items[index];
+          children: List.generate(items.length, (index) {
+            final item = items[index];
             final isSelected = currentIndex == index;
 
             return Expanded(
@@ -58,35 +62,15 @@ class MyBottomBar extends StatelessWidget {
                   highlightColor: Colors.transparent,
                   splashColor: Colors.transparent,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 120),
-                          child: Icon(
-                            isSelected ? item.active : item.icon,
-                            key: ValueKey(isSelected), // simpler
-                            color: isSelected
-                                ? cs.primary
-                                : cs.onSurfaceVariant,
-                            size: isSelected ? 19 : 16,
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        AnimatedDefaultTextStyle(
-                          duration: const Duration(milliseconds: 200),
-                          style: theme.textTheme.bodySmall!.copyWith(
-                            fontSize: isSelected ? 12 : 11,
-                            fontWeight: FontWeight.w700,
-                          ),
-                          child: Text(
-                            item.label,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 350),
+                      child: Icon(
+                        isSelected ? item.active : item.icon,
+                        key: ValueKey(isSelected), // simpler
+                        color: isSelected ? cs.primary : cs.onSurfaceVariant,
+                        size: isSelected ? 26 : 24,
+                      ),
                     ),
                   ),
                 ),

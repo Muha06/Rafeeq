@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/features/quran_reading_plan/presentation/pages/quran_reading_plan_stats.dart';
@@ -31,7 +32,7 @@ class ViewQuranReadingPlanStats extends StatelessWidget {
           child: Row(
             children: [
               Icon(
-                CupertinoIcons.chart_bar,
+                PhosphorIcons.chartBar(),
                 color: theme.colorScheme.onPrimary,
               ),
               const SizedBox(width: 12),
@@ -44,7 +45,7 @@ class ViewQuranReadingPlanStats extends StatelessWidget {
                 ),
               ),
               Icon(
-                CupertinoIcons.chevron_forward,
+                PhosphorIcons.caretRight(),
                 color: theme.colorScheme.onPrimary,
               ),
             ],
