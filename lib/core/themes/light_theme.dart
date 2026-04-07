@@ -28,7 +28,7 @@ ThemeData appLightThemeData() {
         onSurfaceVariant: AppLightColors.onSurface2,
       );
 
-  final base = Typography.material2021().black.apply(fontFamily: 'Manrope');
+  final base = Typography.material2021().black.apply(fontFamily: 'NotoSerif');
 
   return ThemeData(
     useMaterial3: true,

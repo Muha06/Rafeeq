@@ -28,6 +28,6 @@ class AppWrapper extends ConsumerWidget {
       }
     });
 
-    return Stack(children: [SafeArea(bottom: true, child: child)]);
+    return Stack(children: [SafeArea(top: false, bottom: true, child: child)]);
   }
 }

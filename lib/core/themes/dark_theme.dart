@@ -25,7 +25,7 @@ ThemeData appDarkThemeData() {
         onSurfaceVariant: AppDarkColors.onSurface2, // quieter text/icons
       );
 
-  final base = Typography.material2021().black.apply(fontFamily: 'Manrope');
+  final base = Typography.material2021().black.apply(fontFamily: 'NotoSerif');
 
   return ThemeData(
     useMaterial3: true,
@@ -82,7 +82,6 @@ ThemeData appDarkThemeData() {
         side: const BorderSide(color: Colors.transparent),
       ),
     ),
-
 
     bottomSheetTheme: BottomSheetThemeData(
       backgroundColor: scheme.surface,

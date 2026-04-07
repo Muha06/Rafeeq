@@ -4,7 +4,7 @@ import 'package:rafeeq/core/themes/dark_theme.dart';
 class AppTextStyles {
   // Base Manrope style
   static const TextStyle _base = TextStyle(
-    fontFamily: 'Manrope',
+    fontFamily: 'NotoSerif',
     fontSize: 14,
     height: 1.35,
     letterSpacing: 0.1,
