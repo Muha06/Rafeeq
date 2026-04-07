@@ -67,6 +67,7 @@ class UserLocationNotifier extends AsyncNotifier<UserLocation?> {
 
     final ok = await access.requestLocation();
     if (!ok) {
+      throw 'permissions deinied';
       // don’t switch to GPS mode
       // show a snackbar/dialog based on access.state
     }

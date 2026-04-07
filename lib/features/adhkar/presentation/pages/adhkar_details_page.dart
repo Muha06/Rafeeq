@@ -14,7 +14,6 @@ import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/features/adhkar/domain/entities/dhikr.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/dhikr_bookmark.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/dhikr/dhikr_notifier_provider.dart';
-import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class AdhkarDetailsPage extends ConsumerStatefulWidget {
   const AdhkarDetailsPage({
@@ -173,6 +172,7 @@ class _AdhkarDetailsTileState extends ConsumerState<AdhkarDetailsTile> {
                     ),
                     const SizedBox(),
 
+                    //copy
                     IconButton(
                       visualDensity: VisualDensity.compact,
                       iconSize: 22,

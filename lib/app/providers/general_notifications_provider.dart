@@ -1,4 +1,4 @@
- import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -72,7 +72,6 @@ class SystemNotifAccessNotifier extends Notifier<SystemNotifAccessState> {
   Future<void> sync() async {
     state = state.copyWith(isLoading: true);
 
-    // Android 13+ runtime permission
     final notifPerm = await Permission.notification.status;
 
     final notifGranted = notifPerm.isGranted;
@@ -86,8 +85,6 @@ class SystemNotifAccessNotifier extends Notifier<SystemNotifAccessState> {
 
     final exactAlarmsAllowed = await NotificationService.instance
         .canScheduleExactAlarms();
-
-    
 
     await _persist(
       notificationsAllowed: notificationsAllowed,

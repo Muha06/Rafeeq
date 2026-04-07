@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/features/onboarding/presentation/provider/location_prov.dart';
+import 'package:rafeeq/core/features/location/presentation/provider/location_prov.dart';
 
 class LocationPermissionCta extends ConsumerStatefulWidget {
   const LocationPermissionCta({super.key});

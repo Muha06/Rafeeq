@@ -3,12 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/core/themes/app_text_style.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
+import 'package:rafeeq/features/bookmarks/presentation/riverpod/Quran/quran_notifier_provider.dart';
 import 'package:rafeeq/features/quran/domain/entities/ayah.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/ayah_of_the_day.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/ayah_share_cotroller_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/quran_bookmark.dart';
-import 'package:rafeeq/features/bookmarks/presentation/riverpod/Quran/execution_providers.dart';
 
 class AyahTile extends ConsumerStatefulWidget {
   final String surahNameTranslit;
@@ -34,7 +34,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
     final ayahNumber = widget.ayahNumber;
 
     final ayah = widget.ayah;
-    final ayahId = '${ayah.surahId}:$ayahNumber';
+    final bookmarkId = ayah.verseKey;
 
     final cs = theme.colorScheme;
 
@@ -65,55 +65,44 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                     visualDensity: VisualDensity.compact,
                     onPressed: () async {
                       try {
-                        final isBookmarked = ref.read(
-                          isBookmarkedProvider(ayahId),
-                        );
-
-                        if (isBookmarked) {
-                          // remove bookmark
-                          await ref.read(removeQuranBookmarkProvider(ayahId))();
-
-                          AppSnackBar.showSimple(
-                            context: context,
-                            message: 'Bookmark removed ❌',
-                            duration: const Duration(seconds: 3),
-                          );
-
-                          return;
-                        }
-
-                        // add bookmark
                         final ayahSurah = ref.read(
                           ayahSurahProvider(ayah.surahId),
                         );
 
-                        if (ayahSurah != null) {
-                          final bookmark = QuranBookmarkEntity(
-                            id: '${ayah.surahId}:$ayahNumber',
-                            surahId: ayah.surahId,
-                            surahEnglishName: ayahSurah.nameTransliteration,
-                            ayahNumber: ayahNumber,
-                            createdAt: DateTime.now(),
-                          );
+                        final bookmark = QuranBookmarkEntity(
+                          id: bookmarkId,
+                          surahId: ayah.surahId,
+                          surahEnglishName:
+                              ayahSurah?.nameTransliteration ?? '',
+                          ayahNumber: ayahNumber,
+                          createdAt: DateTime.now(),
+                        );
 
-                          await ref.read(addQuranBookmarkProvider(bookmark))();
-                        }
+                        //toggle
+                        final isBookmarked = await ref
+                            .read(quranBookmarksProvider.notifier)
+                            .toggle(bookmark);
 
                         AppSnackBar.showSimple(
                           context: context,
-                          message: 'Bookmark added ✅',
-                          duration: const Duration(seconds: 3),
+                          message: isBookmarked
+                              ? 'Added to bookmarks'
+                              : 'Removed from bookmars',
                         );
                       } catch (e) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Bookmark failed: $e')),
+                        AppSnackBar.showSimple(
+                          context: context,
+                          message:
+                              "Failed to bookmark ayah. Please try again later",
                         );
                       }
                     },
                     icon: Consumer(
                       builder: (context, ref, child) {
-                        final bookmarkedIds = ref.watch(bookmarkedIdsProvider);
-                        final isBookmarked = bookmarkedIds.contains(ayahId);
+                        final isBookmarked = ref.watch(
+                          isQuranBookmarkedProvider(bookmarkId),
+                        );
+
                         return PhosphorIcon(
                           isBookmarked
                               ? PhosphorIcons.bookBookmark(

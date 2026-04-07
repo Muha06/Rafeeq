@@ -46,7 +46,7 @@ void main() {
       } catch (e) {
         debugPrint('dotenv failed to load: $e');
       }
-      
+
       // Initialize Hive
       await Hive.initFlutter();
 
@@ -149,9 +149,10 @@ class _MyAppState extends ConsumerState<MyApp> {
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       scaffoldMessengerKey: scaffoldMessengerKey,
-      home: hasSeenOnboarding
-          ? const AppWrapper(child: TabsScreen())
-          : const OnboardingPage(),
+      home: const OnboardingPage(),
+      //  hasSeenOnboarding
+      //     ? const AppWrapper(child: TabsScreen())
+      //     : const OnboardingPage(),
     );
   }
 }

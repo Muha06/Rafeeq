@@ -27,9 +27,15 @@ class SalahSlide extends StatelessWidget {
       imageAsset: 'assets/images/onboarding/salat_feature.png',
       title: 'Stay on time for every ṣalāh',
       subtitle:
-          'Enable location to calculate accurate prayer times for where you are.',
+          'Enable Location & Notification to calculate and send accurate prayer reminders for where you are.',
       accent: Theme.of(context).colorScheme.primary,
-      child: const LocationPermissionCta(),
+      child: const Column(
+        children: [
+          LocationPermissionCta(),
+          SizedBox(height: 8),
+          NotificationsPermissionCta(),
+        ],
+      ),
     );
   }
 }
@@ -44,21 +50,6 @@ class QuranAdhkarSlide extends StatelessWidget {
       title: 'Stay connected daily',
       subtitle: 'Qur’an, adhkār, and reflections — at your own pace.',
       accent: Theme.of(context).colorScheme.primary,
-    );
-  }
-}
-
-class RamadanSlide extends StatelessWidget {
-  const RamadanSlide({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return OnboardingSlide(
-      imageAsset: 'assets/images/onboarding/ramadan_feature.png',
-      title: 'Ramadan, made intentional',
-      subtitle: 'Suḥūr • Iftār • Daily reminders that matter.',
-      accent: Theme.of(context).colorScheme.primary,
-      child: const NotificationsPermissionCta(),
     );
   }
 }

@@ -34,9 +34,12 @@ class DhikrBookmarksNotifier extends Notifier<List<DhikrBookmark>> {
       await add(bookmark);
     }
   }
+
+   
 }
 
-final isDhikrBookmarkedProvider = Provider.family<bool, int>((ref, dhikrId) {
+final isDhikrBookmarkedProvider = Provider.family<bool, int>((ref, id) {
   final bookmarks = ref.watch(dhikrBookmarksProvider);
-  return bookmarks.any((b) => b.dhikrId == dhikrId);
+  return bookmarks.any((b) => b.dhikrId == id);
 });
+ 

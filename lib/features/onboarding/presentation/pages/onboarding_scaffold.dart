@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/app/tabs_screen.dart';
-import 'package:rafeeq/core/themes/dark_theme.dart';
 import 'package:rafeeq/features/onboarding/presentation/provider/onboarding_provider.dart';
 import 'package:rafeeq/features/onboarding/presentation/provider/providers.dart';
 import 'package:rafeeq/features/onboarding/presentation/widgets/dots_indicator.dart';
@@ -17,7 +17,7 @@ class OnboardingPage extends ConsumerStatefulWidget {
 class _OnboardingPageState extends ConsumerState<OnboardingPage> {
   late final PageController _pageController;
 
-  static const _pageCount = 4;
+  static const _pageCount = 3;
 
   @override
   void initState() {
@@ -52,8 +52,9 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
   Widget build(BuildContext context) {
     final index = ref.watch(onboardingIndexProvider);
 
+    final cs = Theme.of(context).colorScheme;
+
     return Scaffold(
-      backgroundColor: AppDarkColors.canvas,
       body: SafeArea(
         child: Column(
           children: [
@@ -67,7 +68,6 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
                   WelcomeSlide(),
                   SalahSlide(),
                   QuranAdhkarSlide(),
-                  RamadanSlide(),
                 ],
               ),
             ),
@@ -81,15 +81,26 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
                   const Spacer(),
 
                   // Skip (hide on last page)
-                  ElevatedButton(
-                    onPressed: () async {
-                      if (index < _pageCount - 1) {
-                        await _goTo(index + 1);
-                      } else {
-                        _finishOnboarding(context);
-                      }
-                    },
-                    child: Text(index < _pageCount - 1 ? 'Continue' : 'Start'),
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: cs.primary,
+                    ),
+                    child: IconButton(
+                      onPressed: () async {
+                        if (index < _pageCount - 1) {
+                          await _goTo(index + 1);
+                        } else {
+                          _finishOnboarding(context);
+                        }
+                      },
+                      icon: PhosphorIcon(
+                        index == (_pageCount - 1)
+                            ? PhosphorIcons.check()
+                            : PhosphorIcons.caretRight(),
+                        color: cs.onPrimary,
+                      ),
+                    ),
                   ),
                 ],
               ),

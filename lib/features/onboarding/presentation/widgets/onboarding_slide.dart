@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
- 
+
 class OnboardingSlide extends StatelessWidget {
   const OnboardingSlide({
     super.key,
@@ -19,7 +19,8 @@ class OnboardingSlide extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
- 
+    final cs = theme.colorScheme;
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 26, 24, 18),
       child: Column(
@@ -36,10 +37,9 @@ class OnboardingSlide extends StatelessWidget {
             title,
             textAlign: TextAlign.center,
             style: theme.textTheme.headlineLarge?.copyWith(
-              color: Colors.white,
               fontWeight: FontWeight.w800,
-              fontSize: 26,
-              letterSpacing: -0.3,
+              color: cs.onSurface,
+              fontSize: 32,
             ),
           ),
 
@@ -49,9 +49,7 @@ class OnboardingSlide extends StatelessWidget {
           Text(
             subtitle,
             textAlign: TextAlign.center,
-            style: theme.textTheme.bodyMedium?.copyWith(
-               height: 1.35,
-            ),
+            style: theme.textTheme.bodyMedium?.copyWith(fontSize: 20),
           ),
 
           if (child != null) ...[const SizedBox(height: 18), child!],

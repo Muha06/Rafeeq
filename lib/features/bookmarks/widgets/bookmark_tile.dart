@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/dhikr_bookmark.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/quran_bookmark.dart';
-import 'package:rafeeq/features/bookmarks/presentation/riverpod/Quran/execution_providers.dart';
+import 'package:rafeeq/features/bookmarks/presentation/riverpod/Quran/quran_notifier_provider.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/dhikr/dhikr_notifier_provider.dart';
 import 'package:rafeeq/features/bookmarks/widgets/bookmark_action_sheet.dart';
 
@@ -45,7 +45,9 @@ class _BookmarkTileState extends ConsumerState<BookmarkTile> {
             .read(dhikrBookmarksProvider.notifier)
             .remove(dhikrBookmark.dhikrId);
       } else {
-        await ref.read(removeQuranBookmarkProvider(quranBookmark!.id))();
+        await ref
+            .read(quranBookmarksProvider.notifier)
+            .removeBookmark(quranBookmark!.id);
       }
       if (context.mounted) {
         AppSnackBar.showSimple(
