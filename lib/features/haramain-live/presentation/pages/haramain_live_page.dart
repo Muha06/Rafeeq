@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 class HaramainLivePage extends StatefulWidget {
   const HaramainLivePage({
@@ -28,11 +29,13 @@ class _HaramainLivePageState extends State<HaramainLivePage> {
         _controller.play(); // autoplay
         _controller.setLooping(false); // live stream = no loop needed
       });
+    WakelockPlus.enable();
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    WakelockPlus.disable();
     super.dispose();
   }
 

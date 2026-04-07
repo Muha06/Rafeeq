@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
-import 'package:rafeeq/core/helpers/rafeeq_analytics.dart';
+import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/features/adhkar/domain/entities/adhkar_category.dart';
 import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_titles_pages.dart';
 import 'package:rafeeq/features/adhkar/presentation/riverpod/get_adhkars_provider.dart';

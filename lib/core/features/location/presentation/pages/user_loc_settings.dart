@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/features/location/domain/open_mateo.dart';
 import 'package:rafeeq/core/features/location/presentation/provider/open_mateo_provider.dart';
 import 'package:rafeeq/core/features/location/presentation/provider/user_location_provider.dart';
-import 'package:rafeeq/core/helpers/rafeeq_analytics.dart';
+import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/salah_times_providers.dart';
 

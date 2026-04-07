@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
-import 'package:rafeeq/core/helpers/rafeeq_analytics.dart';
+import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_details_page.dart';
 import 'package:rafeeq/features/adhkar/presentation/riverpod/get_adhkars_provider.dart';
 import 'package:rafeeq/features/adhkar/domain/entities/dhikr.dart';
@@ -51,9 +51,8 @@ class AdhkarTitlesPages extends ConsumerWidget {
                         title: adhkarsForCategory.first.categoryTitle,
                       ),
                     ).then(
-                      (value) => RafeeqAnalytics.logScreenView(
-                        'adhkar_details_page',
-                      ),
+                      (value) =>
+                          RafeeqAnalytics.logScreenView('adhkar_details_page'),
                     ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -62,18 +61,19 @@ class AdhkarTitlesPages extends ConsumerWidget {
                   ),
                   child: Row(
                     children: [
+                      //Number
                       Container(
                         height: 24,
                         width: 36,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(999),
-                          color: cs.surface,
+                          color: cs.primary,
                         ),
                         child: Center(
                           child: Text(
                             (index + 1).toString(),
                             style: theme.textTheme.bodySmall!.copyWith(
-                              color: cs.primary,
+                              color: cs.onPrimary,
                             ),
                           ),
                         ),

@@ -9,7 +9,7 @@ import 'package:rafeeq/core/animations/navigation_animations.dart';
 import 'package:rafeeq/core/features/location/presentation/pages/user_loc_settings.dart';
 import 'package:rafeeq/core/features/location/presentation/provider/user_location_provider.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
-import 'package:rafeeq/core/helpers/rafeeq_analytics.dart';
+import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/features/asma_ul_husna/presentation/pages/asma_ul_husna_list_page.dart';
 import 'package:rafeeq/features/home/presentation/widgets/hijri_date.dart';

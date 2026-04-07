@@ -7,7 +7,7 @@ import 'package:rafeeq/core/features/audio/domain/entities/audio_state.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
 import 'package:rafeeq/core/features/audio/providers/just_audio_player_provider.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
-import 'package:rafeeq/core/helpers/rafeeq_analytics.dart';
+import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/core/themes/app_text_style.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
@@ -32,7 +32,6 @@ class AdhkarDetailsPage extends ConsumerStatefulWidget {
 class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
   @override
   Widget build(BuildContext context) {
-    final isDark = ref.watch(isDarkProvider);
     final adhkars = widget.adhkars;
     final theme = Theme.of(context);
 
@@ -46,7 +45,7 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
         itemBuilder: (context, i) {
           final dhikr = adhkars[i];
 
-          return AdhkarDetailsTile(isDark: isDark, dhikr: dhikr);
+          return AdhkarDetailsTile(dhikr: dhikr);
         },
       ),
     );
@@ -54,13 +53,8 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
 }
 
 class AdhkarDetailsTile extends ConsumerStatefulWidget {
-  const AdhkarDetailsTile({
-    super.key,
-    required this.isDark,
-    required this.dhikr,
-  });
+  const AdhkarDetailsTile({super.key, required this.dhikr});
 
-  final bool isDark;
   final DhikrEntity dhikr;
 
   @override
@@ -129,7 +123,7 @@ class _AdhkarDetailsTileState extends ConsumerState<AdhkarDetailsTile> {
                     cleanDhikr(widget.dhikr.arabicText),
                     textDirection: TextDirection.rtl,
                     style: AppTextStyles.arabicUi.copyWith(
-                      // fontSize: 24,
+                      color: cs.onSurface,
                       height: 1.8,
                     ),
                   ),
@@ -230,7 +224,7 @@ class _AdhkarDetailsTileState extends ConsumerState<AdhkarDetailsTile> {
                           onPressed: () {
                             final bookmark = DhikrBookmark(
                               dhikrId: dhikr.id,
-                              title: dhikr.categoryTitle,
+                              title: dhikr.transliteration,
                               categoryId: dhikr.categoryId,
                               createdAt: DateTime.now(),
                             );
@@ -242,7 +236,11 @@ class _AdhkarDetailsTileState extends ConsumerState<AdhkarDetailsTile> {
                             RafeeqAnalytics.logFeature('bookmarked_dhikr');
                           },
                           icon: PhosphorIcon(
-                            PhosphorIcons.bookmark(),
+                            PhosphorIcons.bookmark(
+                              isBookmarked
+                                  ? PhosphorIconsStyle.fill
+                                  : PhosphorIconsStyle.regular,
+                            ),
                             color: isBookmarked ? cs.primary : cs.onSurface,
                           ),
                         );
