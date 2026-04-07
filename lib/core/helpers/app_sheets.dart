@@ -13,6 +13,7 @@ class AppSheets {
   }) {
     return showModalBottomSheet<T>(
       context: context,
+      useSafeArea: true,
       isScrollControlled: isScrollControlled,
       showDragHandle: true,
       shape: const RoundedRectangleBorder(
@@ -37,10 +38,11 @@ class AppSheets {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
-    return showBottomSheet(
+    return showModalBottomSheet(
+      useSafeArea: true,
       context: context,
       isScrollControlled: true,
-      child: Padding(
+      builder: (context) => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         child: Column(
           mainAxisSize: MainAxisSize.min,

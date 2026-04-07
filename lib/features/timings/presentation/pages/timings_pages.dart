@@ -56,65 +56,72 @@ class _SalahTimingsPageState extends ConsumerState<SalahTimingsPage> {
         final status = ref.watch(salahStatusProvider).value;
         final current = status?.current;
 
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text('Today\'s Timings'),
-            bottom: appBarBottomDivider(context),
-          ),
-          body: Column(
-            children: [
-              Positioned.fill(
-                child: SafeArea(
-                  bottom: false,
-                  top: false,
-                  child: SizedBox(
-                    height: 200,
-                    child: AllSalatTimingsCard(times: times, current: current),
-                  ),
-                ),
-              ),
-
-              Expanded(
-                child: Container(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: ListView(
-                    padding: const EdgeInsets.fromLTRB(16, 20, 16, 16),
-                    children: [
-                      // 🕌 Obligatory prayers
-                      Text(
-                        'Obligatory Prayers',
-                        style: theme.textTheme.bodySmall,
+        return SafeArea(
+          top: false,
+          bottom: true,
+          child: Scaffold(
+            appBar: AppBar(
+              title: const Text('Today\'s Timings'),
+              bottom: appBarBottomDivider(context),
+            ),
+            body: Column(
+              children: [
+                Positioned.fill(
+                  child: SafeArea(
+                    bottom: false,
+                    top: false,
+                    child: SizedBox(
+                      height: 200,
+                      child: AllSalatTimingsCard(
+                        times: times,
+                        current: current,
                       ),
-                      const SizedBox(height: 12),
-
-                      ...salats.map((p) {
-                        final t = times.at(p);
-                        return _TimingTile(
-                          prayer: p,
-                          title: p.label,
-                          timeText: _formatHm(t),
-                        );
-                      }),
-
-                      const SizedBox(height: 16),
-
-                      // 🌤️ Other times
-                      Text('Other Times', style: theme.textTheme.bodySmall),
-                      const SizedBox(height: 12),
-
-                      ...otherTimes.map((p) {
-                        final t = times.at(p);
-                        return _TimingTile(
-                          prayer: p,
-                          title: p.label,
-                          timeText: _formatHm(t),
-                        );
-                      }),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: ListView(
+                      padding: const EdgeInsets.fromLTRB(16, 20, 16, 16),
+                      children: [
+                        // 🕌 Obligatory prayers
+                        Text(
+                          'Obligatory Prayers',
+                          style: theme.textTheme.bodySmall,
+                        ),
+                        const SizedBox(height: 12),
+
+                        ...salats.map((p) {
+                          final t = times.at(p);
+                          return _TimingTile(
+                            prayer: p,
+                            title: p.label,
+                            timeText: _formatHm(t),
+                          );
+                        }),
+
+                        const SizedBox(height: 16),
+
+                        // 🌤️ Other times
+                        Text('Other Times', style: theme.textTheme.bodySmall),
+                        const SizedBox(height: 12),
+
+                        ...otherTimes.map((p) {
+                          final t = times.at(p);
+                          return _TimingTile(
+                            prayer: p,
+                            title: p.label,
+                            timeText: _formatHm(t),
+                          );
+                        }),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },

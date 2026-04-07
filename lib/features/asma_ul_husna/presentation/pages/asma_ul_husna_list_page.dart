@@ -16,60 +16,64 @@ class _AllahNamesPageState extends ConsumerState<AllahNamesPage> {
   Widget build(BuildContext context) {
     final asyncNames = ref.watch(allahNamesProvider);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Asma’ul Husna"),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(64),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-            child: _SearchBar(
-              hintText: "Search (Arabic / transliteration)",
-              onChanged: (v) => setState(() => _query = v.trim()),
+    return SafeArea(
+      top: false,
+      bottom: true,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("Asma’ul Husna"),
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(64),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+              child: _SearchBar(
+                hintText: "Search (Arabic / transliteration)",
+                onChanged: (v) => setState(() => _query = v.trim()),
+              ),
             ),
           ),
         ),
-      ),
-      body: asyncNames.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => _ErrorState(
-          message: "Couldn’t load names. Check your internet and try again.",
-          details: e.toString(),
-          onRetry: () => ref.invalidate(allahNamesProvider),
-        ),
-        data: (names) {
-          final filtered = names.where((n) {
-            if (_query.isEmpty) return true;
-            final q = _query.toLowerCase().trim();
+        body: asyncNames.when(
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (e, _) => _ErrorState(
+            message: "Couldn’t load names. Check your internet and try again.",
+            details: e.toString(),
+            onRetry: () => ref.invalidate(allahNamesProvider),
+          ),
+          data: (names) {
+            final filtered = names.where((n) {
+              if (_query.isEmpty) return true;
+              final q = _query.toLowerCase().trim();
 
-            return n.arabic.trim().contains(_query) ||
-                n.transliteration.trim().toLowerCase().contains(q) ||
-                n.meaningEn.trim().toLowerCase().contains(q) ||
-                n.number.toString() == _query;
-          }).toList();
+              return n.arabic.trim().contains(_query) ||
+                  n.transliteration.trim().toLowerCase().contains(q) ||
+                  n.meaningEn.trim().toLowerCase().contains(q) ||
+                  n.number.toString() == _query;
+            }).toList();
 
-          if (filtered.isEmpty) {
-            return const _EmptyState(
-              title: "No matches",
-              subtitle: "Try a different keyword (or search by number).",
-            );
-          }
-
-          return ListView.separated(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-            itemCount: filtered.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 12),
-            itemBuilder: (context, i) {
-              final n = filtered[i];
-              return _AllahNameTile(
-                number: n.number,
-                arabic: n.arabic,
-                transliteration: n.transliteration,
-                meaning: n.meaningEn,
+            if (filtered.isEmpty) {
+              return const _EmptyState(
+                title: "No matches",
+                subtitle: "Try a different keyword (or search by number).",
               );
-            },
-          );
-        },
+            }
+
+            return ListView.separated(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+              itemCount: filtered.length,
+              separatorBuilder: (_, __) => const SizedBox(height: 12),
+              itemBuilder: (context, i) {
+                final n = filtered[i];
+                return _AllahNameTile(
+                  number: n.number,
+                  arabic: n.arabic,
+                  transliteration: n.transliteration,
+                  meaning: n.meaningEn,
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }

@@ -34,18 +34,22 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
     final adhkars = widget.adhkars;
     final theme = Theme.of(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title, style: theme.textTheme.titleMedium),
-        bottom: appBarBottomDivider(context),
-      ),
-      body: ListView.builder(
-        itemCount: adhkars.length,
-        itemBuilder: (context, i) {
-          final dhikr = adhkars[i];
+    return SafeArea(
+      top: false,
+      bottom: true,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title, style: theme.textTheme.titleMedium),
+          bottom: appBarBottomDivider(context),
+        ),
+        body: ListView.builder(
+          itemCount: adhkars.length,
+          itemBuilder: (context, i) {
+            final dhikr = adhkars[i];
 
-          return AdhkarDetailsTile(dhikr: dhikr);
-        },
+            return AdhkarDetailsTile(dhikr: dhikr);
+          },
+        ),
       ),
     );
   }

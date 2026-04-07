@@ -149,10 +149,9 @@ class _MyAppState extends ConsumerState<MyApp> {
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
       scaffoldMessengerKey: scaffoldMessengerKey,
-      home: const OnboardingPage(),
-      //  hasSeenOnboarding
-      //     ? const AppWrapper(child: TabsScreen())
-      //     : const OnboardingPage(),
+      home: hasSeenOnboarding
+          ? const AppWrapper(child: TabsScreen())
+          : const OnboardingPage(),
     );
   }
 }

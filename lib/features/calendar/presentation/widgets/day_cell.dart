@@ -31,7 +31,8 @@ class DayCell extends ConsumerWidget {
     final cs = theme.colorScheme;
 
     final opacity = isOutside ? 0.35 : 1.0;
-    final dateTextColor = isSelected ? cs.onPrimary : cs.onSurfaceVariant;
+    final dateTextColor = isSelected ? cs.onPrimary : cs.onSurface;
+
     final todayBgColor = isToday
         ? cs.surfaceContainerHighest
         : Colors.transparent;
@@ -62,7 +63,7 @@ class DayCell extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 2),
-            
+
             // Hijri day number (small)
             Text(
               '${adjusted.hDay}',

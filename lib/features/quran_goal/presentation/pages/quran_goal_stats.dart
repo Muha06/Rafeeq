@@ -93,7 +93,6 @@ class ProgressBars extends StatelessWidget {
             spacing: 0,
             children: bars,
           ),
-          
         ],
       ),
     );
