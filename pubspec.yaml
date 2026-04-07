@@ -61,7 +61,9 @@ dependencies:
   quran: ^1.4.1
   quran_pages_with_ayah_detector: ^1.2.0
   percent_indicator: ^4.2.5
-  sleek_circular_slider: ^2.1.0
+  sleek_circular_slider: ^2.1.0 
+  wakelock_plus: ^1.5.1
+  video_player: ^2.11.1
 
 dev_dependencies:
   flutter_test:
@@ -97,7 +99,6 @@ flutter:
     - assets/images/home/
     - assets/images/quran/
     - assets/images/quran/pages/
-    - assets/images/salat/
     - assets/images/onboarding/
     - assets/adhkar/
     - assets/db/

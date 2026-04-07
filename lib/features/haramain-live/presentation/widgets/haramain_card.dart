@@ -58,8 +58,8 @@ class MosqueCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    const makkahLive = 'https://makkahlive.net/makkahlive.aspx';
-    const madinahLive = 'https://makkahlive.net/madinalive.aspx';
+    const makkahLive = 'https://win.holol.com/live/quran/playlist.m3u8';
+    const madinahLive = 'https://win.holol.com/live/sunnah/playlist.m3u8';
 
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
@@ -72,7 +72,7 @@ class MosqueCard extends ConsumerWidget {
         if (context.mounted) {
           AppNav.push(
             context,
-            HaramainAloulaLivePage(title: title, liveUrl: liveUrl),
+            HaramainLivePage(title: title, liveUrl: liveUrl),
           ).then((value) => RafeeqAnalytics.logScreenView("haramain_live"));
         }
       },

@@ -30,6 +30,7 @@ import 'package:rafeeq/features/quran_goal/presentation/widgets/log_ayah_bottoms
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:quran/quran.dart' as quran;
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 class FullSurahPage extends ConsumerStatefulWidget {
   final Surah surah;
@@ -72,6 +73,8 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
       if (!mounted) return;
       _handleInitialNavigation();
     });
+
+    WakelockPlus.enable();
   }
 
   Surah get surah {
@@ -276,6 +279,8 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
   void dispose() {
     _autoTimer?.cancel();
     _lastReadDebounce?.cancel();
+    WakelockPlus.disable();
+
     itemPositionsListener.itemPositions.removeListener(_onVisibleAyahsChanged);
 
     super.dispose();

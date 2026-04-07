@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 class MushafPageView extends ConsumerStatefulWidget {
   final int page;
@@ -24,11 +25,13 @@ class _MushafPageViewState extends ConsumerState<MushafPageView> {
   void initState() {
     super.initState();
     pageController = PageController(initialPage: widget.page - 1);
+    WakelockPlus.enable();
   }
 
   @override
   void dispose() {
     pageController.dispose();
+    WakelockPlus.disable();
     super.dispose();
   }
 
