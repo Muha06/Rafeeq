@@ -4,9 +4,9 @@ import 'package:rafeeq/features/haramain-live/presentation/widgets/haramain_card
 import 'package:rafeeq/features/home/providers/reminder_providers.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/ayah_of_the_day.dart';
 import 'package:rafeeq/features/home/presentation/widgets/reminders_carousel.dart';
-import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
-import 'package:rafeeq/features/quran_goal/presentation/widgets/quran_qoal_home_card.dart';
- import 'package:rafeeq/features/timings/presentation/widgets/timeline_card.dart';
+import 'package:rafeeq/features/quran_reading_plan/presentation/providers/quran_reading_plan_provider.dart';
+import 'package:rafeeq/features/quran_reading_plan/presentation/widgets/quran_reading_plan_home_card.dart';
+import 'package:rafeeq/features/timings/presentation/widgets/timeline_card.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -21,7 +21,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final goal = ref.watch(quranGoalProvider);
+    final goal = ref.watch(quranReadingPlanProvider);
     final reminders = ref.watch(homeRemindersProvider);
 
     return Scaffold(
@@ -55,7 +55,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   horizontal: _hPad,
                   vertical: _v10,
                 ),
-                child: QuranGoalCard(),
+                child: QuranReadingPlanCard(),
               ),
             ),
 

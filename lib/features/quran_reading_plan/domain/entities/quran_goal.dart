@@ -1,9 +1,11 @@
-class QuranGoal {
+import 'package:intl/intl.dart';
+
+class QuranReadingPlan {
   final int dailyTarget; // e.g., 50 ayahs
   final DateTime createdAt; // goal start date
   final bool isActive; // is this goal currently active?
 
-  QuranGoal({
+  QuranReadingPlan({
     required this.dailyTarget,
     required this.createdAt,
     this.isActive = true, // default to active
@@ -11,10 +13,14 @@ class QuranGoal {
 
   // Optional: helper to get formatted start date
   String get formattedStartDate =>
-      "${createdAt.day}/${createdAt.month}/${createdAt.year}";
+      DateFormat('EEEE, d MMMM yyyy').format(createdAt);
 
-  QuranGoal copyWith({int? dailyTarget, DateTime? createdAt, bool? isActive}) {
-    return QuranGoal(
+  QuranReadingPlan copyWith({
+    int? dailyTarget,
+    DateTime? createdAt,
+    bool? isActive,
+  }) {
+    return QuranReadingPlan(
       dailyTarget: dailyTarget ?? this.dailyTarget,
       createdAt: createdAt ?? this.createdAt,
       isActive: isActive ?? this.isActive,

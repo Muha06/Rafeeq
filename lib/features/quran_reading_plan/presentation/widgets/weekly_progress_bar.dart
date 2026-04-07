@@ -1,7 +1,7 @@
 import 'package:arc_progress_bar_new/arc_progress_bar_new.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/features/quran_goal/presentation/providers/weeky_progress_provider.dart';
+import 'package:rafeeq/features/quran_reading_plan/presentation/providers/weeky_progress_provider.dart';
 
 class WeeklyQuranProgressArc extends ConsumerWidget {
   const WeeklyQuranProgressArc({super.key});

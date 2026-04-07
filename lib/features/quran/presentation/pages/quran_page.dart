@@ -6,7 +6,7 @@ import 'package:rafeeq/features/quran/presentation/pages/search_surah_page.dart'
 import 'package:rafeeq/features/quran/presentation/widgets/QURAN_PAGE/surah_listview.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/QURAN_PAGE/quick_last_read.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/QURAN_PAGE/quick_surah_links.dart';
-import 'package:rafeeq/features/quran_goal/presentation/widgets/view_stats_card.dart';
+import 'package:rafeeq/features/quran_reading_plan/presentation/widgets/view_stats_card.dart';
 
 class QuranPage extends ConsumerStatefulWidget {
   const QuranPage({super.key});
@@ -70,7 +70,7 @@ class _QuranPageState extends ConsumerState<QuranPage> {
             const SliverToBoxAdapter(child: SizedBox(height: 8)),
 
             // --- Quran Goal Stats Portal ---
-            const SliverToBoxAdapter(child: ViewQuranGoalStats()),
+            const SliverToBoxAdapter(child: ViewQuranReadingPlanStats()),
             const SliverToBoxAdapter(child: SizedBox(height: 8)),
 
             //quick last read

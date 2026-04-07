@@ -64,6 +64,7 @@ dependencies:
   sleek_circular_slider: ^2.1.0 
   wakelock_plus: ^1.5.1
   video_player: ^2.11.1
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:

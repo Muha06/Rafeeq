@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/features/quran_goal/domain/entities/progress.dart';
-import 'package:rafeeq/features/quran_goal/presentation/providers/progress_provider.dart';
+import 'package:rafeeq/features/quran_reading_plan/domain/entities/progress.dart';
+import 'package:rafeeq/features/quran_reading_plan/presentation/providers/progress_provider.dart';
 
 final monthlyRangeProvider = Provider<DateTimeRange>((ref) {
   final now = DateTime.now();

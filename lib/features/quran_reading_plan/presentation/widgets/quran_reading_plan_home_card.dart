@@ -4,16 +4,16 @@ import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/features/quran/presentation/pages/surah_page.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provider.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_ayah_dialog.dart';
-import 'package:rafeeq/features/quran_goal/presentation/pages/quran_goal_stats.dart';
-import 'package:rafeeq/features/quran_goal/presentation/providers/progress_provider.dart';
-import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
+import 'package:rafeeq/features/quran_reading_plan/presentation/pages/quran_reading_plan_stats.dart';
+import 'package:rafeeq/features/quran_reading_plan/presentation/providers/progress_provider.dart';
+import 'package:rafeeq/features/quran_reading_plan/presentation/providers/quran_reading_plan_provider.dart';
 
-class QuranGoalCard extends ConsumerWidget {
-  const QuranGoalCard({super.key});
+class QuranReadingPlanCard extends ConsumerWidget {
+  const QuranReadingPlanCard({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final goal = ref.watch(quranGoalProvider);
+    final readingPlan = ref.watch(quranReadingPlanProvider);
 
     // Today range for V1
     final today = DateTime.now();
@@ -24,10 +24,11 @@ class QuranGoalCard extends ConsumerWidget {
 
     final progress = ref.watch(progressProvider(todayRange));
 
-    final cs = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
 
     return GestureDetector(
-      onTap: () => AppNav.push(context, const QuranGoalStatsPage()),
+      onTap: () => AppNav.push(context, const QuranPlannerPage()),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14),
@@ -41,31 +42,26 @@ class QuranGoalCard extends ConsumerWidget {
               // Top label
               Row(
                 children: [
-                  Text(
-                    'My Quran Goal',
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
+                  Text('My Reading Plan', style: theme.textTheme.labelLarge),
                   const Spacer(),
 
                   IconButton(
                     visualDensity: VisualDensity.compact,
                     onPressed: () {
-                      AppNav.push(context, const QuranGoalStatsPage());
+                      AppNav.push(context, const QuranPlannerPage());
                     },
                     icon: const Icon(Icons.chevron_right),
                   ),
                 ],
               ),
 
-              // Goal title
+              // Plan title
               Text(
-                '${goal.dailyTarget} ayahs per day',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: cs.onSurface,
-                  fontWeight: FontWeight.bold,
-                ),
+                '${readingPlan.dailyTarget} ayahs / day',
+                style: theme.textTheme.titleLarge?.copyWith(color: cs.primary),
               ),
               const SizedBox(height: 16),
+
               // Progress row
               Row(
                 children: [
@@ -79,6 +75,7 @@ class QuranGoalCard extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(width: 8),
+
                   Text(
                     '${(progress.percentage * 100).round()}%',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -89,6 +86,7 @@ class QuranGoalCard extends ConsumerWidget {
                 ],
               ),
               const SizedBox(height: 16),
+
               // CTA Button
               SizedBox(
                 width: double.infinity,

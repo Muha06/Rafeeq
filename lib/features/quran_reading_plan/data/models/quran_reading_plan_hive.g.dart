@@ -1,22 +1,22 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'quran_goal_hive.dart';
+part of 'quran_reading_plan_hive.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class QuranHiveGoalAdapter extends TypeAdapter<QuranHiveGoal> {
+class QuranReadingPlanHiveAdapter extends TypeAdapter<QuranReadingPlanHive> {
   @override
   final int typeId = 10;
 
   @override
-  QuranHiveGoal read(BinaryReader reader) {
+  QuranReadingPlanHive read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return QuranHiveGoal(
+    return QuranReadingPlanHive(
       dailyTarget: fields[0] as int,
       createdAt: fields[1] as DateTime,
       isActive: fields[2] as bool,
@@ -24,7 +24,7 @@ class QuranHiveGoalAdapter extends TypeAdapter<QuranHiveGoal> {
   }
 
   @override
-  void write(BinaryWriter writer, QuranHiveGoal obj) {
+  void write(BinaryWriter writer, QuranReadingPlanHive obj) {
     writer
       ..writeByte(3)
       ..writeByte(0)
@@ -41,7 +41,7 @@ class QuranHiveGoalAdapter extends TypeAdapter<QuranHiveGoal> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is QuranHiveGoalAdapter &&
+      other is QuranReadingPlanHiveAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

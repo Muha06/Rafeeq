@@ -4,27 +4,29 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
-import 'package:rafeeq/features/quran_goal/domain/entities/quran_goal.dart';
-import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
-import 'package:rafeeq/features/quran_goal/presentation/widgets/log_ayah_bottomsheet.dart';
+import 'package:rafeeq/features/quran_reading_plan/domain/entities/quran_goal.dart';
+import 'package:rafeeq/features/quran_reading_plan/presentation/providers/quran_reading_plan_provider.dart';
+import 'package:rafeeq/features/quran_reading_plan/presentation/widgets/log_ayah_bottomsheet.dart';
 
-class EditQuranGoalSheet extends ConsumerStatefulWidget {
-  final QuranGoal goal;
-  const EditQuranGoalSheet({super.key, required this.goal});
+class EditQuranReadingPlanSheet extends ConsumerStatefulWidget {
+  final QuranReadingPlan plan;
+  const EditQuranReadingPlanSheet({super.key, required this.plan});
 
   @override
-  ConsumerState<EditQuranGoalSheet> createState() => _EditQuranGoalSheetState();
+  ConsumerState<EditQuranReadingPlanSheet> createState() =>
+      _EditQuranReadingPlanSheetState();
 }
 
-class _EditQuranGoalSheetState extends ConsumerState<EditQuranGoalSheet> {
+class _EditQuranReadingPlanSheetState
+    extends ConsumerState<EditQuranReadingPlanSheet> {
   late int targetAyahs;
   late TextEditingController targetAyahController;
   @override
   void initState() {
     super.initState();
-    targetAyahs = widget.goal.dailyTarget;
+    targetAyahs = widget.plan.dailyTarget;
     targetAyahController = TextEditingController(
-      text: widget.goal.dailyTarget.toString(),
+      text: widget.plan.dailyTarget.toString(),
     );
   }
 
@@ -54,9 +56,8 @@ class _EditQuranGoalSheetState extends ConsumerState<EditQuranGoalSheet> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // --- Islamic-friendly title ---
           Text(
-            "Adjust My Qur'an Goal",
+            "Adjust My Qur'an Reading Plan",
             style: theme.textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.bold,
             ),
@@ -67,10 +68,7 @@ class _EditQuranGoalSheetState extends ConsumerState<EditQuranGoalSheet> {
             child: Text(
               "Set how many ayahs you aim to read daily, Insha'Allah.",
               textAlign: TextAlign.center,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: cs.onSurfaceVariant,
-                fontSize: 16,
-              ),
+              style: theme.textTheme.bodyMedium,
             ),
           ),
           const SizedBox(height: 16),
@@ -93,7 +91,7 @@ class _EditQuranGoalSheetState extends ConsumerState<EditQuranGoalSheet> {
               ),
               const SizedBox(width: 16),
 
-              LogSetGoalTextfield(
+              LogAyahTextField(
                 controller: targetAyahController,
                 onChanged: (value) {
                   final parsed = int.tryParse(value);
@@ -135,16 +133,18 @@ class _EditQuranGoalSheetState extends ConsumerState<EditQuranGoalSheet> {
                       AppNav.pop(context);
                       AppSnackBar.showSimple(
                         context: context,
-                        message: "Active goal target must be greater than 1",
+                        message: "Reading target must be greater than 1",
                       );
                       return;
                     }
 
                     AppNav.pop(context);
-                    ref.read(quranGoalProvider.notifier).setGoal(targetAyahs);
-                    RafeeqAnalytics.logFeature('edit_Quran_goal');
+                    ref
+                        .read(quranReadingPlanProvider.notifier)
+                        .setTarget(targetAyahs);
+                    RafeeqAnalytics.logFeature('edit_Quran_plan');
                   },
-                  child: const Text("Save Goal"),
+                  child: const Text("Save Plan"),
                 ),
               ),
             ],

@@ -143,11 +143,7 @@ ThemeData appDarkThemeData() {
         disabledForegroundColor: scheme.onSurfaceVariant,
         side: BorderSide(color: scheme.onSurface.withAlpha(100)),
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-        textStyle: TextStyle(
-          fontWeight: FontWeight.w300,
-          fontSize: 14,
-          color: scheme.primary,
-        ),
+        textStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
       ),
     ),
 

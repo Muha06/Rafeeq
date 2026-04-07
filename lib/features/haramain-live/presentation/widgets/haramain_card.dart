@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/features/haramain-live/presentation/pages/haramain_live_page.dart';
@@ -28,9 +29,9 @@ class HaramainCard extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const FaIcon(FontAwesomeIcons.kaaba),
+              FaIcon(PhosphorIcons.mosque()),
               const SizedBox(width: 8),
-              Text('Haramain • Live', style: textTheme.titleMedium),
+              Text('Haramain • Live', style: textTheme.labelLarge),
             ],
           ),
           const SizedBox(height: 4),
@@ -80,7 +81,7 @@ class MosqueCard extends ConsumerWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: cs.onSurface),
+          border: Border.all(color: cs.onSurfaceVariant.withAlpha(200)),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         child: Row(

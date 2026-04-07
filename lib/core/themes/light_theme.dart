@@ -146,7 +146,7 @@ ThemeData appLightThemeData() {
         iconColor: scheme.primary,
         disabledForegroundColor: scheme.onSurfaceVariant,
         side: BorderSide(color: scheme.onSurfaceVariant, width: 1.5),
-        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
         textStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
       ),
     ),

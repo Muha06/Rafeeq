@@ -3,22 +3,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
-import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
-import 'package:rafeeq/features/quran_goal/presentation/providers/quran_log_provider.dart';
-import 'package:rafeeq/features/quran_goal/presentation/widgets/daily_progress_bar.dart';
-import 'package:rafeeq/features/quran_goal/presentation/widgets/edit_goal_sheet.dart';
-import 'package:rafeeq/features/quran_goal/presentation/widgets/monthly_progress_bar.dart';
-import 'package:rafeeq/features/quran_goal/presentation/widgets/weekly_chart.dart';
-import 'package:rafeeq/features/quran_goal/presentation/widgets/weekly_progress_bar.dart';
+import 'package:rafeeq/features/quran_reading_plan/presentation/providers/quran_reading_plan_provider.dart';
+import 'package:rafeeq/features/quran_reading_plan/presentation/providers/quran_log_provider.dart';
+import 'package:rafeeq/features/quran_reading_plan/presentation/widgets/daily_progress_bar.dart';
+import 'package:rafeeq/features/quran_reading_plan/presentation/widgets/edit_reading_plan_sheet.dart';
+import 'package:rafeeq/features/quran_reading_plan/presentation/widgets/monthly_progress_bar.dart';
+import 'package:rafeeq/features/quran_reading_plan/presentation/widgets/weekly_chart.dart';
+import 'package:rafeeq/features/quran_reading_plan/presentation/widgets/weekly_progress_bar.dart';
 
-class QuranGoalStatsPage extends ConsumerWidget {
-  const QuranGoalStatsPage({super.key});
+class QuranPlannerPage extends ConsumerWidget {
+  const QuranPlannerPage({super.key});
 
   @override
   Widget build(BuildContext context, ref) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My stats'),
+        title: const Text('My Reading Plan'),
         actions: [
           IconButton(
             onPressed: () {
@@ -84,7 +84,7 @@ class ProgressBars extends StatelessWidget {
         children: [
           Align(
             alignment: Alignment.centerLeft,
-            child: Text('Overview', style: theme.textTheme.labelLarge),
+            child: Text('My Progress', style: theme.textTheme.titleMedium),
           ),
           const SizedBox(height: 16),
 
@@ -104,7 +104,7 @@ class MyQuranGoalCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final goal = ref.watch(quranGoalProvider);
+    final readingPlan = ref.watch(quranReadingPlanProvider);
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
@@ -122,11 +122,11 @@ class MyQuranGoalCard extends ConsumerWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("My Goal", style: theme.textTheme.labelLarge),
+                Text("Daily Pace", style: theme.textTheme.titleMedium),
 
                 Chip(
                   label: Text(
-                    goal.isActive ? "Goal Active" : "Goal Paused",
+                    readingPlan.isActive ? "Active" : "Paused",
                     style: theme.textTheme.bodySmall!.copyWith(
                       color: cs.primary,
                       fontWeight: FontWeight.bold,
@@ -135,40 +135,38 @@ class MyQuranGoalCard extends ConsumerWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 12),
 
             // Goal details
             Padding(
-              padding: const EdgeInsets.only(left: 16.0),
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Column(
+                    mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Target: ", style: theme.textTheme.bodySmall),
-
                       Text(
-                        "${goal.dailyTarget} ayahs/day",
-                        style: theme.textTheme.bodyMedium!.copyWith(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 24,
+                        "${readingPlan.dailyTarget} ayahs/day",
+                        style: theme.textTheme.headlineMedium!.copyWith(
+                          color: cs.primary,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
+
+                      const SizedBox(height: 8),
 
                       Text.rich(
                         TextSpan(
                           children: [
                             TextSpan(
                               text: 'Started: ',
-                              style: theme.textTheme.bodySmall!,
+                              style: theme.textTheme.bodySmall,
                             ),
+
                             TextSpan(
-                              text: goal.formattedStartDate,
-                              style: theme.textTheme.bodyMedium!.copyWith(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 18,
-                              ),
+                              text: readingPlan.formattedStartDate,
+                              style: theme.textTheme.labelLarge,
                             ),
                           ],
                         ),
@@ -187,15 +185,9 @@ class MyQuranGoalCard extends ConsumerWidget {
                   child: OutlinedButton.icon(
                     onPressed: () {
                       // Always show bottom sheet to edit
-                      showModalBottomSheet(
+                      AppSheets.showBottomSheet(
                         context: context,
-                        isScrollControlled: true,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(20),
-                          ),
-                        ),
-                        builder: (_) => EditQuranGoalSheet(goal: goal),
+                        child: EditQuranReadingPlanSheet(plan: readingPlan),
                       );
                     },
                     icon: const Icon(Icons.edit),
@@ -206,18 +198,20 @@ class MyQuranGoalCard extends ConsumerWidget {
                 Expanded(
                   child: FilledButton(
                     onPressed: () {
-                      final notifier = ref.read(quranGoalProvider.notifier);
-                      notifier.toggleGoalActivity();
+                      final notifier = ref.read(
+                        quranReadingPlanProvider.notifier,
+                      );
+                      notifier.toggleReadingPlanActivity();
 
-                      final updated = ref.read(quranGoalProvider);
+                      final updated = ref.read(quranReadingPlanProvider);
                       AppSnackBar.showSimple(
                         context: context,
                         message: updated.isActive
-                            ? "Goal unpaused"
-                            : "Goal paused",
+                            ? "Target unpaused"
+                            : "Target paused",
                       );
                     },
-                    child: Text(goal.isActive ? "Pause goal" : "Un pause"),
+                    child: Text(readingPlan.isActive ? "Pause" : "Unpause"),
                   ),
                 ),
               ],

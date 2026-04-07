@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
-import 'package:rafeeq/features/quran_goal/presentation/providers/progress_provider.dart';
-import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
-import 'package:rafeeq/features/quran_goal/presentation/providers/quran_log_provider.dart';
-import 'package:rafeeq/features/quran_goal/presentation/providers/today_progress_provider.dart';
+import 'package:rafeeq/features/quran_reading_plan/presentation/providers/progress_provider.dart';
+import 'package:rafeeq/features/quran_reading_plan/presentation/providers/quran_reading_plan_provider.dart';
+import 'package:rafeeq/features/quran_reading_plan/presentation/providers/quran_log_provider.dart';
+import 'package:rafeeq/features/quran_reading_plan/presentation/providers/today_progress_provider.dart';
 
 void showAyahLogSheet(BuildContext context, WidgetRef ref) {
   final cs = Theme.of(context).colorScheme;
@@ -14,12 +15,12 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
   int ayahsRead = 1;
   final ayahController = TextEditingController(text: ayahsRead.toString());
 
-  showModalBottomSheet(
+  AppSheets.showBottomSheet(
     context: context,
-    isScrollControlled: true, // handles keyboard
-    showDragHandle: true,
-    builder: (context) => StatefulBuilder(
+    child: StatefulBuilder(
       builder: (context, setState) {
+        final theme = Theme.of(context);
+
         // Whenever we update ayahsRead programmatically, update controller
         void updateController(int value) {
           ayahsRead = value;
@@ -32,11 +33,11 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
 
         // calculate progress
         final todayRange = ref.read(todayRangeProvider);
-        final goal = ref.read(quranGoalProvider);
+        final readingPlan = ref.read(quranReadingPlanProvider);
         final todayProgress = ref.watch(progressProvider(todayRange));
 
         final totalAfterLog = todayProgress.totalRead + ayahsRead;
-        final progressPercent = (totalAfterLog / goal.dailyTarget).clamp(
+        final progressPercent = (totalAfterLog / readingPlan.dailyTarget).clamp(
           0.0,
           1.0,
         );
@@ -63,7 +64,7 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
                 // Title
                 Text(
                   'Log your reading',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  style: theme.textTheme.titleMedium?.copyWith(
                     color: cs.onSurface,
                     fontWeight: FontWeight.bold,
                   ),
@@ -72,7 +73,7 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
 
                 // Progress info
                 Text(
-                  '$totalAfterLog / ${goal.dailyTarget} ayahs today',
+                  '$totalAfterLog / ${readingPlan.dailyTarget} ayahs today',
                   style: Theme.of(
                     context,
                   ).textTheme.bodyMedium?.copyWith(color: cs.onSurfaceVariant),
@@ -111,7 +112,7 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
                     const SizedBox(width: 16),
 
                     // TextField for Ayahs Read
-                    LogSetGoalTextfield(
+                    LogAyahTextField(
                       controller: ayahController,
                       onChanged: (value) {
                         final parsed = int.tryParse(value);
@@ -147,10 +148,11 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
                         progressProvider(todayRange),
                       );
 
-                      if (updatedProgress.totalRead >= goal.dailyTarget) {
+                      if (updatedProgress.totalRead >=
+                          readingPlan.dailyTarget) {
                         showGoalCompletedDialog(
-                          context, // can use rootNavigator: true inside dialog if needed
-                          goal.dailyTarget,
+                          context,
+                          readingPlan.dailyTarget,
                         );
                       }
                       RafeeqAnalytics.logFeature('logged_Quran_progress');
@@ -170,8 +172,8 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
   );
 }
 
-class LogSetGoalTextfield extends StatelessWidget {
-  const LogSetGoalTextfield({
+class LogAyahTextField extends StatelessWidget {
+  const LogAyahTextField({
     super.key,
     required this.controller,
     required this.onChanged,
@@ -182,7 +184,8 @@ class LogSetGoalTextfield extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),

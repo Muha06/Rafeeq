@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:rafeeq/features/quran_goal/domain/entities/quran_log.dart';
+import 'package:rafeeq/features/quran_reading_plan/domain/entities/quran_log.dart';
 
 part 'quran_log_hive.g.dart';
 

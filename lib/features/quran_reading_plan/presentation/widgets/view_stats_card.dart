@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
-import 'package:rafeeq/features/quran_goal/presentation/pages/quran_goal_stats.dart';
+import 'package:rafeeq/features/quran_reading_plan/presentation/pages/quran_reading_plan_stats.dart';
 
-class ViewQuranGoalStats extends StatelessWidget {
-  const ViewQuranGoalStats({super.key});
+class ViewQuranReadingPlanStats extends StatelessWidget {
+  const ViewQuranReadingPlanStats({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class ViewQuranGoalStats extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           // navigate to goal stats page
-          AppNav.push(context, const QuranGoalStatsPage()).then(
+          AppNav.push(context, const QuranPlannerPage()).then(
             (value) =>
                 RafeeqAnalytics.logScreenView('Quran_progress_stats_page'),
           );
