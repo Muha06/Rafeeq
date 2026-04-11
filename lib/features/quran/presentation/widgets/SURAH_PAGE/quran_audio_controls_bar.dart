@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
-import 'package:rafeeq/core/features/audio/providers/just_audio_player_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/show_audio_controls_bar_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
@@ -10,6 +9,7 @@ import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_prov
 class QuranAudioControlsBar extends ConsumerWidget {
   const QuranAudioControlsBar({
     super.key,
+    required this.currentId,
     required this.onStart,
     required this.onPause,
     required this.autoOn,
@@ -18,6 +18,7 @@ class QuranAudioControlsBar extends ConsumerWidget {
     required this.showSpeedControls,
   });
   final VoidCallback onStart;
+  final String currentId;
   final VoidCallback onPause;
   final VoidCallback onExit;
   final bool showAudioControls;
@@ -28,14 +29,13 @@ class QuranAudioControlsBar extends ConsumerWidget {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
-    final buffering = ref.watch(audioBufferingProvider).value ?? false;
-    final isPlaying = ref.watch(audioPlayingProvider).value ?? false;
-    final audio = ref.watch(audioControllerProvider);
-
-    final hasActive = audio.url != null;
-    final showPause = hasActive && isPlaying;
-
+    final audioState = ref.watch(audioControllerProvider);
     final ctrl = ref.read(audioControllerProvider.notifier);
+    final buffering = audioState.isBuffering;
+
+    final isCurrent = audioState.currentId == currentId;
+
+    final isPlaying = audioState.isPlaying && isCurrent;
 
     final selectedReciter = ref.watch(selectedReciterProvider);
 
@@ -62,7 +62,7 @@ class QuranAudioControlsBar extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          audio.title ?? '—',
+                          audioState.title ?? '—',
                           style: theme.textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.w600,
                             color: cs.onSurface,
@@ -84,11 +84,11 @@ class QuranAudioControlsBar extends ConsumerWidget {
                     onPressed: buffering
                         ? null
                         : () {
-                            showPause ? ctrl.pause() : ctrl.resume();
+                            isPlaying ? ctrl.pause() : ctrl.play();
                           },
 
                     icon: Icon(
-                      showPause ? PhosphorIcons.pause() : PhosphorIcons.play(),
+                      isPlaying ? PhosphorIcons.pause() : PhosphorIcons.play(),
                     ),
                   ),
 

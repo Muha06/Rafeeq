@@ -4,7 +4,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:rafeeq/core/features/audio/domain/entities/audio_state.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
@@ -293,26 +292,21 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
     required String surahName,
   }) async {
     final reciter = ref.read(selectedReciterProvider);
-    final getTrack = ref.read(getSurahAudioTrackProvider);
-
-    final track = await getTrack(
-      surahId: surahId,
-      surahName: surahName,
-      reciter: reciter,
-    );
+    final surahTrack = await ref
+        .read(getSurahAudioTrackUseCaseProvider)
+        .call(surahId: surahId, surahName: surahName, reciter: reciter);
 
     //show cntrols
     ref.read(showAudioControlsProvider.notifier).state = true;
 
     await ref
         .read(audioControllerProvider.notifier)
-        .playUrl(
-          id: surahName,
-          title: surahName,
-          source: AudioSourceType.quranSurah,
-          url: track.url,
-          showPlayer: false,
+        .togglePlay(
           context: context,
+          showAudioPlayer: false,
+          currentId: surahId.toString(),
+          url: surahTrack.url,
+          title: surahTrack.surahName,
         );
   }
 
@@ -322,7 +316,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
 
     final theme = Theme.of(context);
     final isDark = ref.watch(isDarkProvider);
-    final isconStyle = PhosphorIconsStyle.light;
+    final iconStyle = PhosphorIconsStyle.light;
 
     final ayahsAsync = ref.watch(ayahsProvider(surahId));
 
@@ -354,6 +348,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
         child: Scaffold(
           bottomNavigationBar: (showAudioControls || showSpeedControls)
               ? QuranAudioControlsBar(
+                  currentId: surahId.toString(),
                   onStart: _startAutoScroll,
                   onPause: _pauseAutoScroll,
                   autoOn: _autoOn,
@@ -370,7 +365,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
             actions: [
               //Ayah log
               IconButton(
-                icon: PhosphorIcon(PhosphorIcons.floppyDisk(isconStyle)),
+                icon: PhosphorIcon(PhosphorIcons.floppyDisk(iconStyle)),
                 onPressed: () async {
                   showAyahLogSheet(context, ref);
                 },
@@ -394,7 +389,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
                   );
                 },
                 visualDensity: VisualDensity.compact,
-                icon: PhosphorIcon(PhosphorIcons.bookOpenText(isconStyle)),
+                icon: PhosphorIcon(PhosphorIcons.bookOpenText(iconStyle)),
               ),
 
               //Surah settings
@@ -407,7 +402,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
                     ),
                   );
                 },
-                icon: PhosphorIcon(PhosphorIcons.gear(isconStyle)),
+                icon: PhosphorIcon(PhosphorIcons.gear(iconStyle)),
               ),
             ],
             bottom: appBarBottomDivider(context),

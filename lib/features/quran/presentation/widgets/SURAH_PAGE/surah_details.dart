@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:rafeeq/core/features/audio/providers/just_audio_player_provider.dart';
-import 'package:rafeeq/features/quran/domain/entities/surah.dart';
+import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
+ import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 
 class SurahDetails extends ConsumerWidget {
   const SurahDetails({super.key, required this.surah, required this.isDark});
@@ -104,15 +104,16 @@ class PlayFullSurahBtn extends ConsumerWidget {
   final VoidCallback onPlay;
   @override
   Widget build(BuildContext context, ref) {
-    final loading = ref.watch(audioBufferingProvider).value;
+    final audioState = ref.watch(audioControllerProvider);
+    final isBuffering = audioState.isBuffering;
 
     return OutlinedButton.icon(
-      icon: (loading != null && loading)
+      icon: isBuffering
           ? const SizedBox(height: 12, child: CupertinoActivityIndicator())
           : Icon(PhosphorIcons.play()),
       onPressed: onPlay,
 
-      label: Text((loading != null && loading) ? 'Loading...' : 'Play surah'),
+      label: Text(isBuffering ? 'Loading...' : 'Play surah'),
     );
   }
 }

@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:rafeeq/core/features/audio/domain/entities/audio_state.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
-import 'package:rafeeq/core/features/audio/providers/just_audio_player_provider.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
@@ -72,17 +70,15 @@ class _AdhkarDetailsTileState extends ConsumerState<AdhkarDetailsTile> {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
     final dhikr = widget.dhikr;
+    final dhikrId = dhikr.id;
 
-    final playing = ref.watch(audioPlayingProvider).value ?? false;
-    final buffering = ref.watch(audioBufferingProvider).value ?? false;
+    final audioState = ref.watch(audioControllerProvider);
+    final isCurrent = audioState.currentId == dhikrId.toString();
 
-    final audio = ref.watch(audioControllerProvider);
+    final isPlaying = audioState.isPlaying && isCurrent;
+    final buffering = audioState.isBuffering;
+
     final ctrl = ref.watch(audioControllerProvider.notifier);
-
-    final isActive =
-        audio.source == AudioSourceType.adhkar && audio.url == dhikr.audioUrl;
-
-    final showPause = playing && isActive;
 
     final TextStyle bodyTextstyle = textTheme.bodyMedium!.copyWith(
       fontSize: 18,
@@ -154,22 +150,16 @@ class _AdhkarDetailsTileState extends ConsumerState<AdhkarDetailsTile> {
                       onPressed: buffering
                           ? null
                           : () {
-                              if (showPause) {
-                                ctrl.pause();
-                              } else {
-                                ctrl.playUrl(
-                                  url: dhikr.audioUrl,
-                                  source: AudioSourceType.adhkar,
-                                  id: "dhikr.id",
-                                  title: dhikr.categoryTitle,
-                                  context: context,
-                                );
-                              }
+                              ctrl.togglePlay(context: context,
+                                currentId: dhikrId.toString(),
+                                url: dhikr.audioUrl,
+                                title: dhikr.categoryTitle,
+                              );
                             },
                       icon: buffering
                           ? const CupertinoActivityIndicator()
                           : PhosphorIcon(
-                              showPause
+                              isPlaying
                                   ? PhosphorIcons.pause()
                                   : PhosphorIcons.play(),
                             ),

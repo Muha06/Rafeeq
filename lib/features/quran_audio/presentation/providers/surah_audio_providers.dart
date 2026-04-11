@@ -22,7 +22,7 @@ final quranAudioRepositoryProvider = Provider<QuranAudioRepository>((ref) {
   return QuranAudioRepositoryImpl(api: api);
 });
 
-final getSurahAudioTrackProvider = Provider<GetSurahAudioTrack>((ref) {
+final getSurahAudioTrackUseCaseProvider = Provider<GetSurahAudioTrack>((ref) {
   final repo = ref.read(quranAudioRepositoryProvider);
   return GetSurahAudioTrack(repo);
 });

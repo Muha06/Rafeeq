@@ -1,10 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/core/features/audio/domain/entities/audio_state.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
-import 'package:rafeeq/core/features/audio/providers/just_audio_player_provider.dart';
-import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/features/adhkar/presentation/riverpod/get_adhkars_provider.dart';
 
 class AdhkarReminderCard extends ConsumerWidget {
@@ -103,11 +101,10 @@ class AudioControlsChip extends ConsumerWidget {
 
     final theme = Theme.of(context);
 
-    final playing = ref.watch(audioPlayingProvider).value ?? false;
-    final buffering = ref.watch(audioBufferingProvider).value ?? false;
-
-    final audio = ref.watch(audioControllerProvider);
+    final audioState = ref.watch(audioControllerProvider);
     final ctrl = ref.watch(audioControllerProvider.notifier);
+
+    final isBuffering = audioState.isBuffering;
 
     return urlsAsync.when(
       loading: () => TextButton.icon(
@@ -132,39 +129,31 @@ class AudioControlsChip extends ConsumerWidget {
       ),
       data: (urls) {
         final url = isMorning ? urls.morningUrl : urls.eveningUrl;
+        final dhikrId = isMorning ? 'morning_adhkar' : 'evening_adhkar';
         final title = isMorning ? 'Morning adhkar' : 'Evening adhkar';
 
-        final isActive =
-            audio.source == AudioSourceType.adhkar && audio.url == url;
-
-        final showPause = playing && isActive;
-
+        final isCurrent = audioState.currentId == dhikrId;
+        final isPlaying = audioState.isPlaying && isCurrent;
         return TextButton.icon(
-          onPressed: buffering
+          onPressed: isBuffering
               ? null
               : () {
-                  if (showPause) {
-                    ctrl.pause();
-                  } else {
-                    ctrl.playUrl(
-                      url: url,
-                      source: AudioSourceType.adhkar,
-                      id: isMorning ? 'adhkar_morning' : 'adhkar_evening',
-                      title: title,
-                      context: context,
-                    );
-                    RafeeqAnalytics.logFeature('play_adhkar_from_homecard');
-                  }
+                  ctrl.togglePlay(
+                    context: context,
+                    currentId: dhikrId,
+                    title: title,
+                    url: url,
+                  );
                 },
 
           style: theme.textButtonTheme.style,
-          icon: buffering
+          icon: isBuffering
               ? const CupertinoActivityIndicator()
-              : Icon(showPause ? CupertinoIcons.pause : CupertinoIcons.play),
-          label: buffering
+              : Icon(isPlaying ? PhosphorIcons.pause() : PhosphorIcons.play()),
+          label: isBuffering
               ? Text('Loading', style: theme.textTheme.bodySmall!)
               : Text(
-                  (showPause ? 'Pause' : 'Play'),
+                  (isPlaying ? 'Pause' : 'Play'),
                   style: theme.textTheme.bodySmall!.copyWith(
                     fontWeight: FontWeight.bold,
                     color: theme.colorScheme.onSurface,

@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/core/features/audio/domain/entities/audio_state.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:rafeeq/core/app_keys.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
-import 'package:rafeeq/core/features/audio/providers/just_audio_player_provider.dart';
 
 class AdhkarMiniPlayerSheet extends ConsumerWidget {
   const AdhkarMiniPlayerSheet({super.key});
@@ -13,21 +13,19 @@ class AdhkarMiniPlayerSheet extends ConsumerWidget {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
-    final audio = ref.watch(audioControllerProvider);
+    final audioState = ref.watch(audioControllerProvider);
     final ctrl = ref.read(audioControllerProvider.notifier);
 
-    final playing = ref.watch(audioPlayingProvider).value ?? false;
-    final buffering = ref.watch(audioBufferingProvider).value ?? false;
+    final isPlaying = audioState.isPlaying;
+    final isBuffering = audioState.isBuffering;
 
-    final hasActive = audio.url != null;
-    final showPause = hasActive && playing;
-
-    final icon = switch (audio.source) {
-      AudioSourceType.adhkar => CupertinoIcons.moon_stars,
-      AudioSourceType.quranSurah ||
-      AudioSourceType.quranAyah => CupertinoIcons.book,
-      _ => CupertinoIcons.music_note_2,
-    };
+    ref.listen(audioControllerProvider, (previous, next) {
+      final prevId = previous?.currentId;
+      
+      if (next.currentId != prevId) {
+        scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
+      }
+    });
 
     return SafeArea(
       child: Container(
@@ -42,12 +40,12 @@ class AdhkarMiniPlayerSheet extends ConsumerWidget {
           children: [
             Row(
               children: [
-                Icon(icon),
+                Icon(PhosphorIcons.playlist()),
                 const SizedBox(width: 10),
 
                 Expanded(
                   child: Text(
-                    audio.title ?? 'Now playing',
+                    audioState.title ?? 'Now playing',
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: theme.textTheme.bodyLarge,
@@ -59,21 +57,21 @@ class AdhkarMiniPlayerSheet extends ConsumerWidget {
             Row(
               children: [
                 Text(
-                  buffering ? 'Buffering…' : 'Tap pause anytime',
+                  isBuffering ? 'Buffering…' : 'Tap pause anytime',
                   style: theme.textTheme.bodySmall,
                 ),
                 const Spacer(),
                 IconButton(
-                  onPressed: buffering
+                  onPressed: isBuffering
                       ? null
-                      : () => showPause ? ctrl.pause() : ctrl.resume(),
+                      : () => isPlaying ? ctrl.pause() : ctrl.play(),
 
-                  icon: buffering
+                  icon: isBuffering
                       ? const CupertinoActivityIndicator()
                       : Icon(
-                          showPause
-                              ? CupertinoIcons.pause_fill
-                              : CupertinoIcons.play_fill,
+                          isPlaying
+                              ? PhosphorIcons.pause()
+                              : PhosphorIcons.play(),
                         ),
                 ),
                 IconButton(
@@ -81,7 +79,7 @@ class AdhkarMiniPlayerSheet extends ConsumerWidget {
                     await ctrl.stop();
                   },
 
-                  icon: const Icon(CupertinoIcons.xmark),
+                  icon: Icon(PhosphorIcons.x()),
                 ),
               ],
             ),

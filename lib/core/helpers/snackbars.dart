@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rafeeq/core/app_keys.dart';
-import 'package:rafeeq/features/adhkar/presentation/widgets/audio_player_sheet.dart';
+import 'package:rafeeq/core/features/audio/widgets/audio_player_sheet.dart';
 
 class AppSnackBar {
   static void showSimple({

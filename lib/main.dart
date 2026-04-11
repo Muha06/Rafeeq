@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:audio_service/audio_service.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -12,6 +13,7 @@ import 'package:rafeeq/app/notifications.dart';
 import 'package:rafeeq/app/providers/general_notifications_provider.dart';
 import 'package:rafeeq/app/tabs_screen.dart';
 import 'package:rafeeq/core/app_keys.dart';
+import 'package:rafeeq/core/features/audio/data/audio_handler.dart';
 import 'package:rafeeq/core/themes/dark_theme.dart';
 import 'package:rafeeq/core/themes/light_theme.dart';
 import 'package:rafeeq/features/adhkar/data/models/dhikr_hive_model.dart';
@@ -29,6 +31,9 @@ import 'package:rafeeq/features/settings/presentation/provider/settings_notifcat
 import 'package:rafeeq/features/timings/data/models/hive/cached_salah_times_hive.dart';
 import 'package:rafeeq/firebase_options.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:rafeeq/core/features/audio/providers/audio_handler_provider.dart';
+
+late AppAudioHandler audioHandler;
 
 void main() {
   // Make zone errors fatal before binding init
@@ -40,15 +45,21 @@ void main() {
   // Run everything in a single guarded zone
   runZonedGuarded(
     () async {
-      // Load env
-      try {
-        await dotenv.load(fileName: ".env");
-      } catch (e) {
-        debugPrint('dotenv failed to load: $e');
-      }
+      // Initialize Firebase
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+      // Flutter errors → Crashlytics
+      FlutterError.onError =
+          FirebaseCrashlytics.instance.recordFlutterFatalError;
+
+      debugPrint('Firebase apps: ${Firebase.apps.length}');
 
       // Initialize Hive
       await Hive.initFlutter();
+
+      // Load env
+      await dotenv.load(fileName: ".env");
 
       // Initialize Supabase
       await Supabase.initialize(
@@ -56,16 +67,14 @@ void main() {
         anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
       );
 
-      // Initialize Firebase
-      await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform,
+      audioHandler = await AudioService.init(
+        builder: () => AppAudioHandler(),
+        config: const AudioServiceConfig(
+          androidNotificationChannelId: 'rafeeq.audio',
+          androidNotificationChannelName: 'Audio Playback',
+          androidNotificationOngoing: true,
+        ),
       );
-
-      debugPrint('Firebase apps: ${Firebase.apps.length}');
-
-      // Flutter errors → Crashlytics
-      FlutterError.onError =
-          FirebaseCrashlytics.instance.recordFlutterFatalError;
 
       // Register Hive adapters
       Hive.registerAdapter(SurahHiveAdapter());
@@ -95,15 +104,16 @@ void main() {
       await NotificationService.instance.init();
 
       // ✅ Finally, run the app synchronously inside the same zone
-      runApp(const ProviderScope(child: MyApp()));
+      runApp(
+        ProviderScope(
+          overrides: [audioHandlerProvider.overrideWithValue(audioHandler)],
+          child: const MyApp(),
+        ),
+      );
     },
-    (error, stack) {
+    (error, stack) async {
       debugPrint("Error, $stack");
-      try {
-        FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-      } catch (_) {
-        debugPrint('Crashlytics not ready yet');
-      }
+      await FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     },
   );
 }
