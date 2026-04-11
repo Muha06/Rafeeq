@@ -76,40 +76,31 @@ class _QuickActionCard extends StatelessWidget {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
-    return Material(
-      color: cs.surface,
+    return InkWell(
       borderRadius: BorderRadius.circular(14),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(14),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              /// Icon/Image
-              Image.asset(
-                imagePath,
-                height: 32,
-                width: 32,
-                fit: BoxFit.contain,
-              ),
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            /// Icon/Image
+            Image.asset(imagePath, height: 32, width: 32, fit: BoxFit.contain),
 
-              const SizedBox(height: 8),
+            const SizedBox(height: 8),
 
-              /// Title
-              Text(
-                title,
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.labelMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: cs.onSurface,
-                ),
+            /// Title
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.labelMedium?.copyWith(
+                fontWeight: FontWeight.w600,
+                color: cs.onSurface,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
