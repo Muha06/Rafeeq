@@ -45,8 +45,8 @@ class QuranAudioControlsBar extends ConsumerWidget {
     final buffering = audioState.isBuffering;
     final isRepeatEnabled = audioState.isRepeatEnabled;
 
-    final isCurrent = audioState.currentId == currentId;
-    final isPlaying = audioState.isPlaying && isCurrent;
+    // final isCurrent = audioState.currentId == currentId;
+    final isPlaying = audioState.isPlaying;
 
     final currentPosition = audioState.position;
     final bufferedPosition = audioState.bufferedPosition;
@@ -116,17 +116,15 @@ class QuranAudioControlsBar extends ConsumerWidget {
 
                   /// Repeat Button
                   IconButton(
-                    onPressed: isCurrent
-                        ? () {
-                            ctrl.toggleRepeatMode();
-                            AppSnackBar.showSimple(
-                              context: context,
-                              message: isRepeatEnabled
-                                  ? 'Repeat surah disabled'
-                                  : 'Repeat surah enabled',
-                            );
-                          }
-                        : null,
+                    onPressed: () {
+                      ctrl.toggleRepeatMode();
+                      AppSnackBar.showSimple(
+                        context: context,
+                        message: isRepeatEnabled
+                            ? 'Repeat surah disabled'
+                            : 'Repeat surah enabled',
+                      );
+                    },
                     icon: Icon(
                       PhosphorIcons.repeat(PhosphorIconsStyle.light),
                       color: isRepeatEnabled ? cs.primary : null,
@@ -139,11 +137,12 @@ class QuranAudioControlsBar extends ConsumerWidget {
                   /// Close Button
                   IconButton(
                     onPressed: () async {
-                      // stop + close
-                      await ctrl.stop();
                       //hide bar
                       ref.read(showAudioControlsProvider.notifier).state =
                           false;
+
+                      // stop + close
+                      await ctrl.stop();
                     },
                     icon: Icon(PhosphorIcons.x(PhosphorIconsStyle.light)),
                   ),
