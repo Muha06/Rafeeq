@@ -7,23 +7,18 @@ import 'package:rafeeq/core/features/audio/providers/audio_handler_provider.dart
 import 'package:rafeeq/core/helpers/audio_helpers.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 
-/// 🎧 AudioController
-///
 /// This is the SINGLE source of truth for audio UI state.
 ///
 /// Responsibilities:
 /// - Handle UI actions (play, pause, seek)
 /// - Sync state from AudioHandler
-/// - Keep UI reactive and clean
 ///
 /// DO NOT:
 /// - touch AudioPlayer directly
-/// - duplicate playback logic here
 class AudioController extends Notifier<AudioState> {
   late final AppAudioHandler _handler;
 
-  /// Called once when provider is first created.
-  /// Sets up handler + listeners.
+  /// Set up handler + listeners.
   @override
   AudioState build() {
     _handler = ref.read(audioHandlerProvider);
@@ -57,13 +52,13 @@ class AudioController extends Notifier<AudioState> {
 
       debugPrint('🎧 Loading audio: $currentId');
 
+      // Load and play via handler
       await _handler.load(
         currentId: currentId,
         url: AudioHelpers.secureUrl(url),
         title: title,
       );
     } catch (e, st) {
-      // Fail safely without crashing UI
       debugPrint('❌ Failed to load audio: $e');
       debugPrint('$st');
 
@@ -114,11 +109,11 @@ class AudioController extends Notifier<AudioState> {
 
   /// Listens to system-level playback state
   /// and syncs it to UI state.
-  ///
-  /// IMPORTANT:
+
   /// - This is the ONLY stream source
   /// - Do NOT duplicate listeners elsewhere
   void _listenToHandler() {
+    // Listen to playback state changes
     _handler.playbackState.listen(
       (playbackState) {
         final isPlaying = playbackState.playing;
@@ -130,6 +125,7 @@ class AudioController extends Notifier<AudioState> {
         state = state.copyWith(
           isPlaying: isPlaying,
           isBuffering: isBuffering,
+          bufferedPosition: playbackState.bufferedPosition,
           position: playbackState.updatePosition,
         );
       },
@@ -139,6 +135,15 @@ class AudioController extends Notifier<AudioState> {
         debugPrint('$stack');
       },
     );
+
+    _handler.mediaItem.listen((item) {
+      if (item == null) return;
+
+      state = state.copyWith(
+        title: item.title,
+        duration: item.duration ?? Duration.zero,
+      );
+    });
   }
 
   //──────────────────────────────────────────────
@@ -165,7 +170,6 @@ class AudioController extends Notifier<AudioState> {
 
         await loadAndPlay(currentId: currentId, url: url, title: title);
 
-        // Optional UI feedback
         if (showAudioPlayer) {
           AppSnackBar.showPlayer();
         }

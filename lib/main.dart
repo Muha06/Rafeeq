@@ -39,12 +39,11 @@ void main() {
   // Make zone errors fatal before binding init
   BindingBase.debugZoneErrorsAreFatal = false;
 
-  // Ensure Flutter bindings in the root zone
-  WidgetsFlutterBinding.ensureInitialized();
-
   // Run everything in a single guarded zone
   runZonedGuarded(
     () async {
+      WidgetsFlutterBinding.ensureInitialized();
+      
       // Initialize Firebase
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
@@ -67,6 +66,7 @@ void main() {
         anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
       );
 
+      //Initialize audio handler
       audioHandler = await AudioService.init(
         builder: () => AppAudioHandler(),
         config: const AudioServiceConfig(
@@ -106,7 +106,10 @@ void main() {
       // ✅ Finally, run the app synchronously inside the same zone
       runApp(
         ProviderScope(
-          overrides: [audioHandlerProvider.overrideWithValue(audioHandler)],
+          overrides: [
+            audioHandlerProvider.overrideWithValue(audioHandler),
+            //inject the single audio handler instance so it can be used
+          ],
           child: const MyApp(),
         ),
       );

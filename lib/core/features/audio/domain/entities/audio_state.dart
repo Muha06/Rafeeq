@@ -26,11 +26,15 @@ class AudioState extends Equatable {
   /// Whether audio is buffering/loading
   final bool isBuffering;
 
+  //Buffered position
+  final Duration bufferedPosition;
+
   const AudioState({
     this.currentId,
     this.title,
     this.position = Duration.zero,
     this.duration = Duration.zero,
+    this.bufferedPosition = Duration.zero,
     this.isPlaying = false,
     this.isBuffering = false,
   });
@@ -42,6 +46,13 @@ class AudioState extends Equatable {
     return position.inMilliseconds / duration.inMilliseconds;
   }
 
+  /// Buffered progress from 0.0 → 1.0
+  /// Used for progress bar UI
+  double get bufferedProgress {
+    if (duration.inMilliseconds == 0) return 0.0;
+    return bufferedPosition.inMilliseconds / duration.inMilliseconds;
+  }
+
   /// Creates a copy with updated values (immutable pattern)
   AudioState copyWith({
     String? currentId,
@@ -50,6 +61,7 @@ class AudioState extends Equatable {
     Duration? duration,
     bool? isPlaying,
     bool? isBuffering,
+    Duration? bufferedPosition,
   }) {
     return AudioState(
       currentId: currentId ?? this.currentId,
@@ -58,6 +70,7 @@ class AudioState extends Equatable {
       duration: duration ?? this.duration,
       isPlaying: isPlaying ?? this.isPlaying,
       isBuffering: isBuffering ?? this.isBuffering,
+      bufferedPosition: bufferedPosition ?? this.bufferedPosition,
     );
   }
 
@@ -69,5 +82,6 @@ class AudioState extends Equatable {
     duration,
     isPlaying,
     isBuffering,
+    bufferedPosition,
   ];
 }

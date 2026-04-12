@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/core/app_keys.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
+import 'package:rafeeq/core/features/audio/widgets/seek_bar.dart';
 
 class AdhkarMiniPlayerSheet extends ConsumerWidget {
   const AdhkarMiniPlayerSheet({super.key});
@@ -21,11 +22,15 @@ class AdhkarMiniPlayerSheet extends ConsumerWidget {
 
     ref.listen(audioControllerProvider, (previous, next) {
       final prevId = previous?.currentId;
-      
+
       if (next.currentId != prevId) {
         scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
       }
     });
+
+    final currentPosition = audioState.position;
+    final bufferedPosition = audioState.bufferedPosition;
+    final duration = audioState.duration;
 
     return SafeArea(
       child: Container(
@@ -38,6 +43,7 @@ class AdhkarMiniPlayerSheet extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Title
             Row(
               children: [
                 Icon(PhosphorIcons.playlist()),
@@ -54,6 +60,18 @@ class AdhkarMiniPlayerSheet extends ConsumerWidget {
               ],
             ),
 
+            const SizedBox(height: 8),
+
+            // Progress bar
+            AudioSeekBar(
+              position: currentPosition,
+              buffered: bufferedPosition,
+              duration: duration,
+              onSeek: (position) => ctrl.seek(position),
+            ),
+            const SizedBox(height: 8),
+
+            // Controls
             Row(
               children: [
                 Text(

@@ -54,6 +54,7 @@ ThemeData appDarkThemeData() {
         overlayColor: WidgetStatePropertyAll(
           scheme.onSurface.withAlpha(18), // subtle ripple
         ),
+        visualDensity: VisualDensity.compact,
       ),
     ),
 

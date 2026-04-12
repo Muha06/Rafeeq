@@ -4,13 +4,14 @@ import 'package:just_audio/just_audio.dart';
 import 'package:rafeeq/core/helpers/audio_helpers.dart';
 
 class AppAudioHandler extends BaseAudioHandler with SeekHandler {
-  final AudioPlayer _player = AudioPlayer();
+  final AudioPlayer _player = AudioPlayer(); //real engine
 
   AppAudioHandler() {
     _init();
   }
 
   void _init() {
+    // Listen to player state and update audio_service state accordingly
     _player.playerStateStream.listen((playerState) {
       playbackState.add(
         playbackState.value.copyWith(
@@ -25,10 +26,12 @@ class AppAudioHandler extends BaseAudioHandler with SeekHandler {
       );
     });
 
+    // Listen to position updates
     _player.positionStream.listen((position) {
       playbackState.add(playbackState.value.copyWith(updatePosition: position));
     });
 
+    //Listen to buffered position updates
     _player.bufferedPositionStream.listen((bufferedPosition) {
       playbackState.add(
         playbackState.value.copyWith(bufferedPosition: bufferedPosition),
@@ -36,7 +39,7 @@ class AppAudioHandler extends BaseAudioHandler with SeekHandler {
     });
   }
 
-  // 🔄 Map just_audio → audio_service state
+  // Helper: Map just_audio state → audio_service state
   AudioProcessingState _mapState(ProcessingState state) {
     switch (state) {
       case ProcessingState.idle:
@@ -56,22 +59,32 @@ class AppAudioHandler extends BaseAudioHandler with SeekHandler {
   Future<void> load({
     required String currentId,
     required String url,
+    String? artist,
     required String title,
   }) async {
     try {
-      // 🎧 load audio
+      // load audio
       final duration = await _player.setUrl(AudioHelpers.secureUrl(url));
 
-      _setMediaItem(id: currentId, duration: duration, title: title);
+      // Set media item for notification & controls
+      _setMediaItem(
+        id: currentId,
+        duration: duration,
+        artist: artist,
+        title: title,
+      );
 
       await _player.play();
     } catch (e) {
       debugPrint('❌ Audio load failed: $e');
+      rethrow;
     }
   }
 
+  //Helper to set media item for notification & controls
   void _setMediaItem({
     required String id,
+    String? artist,
     Duration? duration,
     required String title,
   }) {
@@ -80,15 +93,14 @@ class AppAudioHandler extends BaseAudioHandler with SeekHandler {
         id: id,
         title: title,
         duration: duration,
-        // optional but good for future
-        artist: 'Rafeeq Recitation',
-
+        artist: artist,
         // keeps notification stable
         playable: true,
-      ),
+      ), //this is will be displayed in the notification and controls
     );
   }
 
+  //These methods are called by the Lock screen control playback.
   @override
   Future<void> play() => _player.play();
 

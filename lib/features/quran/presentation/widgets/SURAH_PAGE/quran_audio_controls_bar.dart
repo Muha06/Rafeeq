@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
+import 'package:rafeeq/core/features/audio/widgets/seek_bar.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/show_audio_controls_bar_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
@@ -34,8 +35,11 @@ class QuranAudioControlsBar extends ConsumerWidget {
     final buffering = audioState.isBuffering;
 
     final isCurrent = audioState.currentId == currentId;
-
     final isPlaying = audioState.isPlaying && isCurrent;
+
+    final currentPosition = audioState.position;
+    final bufferedPosition = audioState.bufferedPosition;
+    final duration = audioState.duration;
 
     final selectedReciter = ref.watch(selectedReciterProvider);
 
@@ -103,11 +107,22 @@ class QuranAudioControlsBar extends ConsumerWidget {
                       ref.read(showAudioControlsProvider.notifier).state =
                           false;
                     },
-                    icon: Icon(PhosphorIcons.x(), color: cs.onSurfaceVariant),
+                    icon: Icon(PhosphorIcons.x()),
                   ),
                 ],
               ),
 
+            const SizedBox(height: 8),
+
+            //seek bar
+            AudioSeekBar(
+              position: currentPosition,
+              buffered: bufferedPosition,
+              duration: duration,
+              onSeek: (position) => ctrl.seek(position),
+            ),
+
+            const SizedBox(height: 8),
             //show controls conditionally
             if (showSpeedControls) ...[
               if (showSpeedControls && showAudioControls)
