@@ -28,146 +28,21 @@ class QuranAudioControlsBar extends ConsumerWidget {
   final bool autoOn;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
-    final cs = theme.colorScheme;
-    final gradientColors = [
-      cs.surfaceContainerHighest.withAlpha(220),
-      cs.surfaceContainerHighest.withAlpha(180),
-      cs.surfaceContainerHighest.withAlpha(150),
-      cs.surfaceContainerHighest.withAlpha(120),
-      cs.surfaceContainerHighest.withAlpha(100),
-      cs.surfaceContainerHighest.withAlpha(20),
-      cs.surfaceContainerHighest.withAlpha(10),
-    ];
-
-    final audioState = ref.watch(audioControllerProvider);
-    final ctrl = ref.read(audioControllerProvider.notifier);
-    final buffering = audioState.isBuffering;
-    final isRepeatEnabled = audioState.isRepeatEnabled;
-
-    // final isCurrent = audioState.currentId == currentId;
-    final isPlaying = audioState.isPlaying;
-
-    final currentPosition = audioState.position;
-    final bufferedPosition = audioState.bufferedPosition;
-    final duration = audioState.duration;
-
-    final selectedReciter = ref.watch(selectedReciterProvider);
-
     return SafeArea(
       top: false,
-      child: Container(
-        // height: 72,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: gradientColors,
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(14)),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      child: AudioControlsBarColorWrapper(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (showAudioControls) ...[
-              //Audio
-              Row(
-                children: [
-                  /// Surah Info
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          audioState.title ?? '—',
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: cs.onSurface,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          selectedReciter.name,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: cs.onSurfaceVariant,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  /// Play / Pause Button
-                  IconButton(
-                    visualDensity: VisualDensity.compact,
-                    onPressed: buffering
-                        ? null
-                        : () {
-                            isPlaying ? ctrl.pause() : ctrl.play();
-                          },
-
-                    icon: Icon(
-                      isPlaying
-                          ? PhosphorIcons.pause(PhosphorIconsStyle.light)
-                          : PhosphorIcons.play(PhosphorIconsStyle.light),
-                    ),
-                  ),
-
-                  /// Repeat Button
-                  IconButton(
-                    onPressed: () {
-                      ctrl.toggleRepeatMode();
-                      AppSnackBar.showSimple(
-                        context: context,
-                        message: isRepeatEnabled
-                            ? 'Repeat surah disabled'
-                            : 'Repeat surah enabled',
-                      );
-                    },
-                    icon: Icon(
-                      PhosphorIcons.repeat(PhosphorIconsStyle.light),
-                      color: isRepeatEnabled ? cs.primary : null,
-                    ),
-                    tooltip: isRepeatEnabled
-                        ? 'Repeat surah is on'
-                        : 'Repeat surah is off',
-                  ),
-
-                  /// Close Button
-                  IconButton(
-                    onPressed: () async {
-                      //hide bar
-                      ref.read(showAudioControlsProvider.notifier).state =
-                          false;
-
-                      // stop + close
-                      await ctrl.stop();
-                    },
-                    icon: Icon(PhosphorIcons.x(PhosphorIconsStyle.light)),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 8),
-
-              //seek bar
-              AudioSeekBar(
-                position: currentPosition,
-                buffered: bufferedPosition,
-                duration: duration,
-                onSeek: (position) => ctrl.seek(position),
-              ),
-
-              const SizedBox(height: 4),
-            ],
+            //Audio
+            if (showAudioControls) ...[const AudioControlsSection()],
 
             //show controls conditionally
             if (showSpeedControls) ...[
               if (showSpeedControls && showAudioControls)
                 const SizedBox(height: 8),
 
-              AutoScrollBar(
+              AutoScrollControlsSection(
                 onStart: onStart,
                 onPause: onPause,
                 autoOn: autoOn,
@@ -181,73 +56,179 @@ class QuranAudioControlsBar extends ConsumerWidget {
   }
 }
 
-class AutoScrollBar extends ConsumerWidget {
-  const AutoScrollBar({
+class AudioControlsBarColorWrapper extends StatelessWidget {
+  const AudioControlsBarColorWrapper({super.key, required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+
+    final gradientColors = [
+      cs.surfaceContainerHighest.withAlpha(220),
+      cs.surfaceContainerHighest.withAlpha(180),
+      cs.surfaceContainerHighest.withAlpha(150),
+      cs.surfaceContainerHighest.withAlpha(120),
+      cs.surfaceContainerHighest.withAlpha(100),
+      cs.surfaceContainerHighest.withAlpha(20),
+      cs.surfaceContainerHighest.withAlpha(10),
+    ];
+
+    return SafeArea(
+      top: false,
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: gradientColors,
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(14)),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+        child: child,
+      ),
+    );
+  }
+}
+
+class AudioControlsSection extends ConsumerWidget {
+  const AudioControlsSection({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
+    final audioState = ref.watch(audioControllerProvider);
+    final ctrl = ref.read(audioControllerProvider.notifier);
+    final selectedReciter = ref.watch(selectedReciterProvider);
+
+    final isRepeatEnabled = audioState.isRepeatEnabled;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    audioState.title ?? '—',
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: cs.onSurface,
+                    ),
+                  ),
+                  Text(
+                    selectedReciter.name,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: cs.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            //Play/pause button
+            IconButton(
+              onPressed: audioState.isBuffering
+                  ? null
+                  : () => audioState.isPlaying ? ctrl.pause() : ctrl.play(),
+              icon: Icon(
+                audioState.isPlaying
+                    ? PhosphorIcons.pause(PhosphorIconsStyle.light)
+                    : PhosphorIcons.play(PhosphorIconsStyle.light),
+              ),
+            ),
+
+            //Repeat mode
+            IconButton(
+              onPressed: () {
+                ctrl.toggleRepeatMode();
+
+                AppSnackBar.showSimple(
+                  context: context,
+                  message: isRepeatEnabled
+                      ? 'Repeat surah disabled'
+                      : 'Repeat surah enabled',
+                );
+              },
+              icon: Icon(
+                PhosphorIcons.repeat(PhosphorIconsStyle.light),
+                color: isRepeatEnabled ? cs.primary : null,
+              ),
+            ),
+
+            //Stop button
+            IconButton(
+              onPressed: () {
+                ref.read(showAudioControlsProvider.notifier).state = false;
+                ctrl.stop();
+              },
+              icon: Icon(PhosphorIcons.x(PhosphorIconsStyle.light)),
+            ),
+          ],
+        ),
+
+        const SizedBox(height: 8),
+
+        AudioSeekBar(
+          position: audioState.position,
+          buffered: audioState.bufferedPosition,
+          duration: audioState.duration,
+          onSeek: ctrl.seek,
+        ),
+      ],
+    );
+  }
+}
+
+class AutoScrollControlsSection extends ConsumerWidget {
+  const AutoScrollControlsSection({
     super.key,
+    required this.autoOn,
     required this.onStart,
     required this.onPause,
-    required this.autoOn,
     required this.onExit,
   });
 
+  final bool autoOn;
   final VoidCallback onStart;
   final VoidCallback onPause;
   final VoidCallback onExit;
-  final bool autoOn;
-  @override
-  Widget build(BuildContext context, ref) {
-    final speed = ref.watch(surahSettingsProvider).autoScrollSpeed;
-    final surahSettingsNotifier = ref.watch(surahSettingsProvider.notifier);
 
-    final fontSize = 20.0;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final speed = ref.watch(surahSettingsProvider).autoScrollSpeed;
+    final notifier = ref.read(surahSettingsProvider.notifier);
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        //exit speed
+        IconButton(onPressed: onExit, icon: const Icon(Icons.close)),
+
+        const Spacer(),
+
         IconButton(
-          onPressed: onExit,
-          icon: PhosphorIcon(PhosphorIcons.x(), size: fontSize),
+          onPressed: notifier.decreaseSpeed,
+          icon: const Icon(Icons.remove),
         ),
 
-        Expanded(
-          child: Center(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                //reduce speed
-                IconButton(
-                  onPressed: () {
-                    surahSettingsNotifier.decreaseSpeed();
-                  },
-                  icon: PhosphorIcon(PhosphorIcons.minus(), size: fontSize),
-                ),
+        Text('${speed.toStringAsFixed(1)}x'),
 
-                const SizedBox(width: 8),
-
-                Text('${speed.toStringAsFixed(1)}x'),
-
-                const SizedBox(width: 8),
-
-                //increase speed
-                IconButton(
-                  onPressed: () {
-                    surahSettingsNotifier.increaseSpeed();
-                  },
-                  icon: PhosphorIcon(PhosphorIcons.plus(), size: fontSize),
-                ),
-              ],
-            ),
-          ),
+        IconButton(
+          onPressed: notifier.increaseSpeed,
+          icon: const Icon(Icons.add),
         ),
 
-        //pause
+        const Spacer(),
+
         IconButton(
           onPressed: autoOn ? onPause : onStart,
-          icon: PhosphorIcon(
-            autoOn ? PhosphorIcons.pause() : PhosphorIcons.play(),
-            size: fontSize,
-          ),
+          icon: Icon(autoOn ? Icons.pause : Icons.play_arrow),
         ),
       ],
     );

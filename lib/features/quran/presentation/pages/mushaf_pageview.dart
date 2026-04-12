@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
+import 'package:rafeeq/features/quran/presentation/riverpod/show_audio_controls_bar_provider.dart';
+import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/quran_audio_controls_bar.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 class MushafPageView extends ConsumerStatefulWidget {
@@ -64,6 +66,8 @@ class _MushafPageViewState extends ConsumerState<MushafPageView> {
     final cs = Theme.of(context).colorScheme;
     final iconStyle = PhosphorIconsStyle.light;
 
+    final showAudioControls = ref.watch(showAudioControlsProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: InkWell(
@@ -85,6 +89,9 @@ class _MushafPageViewState extends ConsumerState<MushafPageView> {
           ),
         ),
       ),
+      bottomNavigationBar: showAudioControls
+          ? const AudioControlsBarColorWrapper(child: AudioControlsSection())
+          : null,
       body: PageView.builder(
         controller: pageController,
         itemCount: _totalPages,
