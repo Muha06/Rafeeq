@@ -91,10 +91,9 @@ class AppAudioHandler extends BaseAudioHandler with SeekHandler {
     mediaItem.add(
       MediaItem(
         id: id,
-        title: title,
+        title: 'Rafeeq - $title',
         duration: duration,
-        artist: artist,
-        // keeps notification stable
+        artist: artist, 
         playable: true,
       ), //this is will be displayed in the notification and controls
     );
@@ -110,6 +109,13 @@ class AppAudioHandler extends BaseAudioHandler with SeekHandler {
   @override
   Future<void> seek(Duration position) => _player.seek(position);
 
+  Future<void> setSingleTrackLoop(bool enabled) async {
+    await _player.setLoopMode(enabled ? LoopMode.one : LoopMode.off);
+  }
+
   @override
-  Future<void> stop() => _player.stop();
+  Future<void> stop() async {
+    await _player.setLoopMode(LoopMode.off);
+    await _player.stop();
+  }
 }

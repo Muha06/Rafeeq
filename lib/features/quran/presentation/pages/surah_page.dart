@@ -303,6 +303,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
         .read(audioControllerProvider.notifier)
         .togglePlay(
           context: context,
+          artist: reciter.name,
           showAudioPlayer: false,
           currentId: surahId.toString(),
           url: surahTrack.url,
@@ -434,7 +435,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
 
                         PlayFullSurahBtn(
                           onPlay: () async {
-                            playSurahAudio(
+                            await playSurahAudio(
                               ref: ref,
                               surahId: surahId,
                               surahName: surah.nameTransliteration,
@@ -524,11 +525,9 @@ class AppbarSurahPicker extends ConsumerWidget {
                     "${surah.id}. ${surah.nameTransliteration}",
                     style: theme.textTheme.titleLarge!.copyWith(fontSize: 16),
                   ),
-                  const SizedBox(width: 6),
+                  const SizedBox(width: 2),
 
-                  PhosphorIcon(
-                    PhosphorIcons.caretDown(PhosphorIconsStyle.light),
-                  ),
+                  PhosphorIcon(PhosphorIcons.caretDown()),
                 ],
               ),
             ),

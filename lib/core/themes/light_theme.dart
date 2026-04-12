@@ -50,13 +50,14 @@ ThemeData appLightThemeData() {
     dividerColor: scheme.outlineVariant,
     dividerTheme: DividerThemeData(color: scheme.outlineVariant),
 
-    iconTheme: IconThemeData(color: scheme.onSurfaceVariant),
+    iconTheme: IconThemeData(color: scheme.onSurface),
     iconButtonTheme: IconButtonThemeData(
       style: ButtonStyle(
         iconColor: WidgetStatePropertyAll(scheme.onSurface),
         overlayColor: WidgetStatePropertyAll(
           scheme.onSurface.withAlpha(18), // subtle ripple
         ),
+        visualDensity: VisualDensity.compact,
       ),
     ),
 
@@ -117,8 +118,8 @@ ThemeData appLightThemeData() {
         iconColor: scheme.onPrimary,
         disabledBackgroundColor: scheme.surfaceContainerHighest,
         disabledForegroundColor: scheme.onSurfaceVariant,
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-        textStyle: const TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+        textStyle: const TextStyle(fontWeight: FontWeight.w400, fontSize: 12),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
       ),
     ),
@@ -131,7 +132,7 @@ ThemeData appLightThemeData() {
           EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         ),
         textStyle: const WidgetStatePropertyAll(
-          TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+          TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
         ),
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
@@ -144,10 +145,15 @@ ThemeData appLightThemeData() {
         backgroundColor: Colors.transparent,
         foregroundColor: scheme.primary,
         iconColor: scheme.primary,
+        iconSize: 16,
         disabledForegroundColor: scheme.onSurfaceVariant,
-        side: BorderSide(color: scheme.onSurfaceVariant, width: 1.5),
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-        textStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(999),
+          side: BorderSide(color: scheme.onSurface),
+        ),
+        side: BorderSide(color: scheme.onSurfaceVariant),
+        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
+        textStyle: const TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
       ),
     ),
 
@@ -266,8 +272,7 @@ ThemeData appLightThemeData() {
 
 class AppLightColors {
   // 🌤️ BACKGROUND (soft warm, not pure white)
-  static const canvas = Color(0xFFFAFAF7);
-  // feels like paper, reduces eye strain
+  static const canvas = Color(0xFFFAFAF6);
 
   // 🧱 SURFACES (Material 3 ladder tuned warm)
   static const surface = Color(0xFFFFFFFF);

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
 import 'package:rafeeq/core/features/audio/widgets/seek_bar.dart';
+import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/show_audio_controls_bar_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
@@ -35,16 +36,14 @@ class QuranAudioControlsBar extends ConsumerWidget {
       cs.surfaceContainerHighest.withAlpha(150),
       cs.surfaceContainerHighest.withAlpha(120),
       cs.surfaceContainerHighest.withAlpha(100),
-      cs.surfaceContainerHighest.withAlpha(80),
-      cs.surfaceContainerHighest.withAlpha(60),
-      cs.surfaceContainerHighest.withAlpha(40),
       cs.surfaceContainerHighest.withAlpha(20),
       cs.surfaceContainerHighest.withAlpha(10),
     ];
-    
+
     final audioState = ref.watch(audioControllerProvider);
     final ctrl = ref.read(audioControllerProvider.notifier);
     final buffering = audioState.isBuffering;
+    final isRepeatEnabled = audioState.isRepeatEnabled;
 
     final isCurrent = audioState.currentId == currentId;
     final isPlaying = audioState.isPlaying && isCurrent;
@@ -101,6 +100,7 @@ class QuranAudioControlsBar extends ConsumerWidget {
 
                   /// Play / Pause Button
                   IconButton(
+                    visualDensity: VisualDensity.compact,
                     onPressed: buffering
                         ? null
                         : () {
@@ -108,11 +108,33 @@ class QuranAudioControlsBar extends ConsumerWidget {
                           },
 
                     icon: Icon(
-                      isPlaying ? PhosphorIcons.pause() : PhosphorIcons.play(),
+                      isPlaying
+                          ? PhosphorIcons.pause(PhosphorIconsStyle.light)
+                          : PhosphorIcons.play(PhosphorIconsStyle.light),
                     ),
                   ),
 
-                  const SizedBox(width: 12),
+                  /// Repeat Button
+                  IconButton(
+                    onPressed: isCurrent
+                        ? () {
+                            ctrl.toggleRepeatMode();
+                            AppSnackBar.showSimple(
+                              context: context,
+                              message: isRepeatEnabled
+                                  ? 'Repeat surah disabled'
+                                  : 'Repeat surah enabled',
+                            );
+                          }
+                        : null,
+                    icon: Icon(
+                      PhosphorIcons.repeat(PhosphorIconsStyle.light),
+                      color: isRepeatEnabled ? cs.primary : null,
+                    ),
+                    tooltip: isRepeatEnabled
+                        ? 'Repeat surah is on'
+                        : 'Repeat surah is off',
+                  ),
 
                   /// Close Button
                   IconButton(
@@ -123,7 +145,7 @@ class QuranAudioControlsBar extends ConsumerWidget {
                       ref.read(showAudioControlsProvider.notifier).state =
                           false;
                     },
-                    icon: Icon(PhosphorIcons.x()),
+                    icon: Icon(PhosphorIcons.x(PhosphorIconsStyle.light)),
                   ),
                 ],
               ),

@@ -114,8 +114,8 @@ ThemeData appDarkThemeData() {
         iconColor: scheme.onPrimary,
         disabledBackgroundColor: scheme.surfaceContainerHigh,
         disabledForegroundColor: scheme.onSurfaceVariant,
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-        textStyle: const TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+        textStyle: const TextStyle(fontWeight: FontWeight.w400, fontSize: 12),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
       ),
     ),
@@ -128,7 +128,7 @@ ThemeData appDarkThemeData() {
           EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         ),
         textStyle: const WidgetStatePropertyAll(
-          TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+          TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
         ),
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
@@ -143,8 +143,8 @@ ThemeData appDarkThemeData() {
         iconColor: scheme.primary,
         disabledForegroundColor: scheme.onSurfaceVariant,
         side: BorderSide(color: scheme.onSurface.withAlpha(100)),
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-        textStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
+        textStyle: const TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
       ),
     ),
 
@@ -158,6 +158,7 @@ ThemeData appDarkThemeData() {
         padding: EdgeInsets.zero,
         minimumSize: Size.zero,
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        visualDensity: VisualDensity.compact,
       ),
     ),
 

@@ -43,7 +43,7 @@ void main() {
   runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
-      
+
       // Initialize Firebase
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
@@ -72,7 +72,9 @@ void main() {
         config: const AudioServiceConfig(
           androidNotificationChannelId: 'rafeeq.audio',
           androidNotificationChannelName: 'Audio Playback',
-          androidNotificationOngoing: true,
+          androidStopForegroundOnPause: false,
+          androidShowNotificationBadge: true,
+          androidNotificationIcon: 'drawable/ic_stat_rafeeq',
         ),
       );
 

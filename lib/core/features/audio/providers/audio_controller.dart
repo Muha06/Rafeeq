@@ -7,117 +7,106 @@ import 'package:rafeeq/core/features/audio/providers/audio_handler_provider.dart
 import 'package:rafeeq/core/helpers/audio_helpers.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 
-/// This is the SINGLE source of truth for audio UI state.
+/// This is the single source of truth for audio UI state.
 ///
 /// Responsibilities:
-/// - Handle UI actions (play, pause, seek)
+/// - Handle UI actions (play, pause, seek, repeat)
 /// - Sync state from AudioHandler
 ///
 /// DO NOT:
 /// - touch AudioPlayer directly
 class AudioController extends Notifier<AudioState> {
   late final AppAudioHandler _handler;
+  static const _notificationPrefix = 'Rafeeq - ';
 
-  /// Set up handler + listeners.
   @override
   AudioState build() {
     _handler = ref.read(audioHandlerProvider);
-
     _listenToHandler();
-
     return const AudioState();
   }
 
-  //──────────────────────────────────────────────
-  // 🎯 CORE ACTIONS
-  //──────────────────────────────────────────────
-
   /// Loads a new audio track and starts playback.
-  ///
-  /// Used when:
-  /// - first play
-  /// - switching track
   Future<void> loadAndPlay({
     required String currentId,
     required String url,
+    String? artist,
     required String title,
   }) async {
     try {
-      // Update UI immediately (optimistic state)
       state = state.copyWith(
         currentId: currentId,
         title: title,
         isBuffering: true,
       );
 
-      debugPrint('🎧 Loading audio: $currentId');
+      debugPrint('Loading audio: $currentId');
 
-      // Load and play via handler
       await _handler.load(
         currentId: currentId,
-        url: AudioHelpers.secureUrl(url),
         title: title,
+        artist: artist,
+        url: AudioHelpers.secureUrl(url),
       );
-    } catch (e, st) {
-      debugPrint('❌ Failed to load audio: $e');
-      debugPrint('$st');
 
+      await _handler.setSingleTrackLoop(state.isRepeatEnabled);
+    } catch (e, st) {
+      debugPrint('Audio load failed: $e');
+      debugPrint('$st');
       state = state.copyWith(isBuffering: false);
     }
   }
 
-  /// Resume playback
   Future<void> play() async {
     try {
       await _handler.play();
     } catch (e) {
-      debugPrint('❌ Play failed: $e');
+      debugPrint('Play failed: $e');
     }
   }
 
-  /// Pause playback
   Future<void> pause() async {
     try {
       await _handler.pause();
     } catch (e) {
-      debugPrint('❌ Pause failed: $e');
+      debugPrint('Pause failed: $e');
     }
   }
 
-  /// Stop playback and reset state
   Future<void> stop() async {
     try {
       await _handler.stop();
       state = const AudioState();
     } catch (e) {
-      debugPrint('❌ Stop failed: $e');
+      debugPrint('Stop failed: $e');
     }
   }
 
-  /// Seek to specific position in current track
   Future<void> seek(Duration position) async {
     try {
       await _handler.seek(position);
     } catch (e) {
-      debugPrint('❌ Seek failed: $e');
+      debugPrint('Seek failed: $e');
     }
   }
 
-  //──────────────────────────────────────────────
-  // 🔁 SYNC FROM AUDIO HANDLER
-  //──────────────────────────────────────────────
+  Future<void> setRepeatMode(bool enabled) async {
+    try {
+      await _handler.setSingleTrackLoop(enabled);
+      state = state.copyWith(isRepeatEnabled: enabled);
+    } catch (e) {
+      debugPrint('Repeat mode update failed: $e');
+    }
+  }
 
-  /// Listens to system-level playback state
-  /// and syncs it to UI state.
+  Future<void> toggleRepeatMode() async {
+    await setRepeatMode(!state.isRepeatEnabled);
+  }
 
-  /// - This is the ONLY stream source
-  /// - Do NOT duplicate listeners elsewhere
   void _listenToHandler() {
-    // Listen to playback state changes
     _handler.playbackState.listen(
       (playbackState) {
         final isPlaying = playbackState.playing;
-
         final isBuffering =
             playbackState.processingState == AudioProcessingState.loading ||
             playbackState.processingState == AudioProcessingState.buffering;
@@ -130,33 +119,40 @@ class AudioController extends Notifier<AudioState> {
         );
       },
       onError: (error, stack) {
-        // Prevent silent stream crashes
-        debugPrint('❌ Playback stream error: $error');
+        debugPrint('Playback stream error: $error');
         debugPrint('$stack');
       },
     );
 
+    // Listen to media item updates (e.g. title, duration)
     _handler.mediaItem.listen((item) {
       if (item == null) return;
 
+      //update title and duration
+      //when media item changes (e.g. new track loaded)
       state = state.copyWith(
-        title: item.title,
+        title: _stripNotificationPrefix(item.title),
         duration: item.duration ?? Duration.zero,
       );
     });
   }
 
-  //──────────────────────────────────────────────
-  // 🎮 TOGGLE LOGIC (SMART CONTROL)
-  //──────────────────────────────────────────────
+  //remove "Rafeeq - " prefix from notification title for in-app display
+  String _stripNotificationPrefix(String title) {
+    if (title.startsWith(_notificationPrefix)) {
+      return title.substring(_notificationPrefix.length);
+    }
+    return title;
+  }
 
   /// Smart play/pause handler:
-  /// - New track → load & play
-  /// - Same track → toggle play/pause
+  /// - New track -> load & play
+  /// - Same track -> toggle play/pause
   Future<void> togglePlay({
     required BuildContext context,
     bool showAudioPlayer = true,
     required String currentId,
+    String? artist,
     required String url,
     required String title,
   }) async {
@@ -164,11 +160,15 @@ class AudioController extends Notifier<AudioState> {
       final isNewTrack =
           state.currentId == null || state.currentId != currentId;
 
-      // 🎯 Case 1: New track
       if (isNewTrack) {
-        debugPrint('🎧 Switching to new track: $currentId');
+        debugPrint('Switching to new track: $currentId');
 
-        await loadAndPlay(currentId: currentId, url: url, title: title);
+        await loadAndPlay(
+          currentId: currentId,
+          artist: artist,
+          url: url,
+          title: title,
+        );
 
         if (showAudioPlayer) {
           AppSnackBar.showPlayer();
@@ -177,27 +177,20 @@ class AudioController extends Notifier<AudioState> {
         return;
       }
 
-      // 🎯 Case 2: Same track toggle
       if (state.isPlaying) {
-        debugPrint('⏸ Pausing track');
+        debugPrint('Pausing track');
         await pause();
       } else {
-        debugPrint('▶️ Resuming track');
+        debugPrint('Resuming track');
         await play();
       }
     } catch (e, st) {
-      // Global safety net
-      debugPrint('❌ togglePlay failed: $e');
+      debugPrint('togglePlay failed: $e');
       debugPrint('$st');
     }
   }
 }
 
-/// 🌍 Global provider
-///
-/// UI:
-/// - watch → state updates
-/// - read → actions (play/pause/seek)
 final audioControllerProvider = NotifierProvider<AudioController, AudioState>(
   AudioController.new,
 );

@@ -29,6 +29,9 @@ class AudioState extends Equatable {
   //Buffered position
   final Duration bufferedPosition;
 
+  /// Whether the current track should restart after it completes.
+  final bool isRepeatEnabled;
+
   const AudioState({
     this.currentId,
     this.title,
@@ -37,6 +40,7 @@ class AudioState extends Equatable {
     this.bufferedPosition = Duration.zero,
     this.isPlaying = false,
     this.isBuffering = false,
+    this.isRepeatEnabled = false,
   });
 
   /// Progress from 0.0 → 1.0
@@ -62,6 +66,7 @@ class AudioState extends Equatable {
     bool? isPlaying,
     bool? isBuffering,
     Duration? bufferedPosition,
+    bool? isRepeatEnabled,
   }) {
     return AudioState(
       currentId: currentId ?? this.currentId,
@@ -71,6 +76,7 @@ class AudioState extends Equatable {
       isPlaying: isPlaying ?? this.isPlaying,
       isBuffering: isBuffering ?? this.isBuffering,
       bufferedPosition: bufferedPosition ?? this.bufferedPosition,
+      isRepeatEnabled: isRepeatEnabled ?? this.isRepeatEnabled,
     );
   }
 
@@ -83,5 +89,6 @@ class AudioState extends Equatable {
     isPlaying,
     isBuffering,
     bufferedPosition,
+    isRepeatEnabled,
   ];
 }

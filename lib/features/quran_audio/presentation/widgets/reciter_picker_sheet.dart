@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
 
 class ReciterPickerSheet extends ConsumerWidget {
@@ -63,11 +64,11 @@ class ReciterPickerSheet extends ConsumerWidget {
                           horizontal: 16,
                         ),
                         child: TextField(
-                          style: tTheme.labelMedium!.copyWith(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w200,
-                            height: 1.7,
-                          ),
+                          // style: tTheme.labelMedium!.copyWith(
+                          //   fontSize: 14,
+                          //   fontWeight: FontWeight.w200,
+                          //   height: 1.7,
+                          // ),
                           controller: searchCtrl,
                           onChanged: (v) => query.value = v.trim(),
                           decoration: const InputDecoration(
@@ -91,7 +92,7 @@ class ReciterPickerSheet extends ConsumerWidget {
                             final isSelected = r.id == selected.id;
 
                             return Material(
-                              color: cs.surfaceContainerHighest,
+                              color: cs.surface,
                               borderRadius: BorderRadius.circular(16),
                               child: InkWell(
                                 borderRadius: BorderRadius.circular(16),
@@ -102,7 +103,7 @@ class ReciterPickerSheet extends ConsumerWidget {
                                           )
                                           .state =
                                       r;
-                                  Navigator.pop(context);
+                                  AppNav.pop(context);
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -131,11 +132,7 @@ class ReciterPickerSheet extends ConsumerWidget {
                                                 ? r.name.trim()[0].toUpperCase()
                                                 : '?',
                                             style: theme.textTheme.labelLarge!
-                                                .copyWith(
-                                                  color: cs.onSurface,
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w700,
-                                                ),
+                                                .copyWith(color: cs.onSurface),
                                           ),
                                         ),
                                       ),

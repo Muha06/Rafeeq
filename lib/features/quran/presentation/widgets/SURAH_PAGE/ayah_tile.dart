@@ -108,11 +108,11 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                               ? PhosphorIcons.bookBookmark(
                                   PhosphorIconsStyle.fill,
                                 )
-                              : PhosphorIcons.bookBookmark(),
+                              : PhosphorIcons.bookBookmark(
+                                  PhosphorIconsStyle.light,
+                                ),
                           size: 22,
-                          color: isBookmarked
-                              ? cs.primary
-                              : cs.onSurfaceVariant,
+                          color: isBookmarked ? cs.primary : null,
                         );
                       },
                     ),
@@ -143,8 +143,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                         await controller.share(context: btnCtx, text: text);
                       },
                       icon: PhosphorIcon(
-                        PhosphorIcons.share(),
-                        color: cs.onSurfaceVariant,
+                        PhosphorIcons.share(PhosphorIconsStyle.light),
                       ),
                     ),
                   ),

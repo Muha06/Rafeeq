@@ -8,5 +8,5 @@ final quranRecitersProvider = Provider<List<ReciterEntity>>((ref) {
 });
 
 final selectedReciterProvider = StateProvider<ReciterEntity>((ref) {
-  return kQuranRecitersSeed[19];
+  return kQuranRecitersSeed[2];
 });
