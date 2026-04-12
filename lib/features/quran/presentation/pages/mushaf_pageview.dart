@@ -110,6 +110,7 @@ class _MushafPageViewState extends ConsumerState<MushafPageView> {
               'assets/images/quran/pages/$pageNumber.png',
               color: cs.onSurface,
               filterQuality: FilterQuality.high,
+              width: double.infinity,
               alignment: Alignment.topCenter,
             ),
           );
