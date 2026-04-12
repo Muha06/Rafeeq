@@ -29,7 +29,19 @@ class QuranAudioControlsBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
-
+    final gradientColors = [
+      cs.surfaceContainerHighest.withAlpha(220),
+      cs.surfaceContainerHighest.withAlpha(180),
+      cs.surfaceContainerHighest.withAlpha(150),
+      cs.surfaceContainerHighest.withAlpha(120),
+      cs.surfaceContainerHighest.withAlpha(100),
+      cs.surfaceContainerHighest.withAlpha(80),
+      cs.surfaceContainerHighest.withAlpha(60),
+      cs.surfaceContainerHighest.withAlpha(40),
+      cs.surfaceContainerHighest.withAlpha(20),
+      cs.surfaceContainerHighest.withAlpha(10),
+    ];
+    
     final audioState = ref.watch(audioControllerProvider);
     final ctrl = ref.read(audioControllerProvider.notifier);
     final buffering = audioState.isBuffering;
@@ -48,14 +60,18 @@ class QuranAudioControlsBar extends ConsumerWidget {
       child: Container(
         // height: 72,
         decoration: BoxDecoration(
-          color: cs.surfaceContainerHighest,
+          gradient: LinearGradient(
+            colors: gradientColors,
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
           borderRadius: const BorderRadius.vertical(top: Radius.circular(14)),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (showAudioControls)
+            if (showAudioControls) ...[
               //Audio
               Row(
                 children: [
@@ -112,17 +128,19 @@ class QuranAudioControlsBar extends ConsumerWidget {
                 ],
               ),
 
-            const SizedBox(height: 8),
+              const SizedBox(height: 8),
 
-            //seek bar
-            AudioSeekBar(
-              position: currentPosition,
-              buffered: bufferedPosition,
-              duration: duration,
-              onSeek: (position) => ctrl.seek(position),
-            ),
+              //seek bar
+              AudioSeekBar(
+                position: currentPosition,
+                buffered: bufferedPosition,
+                duration: duration,
+                onSeek: (position) => ctrl.seek(position),
+              ),
 
-            const SizedBox(height: 8),
+              const SizedBox(height: 4),
+            ],
+
             //show controls conditionally
             if (showSpeedControls) ...[
               if (showSpeedControls && showAudioControls)
@@ -160,7 +178,7 @@ class AutoScrollBar extends ConsumerWidget {
     final speed = ref.watch(surahSettingsProvider).autoScrollSpeed;
     final surahSettingsNotifier = ref.watch(surahSettingsProvider.notifier);
 
-    final fontSize = 14.0;
+    final fontSize = 20.0;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
