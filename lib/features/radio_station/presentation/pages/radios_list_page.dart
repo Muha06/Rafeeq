@@ -69,18 +69,20 @@ class _RadioListPageState extends ConsumerState<RadioListPage> {
                   RadioLoaded(:final stations) =>
                     stations.isEmpty
                         ? _emptyState()
-                        : GridView.builder(
-                            // padding: const EdgeInsets.all(12),
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  crossAxisSpacing: 12,
-                                  mainAxisSpacing: 12,
-                                  childAspectRatio: 0.78,
-                                ),
-                            itemCount: stations.length,
-                            itemBuilder: (_, i) =>
-                                RadioCard(station: stations[i]),
+                        : RefreshIndicator(
+                            onRefresh: () => controller.loadAll(),
+                            child: GridView.builder(
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: 12,
+                                    mainAxisSpacing: 12,
+                                    childAspectRatio: 0.78,
+                                  ),
+                              itemCount: stations.length,
+                              itemBuilder: (_, i) =>
+                                  RadioCard(station: stations[i]),
+                            ),
                           ),
                 },
               ),

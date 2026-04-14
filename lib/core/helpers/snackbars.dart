@@ -63,6 +63,8 @@ class AppSnackBar {
   //show player
   static void showPlayer() {
     scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
+    scaffoldMessengerKey.currentState?.clearSnackBars();
+
     scaffoldMessengerKey.currentState?.showSnackBar(
       const SnackBar(
         persist: true,

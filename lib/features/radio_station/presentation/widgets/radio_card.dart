@@ -28,7 +28,7 @@ class RadioCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          color: theme.colorScheme.surface,
+          // color: theme.colorScheme.surface,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,6 +40,7 @@ class RadioCard extends StatelessWidget {
                       imageUrl: station.imageUrl,
                       height: 80,
                       width: double.infinity,
+                      fit: BoxFit.cover,
                     )
                   : CategoryFallback(
                       station: station,
@@ -49,31 +50,26 @@ class RadioCard extends StatelessWidget {
                     ),
             ),
 
+            const SizedBox(height: 8),
+
             // TEXT SECTION
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    station.name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: theme.textTheme.labelLarge,
-                  ),
+            Text(
+              station.name,
+              textAlign: TextAlign.start,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.labelLarge,
+            ),
 
-                  const SizedBox(height: 6),
+            const SizedBox(height: 6),
 
-                  // TAG
-                  MyChip(
-                    child: Text(
-                      station.category.label,
-                      style: theme.textTheme.labelSmall!.copyWith(
-                        color: theme.colorScheme.onSurface,
-                      ),
-                    ),
-                  ),
-                ],
+            // TAG
+            MyChip(
+              child: Text(
+                station.category.label,
+                style: theme.textTheme.labelSmall!.copyWith(
+                  color: theme.colorScheme.onSurface,
+                ),
               ),
             ),
           ],

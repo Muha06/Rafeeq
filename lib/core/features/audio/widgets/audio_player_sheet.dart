@@ -20,14 +20,6 @@ class AdhkarMiniPlayerSheet extends ConsumerWidget {
     final isPlaying = audioState.isPlaying;
     final isBuffering = audioState.isBuffering;
 
-    ref.listen(audioControllerProvider, (previous, next) {
-      final prevId = previous?.currentId;
-
-      if (next.currentId != prevId) {
-        scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
-      }
-    });
-
     final currentPosition = audioState.position;
     final bufferedPosition = audioState.bufferedPosition;
     final duration = audioState.duration;
@@ -94,6 +86,8 @@ class AdhkarMiniPlayerSheet extends ConsumerWidget {
                 ),
                 IconButton(
                   onPressed: () async {
+                    scaffoldMessengerKey.currentState?.removeCurrentSnackBar();
+                    scaffoldMessengerKey.currentState?.clearSnackBars();
                     await ctrl.stop();
                   },
 

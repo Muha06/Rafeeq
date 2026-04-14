@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/app/connectivity_plus/conectivity_plus_provider.dart';
+import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
+import 'package:rafeeq/core/features/audio/widgets/audio_player_sheet.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 
 class AppWrapper extends ConsumerWidget {
@@ -28,6 +30,14 @@ class AppWrapper extends ConsumerWidget {
       }
     });
 
-    return Stack(children: [SafeArea(top: false, bottom: true, child: child)]);
+    final s = ref.watch(audioControllerProvider);
+
+    return Stack(
+      children: [
+        SafeArea(top: false, bottom: true, child: child),
+        if (s.isPlaying)
+          const Positioned(bottom: 0, child: AdhkarMiniPlayerSheet()),
+      ],
+    );
   }
 }
