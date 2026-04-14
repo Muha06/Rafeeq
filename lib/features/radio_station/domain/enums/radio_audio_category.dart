@@ -30,4 +30,29 @@ extension RadioAudioCategoryX on RadioAudioCategory {
         return "Fatwa";
     }
   }
+
+  String get dbValue => name;
+
+  static RadioAudioCategory fromDb(String value) {
+    switch (value.toLowerCase()) {
+      case "quran":
+        return RadioAudioCategory.quran;
+      case "hadith":
+        return RadioAudioCategory.hadith;
+      case "tafsir":
+        return RadioAudioCategory.tafsir;
+      case "adhkar":
+        return RadioAudioCategory.adhkar;
+      case "seerah":
+        return RadioAudioCategory.seerah;
+      case "fiqh":
+        return RadioAudioCategory.fiqh;
+      case "qisas":
+        return RadioAudioCategory.qisas;
+      case "fatwa":
+        return RadioAudioCategory.fatwa;
+      default:
+        return RadioAudioCategory.quran; // safe fallback
+    }
+  }
 }

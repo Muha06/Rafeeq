@@ -18,18 +18,4 @@ class RadioRemoteDataSource {
 
     return data.map((json) => RadioStationModel.fromJson(json)).toList();
   }
-
-  /// Fetch by category
-  Future<List<RadioStationModel>> fetchByCategory(String category) async {
-    final response = await client
-        .from('radio_stations')
-        .select()
-        .eq('is_active', true)
-        .eq('category', category)
-        .order('name');
-
-    final data = response as List<dynamic>;
-
-    return data.map((json) => RadioStationModel.fromJson(json)).toList();
-  }
 }

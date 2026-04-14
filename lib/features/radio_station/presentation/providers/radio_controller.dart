@@ -1,3 +1,4 @@
+import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/features/radio_station/domain/enums/radio_audio_category.dart';
 import 'package:rafeeq/features/radio_station/presentation/providers/wiring_providers.dart';
@@ -11,7 +12,10 @@ sealed class RadioState {
   //Using factory constructors to control the creation of state instances
   const factory RadioState.initial() = RadioInitial;
   const factory RadioState.loading() = RadioLoading;
-  const factory RadioState.loaded(List<RadioStation> stations) = RadioLoaded;
+  const factory RadioState.loaded(
+    List<RadioStation> stations,
+    RadioAudioCategory selectedCategory,
+  ) = RadioLoaded;
   const factory RadioState.error(String message) = RadioError;
 }
 
@@ -26,8 +30,9 @@ class RadioLoading extends RadioState {
 
 class RadioLoaded extends RadioState {
   final List<RadioStation> stations;
+  final RadioAudioCategory selectedCategory;
 
-  const RadioLoaded(this.stations);
+  const RadioLoaded(this.stations, this.selectedCategory);
 }
 
 class RadioError extends RadioState {
@@ -41,10 +46,13 @@ class RadioController extends Notifier<RadioState> {
 
   bool _isInitialized = false;
 
+  List<RadioStation> _allStations = [];
+  RadioAudioCategory _currentCategory = RadioAudioCategory.quran;
+
   @override
   RadioState build() {
     _autoFetch();
-    return const RadioState.initial();
+    return const RadioState.loading();
   }
 
   void _autoFetch() {
@@ -56,26 +64,44 @@ class RadioController extends Notifier<RadioState> {
     });
   }
 
+  // Load all stations (initial load)
   Future<void> loadAll() async {
     state = const RadioState.loading();
 
     try {
       final radios = await _repo.getRadioStations();
-      state = RadioState.loaded(radios);
+
+      // Cache all stations for category filtering
+      _allStations = radios;
+
+      state = RadioState.loaded(
+        _filterByCategory(_currentCategory),
+        _currentCategory,
+      );
     } catch (e) {
       state = RadioState.error(e.toString());
     }
   }
 
-  Future<void> loadByCategory(RadioAudioCategory category) async {
-    state = const RadioState.loading();
+  // Load by category (when user selects a tab)
+  void setCategory(RadioAudioCategory category) {
+    _currentCategory = category;
 
-    try {
-      final radios = await _repo.getByCategory(category);
-      state = RadioState.loaded(radios);
-    } catch (e) {
-      state = RadioState.error(e.toString());
+    if (_allStations.isEmpty) {
+      state = const RadioState.loading();
+      return;
     }
+
+    debugPrint("Selected category: $category");
+
+    state = RadioState.loaded(_filterByCategory(category), category);
+  }
+
+  //Helper method to filter cached stations by category
+  List<RadioStation> _filterByCategory(RadioAudioCategory category) {
+    return _allStations
+        .where((station) => station.category == category)
+        .toList();
   }
 }
 

@@ -32,18 +32,6 @@ class RadioStationModel {
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'stream_url': streamUrl,
-      'image_url': imageUrl,
-      'category': category,
-      'is_active': isActive,
-      'created_at': createdAt.toIso8601String(),
-    };
-  }
-
   RadioStation toEntity() {
     return RadioStation(
       id: id,
@@ -52,10 +40,7 @@ class RadioStationModel {
       imageUrl: imageUrl,
       isActive: isActive,
       createdAt: createdAt,
-      category: RadioAudioCategory.values.firstWhere(
-        (e) => e.name == category,
-        orElse: () => RadioAudioCategory.quran,
-      ),
+      category: RadioAudioCategoryX.fromDb(category),
     );
   }
 }
