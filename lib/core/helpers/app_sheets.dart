@@ -10,14 +10,17 @@ class AppSheets {
     required BuildContext context,
     required Widget child,
     bool isScrollControlled = true,
+    bool showDragHandle = true,
+    bool useSafeArea = true,
+    double borderRadius = 24,
   }) {
     return showModalBottomSheet<T>(
       context: context,
-      useSafeArea: true,
+      useSafeArea: useSafeArea,
       isScrollControlled: isScrollControlled,
-      showDragHandle: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      showDragHandle: showDragHandle,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(borderRadius)),
       ),
       builder: (_) => child,
     );

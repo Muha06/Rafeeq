@@ -62,6 +62,7 @@ class AudioController extends Notifier<AudioState> {
       await _handler.play();
     } catch (e) {
       debugPrint('Play failed: $e');
+      rethrow;
     }
   }
 
@@ -70,6 +71,7 @@ class AudioController extends Notifier<AudioState> {
       await _handler.pause();
     } catch (e) {
       debugPrint('Pause failed: $e');
+      rethrow;
     }
   }
 
@@ -79,6 +81,7 @@ class AudioController extends Notifier<AudioState> {
       state = const AudioState();
     } catch (e) {
       debugPrint('Stop failed: $e');
+      rethrow;
     }
   }
 
@@ -157,6 +160,8 @@ class AudioController extends Notifier<AudioState> {
     required String title,
   }) async {
     try {
+      debugPrint('togglePlay called: $currentId, $url');
+
       final isNewTrack =
           state.currentId == null || state.currentId != currentId;
 

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/widgets/app_cache_image.dart';
+import 'package:rafeeq/core/widgets/my_chip.dart';
 import 'package:rafeeq/features/radio_station/domain/enums/radio_audio_category.dart';
+import 'package:rafeeq/features/radio_station/presentation/widgets/radio_player_sheet.dart';
 import '../../domain/entities/radio_station.dart';
 
 class RadioCard extends StatelessWidget {
@@ -14,9 +17,13 @@ class RadioCard extends StatelessWidget {
 
     return InkWell(
       borderRadius: BorderRadius.circular(16),
-      onTap: () {
-        // later: play station
-      },
+      onTap: () => AppSheets.showBottomSheet(
+        context: context,
+        showDragHandle: false,
+        useSafeArea: false,
+        isScrollControlled: true,
+        child: RadioPlayerSheet(station: station),
+      ),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
@@ -50,15 +57,7 @@ class RadioCard extends StatelessWidget {
                   const SizedBox(height: 6),
 
                   // TAG
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 3,
-                    ),
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.surfaceContainerHighest,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+                  MyChip(
                     child: Text(
                       station.category.label,
                       style: theme.textTheme.labelSmall!.copyWith(
