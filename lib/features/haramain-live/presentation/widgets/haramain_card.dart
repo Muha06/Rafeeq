@@ -5,9 +5,10 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/features/haramain-live/presentation/pages/haramain_live_page.dart';
+ import 'package:rafeeq/features/radio_station/presentation/pages/radios_list_page.dart';
 
-class HaramainCard extends ConsumerWidget {
-  const HaramainCard({super.key});
+class LiveHubCard extends ConsumerWidget {
+  const LiveHubCard({super.key});
 
   @override
   Widget build(BuildContext context, ref) {
@@ -21,94 +22,111 @@ class HaramainCard extends ConsumerWidget {
         borderRadius: BorderRadius.circular(12),
         color: cs.surface,
       ),
-
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          //title
+          // TITLE
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              FaIcon(PhosphorIcons.mosque()),
+              FaIcon(PhosphorIcons.broadcast()),
               const SizedBox(width: 8),
-              Text('Haramain • Live', style: textTheme.labelLarge),
+              Text('Live Streams', style: textTheme.labelLarge),
             ],
           ),
+
           const SizedBox(height: 4),
 
-          //subtitle
-          Text('Live from the sacred mosques', style: textTheme.bodyMedium),
-          const SizedBox(height: 8),
+          Text(
+            'Haramain & Quran radio — always live',
+            style: textTheme.bodyMedium,
+          ),
 
-          //cards
-          const MosqueCard(mosqueName: 'Makkah'),
+          const SizedBox(height: 14),
+
+          // HARAMAIN
+          _LiveTile(
+            title: 'Haramain',
+            subtitle: 'Makkah • Madinah live',
+            icon: PhosphorIcons.mosque(),
+            onTap: () {
+              AppNav.push(
+                context,
+                const HaramainLivePage(),
+              ).then((_) => RafeeqAnalytics.logScreenView("haramain_live"));
+            },
+          ),
 
           const SizedBox(height: 12),
 
-          const MosqueCard(mosqueName: 'Madinah'),
+          // RADIO
+          _LiveTile(
+            title: 'Quran Radio',
+            subtitle: 'Reciters • Tafsir • Adhkar',
+            icon: PhosphorIcons.radio(),
+            onTap: () {
+              AppNav.push(
+                context,
+                const RadioListPage(),
+              ).then((_) => RafeeqAnalytics.logScreenView("radio_live"));
+            },
+          ),
         ],
       ),
     );
   }
 }
 
-class MosqueCard extends ConsumerWidget {
-  const MosqueCard({super.key, required this.mosqueName});
+class _LiveTile extends StatelessWidget {
+  const _LiveTile({
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    required this.onTap,
+  });
 
-  final String mosqueName;
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final VoidCallback onTap;
 
   @override
-  Widget build(BuildContext context, ref) {
-    const makkahLive = 'https://win.holol.com/live/quran/playlist.m3u8';
-    const madinahLive = 'https://win.holol.com/live/sunnah/playlist.m3u8';
-
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
     return GestureDetector(
-      onTap: () async {
-        final liveUrl = mosqueName == 'Madinah' ? madinahLive : makkahLive;
-        final title = mosqueName;
-
-        if (context.mounted) {
-          AppNav.push(
-            context,
-            HaramainLivePage(title: title, liveUrl: liveUrl),
-          ).then((value) => RafeeqAnalytics.logScreenView("haramain_live"));
-        }
-      },
-
+      onTap: onTap,
       child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: cs.onSurfaceVariant.withAlpha(200)),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
           children: [
+            FaIcon(icon),
+
+            const SizedBox(width: 12),
+
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(mosqueName, style: theme.textTheme.labelLarge),
-                  const SizedBox(height: 8),
-
-                  const LiveChip(),
+                  Text(title, style: theme.textTheme.labelLarge),
+                  const SizedBox(height: 4),
+                  Text(subtitle, style: theme.textTheme.bodySmall),
                 ],
               ),
             ),
 
-            const Spacer(),
-
-            const FaIcon(FontAwesomeIcons.chevronRight, size: 16),
+            const LiveChip(),
           ],
         ),
       ),
     );
   }
 }
+
 
 class LiveChip extends StatefulWidget {
   const LiveChip({super.key, this.text = 'LIVE'});

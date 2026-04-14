@@ -63,7 +63,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           const SliverToBoxAdapter(
             child: HomeSection(
               padding: EdgeInsets.symmetric(horizontal: _hPad, vertical: _v10),
-              child: HaramainCard(),
+              child: LiveHubCard(),
             ),
           ),
 
