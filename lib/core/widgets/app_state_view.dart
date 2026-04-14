@@ -58,7 +58,7 @@ class AppStateView extends StatelessWidget {
 
             const SizedBox(height: 8),
 
-            // 🔥 Message
+            //   Message
             Text(
               message,
               textAlign: TextAlign.center,
@@ -70,7 +70,7 @@ class AppStateView extends StatelessWidget {
             if (buttonText != null && onPressed != null) ...[
               const SizedBox(height: 20),
 
-              // 🔥 Action Button
+              //   Action Button
               FilledButton(onPressed: onPressed, child: Text(buttonText!)),
             ],
           ],

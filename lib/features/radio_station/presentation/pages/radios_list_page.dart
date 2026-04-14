@@ -61,7 +61,7 @@ class _RadioListPageState extends ConsumerState<RadioListPage> {
                     icon: PhosphorIcons.radio(),
                     title: "Error loading stations",
                     message:
-                        'We couldn/t load the radio stations, please try again later.',
+                        "We couldn't load the radio stations, please try again later.",
                     buttonText: "retry",
                     onPressed: () => controller.loadAll(),
                   ),
@@ -97,7 +97,7 @@ Widget _emptyState() {
     child: AppStateView(
       icon: PhosphorIcons.radio(),
       title: "No stations found",
-      message: 'We couldn\'t find any radio stations for this category.',
+      message: "We couldn't find any radio stations for this category.",
     ),
   );
 }

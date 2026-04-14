@@ -1,15 +1,17 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
 import 'package:rafeeq/core/features/audio/widgets/seek_bar.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
-import 'package:rafeeq/core/helpers/snackbars.dart';
+import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/widgets/app_cache_image.dart';
 import 'package:rafeeq/core/widgets/my_chip.dart';
 import 'package:rafeeq/features/radio_station/domain/entities/radio_station.dart';
 import 'package:rafeeq/features/radio_station/domain/enums/radio_audio_category.dart';
 import 'package:palette_generator_master/palette_generator_master.dart';
+import 'package:rafeeq/features/radio_station/presentation/widgets/category_fallback_image.dart';
 
 class RadioPlayerSheet extends ConsumerStatefulWidget {
   const RadioPlayerSheet({super.key, required this.station});
@@ -58,7 +60,6 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
   }
 
   //Auto start Playing
-
   Future<void> _autoPlay() async {
     final state = ref.read(audioControllerProvider);
     final currentId = station.id;
@@ -68,11 +69,7 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      try {
-        await _togglePlay();
-      } catch (e) {
-        _showErrorSnack('Failed to play audio');
-      }
+      await _togglePlay();
     });
   }
 
@@ -81,13 +78,27 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
     final title = station.name;
     final url = station.streamUrl;
 
-    await ref
-        .read(audioControllerProvider.notifier)
-        .togglePlay(context: context, currentId: id, url: url, title: title);
+    try {
+      await ref
+          .read(audioControllerProvider.notifier)
+          .togglePlay(context: context, currentId: id, url: url, title: title);
+    } catch (e) {
+      _showErrorSnack(
+        'Failed to play audio. Please check your internet connection.',
+      );
+      debugPrint("Caught ERROR: $e");
+      rethrow;
+    }
   }
 
   void _showErrorSnack(String message) {
-    AppSnackBar.showSimple(context: context, message: message);
+    if (!context.mounted) return;
+
+    AppSheets.showErrorDialog(
+      context: context,
+      title: 'Playback Error',
+      message: message,
+    );
   }
 
   @override
@@ -96,7 +107,9 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
     final cs = theme.colorScheme;
     final tt = theme.textTheme;
 
-    final isPlaying = ref.watch(audioControllerProvider).isPlaying;
+    final state = ref.watch(audioControllerProvider);
+    final isBuffering = state.isBuffering;
+    final isPlaying = state.isPlaying;
 
     return Container(
       padding: const EdgeInsets.only(left: 16, right: 16, top: 24),
@@ -117,30 +130,27 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
           // Minimize button
           Align(
             alignment: Alignment.topLeft,
-            child: Container(
-              decoration: BoxDecoration(
-                color: cs.surfaceContainerHighest,
-                shape: BoxShape.circle,
-              ),
-              padding: const EdgeInsets.all(4),
-              child: IconButton(
-                icon: Icon(PhosphorIcons.caretDown()),
-                onPressed: () => AppNav.pop(context),
-              ),
+            child: IconButton(
+              icon: Icon(PhosphorIcons.caretDown(PhosphorIconsStyle.bold)),
+              onPressed: () => AppNav.pop(context),
             ),
           ),
 
           const SizedBox(height: 20),
 
           //  large Image
-          const Center(
-            child: AppCachedImage(
-              imageUrl:
-                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4iOQjZV-CanT2x-vkfs5xsNNDWEVPt2SHJw&s',
-              //for now, later use station.imageUrl
-              height: 350,
-              width: 350,
-            ),
+          Center(
+            child: station.imageUrl != null
+                ? AppCachedImage(
+                    imageUrl: station.imageUrl,
+                    height: 350,
+                    width: double.infinity,
+                  )
+                : CategoryFallback(
+                    station: station,
+                    height: 350,
+                    width: double.infinity,
+                  ),
           ),
 
           const SizedBox(height: 20),
@@ -177,7 +187,11 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
           const SizedBox(height: 20),
 
           // Play/pause
-          AnimatedPlayPauseBtn(onPressed: _togglePlay, isPlaying: isPlaying),
+          AnimatedPlayPauseBtn(
+            onPressed: _togglePlay,
+            isPlaying: isPlaying,
+            isBuffering: isBuffering,
+          ),
         ],
       ),
     );
@@ -189,12 +203,14 @@ class AnimatedPlayPauseBtn extends StatelessWidget {
     super.key,
     required this.onPressed,
     required this.isPlaying,
+    required this.isBuffering,
     this.duration = const Duration(milliseconds: 300),
     this.size = 48,
     this.color,
   });
 
   final bool isPlaying;
+  final bool isBuffering;
   final VoidCallback onPressed;
   final Duration duration;
   final double size;
@@ -216,7 +232,9 @@ class AnimatedPlayPauseBtn extends StatelessWidget {
             child: FadeTransition(opacity: animation, child: child),
           );
         },
-        child: isPlaying
+        child: isBuffering
+            ? const CupertinoActivityIndicator()
+            : isPlaying
             ? PhosphorIcon(
                 key: const ValueKey('pause'),
                 PhosphorIcons.pause(PhosphorIconsStyle.light),

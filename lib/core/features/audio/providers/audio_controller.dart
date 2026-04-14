@@ -54,6 +54,7 @@ class AudioController extends Notifier<AudioState> {
       debugPrint('Audio load failed: $e');
       debugPrint('$st');
       state = state.copyWith(isBuffering: false);
+      rethrow;
     }
   }
 
@@ -192,6 +193,7 @@ class AudioController extends Notifier<AudioState> {
     } catch (e, st) {
       debugPrint('togglePlay failed: $e');
       debugPrint('$st');
+      rethrow;
     }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rafeeq/core/helpers/app_nav.dart';
 
 class AppSheets {
   AppSheets._(); // private constructor (no instantiation)
@@ -145,6 +146,64 @@ class AppSheets {
                 width: double.infinity,
                 child: FilledButton(
                   onPressed: () => Navigator.pop(context),
+                  child: Text(buttonText),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  static Future<void> showErrorDialog({
+    required BuildContext context,
+    String title = "Something went wrong",
+    required String message,
+    String buttonText = "OK",
+    final bool useRootNavigator = true,
+  }) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
+    return showDialog(
+      context: context,
+      useRootNavigator: useRootNavigator,
+      builder: (_) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: cs.surface,
+            borderRadius: BorderRadius.circular(24),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.error_outline, color: cs.error, size: 40),
+
+              const SizedBox(height: 12),
+
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.titleMedium?.copyWith(color: cs.error),
+              ),
+
+              const SizedBox(height: 12),
+
+              Text(
+                message,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodyMedium,
+              ),
+
+              const SizedBox(height: 20),
+
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton(
+                  onPressed: () => AppNav.pop(context),
                   child: Text(buttonText),
                 ),
               ),
