@@ -35,7 +35,9 @@ class RadioCategorySelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+    final tt = theme.textTheme;
 
     return SizedBox(
       height: 44,
@@ -71,12 +73,8 @@ class RadioCategorySelector extends StatelessWidget {
                   const SizedBox(width: 6),
                   Text(
                     cat.label,
-                    style: TextStyle(
-                      fontSize: 13,
+                    style: tt.labelMedium!.copyWith(
                       color: selectedCat ? cs.onPrimaryContainer : cs.onSurface,
-                      fontWeight: selectedCat
-                          ? FontWeight.w600
-                          : FontWeight.normal,
                     ),
                   ),
                 ],

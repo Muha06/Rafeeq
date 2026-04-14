@@ -5,7 +5,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/features/haramain-live/presentation/pages/haramain_live_page.dart';
- import 'package:rafeeq/features/radio_station/presentation/pages/radios_list_page.dart';
+import 'package:rafeeq/features/radio_station/presentation/pages/radios_list_page.dart';
 
 class LiveHubCard extends ConsumerWidget {
   const LiveHubCard({super.key});
@@ -38,10 +38,10 @@ class LiveHubCard extends ConsumerWidget {
 
           Text(
             'Haramain & Quran radio — always live',
-            style: textTheme.bodyMedium,
+            style: textTheme.bodyMedium!.copyWith(color: cs.onSurfaceVariant),
           ),
 
-          const SizedBox(height: 14),
+          const SizedBox(height: 16),
 
           // HARAMAIN
           _LiveTile(
@@ -126,7 +126,6 @@ class _LiveTile extends StatelessWidget {
     );
   }
 }
-
 
 class LiveChip extends StatefulWidget {
   const LiveChip({super.key, this.text = 'LIVE'});

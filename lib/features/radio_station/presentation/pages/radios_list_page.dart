@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/features/radio_station/domain/enums/radio_audio_category.dart';
 import 'package:rafeeq/features/radio_station/presentation/providers/radio_controller.dart';
 import 'package:rafeeq/features/radio_station/presentation/widgets/radio_tab_selector.dart';
@@ -25,7 +27,7 @@ class _RadioListPageState extends ConsumerState<RadioListPage> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Live Radio")),
+      appBar: AppBar(title: const Text("📻 Live Radio")),
 
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -48,23 +50,37 @@ class _RadioListPageState extends ConsumerState<RadioListPage> {
               child: switch (state) {
                 RadioInitial() => const SizedBox(),
 
+                //TODO: Use shimmer
                 RadioLoading() => const Center(
                   child: CircularProgressIndicator(),
                 ),
 
-                RadioError(:final message) => Center(child: Text(message)),
-
-                RadioLoaded(:final stations) => GridView.builder(
-                  // padding: const EdgeInsets.all(12),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 12,
-                    childAspectRatio: 0.78,
-                  ),
-                  itemCount: stations.length,
-                  itemBuilder: (_, i) => RadioCard(station: stations[i]),
+                //
+                RadioError() => AppStateView(
+                  icon: PhosphorIcons.radio(),
+                  title: "Error loading stations",
+                  message:
+                      'We couldn/t load the radio stations, please try again later.',
+                  buttonText: "retry",
+                  onPressed: () => controller.loadAll(),
                 ),
+
+                RadioLoaded(:final stations) =>
+                  stations.isEmpty
+                      ? _emptyState()
+                      : GridView.builder(
+                          // padding: const EdgeInsets.all(12),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 12,
+                                mainAxisSpacing: 12,
+                                childAspectRatio: 0.78,
+                              ),
+                          itemCount: stations.length,
+                          itemBuilder: (_, i) =>
+                              RadioCard(station: stations[i]),
+                        ),
               },
             ),
           ],
@@ -72,4 +88,14 @@ class _RadioListPageState extends ConsumerState<RadioListPage> {
       ),
     );
   }
+}
+
+Widget _emptyState() {
+  return Center(
+    child: AppStateView(
+      icon: PhosphorIcons.radio(),
+      title: "No stations found",
+      message: 'We couldn\'t find any radio stations for this category.',
+    ),
+  );
 }

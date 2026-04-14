@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rafeeq/core/widgets/app_cache_image.dart';
 import 'package:rafeeq/features/radio_station/domain/enums/radio_audio_category.dart';
 import '../../domain/entities/radio_station.dart';
 
@@ -19,22 +20,17 @@ class RadioCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          color: theme.colorScheme.surfaceContainerHighest,
+          color: theme.colorScheme.surface,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // IMAGE
             Expanded(
-              child: ClipRRect(
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(16),
-                ),
-                child: Image.network(
-                  station.imageUrl ?? "https://via.placeholder.com/300",
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
+              child: AppCachedImage(
+                imageUrl: station.imageUrl,
+                height: 80,
+                width: double.infinity,
               ),
             ),
 
@@ -48,9 +44,7 @@ class RadioCard extends StatelessWidget {
                     station.name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: theme.textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: theme.textTheme.labelLarge,
                   ),
 
                   const SizedBox(height: 6),
@@ -62,13 +56,13 @@ class RadioCard extends StatelessWidget {
                       vertical: 3,
                     ),
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.primaryContainer,
+                      color: theme.colorScheme.surfaceContainerHighest,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
                       station.category.label,
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: theme.colorScheme.onPrimaryContainer,
+                      style: theme.textTheme.labelSmall!.copyWith(
+                        color: theme.colorScheme.onSurface,
                       ),
                     ),
                   ),
