@@ -85,7 +85,7 @@ class _MushafPageViewState extends ConsumerState<MushafPageView> {
                 const SizedBox(width: 6),
                 PhosphorIcon(PhosphorIcons.caretDown(iconStyle), size: 18),
               ],
-            ),
+            ), 
           ),
         ),
       ),

@@ -74,7 +74,7 @@ void main() {
           androidNotificationChannelName: 'Audio Playback',
           androidStopForegroundOnPause: false,
           androidShowNotificationBadge: true,
-          androidNotificationIcon: 'drawable/ic_stat_rafeeq',
+          androidNotificationIcon: 'mipmap/ic_launcher',
         ),
       );
 
