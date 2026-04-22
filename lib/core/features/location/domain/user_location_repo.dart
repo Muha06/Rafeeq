@@ -8,7 +8,7 @@ abstract class LocationRepository {
   Future<UserLocation?> getCachedLocation();
 
   /// Refresh using GPS + reverse geocode, then cache it
-  Future<UserLocation> refreshLocation();
+  Future<UserLocation> getCurrentLocation();
 
   Future<void> saveLocation(UserLocation loc);
 
@@ -32,11 +32,11 @@ class LocationRepositoryImpl implements LocationRepository {
         return cached;
       }
 
-      debugPrint('No cached location → refreshing once...');
-      final refreshed = await refreshLocation();
+      debugPrint('No cached location → returning null');
 
-      return refreshed;
+      return null;
     } catch (e) {
+      debugPrint('Error Fetching cached location');
       return null;
     }
   }
@@ -47,8 +47,9 @@ class LocationRepositoryImpl implements LocationRepository {
     await local.write(loc);
   }
 
+  //Fetches
   @override
-  Future<UserLocation> refreshLocation() async {
+  Future<UserLocation> getCurrentLocation() async {
     try {
       final pos = await gps.getCurrentPosition();
 

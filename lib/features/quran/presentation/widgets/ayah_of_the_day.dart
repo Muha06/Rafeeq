@@ -40,7 +40,8 @@ class AyahOfTheDay extends ConsumerWidget {
 
           //Fetch surah for the ayah
           final ayahSurah = ref.watch(ayahSurahProvider(ayah.surahId));
-          if (ayahSurah == null) return const SizedBox();
+
+          if (ayahSurah == null) return const SizedBox.shrink();
 
           return GestureDetector(
             key: const ValueKey('data'),

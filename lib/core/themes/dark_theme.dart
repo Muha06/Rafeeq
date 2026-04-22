@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 ThemeData appDarkThemeData() {
   final scheme =
@@ -25,7 +26,9 @@ ThemeData appDarkThemeData() {
         onSurfaceVariant: AppDarkColors.onSurface2, // quieter text/icons
       );
 
-  final base = Typography.material2021().black.apply(fontFamily: 'NotoSerif');
+  final base = GoogleFonts.plusJakartaSansTextTheme(
+    Typography.material2021().white,
+  );
 
   return ThemeData(
     useMaterial3: true,
@@ -179,8 +182,7 @@ ThemeData appDarkThemeData() {
     ),
 
     inputDecorationTheme: InputDecorationTheme(
-      filled: true,
-      fillColor: scheme.surfaceContainerHighest,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
       hintStyle: TextStyle(color: scheme.onSurfaceVariant),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
@@ -193,6 +195,20 @@ ThemeData appDarkThemeData() {
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
         borderSide: BorderSide(color: scheme.primary),
+      ),
+      disabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide(color: scheme.outlineVariant.withAlpha(100)),
+      ),
+
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide(color: scheme.error),
+      ),
+
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide(color: scheme.error),
       ),
     ),
 
@@ -219,43 +235,49 @@ ThemeData appDarkThemeData() {
     textTheme: base.copyWith(
       titleLarge: base.titleLarge?.copyWith(
         fontSize: 20,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w500,
+        letterSpacing: -0.2,
         color: scheme.onSurface,
       ),
       titleMedium: base.titleMedium?.copyWith(
         fontSize: 16,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w500,
+        letterSpacing: -0.1,
         color: scheme.onSurface,
       ),
       titleSmall: base.titleSmall?.copyWith(
         fontSize: 14,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w500,
         color: scheme.onSurfaceVariant,
       ),
       bodyLarge: base.bodyLarge?.copyWith(
         fontSize: 15,
-        height: 1.5,
+        height: 1.6,
         color: scheme.onSurface,
       ),
       bodyMedium: base.bodyMedium?.copyWith(
         fontSize: 14,
-        height: 1.55,
+        height: 1.65,
         color: scheme.onSurface,
       ),
       bodySmall: base.bodySmall?.copyWith(
         fontSize: 12.5,
+        height: 1.5,
         color: scheme.onSurfaceVariant,
       ),
       labelLarge: base.labelLarge?.copyWith(
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w700,
+        letterSpacing: 0.2,
         color: scheme.onSurface,
       ),
       labelMedium: base.labelMedium?.copyWith(
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w500,
+        letterSpacing: 0.2,
         color: scheme.onSurfaceVariant,
       ),
       labelSmall: base.labelSmall?.copyWith(
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w500,
+        letterSpacing: 0.2,
         color: scheme.onSurfaceVariant.withAlpha(210),
       ),
     ),
@@ -263,25 +285,24 @@ ThemeData appDarkThemeData() {
 }
 
 class AppDarkColors {
-  static const canvas = Color(0xFF071013);
+  static const canvas = Color(0xFF12100e);
 
-  static const surface = Color(0xFF0F1F25);
-  static const surfaceDim = Color(0xFF081214);
-  static const surfaceHigh = Color(0xFF122A32);
+  static const surface = Color(0xFF1e1a16);
+  static const surfaceDim = Color(0xFF171310); // lowest elevation
+  static const surfaceHigh = Color(0xFF2a241f);
 
-  static const outline = Color(0xFF123238);
-  static const outlineVariant = Color(0xFF0E2A2D);
+  static const outline = Color(0xFF3A332D);
+  static const outlineVariant = Color(0xFF2A241F);
 
-  static const tertiary = Color(0xFF4FA3A8);
-
-  static const brand = Color(0xFFDAB36D);
+  static const tertiary = Color(0xFF7FAFA2);
+  static const brand = Color(0xFFe4c169);
 
   static const onSurface = Color(0xFFEAF2F2);
   static const onSurface2 = Color(0xFFCAD6D8);
 
   static const error = Color(0xFFFF5A6A);
 
-  static const switchOn = Color(0xFF1EAE93);
-  static const switchOnBg = Color(0xFF0B2A2A);
-  static const switchRipple = Color(0x1A22C6A6);
+  static const switchOn = Color(0xFFE4C169); // same as brand (unifies identity)
+  static const switchOnBg = Color(0xFF2A241F); // matches surfaceHigh tone
+  static const switchRipple = Color(0x33E4C169); // soft gold glow
 }

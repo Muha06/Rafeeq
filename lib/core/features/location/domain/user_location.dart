@@ -7,8 +7,7 @@ class UserLocation {
   final String city;
   final String country;
 
-  /// Usually from prayer API meta.timezone (optional but useful)
-  final String timezone;
+   final String timezone;
 
   /// True = GPS/auto,  
   final bool isAuto;

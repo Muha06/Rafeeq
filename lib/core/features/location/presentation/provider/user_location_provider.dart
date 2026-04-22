@@ -22,23 +22,40 @@ final userLocationProvider =
     );
 
 class UserLocationNotifier extends AsyncNotifier<UserLocation?> {
+  //
   @override
   Future<UserLocation?> build() async {
     final repo = ref.read(locationRepositoryProvider);
 
-    return repo.getCachedLocation();
+    final cachedLocation = await repo.getCachedLocation();
+
+    //If cached is null return null
+    //Set user fallback
+    if (cachedLocation == null) {
+      setManual(
+        lat: 24.4672,
+        lng: 39.6111,
+        city: 'Madinah',
+        country: 'Saudi Arabia',
+        timezone: 'Ksa/Medinah',
+      );
+      return null;
+    }
+
+    return cachedLocation;
   }
 
+  //
   //refresh
   Future<void> refresh() async {
     final repo = ref.read(locationRepositoryProvider);
     final prev = state.value; // keep old
     state = AsyncData(prev); // keep showing
-    final newLoc = await repo.refreshLocation();
+    final newLoc = await repo.getCurrentLocation();
     state = AsyncData(newLoc);
   }
 
-  /// ✅ Save manual selection (from Open-Meteo pick)
+  /// Save manual selection (from Open-Meteo pick)
   Future<void> setManual({
     required double lat,
     required double lng,
@@ -61,7 +78,7 @@ class UserLocationNotifier extends AsyncNotifier<UserLocation?> {
     state = AsyncData(loc);
   }
 
-  /// ✅ Switch back to auto mode (GPS)
+  /// Switch back to auto mode (GPS)
   Future<void> setAuto() async {
     final access = ref.read(systemLocationAccessProvider.notifier);
 
@@ -73,7 +90,7 @@ class UserLocationNotifier extends AsyncNotifier<UserLocation?> {
     }
 
     final repo = ref.read(locationRepositoryProvider);
-    final loc = await repo.refreshLocation();
+    final loc = await repo.getCurrentLocation();
     state = AsyncData(loc);
   }
 }

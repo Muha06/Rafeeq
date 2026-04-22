@@ -29,16 +29,18 @@ class LocationGpsDataSource {
   }) async {
     final placemarks = await placemarkFromCoordinates(lat, lng);
     final p = placemarks.first;
+    final locality = p.locality;
+    final subAdministrativeArea = p.subAdministrativeArea;
 
-    final city = (p.locality?.trim().isNotEmpty ?? false)
+    final city = (locality?.trim().isNotEmpty ?? false)
         ? p.locality!.trim()
-        : (p.subAdministrativeArea?.trim().isNotEmpty ?? false)
-        ? p.subAdministrativeArea!.trim()
-        : 'Unknown';
+        : (subAdministrativeArea?.trim().isNotEmpty ?? false)
+        ? subAdministrativeArea!.trim()
+        : 'Unknown city';
 
     final country = (p.country?.trim().isNotEmpty ?? false)
         ? p.country!.trim()
-        : 'Unknown';
+        : 'Unknown country';
 
     return (city, country);
   }

@@ -31,13 +31,22 @@ class AppWrapper extends ConsumerWidget {
     });
 
     final s = ref.watch(audioControllerProvider);
+    final miniPlayer = AnimatedSwitcher(
+      duration: const Duration(milliseconds: 250),
+      child: s.isPlaying
+          ? const AdhkarMiniPlayerSheet()
+          : const SizedBox.shrink(),
+    );
 
-    return Stack(
-      children: [
-        SafeArea(top: false, bottom: true, child: child),
-        if (s.isPlaying)
-          const Positioned(bottom: 0, child: AdhkarMiniPlayerSheet()),
-      ],
+    return Scaffold(
+      body: Stack(
+        children: [
+          child,
+
+          //Mini player
+          Positioned(left: 0, right: 0, bottom: 64, child: miniPlayer),
+        ],
+      ),
     );
   }
 }

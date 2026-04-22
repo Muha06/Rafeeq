@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provider.dart';
@@ -15,22 +13,19 @@ class SurahSearchPage extends ConsumerStatefulWidget {
 class _SurahSearchPageState extends ConsumerState<SurahSearchPage> {
   final FocusNode _focus = FocusNode();
   final _controller = TextEditingController();
-  Timer? _debounce;
+  String _query = '';
 
   @override
   void dispose() {
     _focus.dispose();
     _controller.dispose();
     _controller.clear();
-    _debounce?.cancel();
     ref.read(searchSurahTextProvider.notifier).state = '';
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     final surahs = ref.watch(surahsProvider).value ?? []; // <surahs provider
     final searchSurahText = ref.watch(searchSurahTextProvider);
     final q = searchSurahText.trim().toLowerCase();
@@ -38,75 +33,83 @@ class _SurahSearchPageState extends ConsumerState<SurahSearchPage> {
     final filtered = q.isEmpty
         ? surahs
         : surahs.where((s) {
-            final t = s.nameTransliteration.toLowerCase();
-            final e = s.nameEnglish.toLowerCase();
-            final n = s.id.toString();
-            return t.contains(q) || e.contains(q) || n == q;
+            return s.nameTransliteration.toLowerCase().contains(q) ||
+                s.nameEnglish.toLowerCase().contains(q) ||
+                s.id.toString() == q;
           }).toList();
-
-    if (q.isNotEmpty && filtered.isEmpty) {
-      return const Center(child: Text('No surahs found'));
-    }
 
     return PopScope(
       onPopInvokedWithResult: (didPop, result) {
-        ref.read(searchSurahTextProvider.notifier).state = '';
-        _controller.clear();
-        _focus.requestFocus();
+        if (didPop) {
+          ref.read(searchSurahTextProvider.notifier).state = '';
+          _controller.clear();
+        }
       },
       child: Scaffold(
         appBar: AppBar(
           titleSpacing: 12,
-          title: Container(
-            height: 44,
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            alignment: Alignment.center,
-            child: TextField(
-              focusNode: _focus,
-              autofocus: true,
-              controller: _controller,
-              textInputAction: TextInputAction.search,
-              style: theme.textTheme.bodyMedium,
-              decoration: InputDecoration(
-                isDense: true,
-                hintText: "Search surah (name / number)…",
-                suffixIcon: searchSurahText.trim().isEmpty
-                    ? null
-                    : IconButton(
-                        icon: const Icon(Icons.cancel),
-                        onPressed: () {
-                          _controller.clear();
-                          ref.read(searchSurahTextProvider.notifier).state = '';
-                          _focus.requestFocus();
-                        },
-                      ),
+          title: TextField(
+            focusNode: _focus,
+            autofocus: true,
+            controller: _controller,
+            textInputAction: TextInputAction.search,
+            decoration: InputDecoration(
+              isDense: true,
+              hintText: "Search surah (name / number)…",
+              suffixIcon: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (searchSurahText.trim().isNotEmpty)
+                    IconButton(
+                      icon: const Icon(Icons.cancel),
+                      onPressed: () {
+                        _controller.clear();
+                        _query = '';
+                        ref.read(searchSurahTextProvider.notifier).state = '';
+                        _focus.requestFocus();
+                      },
+                    ),
+                  IconButton(
+                    icon: const Icon(Icons.search),
+                    onPressed: () {
+                      ref.read(searchSurahTextProvider.notifier).state = _query;
+                      _focus.unfocus();
+                    },
+                  ),
+                ],
               ),
-              onChanged: (value) {
-                _debounce?.cancel();
-                _debounce = Timer(const Duration(milliseconds: 100), () {
-                  ref.read(searchSurahTextProvider.notifier).state = value;
-                });
-              },
             ),
+            onChanged: (value) {
+              _query = value;
+            },
+            onSubmitted: (value) {
+              ref.read(searchSurahTextProvider.notifier).state = _query;
+            },
           ),
         ),
         body: GestureDetector(
           onTap: () => _focus.unfocus(),
-          child: ListView.builder(
-            itemCount: filtered.length,
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            itemBuilder: (context, index) {
-              final surah = filtered[index];
+          child: filtered.isEmpty
+              ? const Center(child: Text('No surahs found'))
+              : ListView.builder(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  itemCount: filtered.length,
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  itemBuilder: (context, index) {
+                    final surah = filtered[index];
 
-              final realSurahIndex = surahs.indexWhere((s) => s.id == surah.id);
+                    final realSurahIndex = surahs.indexWhere(
+                      (s) => s.id == surah.id,
+                    );
 
-              return SurahTile(
-                surah: surah,
-                surahs: surahs,
-                index: realSurahIndex,
-              );
-            },
-          ),
+                    return SurahTile(
+                      surah: surah,
+                      surahs: surahs,
+                      index: realSurahIndex,
+                    );
+                  },
+                ),
         ),
       ),
     );

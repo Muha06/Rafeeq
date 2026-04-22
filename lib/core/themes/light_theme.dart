@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 ThemeData appLightThemeData() {
   final scheme =
@@ -28,7 +29,9 @@ ThemeData appLightThemeData() {
         onSurfaceVariant: AppLightColors.onSurface2,
       );
 
-  final base = Typography.material2021().black.apply(fontFamily: 'NotoSerif');
+  final base = GoogleFonts.plusJakartaSansTextTheme(
+    Typography.material2021().white,
+  );
 
   return ThemeData(
     useMaterial3: true,
@@ -187,9 +190,9 @@ ThemeData appLightThemeData() {
     ),
 
     inputDecorationTheme: InputDecorationTheme(
-      filled: true,
-      fillColor: scheme.surfaceContainerHighest,
       hintStyle: TextStyle(color: scheme.onSurfaceVariant),
+      iconColor: scheme.onSurface,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
         borderSide: BorderSide(color: scheme.outlineVariant),
@@ -201,6 +204,20 @@ ThemeData appLightThemeData() {
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
         borderSide: BorderSide(color: scheme.primary),
+      ),
+      disabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide(color: scheme.outlineVariant.withAlpha(100)),
+      ),
+
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide(color: scheme.error),
+      ),
+
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide(color: scheme.error),
       ),
     ),
 
@@ -227,43 +244,49 @@ ThemeData appLightThemeData() {
     textTheme: base.copyWith(
       titleLarge: base.titleLarge?.copyWith(
         fontSize: 20,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w500,
+        letterSpacing: -0.2,
         color: scheme.onSurface,
       ),
       titleMedium: base.titleMedium?.copyWith(
         fontSize: 16,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w500,
+        letterSpacing: -0.1,
         color: scheme.onSurface,
       ),
       titleSmall: base.titleSmall?.copyWith(
         fontSize: 14,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w500,
         color: scheme.onSurfaceVariant,
       ),
       bodyLarge: base.bodyLarge?.copyWith(
         fontSize: 15,
-        height: 1.5,
+        height: 1.6,
         color: scheme.onSurface,
       ),
       bodyMedium: base.bodyMedium?.copyWith(
         fontSize: 14,
-        height: 1.55,
+        height: 1.65,
         color: scheme.onSurface,
       ),
       bodySmall: base.bodySmall?.copyWith(
         fontSize: 12.5,
+        height: 1.5,
         color: scheme.onSurfaceVariant,
       ),
       labelLarge: base.labelLarge?.copyWith(
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w600,
+        letterSpacing: 0.2,
         color: scheme.onSurface,
       ),
       labelMedium: base.labelMedium?.copyWith(
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w500,
+        letterSpacing: 0.2,
         color: scheme.onSurfaceVariant,
       ),
       labelSmall: base.labelSmall?.copyWith(
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w500,
+        letterSpacing: 0.2,
         color: scheme.onSurfaceVariant.withAlpha(210),
       ),
     ),

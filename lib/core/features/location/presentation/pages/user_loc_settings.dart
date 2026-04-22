@@ -95,7 +95,7 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
     });
 
     try {
-      final usecase = ref.read(getTodaySalahTimesProvider);
+      final usecase = ref.read(fetchSalahTimesUsecase);
       final method = ref.read(salahMethodProvider);
 
       await usecase.call(
@@ -511,7 +511,7 @@ class _ActionButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-     final cs = Theme.of(context).colorScheme;
+    final cs = Theme.of(context).colorScheme;
 
     return InkWell(
       borderRadius: BorderRadius.circular(12),

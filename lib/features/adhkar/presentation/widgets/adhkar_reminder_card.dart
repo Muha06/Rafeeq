@@ -50,7 +50,7 @@ class AdhkarReminderCard extends ConsumerWidget {
                       isMorning ? morningMsg : eveningMsg,
                       style: theme.textTheme.bodyMedium!,
                     ),
-                    const SizedBox(height: 14),
+                    const SizedBox(height: 8),
 
                     //Actions
                     Row(
@@ -63,9 +63,8 @@ class AdhkarReminderCard extends ConsumerWidget {
                           child: Text(
                             'Tap to read >',
                             style: theme.textTheme.bodySmall!.copyWith(
-                              fontWeight: FontWeight.bold,
-                              height: 1,
                               color: cs.primary,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
@@ -142,6 +141,7 @@ class AudioControlsChip extends ConsumerWidget {
                     context: context,
                     currentId: dhikrId,
                     title: title,
+                    showAudioPlayer: true,
                     url: url,
                   );
                 },

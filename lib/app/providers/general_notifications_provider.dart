@@ -43,16 +43,21 @@ class SystemNotifAccessState {
 }
 
 class SystemNotifAccessNotifier extends Notifier<SystemNotifAccessState> {
-  Box get _box => ref.read(settingsBoxProvider);
+  Box get _box => ref.read(settingsBoxProvider); //we store user's settings
 
   @override
   SystemNotifAccessState build() {
-    // start from cached values (fast startup)
+    // start from cached values
+
+    //1) Notifs allowed?
     final cachedNotifs =
         _box.get(kAppNotifsAllowedKey, defaultValue: false) as bool;
+
+    //1) Exact allowed?
     final cachedExact =
         _box.get(kExactAlarmsAllowedKey, defaultValue: false) as bool;
 
+    //return
     return SystemNotifAccessState(
       notificationsAllowed: cachedNotifs,
       exactAlarmsAllowed: cachedExact,
@@ -60,6 +65,7 @@ class SystemNotifAccessNotifier extends Notifier<SystemNotifAccessState> {
     );
   }
 
+  //Persists
   Future<void> _persist({
     required bool notificationsAllowed,
     required bool exactAlarmsAllowed,
@@ -69,12 +75,15 @@ class SystemNotifAccessNotifier extends Notifier<SystemNotifAccessState> {
   }
 
   /// Re-check OS state + persist to Hive
+  /// This is what is called on app starts
   Future<void> sync() async {
     state = state.copyWith(isLoading: true);
 
     final notifPerm = await Permission.notification.status;
 
+    //Check if Notifications is granted
     final notifGranted = notifPerm.isGranted;
+    //Check if is permamnently granted
     final permanentlyDenied = notifPerm.isPermanentlyDenied;
 
     // OS-level enabled toggle
@@ -91,6 +100,7 @@ class SystemNotifAccessNotifier extends Notifier<SystemNotifAccessState> {
       exactAlarmsAllowed: exactAlarmsAllowed,
     );
 
+    //return new state
     state = state.copyWith(
       notificationsAllowed: notificationsAllowed,
       exactAlarmsAllowed: exactAlarmsAllowed,
