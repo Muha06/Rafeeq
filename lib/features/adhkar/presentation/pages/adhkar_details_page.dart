@@ -150,9 +150,11 @@ class _AdhkarDetailsTileState extends ConsumerState<AdhkarDetailsTile> {
                       onPressed: buffering
                           ? null
                           : () {
-                              ctrl.togglePlay(context: context,
+                              ctrl.togglePlay(
+                                context: context,
                                 currentId: dhikrId.toString(),
                                 url: dhikr.audioUrl,
+                                showAudioPlayer: true,
                                 title: dhikr.categoryTitle,
                               );
                             },

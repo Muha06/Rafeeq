@@ -169,16 +169,16 @@ class AudioController extends Notifier<AudioState> {
       if (isNewTrack) {
         debugPrint('Switching to new track: $currentId');
 
+        if (showAudioPlayer) {
+          AppSnackBar.showPlayer();
+        }
+
         await loadAndPlay(
           currentId: currentId,
           artist: artist,
           url: url,
           title: title,
         );
-
-        if (showAudioPlayer) {
-          AppSnackBar.showPlayer();
-        }
 
         return;
       }

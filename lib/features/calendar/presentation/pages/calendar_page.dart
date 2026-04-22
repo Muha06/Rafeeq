@@ -203,14 +203,14 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                     children: [
                       Text(
                         hijriState.formatted,
-                        style: Theme.of(context).textTheme.labelLarge,
+                        style: theme.textTheme.labelLarge,
                       ),
 
                       Text(
                         offset == 0
                             ? 'Offset: 0'
                             : 'Offset: ${offset > 0 ? '+' : ''}$offset',
-                        style: Theme.of(context).textTheme.bodySmall,
+                        style: theme.textTheme.bodySmall,
                       ),
                     ],
                   ),
@@ -238,8 +238,8 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                     CalendarFormat.month: 'Month',
                   },
                   daysOfWeekStyle: DaysOfWeekStyle(
-                    weekdayStyle: Theme.of(context).textTheme.labelLarge!,
-                    weekendStyle: Theme.of(context).textTheme.labelLarge!,
+                    weekdayStyle: theme.textTheme.labelLarge!,
+                    weekendStyle: theme.textTheme.labelLarge!,
                   ),
                   headerStyle: const HeaderStyle(
                     formatButtonVisible: false,
@@ -258,13 +258,12 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                         children: [
                           Text(
                             gregorianTitle,
-                            style: Theme.of(context).textTheme.labelLarge,
+                            style: theme.textTheme.labelLarge,
                           ),
+
                           const SizedBox(height: 2),
-                          Text(
-                            hijriTitle,
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
+
+                          Text(hijriTitle, style: theme.textTheme.bodySmall),
                         ],
                       );
                     },
@@ -308,7 +307,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                         alignment: Alignment.centerLeft,
                         child: Text(
                           "Events in ${hijriState.hijri.longMonthName}",
-                          style: Theme.of(context).textTheme.titleMedium,
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
                       ),
                       const SizedBox(height: 16),

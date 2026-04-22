@@ -20,7 +20,7 @@ class QuickSurahLinks extends ConsumerWidget {
     final hasData = quickSurahs.isNotEmpty;
 
     return SizedBox(
-      height: hasData ? 81 : 0,
+      height: hasData ? 85 : 0,
       child: hasData
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,6 +32,7 @@ class QuickSurahLinks extends ConsumerWidget {
                   physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: quickSurahs
                         .map((surah) => SurahLink(surah: surah))
                         .toList(),
@@ -58,18 +59,17 @@ class SurahLink extends ConsumerWidget {
       onTap: () {
         AppNav.push(context, FullSurahPage(surah: surah));
       },
-      child: Card(
-        child: Container(
-          decoration: BoxDecoration(
-            color: cs.surface,
-            borderRadius: BorderRadius.circular(14),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-          child: Center(
-            child: Text(
-              surah.nameTransliteration,
-              style: theme.textTheme.bodySmall,
-            ),
+      child: Container(
+        decoration: BoxDecoration(
+          color: cs.surface,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        margin: const EdgeInsets.only(right: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        child: Center(
+          child: Text(
+            surah.nameTransliteration,
+            style: theme.textTheme.bodySmall,
           ),
         ),
       ),

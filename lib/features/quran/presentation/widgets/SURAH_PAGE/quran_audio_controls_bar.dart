@@ -30,26 +30,29 @@ class QuranAudioControlsBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SafeArea(
       top: false,
-      child: AudioControlsBarColorWrapper(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            //Audio
-            if (showAudioControls) ...[const AudioControlsSection()],
+      child: AnimatedSize(
+        duration: const Duration(milliseconds: 250),
+        child: AudioControlsBarColorWrapper(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              //Audio
+              if (showAudioControls) ...[const AudioControlsSection()],
 
-            //show controls conditionally
-            if (showSpeedControls) ...[
-              if (showSpeedControls && showAudioControls)
-                const SizedBox(height: 8),
+              //show controls conditionally
+              if (showSpeedControls) ...[
+                if (showSpeedControls && showAudioControls)
+                  const SizedBox(height: 8),
 
-              AutoScrollControlsSection(
-                onStart: onStart,
-                onPause: onPause,
-                autoOn: autoOn,
-                onExit: onExit,
-              ),
+                AutoScrollControlsSection(
+                  onStart: onStart,
+                  onPause: onPause,
+                  autoOn: autoOn,
+                  onExit: onExit,
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/quran/presentation/pages/surah_page.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
@@ -18,9 +20,6 @@ class _FridayReminderCardState extends ConsumerState<FridayReminderCard> {
     final cs = theme.colorScheme;
 
     final isDark = ref.watch(isDarkProvider);
-
-    final TextStyle keyWordStyle = Theme.of(context).textTheme.bodyMedium!
-        .copyWith(fontWeight: FontWeight.w800, fontSize: 14, height: 1.3);
 
     const surahAlKahf = Surah(
       id: 18,
@@ -46,28 +45,14 @@ class _FridayReminderCardState extends ConsumerState<FridayReminderCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Friday Reminder', style: theme.textTheme.labelLarge),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 8),
 
-                  Text.rich(
-                    TextSpan(
-                      text: "Friday is a gift from Allah ﷻ. Recite ",
-                      style: Theme.of(context).textTheme.bodyMedium!,
-                      children: [
-                        TextSpan(text: 'Sūrah Al-Kahf,', style: keyWordStyle),
-                        TextSpan(
-                          text: " increase",
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                        TextSpan(text: ' dhikr', style: keyWordStyle),
-                        TextSpan(
-                          text: ' and take a moment for',
-                          style: Theme.of(context).textTheme.bodyMedium!,
-                        ),
-                        TextSpan(text: ' duʿā.', style: keyWordStyle),
-                      ],
-                    ),
+                  const Text(
+                    "Friday is a gift from Allah ﷻ. Recite Sūrah Al-Kahf, increase dhikr and take a moment for duʿā.",
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 3,
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 8),
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -87,12 +72,9 @@ class _FridayReminderCardState extends ConsumerState<FridayReminderCard> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Navigator.push(
+                          AppNav.push(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const FullSurahPage(surah: surahAlKahf),
-                            ),
+                            const FullSurahPage(surah: surahAlKahf),
                           );
                         },
                         child: Text(
@@ -131,6 +113,8 @@ void _showFridayVirtuesSheet(BuildContext context, bool isDark) {
     isScrollControlled: true,
     useSafeArea: true,
     builder: (_) {
+      final iconStyle = PhosphorIconsStyle.light;
+
       return ListView(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
         children: [
@@ -147,29 +131,29 @@ void _showFridayVirtuesSheet(BuildContext context, bool isDark) {
           ),
           const SizedBox(height: 16),
 
-          const _VirtueTile(
+          _VirtueTile(
             title: 'Recite Sūrah Al-Kahf',
             body:
                 'A beautiful Friday habit. If you can’t finish, start and continue — consistency wins.',
-            icon: Icons.menu_book_outlined,
+            icon: PhosphorIcons.bookOpen(iconStyle),
           ),
-          const _VirtueTile(
+          _VirtueTile(
             title: 'Send ṣalawāt',
             body:
                 'Increase blessings by sending prayers upon the Prophet ﷺ throughout the day.',
-            icon: Icons.favorite_border,
+            icon: PhosphorIcons.heart(iconStyle),
           ),
 
-          const _VirtueTile(
+          _VirtueTile(
             title: 'Ghusl + early Jumu‘ah',
             body: 'Prepare for Jumu‘ah like it matters — because it does.',
-            icon: Icons.water_drop_outlined,
+            icon: PhosphorIcons.drop(iconStyle),
           ),
-          const _VirtueTile(
+          _VirtueTile(
             title: 'Make duʿā',
             body:
                 'Keep a short duʿā list. Ask for guidance, forgiveness, and barakah in your time.',
-            icon: Icons.volunteer_activism_outlined,
+            icon: PhosphorIcons.handsPraying(iconStyle),
           ),
           const SizedBox(height: 14),
           FilledButton(
@@ -196,7 +180,7 @@ class _VirtueTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final theme = Theme.of(context);
-
+    final cs = theme.colorScheme;
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Container(
@@ -208,13 +192,13 @@ class _VirtueTile extends ConsumerWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon),
+            Icon(icon, color: cs.onSurface),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, style: theme.textTheme.titleSmall),
+                  Text(title, style: theme.textTheme.labelLarge),
                   const SizedBox(height: 4),
                   Text(body, style: theme.textTheme.bodyMedium),
                 ],

@@ -66,18 +66,9 @@ class _SalahTimingsPageState extends ConsumerState<SalahTimingsPage> {
             ),
             body: Column(
               children: [
-                Positioned.fill(
-                  child: SafeArea(
-                    bottom: false,
-                    top: false,
-                    child: SizedBox(
-                      height: 200,
-                      child: AllSalatTimingsCard(
-                        times: times,
-                        current: current,
-                      ),
-                    ),
-                  ),
+                SizedBox(
+                  height: 100,
+                  child: AllSalatTimingsCard(times: times, current: current),
                 ),
 
                 Expanded(
@@ -169,10 +160,10 @@ class AllSalatTimingsCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: salats.map((p) {
               final t = times.at(p);
-              final isCurrent = p == current;
+              final isCurrent = p == SalahPrayer.isha;
 
               final lightColors = isCurrent ? cs.tertiary : cs.onPrimary;
-              final darkColors = isCurrent ? cs.tertiary : cs.onSurface;
+              final darkColors = isCurrent ? cs.primary : cs.onSurface;
 
               final isDark = theme.brightness == Brightness.dark;
 

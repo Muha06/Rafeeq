@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
+import 'package:rafeeq/core/themes/app_text_style.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 
 class SurahDetails extends ConsumerWidget {
@@ -13,75 +14,13 @@ class SurahDetails extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final place = surah.isMeccan ? 'Makkah' : 'Madinah';
-    final isMakkan = surah.isMeccan;
-
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
     return Column(
       children: [
-        Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 12.0,
-                vertical: 16,
-              ),
-              child: Container(
-                height: 160,
-                decoration: BoxDecoration(
-                  color: cs.primary,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 24, 20, 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        surah.nameArabic,
-                        style: theme.textTheme.labelLarge!.copyWith(
-                          fontSize: 20,
-                          color: cs.onPrimary,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        surah.nameEnglish,
-                        maxLines: 2,
-                        style: theme.textTheme.titleMedium!.copyWith(
-                          color: cs.onPrimary,
-                        ),
-                      ),
-                      const SizedBox(height: 14),
+        _SurahBriefDetailsCard(surah: surah),
 
-                      Row(
-                        children: [
-                          _Chip(text: '#${surah.id}'),
-                          const SizedBox(width: 8),
-                          _Chip(text: '$place • ${surah.versesCount} verses'),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-
-            Positioned(
-              top: isMakkan ? 36 : 35,
-              right: 20,
-              child: Image.asset(
-                isMakkan
-                    ? 'assets/images/quran/makkan.png'
-                    : 'assets/images/quran/madinan.png',
-                height: 120,
-                width: 120,
-              ),
-            ),
-          ],
-        ),
         const SizedBox(height: 8),
 
         //Bismillah
@@ -94,6 +33,59 @@ class SurahDetails extends ConsumerWidget {
           const SizedBox(height: 8),
         ],
       ],
+    );
+  }
+}
+
+class _SurahBriefDetailsCard extends StatelessWidget {
+  const _SurahBriefDetailsCard({required this.surah});
+  final Surah surah;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+    final place = surah.isMeccan ? 'Makkah' : 'Madinah';
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: cs.primary,
+          borderRadius: BorderRadius.circular(18),
+        ),
+        child: SizedBox(
+          width: double.infinity,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // Arabic name (hero)
+              Text(
+                surah.nameArabic,
+                style: AppTextStyles.arabicUi.copyWith(color: cs.onPrimary),
+              ),
+
+              const SizedBox(height: 4),
+
+              // English name (secondary)
+              Text(
+                surah.nameEnglish,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.labelLarge?.copyWith(
+                  color: cs.onPrimary,
+                ),
+              ),
+
+              const SizedBox(height: 14),
+
+              // metadata row (clean + subtle)
+              _Chip(text: '$place • ${surah.versesCount} verses'),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

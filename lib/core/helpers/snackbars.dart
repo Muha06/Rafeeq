@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rafeeq/core/app_keys.dart';
-import 'package:rafeeq/core/features/audio/widgets/audio_player_sheet.dart';
+import 'package:rafeeq/core/features/audio/widgets/global_mini_player.dart';
 
 class AppSnackBar {
   static void showSimple({
@@ -42,9 +42,9 @@ class AppSnackBar {
   }) {
     final theme = Theme.of(context);
 
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(
+    scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
+    scaffoldMessengerKey.currentState?.clearSnackBars();
+    scaffoldMessengerKey.currentState?.showSnackBar(
       SnackBar(
         shape: const Border(top: BorderSide()),
         persist: false,
@@ -72,7 +72,7 @@ class AppSnackBar {
         backgroundColor: Colors.transparent,
         elevation: 0,
         margin: EdgeInsets.symmetric(vertical: 8, horizontal: 0),
-        content: AdhkarMiniPlayerSheet(),
+        content: GLobalMiniPlayerSheet(),
         dismissDirection: DismissDirection.none,
       ),
     );

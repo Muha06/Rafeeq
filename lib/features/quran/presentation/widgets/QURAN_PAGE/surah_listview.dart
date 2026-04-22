@@ -76,8 +76,7 @@ class SurahTile extends ConsumerWidget {
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 14),
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
+      child: InkWell(
         onTap: () {
           AppNav.push(
             context,
@@ -100,40 +99,37 @@ class SurahTile extends ConsumerWidget {
                     height: 44,
                     fit: BoxFit.contain,
                   ),
-                  Text(
-                    surah.id.toString(),
-                    style: theme.textTheme.bodySmall!.copyWith(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
+                  Text(surah.id.toString(), style: theme.textTheme.labelLarge),
                 ],
               ),
             ),
 
             const SizedBox(width: 10),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  surah.nameTransliteration,
-                  style: theme.textTheme.titleMedium,
-                ),
-                const SizedBox(height: 6),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    surah.nameTransliteration,
+                    style: theme.textTheme.labelLarge,
+                  ),
+                  const SizedBox(height: 6),
 
-                Text(
-                  "${surah.nameTransliteration} • Verses ${surah.versesCount} ",
-                  style: theme.textTheme.bodySmall,
-                ),
-              ],
+                  Text(
+                    "${surah.nameEnglish} • Verses ${surah.versesCount} ",
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.labelMedium,
+                  ),
+                ],
+              ),
             ),
-
-            const Spacer(),
 
             Text(
               cleanAyah(surah.nameArabic),
               style: AppTextStyles.quranAyah.copyWith(
                 color: theme.colorScheme.onSurface,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ],

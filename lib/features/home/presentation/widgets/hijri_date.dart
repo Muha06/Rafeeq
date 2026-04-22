@@ -28,12 +28,11 @@ class HijriDateToday extends ConsumerWidget {
         children: [
           Text(
             hijriState.formatted,
-            style: theme.textTheme.bodySmall!.copyWith(
+            style: theme.textTheme.labelMedium!.copyWith(
               color: foregroundColor,
-              fontSize: fontSize,
-              height: 1,
             ),
           ),
+
           const SizedBox(width: 8),
 
           Icon(PhosphorIcons.caretRight(), size: 16, color: foregroundColor),

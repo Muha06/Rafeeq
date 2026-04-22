@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/app/connectivity_plus/conectivity_plus_provider.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
-import 'package:rafeeq/core/features/audio/widgets/audio_player_sheet.dart';
+import 'package:rafeeq/core/features/audio/widgets/global_mini_player.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 
 class AppWrapper extends ConsumerWidget {
@@ -34,7 +34,7 @@ class AppWrapper extends ConsumerWidget {
     final miniPlayer = AnimatedSwitcher(
       duration: const Duration(milliseconds: 250),
       child: s.isPlaying
-          ? const AdhkarMiniPlayerSheet()
+          ? const GLobalMiniPlayerSheet()
           : const SizedBox.shrink(),
     );
 
@@ -44,7 +44,7 @@ class AppWrapper extends ConsumerWidget {
           child,
 
           //Mini player
-          Positioned(left: 0, right: 0, bottom: 64, child: miniPlayer),
+          Positioned(left: 0, right: 0, bottom: 72, child: miniPlayer),
         ],
       ),
     );

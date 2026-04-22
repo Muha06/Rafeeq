@@ -24,6 +24,7 @@ ThemeData appDarkThemeData() {
 
         outlineVariant: AppDarkColors.outlineVariant, // subtle borders/dividers
         onSurfaceVariant: AppDarkColors.onSurface2, // quieter text/icons
+        shadow: AppDarkColors.onSurface2.withAlpha(64),
       );
 
   final base = GoogleFonts.plusJakartaSansTextTheme(
@@ -49,6 +50,7 @@ ThemeData appDarkThemeData() {
 
     dividerColor: scheme.outlineVariant,
     dividerTheme: DividerThemeData(color: scheme.outlineVariant),
+    shadowColor: scheme.shadow,
 
     iconTheme: IconThemeData(color: scheme.onSurfaceVariant),
     iconButtonTheme: IconButtonThemeData(

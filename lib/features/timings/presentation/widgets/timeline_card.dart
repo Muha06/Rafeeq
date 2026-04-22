@@ -4,16 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:rafeeq/app/providers/tabs_screen_provider.dart';
 import 'package:rafeeq/core/animations/navigation_animations.dart';
 import 'package:rafeeq/core/features/location/presentation/pages/user_loc_settings.dart';
 import 'package:rafeeq/core/features/location/presentation/provider/user_location_provider.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/core/widgets/app_state_view.dart';
-import 'package:rafeeq/features/asma_ul_husna/presentation/pages/asma_ul_husna_list_page.dart';
 import 'package:rafeeq/features/home/presentation/widgets/hijri_date.dart';
-import 'package:rafeeq/features/home/presentation/widgets/quick_action_row.dart';
 import 'package:rafeeq/features/settings/presentation/pages/settings_page.dart';
 import 'package:rafeeq/features/timings/presentation/pages/timings_pages.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/salah_status_provider.dart';
@@ -21,12 +18,10 @@ import 'package:rafeeq/features/timings/presentation/riverpod/salah_times_provid
 import '../../domain/entities/salah_prayer.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
-const String _bg = "assets/images/home/mosque2.jpeg";
-
 class TodayTimesCard extends ConsumerWidget {
   const TodayTimesCard({
     super.key,
-    this.height = 360, // content height
+    this.height = 280, // content height
   });
 
   final double height;
@@ -36,71 +31,24 @@ class TodayTimesCard extends ConsumerWidget {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
-    final isDark = theme.brightness == Brightness.dark;
-
-    final fg = isDark ? cs.onSurface : cs.onPrimary;
-    final highlightColor = isDark ? cs.primary : cs.tertiary;
+    final fg = cs.onSurface;
+    final highlightColor = cs.primary;
 
     return SizedBox(
       height: height,
-      child: Stack(
-        clipBehavior: Clip.none,
-
+      child: Column(
         children: [
-          // BACKGROUND IMAGE
-          Positioned.fill(child: Image.asset(_bg, fit: BoxFit.cover)),
+          //APPBAR
+          _TimingsCardAppbar(foregroundColor: fg),
 
-          // DARK OVERLAY
-          Positioned.fill(child: Container(color: Colors.black.withAlpha(120))),
+          //HIJRI DATE
+          HijriDateToday(foregroundColor: fg, fontSize: 16),
 
-          Column(
-            children: [
-              //APPBAR
-              _TimingsCardAppbar(foregroundColor: fg),
+          const SizedBox(height: 16),
 
-              //HIJRI DATE
-              const HijriDateToday(foregroundColor: Colors.white, fontSize: 16),
-
-              const SizedBox(height: 16),
-
-              //CONTENT
-              TimingsStatus(
-                foregroundColor: fg,
-                highlightColor: highlightColor,
-              ),
-            ],
-          ),
-
-          // QUICK ACTIONS
-          const QuickHomeActions(),
+          //CONTENT
+          TimingsStatus(foregroundColor: fg, highlightColor: highlightColor),
         ],
-      ),
-    );
-  }
-}
-
-class QuickHomeActions extends ConsumerWidget {
-  const QuickHomeActions({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Positioned(
-      left: 0,
-      right: 0,
-      bottom: -48,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 14.0),
-        child: HomeQuickActionsRow(
-          onQuran: () {
-            ref.read(tabsScreenIndexProvider.notifier).state = 1;
-          },
-          onAdhkar: () {
-            ref.read(tabsScreenIndexProvider.notifier).state = 2;
-          },
-          onAllahNames: () {
-            AppNav.push(context, const AllahNamesPage());
-          },
-        ),
       ),
     );
   }
@@ -149,7 +97,7 @@ class TimingsStatus extends ConsumerWidget {
                   ),
                   customColors: CustomSliderColors(
                     progressBarColor: highlightColor,
-                    trackColor: cs.surface.withAlpha(90),
+                    trackColor: cs.surfaceContainerHighest,
                   ),
                   animationEnabled: false,
                 ),
@@ -157,16 +105,13 @@ class TimingsStatus extends ConsumerWidget {
                   return Center(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
                           current?.label ?? '',
-                          style: theme.textTheme.labelLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: fg,
-                            fontSize: 20,
-                          ),
+                          style: theme.textTheme.labelLarge,
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 12),
 
                         InkWell(
                           onTap: () {
@@ -181,9 +126,8 @@ class TimingsStatus extends ConsumerWidget {
                             children: [
                               Text(
                                 'View times',
-                                style: theme.textTheme.labelMedium!.copyWith(
+                                style: theme.textTheme.labelLarge!.copyWith(
                                   color: highlightColor,
-                                  fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -266,7 +210,7 @@ class _TimingsCardAppbar extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 8.0,
-        vertical: 18, // safe area + some spacing
+        vertical: 22, // safe area + some spacing
       ),
       child: Row(
         children: [

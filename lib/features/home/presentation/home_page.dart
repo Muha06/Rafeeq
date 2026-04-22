@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/app/providers/tabs_screen_provider.dart';
+import 'package:rafeeq/core/helpers/app_nav.dart';
+import 'package:rafeeq/features/asma_ul_husna/presentation/pages/asma_ul_husna_list_page.dart';
 import 'package:rafeeq/features/haramain-live/presentation/widgets/haramain_card.dart';
+import 'package:rafeeq/features/home/presentation/widgets/quick_action_row.dart';
 import 'package:rafeeq/features/home/providers/reminder_providers.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/ayah_of_the_day.dart';
 import 'package:rafeeq/features/home/presentation/widgets/reminders_carousel.dart';
@@ -32,9 +36,30 @@ class _HomePageState extends ConsumerState<HomePage> {
           const SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.only(
-                bottom: 58,
+                bottom: _v10,
               ), // to accommodate quick actions overlap
-              child: TodayTimesCard(height: 320),
+              child: TodayTimesCard(height: 270),
+            ),
+          ),
+
+          //QUICK ROWS
+          SliverToBoxAdapter(
+            child: HomeSection(
+              padding: const EdgeInsets.symmetric(
+                horizontal: _hPad,
+                vertical: _v10,
+              ),
+              child: HomeQuickActionsRow(
+                onQuran: () {
+                  ref.read(tabsScreenIndexProvider.notifier).state = 1;
+                },
+                onAdhkar: () {
+                  ref.read(tabsScreenIndexProvider.notifier).state = 2;
+                },
+                onAllahNames: () {
+                  AppNav.push(context, const AllahNamesPage());
+                },
+              ),
             ),
           ),
 
