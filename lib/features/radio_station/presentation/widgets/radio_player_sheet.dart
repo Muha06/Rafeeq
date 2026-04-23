@@ -84,6 +84,8 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
     final isCurrent = state.currentId == station.id;
     final isPlaying = isCurrent && state.isPlaying;
 
+    debugPrint(station.imageUrl);
+
     return SafeArea(
       top: false,
       child: Container(

@@ -17,6 +17,7 @@ import 'package:rafeeq/core/features/audio/data/audio_handler.dart';
 import 'package:rafeeq/core/themes/dark_theme.dart';
 import 'package:rafeeq/core/themes/light_theme.dart';
 import 'package:rafeeq/features/adhkar/data/models/dhikr_hive_model.dart';
+import 'package:rafeeq/features/notifications/data/push_notification_services.dart';
 import 'package:rafeeq/features/quran/data/models/ayah_hive.dart';
 import 'package:rafeeq/features/quran/data/models/surah_hive.dart';
 import 'package:rafeeq/features/asma_ul_husna/data/models/hive/name_hive_model.dart';
@@ -52,11 +53,6 @@ void main() {
       FlutterError.onError =
           FirebaseCrashlytics.instance.recordFlutterFatalError;
 
-      debugPrint('Firebase apps: ${Firebase.apps.length}');
-
-      // Initialize Hive
-      await Hive.initFlutter();
-
       // Load env
       await dotenv.load(fileName: ".env");
 
@@ -77,6 +73,9 @@ void main() {
           androidNotificationIcon: 'mipmap/ic_launcher',
         ),
       );
+
+      // Initialize Hive
+      await Hive.initFlutter();
 
       // Register Hive adapters
       Hive.registerAdapter(SurahHiveAdapter());
@@ -104,6 +103,7 @@ void main() {
 
       // Notifications
       await NotificationService.instance.init();
+      await PushNotificationService().init();
 
       // ✅ Finally, run the app synchronously inside the same zone
       runApp(
@@ -163,6 +163,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       darkTheme: appDarkThemeData(),
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
+      navigatorKey: navigatorKey,
       scaffoldMessengerKey: scaffoldMessengerKey,
       home: hasSeenOnboarding
           ? const AppWrapper(child: TabsScreen())
