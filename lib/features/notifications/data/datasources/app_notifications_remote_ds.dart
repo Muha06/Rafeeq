@@ -7,11 +7,14 @@ class NotificationRemoteDataSource {
 
   NotificationRemoteDataSource(this.supabase);
 
-  Future<void> saveToken(String token) {
-    return supabase.from('user_devices').upsert({
-      'fcm_token': token,
-      'platform': 'android',
-    });
+  Future<void> saveToken(String token) async {
+    try {
+      await supabase.from('user_devices').upsert({'fcm_token': token});
+      debugPrint('Saving token: $token');
+    } on Exception catch (e) {
+      debugPrint('Error Saving token: $e');
+      rethrow;
+    }
   }
 
   Future<List<AppNotificationModel>> getAllNotifications() async {

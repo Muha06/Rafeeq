@@ -102,7 +102,7 @@ void main() {
       await Hive.openBox<CachedSalahTimesHive>('salah_times_cache_box');
       await Hive.openBox('settingsBox');
       await Hive.openBox('read_notifications');
-
+ 
       // Notifications
       await NotificationService.instance.init();
       final supabase = Supabase.instance.client;

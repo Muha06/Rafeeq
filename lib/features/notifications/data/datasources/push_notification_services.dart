@@ -1,8 +1,12 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:rafeeq/core/app_keys.dart';
 import 'package:rafeeq/features/notifications/data/datasources/app_notifications_remote_ds.dart';
 import 'package:rafeeq/features/notifications/presentation/pages/notif_details_page.dart';
+
+const _boxName = 'settingsBox';
+const _fcmTokenKey = 'fcm_token';
 
 class PushNotificationService {
   final FirebaseMessaging _messaging = FirebaseMessaging.instance;
@@ -46,12 +50,20 @@ class PushNotificationService {
   // -------------------------
   Future<void> _getAndStoreToken() async {
     final token = await _messaging.getToken();
-    debugPrint("🔥 FCM TOKEN: $token");
 
     if (token == null) return;
 
-    //send token to Supabase
+    final storedToken = _getStoredToken();
+
+    if (storedToken == token) {
+      debugPrint("✅ Token unchanged, skipping save");
+      return;
+    }
+
+    debugPrint("🆕 New token detected, saving...");
+
     await _saveToken(token);
+    await _storeTokenLocally(token);
   }
 
   // -------------------------
@@ -61,9 +73,10 @@ class PushNotificationService {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       debugPrint("📩 Foreground message: ${message.notification?.title}");
 
-      // Optional: show in-app snackbar/dialog here later
+      final title = message.notification?.title ?? "New notification";
+
       scaffoldMessengerKey.currentState?.showSnackBar(
-        SnackBar(content: Text('New notification received: $message')),
+        SnackBar(content: Text(title)),
       );
     });
   }
@@ -97,9 +110,18 @@ class PushNotificationService {
   // -------------------------
   void _handleTokenRefresh() {
     _messaging.onTokenRefresh.listen((newToken) async {
-      debugPrint("🔄 New FCM token: $newToken");
+      try {
+        debugPrint("🔄 New FCM token: $newToken");
 
-      await _saveToken(newToken);
+        final storedToken = _getStoredToken();
+
+        if (storedToken != newToken) {
+          await _saveToken(newToken);
+          await _storeTokenLocally(newToken);
+        }
+      } catch (e) {
+        debugPrint("Token refresh error: $e");
+      }
     });
   }
 
@@ -113,10 +135,21 @@ class PushNotificationService {
 
     if (notificationId == null) return;
 
+    //Pushing to Notification details page
     navigatorKey.currentState?.push(
       MaterialPageRoute(
         builder: (_) => NotificationDetailPage(notificationId: notificationId),
       ),
     );
+  }
+
+  Box get _box => Hive.box(_boxName);
+
+  String? _getStoredToken() {
+    return _box.get(_fcmTokenKey);
+  }
+
+  Future<void> _storeTokenLocally(String token) async {
+    await _box.put(_fcmTokenKey, token);
   }
 }
