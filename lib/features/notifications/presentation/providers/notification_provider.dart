@@ -50,3 +50,14 @@ final notificationByIdProvider = FutureProvider.family<AppNotification, String>(
     return repo.getNotificationById(id);
   },
 );
+
+final hasUnreadNotificationsProvider = Provider<bool>((ref) {
+  final notificationsAsync = ref.watch(allNotificationsProvider);
+
+  return notificationsAsync.maybeWhen(
+    data: (notifications) {
+      return notifications.any((n) => !n.isRead);
+    },
+    orElse: () => false,
+  );
+});

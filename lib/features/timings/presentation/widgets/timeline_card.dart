@@ -12,6 +12,7 @@ import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/features/home/presentation/widgets/hijri_date.dart';
 import 'package:rafeeq/features/notifications/presentation/pages/notification_list_page.dart';
+import 'package:rafeeq/features/notifications/presentation/providers/notification_provider.dart';
 import 'package:rafeeq/features/settings/presentation/pages/settings_page.dart';
 import 'package:rafeeq/features/timings/presentation/pages/timings_pages.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/salah_status_provider.dart';
@@ -220,11 +221,38 @@ class _TimingsCardAppbar extends StatelessWidget {
           const Spacer(),
 
           //Notification Icon
-          IconButton(
-            onPressed: () {
-              AppNav.push(context, const NotificationsInboxPage());
+          Consumer(
+            builder: (context, ref, child) {
+              final hasUnreadNotifications = ref.watch(
+                hasUnreadNotificationsProvider,
+              );
+
+              return Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      AppNav.push(context, const NotificationsInboxPage());
+                    },
+                    icon: PhosphorIcon(PhosphorIcons.bell()),
+                  ),
+
+                  if (hasUnreadNotifications)
+                    Positioned(
+                      top: 8,
+                      left: 8,
+                      child: Container(
+                        height: 10,
+                        width: 10,
+                        decoration: const BoxDecoration(
+                          color: Colors.green,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                    ),
+                ],
+              );
             },
-            icon: PhosphorIcon(PhosphorIcons.bell()),
           ),
 
           const SizedBox(width: 8),
