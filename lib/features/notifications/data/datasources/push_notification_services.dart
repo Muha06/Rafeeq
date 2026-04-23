@@ -1,10 +1,14 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:rafeeq/core/app_keys.dart';
+import 'package:rafeeq/features/notifications/data/datasources/app_notifications_remote_ds.dart';
 import 'package:rafeeq/features/notifications/presentation/pages/notif_details_page.dart';
 
 class PushNotificationService {
   final FirebaseMessaging _messaging = FirebaseMessaging.instance;
+  final NotificationRemoteDataSource notificationRemoteDataSource;
+
+  PushNotificationService({required this.notificationRemoteDataSource});
 
   /// Call this from main() after Firebase.initializeApp()
   Future<void> init() async {
@@ -15,6 +19,14 @@ class PushNotificationService {
     _handleNotificationTap();
     await _handleInitialMessage();
     _handleTokenRefresh();
+  }
+
+  Future<void> _saveToken(String token) async {
+    try {
+      await notificationRemoteDataSource.saveToken(token);
+    } catch (e) {
+      debugPrint("Error saving token: $e");
+    }
   }
 
   // -------------------------
@@ -36,7 +48,10 @@ class PushNotificationService {
     final token = await _messaging.getToken();
     debugPrint("🔥 FCM TOKEN: $token");
 
-    // TODO: send token to Supabase
+    if (token == null) return;
+
+    //send token to Supabase
+    await _saveToken(token);
   }
 
   // -------------------------
@@ -81,10 +96,10 @@ class PushNotificationService {
   // 6. Token refresh (important)
   // -------------------------
   void _handleTokenRefresh() {
-    _messaging.onTokenRefresh.listen((newToken) {
+    _messaging.onTokenRefresh.listen((newToken) async {
       debugPrint("🔄 New FCM token: $newToken");
 
-      // TODO: update Supabase
+      await _saveToken(newToken);
     });
   }
 

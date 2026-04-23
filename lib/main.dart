@@ -17,6 +17,7 @@ import 'package:rafeeq/core/features/audio/data/audio_handler.dart';
 import 'package:rafeeq/core/themes/dark_theme.dart';
 import 'package:rafeeq/core/themes/light_theme.dart';
 import 'package:rafeeq/features/adhkar/data/models/dhikr_hive_model.dart';
+import 'package:rafeeq/features/notifications/data/datasources/app_notifications_remote_ds.dart';
 import 'package:rafeeq/features/notifications/data/datasources/push_notification_services.dart';
 import 'package:rafeeq/features/quran/data/models/ayah_hive.dart';
 import 'package:rafeeq/features/quran/data/models/surah_hive.dart';
@@ -104,8 +105,17 @@ void main() {
 
       // Notifications
       await NotificationService.instance.init();
-      await PushNotificationService().init();
+      final supabase = Supabase.instance.client;
 
+      final notificationRemoteDataSource = NotificationRemoteDataSource(
+        supabase,
+      );
+
+      final pushService = PushNotificationService(
+        notificationRemoteDataSource: notificationRemoteDataSource,
+      );
+
+      await pushService.init();
       // ✅ Finally, run the app synchronously inside the same zone
       runApp(
         ProviderScope(
