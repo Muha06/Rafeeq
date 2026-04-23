@@ -1,8 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:rafeeq/core/app_keys.dart';
-import 'package:rafeeq/core/helpers/snackbars.dart';
-import 'package:rafeeq/features/notifications/presentation/notif_details_page.dart';
+import 'package:rafeeq/features/notifications/presentation/pages/notif_details_page.dart';
 
 class PushNotificationService {
   final FirebaseMessaging _messaging = FirebaseMessaging.instance;

@@ -17,7 +17,7 @@ import 'package:rafeeq/core/features/audio/data/audio_handler.dart';
 import 'package:rafeeq/core/themes/dark_theme.dart';
 import 'package:rafeeq/core/themes/light_theme.dart';
 import 'package:rafeeq/features/adhkar/data/models/dhikr_hive_model.dart';
-import 'package:rafeeq/features/notifications/data/push_notification_services.dart';
+import 'package:rafeeq/features/notifications/data/datasources/push_notification_services.dart';
 import 'package:rafeeq/features/quran/data/models/ayah_hive.dart';
 import 'package:rafeeq/features/quran/data/models/surah_hive.dart';
 import 'package:rafeeq/features/asma_ul_husna/data/models/hive/name_hive_model.dart';
@@ -100,6 +100,7 @@ void main() {
       await Hive.openBox<AllahNameHive>('allah_names_box');
       await Hive.openBox<CachedSalahTimesHive>('salah_times_cache_box');
       await Hive.openBox('settingsBox');
+      await Hive.openBox('read_notifications');
 
       // Notifications
       await NotificationService.instance.init();

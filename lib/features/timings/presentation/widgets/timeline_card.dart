@@ -11,6 +11,7 @@ import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/features/home/presentation/widgets/hijri_date.dart';
+import 'package:rafeeq/features/notifications/presentation/pages/notification_list_page.dart';
 import 'package:rafeeq/features/settings/presentation/pages/settings_page.dart';
 import 'package:rafeeq/features/timings/presentation/pages/timings_pages.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/salah_status_provider.dart';
@@ -218,6 +219,17 @@ class _TimingsCardAppbar extends StatelessWidget {
 
           const Spacer(),
 
+          //Notification Icon
+          IconButton(
+            onPressed: () {
+              AppNav.push(context, const NotificationsInboxPage());
+            },
+            icon: PhosphorIcon(PhosphorIcons.bell()),
+          ),
+
+          const SizedBox(width: 8),
+
+          //Settings page
           IconButton(
             onPressed: () async {
               pushLeftPage(context, const SettingsPage());
