@@ -4,18 +4,20 @@ class Ayah {
   final int ayahNumber;
   final String textArabic; //
   final String textEnglish; //English translation
+  final String textSwahili;
   final String transliteration;
 
   final int? pageNumber;
   int? lineNumber;
   final int? juz;
 
-    Ayah({
+  Ayah({
     required this.id,
     required this.surahId,
     required this.ayahNumber,
     required this.textArabic,
     required this.textEnglish,
+    required this.textSwahili,
     required this.transliteration,
     required this.pageNumber,
     required this.lineNumber,

@@ -154,6 +154,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
 
           const SizedBox(height: 24),
 
+          //Content section
           Consumer(
             builder: (context, ref, child) {
               final settings = ref.watch(surahSettingsProvider);
@@ -179,19 +180,30 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                     ),
                   ),
 
-                  // TRANSLATION
+                  // TRANSLATIONS
                   if (showTranslation) ...[
                     const SizedBox(height: 20),
-                    AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 100),
-                      child: Text(
-                        key: const ValueKey('translation'),
-                        ayah.textEnglish,
-                        textAlign: TextAlign.left,
-                        style: theme.textTheme.bodyMedium!.copyWith(
-                          fontSize: translationFontSize,
-                        ),
-                      ),
+                    _TranslationSection(
+                      label: 'English',
+                      ayahText: ayah.textEnglish,
+                      translationFontSize: translationFontSize,
+                    ),
+                    const SizedBox(height: 16),
+
+                    _TranslationSection(
+                      label: 'Swahili',
+                      ayahText: ayah.textSwahili,
+                      translationFontSize: translationFontSize,
+                    ),
+                    const SizedBox(height: 20),
+                  ],
+
+                  //Transliterations
+                  if (settings.showTranslit) ...[
+                    _TranslationSection(
+                      label: 'Transliteration',
+                      ayahText: ayah.transliteration,
+                      translationFontSize: translationFontSize,
                     ),
                   ],
                 ],
@@ -200,6 +212,40 @@ class _AyahTileState extends ConsumerState<AyahTile> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _TranslationSection extends StatelessWidget {
+  const _TranslationSection({
+    required this.label,
+    this.translationFontSize,
+    required this.ayahText,
+  });
+
+  final String label;
+  final String ayahText;
+  final double? translationFontSize;
+
+  @override
+  Widget build(BuildContext context) {
+    final tt = Theme.of(context).textTheme;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        //label
+        Text(label, style: tt.bodySmall),
+
+        const SizedBox(height: 0),
+
+        Text(
+          ayahText,
+          textAlign: TextAlign.left,
+          style: tt.bodyMedium!.copyWith(fontSize: translationFontSize),
+        ),
+      ],
     );
   }
 }

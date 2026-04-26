@@ -25,9 +25,10 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
       surahSettingsProvider.select((s) => s.showTranslation),
     );
 
-    // final showTranslit = ref.watch(
-    //   surahSettingsProvider.select((s) => s.showTranslit),
-    // );
+    final showTranslit = ref.watch(
+      surahSettingsProvider.select((s) => s.showTranslit),
+    );
+    
     final arabicFontSize = ref.watch(
       surahSettingsProvider.select((s) => s.arabicFontSize),
     );
@@ -79,15 +80,15 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
             const SizedBox(height: 4),
 
             //TRANSILT TOGGLE TODO: Will add later
-            // SwitchListTile(
-            //   value: showTranslit,
-            //   contentPadding: EdgeInsets.zero,
-            //   title: Text('Show Transliteration', style: titleTextstyle),
-            //   onChanged: (value) {
-            //     sNotifier.setShowTranslit(value);
-            //   },
-            // ),
-            // const SizedBox(height: 4),
+            SwitchListTile(
+              value: showTranslit,
+              contentPadding: EdgeInsets.zero,
+              title: Text('Show Transliteration', style: titleTextstyle),
+              onChanged: (value) {
+                sNotifier.setShowTranslit(value);
+              },
+            ),
+            const SizedBox(height: 4),
 
             //select reciter
             ListTile(
