@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:236969530242:android:43e5159102fb0c2f2b359b",
+        "mobilesdk_app_id": "1:236969530242:android:04e19c2e7fa8cf8f2b359b",
         "android_client_info": {
-          "package_name": "com.example.rafeeq"
+          "package_name": "com.mohaa.rafeeq"
         }
       },
       "oauth_client": [],

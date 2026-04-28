@@ -1,4 +1,4 @@
-package com.example.rafeeq
+package com.mohaa.rafeeq
 
 import com.ryanheise.audioservice.AudioServiceActivity
 

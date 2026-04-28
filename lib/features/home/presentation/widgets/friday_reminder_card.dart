@@ -123,7 +123,9 @@ void _showFridayVirtuesSheet(BuildContext context, bool isDark) {
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.titleLarge,
           ),
+
           const SizedBox(height: 12),
+          
           Text(
             'A few Sunnah reminders to make your Jumu‘ah count.',
             textAlign: TextAlign.center,

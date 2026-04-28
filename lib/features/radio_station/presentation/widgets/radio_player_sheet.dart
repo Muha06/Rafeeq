@@ -78,14 +78,6 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
     final cs = theme.colorScheme;
     final tt = theme.textTheme;
 
-    final state = ref.watch(audioControllerProvider);
-    final isBuffering = state.isBuffering;
-
-    final isCurrent = state.currentId == station.id;
-    final isPlaying = isCurrent && state.isPlaying;
-
-    debugPrint(station.imageUrl);
-
     return SafeArea(
       top: false,
       child: Container(
@@ -169,11 +161,21 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
             const SizedBox(height: 20),
 
             // Play/pause
-            AnimatedPlayPauseBtn(
-              onPressed: _togglePlay,
-              size: 36,
-              isPlaying: isPlaying,
-              isBuffering: isBuffering,
+            Consumer(
+              builder: (_, context, _) {
+                final state = ref.watch(audioControllerProvider);
+                final isBuffering = state.isBuffering;
+
+                final isCurrent = state.currentId == station.id;
+                final isPlaying = isCurrent && state.isPlaying;
+
+                return AnimatedPlayPauseBtn(
+                  onPressed: _togglePlay,
+                  size: 36,
+                  isPlaying: isPlaying,
+                  isBuffering: isBuffering,
+                );
+              },
             ),
           ],
         ),

@@ -37,7 +37,7 @@ class ViewQuranReadingPlanStats extends StatelessWidget {
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
-                  'View your Quran Goal stats',
+                  'Your reading progress',
                   style: theme.textTheme.titleMedium?.copyWith(
                     color: theme.colorScheme.onPrimary,
                   ),

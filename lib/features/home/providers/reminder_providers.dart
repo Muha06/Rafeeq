@@ -35,7 +35,7 @@ final homeRemindersProvider = Provider<List<Widget>>((ref) {
   );
 
   // 🌅 Morning Adhkar
-  if (!isMorning) {
+  if (isMorning) {
     reminders.add(const AdhkarReminderCard(isMorning: true));
   }
 

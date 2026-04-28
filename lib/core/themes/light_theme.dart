@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 ThemeData appLightThemeData() {
   final scheme =
@@ -29,8 +28,8 @@ ThemeData appLightThemeData() {
         onSurfaceVariant: AppLightColors.onSurface2,
       );
 
-  final base = GoogleFonts.plusJakartaSansTextTheme(
-    Typography.material2021().white,
+  final base = Typography.material2021().black.apply(
+    fontFamily: 'PlusJakartaSans',
   );
 
   return ThemeData(
@@ -49,6 +48,7 @@ ThemeData appLightThemeData() {
     canvasColor: scheme.surfaceContainerLowest,
     hintColor: scheme.onSurfaceVariant,
     disabledColor: scheme.onSurfaceVariant.withAlpha(140),
+    fontFamily: 'PlusJakartaSans',
 
     dividerColor: scheme.outlineVariant,
     dividerTheme: DividerThemeData(color: scheme.outlineVariant),
