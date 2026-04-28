@@ -57,10 +57,9 @@ class DayCell extends ConsumerWidget {
             // Gregorian day number
             Text(
               '${day.day}',
-              style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                fontWeight: FontWeight.bold,
-                color: dateTextColor,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.labelLarge!.copyWith(color: dateTextColor),
             ),
             const SizedBox(height: 2),
 

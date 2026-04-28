@@ -220,7 +220,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
 
                 // Calendar
                 TableCalendar(
-                  rowHeight: 52,
+                  rowHeight: 64,
                   daysOfWeekHeight: 32,
                   firstDay: DateTime.utc(2025, 1, 1),
                   lastDay: DateTime.utc(2035, 12, 31),
@@ -307,7 +307,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                         alignment: Alignment.centerLeft,
                         child: Text(
                           "Events in ${hijriState.hijri.longMonthName}",
-                          style: Theme.of(context).textTheme.titleLarge,
+                          style: Theme.of(context).textTheme.labelLarge,
                         ),
                       ),
                       const SizedBox(height: 16),
