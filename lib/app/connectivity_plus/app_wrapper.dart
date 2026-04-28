@@ -33,7 +33,7 @@ class AppWrapper extends ConsumerWidget {
     final s = ref.watch(audioControllerProvider);
     final miniPlayer = AnimatedSwitcher(
       duration: const Duration(milliseconds: 250),
-      child: s.isPlaying
+      child: s.currentId != null
           ? const GLobalMiniPlayerSheet()
           : const SizedBox.shrink(),
     );

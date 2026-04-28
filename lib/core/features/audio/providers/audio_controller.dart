@@ -5,7 +5,6 @@ import 'package:rafeeq/core/features/audio/data/audio_handler.dart';
 import 'package:rafeeq/core/features/audio/domain/entities/audio_state.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_handler_provider.dart';
 import 'package:rafeeq/core/helpers/audio_helpers.dart';
-import 'package:rafeeq/core/helpers/snackbars.dart';
 
 /// This is the single source of truth for audio UI state.
 ///
@@ -169,9 +168,9 @@ class AudioController extends Notifier<AudioState> {
       if (isNewTrack) {
         debugPrint('Switching to new track: $currentId');
 
-        if (showAudioPlayer) {
-          AppSnackBar.showPlayer();
-        }
+        // if (showAudioPlayer) {
+        //   AppSnackBar.showPlayer();
+        // }
 
         await loadAndPlay(
           currentId: currentId,

@@ -454,6 +454,9 @@ class _SettingCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
+    final theme = Theme.of(context);
+    final tt = theme.textTheme;
+
     return InkWell(
       borderRadius: BorderRadius.circular(16),
       onTap: onTap,
@@ -474,15 +477,9 @@ class _SettingCard extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        title,
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
+                      Text(title, style: tt.labelLarge),
                       const SizedBox(height: 6),
-                      Text(
-                        description,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
+                      Text(description, style: tt.bodyMedium),
                     ],
                   ),
                 ),

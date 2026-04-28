@@ -28,7 +28,7 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
     final showTranslit = ref.watch(
       surahSettingsProvider.select((s) => s.showTranslit),
     );
-    
+
     final arabicFontSize = ref.watch(
       surahSettingsProvider.select((s) => s.arabicFontSize),
     );
@@ -90,28 +90,18 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
             ),
             const SizedBox(height: 4),
 
+            //Select Translations
+            _SurahSettingsSelectTile(
+              title: 'Translations',
+              value: '',
+              onTap: () {},
+            ),
+            const SizedBox(height: 4),
+
             //select reciter
-            ListTile(
-              title: Text('Reciters', style: titleTextstyle),
-              contentPadding: EdgeInsets.zero,
-              trailing: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 220),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Flexible(
-                      child: Text(
-                        selectedReciter.name,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: theme.textTheme.labelLarge,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    const FaIcon(FontAwesomeIcons.chevronRight, size: 16),
-                  ],
-                ),
-              ),
+            _SurahSettingsSelectTile(
+              title: 'Reciters',
+              value: selectedReciter.name,
               onTap: () {
                 AppSheets.showBottomSheet(
                   context: context,
@@ -171,6 +161,53 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _SurahSettingsSelectTile extends StatelessWidget {
+  final String title;
+  final String value;
+  final TextStyle? titleStyle;
+  final TextStyle? valueStyle;
+  final double? maxValueWidth;
+  final VoidCallback onTap;
+
+  const _SurahSettingsSelectTile({
+    required this.title,
+    required this.value,
+    required this.onTap,
+    this.titleStyle,
+    this.valueStyle,
+    this.maxValueWidth,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      title: Text(title, style: titleStyle),
+      trailing: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: maxValueWidth ?? double.infinity),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Flexible(
+              child: Text(
+                value,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: valueStyle ?? theme.textTheme.labelLarge,
+              ),
+            ),
+            const SizedBox(width: 8),
+            const FaIcon(FontAwesomeIcons.chevronRight, size: 16),
+          ],
+        ),
+      ),
+      onTap: onTap,
     );
   }
 }

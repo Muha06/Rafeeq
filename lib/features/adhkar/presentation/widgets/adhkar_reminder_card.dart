@@ -136,8 +136,8 @@ class AudioControlsChip extends ConsumerWidget {
         return TextButton.icon(
           onPressed: isBuffering
               ? null
-              : () {
-                  ctrl.togglePlay(
+              : () async {
+                  await ctrl.togglePlay(
                     context: context,
                     currentId: dhikrId,
                     title: title,

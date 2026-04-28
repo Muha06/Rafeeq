@@ -74,10 +74,10 @@ class _RadioListPageState extends ConsumerState<RadioListPage> {
                             child: GridView.builder(
                               gridDelegate:
                                   const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
+                                    crossAxisCount: 3,
                                     crossAxisSpacing: 12,
                                     mainAxisSpacing: 12,
-                                    childAspectRatio: 0.78,
+                                    childAspectRatio: 0.6,
                                   ),
                               itemCount: stations.length,
                               itemBuilder: (_, i) =>

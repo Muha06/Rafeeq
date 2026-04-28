@@ -307,9 +307,11 @@ class _MyUserLocChip extends StatelessWidget {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
-    return InkWell(
+    return GestureDetector(
       onTap: onTap,
       child: Chip(
+        color: WidgetStatePropertyAll(cs.surfaceContainerHighest),
+        padding: const EdgeInsets.symmetric(horizontal: 4),
         label: Row(
           children: [
             Icon(icon, size: 16, color: cs.onSurface),

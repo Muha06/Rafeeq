@@ -15,6 +15,7 @@ class RadioCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final cs = theme.colorScheme;
 
     return InkWell(
       borderRadius: BorderRadius.circular(16),
@@ -45,6 +46,7 @@ class RadioCard extends StatelessWidget {
                   : CategoryFallback(
                       station: station,
                       height: 80,
+                      isSheet: false,
                       width: double.infinity,
                       showShadow: false,
                     ),
@@ -56,9 +58,9 @@ class RadioCard extends StatelessWidget {
             Text(
               station.name,
               textAlign: TextAlign.start,
-              maxLines: 1,
+              maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.labelLarge,
+              style: theme.textTheme.labelMedium?.copyWith(color: cs.onSurface),
             ),
 
             const SizedBox(height: 6),

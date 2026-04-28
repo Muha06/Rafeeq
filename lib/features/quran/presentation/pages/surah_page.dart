@@ -293,6 +293,9 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
     required String surahName,
   }) async {
     final reciter = ref.read(selectedReciterProvider);
+
+    final audioId = '${surahId}_${reciter.id}';
+
     final surahTrack = await ref
         .read(getSurahAudioTrackUseCaseProvider)
         .call(surahId: surahId, surahName: surahName, reciter: reciter);
@@ -306,7 +309,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
           context: context,
           artist: reciter.name,
           showAudioPlayer: false,
-          currentId: surahId.toString(),
+          currentId: audioId,
           url: surahTrack.url,
           title: surahTrack.surahName,
         );
@@ -326,7 +329,17 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
     final showSpeedControls = ref
         .watch(surahSettingsProvider)
         .autoScrollEnabled;
+        
+    final reciter = ref.watch(selectedReciterProvider);
+    final currentAudioId = '${surahId}_${reciter.id}';
 
+    ref.listen(audioControllerProvider, (prev, next) {
+      if (next.currentId != currentAudioId) {
+        ref.read(showAudioControlsProvider.notifier).state = false;
+      } else {
+        ref.read(showAudioControlsProvider.notifier).state = true;
+      }
+    });
     return PopScope(
       onPopInvokedWithResult: (didPop, result) async {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();

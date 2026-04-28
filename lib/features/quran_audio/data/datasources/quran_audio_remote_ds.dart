@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:rafeeq/features/quran/data/dataSources/quran_auth_client.dart';
 import 'package:rafeeq/features/quran_audio/data/models/audio_file_dto.dart';
@@ -32,28 +33,27 @@ class QuranAudioApiService {
       '$baseUrl/chapter_recitations/$reciterId/$chapterNumber',
     );
 
-    final response = await client.get(url, headers: await _authHeaders());
+    try {
+      final response = await client.get(url, headers: await _authHeaders());
 
-    if (response.statusCode != 200) {
-      throw Exception(
-        'Failed to fetch chapter audio: ${response.statusCode} ${response.body}',
-      );
+      final data = json.decode(response.body) as Map<String, dynamic>;
+      final dto = ChapterRecitationResponseDto.fromJson(data);
+      final AudioFileDto audioFile = dto.audioFile;
+
+      if (audioFile.audioUrl.trim().isEmpty) {
+        throw Exception('Audio URL missing in audio_file.audio_url');
+      }
+
+      if (audioFile.chapterId != chapterNumber) {
+        throw Exception(
+          'Chapter mismatch. Requested=$chapterNumber, got=${audioFile.chapterId}',
+        );
+      }
+      return audioFile;
+    } catch (e) {
+      debugPrint('Error fetching audio url $e');
+      rethrow;
     }
-
-    final data = json.decode(response.body) as Map<String, dynamic>;
-    final dto = ChapterRecitationResponseDto.fromJson(data);
-    final AudioFileDto audioFile = dto.audioFile;
-
-    if (audioFile.audioUrl.trim().isEmpty) {
-      throw Exception('Audio URL missing in audio_file.audio_url');
-    }
-
-    if (audioFile.chapterId != chapterNumber) {
-      throw Exception(
-        'Chapter mismatch. Requested=$chapterNumber, got=${audioFile.chapterId}',
-      );
-    }
-    return audioFile;
   }
 
   // Fetch all reciters
@@ -64,30 +64,35 @@ class QuranAudioApiService {
     final url = Uri.parse(
       '$baseUrl/resources/chapter_reciters?language=$language',
     );
-    final res = await client.get(url, headers: await _authHeaders());
+    try {
+      final res = await client.get(url, headers: await _authHeaders());
 
-    if (res.statusCode != 200) {
-      throw Exception(
-        'Failed to fetch reciters: ${res.statusCode} ${res.body}',
-      );
+      if (res.statusCode != 200) {
+        throw Exception(
+          'Failed to fetch reciters: ${res.statusCode} ${res.body}',
+        );
+      }
+
+      final data = json.decode(res.body) as Map<String, dynamic>;
+
+      // API usually returns: { "reciters": [ ... ] }
+      final list = (data['reciters'] as List<dynamic>?);
+      if (list == null) {
+        throw Exception('Unexpected response shape. Top keys: ${data.keys}');
+      }
+
+      return list.map((e) {
+        final m = e as Map<String, dynamic>;
+        final id = m['id'] as int;
+        final name =
+            (m['name'] as String?) ??
+            (m['translated_name']?['name'] as String?) ??
+            'Unknown';
+        return ReciterLite(id: id, name: name);
+      }).toList();
+    } catch (e) {
+      debugPrint('Error fetching reciters $e');
+      rethrow;
     }
-
-    final data = json.decode(res.body) as Map<String, dynamic>;
-
-    // API usually returns: { "reciters": [ ... ] }
-    final list = (data['reciters'] as List<dynamic>?);
-    if (list == null) {
-      throw Exception('Unexpected response shape. Top keys: ${data.keys}');
-    }
-
-    return list.map((e) {
-      final m = e as Map<String, dynamic>;
-      final id = m['id'] as int;
-      final name =
-          (m['name'] as String?) ??
-          (m['translated_name']?['name'] as String?) ??
-          'Unknown';
-      return ReciterLite(id: id, name: name);
-    }).toList();
   }
 }

@@ -9,16 +9,20 @@ class CategoryFallback extends StatelessWidget {
     this.height = 80,
     this.width = 80,
     this.showShadow = true,
+    this.isSheet = true,
   });
 
   final RadioStation station;
   final double height;
   final double width;
   final bool showShadow;
+  final bool isSheet;
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+    final tt = theme.textTheme;
 
     return Container(
       height: height,
@@ -45,9 +49,13 @@ class CategoryFallback extends StatelessWidget {
             color: cs.primary,
           ),
           const SizedBox(height: 8),
+
           Text(
             station.category.label,
-            style: const TextStyle(fontWeight: FontWeight.w600),
+            style: tt.headlineMedium?.copyWith(
+              color: cs.onSurface,
+              fontSize: isSheet ? 24 : 20,
+            ),
           ),
         ],
       ),

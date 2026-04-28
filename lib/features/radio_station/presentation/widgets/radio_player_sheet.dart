@@ -122,18 +122,17 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
 
             //  large Image
             Center(
-              child: (station.imageUrl != null && station.imageUrl!.isEmpty)
-                  ? AppCachedImage(
-                      imageUrl: station.imageUrl,
-                      height: 350,
-                      width: double.infinity,
-                    )
-                  : CategoryFallback(
-                      station: station,
-                      height: 350,
-                      showShadow: false,
-                      width: double.infinity,
-                    ),
+              child: AppCachedImage(
+                imageUrl: station.imageUrl,
+                height: 350,
+                width: double.infinity,
+                errorWidget: CategoryFallback(
+                  station: station,
+                  height: 350,
+                  showShadow: false,
+                  width: double.infinity,
+                ),
+              ),
             ),
 
             const SizedBox(height: 20),

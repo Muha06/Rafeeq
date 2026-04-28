@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class QuranAuthClient {
@@ -24,31 +25,36 @@ class QuranAuthClient {
       return _accessToken!;
     }
 
-    final basicAuth =
-        'Basic ${base64Encode(utf8.encode('$clientId:$clientSecret'))}';
+    try {
+      final basicAuth =
+          'Basic ${base64Encode(utf8.encode('$clientId:$clientSecret'))}';
 
-    final res = await httpClient.post(
-      Uri.parse(tokenUrl),
-      headers: {
-        'Authorization': basicAuth,
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: {'grant_type': 'client_credentials', 'scope': 'content'},
-    );
-
-    if (res.statusCode != 200) {
-      throw Exception(
-        'Failed to get access token: ${res.statusCode} ${res.body}',
+      final res = await httpClient.post(
+        Uri.parse(tokenUrl),
+        headers: {
+          'Authorization': basicAuth,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: {'grant_type': 'client_credentials', 'scope': 'content'},
       );
+
+      if (res.statusCode != 200) {
+        throw Exception(
+          'Failed to get access token: ${res.statusCode} ${res.body}',
+        );
+      }
+
+      final data = json.decode(res.body) as Map<String, dynamic>;
+      _accessToken = data['access_token'] as String;
+
+      final expiresIn = (data['expires_in'] as num?)?.toInt() ?? 3600;
+      // buffer: subtract 60s to avoid last-second expiry bugs
+      _expiry = now.add(Duration(seconds: expiresIn - 60));
+
+      return _accessToken!;
+    } catch (e) {
+      debugPrint('Error fetching access token');
+      rethrow;
     }
-
-    final data = json.decode(res.body) as Map<String, dynamic>;
-    _accessToken = data['access_token'] as String;
-
-    final expiresIn = (data['expires_in'] as num?)?.toInt() ?? 3600;
-    // buffer: subtract 60s to avoid last-second expiry bugs
-    _expiry = now.add(Duration(seconds: expiresIn - 60));
-
-    return _accessToken!;
   }
 }
