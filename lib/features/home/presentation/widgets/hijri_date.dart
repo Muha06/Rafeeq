@@ -18,24 +18,29 @@ class HijriDateToday extends ConsumerWidget {
     final theme = Theme.of(context);
     final hijriState = ref.watch(hijriDateProvider);
 
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
+    return InkWell(
       onTap: () {
         AppNav.push(context, const CalendarPage());
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             hijriState.formatted,
-            style: theme.textTheme.labelMedium!.copyWith(
+            style: theme.textTheme.labelMedium?.copyWith(
               color: foregroundColor,
+              fontSize: fontSize,
             ),
           ),
 
           const SizedBox(width: 8),
 
-          Icon(PhosphorIcons.caretRight(), size: 16, color: foregroundColor),
+          Icon(
+            PhosphorIcons.caretRight(PhosphorIconsStyle.bold),
+            size: 16,
+            color: foregroundColor,
+          ),
         ],
       ),
     );

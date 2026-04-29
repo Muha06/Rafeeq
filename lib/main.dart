@@ -36,9 +36,6 @@ import 'package:rafeeq/core/features/audio/providers/audio_handler_provider.dart
 late AppAudioHandler audioHandler;
 
 void main() {
-  // Make zone errors fatal before binding init
-  BindingBase.debugZoneErrorsAreFatal = false;
-
   // Run everything in a single guarded zone
   runZonedGuarded(
     () async {
@@ -48,10 +45,15 @@ void main() {
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       );
-      // Flutter errors → Crashlytics
-      FlutterError.onError =
-          FirebaseCrashlytics.instance.recordFlutterFatalError;
-
+      await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(
+        !kDebugMode,
+      );
+      if (kDebugMode) {
+        FlutterError.onError = FlutterError.dumpErrorToConsole;
+      } else {
+        FlutterError.onError =
+            FirebaseCrashlytics.instance.recordFlutterFatalError;
+      }
       // Load env
       await dotenv.load(fileName: ".env");
 
@@ -123,7 +125,14 @@ void main() {
     },
     (error, stack) async {
       debugPrint("Error, $stack");
-      await FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+
+      if (!kDebugMode) {
+        await FirebaseCrashlytics.instance.recordError(
+          error,
+          stack,
+          fatal: true,
+        );
+      }
     },
   );
 }

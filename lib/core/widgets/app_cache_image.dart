@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+enum AppImageShape { circle, rounded }
 
 class AppCachedImage extends StatelessWidget {
   const AppCachedImage({
@@ -9,6 +10,7 @@ class AppCachedImage extends StatelessWidget {
     this.width,
     this.fit = BoxFit.cover,
     this.borderRadius = 12,
+    this.shape = AppImageShape.rounded,
     this.placeholder,
     this.errorWidget,
   });
@@ -18,6 +20,7 @@ class AppCachedImage extends StatelessWidget {
   final double? width;
   final BoxFit fit;
   final double borderRadius;
+  final AppImageShape shape;
   final Widget? placeholder;
   final Widget? errorWidget;
 
@@ -47,10 +50,16 @@ class AppCachedImage extends StatelessWidget {
     );
   }
 
-  Widget _buildWrapper(Widget child) {
+ Widget _buildWrapper(Widget child) {
+    final content = SizedBox(width: width, height: height, child: child);
+
+    if (shape == AppImageShape.circle) {
+      return ClipOval(child: content);
+    }
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(borderRadius),
-      child: SizedBox(width: width, height: height, child: child),
+      child: content,
     );
   }
 }

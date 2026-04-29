@@ -40,17 +40,4 @@ class RafeeqAnalytics {
       parameters: {'timestamp': DateTime.now().toIso8601String()},
     );
   }
-
-  // -------------------------
-  // Optional: log errors
-  // -------------------------
-  static Future<void> logError(String error, {StackTrace? stack}) async {
-    await _analytics.logEvent(
-      name: 'error',
-      parameters: {
-        'error': error,
-        if (stack != null) 'stack': stack.toString(),
-      },
-    );
-  }
 }

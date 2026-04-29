@@ -36,9 +36,7 @@ class AllSurahsList extends ConsumerWidget {
           },
         );
       },
-      error: (error, stackTrace) {
-        RafeeqAnalytics.logError(error.toString(), stack: stackTrace);
-
+      error: (error, _) {
         return Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),

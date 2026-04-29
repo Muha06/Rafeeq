@@ -49,21 +49,48 @@ class PushNotificationService {
   // 2. Token
   // -------------------------
   Future<void> _getAndStoreToken() async {
-    final token = await _messaging.getToken();
+    try {
+      final token = await _messaging.getToken();
 
-    if (token == null) return;
+      if (token == null) return;
 
-    final storedToken = _getStoredToken();
+      final storedToken = _getStoredToken();
 
-    if (storedToken == token) {
-      debugPrint("✅ Token unchanged, skipping save");
-      return;
+      if (storedToken == token) {
+        debugPrint("✅ Token unchanged, skipping save");
+        return;
+      }
+
+      debugPrint("🆕 New token detected, saving...");
+
+      await _saveToken(token);
+      await _storeTokenLocally(token);
+    } catch (e) {
+      debugPrint("⚠️ Failed to get FCM token (likely offline): $e");
+
+      //retry later instead of crashing flow
+      Future.delayed(const Duration(seconds: 5), () {
+        _retryTokenFetch();
+      });
     }
+  }
 
-    debugPrint("🆕 New token detected, saving...");
+  //Retry fetch token
+  Future<void> _retryTokenFetch() async {
+    try {
+      final token = await _messaging.getToken();
 
-    await _saveToken(token);
-    await _storeTokenLocally(token);
+      if (token == null) return;
+
+      final storedToken = _getStoredToken();
+
+      if (storedToken != token) {
+        await _saveToken(token);
+        await _storeTokenLocally(token);
+      }
+    } catch (e) {
+      debugPrint("🔁 Retry failed again: $e");
+    }
   }
 
   // -------------------------

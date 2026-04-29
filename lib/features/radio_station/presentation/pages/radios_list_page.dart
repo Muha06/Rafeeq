@@ -72,12 +72,14 @@ class _RadioListPageState extends ConsumerState<RadioListPage> {
                         : RefreshIndicator(
                             onRefresh: () => controller.loadAll(),
                             child: GridView.builder(
+                              padding: const EdgeInsets.only(bottom: 16),
+                              physics: const AlwaysScrollableScrollPhysics(),
                               gridDelegate:
                                   const SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 3,
                                     crossAxisSpacing: 12,
                                     mainAxisSpacing: 12,
-                                    childAspectRatio: 0.6,
+                                    childAspectRatio: 0.7,
                                   ),
                               itemCount: stations.length,
                               itemBuilder: (_, i) =>

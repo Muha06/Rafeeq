@@ -27,27 +27,29 @@ class RadioCard extends StatelessWidget {
         child: RadioPlayerSheet(station: station),
       ),
       child: Container(
+        width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          // color: theme.colorScheme.surface,
-        ),
+         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
             // IMAGE
-            Expanded(
+            SizedBox(
+              height: 80,
+              width: 80,
               child: station.imageUrl != null
                   ? AppCachedImage(
                       imageUrl: station.imageUrl,
-                      height: 80,
-                      width: double.infinity,
+                      shape: AppImageShape.circle,
                       fit: BoxFit.cover,
                     )
                   : CategoryFallback(
                       station: station,
                       height: 80,
+                      width: 80,
                       isSheet: false,
-                      width: double.infinity,
                       showShadow: false,
                     ),
             ),
@@ -57,7 +59,7 @@ class RadioCard extends StatelessWidget {
             // TEXT SECTION
             Text(
               station.name,
-              textAlign: TextAlign.start,
+              textAlign: TextAlign.center,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: theme.textTheme.labelMedium?.copyWith(color: cs.onSurface),

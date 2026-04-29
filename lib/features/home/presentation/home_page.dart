@@ -9,7 +9,7 @@ import 'package:rafeeq/features/home/providers/reminder_providers.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/ayah_of_the_day.dart';
 import 'package:rafeeq/features/home/presentation/widgets/reminders_carousel.dart';
 import 'package:rafeeq/features/quran_reading_plan/presentation/providers/quran_reading_plan_provider.dart';
-import 'package:rafeeq/features/quran_reading_plan/presentation/widgets/quran_reading_plan_home_card.dart';
+import 'package:rafeeq/features/quran_reading_plan/presentation/widgets/home_card_reading_plan.dart';
 import 'package:rafeeq/features/timings/presentation/widgets/timeline_card.dart';
 
 class HomePage extends ConsumerStatefulWidget {

@@ -65,7 +65,6 @@ dependencies:
   equatable: ^2.0.8
   palette_generator_master: ^1.0.1
   firebase_messaging: ^16.2.0
-  change_app_package_name: ^1.5.0
   flutter_linkify: ^6.0.0
 
 dev_dependencies:
@@ -114,7 +113,7 @@ flutter_launcher_icons:
 
 flutter_native_splash:
   color: "#12100e" 
-  image: assets/icon/app_splash.png
+  image: assets/icon/app_splash_icon.png
   android: true
   ios: true
   web: false
@@ -123,5 +122,5 @@ flutter_native_splash:
   fullscreen: true
 
   android_12:
-    image: assets/icon/app_splash.png
+    image: assets/icon/app_splash_icon.png
     icon_background_color: "#12100e" # background behind icon

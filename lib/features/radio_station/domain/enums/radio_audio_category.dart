@@ -21,7 +21,7 @@ extension RadioAudioCategoryX on RadioAudioCategory {
       case RadioAudioCategory.tafsir:
         return PhosphorIcons.magnifyingGlass(); // explanation / deep dive
       case RadioAudioCategory.adhkar:
-        return PhosphorIcons.handsPraying(); // remembrance / du'a vibe
+        return PhosphorIcons.sun(); // remembrance / du'a vibe
       case RadioAudioCategory.seerah:
         return PhosphorIcons.person(); // life story / biography
       case RadioAudioCategory.fiqh:

@@ -9,7 +9,6 @@ import 'package:rafeeq/core/features/location/presentation/pages/user_loc_settin
 import 'package:rafeeq/core/features/location/presentation/provider/user_location_provider.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
-import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/features/home/presentation/widgets/hijri_date.dart';
 import 'package:rafeeq/features/notifications/presentation/pages/notification_list_page.dart';
 import 'package:rafeeq/features/notifications/presentation/providers/notification_provider.dart';
@@ -44,7 +43,7 @@ class TodayTimesCard extends ConsumerWidget {
           _TimingsCardAppbar(foregroundColor: fg),
 
           //HIJRI DATE
-          HijriDateToday(foregroundColor: fg, fontSize: 16),
+          HijriDateToday(foregroundColor: fg, fontSize: 14),
 
           const SizedBox(height: 16),
 
@@ -157,15 +156,25 @@ class TimingsStatus extends ConsumerWidget {
         ),
       ),
 
-      error: (error, stackTrace) => AppStateView(
-        title: "Error fetching times",
-        message: "Please check your Internet connection and try again.",
-        foregroundColor: fg,
-        buttonText: "Retry",
-        onPressed: () => ref.refresh(todaySalahTimesProvider),
+      error: (error, stackTrace) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            "Failed to fetch prayer times",
+            style: theme.textTheme.bodyMedium,
+          ),
+
+          const SizedBox(height: 4),
+
+          TextButton(
+            onPressed: () => ref.refresh(todaySalahTimesProvider),
+            child: const Text('Retry'),
+          ),
+        ],
       ),
 
-      loading: () => Center(child: CircularProgressIndicator(color: fg)),
+      loading: () =>
+          Center(child: CupertinoActivityIndicator(color: fg, radius: 24)),
     );
   }
 }
@@ -313,16 +322,16 @@ class _MyUserLocChip extends StatelessWidget {
         color: WidgetStatePropertyAll(cs.surfaceContainerHighest),
         padding: const EdgeInsets.symmetric(horizontal: 4),
         label: SizedBox(
-          width: 120,
+          width: 80,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(icon, size: 16, color: cs.onSurface),
               const SizedBox(width: 2),
 
-              Expanded(
+              Flexible(
                 child: Text(
-                  "Dar es Salaam Metropolitan Area Phase 3 Extension Ultra Deluxe",
+                  label,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: theme.textTheme.labelMedium!.copyWith(

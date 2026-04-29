@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:rafeeq/features/radio_station/domain/enums/radio_audio_category.dart';
+ import 'package:rafeeq/features/radio_station/domain/enums/radio_audio_category.dart';
 
 class RadioCategorySelector extends StatelessWidget {
   const RadioCategorySelector({
@@ -11,27 +10,6 @@ class RadioCategorySelector extends StatelessWidget {
 
   final RadioAudioCategory selected;
   final ValueChanged<RadioAudioCategory> onChanged;
-
-  IconData _icon(RadioAudioCategory c) {
-    switch (c) {
-      case RadioAudioCategory.quran:
-        return PhosphorIcons.bookOpen();
-      case RadioAudioCategory.hadith:
-        return PhosphorIcons.chatCenteredText();
-      case RadioAudioCategory.tafsir:
-        return PhosphorIcons.magnifyingGlass();
-      case RadioAudioCategory.adhkar:
-        return PhosphorIcons.sun();
-      case RadioAudioCategory.seerah:
-        return PhosphorIcons.person();
-      case RadioAudioCategory.fiqh:
-        return PhosphorIcons.scales();
-      case RadioAudioCategory.qisas:
-        return PhosphorIcons.bookBookmark();
-      case RadioAudioCategory.fatwa:
-        return PhosphorIcons.question();
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +22,7 @@ class RadioCategorySelector extends StatelessWidget {
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: RadioAudioCategory.values.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 10),
+        separatorBuilder: (_, _) => const SizedBox(width: 10),
         itemBuilder: (context, index) {
           final cat = RadioAudioCategory.values[index];
           final selectedCat = cat == selected;
@@ -66,7 +44,7 @@ class RadioCategorySelector extends StatelessWidget {
               child: Row(
                 children: [
                   Icon(
-                    _icon(cat),
+                    selected.icon,
                     size: 18,
                     color: selectedCat ? cs.onPrimaryContainer : cs.onSurface,
                   ),

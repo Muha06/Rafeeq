@@ -22,8 +22,7 @@ class CategoryFallback extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
-    final tt = theme.textTheme;
-
+ 
     return Container(
       height: height,
       width: width,
@@ -40,24 +39,10 @@ class CategoryFallback extends StatelessWidget {
               ]
             : null,
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            station.category.icon, // or your switch-case icon
-            size: 48,
-            color: cs.primary,
-          ),
-          const SizedBox(height: 8),
-
-          Text(
-            station.category.label,
-            style: tt.headlineMedium?.copyWith(
-              color: cs.onSurface,
-              fontSize: isSheet ? 24 : 20,
-            ),
-          ),
-        ],
+      child: Icon(
+        station.category.icon,  
+        size: isSheet ? 48 : 32,
+        color: cs.primary,
       ),
     );
   }

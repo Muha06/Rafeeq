@@ -6,7 +6,7 @@ import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
 import 'package:rafeeq/core/features/audio/widgets/seek_bar.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
-import 'package:rafeeq/core/widgets/app_cache_image.dart';
+ import 'package:rafeeq/core/widgets/app_cache_image.dart';
 import 'package:rafeeq/core/widgets/my_chip.dart';
 import 'package:rafeeq/features/radio_station/domain/entities/radio_station.dart';
 import 'package:rafeeq/features/radio_station/domain/enums/radio_audio_category.dart';
@@ -53,16 +53,15 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
       await ref
           .read(audioControllerProvider.notifier)
           .togglePlay(context: context, currentId: id, url: url, title: title);
-    } catch (e) {
-      _showErrorSnack(
+    } catch (e  ) {
+      _showErrorDialog(
         'Failed to play audio. Please check your internet connection.',
       );
       debugPrint("Caught ERROR: $e");
-      rethrow;
-    }
+     }
   }
 
-  void _showErrorSnack(String message) {
+  void _showErrorDialog(String message) {
     if (!context.mounted) return;
 
     AppSheets.showErrorDialog(

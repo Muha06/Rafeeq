@@ -69,11 +69,12 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
   void initState() {
     super.initState();
 
-    itemPositionsListener.itemPositions.addListener(_onVisibleAyahsChanged);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       _handleInitialNavigation();
     });
+
+    itemPositionsListener.itemPositions.addListener(_onVisibleAyahsChanged);
 
     WakelockPlus.enable();
   }
@@ -241,7 +242,13 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
 
   Future<void> _handleInitialNavigation() async {
     if (widget.autoScrollAyah != null) {
-      await jumpToAyah(widget.autoScrollAyah!, suppressSave: true);
+      debugPrint('Auto scrolling to Ayah ${widget.autoScrollAyah}');
+
+      try {
+        await jumpToAyah(widget.autoScrollAyah!, suppressSave: true);
+      } catch (e) {
+        debugPrint('Error autoscrolling $e');
+      }
       return;
     }
 
@@ -302,7 +309,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
 
     //show cntrols
     ref.read(showAudioControlsProvider.notifier).state = true;
-    
+
     try {
       await ref
           .read(audioControllerProvider.notifier)
