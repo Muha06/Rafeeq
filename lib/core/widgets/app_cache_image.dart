@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+
 enum AppImageShape { circle, rounded }
 
 class AppCachedImage extends StatelessWidget {
@@ -26,9 +27,15 @@ class AppCachedImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     final placeholderWidget =
         placeholder ??
-        const Center(child: CircularProgressIndicator(strokeWidth: 2));
+        Container(
+          decoration: BoxDecoration(
+            color: cs.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(borderRadius),
+          ),
+        );
 
     final error =
         errorWidget ?? const Center(child: Icon(Icons.broken_image_outlined));
@@ -50,7 +57,7 @@ class AppCachedImage extends StatelessWidget {
     );
   }
 
- Widget _buildWrapper(Widget child) {
+  Widget _buildWrapper(Widget child) {
     final content = SizedBox(width: width, height: height, child: child);
 
     if (shape == AppImageShape.circle) {
