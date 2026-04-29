@@ -16,7 +16,6 @@ class PushNotificationService {
 
   /// Call this from main() after Firebase.initializeApp()
   Future<void> init() async {
-    await _requestPermission(); //Permissions
     await _getAndStoreToken(); //Token
 
     _handleForegroundMessages();
@@ -31,18 +30,6 @@ class PushNotificationService {
     } catch (e) {
       debugPrint("Error saving token: $e");
     }
-  }
-
-  // -------------------------
-  // 1. Permission
-  // -------------------------
-  Future<void> _requestPermission() async {
-    await _messaging.requestPermission(
-      alert: true,
-      criticalAlert: true,
-      badge: true,
-      sound: true,
-    );
   }
 
   // -------------------------

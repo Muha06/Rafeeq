@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
-import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/core/themes/app_text_style.dart';
 import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
@@ -31,7 +31,10 @@ class AllSurahsList extends ConsumerWidget {
           itemBuilder: (context, index) {
             final surah = surahs[index];
 
-            return SurahTile(surah: surah, surahs: surahs, index: index);
+            return InkWell(
+              onTap: () => AppNav.push(context, FullSurahPage(surah: surah)),
+              child: SurahTile(surah: surah, surahs: surahs, index: index),
+            );
           },
         );
       },
@@ -73,68 +76,56 @@ class SurahTile extends ConsumerWidget {
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 14),
-      child: InkWell(
-        onTap: () {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => FullSurahPage(surah: surah),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 44,
+            height: 44,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Image.asset(
+                  isDark
+                      ? 'assets/images/quran/surah_badge_dark.png'
+                      : 'assets/images/quran/surah_badge_light.png',
+                  width: 44,
+                  height: 44,
+                  fit: BoxFit.contain,
+                ),
+                Text(surah.id.toString(), style: theme.textTheme.labelLarge),
+              ],
             ),
-          );
+          ),
 
-          RafeeqAnalytics.logScreenView('surah_page');
-        },
-        child: Row(
-          children: [
-            SizedBox(
-              width: 44,
-              height: 44,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Image.asset(
-                    isDark
-                        ? 'assets/images/quran/surah_badge_dark.png'
-                        : 'assets/images/quran/surah_badge_light.png',
-                    width: 44,
-                    height: 44,
-                    fit: BoxFit.contain,
-                  ),
-                  Text(surah.id.toString(), style: theme.textTheme.labelLarge),
-                ],
-              ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  surah.nameTransliteration,
+                  style: theme.textTheme.labelLarge,
+                ),
+                const SizedBox(height: 6),
+
+                Text(
+                  "${surah.nameEnglish} • Verses ${surah.versesCount} ",
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.labelMedium,
+                ),
+              ],
             ),
+          ),
 
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    surah.nameTransliteration,
-                    style: theme.textTheme.labelLarge,
-                  ),
-                  const SizedBox(height: 6),
-
-                  Text(
-                    "${surah.nameEnglish} • Verses ${surah.versesCount} ",
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: theme.textTheme.labelMedium,
-                  ),
-                ],
-              ),
+          Text(
+            cleanAyah(surah.nameArabic),
+            style: AppTextStyles.quranAyah.copyWith(
+              color: theme.colorScheme.onSurface,
+              fontWeight: FontWeight.bold,
             ),
-
-            Text(
-              cleanAyah(surah.nameArabic),
-              style: AppTextStyles.quranAyah.copyWith(
-                color: theme.colorScheme.onSurface,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

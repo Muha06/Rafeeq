@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
+import 'package:rafeeq/features/quran/presentation/pages/surah_page.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provider.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/QURAN_PAGE/surah_listview.dart';
 
@@ -94,10 +96,24 @@ class _SurahSearchPageState extends ConsumerState<SurahSearchPage> {
                       (s) => s.id == surah.id,
                     );
 
-                    return SurahTile(
-                      surah: surah,
-                      surahs: surahs,
-                      index: realSurahIndex,
+                    return InkWell(
+                      onTap: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return FullSurahPage(surah: surah);
+                            },
+                          ),
+                        );
+
+                        RafeeqAnalytics.logScreenView('surah_page');
+                      },
+                      child: SurahTile(
+                        surah: surah,
+                        surahs: surahs,
+                        index: realSurahIndex,
+                      ),
                     );
                   },
                 ),

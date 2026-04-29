@@ -158,12 +158,14 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
   void _toggleAutoScroll() => _autoOn ? _exitAutoScroll() : _startAutoScroll();
 
   Future<void> jumpToAyah(int ayahNumber, {bool suppressSave = false}) async {
-    if (!itemScrollController.isAttached) return;
+    int attempts = 0;
 
-    if (suppressSave) {
-      _suppressNextSave = true;
-      _lastReadDebounce?.cancel(); // cancel any pending save
+    while (!itemScrollController.isAttached && attempts < 20) {
+      await Future.delayed(const Duration(milliseconds: 100));
+      attempts++;
     }
+
+    if (!itemScrollController.isAttached) return;
 
     await itemScrollController.scrollTo(
       index: ayahNumber,
