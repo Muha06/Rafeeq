@@ -302,17 +302,21 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
 
     //show cntrols
     ref.read(showAudioControlsProvider.notifier).state = true;
-
-    await ref
-        .read(audioControllerProvider.notifier)
-        .togglePlay(
-          context: context,
-          artist: reciter.name,
-          showAudioPlayer: false,
-          currentId: audioId,
-          url: surahTrack.url,
-          title: surahTrack.surahName,
-        );
+    
+    try {
+      await ref
+          .read(audioControllerProvider.notifier)
+          .togglePlay(
+            context: context,
+            artist: reciter.name,
+            showAudioPlayer: false,
+            currentId: audioId,
+            url: surahTrack.url,
+            title: surahTrack.surahName,
+          );
+    } catch (e) {
+      AppSnackBar.showSimple(context: context, message: "Something went wrong");
+    }
   }
 
   @override
@@ -329,7 +333,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
     final showSpeedControls = ref
         .watch(surahSettingsProvider)
         .autoScrollEnabled;
-        
+
     final reciter = ref.watch(selectedReciterProvider);
     final currentAudioId = '${surahId}_${reciter.id}';
 

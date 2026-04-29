@@ -312,18 +312,26 @@ class _MyUserLocChip extends StatelessWidget {
       child: Chip(
         color: WidgetStatePropertyAll(cs.surfaceContainerHighest),
         padding: const EdgeInsets.symmetric(horizontal: 4),
-        label: Row(
-          children: [
-            Icon(icon, size: 16, color: cs.onSurface),
-            const SizedBox(width: 2),
+        label: SizedBox(
+          width: 120,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, size: 16, color: cs.onSurface),
+              const SizedBox(width: 2),
 
-            Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.labelMedium!.copyWith(color: cs.onSurface),
-            ),
-          ],
+              Expanded(
+                child: Text(
+                  "Dar es Salaam Metropolitan Area Phase 3 Extension Ultra Deluxe",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.labelMedium!.copyWith(
+                    color: cs.onSurface,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 
 abstract class OnboardingLocalDataSource {
   bool hasSeenOnboarding();
@@ -23,5 +24,6 @@ class OnboardingLocalDataSourceImpl implements OnboardingLocalDataSource {
   Future<void> setSeenOnboarding() async {
     debugPrint('setting as seen');
     await _box.put(_key, true);
+    RafeeqAnalytics.logFirstOpen();
   }
 }

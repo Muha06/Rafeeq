@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/core/helpers/url_launcher.dart';
 import 'package:rafeeq/features/notifications/presentation/providers/notification_provider.dart';
 
 class NotificationDetailPage extends ConsumerWidget {
@@ -61,7 +63,17 @@ class NotificationDetailPage extends ConsumerWidget {
                         const SizedBox(height: 16),
 
                         // Body
-                        Text(notif.body, style: tt.bodyLarge),
+                        Linkify(
+                          text: notif.body,
+                          style: tt.bodyLarge,
+                          linkStyle: tt.bodyLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue,
+                          ),
+                          onOpen: (link) async {
+                            await AppUrlLauncher.openExternal(link.url);
+                          },
+                        ),
                       ],
                     ),
                   ),
