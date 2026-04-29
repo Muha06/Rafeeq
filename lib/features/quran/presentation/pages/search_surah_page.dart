@@ -19,8 +19,6 @@ class _SurahSearchPageState extends ConsumerState<SurahSearchPage> {
   void dispose() {
     _focus.dispose();
     _controller.dispose();
-    _controller.clear();
-    ref.read(searchSurahTextProvider.notifier).state = '';
     super.dispose();
   }
 
@@ -42,7 +40,6 @@ class _SurahSearchPageState extends ConsumerState<SurahSearchPage> {
       onPopInvokedWithResult: (didPop, result) {
         if (didPop) {
           ref.read(searchSurahTextProvider.notifier).state = '';
-          _controller.clear();
         }
       },
       child: Scaffold(

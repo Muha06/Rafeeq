@@ -22,7 +22,7 @@ import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 class TodayTimesCard extends ConsumerWidget {
   const TodayTimesCard({
     super.key,
-    this.height = 280, // content height
+    this.height = 285, // content height
   });
 
   final double height;

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/core/themes/app_text_style.dart';
@@ -76,10 +75,14 @@ class SurahTile extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 14),
       child: InkWell(
         onTap: () {
-          AppNav.push(
+          Navigator.pushReplacement(
             context,
-            FullSurahPage(surah: surah),
-          ).then((value) => RafeeqAnalytics.logScreenView('surah_page'));
+            MaterialPageRoute(
+              builder: (context) => FullSurahPage(surah: surah),
+            ),
+          );
+
+          RafeeqAnalytics.logScreenView('surah_page');
         },
         child: Row(
           children: [

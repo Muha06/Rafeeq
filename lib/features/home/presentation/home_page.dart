@@ -38,7 +38,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               padding: EdgeInsets.only(
                 bottom: _v10,
               ), // to accommodate quick actions overlap
-              child: TodayTimesCard(height: 270),
+              child: TodayTimesCard(height: 285),
             ),
           ),
 

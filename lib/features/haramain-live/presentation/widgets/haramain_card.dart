@@ -100,7 +100,7 @@ class _LiveTile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: cs.onSurfaceVariant.withAlpha(200)),
+          border: Border.all(color: cs.onSurfaceVariant.withAlpha(52)),
         ),
         child: Row(
           children: [
