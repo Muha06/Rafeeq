@@ -13,7 +13,6 @@ class SurahSearchPage extends ConsumerStatefulWidget {
 class _SurahSearchPageState extends ConsumerState<SurahSearchPage> {
   final FocusNode _focus = FocusNode();
   final _controller = TextEditingController();
-  String _query = '';
 
   @override
   void dispose() {
@@ -61,7 +60,6 @@ class _SurahSearchPageState extends ConsumerState<SurahSearchPage> {
                       icon: const Icon(Icons.cancel),
                       onPressed: () {
                         _controller.clear();
-                        _query = '';
                         ref.read(searchSurahTextProvider.notifier).state = '';
                         _focus.requestFocus();
                       },
@@ -69,7 +67,6 @@ class _SurahSearchPageState extends ConsumerState<SurahSearchPage> {
                   IconButton(
                     icon: const Icon(Icons.search),
                     onPressed: () {
-                      ref.read(searchSurahTextProvider.notifier).state = _query;
                       _focus.unfocus();
                     },
                   ),
@@ -77,10 +74,7 @@ class _SurahSearchPageState extends ConsumerState<SurahSearchPage> {
               ),
             ),
             onChanged: (value) {
-              _query = value;
-            },
-            onSubmitted: (value) {
-              ref.read(searchSurahTextProvider.notifier).state = _query;
+              ref.read(searchSurahTextProvider.notifier).state = value;
             },
           ),
         ),
