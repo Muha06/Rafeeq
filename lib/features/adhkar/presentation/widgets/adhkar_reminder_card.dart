@@ -53,23 +53,7 @@ class AdhkarReminderCard extends ConsumerWidget {
                     const SizedBox(height: 8),
 
                     //Actions
-                    Row(
-                      children: [
-                        AudioControlsChip(isMorning: isMorning),
-
-                        const Spacer(),
-
-                        GestureDetector(
-                          child: Text(
-                            'Tap to read >',
-                            style: theme.textTheme.bodySmall!.copyWith(
-                              color: cs.primary,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    AudioControlsChip(isMorning: isMorning),
                   ],
                 ),
               ),

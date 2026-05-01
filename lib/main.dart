@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -112,7 +113,7 @@ void main() {
       );
 
       await pushService.init();
-      // ✅ Finally, run the app synchronously inside the same zone
+
       runApp(
         ProviderScope(
           overrides: [
@@ -144,13 +145,48 @@ class MyApp extends ConsumerStatefulWidget {
   ConsumerState<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends ConsumerState<MyApp> {
+class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _bootstrap();
+
+      SystemChrome.setEnabledSystemUIMode(
+        SystemUiMode.manual,
+        overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom],
+      );
+
+      Future.microtask(() {
+        _updateSystemUI();
+      });
     });
+  }
+
+  @override
+  void didChangePlatformBrightness() {
+    _updateSystemUI();
+  }
+
+  void _updateSystemUI() {
+    final isDark =
+        WidgetsBinding.instance.platformDispatcher.platformBrightness ==
+        Brightness.dark;
+    final navColor = isDark ? const Color(0xFF12100e) : const Color(0xffFAFAF6);
+
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        systemNavigationBarColor: navColor,
+        systemNavigationBarIconBrightness: isDark
+            ? Brightness.light
+            : Brightness.dark,
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+        systemNavigationBarContrastEnforced: false,
+      ),
+    );
   }
 
   Future<void> _bootstrap() async {
@@ -159,6 +195,12 @@ class _MyAppState extends ConsumerState<MyApp> {
 
     //SYNC
     await ref.read(systemNotifAccessProvider.notifier).sync();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   @override

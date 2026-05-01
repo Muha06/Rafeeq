@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
+import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/features/quran/domain/entities/last_read_ayah.dart';
 import 'package:rafeeq/features/quran/presentation/pages/surah_page.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provider.dart';
@@ -80,12 +82,14 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
     setState(() {
       _isSelected = true;
     });
-    return showModalBottomSheet(
-      context: context,
-      builder: (_) {
-        final theme = Theme.of(context);
 
-        return Container(
+    final theme = Theme.of(context);
+
+    return AppSheets.showBottomSheet(
+      context: context,
+      child: SafeArea(
+        top: false,
+        child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           decoration: const BoxDecoration(
             borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
@@ -93,7 +97,7 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.delete_outline, size: 72),
+              Icon(PhosphorIcons.trash(PhosphorIconsStyle.light), size: 72),
               const SizedBox(height: 16),
 
               Text('Remove last read?', style: theme.textTheme.titleMedium),
@@ -134,8 +138,8 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
               ),
             ],
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 

@@ -7,7 +7,6 @@ ThemeData appLightThemeData() {
         primary: AppLightColors.brand,
         onPrimary: Colors.white,
 
-        //  Accent is reserved for subtle highlights, not interactive elements
         tertiary: AppLightColors.accent,
 
         surface: AppLightColors.surface,

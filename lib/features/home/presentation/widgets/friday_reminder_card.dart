@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
+import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/quran/presentation/pages/surah_page.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
@@ -96,7 +97,7 @@ class _FridayReminderCardState extends ConsumerState<FridayReminderCard> {
             top: 8,
             right: 8,
             child: Image.asset(
-              'assets/images/adhkar/mosque_amber.png',
+              'assets/images/adhkar/mosque.png',
               height: 30,
               width: 30,
             ),
@@ -108,14 +109,15 @@ class _FridayReminderCardState extends ConsumerState<FridayReminderCard> {
 }
 
 void _showFridayVirtuesSheet(BuildContext context, bool isDark) {
-  showModalBottomSheet(
+  final iconStyle = PhosphorIconsStyle.light;
+
+  AppSheets.showBottomSheet(
     context: context,
     isScrollControlled: true,
     useSafeArea: true,
-    builder: (_) {
-      final iconStyle = PhosphorIconsStyle.light;
-
-      return ListView(
+    child: SafeArea(
+      top: false,
+      child: ListView(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
         children: [
           Text(
@@ -125,7 +127,7 @@ void _showFridayVirtuesSheet(BuildContext context, bool isDark) {
           ),
 
           const SizedBox(height: 12),
-          
+
           Text(
             'A few Sunnah reminders to make your Jumu‘ah count.',
             textAlign: TextAlign.center,
@@ -163,8 +165,8 @@ void _showFridayVirtuesSheet(BuildContext context, bool isDark) {
             child: const Text('Got it'),
           ),
         ],
-      );
-    },
+      ),
+    ),
   );
 }
 

@@ -11,7 +11,7 @@ class HaramainLivePage extends StatefulWidget {
 
 class _HaramainLivePageState extends State<HaramainLivePage>
     with SingleTickerProviderStateMixin {
-  late VideoPlayerController _controller;
+  VideoPlayerController? _controller;
   late TabController _tabController;
 
   String? _error;
@@ -19,7 +19,6 @@ class _HaramainLivePageState extends State<HaramainLivePage>
   String _currentUrl = makkahLive;
   int _retryCount = 0;
   bool _isRetrying = false;
-  bool _hasListener = false;
   static const makkahLive = 'https://win.holol.com/live/quran/playlist.m3u8';
   static const madinahLive = 'https://win.holol.com/live/sunnah/playlist.m3u8';
 
@@ -58,37 +57,41 @@ class _HaramainLivePageState extends State<HaramainLivePage>
 
       if (!mounted) return;
 
-      _controller.dispose();
-      _controller = newController;
-
-      if (!_hasListener) {
-        _controller.addListener(() {
-          final error = _controller.value.errorDescription;
-
-          if (error != null && error.isNotEmpty) {
-            if (_error == null) {
-              setState(() {
-                _error = "Stream interrupted...";
-                _isLoading = false;
-              });
-
-              _autoReconnect(_currentUrl);
-            }
-          }
-        });
-
-        _hasListener = true;
+      // Dispose old controller safely
+      if (_controller != null) {
+        await _controller!.dispose();
       }
 
-      await _controller.play();
+      // Always attach listener to NEW controller
+      final controller = newController;
+
+      controller.addListener(() {
+        final error = controller.value.errorDescription;
+
+        if (error != null && error.isNotEmpty) {
+          if (_error == null) {
+            setState(() {
+              _error = "Stream interrupted...";
+              _isLoading = false;
+            });
+
+            _autoReconnect(_currentUrl);
+          }
+        }
+      });
+
+      _controller = controller;
+
+      await _controller?.play();
 
       setState(() {
         _isLoading = false;
         _error = null;
-        _retryCount = 0; // 🔥 reset on success
+        _retryCount = 0;
         _isRetrying = false;
       });
     } catch (e) {
+      if (!mounted) return;
       setState(() {
         _error = "Stream dropped. Reconnecting...";
         _isLoading = false;
@@ -108,18 +111,21 @@ class _HaramainLivePageState extends State<HaramainLivePage>
 
     await Future.delayed(delay);
 
-    if (!mounted) return;
+    if (!mounted || url != _currentUrl) {
+      _isRetrying = false; // 🔥 MUST reset here
+      return;
+    }
 
     _retryCount++;
 
     await _initController(url);
 
-    _isRetrying = false;
+    _isRetrying = false; // 🔥 always reset after attempt
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller?.dispose();
     _tabController.dispose();
     WakelockPlus.disable();
     super.dispose();
@@ -153,12 +159,12 @@ class _HaramainLivePageState extends State<HaramainLivePage>
                   ),
                 ],
               )
-            : _isLoading
-            ? const CircularProgressIndicator()
-            : AspectRatio(
-                aspectRatio: _controller.value.aspectRatio,
-                child: VideoPlayer(_controller),
-              ),
+            : (_controller != null && _controller!.value.isInitialized)
+            ? AspectRatio(
+                aspectRatio: _controller!.value.aspectRatio,
+                child: VideoPlayer(_controller!),
+              )
+            : const CircularProgressIndicator(),
       ),
     );
   }

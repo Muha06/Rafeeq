@@ -24,6 +24,7 @@ class QuranPlannerPage extends ConsumerWidget {
             onPressed: () {
               AppSheets.showConfirmSheet(
                 context: context,
+                useSafeArea: true,
                 title: "Reset stats?",
                 description: "This will clear all your recorded ayahs.",
                 destructive: true,

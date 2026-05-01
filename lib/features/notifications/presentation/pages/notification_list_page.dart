@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
+import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/features/notifications/domain/entities/app_notification.dart';
 import 'package:rafeeq/features/notifications/presentation/pages/notif_details_page.dart';
 import 'package:rafeeq/features/notifications/presentation/providers/notification_provider.dart';
@@ -16,8 +17,14 @@ class NotificationsInboxPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: const Text("Notifications")),
       body: notificationsAsync.when(
-        loading: () => const LoadingState(),
-        error: (e, _) => ErrorState(error: e.toString()),
+        loading: () => const _LoadingState(),
+        error: (e, _) => AppStateView(
+          title: 'Failed to load notifications',
+          message:
+              "We could'nt retireve the notifications. \n Please try again later.",
+          buttonText: 'Retry',
+          onPressed: () => ref.refresh(allNotificationsProvider),
+        ),
         data: (notifications) {
           if (notifications.isEmpty) {
             return const EmptyState();
@@ -137,8 +144,8 @@ class NotificationTile extends ConsumerWidget {
   }
 }
 
-class LoadingState extends StatelessWidget {
-  const LoadingState({super.key});
+class _LoadingState extends StatelessWidget {
+  const _LoadingState( );
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:rafeeq/core/helpers/app_nav.dart';
+import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/dhikr_bookmark.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/quran_bookmark.dart';
@@ -110,14 +112,15 @@ class _BookmarkTileState extends ConsumerState<BookmarkTile> {
 
           IconButton(
             onPressed: () {
-              showModalBottomSheet(
+              AppSheets.showBottomSheet(
                 context: context,
                 showDragHandle: true,
-                builder: (_) => BookmarkActionBottomSheet(
+                useSafeArea: true,
+                child: BookmarkActionBottomSheet(
                   quranBookmark: quranBookmark,
                   dhikrBookmark: dhikrBookmark,
                   onDeleteBookmark: () async {
-                    Navigator.pop(context); // close sheet once
+                    AppNav.pop(context); // close sheet once
                     if (quranBookmark != null) {
                       await deleteBookmark(ref, quranBookmark: quranBookmark);
                     } else {

@@ -52,104 +52,107 @@ class _EditQuranReadingPlanSheetState
         top: 0,
         bottom: MediaQuery.of(context).viewInsets.bottom + 16,
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            "Adjust My Qur'an Reading Plan",
-            style: theme.textTheme.titleLarge?.copyWith(
-              fontWeight: FontWeight.bold,
+      child: SafeArea(
+        top: false,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              "Adjust My Qur'an Reading Plan",
+              style: theme.textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          const SizedBox(height: 8),
+            const SizedBox(height: 8),
 
-          Center(
-            child: Text(
-              "Set how many ayahs you aim to read daily, Insha'Allah.",
-              textAlign: TextAlign.center,
-              style: theme.textTheme.bodyMedium,
+            Center(
+              child: Text(
+                "Set how many ayahs you aim to read daily, Insha'Allah.",
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodyMedium,
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
+            const SizedBox(height: 16),
 
-          // --- Number selector with buttons ---
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                onPressed: targetAyahs > 1
-                    ? () => setState(() {
-                        targetAyahs--;
-                        updateController(targetAyahs);
-                      })
-                    : null,
-                icon: PhosphorIcon(
-                  PhosphorIcons.minus(),
-                  color: targetAyahs > 1 ? cs.primary : cs.onSurfaceVariant,
+            // --- Number selector with buttons ---
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  onPressed: targetAyahs > 1
+                      ? () => setState(() {
+                          targetAyahs--;
+                          updateController(targetAyahs);
+                        })
+                      : null,
+                  icon: PhosphorIcon(
+                    PhosphorIcons.minus(),
+                    color: targetAyahs > 1 ? cs.primary : cs.onSurfaceVariant,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 16),
+                const SizedBox(width: 16),
 
-              LogAyahTextField(
-                controller: targetAyahController,
-                onChanged: (value) {
-                  final parsed = int.tryParse(value);
-                  if (parsed != null && parsed > 0) {
-                    setState(() => updateController(parsed));
-                  }
-                },
-              ),
-              const SizedBox(width: 16),
-
-              IconButton(
-                onPressed: () => setState(() {
-                  targetAyahs++;
-                  updateController(targetAyahs);
-                }),
-                icon: Icon(PhosphorIcons.plus(), color: cs.primary),
-              ),
-            ],
-          ),
-          const SizedBox(height: 24),
-
-          // --- Action buttons ---
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text("Cancel"),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: FilledButton(
-                  onPressed: () {
-                    final parsed = int.tryParse(targetAyahController.text);
-
-                    if (parsed != null && parsed <= 0) {
-                      //just use the prev target & dont update
-                      AppNav.pop(context);
-                      AppSnackBar.showSimple(
-                        context: context,
-                        message: "Reading target must be greater than 1",
-                      );
-                      return;
+                LogAyahTextField(
+                  controller: targetAyahController,
+                  onChanged: (value) {
+                    final parsed = int.tryParse(value);
+                    if (parsed != null && parsed > 0) {
+                      setState(() => updateController(parsed));
                     }
-
-                    AppNav.pop(context);
-                    ref
-                        .read(quranReadingPlanProvider.notifier)
-                        .setTarget(targetAyahs);
-                    RafeeqAnalytics.logFeature('edit_Quran_plan');
                   },
-                  child: const Text("Save Plan"),
                 ),
-              ),
-            ],
-          ),
-        ],
+                const SizedBox(width: 16),
+
+                IconButton(
+                  onPressed: () => setState(() {
+                    targetAyahs++;
+                    updateController(targetAyahs);
+                  }),
+                  icon: Icon(PhosphorIcons.plus(), color: cs.primary),
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
+
+            // --- Action buttons ---
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text("Cancel"),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: FilledButton(
+                    onPressed: () {
+                      final parsed = int.tryParse(targetAyahController.text);
+
+                      if (parsed != null && parsed <= 0) {
+                        //just use the prev target & dont update
+                        AppNav.pop(context);
+                        AppSnackBar.showSimple(
+                          context: context,
+                          message: "Reading target must be greater than 1",
+                        );
+                        return;
+                      }
+
+                      AppNav.pop(context);
+                      ref
+                          .read(quranReadingPlanProvider.notifier)
+                          .setTarget(targetAyahs);
+                      RafeeqAnalytics.logFeature('edit_Quran_plan');
+                    },
+                    child: const Text("Save Plan"),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -43,80 +43,83 @@ class _SurahSearchPageState extends ConsumerState<SurahSearchPage> {
           ref.read(searchSurahTextProvider.notifier).state = '';
         }
       },
-      child: Scaffold(
-        appBar: AppBar(
-          titleSpacing: 12,
-          title: TextField(
-            focusNode: _focus,
-            autofocus: true,
-            controller: _controller,
-            textInputAction: TextInputAction.search,
-            decoration: InputDecoration(
-              isDense: true,
-              hintText: "Search surah (name / number)…",
-              suffixIcon: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (searchSurahText.trim().isNotEmpty)
+      child: SafeArea(
+        top: false,
+        child: Scaffold(
+          appBar: AppBar(
+            titleSpacing: 12,
+            title: TextField(
+              focusNode: _focus,
+              autofocus: true,
+              controller: _controller,
+              textInputAction: TextInputAction.search,
+              decoration: InputDecoration(
+                isDense: true,
+                hintText: "Search surah (name / number)…",
+                suffixIcon: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (searchSurahText.trim().isNotEmpty)
+                      IconButton(
+                        icon: const Icon(Icons.cancel),
+                        onPressed: () {
+                          _controller.clear();
+                          ref.read(searchSurahTextProvider.notifier).state = '';
+                          _focus.requestFocus();
+                        },
+                      ),
                     IconButton(
-                      icon: const Icon(Icons.cancel),
+                      icon: const Icon(Icons.search),
                       onPressed: () {
-                        _controller.clear();
-                        ref.read(searchSurahTextProvider.notifier).state = '';
-                        _focus.requestFocus();
+                        _focus.unfocus();
                       },
                     ),
-                  IconButton(
-                    icon: const Icon(Icons.search),
-                    onPressed: () {
-                      _focus.unfocus();
+                  ],
+                ),
+              ),
+              onChanged: (value) {
+                ref.read(searchSurahTextProvider.notifier).state = value;
+              },
+            ),
+          ),
+          body: GestureDetector(
+            onTap: () => _focus.unfocus(),
+            child: filtered.isEmpty
+                ? const Center(child: Text('No surahs found'))
+                : ListView.builder(
+                    keyboardDismissBehavior:
+                        ScrollViewKeyboardDismissBehavior.onDrag,
+                    itemCount: filtered.length,
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    itemBuilder: (context, index) {
+                      final surah = filtered[index];
+
+                      final realSurahIndex = surahs.indexWhere(
+                        (s) => s.id == surah.id,
+                      );
+
+                      return InkWell(
+                        onTap: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return FullSurahPage(surah: surah);
+                              },
+                            ),
+                          );
+
+                          RafeeqAnalytics.logScreenView('surah_page');
+                        },
+                        child: SurahTile(
+                          surah: surah,
+                          surahs: surahs,
+                          index: realSurahIndex,
+                        ),
+                      );
                     },
                   ),
-                ],
-              ),
-            ),
-            onChanged: (value) {
-              ref.read(searchSurahTextProvider.notifier).state = value;
-            },
           ),
-        ),
-        body: GestureDetector(
-          onTap: () => _focus.unfocus(),
-          child: filtered.isEmpty
-              ? const Center(child: Text('No surahs found'))
-              : ListView.builder(
-                  keyboardDismissBehavior:
-                      ScrollViewKeyboardDismissBehavior.onDrag,
-                  itemCount: filtered.length,
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  itemBuilder: (context, index) {
-                    final surah = filtered[index];
-
-                    final realSurahIndex = surahs.indexWhere(
-                      (s) => s.id == surah.id,
-                    );
-
-                    return InkWell(
-                      onTap: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return FullSurahPage(surah: surah);
-                            },
-                          ),
-                        );
-
-                        RafeeqAnalytics.logScreenView('surah_page');
-                      },
-                      child: SurahTile(
-                        surah: surah,
-                        surahs: surahs,
-                        index: realSurahIndex,
-                      ),
-                    );
-                  },
-                ),
         ),
       ),
     );

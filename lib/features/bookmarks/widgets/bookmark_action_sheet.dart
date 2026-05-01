@@ -19,26 +19,29 @@ class BookmarkActionBottomSheet extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _ActionTile(
-            icon: Icons.delete_outline_rounded,
-            title: 'Delete',
-            subtitle: 'This can’t be undone',
-            onTap: onDeleteBookmark,
-          ),
+      child: SafeArea(
+        top: false,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _ActionTile(
+              icon: PhosphorIcons.trash(),
+              title: 'Delete',
+              subtitle: 'This can’t be undone',
+              onTap: onDeleteBookmark,
+            ),
 
-          const SizedBox(height: 16),
+            const SizedBox(height: 16),
 
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text('Cancel'),
-          ),
-          const SizedBox(height: 8),
-        ],
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Cancel'),
+            ),
+            const SizedBox(height: 8),
+          ],
+        ),
       ),
     );
   }

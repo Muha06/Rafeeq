@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/helpers/url_launcher.dart';
+import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/features/notifications/presentation/providers/notification_provider.dart';
 
 class NotificationDetailPage extends ConsumerWidget {
@@ -22,7 +23,13 @@ class NotificationDetailPage extends ConsumerWidget {
         appBar: AppBar(title: const Text("Notification")),
         body: notifAsync.when(
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (e, _) => Center(child: Text("Error: $e")),
+          error: (e, _) => AppStateView(
+            title: 'Failed to load notification',
+            message: "Something went wrong. \n Please try again later.",
+            buttonText: 'Retry',
+            onPressed: () =>
+                ref.refresh(notificationByIdProvider(notificationId)),
+          ),
           data: (notif) {
             return SingleChildScrollView(
               child: Column(

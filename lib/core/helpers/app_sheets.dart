@@ -35,6 +35,7 @@ class AppSheets {
     required String title,
     required String description,
     required VoidCallback onConfirm,
+    bool useSafeArea = true,
     String confirmText = "Confirm",
     String cancelText = "Cancel",
     bool destructive = false,
@@ -43,60 +44,63 @@ class AppSheets {
     final cs = theme.colorScheme;
 
     return showModalBottomSheet(
-      useSafeArea: true,
+      useSafeArea: useSafeArea,
       context: context,
       isScrollControlled: true,
       builder: (context) => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              description,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: cs.onSurfaceVariant,
-              ),
-            ),
-            const SizedBox(height: 24),
-
-            Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: Text(cancelText),
-                  ),
+        child: SafeArea(
+          top: false,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: FilledButton(
-                    style: FilledButton.styleFrom(
-                      backgroundColor: destructive ? cs.error : cs.primary,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                description,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: cs.onSurfaceVariant,
+                ),
+              ),
+              const SizedBox(height: 24),
+
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text(cancelText),
                     ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      onConfirm();
-                    },
-                    child: Text(
-                      confirmText,
-                      style: theme.textTheme.bodyMedium!.copyWith(
-                        color: destructive ? cs.onError : cs.onPrimary,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: FilledButton(
+                      style: FilledButton.styleFrom(
+                        backgroundColor: destructive ? cs.error : cs.primary,
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                        onConfirm();
+                      },
+                      child: Text(
+                        confirmText,
+                        style: theme.textTheme.bodyMedium!.copyWith(
+                          color: destructive ? cs.onError : cs.onPrimary,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-          ],
+                ],
+              ),
+              const SizedBox(height: 12),
+            ],
+          ),
         ),
       ),
     );
