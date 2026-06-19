@@ -4,8 +4,8 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/app/providers/tabs_screen_provider.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/widgets/app_state_view.dart';
-import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_details_page.dart';
-import 'package:rafeeq/features/adhkar/presentation/riverpod/get_adhkars_provider.dart';
+import 'package:rafeeq/features/adhkar_02/presentation/pages/adhkar_details_page.dart';
+import 'package:rafeeq/features/adhkar_02/presentation/providers/adhkar_providers.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/dhikr/dhikr_notifier_provider.dart';
 import 'package:rafeeq/features/bookmarks/widgets/bookmark_tile.dart';
 
@@ -48,24 +48,17 @@ class _AdhkarBookmarksTabState extends ConsumerState<AdhkarBookmarksTab> {
                 behavior: HitTestBehavior.opaque,
                 onTap: () async {
                   //fetching adhkars
-                  final adhkars = await ref.read(
-                    getAdhkarsProvider([bookMark.categoryId]).future,
-                  );
 
-                  // //fetching actual dhikr
-                  final dhikr = adhkars.firstWhere(
-                    (dhikr) => dhikr.id == bookMark.dhikrId,
+                  final adhkar = await ref.read(
+                    fetchAllAdhkarProvider(bookMark.categoryId).future,
+                  );
+                  final dhikr = adhkar.firstWhere(
+                    (d) => d.id == bookMark.dhikrId,
                   );
 
                   if (!context.mounted) return;
 
-                  AppNav.push(
-                    context,
-                    AdhkarDetailsPage(
-                      adhkars: [dhikr],
-                      title: dhikr.categoryTitle,
-                    ),
-                  );
+                  AppNav.push(context, AdhkarDetailsPage(dhikr: dhikr));
                 },
                 child: BookmarkTile(
                   dhikrBookmark: bookMark,

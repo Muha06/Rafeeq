@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:rafeeq/app/notifications.dart';
 import 'package:rafeeq/features/settings/presentation/provider/notiffications_controller.dart';
-import 'package:riverpod/legacy.dart';
 
 const kAdhkarEnabled =
     'adhkar_notif_enabled'; //a setting inside hive (For user settings)

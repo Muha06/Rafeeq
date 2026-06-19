@@ -2,7 +2,7 @@ name: rafeeq
 description: "An Islamic companion app."
 publish_to: "none"
 
-version: 0.0.1+24  
+version: 0.0.1+24
 
 environment:
   sdk: ^3.10.4
@@ -12,15 +12,10 @@ dependencies:
     sdk: flutter
   flutter_dotenv: ^6.0.0
   http: ^1.6.0
-  riverpod: ^3.1.0
-  flutter_riverpod: ^3.1.0
   hijri_date: ^1.0.0
   shimmer: ^3.0.0
   hive: ^2.2.3
-  hive_generator: ^2.0.1
   hive_flutter: ^1.1.0
-  build_runner: ^2.4.13
-  analyzer: ^6.4.1
   collection: ^1.19.1
   scrollable_positioned_list:
   carousel_slider: ^5.1.1
@@ -66,11 +61,15 @@ dependencies:
   palette_generator_master: ^1.0.1
   firebase_messaging: ^16.2.0
   flutter_linkify: ^6.0.0
+  riverpod: ^2.6.1
+  flutter_riverpod: ^2.6.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  build_runner: ^2.4.13
+  hive_generator: ^2.0.0
 
 flutter:
   uses-material-design: true
@@ -111,7 +110,7 @@ flutter_launcher_icons:
   image_path: "assets/icon/app_icon.png"
 
 flutter_native_splash:
-  color: "#12100e" 
+  color: "#12100e"
   image: assets/icon/app_splash_icon.png
   android: true
   ios: true

@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/features/adhkar/presentation/riverpod/wiring_providers.dart';
-import 'package:rafeeq/features/radio_station/data/radio_remote_ds.dart';
+import 'package:rafeeq/app/providers/wiring_providers.dart';
+ import 'package:rafeeq/features/radio_station/data/radio_remote_ds.dart';
  import 'package:rafeeq/features/radio_station/data/repository/radio_repo_impl.dart';
 import '../../domain/repository/radio_repository.dart';
 

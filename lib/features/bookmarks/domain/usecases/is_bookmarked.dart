@@ -14,7 +14,7 @@ class IsDhikrBookmarked {
   final DhikrBookmarksRepository repo;
   IsDhikrBookmarked(this.repo);
 
-  bool call(int dhikrId) {
+  bool call(String dhikrId) {
     return repo.isBookmarked(dhikrId);
   }
 }

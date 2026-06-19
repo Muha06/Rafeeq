@@ -2,7 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/features/notifications/domain/entities/app_notification.dart';
 import 'package:rafeeq/features/notifications/presentation/providers/wiring_providers.dart';
 
-class NotificationsController extends AsyncNotifier<List<AppNotification>> {
+class NotificationsController
+    extends AutoDisposeAsyncNotifier<List<AppNotification>> {
   @override
   Future<List<AppNotification>> build() async {
     final repo = ref.read(notificationRepoProvider);

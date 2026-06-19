@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/quran/data/dataSources/quran_auth_client.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/wiring_providers.dart';
-import 'package:riverpod/legacy.dart';
 
 //auth client
 final quranAuthClientProvider = Provider<QuranAuthClient>((ref) {

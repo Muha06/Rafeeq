@@ -61,7 +61,7 @@ class _AllahNamesPageState extends ConsumerState<AllahNamesPage> {
             return ListView.separated(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
               itemCount: filtered.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
+              separatorBuilder: (_, _) => const SizedBox(height: 12),
               itemBuilder: (context, i) {
                 final n = filtered[i];
                 return _AllahNameTile(

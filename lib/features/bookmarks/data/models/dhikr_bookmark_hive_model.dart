@@ -5,7 +5,7 @@ part 'dhikr_bookmark_hive_model.g.dart';
 @HiveType(typeId: 32) // make sure this ID is unique in your app
 class DhikrBookmarkHiveModel extends HiveObject {
   @HiveField(0)
-  final int dhikrId; //dhikr id
+  final String dhikrId; //dhikr id
 
   @HiveField(1)
   final String dhikrTitle;
@@ -14,12 +14,12 @@ class DhikrBookmarkHiveModel extends HiveObject {
   final int createdAtMillis;
 
   @HiveField(3)
-  final int categoryId;
+  final String subcategoryId;
 
   DhikrBookmarkHiveModel({
     required this.dhikrId,
     required this.dhikrTitle,
     required this.createdAtMillis,
-    required this.categoryId,
+    required this.subcategoryId,
   });
 }

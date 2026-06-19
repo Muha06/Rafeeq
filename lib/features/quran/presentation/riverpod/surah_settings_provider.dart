@@ -1,6 +1,5 @@
 // Show/hide translation
-import 'package:riverpod/legacy.dart';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 class SurahSettings {
   final bool showTranslation;
   final bool showTranslit;

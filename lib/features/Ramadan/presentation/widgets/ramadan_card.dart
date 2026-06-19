@@ -39,7 +39,7 @@ class _RamadanDailyCardState extends ConsumerState<RamadanDailyCard> {
 
         return ramadanAsync.when(
           loading: () => const SizedBox.shrink(),
-          error: (_, __) => const SizedBox.shrink(),
+          error: (_, _) => const SizedBox.shrink(),
           data: (times) {
             final suhur = times.suhurEnd;
             final iftar = times.iftar;

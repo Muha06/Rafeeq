@@ -41,22 +41,24 @@ class QuranPlannerPage extends ConsumerWidget {
       ),
       body: const Padding(
         padding: EdgeInsets.symmetric(horizontal: 12.0),
-        child: Column(
-          children: [
-            MyQuranGoalCard(),
-            SizedBox(height: 8),
-
-            ProgressBars(
-              bars: [
-                TodayQuranProgressArc(),
-                WeeklyQuranProgressArc(),
-                MonthlyQuranProgressArc(),
-              ],
-            ),
-            SizedBox(height: 8),
-
-            WeeklyQuranChart(),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              MyQuranGoalCard(),
+              SizedBox(height: 8),
+          
+              ProgressBars(
+                bars: [
+                  TodayQuranProgressArc(),
+                  WeeklyQuranProgressArc(),
+                  MonthlyQuranProgressArc(),
+                ],
+              ),
+              SizedBox(height: 8),
+          
+              WeeklyQuranChart(),
+            ],
+          ),
         ),
       ),
     );

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/features/adhkar/presentation/widgets/adhkar_reminder_card.dart';
+import 'package:rafeeq/features/adhkar_02/presentation/widgets/adhkar_reminder_card.dart';
 import 'package:rafeeq/features/home/presentation/widgets/friday_reminder_card.dart';
 import 'package:rafeeq/features/settings/presentation/provider/settings_notifcation_provider.dart';
 

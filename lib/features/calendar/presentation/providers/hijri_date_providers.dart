@@ -1,8 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hijri_date/hijri.dart';
 import 'package:rafeeq/features/calendar/datasources/calender_local_ds.dart';
-import 'package:riverpod/legacy.dart';
-
+ 
 /// Storage provider
 final hijriOffsetStorageProvider = Provider<HijriOffsetStorage>((ref) {
   return HijriOffsetStorage();

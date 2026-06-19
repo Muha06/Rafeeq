@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:rafeeq/features/adhkar/presentation/riverpod/wiring_providers.dart';
-import 'package:rafeeq/features/notifications/data/datasources/app_notifications_remote_ds.dart';
+import 'package:rafeeq/app/providers/wiring_providers.dart';
+ import 'package:rafeeq/features/notifications/data/datasources/app_notifications_remote_ds.dart';
 import 'package:rafeeq/features/notifications/data/datasources/notifications_local_ds.dart';
 import 'package:rafeeq/features/notifications/data/repository/app_notification_repo_impl.dart';
 import 'package:rafeeq/features/notifications/domain/entities/app_notification.dart';

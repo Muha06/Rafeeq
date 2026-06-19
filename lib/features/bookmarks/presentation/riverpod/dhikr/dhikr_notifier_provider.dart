@@ -19,7 +19,7 @@ class DhikrBookmarksNotifier extends Notifier<List<DhikrBookmark>> {
     state = [...state, bookmark];
   }
 
-  Future<void> remove(int bookmarkId) async {
+  Future<void> remove(String bookmarkId) async {
     await ref.read(removeDhikrBookmarkUseCaseProvider).call(bookmarkId);
 
     state = state.where((b) => b.dhikrId != bookmarkId).toList();
@@ -38,7 +38,7 @@ class DhikrBookmarksNotifier extends Notifier<List<DhikrBookmark>> {
    
 }
 
-final isDhikrBookmarkedProvider = Provider.family<bool, int>((ref, id) {
+final isDhikrBookmarkedProvider = Provider.family<bool, String>((ref, id) {
   final bookmarks = ref.watch(dhikrBookmarksProvider);
   return bookmarks.any((b) => b.dhikrId == id);
 });

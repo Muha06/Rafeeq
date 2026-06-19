@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/features/feedback/data/models/feedback_model.dart';
 import 'package:rafeeq/features/feedback/presentation/providers/wiring_providers.dart';
 
-class FeedbackController extends AsyncNotifier<void> {
+class FeedbackController extends AutoDisposeAsyncNotifier<void> {
   @override
   Future<void> build() async {
     // no initial state needed
