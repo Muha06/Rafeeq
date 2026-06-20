@@ -4,7 +4,7 @@ class DhikrCategoryDto {
   final String id;
   final String title;
   final String slug;
-   final int sortOrder;
+  final int sortOrder;
   final String createdAt;
   final String updatedAt;
 
@@ -12,7 +12,7 @@ class DhikrCategoryDto {
     required this.id,
     required this.title,
     required this.slug,
-     required this.sortOrder,
+    required this.sortOrder,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -23,7 +23,7 @@ class DhikrCategoryDto {
       id: json['id'],
       title: json['title'],
       slug: json['slug'],
-       sortOrder: json['sort_order'],
+      sortOrder: json['sort_order'],
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
     );
@@ -35,7 +35,7 @@ class DhikrCategoryDto {
       id: id,
       title: title,
       slug: slug,
-       sortOrder: sortOrder,
+      sortOrder: sortOrder,
       createdAt: DateTime.parse(createdAt),
       updatedAt: DateTime.parse(updatedAt),
     );

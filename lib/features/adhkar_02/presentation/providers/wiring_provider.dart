@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive/hive.dart';
 import 'package:rafeeq/app/providers/wiring_providers.dart';
 import 'package:rafeeq/features/adhkar_02/data/datasources/adhkar_audio_remote_ds.dart';
+import 'package:rafeeq/features/adhkar_02/data/datasources/adhkar_local_ds.dart';
 import 'package:rafeeq/features/adhkar_02/data/datasources/dhikr_remote_datasource.dart';
 import 'package:rafeeq/features/adhkar_02/data/repositories/audio_repo_impl.dart';
 import 'package:rafeeq/features/adhkar_02/data/repositories/dhikr_repo_impl.dart';
@@ -10,15 +12,27 @@ import 'package:rafeeq/features/adhkar_02/domain/usecases/fetch_all_adhkar.dart'
 import 'package:rafeeq/features/adhkar_02/domain/usecases/get_adhkar_audio_urls.dart';
 import 'package:rafeeq/features/adhkar_02/domain/entities/adhkar_audio_urls.dart';
 import 'package:rafeeq/features/adhkar_02/domain/usecases/fetch_all_categories.dart';
- 
+
 final adhkarRemoteDataSourceProvider = Provider<AdhkarRemoteDataSource>((ref) {
   final client = ref.watch(supabaseClientProvider);
   return AdhkarRemoteDatasourceImpl(client: client);
 });
 
+final adhkarBoxProvider = Provider((ref) {
+  return Hive.box('adhkar_cache_box');
+});
+final adhkarLocalDsProvider = Provider((ref) {
+  final box = ref.read(adhkarBoxProvider);
+  return AdhkarLocalDs(box);
+});
+
 final adhkarRepoProvider = Provider<AdkarRepo>((ref) {
   final remoteDataSource = ref.watch(adhkarRemoteDataSourceProvider);
-  return DhikrRepoImpl(remoteDataSource: remoteDataSource);
+  final localDs = ref.watch(adhkarLocalDsProvider);
+  return DhikrRepoImpl(
+    remoteDataSource: remoteDataSource,
+    localDataSource: localDs,
+  );
 });
 
 final fetchAllAdhkarUsecaseProvider = Provider<FetchAllAdhkarUsecase>((ref) {
@@ -30,8 +44,6 @@ final fetchAllCategoriesUsecaseProvider = Provider<FetchAllCategories>((ref) {
   final repo = ref.watch(adhkarRepoProvider);
   return FetchAllCategories(repository: repo);
 });
-
- 
 
 //Audio Remote
 final dhikrAudioRemoteDsProvider = Provider<DhikrAudioRemoteDataSource>((ref) {

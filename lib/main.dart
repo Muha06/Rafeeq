@@ -17,6 +17,9 @@ import 'package:rafeeq/core/app_keys.dart';
 import 'package:rafeeq/core/features/audio/data/audio_handler.dart';
 import 'package:rafeeq/core/themes/dark_theme.dart';
 import 'package:rafeeq/core/themes/light_theme.dart';
+import 'package:rafeeq/features/adhkar_02/data/models/hive/category_hive_wrapper.dart';
+import 'package:rafeeq/features/adhkar_02/data/models/hive/dhikr_category_hive.dart';
+import 'package:rafeeq/features/adhkar_02/data/models/hive/dhikr_hive_model.dart';
 import 'package:rafeeq/features/notifications/data/datasources/app_notifications_remote_ds.dart';
 import 'package:rafeeq/features/notifications/data/datasources/push_notification_services.dart';
 import 'package:rafeeq/features/asma_ul_husna/data/models/hive/name_hive_model.dart';
@@ -79,12 +82,15 @@ void main() {
       await Hive.initFlutter();
 
       // Register Hive adapters
-      Hive.registerAdapter(QuranBookmarkHiveModelAdapter());
-      Hive.registerAdapter(DhikrBookmarkHiveModelAdapter());
-      Hive.registerAdapter(CachedSalahTimesHiveAdapter());
-      Hive.registerAdapter(AllahNameHiveAdapter());
-      Hive.registerAdapter(QuranReadingPlanHiveAdapter());
-      Hive.registerAdapter(QuranHiveLogAdapter());
+      Hive.registerAdapter(QuranReadingPlanHiveAdapter()); // TypeId = 10
+      Hive.registerAdapter(QuranHiveLogAdapter()); // TypeId = 11
+      Hive.registerAdapter(AllahNameHiveAdapter()); // TypeId = 30
+      Hive.registerAdapter(QuranBookmarkHiveModelAdapter()); // TypeId = 31
+      Hive.registerAdapter(DhikrBookmarkHiveModelAdapter()); // TypeId = 32
+      Hive.registerAdapter(DhikrCategoryHiveAdapter()); // TypeId = 33
+      Hive.registerAdapter(DhikrHiveModelAdapter()); // TypeId = 34
+      Hive.registerAdapter(CategoryCacheHiveAdapter()); // TypeId = 35
+      Hive.registerAdapter(CachedSalahTimesHiveAdapter()); // TypeId = 41
 
       // Open Hive boxes
       await Hive.openBox<QuranReadingPlanHive>('quran_reading_plan');
@@ -97,6 +103,7 @@ void main() {
       await Hive.openBox<CachedSalahTimesHive>('salah_times_cache_box');
       await Hive.openBox('settingsBox');
       await Hive.openBox('read_notifications');
+      await Hive.openBox('adhkar_cache_box');
 
       // Notifications
       await NotificationService.instance.init();
