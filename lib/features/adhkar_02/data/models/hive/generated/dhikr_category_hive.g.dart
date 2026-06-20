@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'dhikr_category_hive.dart';
+part of '../dhikr_category_hive.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator

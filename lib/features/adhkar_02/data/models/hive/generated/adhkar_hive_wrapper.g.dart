@@ -1,35 +1,38 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'category_hive_wrapper.dart';
+part of '../adhkar_hive_wrapper.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class CategoryCacheHiveAdapter extends TypeAdapter<CategoryCacheHive> {
+class AdhkarHiveWrapperAdapter extends TypeAdapter<AdhkarHiveWrapper> {
   @override
-  final int typeId = 35;
+  final int typeId = 36;
 
   @override
-  CategoryCacheHive read(BinaryReader reader) {
+  AdhkarHiveWrapper read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return CategoryCacheHive(
-      cachedAt: fields[0] as DateTime,
-      categories: (fields[1] as List).cast<DhikrCategoryHive>(),
+    return AdhkarHiveWrapper(
+      categoryId: fields[0] as String,
+      cachedAt: fields[1] as DateTime,
+      dhikrs: (fields[2] as List).cast<DhikrHiveModel>(),
     );
   }
 
   @override
-  void write(BinaryWriter writer, CategoryCacheHive obj) {
+  void write(BinaryWriter writer, AdhkarHiveWrapper obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
-      ..write(obj.cachedAt)
+      ..write(obj.categoryId)
       ..writeByte(1)
-      ..write(obj.categories);
+      ..write(obj.cachedAt)
+      ..writeByte(2)
+      ..write(obj.dhikrs);
   }
 
   @override
@@ -38,7 +41,7 @@ class CategoryCacheHiveAdapter extends TypeAdapter<CategoryCacheHive> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CategoryCacheHiveAdapter &&
+      other is AdhkarHiveWrapperAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

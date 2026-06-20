@@ -17,6 +17,7 @@ import 'package:rafeeq/core/app_keys.dart';
 import 'package:rafeeq/core/features/audio/data/audio_handler.dart';
 import 'package:rafeeq/core/themes/dark_theme.dart';
 import 'package:rafeeq/core/themes/light_theme.dart';
+import 'package:rafeeq/features/adhkar_02/data/models/hive/adhkar_hive_wrapper.dart';
 import 'package:rafeeq/features/adhkar_02/data/models/hive/category_hive_wrapper.dart';
 import 'package:rafeeq/features/adhkar_02/data/models/hive/dhikr_category_hive.dart';
 import 'package:rafeeq/features/adhkar_02/data/models/hive/dhikr_hive_model.dart';
@@ -90,6 +91,7 @@ void main() {
       Hive.registerAdapter(DhikrCategoryHiveAdapter()); // TypeId = 33
       Hive.registerAdapter(DhikrHiveModelAdapter()); // TypeId = 34
       Hive.registerAdapter(CategoryCacheHiveAdapter()); // TypeId = 35
+      Hive.registerAdapter(AdhkarHiveWrapperAdapter()); // TypeId = 36
       Hive.registerAdapter(CachedSalahTimesHiveAdapter()); // TypeId = 41
 
       // Open Hive boxes

@@ -1,12 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/features/adhkar_02/presentation/providers/wiring_provider.dart';
 
-final fetchAdhkarCategoriesProvider = FutureProvider.autoDispose((ref) async {
+final fetchAdhkarCategoriesProvider = FutureProvider((ref) async {
   final usecase = ref.watch(fetchAllCategoriesUsecaseProvider);
   return await usecase.call();
 });
 
-final fetchAllAdhkarProvider = FutureProvider.family.autoDispose((
+final fetchAllAdhkarProvider = FutureProvider.family((
   ref,
   String subcategoryId,
 ) async {

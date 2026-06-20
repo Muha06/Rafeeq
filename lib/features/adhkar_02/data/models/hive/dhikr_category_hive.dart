@@ -1,7 +1,7 @@
 import 'package:hive/hive.dart';
 import 'package:rafeeq/features/adhkar_02/domain/entities/dhikr_category.dart';
 
-part 'dhikr_category_hive.g.dart';
+part 'generated/dhikr_category_hive.g.dart';
 
 @HiveType(typeId: 33)
 class DhikrCategoryHive extends HiveObject {
