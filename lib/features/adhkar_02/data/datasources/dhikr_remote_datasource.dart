@@ -20,8 +20,6 @@ class AdhkarRemoteDatasourceImpl implements AdhkarRemoteDataSource {
           .select()
           .order('sort_order', ascending: true);
 
-      debugPrint('response: $response');
-
       return response.map((json) => DhikrCategoryDto.fromJson(json)).toList();
     } catch (e) {
       debugPrint('Error fetching categories: $e');
@@ -37,8 +35,6 @@ class AdhkarRemoteDatasourceImpl implements AdhkarRemoteDataSource {
           .select()
           .eq('category_id', categoryId)
           .order('sort_order', ascending: true);
-
-      debugPrint('response: $response');
 
       return response.map((json) => DhikrDto.fromJson(json)).toList();
     } catch (e) {

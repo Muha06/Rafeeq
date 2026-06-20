@@ -202,7 +202,7 @@ class _AdhkarDetailsSectionState extends ConsumerState<AdhkarDetailsSection> {
                         onPressed: () {
                           final bookmark = DhikrBookmark(
                             dhikrId: dhikr.id,
-                            title: dhikr.transliteration ?? '',
+                            title: dhikr.title,
                             categoryId: dhikr.categoryId,
                             createdAt: DateTime.now(),
                           );

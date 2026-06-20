@@ -15,14 +15,14 @@ class DhikrDto {
 
   const DhikrDto({
     required this.id,
-    required  this.title,
+    required this.title,
     required this.arabicText,
     required this.englishText,
     this.transliteration,
     required this.repeat,
     required this.sortOrder,
     required this.categoryId,
-      this.audio,
+    this.audio,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -53,6 +53,7 @@ class DhikrDto {
       englishText: englishText,
       transliteration: transliteration,
       repeat: repeat,
+      sortOrder: sortOrder,
       audioUrl: audio,
       categoryId: categoryId,
       createdAt: createdAt,
