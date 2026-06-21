@@ -53,12 +53,17 @@ class _AdhkarBookmarksTabState extends ConsumerState<AdhkarBookmarksTab> {
                     fetchAllAdhkarProvider(bookMark.categoryId).future,
                   );
                   final dhikr = adhkar.firstWhere(
-                    (d) => d.id == bookMark.dhikrId,
+                    (e) => e.id == bookMark.dhikrId,
                   );
 
                   if (!context.mounted) return;
 
-                  AppNav.push(context, AdhkarDetailsPage(dhikr: dhikr));
+                  final index = adhkar.indexOf(dhikr);
+                  
+                  AppNav.push(
+                    context,
+                    AdhkarDetailsPage(adhkars: adhkar, initialIndex: index),
+                  );
                 },
                 child: BookmarkTile(
                   dhikrBookmark: bookMark,

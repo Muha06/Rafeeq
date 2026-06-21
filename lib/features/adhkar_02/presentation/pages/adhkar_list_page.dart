@@ -40,7 +40,10 @@ class AdhkarPreviewPages extends ConsumerWidget {
                   onTap: () =>
                       AppNav.push(
                         context,
-                        AdhkarDetailsPage(dhikr: dhikr),
+                        AdhkarDetailsPage(
+                          adhkars: adhkars,
+                          initialIndex: index,
+                        ),
                       ).then(
                         (value) => RafeeqAnalytics.logScreenView(
                           'adhkar_details_page',
@@ -75,7 +78,7 @@ class AdhkarPreviewPages extends ConsumerWidget {
 
                         Expanded(
                           child: Text(
-                            dhikr.title  ,
+                            dhikr.title,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: theme.textTheme.bodyMedium,

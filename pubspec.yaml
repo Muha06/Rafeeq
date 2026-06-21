@@ -63,6 +63,8 @@ dependencies:
   flutter_linkify: ^6.0.0
   riverpod: ^2.6.1
   flutter_riverpod: ^2.6.1
+  floating_draggable_widget: ^2.3.0
+  vibration: ^3.2.0
 
 dev_dependencies:
   flutter_test:

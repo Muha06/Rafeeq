@@ -1,3 +1,4 @@
+import 'package:floating_draggable_widget/floating_draggable_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,34 +9,117 @@ import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/core/themes/app_text_style.dart';
-import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/features/adhkar_02/domain/entities/dhikr_entity.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/dhikr_bookmark.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/dhikr/dhikr_notifier_provider.dart';
+import 'package:vibration/vibration.dart';
 
 class AdhkarDetailsPage extends ConsumerStatefulWidget {
-  const AdhkarDetailsPage({super.key, required this.dhikr});
+  const AdhkarDetailsPage({
+    super.key,
+    required this.adhkars,
+    required this.initialIndex,
+  });
 
-  final Dhikr dhikr;
+  final List<Dhikr> adhkars;
+  final int initialIndex;
   @override
   ConsumerState<AdhkarDetailsPage> createState() => _AdhkarDetailsPageState();
 }
 
 class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
+  late final PageController _controller;
+  int currentIndex = 0;
+  int _dhikrCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = PageController(initialPage: widget.initialIndex);
+    currentIndex = widget.initialIndex;
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final dhikr = widget.adhkars[currentIndex];
 
-    return SafeArea(
-      top: false,
-      bottom: true,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.dhikr.title, style: theme.textTheme.titleMedium),
-          bottom: appBarBottomDivider(context),
-        ),
-        body: AdhkarDetailsSection(dhikr: widget.dhikr),
-      ),
+    return LayoutBuilder(
+      builder: (context, _) {
+        final screenHeight = MediaQuery.of(context).size.height;
+        final screenWidth = MediaQuery.of(context).size.width;
+
+        return FloatingDraggableWidget(
+          mainScreenWidget: SafeArea(
+            top: false,
+            bottom: true,
+            child: Scaffold(
+              appBar: AppBar(
+                title: Text(dhikr.title, style: theme.textTheme.titleMedium),
+                bottom: PreferredSize(
+                  preferredSize: const Size.fromHeight(1),
+                  child: LinearProgressIndicator(
+                    value: (currentIndex + 1) / widget.adhkars.length,
+                  ),
+                ),
+              ),
+              body: PageView.builder(
+                controller: _controller,
+                itemCount: widget.adhkars.length,
+                onPageChanged: (index) {
+                  setState(() {
+                    currentIndex = index;
+                    _dhikrCount = 0;
+                  });
+                },
+                itemBuilder: (context, index) {
+                  final dhikr = widget.adhkars[index];
+                  return AdhkarDetailsSection(dhikr: dhikr);
+                },
+              ),
+            ),
+          ),
+          floatingWidget: DhikrFloatingButton(
+            count: _dhikrCount,
+            total: dhikr.repeat,
+            onTap: () async {
+              final isCompleting = _dhikrCount + 1 >= dhikr.repeat;
+
+              if (isCompleting) {
+                await Vibration.vibrate(
+                  pattern: [0, 80, 50, 120],
+                  amplitude: 255,
+                );
+              } else {
+                await Vibration.vibrate(
+                  duration: 20,
+                  amplitude: 80,
+                ); // soft normal tap
+              }
+
+              setState(() {
+                if (_dhikrCount < dhikr.repeat) {
+                  _dhikrCount++;
+                } else if (_dhikrCount == dhikr.repeat) {
+                  _dhikrCount = 0;
+                }
+              });
+            },
+          ),
+          floatingWidgetHeight: 64,
+          floatingWidgetWidth: 64,
+          dy: screenHeight - 150,
+          dx: screenWidth - 100,
+        );
+      },
     );
   }
 }
@@ -148,7 +232,6 @@ class _AdhkarDetailsSectionState extends ConsumerState<AdhkarDetailsSection> {
                                 : PhosphorIcons.play(),
                           ),
                   ),
-                  const SizedBox(),
 
                   //copy
                   IconButton(
@@ -229,6 +312,65 @@ class _AdhkarDetailsSectionState extends ConsumerState<AdhkarDetailsSection> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class DhikrFloatingButton extends StatelessWidget {
+  const DhikrFloatingButton({
+    super.key,
+    required this.count,
+    required this.total,
+    required this.onTap,
+  });
+
+  final int count;
+  final int total;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final progress = total == 0 ? 0.0 : count / total;
+    final theme = Theme.of(context);
+    final tt = theme.textTheme;
+    final cs = theme.colorScheme;
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Container(
+            width: 72,
+            height: 72,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: cs.surfaceContainer,
+              boxShadow: [
+                BoxShadow(
+                  color: cs.onSurfaceVariant,
+                  blurRadius: 20,
+                  offset: const Offset(0, 8),
+                ),
+              ],
+            ),
+          ),
+
+          SizedBox(
+            width: 72,
+            height: 72,
+            child: CircularProgressIndicator(value: progress, strokeWidth: 5),
+          ),
+
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("$count", style: tt.titleLarge),
+              Text("/ $total", style: tt.labelMedium),
+            ],
+          ),
+        ],
       ),
     );
   }
