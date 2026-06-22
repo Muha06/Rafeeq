@@ -114,7 +114,7 @@ class _BookmarkTileState extends ConsumerState<BookmarkTile> {
             onPressed: () {
               AppSheets.showBottomSheet(
                 context: context,
-                showDragHandle: true,
+                showDragHandle: false,
                 useSafeArea: true,
                 child: BookmarkActionBottomSheet(
                   quranBookmark: quranBookmark,

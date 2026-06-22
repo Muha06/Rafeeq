@@ -18,28 +18,18 @@ class BookmarkActionBottomSheet extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 14),
       child: SafeArea(
         top: false,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _ActionTile(
+            _ActionTile( 
               icon: PhosphorIcons.trash(),
               title: 'Delete',
               subtitle: 'This can’t be undone',
               onTap: onDeleteBookmark,
             ),
-
-            const SizedBox(height: 16),
-
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('Cancel'),
-            ),
-            const SizedBox(height: 8),
           ],
         ),
       ),
