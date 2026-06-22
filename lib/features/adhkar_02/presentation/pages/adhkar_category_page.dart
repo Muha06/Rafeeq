@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
+import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/features/adhkar_02/domain/entities/dhikr_category.dart';
 import 'package:rafeeq/features/adhkar_02/presentation/pages/adhkar_list_page.dart';
 import 'package:rafeeq/features/adhkar_02/presentation/providers/adhkar_providers.dart';
@@ -45,7 +46,12 @@ class _AdhkarCategoryPageState extends ConsumerState<AdhkarCategoryPage> {
             },
           );
         },
-        error: (error, stack) => Center(child: Text('Error: $error')),
+        error: (error, stack) => AppStateView(
+          title: '',
+          message: 'Failed to load categories. Please try again.',
+          buttonText: 'Retry',
+          onPressed: () => ref.refresh(fetchAdhkarCategoriesProvider),
+        ),
         loading: () => const Center(child: CircularProgressIndicator()),
       ),
     );

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:floating_draggable_widget/floating_draggable_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -61,29 +63,45 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
           mainScreenWidget: SafeArea(
             top: false,
             bottom: true,
-            child: Scaffold(
-              appBar: AppBar(
-                title: Text(dhikr.title, style: theme.textTheme.titleMedium),
-                bottom: PreferredSize(
-                  preferredSize: const Size.fromHeight(1),
-                  child: LinearProgressIndicator(
-                    value: (currentIndex + 1) / widget.adhkars.length,
+            child: SafeArea(
+              child: Scaffold(
+                appBar: AppBar(
+                  title: Text(dhikr.title, style: theme.textTheme.titleMedium),
+                  bottom: PreferredSize(
+                    preferredSize: const Size.fromHeight(1),
+                    child: LinearProgressIndicator(
+                      value: (currentIndex + 1) / widget.adhkars.length,
+                    ),
                   ),
                 ),
-              ),
-              body: PageView.builder(
-                controller: _controller,
-                itemCount: widget.adhkars.length,
-                onPageChanged: (index) {
-                  setState(() {
-                    currentIndex = index;
-                    _dhikrCount = 0;
-                  });
-                },
-                itemBuilder: (context, index) {
-                  final dhikr = widget.adhkars[index];
-                  return AdhkarDetailsSection(dhikr: dhikr);
-                },
+
+                body: Stack(
+                  children: [
+                    PageView.builder(
+                      controller: _controller,
+                      itemCount: widget.adhkars.length,
+                      onPageChanged: (index) {
+                        setState(() {
+                          currentIndex = index;
+                          _dhikrCount = 0;
+                        });
+                      },
+                      itemBuilder: (context, index) {
+                        final dhikr = widget.adhkars[index];
+
+                        return AdhkarDetailsSection(dhikr: dhikr);
+                      },
+                    ),
+
+                    // Fixed bottom nav bar
+                    Positioned(
+                      bottom: 16,
+                      left: 16,
+                      right: 16,
+                      child: _BottomNavBar(dhikr: dhikr),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -101,15 +119,15 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
               } else {
                 await Vibration.vibrate(
                   duration: 20,
-                  amplitude: 80,
+                  amplitude: 150,
                 ); // soft normal tap
               }
 
               setState(() {
-                if (_dhikrCount < dhikr.repeat) {
-                  _dhikrCount++;
-                } else if (_dhikrCount == dhikr.repeat) {
+                if (_dhikrCount >= dhikr.repeat) {
                   _dhikrCount = 0;
+                } else {
+                  _dhikrCount++;
                 }
               });
             },
@@ -120,6 +138,200 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
           dx: screenWidth - 100,
         );
       },
+    );
+  }
+}
+
+class _BottomNavBar extends ConsumerWidget {
+  const _BottomNavBar({super.key, required this.dhikr});
+  final Dhikr dhikr;
+
+  @override
+  Widget build(BuildContext context, ref) {
+    final cs = Theme.of(context).colorScheme;
+
+    void toggleBookmark(Dhikr dhikr) {
+      final bookmark = DhikrBookmark(
+        dhikrId: dhikr.id,
+        title: dhikr.title,
+        categoryId: dhikr.categoryId,
+        createdAt: DateTime.now(),
+      );
+
+      ref.read(dhikrBookmarksProvider.notifier).toggle(bookmark);
+
+      RafeeqAnalytics.logFeature('bookmarked_dhikr');
+    }
+
+    Future<void> copyDhikr(Dhikr dhikr) async {
+      final transliteration = dhikr.transliteration;
+
+      final buffer = StringBuffer();
+
+      // Arabic
+      buffer.writeln(cleanDhikr(dhikr.arabicText));
+      buffer.writeln();
+
+      // Transliteration
+      if (transliteration != null && transliteration.trim().isNotEmpty) {
+        buffer.writeln("Transliteration:");
+        buffer.writeln(transliteration.trim());
+        buffer.writeln();
+      }
+
+      // Translation
+      if ((dhikr.englishText).trim().isNotEmpty) {
+        buffer.writeln("Translation:");
+        buffer.writeln(dhikr.englishText.trim());
+        buffer.writeln();
+      }
+
+      // Repeat
+      buffer.writeln("Repeat ${dhikr.repeat} times");
+
+      await Clipboard.setData(ClipboardData(text: buffer.toString().trim()));
+
+      if (context.mounted) {
+        AppSnackBar.showSimple(context: context, message: "Dhikr copied");
+      }
+    }
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(999),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+        child: Container(
+          height: 64,
+          padding: const EdgeInsets.symmetric(horizontal: 18),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(40),
+            color: cs.surface.withAlpha(100),
+            border: Border.all(color: cs.outlineVariant.withAlpha(25)),
+            boxShadow: [
+              BoxShadow(
+                color: cs.shadow.withAlpha(50),
+                blurRadius: 20,
+                offset: const Offset(0, 10),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              // Bookmark
+              Consumer(
+                builder: (context, ref, _) {
+                  final isBookmarked = ref.watch(
+                    isDhikrBookmarkedProvider(dhikr.id),
+                  );
+
+                  return _BottomNavItem(
+                    icon: PhosphorIcon(
+                      size: 20,
+                      color: isBookmarked ? cs.primary : null,
+                      PhosphorIcons.bookmark(
+                        isBookmarked
+                            ? PhosphorIconsStyle.fill
+                            : PhosphorIconsStyle.regular,
+                      ),
+                    ),
+                    label: isBookmarked ? 'Saved' : 'Save',
+                    onTap: () {
+                      toggleBookmark(dhikr);
+                    },
+                  );
+                },
+              ),
+
+              // Play
+              if (dhikr.audioUrl != null)
+                Consumer(
+                  builder: (context, ref, _) {
+                    final audioState = ref.watch(audioControllerProvider);
+                    final audioCtrl = ref.read(
+                      audioControllerProvider.notifier,
+                    );
+
+                    final isCurrent =
+                        audioState.currentId == dhikr.id.toString();
+                    final isPlaying = audioState.isPlaying && isCurrent;
+
+                    return _BottomNavItem(
+                      icon: audioState.isBuffering
+                          ? const SizedBox(
+                              width: 18,
+                              height: 18,
+                              child: CupertinoActivityIndicator(),
+                            )
+                          : PhosphorIcon(
+                              isPlaying
+                                  ? PhosphorIcons.pause()
+                                  : PhosphorIcons.play(),
+                              size: 20,
+                            ),
+                      label: 'Play',
+                      onTap: () {
+                        audioCtrl.togglePlay(
+                          context: context,
+                          currentId: dhikr.id.toString(),
+                          url: dhikr.audioUrl!,
+                          showAudioPlayer: true,
+                          title: dhikr.transliteration ?? 'adhkar',
+                        );
+                      },
+                    );
+                  },
+                ),
+
+              // Copy
+              _BottomNavItem(
+                icon: PhosphorIcon(PhosphorIcons.copy(), size: 20),
+                label: 'Copy',
+                onTap: () async {
+                  copyDhikr(dhikr);
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _BottomNavItem extends StatelessWidget {
+  const _BottomNavItem({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  final Widget icon;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final tt = Theme.of(context).textTheme;
+
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: SizedBox(
+        height: double.infinity,
+        width: 80,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(width: 28, height: 28, child: Center(child: icon)),
+
+            const SizedBox(height: 2),
+
+            Text(label, style: tt.labelSmall),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -139,16 +351,6 @@ class _AdhkarDetailsSectionState extends ConsumerState<AdhkarDetailsSection> {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
     final dhikr = widget.dhikr;
-    final dhikrId = dhikr.id;
-    final transliteration =
-        dhikr.transliteration ?? 'No transliteration available';
-    final audioState = ref.watch(audioControllerProvider);
-    final isCurrent = audioState.currentId == dhikrId.toString();
-
-    final isPlaying = audioState.isPlaying && isCurrent;
-    final buffering = audioState.isBuffering;
-
-    final ctrl = ref.watch(audioControllerProvider.notifier);
 
     final TextStyle bodyTextstyle = textTheme.bodyMedium!.copyWith(
       fontSize: 16,
@@ -156,8 +358,9 @@ class _AdhkarDetailsSectionState extends ConsumerState<AdhkarDetailsSection> {
     final cs = theme.colorScheme;
 
     Widget section(String title, String? text) {
-      final t = (text ?? '').trim();
-      if (t.isEmpty) return const SizedBox.shrink();
+      final hasValidText = text != null && text.isNotEmpty;
+
+      if (!hasValidText) return const SizedBox.shrink();
 
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -165,7 +368,7 @@ class _AdhkarDetailsSectionState extends ConsumerState<AdhkarDetailsSection> {
           Text(title, style: textTheme.bodySmall), //header
           const SizedBox(height: 8),
 
-          Text(t, style: bodyTextstyle), //text
+          Text(text, style: bodyTextstyle), //text
           const SizedBox(height: 24),
         ],
       );
@@ -204,111 +407,7 @@ class _AdhkarDetailsSectionState extends ConsumerState<AdhkarDetailsSection> {
               //note
               section('Notes', 'Repeat ${dhikr.repeat} times'),
 
-              const Divider(height: 8),
-
-              //controls section
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  IconButton(
-                    visualDensity: VisualDensity.compact,
-                    iconSize: 20,
-                    onPressed: (buffering || dhikr.audioUrl == null)
-                        ? null
-                        : () {
-                            ctrl.togglePlay(
-                              context: context,
-                              currentId: dhikrId.toString(),
-                              url: dhikr.audioUrl!,
-                              showAudioPlayer: true,
-                              title: dhikr.transliteration ?? 'adhkar',
-                            );
-                          },
-                    icon: buffering
-                        ? const CupertinoActivityIndicator()
-                        : PhosphorIcon(
-                            isPlaying
-                                ? PhosphorIcons.pause()
-                                : PhosphorIcons.play(),
-                          ),
-                  ),
-
-                  //copy
-                  IconButton(
-                    visualDensity: VisualDensity.compact,
-                    iconSize: 22,
-                    onPressed: () async {
-                      final buffer = StringBuffer();
-
-                      // Arabic
-                      buffer.writeln(cleanDhikr(dhikr.arabicText));
-                      buffer.writeln();
-
-                      // Transliteration
-                      if (transliteration.trim().isNotEmpty) {
-                        buffer.writeln("Transliteration:");
-                        buffer.writeln(transliteration.trim());
-                        buffer.writeln();
-                      }
-
-                      // Translation
-                      if ((dhikr.englishText).trim().isNotEmpty) {
-                        buffer.writeln("Translation:");
-                        buffer.writeln(dhikr.englishText.trim());
-                        buffer.writeln();
-                      }
-
-                      // Repeat
-                      buffer.writeln("Repeat ${dhikr.repeat} times");
-
-                      await Clipboard.setData(
-                        ClipboardData(text: buffer.toString().trim()),
-                      );
-
-                      if (context.mounted) {
-                        AppSnackBar.showSimple(
-                          context: context,
-                          message: "Dhikr copied",
-                        );
-                      }
-                    },
-                    icon: PhosphorIcon(PhosphorIcons.copy()),
-                  ),
-
-                  Consumer(
-                    builder: (context, ref, child) {
-                      final isBookmarked = ref.watch(
-                        isDhikrBookmarkedProvider(dhikr.id),
-                      );
-
-                      return IconButton(
-                        onPressed: () {
-                          final bookmark = DhikrBookmark(
-                            dhikrId: dhikr.id,
-                            title: dhikr.title,
-                            categoryId: dhikr.categoryId,
-                            createdAt: DateTime.now(),
-                          );
-
-                          ref
-                              .read(dhikrBookmarksProvider.notifier)
-                              .toggle(bookmark);
-
-                          RafeeqAnalytics.logFeature('bookmarked_dhikr');
-                        },
-                        icon: PhosphorIcon(
-                          PhosphorIcons.bookmark(
-                            isBookmarked
-                                ? PhosphorIconsStyle.fill
-                                : PhosphorIconsStyle.regular,
-                          ),
-                          color: isBookmarked ? cs.primary : cs.onSurface,
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
+              const SizedBox(height: 80),
             ],
           ),
         ),
@@ -349,9 +448,9 @@ class DhikrFloatingButton extends StatelessWidget {
               color: cs.surfaceContainer,
               boxShadow: [
                 BoxShadow(
-                  color: cs.onSurfaceVariant,
-                  blurRadius: 20,
-                  offset: const Offset(0, 8),
+                  color: cs.shadow,
+                  blurRadius: 16,
+                  offset: const Offset(0, 4),
                 ),
               ],
             ),

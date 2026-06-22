@@ -30,7 +30,7 @@ class AppStateView extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // 🔥 Icon
+            //  Icon
             if (icon != null)
               Container(
                 padding: const EdgeInsets.all(16),
