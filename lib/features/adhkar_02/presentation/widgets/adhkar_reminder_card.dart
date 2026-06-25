@@ -3,11 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
+import 'package:rafeeq/core/helpers/app_nav.dart';
+import 'package:rafeeq/core/helpers/snackbars.dart';
+import 'package:rafeeq/features/adhkar_02/domain/entities/dhikr_entity.dart';
+import 'package:rafeeq/features/adhkar_02/presentation/pages/adhkar_details_page.dart';
+import 'package:rafeeq/features/adhkar_02/presentation/providers/adhkar_providers.dart';
 import 'package:rafeeq/features/adhkar_02/presentation/providers/wiring_provider.dart';
- 
+
 class AdhkarReminderCard extends ConsumerWidget {
   const AdhkarReminderCard({super.key, required this.isMorning});
   final bool isMorning;
+
+  static const String morningCategoryId =
+      '74f733e9-bb91-433c-99b6-5ff225110388';
+  static const String eveningCategoryId =
+      'ec8a1d04-5d2e-43a5-b68a-69e0c58c74a3';
+
+  static Future<List<Dhikr>> _fetch(String categoryId, WidgetRef ref) async {
+    return await ref.read(fetchAllAdhkarProvider(categoryId).future);
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -22,8 +36,30 @@ class AdhkarReminderCard extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 14.0),
       child: GestureDetector(
-        onTap: () {
-          //TODO: Navigate to Morining / Evening adhkar page
+        onTap: () async {
+          try {
+            if (isMorning) {
+              final adhkars = await _fetch(morningCategoryId, ref);
+
+              AppNav.push(
+                context,
+                AdhkarDetailsPage(adhkars: adhkars, initialIndex: 0),
+              );
+            } else {
+              final adhkars = await _fetch(eveningCategoryId, ref);
+
+              AppNav.push(
+                context,
+                AdhkarDetailsPage(adhkars: adhkars, initialIndex: 0),
+              );
+            }
+          } catch (_) {
+            AppSnackBar.showSimple(
+              context: context,
+              message:
+                  "Failed to load adhkar. Please open the Adhkar tab manually.",
+            );
+          }
         },
         child: Stack(
           children: [
@@ -53,7 +89,21 @@ class AdhkarReminderCard extends ConsumerWidget {
                     const SizedBox(height: 8),
 
                     //Actions
-                    AudioControlsChip(isMorning: isMorning),
+                    Row(
+                      children: [
+                        AudioControlsChip(isMorning: isMorning),
+
+                        const Spacer(),
+
+                        Text(
+                          'Tap to read',
+                          style: theme.textTheme.labelMedium?.copyWith(
+                            color: cs.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),

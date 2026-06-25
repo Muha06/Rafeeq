@@ -75,32 +75,55 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
                   ),
                 ),
 
-                body: Stack(
-                  children: [
-                    PageView.builder(
-                      controller: _controller,
-                      itemCount: widget.adhkars.length,
-                      onPageChanged: (index) {
-                        setState(() {
-                          currentIndex = index;
-                          _dhikrCount = 0;
-                        });
-                      },
-                      itemBuilder: (context, index) {
-                        final dhikr = widget.adhkars[index];
+                body: GestureDetector(
+                  onTapUp: (details) {
+                    final screenWidth = MediaQuery.of(context).size.width;
+                    final dx = details.localPosition.dx;
 
-                        return AdhkarDetailsSection(dhikr: dhikr);
-                      },
-                    ),
+                    const edgeWidth = 80.0;
+                    const duration = Duration(milliseconds: 170);
 
-                    // Fixed bottom nav bar
-                    Positioned(
-                      bottom: 16,
-                      left: 16,
-                      right: 16,
-                      child: _BottomNavBar(dhikr: dhikr),
-                    ),
-                  ],
+                    if (dx < edgeWidth) {
+                      // Left edge tapped
+                      _controller.previousPage(
+                        duration: duration,
+                        curve: Curves.fastOutSlowIn,
+                      );
+                    } else if (dx > screenWidth - edgeWidth) {
+                      // Right edge tapped
+                      _controller.nextPage(
+                        duration: duration,
+                        curve: Curves.fastOutSlowIn,
+                      );
+                    }
+                  },
+                  child: Stack(
+                    children: [
+                      PageView.builder(
+                        controller: _controller,
+                        itemCount: widget.adhkars.length,
+                        onPageChanged: (index) {
+                          setState(() {
+                            currentIndex = index;
+                            _dhikrCount = 0;
+                          });
+                        },
+                        itemBuilder: (context, index) {
+                          final dhikr = widget.adhkars[index];
+
+                          return AdhkarDetailsSection(dhikr: dhikr);
+                        },
+                      ),
+
+                      // Fixed bottom nav bar
+                      Positioned(
+                        bottom: 16,
+                        left: 16,
+                        right: 16,
+                        child: _BottomNavBar(dhikr: dhikr),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -257,8 +280,9 @@ class _BottomNavBar extends ConsumerWidget {
                         audioState.currentId == dhikr.id.toString();
                     final isPlaying = audioState.isPlaying && isCurrent;
 
+                    final isBuffering = audioState.isBuffering && isCurrent;
                     return _BottomNavItem(
-                      icon: audioState.isBuffering
+                      icon: isBuffering
                           ? const SizedBox(
                               width: 18,
                               height: 18,
@@ -377,39 +401,37 @@ class _AdhkarDetailsSectionState extends ConsumerState<AdhkarDetailsSection> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: SingleChildScrollView(
-        child: SelectionArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              //arabic
-              Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  cleanDhikr(widget.dhikr.arabicText),
-                  textDirection: TextDirection.rtl,
-                  style: AppTextStyles.quranAyah.copyWith(
-                    color: cs.onSurface,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 30,
-                    height: 1.8,
-                  ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            //arabic
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                cleanDhikr(widget.dhikr.arabicText),
+                textDirection: TextDirection.rtl,
+                style: AppTextStyles.quranAyah.copyWith(
+                  color: cs.onSurface,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 30,
+                  height: 1.8,
                 ),
               ),
-              const SizedBox(height: 32),
+            ),
+            const SizedBox(height: 32),
 
-              //transliteration
-              section('Transliteration', dhikr.transliteration),
+            //transliteration
+            section('Transliteration', dhikr.transliteration),
 
-              //english
-              section('Translation', dhikr.englishText),
+            //english
+            section('Translation', dhikr.englishText),
 
-              //note
-              section('Notes', 'Repeat ${dhikr.repeat} times'),
+            //note
+            section('Notes', 'Repeat ${dhikr.repeat} times'),
 
-              const SizedBox(height: 80),
-            ],
-          ),
+            const SizedBox(height: 80),
+          ],
         ),
       ),
     );
