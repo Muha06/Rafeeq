@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
+import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/features/adhkar_02/domain/entities/dhikr_category.dart';
 import 'package:rafeeq/features/adhkar_02/presentation/pages/adhkar_details_page.dart';
 import 'package:rafeeq/features/adhkar_02/presentation/providers/adhkar_providers.dart';
@@ -24,7 +25,10 @@ class AdhkarPreviewPages extends ConsumerWidget {
         appBar: AppBar(title: Text(category.title)),
         body: adhkarAsync.when(
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (error, stack) => Center(child: Text('Error: $error')),
+          error: (_, _) => const AppStateView(
+            title: 'Error',
+            message: 'Failed to load Adhkars. Please try again',
+          ),
           data: (adhkars) {
             if (adhkars.isEmpty) {
               return const Center(child: Text('No adhkars found'));
@@ -62,13 +66,13 @@ class AdhkarPreviewPages extends ConsumerWidget {
                           width: 36,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(999),
-                            color: cs.primary,
+                            color: cs.surface,
                           ),
                           child: Center(
                             child: Text(
                               (index + 1).toString(),
                               style: theme.textTheme.bodySmall!.copyWith(
-                                color: cs.onPrimary,
+                                color: cs.onSurface,
                               ),
                             ),
                           ),
