@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 //converts string salat timings to datetime
 //eg 05:25 => datetime((todays date) hour, minute)
 
@@ -13,14 +14,20 @@ DateTime parseAladhanTime({required String raw, required DateTime date}) {
   return DateTime(date.year, date.month, date.day, hour, minute);
 }
 
-String formatHms(Duration d) {
-  if (d.isNegative) d = Duration.zero;
 
-  String two(int n) => n.toString().padLeft(2, '0');
+String formatTime(DateTime dateTime) {
+  return DateFormat('h.mma').format(dateTime).toLowerCase();
+}
 
+String formatRemaining(Duration d) {
   final hours = d.inHours;
   final minutes = d.inMinutes.remainder(60);
-  final seconds = d.inSeconds.remainder(60);
 
-  return '${two(hours)}:${two(minutes)}:${two(seconds)}';
+  if (hours == 0) {
+    return "$minutes min";
+  } else if (minutes == 0) {
+    return "$hours hr";
+  } else {
+    return "$hours hr $minutes min";
+  }
 }

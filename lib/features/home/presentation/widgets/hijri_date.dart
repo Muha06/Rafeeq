@@ -27,14 +27,14 @@ class HijriDateToday extends ConsumerWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            hijriState.formatted,
+            hijriState.hijri.toFormat('dd MMMM yyyy'),
             style: theme.textTheme.labelMedium?.copyWith(
               color: foregroundColor,
               fontSize: fontSize,
             ),
           ),
 
-          const SizedBox(width: 8),
+          const SizedBox(width: 4),
 
           Icon(
             PhosphorIcons.caretRight(PhosphorIconsStyle.bold),

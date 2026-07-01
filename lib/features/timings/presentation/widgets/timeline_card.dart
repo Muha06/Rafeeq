@@ -1,277 +1,80 @@
-// ignore_for_file: unused_result
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:rafeeq/core/animations/navigation_animations.dart';
-import 'package:rafeeq/core/features/location/presentation/pages/user_loc_settings.dart';
-import 'package:rafeeq/core/features/location/presentation/provider/user_location_provider.dart';
-import 'package:rafeeq/core/helpers/app_nav.dart';
-import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
+import 'package:rafeeq/core/helpers/salat_times.dart';
 import 'package:rafeeq/features/home/presentation/widgets/hijri_date.dart';
-import 'package:rafeeq/features/notifications/presentation/pages/notification_list_page.dart';
-import 'package:rafeeq/features/notifications/presentation/providers/notification_provider.dart';
-import 'package:rafeeq/features/settings/presentation/pages/settings_page.dart';
-import 'package:rafeeq/features/timings/presentation/pages/timings_pages.dart';
+import 'package:rafeeq/features/timings/domain/entities/salah_prayer.dart';
+import 'package:rafeeq/features/timings/domain/entities/salah_status.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/salah_status_provider.dart';
-import 'package:rafeeq/features/timings/presentation/riverpod/salah_times_providers.dart';
-import '../../domain/entities/salah_prayer.dart';
-import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
-class TodayTimesCard extends ConsumerWidget {
-  const TodayTimesCard({
-    super.key,
-    this.height = 285, // content height
-  });
+class HomeTimelineCard extends ConsumerWidget {
+  const HomeTimelineCard({super.key});
 
-  final double height;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
-    final cs = theme.colorScheme;
-
-    final fg = cs.onSurface;
-    final highlightColor = cs.primary;
-
-    return SizedBox(
-      height: height,
-      child: Column(
-        children: [
-          //APPBAR
-          _TimingsCardAppbar(foregroundColor: fg),
-
-          //HIJRI DATE
-          HijriDateToday(foregroundColor: fg, fontSize: 14),
-
-          const SizedBox(height: 16),
-
-          //CONTENT
-          TimingsStatus(foregroundColor: fg, highlightColor: highlightColor),
-        ],
-      ),
-    );
-  }
-}
-
-class TimingsStatus extends ConsumerWidget {
-  const TimingsStatus({
-    super.key,
-    required this.foregroundColor,
-    required this.highlightColor,
-  });
-  final Color foregroundColor;
-  final Color highlightColor;
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final statusAsync = ref.watch(salahStatusProvider);
-    final progress = ref.watch(
-      salahStatusProvider.select((s) => s.value?.progress ?? 0),
-    );
-
-    final current = ref.watch(
-      salahStatusProvider.select((s) => s.value?.current),
-    );
-
-    final theme = Theme.of(context);
-    final cs = theme.colorScheme;
-
-    final fg = foregroundColor;
-
-    return statusAsync.when(
-      data: (status) => Center(
-        child: Column(
-          children: [
-            RepaintBoundary(
-              child: SleekCircularSlider(
-                min: 0,
-                max: 1,
-                initialValue: progress.clamp(0, 1),
-                appearance: CircularSliderAppearance(
-                  size: 120,
-                  startAngle: 180,
-                  angleRange: 180,
-                  customWidths: CustomSliderWidths(
-                    trackWidth: 6,
-                    progressBarWidth: 6,
-                  ),
-                  customColors: CustomSliderColors(
-                    progressBarColor: highlightColor,
-                    trackColor: cs.surfaceContainerHighest,
-                  ),
-                  animationEnabled: false,
-                ),
-                innerWidget: (_) {
-                  return Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          current?.label ?? '',
-                          style: theme.textTheme.labelLarge,
-                        ),
-                        const SizedBox(height: 12),
-
-                        InkWell(
-                          onTap: () {
-                            AppNav.push(context, const SalahTimingsPage()).then(
-                              (_) => RafeeqAnalytics.logScreenView(
-                                "salah_times_page",
-                              ),
-                            );
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'View times',
-                                style: theme.textTheme.labelLarge!.copyWith(
-                                  color: highlightColor,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Icon(
-                                PhosphorIcons.caretRight(),
-                                size: 16,
-                                color: highlightColor,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-
-            _NextPrayerText(
-              theme: theme,
-              fg: fg,
-              highlightColor: highlightColor,
-            ),
-          ],
-        ),
-      ),
-
-      error: (error, stackTrace) => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            "Failed to fetch prayer times",
-            style: theme.textTheme.bodyMedium,
-          ),
-
-          const SizedBox(height: 4),
-
-          TextButton(
-            onPressed: () => ref.refresh(todaySalahTimesProvider),
-            child: const Text('Retry'),
-          ),
-        ],
-      ),
-
-      loading: () =>
-          Center(child: CupertinoActivityIndicator(color: fg, radius: 24)),
-    );
-  }
-}
-
-class _NextPrayerText extends ConsumerWidget {
-  const _NextPrayerText({
-    required this.theme,
-    required this.fg,
-    required this.highlightColor,
-  });
-
-  final ThemeData theme;
-  final Color fg;
-  final Color highlightColor;
   @override
   Widget build(BuildContext context, ref) {
-    final next = ref.watch(salahStatusProvider.select((s) => s.value));
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
 
-    return RichText(
-      text: TextSpan(
-        text: "${next?.next.label ?? 'null'} is approaching in ",
-        style: theme.textTheme.bodyMedium!.copyWith(color: fg),
-        children: [
-          if (next?.timeToNext != null)
-            TextSpan(
-              text: formatRemaining(next!.timeToNext),
-              style: theme.textTheme.bodyMedium!.copyWith(
-                color: highlightColor,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-        ],
-      ),
+    final salahStatus = ref.watch(salahStatusProvider);
+
+    return salahStatus.when(
+      data: (status) => _BuildTimelineCard(status: status),
+      loading: () => const SizedBox(),
+      error: (error, stackTrace) => const SizedBox(),
     );
   }
 }
 
-class _TimingsCardAppbar extends StatelessWidget {
-  const _TimingsCardAppbar({required this.foregroundColor});
-  final Color foregroundColor;
+class _BuildTimelineCard extends StatelessWidget {
+  const _BuildTimelineCard({super.key, required this.status});
+  final SalahStatusEntity status;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 8.0,
-        vertical: 22, // safe area + some spacing
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
+    final current = status.current;
+    final currentStart = status.currentStart;
+    final next = status.next;
+    final remaining = status.timeToNext;
+
+    return Container(
+      height: 120,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      decoration: BoxDecoration(
+        color: cs.primary.withAlpha(160),
+        borderRadius: BorderRadius.circular(12),
       ),
-      child: Row(
+      child: Column(
         children: [
-          const Align(alignment: Alignment.topLeft, child: UserLocationChip()),
+          // Row 1
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _CurrentSalat(current: current, currentStart: currentStart),
+              const Spacer(),
+              HijriDateToday(foregroundColor: cs.onPrimary, fontSize: 14),
+            ],
+          ),
 
           const Spacer(),
 
-          //Notification Icon
-          Consumer(
-            builder: (context, ref, child) {
-              final hasUnreadNotifications = ref.watch(
-                hasUnreadNotificationsProvider,
-              );
-
-              return Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      AppNav.push(context, const NotificationsInboxPage());
-                    },
-                    icon: PhosphorIcon(PhosphorIcons.bell()),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Row(
+              children: [
+                Icon(PhosphorIcons.clock(), color: cs.onPrimary, size: 14),
+                const SizedBox(width: 2),
+                Text(
+                  '${formatRemaining(remaining)} until ${next.label}',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: cs.onPrimary,
                   ),
-
-                  if (hasUnreadNotifications)
-                    Positioned(
-                      top: 8,
-                      left: 8,
-                      child: Container(
-                        height: 10,
-                        width: 10,
-                        decoration: const BoxDecoration(
-                          color: Colors.green,
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    ),
-                ],
-              );
-            },
-          ),
-
-          const SizedBox(width: 8),
-
-          //Settings page
-          IconButton(
-            onPressed: () async {
-              pushLeftPage(context, const SettingsPage());
-            },
-            icon: Icon(PhosphorIcons.gear(), color: foregroundColor),
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -279,83 +82,38 @@ class _TimingsCardAppbar extends StatelessWidget {
   }
 }
 
-class UserLocationChip extends ConsumerWidget {
-  const UserLocationChip({super.key});
-
-  @override
-  Widget build(BuildContext context, ref) {
-    final userLocationAsync = ref.watch(userLocationProvider);
-
-    return userLocationAsync.when(
-      error: (error, stackTrace) => _MyUserLocChip(
-        icon: Icons.error_outline,
-        label: 'retry',
-        onTap: () => ref.read(userLocationProvider.notifier).refresh(),
-      ),
-      loading: () => const Chip(label: CupertinoActivityIndicator()),
-      data: (userLocation) => _MyUserLocChip(
-        icon: PhosphorIcons.mapPin(),
-        label: userLocation?.city ?? '',
-        onTap: () => AppNav.push(context, const UserLocSettingsPage()),
-      ),
-    );
-  }
-}
-
-class _MyUserLocChip extends StatelessWidget {
-  const _MyUserLocChip({
-    required this.icon,
-    required this.label,
-    required this.onTap,
+class _CurrentSalat extends StatelessWidget {
+  const _CurrentSalat({
+    super.key,
+    required this.current,
+    required this.currentStart,
   });
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
+  final SalahPrayer current;
+  final DateTime currentStart;
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final tt = theme.textTheme;
     final cs = theme.colorScheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Label
+        Text(
+          current.label,
+          style: tt.labelMedium?.copyWith(color: cs.onPrimary),
+        ),
 
-    return GestureDetector(
-      onTap: onTap,
-      child: Chip(
-        color: WidgetStatePropertyAll(cs.surfaceContainerHighest),
-        padding: const EdgeInsets.symmetric(horizontal: 4),
-        label: SizedBox(
-          width: 80,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(icon, size: 16, color: cs.onSurface),
-              const SizedBox(width: 2),
-
-              Flexible(
-                child: Text(
-                  label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.labelMedium!.copyWith(
-                    color: cs.onSurface,
-                  ),
-                ),
-              ),
-            ],
+        // Time
+        Text(
+          formatTime(currentStart),
+          style: tt.labelLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            color: cs.onPrimary,
           ),
         ),
-      ),
+      ],
     );
-  }
-}
-
-String formatRemaining(Duration d) {
-  final hours = d.inHours;
-  final minutes = d.inMinutes.remainder(60);
-
-  if (hours == 0) {
-    return "$minutes min";
-  } else if (minutes == 0) {
-    return "$hours hr";
-  } else {
-    return "$hours hr $minutes min";
   }
 }
