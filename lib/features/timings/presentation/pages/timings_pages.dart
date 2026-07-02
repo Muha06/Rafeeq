@@ -160,7 +160,7 @@ class AllSalatTimingsCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: salats.map((p) {
               final t = times.at(p);
-              final isCurrent = p == SalahPrayer.isha;
+              final isCurrent = p == current;
 
               final lightColors = isCurrent ? cs.tertiary : cs.onPrimary;
               final darkColors = isCurrent ? cs.primary : cs.onSurface;

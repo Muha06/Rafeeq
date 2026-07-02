@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/salat_times.dart';
 import 'package:rafeeq/features/home/presentation/widgets/hijri_date.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_prayer.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_status.dart';
+import 'package:rafeeq/features/timings/presentation/pages/timings_pages.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/salah_status_provider.dart';
 
 class HomeTimelineCard extends ConsumerWidget {
@@ -12,9 +14,6 @@ class HomeTimelineCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final theme = Theme.of(context);
-    final cs = theme.colorScheme;
-
     final salahStatus = ref.watch(salahStatusProvider);
 
     return salahStatus.when(
@@ -37,47 +36,66 @@ class _BuildTimelineCard extends StatelessWidget {
     final current = status.current;
     final currentStart = status.currentStart;
     final next = status.next;
-    final remaining = status.timeToNext;
 
-    return Container(
-      height: 120,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      decoration: BoxDecoration(
-        color: cs.primary.withAlpha(160),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        children: [
-          // Row 1
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _CurrentSalat(current: current, currentStart: currentStart),
-              const Spacer(),
-              HijriDateToday(foregroundColor: cs.onPrimary, fontSize: 14),
-            ],
-          ),
-
-          const Spacer(),
-
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Row(
+    return GestureDetector(
+      onTap: () => AppNav.push(context, const SalahTimingsPage()),
+      child: Container(
+        height: 120,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        decoration: BoxDecoration(
+          color: cs.primary.withAlpha(160),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          children: [
+            // Row 1
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(PhosphorIcons.clock(), color: cs.onPrimary, size: 14),
-                const SizedBox(width: 2),
-                Text(
-                  '${formatRemaining(remaining)} until ${next.label}',
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: cs.onPrimary,
-                  ),
-                ),
+                _CurrentSalat(current: current, currentStart: currentStart),
+                const Spacer(),
+                HijriDateToday(foregroundColor: cs.onPrimary, fontSize: 14),
               ],
             ),
-          ),
-        ],
+
+            const Spacer(),
+
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Row(
+                children: [
+                  Icon(PhosphorIcons.clock(), color: cs.onPrimary, size: 14),
+                  const SizedBox(width: 2),
+                  _TimeToNextText(next: next),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
+    );
+  }
+}
+
+class _TimeToNextText extends ConsumerWidget {
+  const _TimeToNextText({required this.next});
+
+  final SalahPrayer next;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+    final remaining = ref.watch(salahTimeToNextProvider);
+
+    return remaining.when(
+      data: (duration) => Text(
+        '${formatRemaining(duration)} until ${next.label}',
+        style: theme.textTheme.bodyMedium?.copyWith(color: cs.onPrimary),
+      ),
+      loading: () => const SizedBox.shrink(),
+      error: (error, stackTrace) => const SizedBox.shrink(),
     );
   }
 }
