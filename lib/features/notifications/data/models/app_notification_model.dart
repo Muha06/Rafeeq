@@ -6,14 +6,15 @@ class AppNotificationModel extends AppNotification {
     required super.title,
     required super.body,
     super.imageUrl,
+    required super.createdAt,
   });
-
   factory AppNotificationModel.fromJson(Map<String, dynamic> json) {
     return AppNotificationModel(
       id: json['id'],
       title: json['title'],
       body: json['body'],
       imageUrl: json['image_url'],
+      createdAt: DateTime.parse(json['created_at']),
     );
   }
 }

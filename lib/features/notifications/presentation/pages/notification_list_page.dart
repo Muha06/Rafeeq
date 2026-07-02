@@ -98,27 +98,11 @@ class NotificationTile extends ConsumerWidget {
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: cs.outlineVariant),
+            color: isRead ? cs.surface : cs.primary.withAlpha(30),
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Unread dot
-              if (!isRead)
-                Container(
-                  width: 8,
-                  height: 8,
-                  margin: const EdgeInsets.only(right: 10),
-                  decoration: const BoxDecoration(
-                    color: Colors.green,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-
-              PhosphorIcon(PhosphorIcons.bell()),
-
-              const SizedBox(width: 12),
-
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -145,7 +129,7 @@ class NotificationTile extends ConsumerWidget {
 }
 
 class _LoadingState extends StatelessWidget {
-  const _LoadingState( );
+  const _LoadingState();
 
   @override
   Widget build(BuildContext context) {

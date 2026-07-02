@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/helpers/url_launcher.dart';
 import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/features/notifications/presentation/providers/notification_provider.dart';
+import 'package:intl/intl.dart';
 
 class NotificationDetailPage extends ConsumerWidget {
   final String notificationId;
@@ -69,10 +70,22 @@ class NotificationDetailPage extends ConsumerWidget {
 
                         const SizedBox(height: 16),
 
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            DateFormat('MMM dd, yyyy').format(notif.createdAt),
+                            style: tt.bodySmall!.copyWith(
+                              color: cs.onSurfaceVariant,
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 16),
+
                         // Body
                         Linkify(
                           text: notif.body,
-                          style: tt.bodyLarge,
+                          style: tt.bodyLarge?.copyWith(fontSize: 16),
                           linkStyle: tt.bodyLarge?.copyWith(
                             fontWeight: FontWeight.bold,
                             color: Colors.blue,

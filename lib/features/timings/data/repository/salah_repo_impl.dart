@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:rafeeq/features/timings/data/datasources/cached_salah_local_ds.dart';
 import 'package:rafeeq/features/timings/data/datasources/salah_remote_ds.dart';
 import 'package:rafeeq/features/timings/data/models/mappers.dart';
@@ -40,7 +39,6 @@ class SalahTimesRepositoryImpl implements SalahTimesRepository {
       longitude: longitude,
       method: method,
     );
-    debugPrint('$latitude $longitude');
 
     final entity = model.toEntity();
 

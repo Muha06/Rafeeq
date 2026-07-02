@@ -4,6 +4,7 @@ class AppNotification {
   final String body;
   final String? imageUrl;
   final bool isRead;
+  final DateTime createdAt;
 
   AppNotification({
     required this.id,
@@ -11,6 +12,7 @@ class AppNotification {
     required this.body,
     this.imageUrl,
     this.isRead = false,
+    required this.createdAt,
   });
 
   AppNotification copyWith({
@@ -26,6 +28,7 @@ class AppNotification {
       body: body ?? this.body,
       imageUrl: imageUrl ?? this.imageUrl,
       isRead: isRead ?? this.isRead,
+      createdAt: createdAt
     );
   }
 }
