@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/app/tabs_screen.dart';
 import 'package:rafeeq/features/onboarding/presentation/provider/onboarding_provider.dart';
 import 'package:rafeeq/features/onboarding/presentation/provider/providers.dart';
@@ -96,8 +96,8 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
                       },
                       icon: PhosphorIcon(
                         index == (_pageCount - 1)
-                            ? PhosphorIcons.check()
-                            : PhosphorIcons.caretRight(),
+                            ? PhosphorIcons.check
+                            : PhosphorIcons.caretRight,
                         color: cs.onPrimary,
                       ),
                     ),

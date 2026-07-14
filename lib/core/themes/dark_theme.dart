@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
- 
+
 ThemeData appDarkThemeData() {
   final scheme =
       const ColorScheme.dark(
@@ -133,7 +133,7 @@ ThemeData appDarkThemeData() {
           EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         ),
         textStyle: const WidgetStatePropertyAll(
-          TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
+          TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
         ),
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
@@ -149,7 +149,7 @@ ThemeData appDarkThemeData() {
         disabledForegroundColor: scheme.onSurfaceVariant,
         side: BorderSide(color: scheme.onSurface.withAlpha(100)),
         padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
-        textStyle: const TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
+        textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
       ),
     ),
 

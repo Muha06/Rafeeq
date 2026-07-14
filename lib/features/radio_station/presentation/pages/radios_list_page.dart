@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/features/radio_station/domain/enums/radio_audio_category.dart';
 import 'package:rafeeq/features/radio_station/presentation/providers/radio_controller.dart';
@@ -58,7 +58,7 @@ class _RadioListPageState extends ConsumerState<RadioListPage> {
                   ),
 
                   RadioError() => AppStateView(
-                    icon: PhosphorIcons.radio(),
+                    icon: PhosphorIcons.radio,
                     title: "Error loading stations",
                     message:
                         "We couldn't load the radio stations, please try again later.",
@@ -99,7 +99,7 @@ class _RadioListPageState extends ConsumerState<RadioListPage> {
 Widget _emptyState() {
   return Center(
     child: AppStateView(
-      icon: PhosphorIcons.radio(),
+      icon: PhosphorIcons.radio,
       title: "No stations found",
       message: "We couldn't find any radio stations for this category.",
     ),

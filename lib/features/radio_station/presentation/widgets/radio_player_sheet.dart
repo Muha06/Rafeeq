@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
 import 'package:rafeeq/core/features/audio/widgets/seek_bar.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
@@ -99,7 +99,7 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
               children: [
                 IconButton(
                   visualDensity: VisualDensity.comfortable,
-                  icon: Icon(PhosphorIcons.caretDown(PhosphorIconsStyle.bold)),
+                  icon: Icon(PhosphorIcons.caretDown ),
                   onPressed: () => AppNav.pop(context),
                 ),
 
@@ -222,11 +222,11 @@ class AnimatedPlayPauseBtn extends StatelessWidget {
             : isPlaying
             ? PhosphorIcon(
                 key: const ValueKey('pause'),
-                PhosphorIcons.pause(PhosphorIconsStyle.light),
+                PhosphorIcons.pause ,
               )
             : PhosphorIcon(
                 key: const ValueKey('play'),
-                PhosphorIcons.play(PhosphorIconsStyle.light),
+                PhosphorIcons.play ,
               ),
       ),
     );

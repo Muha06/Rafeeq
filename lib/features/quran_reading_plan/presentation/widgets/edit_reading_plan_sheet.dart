@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
@@ -87,7 +87,7 @@ class _EditQuranReadingPlanSheetState
                         })
                       : null,
                   icon: PhosphorIcon(
-                    PhosphorIcons.minus(),
+                    PhosphorIcons.minus,
                     color: targetAyahs > 1 ? cs.primary : cs.onSurfaceVariant,
                   ),
                 ),
@@ -109,7 +109,7 @@ class _EditQuranReadingPlanSheetState
                     targetAyahs++;
                     updateController(targetAyahs);
                   }),
-                  icon: Icon(PhosphorIcons.plus(), color: cs.primary),
+                  icon: Icon(PhosphorIcons.plus, color: cs.primary),
                 ),
               ],
             ),

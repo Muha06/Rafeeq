@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/features/Ramadan/domain/ramadan_reflection.dart';
 import 'package:rafeeq/features/Ramadan/presentation/providers/ramadan_timings_provider.dart';
 import 'package:rafeeq/features/Ramadan/presentation/providers/ramadan_reflections_provider.dart';
@@ -60,7 +60,7 @@ class _RamadanDailyCardState extends ConsumerState<RamadanDailyCard> {
                     children: [
                       Expanded(
                         child: BuildRamadanTimeCard(
-                          icon: PhosphorIcons.sunHorizon(),
+                          icon: PhosphorIcons.sunHorizon,
                           title: 'Suhur end',
                           time: format12h(suhur),
                           isDark: isDark,
@@ -69,7 +69,7 @@ class _RamadanDailyCardState extends ConsumerState<RamadanDailyCard> {
                       const Spacer(),
                       Expanded(
                         child: BuildRamadanTimeCard(
-                          icon: PhosphorIcons.bowlFood(),
+                          icon: PhosphorIcons.bowlFood,
                           title: 'Iftar',
                           time: format12h(iftar),
                           isDark: isDark,

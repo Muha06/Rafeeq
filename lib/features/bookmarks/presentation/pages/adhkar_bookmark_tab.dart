@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/app/providers/tabs_screen_provider.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/widgets/app_state_view.dart';
@@ -25,7 +25,7 @@ class _AdhkarBookmarksTabState extends ConsumerState<AdhkarBookmarksTab> {
     return bookMarks.isEmpty
         ? Center(
             child: AppStateView(
-              icon: PhosphorIcons.handsPraying(),
+              icon: PhosphorIcons.handsPraying,
               title: 'No Bookmarks',
               message:
                   "You haven't bookmarked any Dhikr yet. bookmark your best Adhkars to find them instantly.",

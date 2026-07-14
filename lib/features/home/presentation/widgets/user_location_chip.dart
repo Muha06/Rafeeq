@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/features/location/presentation/pages/user_loc_settings.dart';
 import 'package:rafeeq/core/features/location/presentation/provider/user_location_provider.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
@@ -22,7 +21,7 @@ class UserLocationChip extends ConsumerWidget {
       ),
       loading: () => const Chip(label: CupertinoActivityIndicator(radius: 24)),
       data: (userLocation) => _MyUserLocChip(
-        icon: PhosphorIcons.mapPin(),
+        icon: PhosphorIcons.mapPin,
         label: userLocation?.city ?? 'N/A',
         onTap: () => AppNav.push(context, const UserLocSettingsPage()),
       ),

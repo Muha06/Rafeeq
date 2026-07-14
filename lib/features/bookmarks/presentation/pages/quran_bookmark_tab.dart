@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/app/providers/tabs_screen_provider.dart';
 import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/Quran/quran_notifier_provider.dart';
@@ -19,7 +19,7 @@ class QuranBookmarksTab extends ConsumerWidget {
     return bookMarks.isEmpty
         ? Center(
             child: AppStateView(
-              icon: PhosphorIcons.book(),
+              icon: PhosphorIcons.book,
               title: 'No Bookmarks',
               message:
                   'You have no saved bookmarks yet. Start bookmarking your favorite ayahs to easily read them later.',

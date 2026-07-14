@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/features/feedback/presentation/pages/feedback_page.dart';
@@ -17,14 +17,7 @@ class SettingsPage extends ConsumerStatefulWidget {
 }
 
 class _SettingsPageState extends ConsumerState<SettingsPage> {
-  // void showThemePicker(BuildContext context) {
-  //   showModalBottomSheet(
-  //     context: context,
-  //     showDragHandle: true,
-  //     useSafeArea: true,
-  //     builder: (context) => const ThemePickerSheet(),
-  //   );
-  // }
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +32,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       body: ListView(
         children: [
           SettingsTile(
-            leading: PhosphorIcon(PhosphorIcons.bell()),
+            leading: PhosphorIcon(PhosphorIcons.bell),
             title: 'Salah reminders',
             subtitle: 'Get Salah times reminders',
             isDark: isDark,
@@ -60,7 +53,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           ),
 
           SettingsTile(
-            leading: PhosphorIcon(PhosphorIcons.bell()),
+            leading: PhosphorIcon(PhosphorIcons.bell),
             title: 'Adhkar reminders',
             subtitle: 'Morning & evening adhkars',
             isDark: isDark,
@@ -82,7 +75,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 
           //send feedback
           SettingsTile(
-            leading: PhosphorIcon(PhosphorIcons.chatTeardropText()),
+            leading: PhosphorIcon(PhosphorIcons.chatTeardropText),
             title: 'Share Your Thoughts',
             subtitle:
                 'Share your suggestions and make Rafeeq more beneficial, In shaa Allah',

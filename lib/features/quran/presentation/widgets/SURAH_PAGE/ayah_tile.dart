@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/themes/app_text_style.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/Quran/quran_notifier_provider.dart';
@@ -103,17 +103,9 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                           isQuranBookmarkedProvider(bookmarkId),
                         );
 
-                        return PhosphorIcon(
-                          isBookmarked
-                              ? PhosphorIcons.bookBookmark(
-                                  PhosphorIconsStyle.fill,
-                                )
-                              : PhosphorIcons.bookBookmark(
-                                  PhosphorIconsStyle.light,
-                                ),
-                          size: 22,
-                          color: isBookmarked ? cs.primary : null,
-                        );
+                        return isBookmarked
+                            ? const Icon(PhosphorIcons.bookmarkFill)
+                            : const Icon(PhosphorIcons.bookBookmark);
                       },
                     ),
                   ),
@@ -142,9 +134,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
 
                         await controller.share(context: btnCtx, text: text);
                       },
-                      icon: PhosphorIcon(
-                        PhosphorIcons.share(PhosphorIconsStyle.light),
-                      ),
+                      icon: const PhosphorIcon(PhosphorIcons.share),
                     ),
                   ),
                 ],

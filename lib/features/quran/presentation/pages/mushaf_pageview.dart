@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/show_audio_controls_bar_provider.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/quran_audio_controls_bar.dart';
@@ -64,8 +64,7 @@ class _MushafPageViewState extends ConsumerState<MushafPageView> {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-    final iconStyle = PhosphorIconsStyle.light;
-
+ 
     final showAudioControls = ref.watch(showAudioControlsProvider);
 
     return Scaffold(
@@ -83,9 +82,9 @@ class _MushafPageViewState extends ConsumerState<MushafPageView> {
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 const SizedBox(width: 6),
-                PhosphorIcon(PhosphorIcons.caretDown(iconStyle), size: 18),
+                const PhosphorIcon(PhosphorIcons.caretDown, size: 18),
               ],
-            ), 
+            ),
           ),
         ),
       ),

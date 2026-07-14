@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
-
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+ 
 class AppStateView extends StatelessWidget {
   final PhosphorIconData? icon;
   final String title;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/salat_times.dart';
 import 'package:rafeeq/features/home/presentation/widgets/hijri_date.dart';
@@ -65,7 +65,7 @@ class _BuildTimelineCard extends StatelessWidget {
               alignment: Alignment.centerLeft,
               child: Row(
                 children: [
-                  Icon(PhosphorIcons.clock(), color: cs.onPrimary, size: 14),
+                  Icon(PhosphorIcons.clock, color: cs.onPrimary, size: 14),
                   const SizedBox(width: 2),
                   _TimeToNextText(next: next),
                 ],

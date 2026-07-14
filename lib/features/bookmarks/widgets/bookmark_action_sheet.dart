@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/dhikr_bookmark.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/quran_bookmark.dart';
 
@@ -25,7 +25,7 @@ class BookmarkActionBottomSheet extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             _ActionTile( 
-              icon: PhosphorIcons.trash(),
+              icon: PhosphorIcons.trash,
               title: 'Delete',
               subtitle: 'This can’t be undone',
               onTap: onDeleteBookmark,

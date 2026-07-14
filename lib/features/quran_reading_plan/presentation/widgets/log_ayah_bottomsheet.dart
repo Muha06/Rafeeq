@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/features/quran_reading_plan/presentation/providers/progress_provider.dart';
@@ -105,7 +105,7 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
                           ? () => setState(() => ayahsRead--)
                           : null,
                       icon: Icon(
-                        PhosphorIcons.minus(),
+                        PhosphorIcons.minus,
                         color: ayahsRead > 1 ? cs.primary : cs.onSurfaceVariant,
                       ),
                     ),
@@ -126,7 +126,7 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
 
                     IconButton(
                       onPressed: () => setState(() => ayahsRead++),
-                      icon: Icon(PhosphorIcons.plus(), color: cs.primary),
+                      icon: Icon(PhosphorIcons.plus, color: cs.primary),
                     ),
                   ],
                 ),
@@ -158,7 +158,7 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
                       RafeeqAnalytics.logFeature('logged_Quran_progress');
                     },
 
-                    icon: Icon(PhosphorIcons.floppyDisk()),
+                    icon: Icon(PhosphorIcons.floppyDisk),
                     label: const Text('Save'),
                   ),
                 ),

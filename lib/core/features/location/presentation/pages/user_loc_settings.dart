@@ -8,7 +8,7 @@ import 'package:rafeeq/core/features/location/presentation/provider/user_locatio
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/salah_times_providers.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 class UserLocSettingsPage extends ConsumerStatefulWidget {
   const UserLocSettingsPage({super.key});
@@ -58,7 +58,7 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
         textStyle: theme.textTheme.bodyMedium,
         inputDecoration: InputDecoration(
           hintText: 'Search country…',
-          prefixIcon: Icon(PhosphorIcons.magnifyingGlass()),
+          prefixIcon: Icon(PhosphorIcons.magnifyingGlass),
         ),
       ),
     );

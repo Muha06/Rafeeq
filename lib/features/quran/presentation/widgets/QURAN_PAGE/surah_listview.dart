@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
 import 'package:rafeeq/core/themes/app_text_style.dart';
@@ -43,7 +43,7 @@ class AllSurahsList extends ConsumerWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: AppStateView(
-              icon: PhosphorIcons.warningCircle(),
+              icon: PhosphorIcons.warningCircle,
               title: "Something went wrong",
               message: "We couldn't load the surahs. Please try again Later.",
               buttonText: "Retry",

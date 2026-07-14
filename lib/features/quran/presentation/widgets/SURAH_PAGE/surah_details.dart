@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
 import 'package:rafeeq/core/themes/app_text_style.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
@@ -102,7 +102,7 @@ class PlayFullSurahBtn extends ConsumerWidget {
     return OutlinedButton.icon(
       icon: isBuffering
           ? const SizedBox(height: 12, child: CupertinoActivityIndicator())
-          : Icon(PhosphorIcons.playCircle()),
+          : Icon(PhosphorIcons.playCircle),
       onPressed: onPlay,
 
       label: Text(isBuffering ? 'Loading...' : 'Play surah'),

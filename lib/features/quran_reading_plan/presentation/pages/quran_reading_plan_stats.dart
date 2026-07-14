@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+ import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/quran_reading_plan/presentation/providers/quran_reading_plan_provider.dart';
@@ -34,7 +34,7 @@ class QuranPlannerPage extends ConsumerWidget {
                 },
               );
             },
-            icon: PhosphorIcon(PhosphorIcons.arrowClockwise()),
+            icon: PhosphorIcon(PhosphorIcons.arrowClockwise),
             tooltip: 'Reset stats',
           ),
         ],

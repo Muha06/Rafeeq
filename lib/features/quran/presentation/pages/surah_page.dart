@@ -3,7 +3,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
@@ -334,7 +334,6 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
 
     final theme = Theme.of(context);
     final isDark = ref.watch(isDarkProvider);
-    final iconStyle = PhosphorIconsStyle.light;
 
     final ayahsAsync = ref.watch(ayahsProvider(surahId));
 
@@ -393,7 +392,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
             actions: [
               //Ayah log
               IconButton(
-                icon: PhosphorIcon(PhosphorIcons.floppyDisk(iconStyle)),
+                icon: const PhosphorIcon(PhosphorIcons.floppyDisk),
                 onPressed: () async {
                   showAyahLogSheet(context, ref);
                 },
@@ -417,7 +416,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
                   );
                 },
                 visualDensity: VisualDensity.compact,
-                icon: PhosphorIcon(PhosphorIcons.bookOpenText(iconStyle)),
+                icon: const PhosphorIcon(PhosphorIcons.bookOpenText),
               ),
 
               //Surah settings
@@ -430,7 +429,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
                     ),
                   );
                 },
-                icon: PhosphorIcon(PhosphorIcons.gear(iconStyle)),
+                icon: const PhosphorIcon(PhosphorIcons.gear),
               ),
             ],
             bottom: appBarBottomDivider(context),
@@ -439,7 +438,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
             loading: () => const Center(child: CircularProgressIndicator()),
 
             error: (e, _) => AppStateView(
-              icon: PhosphorIcons.warningCircle(),
+              icon: PhosphorIcons.warningCircle,
               title: "Something went wrong",
               message: "We couldn't load the ayahs. Please try again.",
               buttonText: "Retry",
@@ -560,7 +559,7 @@ class AppbarSurahPicker extends ConsumerWidget {
                   ),
                   const SizedBox(width: 2),
 
-                  PhosphorIcon(PhosphorIcons.caretDown()),
+                  const PhosphorIcon(PhosphorIcons.caretDown),
                 ],
               ),
             ),

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/app_keys.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
 
@@ -58,7 +58,7 @@ class GLobalMiniPlayerSheet extends ConsumerWidget {
               icon: isBuffering
                   ? const CupertinoActivityIndicator()
                   : Icon(
-                      isPlaying ? PhosphorIcons.pause() : PhosphorIcons.play(),
+                      isPlaying ? PhosphorIcons.pause : PhosphorIcons.play,
                     ),
             ),
 
@@ -68,7 +68,7 @@ class GLobalMiniPlayerSheet extends ConsumerWidget {
                 scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
                 ctrl.stop();
               },
-              icon: Icon(PhosphorIcons.x()),
+              icon: Icon(PhosphorIcons.x),
             ),
           ],
         ),

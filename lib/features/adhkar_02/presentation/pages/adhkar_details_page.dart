@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
@@ -250,14 +250,12 @@ class _BottomNavBar extends ConsumerWidget {
                   );
 
                   return _BottomNavItem(
-                    icon: PhosphorIcon(
+                    icon: Icon(
                       size: 20,
                       color: isBookmarked ? cs.primary : null,
-                      PhosphorIcons.bookmark(
-                        isBookmarked
-                            ? PhosphorIconsStyle.fill
-                            : PhosphorIconsStyle.regular,
-                      ),
+                      isBookmarked
+                          ? PhosphorIconsFill.bookmark
+                          : PhosphorIcons.bookBookmark,
                     ),
                     label: isBookmarked ? 'Saved' : 'Save',
                     onTap: () {
@@ -290,8 +288,8 @@ class _BottomNavBar extends ConsumerWidget {
                             )
                           : PhosphorIcon(
                               isPlaying
-                                  ? PhosphorIcons.pause()
-                                  : PhosphorIcons.play(),
+                                  ? PhosphorIcons.pause
+                                  : PhosphorIcons.play,
                               size: 20,
                             ),
                       label: 'Play',
@@ -310,7 +308,7 @@ class _BottomNavBar extends ConsumerWidget {
 
               // Copy
               _BottomNavItem(
-                icon: PhosphorIcon(PhosphorIcons.copy(), size: 20),
+                icon: const PhosphorIcon(PhosphorIcons.copy, size: 20),
                 label: 'Copy',
                 onTap: () async {
                   copyDhikr(dhikr);

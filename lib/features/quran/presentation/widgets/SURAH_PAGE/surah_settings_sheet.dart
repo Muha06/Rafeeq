@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:rafeeq/core/helpers/app_sheets.dart';
+ import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
 import 'package:rafeeq/features/quran_audio/presentation/widgets/reciter_picker_sheet.dart';
@@ -203,7 +202,7 @@ class _SurahSettingsSelectTile extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
-            const FaIcon(FontAwesomeIcons.chevronRight, size: 16),
+            const Icon(Icons.chevron_right, size: 16),
           ],
         ),
       ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/features/quran/domain/entities/last_read_ayah.dart';
@@ -97,7 +97,7 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(PhosphorIcons.trash(PhosphorIconsStyle.light), size: 72),
+              const Icon(PhosphorIcons.trash, size: 72),
               const SizedBox(height: 16),
 
               Text('Remove last read?', style: theme.textTheme.titleMedium),

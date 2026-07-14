@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 class MyBottomBar extends StatelessWidget {
   final ValueChanged<int> onTap;
@@ -20,23 +20,23 @@ class MyBottomBar extends StatelessWidget {
 
     final List<({IconData icon, IconData active, String label})> items = [
       (
-        icon: PhosphorIcons.house(),
-        active: PhosphorIcons.house(PhosphorIconsStyle.fill),
+        icon: PhosphorIcons.house,
+        active: PhosphorIcons.house ,
         label: 'Home',
       ),
       (
-        icon: PhosphorIcons.bookOpenText(),
-        active: PhosphorIcons.bookOpenText(PhosphorIconsStyle.fill),
+        icon: PhosphorIcons.bookOpenText,
+        active: PhosphorIcons.bookOpenText,
         label: "Qur'an",
       ),
       (
-        icon: PhosphorIcons.handsPraying(),
-        active: PhosphorIcons.handsPraying(PhosphorIconsStyle.fill),
+        icon: PhosphorIcons.handsPraying,
+        active: PhosphorIcons.handsPraying,
         label: 'Adhkār',
       ),
       (
-        icon: PhosphorIcons.bookmark(),
-        active: PhosphorIcons.bookmark(PhosphorIconsStyle.fill),
+        icon: PhosphorIcons.bookmark,
+        active: PhosphorIcons.bookmark,
         label: 'Bookmarks',
       ),
     ];

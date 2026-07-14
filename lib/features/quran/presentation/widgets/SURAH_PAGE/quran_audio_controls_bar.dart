@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
 import 'package:rafeeq/core/features/audio/widgets/seek_bar.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
@@ -142,9 +142,7 @@ class AudioControlsSection extends ConsumerWidget {
                   ? null
                   : () => audioState.isPlaying ? ctrl.pause() : ctrl.play(),
               icon: Icon(
-                audioState.isPlaying
-                    ? PhosphorIcons.pause(PhosphorIconsStyle.light)
-                    : PhosphorIcons.play(PhosphorIconsStyle.light),
+                audioState.isPlaying ? PhosphorIcons.pause : PhosphorIcons.play,
               ),
             ),
 
@@ -161,7 +159,7 @@ class AudioControlsSection extends ConsumerWidget {
                 );
               },
               icon: Icon(
-                PhosphorIcons.repeat(PhosphorIconsStyle.light),
+                PhosphorIcons.repeat,
                 color: isRepeatEnabled ? cs.primary : null,
               ),
             ),
@@ -172,7 +170,7 @@ class AudioControlsSection extends ConsumerWidget {
                 ref.read(showAudioControlsProvider.notifier).state = false;
                 ctrl.stop();
               },
-              icon: Icon(PhosphorIcons.x(PhosphorIconsStyle.light)),
+              icon: const Icon(PhosphorIcons.x),
             ),
           ],
         ),

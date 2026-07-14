@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:rafeeq/core/helpers/app_nav.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+ import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/features/notifications/domain/entities/app_notification.dart';
 import 'package:rafeeq/features/notifications/presentation/pages/notif_details_page.dart';
@@ -119,7 +119,7 @@ class NotificationTile extends ConsumerWidget {
                 ),
               ),
 
-              PhosphorIcon(PhosphorIcons.caretRight(), size: 24),
+              const PhosphorIcon(PhosphorIcons.caretRight, size: 24),
             ],
           ),
         ),

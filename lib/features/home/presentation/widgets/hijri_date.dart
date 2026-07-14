@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+ import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/features/calendar/presentation/pages/calendar_page.dart';
 import 'package:rafeeq/features/calendar/presentation/providers/hijri_date_providers.dart';
@@ -37,7 +37,7 @@ class HijriDateToday extends ConsumerWidget {
           const SizedBox(width: 4),
 
           Icon(
-            PhosphorIcons.caretRight(PhosphorIconsStyle.bold),
+            PhosphorIcons.caretRight ,
             size: 16,
             color: foregroundColor,
           ),

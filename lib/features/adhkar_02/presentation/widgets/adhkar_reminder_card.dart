@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
@@ -183,7 +183,7 @@ class AudioControlsChip extends ConsumerWidget {
           style: theme.textButtonTheme.style,
           icon: isBuffering
               ? const CupertinoActivityIndicator()
-              : Icon(isPlaying ? PhosphorIcons.pause() : PhosphorIcons.play()),
+              : Icon(isPlaying ? PhosphorIcons.pause : PhosphorIcons.play),
           label: isBuffering
               ? Text('Loading', style: theme.textTheme.bodySmall!)
               : Text(

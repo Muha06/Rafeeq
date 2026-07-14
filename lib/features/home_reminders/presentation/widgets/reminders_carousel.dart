@@ -1,7 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/features/home/providers/reminder_providers.dart';
+import 'package:rafeeq/features/home_reminders/presentation/providers/reminder_providers.dart';
 
 class HomeRemindersCarousel extends ConsumerWidget {
   const HomeRemindersCarousel({super.key});
@@ -10,9 +10,10 @@ class HomeRemindersCarousel extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final items = ref.watch(homeRemindersProvider);
+    final items = ref.watch(homeRemindersProvider(context));
 
     if (items.isEmpty) return const SizedBox.shrink();
+    debugPrint("HomeRemindersCarousel: items.length = ${items.length}");
 
     final canAutoPlay = items.length > 1;
 
@@ -20,7 +21,7 @@ class HomeRemindersCarousel extends ConsumerWidget {
       items: items,
       options: CarouselOptions(
         padEnds: true,
-        height: 180, // match your card height area
+        height: 74, // match your card height area
         viewportFraction: 1, // full width (banner style)
         enlargeCenterPage: false,
         enableInfiniteScroll: canAutoPlay,

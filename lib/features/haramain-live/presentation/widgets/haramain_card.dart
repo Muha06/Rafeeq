@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/features/haramain-live/presentation/pages/haramain_live_page.dart';
@@ -28,7 +27,7 @@ class LiveHubCard extends ConsumerWidget {
           // TITLE
           Row(
             children: [
-              FaIcon(PhosphorIcons.broadcast()),
+              Icon(PhosphorIcons.broadcast),
               const SizedBox(width: 8),
               Text('Live Streams', style: textTheme.labelLarge),
             ],
@@ -47,7 +46,7 @@ class LiveHubCard extends ConsumerWidget {
           _LiveTile(
             title: 'Haramain',
             subtitle: 'Makkah • Madinah live',
-            icon: PhosphorIcons.mosque(),
+            icon: PhosphorIcons.mosque,
             onTap: () {
               AppNav.push(
                 context,
@@ -62,7 +61,7 @@ class LiveHubCard extends ConsumerWidget {
           _LiveTile(
             title: 'Quran Radio',
             subtitle: 'Reciters • Tafsir • Adhkar',
-            icon: PhosphorIcons.radio(),
+            icon: PhosphorIcons.radio,
             onTap: () {
               AppNav.push(
                 context,
@@ -104,7 +103,7 @@ class _LiveTile extends StatelessWidget {
         ),
         child: Row(
           children: [
-            FaIcon(icon),
+            Icon(icon),
 
             const SizedBox(width: 12),
 

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_times.dart';
@@ -240,7 +239,7 @@ class _TimingTile extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          FaIcon(prayer.icon, size: 16),
+          Icon(prayer.icon, size: 16),
           const SizedBox(width: 8),
 
           Column(
@@ -271,8 +270,8 @@ class _TimingTile extends ConsumerWidget {
                 }
               },
 
-              icon: FaIcon(
-                isDisabled ? FontAwesomeIcons.bellSlash : FontAwesomeIcons.bell,
+              icon: Icon(
+                isDisabled ? Icons.notifications : Icons.notifications_off,
                 color: isDisabled
                     ? theme.colorScheme.error
                     : theme.colorScheme.onSurface,
