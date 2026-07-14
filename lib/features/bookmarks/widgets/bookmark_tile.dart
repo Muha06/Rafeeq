@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
- import 'package:rafeeq/core/helpers/app_nav.dart';
+import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/dhikr_bookmark.dart';
@@ -71,6 +71,7 @@ class _BookmarkTileState extends ConsumerState<BookmarkTile> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final cs = theme.colorScheme;
     final dhikrBookmark = widget.dhikrBookmark;
     final quranBookmark = widget.quranBookMark;
 
@@ -83,7 +84,7 @@ class _BookmarkTileState extends ConsumerState<BookmarkTile> {
         children: [
           Text(
             widget.indexDisplay.toString(),
-            style: theme.textTheme.titleMedium,
+            style: theme.textTheme.labelMedium,
           ),
           const SizedBox(width: 16),
 
@@ -129,7 +130,7 @@ class _BookmarkTileState extends ConsumerState<BookmarkTile> {
                 ),
               );
             },
-            icon: const Icon(Icons.more_vert),
+            icon: Icon(Icons.more_horiz, color: cs.onSurfaceVariant),
           ),
         ],
       ),

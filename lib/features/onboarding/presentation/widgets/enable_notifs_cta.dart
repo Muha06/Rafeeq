@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/app/providers/general_notifications_provider.dart';
- import 'package:rafeeq/features/settings/presentation/provider/notiffications_controller.dart';
- 
-class NotificationsPermissionCta extends ConsumerStatefulWidget {
-  const NotificationsPermissionCta({super.key});
+import 'package:rafeeq/features/settings/presentation/provider/notiffications_controller.dart';
 
+class NotificationsPermissionCta extends ConsumerStatefulWidget {
+  const NotificationsPermissionCta({super.key, required this.btnStyle});
+  final ButtonStyle? btnStyle;
   @override
   ConsumerState<NotificationsPermissionCta> createState() =>
       _NotificationsPermissionCtaState();
@@ -30,6 +30,7 @@ class _NotificationsPermissionCtaState
         onPressed: null,
         icon: const Icon(Icons.check_circle_rounded),
         label: const Text('Notifications Enabled'),
+        style: widget.btnStyle,
       );
     }
 
@@ -41,6 +42,7 @@ class _NotificationsPermissionCtaState
             onPressed: () async => notifier.openSettings(),
             icon: const Icon(Icons.settings_rounded),
             label: const Text('Open Settings'),
+            style: widget.btnStyle,
           ),
           const SizedBox(height: 8),
           Text(
@@ -91,6 +93,7 @@ class _NotificationsPermissionCtaState
             )
           : const Icon(Icons.notifications_active_rounded),
       label: Text(perm.isLoading ? 'Enabling…' : 'Enable Notifications'),
+      style: widget.btnStyle,
     );
   }
 }

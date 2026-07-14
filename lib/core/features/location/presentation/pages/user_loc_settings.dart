@@ -153,8 +153,7 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
         children: [
           _SettingCard(
             title: 'Use GPS automatically',
-            description:
-                'We’ll detect your location and compute prayer times for where you are.',
+            description: 'Allow Location services for precise prayer times',
             selected: isAuto,
             selectedColor: cs.surfaceContainerHighest,
             baseColor: cs.surface,
@@ -191,7 +190,7 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
           _SettingCard(
             title: 'Select country & city manually',
             description:
-                'Stable and predictable. No location permission needed.',
+                'Manually choose your country and city for prayer times.',
             selected: !isAuto,
             selectedColor: cs.surfaceContainerHighest,
             baseColor: cs.surface,
@@ -455,6 +454,7 @@ class _SettingCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final theme = Theme.of(context);
+    final cs = theme.colorScheme;
     final tt = theme.textTheme;
 
     return InkWell(
@@ -479,7 +479,12 @@ class _SettingCard extends ConsumerWidget {
                     children: [
                       Text(title, style: tt.labelLarge),
                       const SizedBox(height: 6),
-                      Text(description, style: tt.bodyMedium),
+                      Text(
+                        description,
+                        style: tt.bodyMedium?.copyWith(
+                          color: cs.onSurfaceVariant,
+                        ),
+                      ),
                     ],
                   ),
                 ),

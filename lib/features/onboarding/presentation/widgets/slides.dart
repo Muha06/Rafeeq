@@ -11,8 +11,8 @@ class WelcomeSlide extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     return OnboardingSlide(
       imageAsset: 'assets/images/onboarding/welcome.png',
-      title: 'Rafeeq',
-      subtitle: 'A calm companion for your worship.',
+      title: 'Your Daily Worship Companion',
+      subtitle: 'Everything you need for your daily worship.',
       accent: Theme.of(context).colorScheme.primary,
     );
   }
@@ -23,17 +23,28 @@ class SalahSlide extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
+
+    final btnStyle = theme.elevatedButtonTheme.style?.copyWith(
+          backgroundColor: WidgetStatePropertyAll(cs.tertiary),
+          foregroundColor: WidgetStatePropertyAll(cs.onTertiary),
+          iconColor: WidgetStatePropertyAll(cs.onTertiary),
+        );
+
     return OnboardingSlide(
       imageAsset: 'assets/images/onboarding/salat_feature.png',
       title: 'Stay on time for every ṣalāh',
       subtitle:
           'Enable Location & Notification to calculate and send accurate prayer reminders for where you are.',
       accent: Theme.of(context).colorScheme.primary,
-      child: const Column(
+      child:   Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          LocationPermissionCta(),
-          SizedBox(height: 8),
-          NotificationsPermissionCta(),
+          LocationPermissionCta(btnStyle: btnStyle,),
+          SizedBox(width: 14),
+          NotificationsPermissionCta(btnStyle: btnStyle,),
         ],
       ),
     );

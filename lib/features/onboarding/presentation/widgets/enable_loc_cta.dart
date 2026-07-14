@@ -3,9 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/features/location/presentation/provider/location_prov.dart';
 
 class LocationPermissionCta extends ConsumerStatefulWidget {
-  const LocationPermissionCta({super.key});
-
-  /// Optional: if you want, auto-advance PageView when granted
+  const LocationPermissionCta({super.key,   this.btnStyle});
+  final ButtonStyle? btnStyle;
 
   @override
   ConsumerState<LocationPermissionCta> createState() =>
@@ -24,6 +23,7 @@ class _LocationPermissionCtaState extends ConsumerState<LocationPermissionCta> {
         onPressed: null,
         icon: const Icon(Icons.check_circle_rounded),
         label: const Text('Location Enabled'),
+        style: widget.btnStyle,
       );
     }
 
@@ -37,6 +37,7 @@ class _LocationPermissionCtaState extends ConsumerState<LocationPermissionCta> {
             },
             icon: const Icon(Icons.settings_rounded),
             label: const Text('Open Settings'),
+            style: widget.btnStyle,
           ),
           const SizedBox(height: 8),
           Text(
@@ -63,6 +64,7 @@ class _LocationPermissionCtaState extends ConsumerState<LocationPermissionCta> {
             )
           : const Icon(Icons.location_on_rounded),
       label: Text(perm.isLoading ? 'Enabling…' : 'Enable Location'),
+      style: widget.btnStyle,
     );
   }
 }

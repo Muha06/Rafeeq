@@ -36,7 +36,7 @@ class OnboardingSlide extends StatelessWidget {
           Text(
             title,
             textAlign: TextAlign.center,
-            style: theme.textTheme.headlineSmall?.copyWith(color: cs.onSurface),
+            style: theme.textTheme.headlineMedium,
           ),
 
           const SizedBox(height: 10),

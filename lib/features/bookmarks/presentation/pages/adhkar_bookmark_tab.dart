@@ -4,8 +4,8 @@ import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/app/providers/tabs_screen_provider.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/widgets/app_state_view.dart';
-import 'package:rafeeq/features/adhkar_02/presentation/pages/adhkar_details_page.dart';
-import 'package:rafeeq/features/adhkar_02/presentation/providers/adhkar_providers.dart';
+import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_details_page.dart';
+import 'package:rafeeq/features/adhkar/presentation/providers/adhkar_providers.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/dhikr/dhikr_notifier_provider.dart';
 import 'package:rafeeq/features/bookmarks/widgets/bookmark_tile.dart';
 

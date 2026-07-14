@@ -17,10 +17,10 @@ import 'package:rafeeq/core/app_keys.dart';
 import 'package:rafeeq/core/features/audio/data/audio_handler.dart';
 import 'package:rafeeq/core/themes/dark_theme.dart';
 import 'package:rafeeq/core/themes/light_theme.dart';
-import 'package:rafeeq/features/adhkar_02/data/models/hive/adhkar_hive_wrapper.dart';
-import 'package:rafeeq/features/adhkar_02/data/models/hive/category_hive_wrapper.dart';
-import 'package:rafeeq/features/adhkar_02/data/models/hive/dhikr_category_hive.dart';
-import 'package:rafeeq/features/adhkar_02/data/models/hive/dhikr_hive_model.dart';
+import 'package:rafeeq/features/adhkar/data/models/hive/adhkar_hive_wrapper.dart';
+import 'package:rafeeq/features/adhkar/data/models/hive/category_hive_wrapper.dart';
+import 'package:rafeeq/features/adhkar/data/models/hive/dhikr_category_hive.dart';
+import 'package:rafeeq/features/adhkar/data/models/hive/dhikr_hive_model.dart';
 import 'package:rafeeq/features/notifications/data/datasources/app_notifications_remote_ds.dart';
 import 'package:rafeeq/features/notifications/data/datasources/push_notification_services.dart';
 import 'package:rafeeq/features/asma_ul_husna/data/models/hive/name_hive_model.dart';
@@ -225,7 +225,7 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
       debugShowCheckedModeBanner: false,
       navigatorKey: navigatorKey,
       scaffoldMessengerKey: scaffoldMessengerKey,
-      home: hasSeenOnboarding
+      home: !hasSeenOnboarding
           ? const AppWrapper(child: TabsScreen())
           : const OnboardingPage(),
     );

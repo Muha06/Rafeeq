@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
- import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/quran_reading_plan/presentation/providers/quran_reading_plan_provider.dart';
@@ -46,7 +46,7 @@ class QuranPlannerPage extends ConsumerWidget {
             children: [
               MyQuranGoalCard(),
               SizedBox(height: 8),
-          
+
               ProgressBars(
                 bars: [
                   TodayQuranProgressArc(),
@@ -55,7 +55,7 @@ class QuranPlannerPage extends ConsumerWidget {
                 ],
               ),
               SizedBox(height: 8),
-          
+
               WeeklyQuranChart(),
             ],
           ),
@@ -128,10 +128,15 @@ class MyQuranGoalCard extends ConsumerWidget {
                 Text("Daily Pace", style: theme.textTheme.titleMedium),
 
                 Chip(
+                  backgroundColor: Colors.green,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 0,
+                    horizontal: 2,
+                  ),
                   label: Text(
                     readingPlan.isActive ? "Active" : "Paused",
                     style: theme.textTheme.bodySmall!.copyWith(
-                      color: cs.primary,
+                      color: cs.onSurface,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -163,7 +168,7 @@ class MyQuranGoalCard extends ConsumerWidget {
                         TextSpan(
                           children: [
                             TextSpan(
-                              text: 'Started: ',
+                              text: 'Created: ',
                               style: theme.textTheme.bodySmall,
                             ),
 

@@ -254,6 +254,20 @@ ThemeData appLightThemeData() {
     ),
 
     textTheme: base.copyWith(
+      headlineMedium: base.headlineSmall?.copyWith(
+        fontFamily: 'PlayFairDisplay',
+        fontSize: 26,
+        fontWeight: FontWeight.w600,
+        letterSpacing: -0.4,
+        color: scheme.onSurface,
+      ),
+
+      headlineSmall: base.headlineSmall?.copyWith(
+        fontSize: 24,
+        fontWeight: FontWeight.w600,
+        letterSpacing: -0.4,
+        color: scheme.onSurface,
+      ),
       titleLarge: base.titleLarge?.copyWith(
         fontSize: 22,
         fontWeight: FontWeight.w600,
@@ -328,7 +342,7 @@ class AppLightColors {
 
   // ➖ BORDERS / DIVIDERS (iOS style)
   static const outline = Color(0xFFE5E5EA);
-  static const outlineVariant = Color(0xFFF0F0F4);
+  static const outlineVariant = Color(0xFFD0D0D8);
 
   // 🟢 PRIMARY
   static const brand = Color(0xFF27687E);

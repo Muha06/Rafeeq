@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rafeeq/core/themes/light_theme.dart';
 
 ThemeData appDarkThemeData() {
   final scheme =
@@ -12,6 +13,7 @@ ThemeData appDarkThemeData() {
         outline: AppDarkColors.outline, // outlines
         tertiary: AppDarkColors
             .tertiary, // used for chips and highlights above primary
+        onTertiary: AppDarkColors.onSurface,
       ).copyWith(
         // Material 3 container ladder
         surfaceContainerLowest: AppDarkColors.canvas, // page bg
@@ -248,8 +250,15 @@ ThemeData appDarkThemeData() {
     ),
 
     textTheme: base.copyWith(
+      headlineMedium: base.headlineSmall?.copyWith(
+        fontFamily: 'PlayFairDisplay',
+        fontSize: 26,
+        fontWeight: FontWeight.w600,
+        letterSpacing: -0.4,
+        color: scheme.onSurface,
+      ),
+
       headlineSmall: base.headlineSmall?.copyWith(
-        fontFamily: 'PlayfairDisplay',
         fontSize: 24,
         fontWeight: FontWeight.w600,
         letterSpacing: -0.4,
@@ -328,7 +337,7 @@ class AppDarkColors {
   static const outline = Color(0xFF3A332D);
   static const outlineVariant = Color(0xFF2A241F);
 
-  static const tertiary = Color(0xFF7FAFA2);
+  static const tertiary = AppLightColors.brand;
   static const brand = Color(0xFFe4c169);
 
   static const onSurface = Color(0xFFEAF2F2);
