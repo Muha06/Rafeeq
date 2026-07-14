@@ -10,9 +10,7 @@ import 'package:rafeeq/features/notifications/presentation/pages/notification_li
 import 'package:rafeeq/features/notifications/presentation/providers/notification_provider.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/ayah_of_the_day.dart';
 import 'package:rafeeq/features/home_reminders/presentation/widgets/reminders_carousel.dart';
-import 'package:rafeeq/features/quran_reading_plan/presentation/providers/quran_reading_plan_provider.dart';
-import 'package:rafeeq/features/quran_reading_plan/presentation/widgets/home_card_reading_plan.dart';
-import 'package:rafeeq/features/settings/presentation/pages/settings_page.dart';
+  import 'package:rafeeq/features/settings/presentation/pages/settings_page.dart';
 import 'package:rafeeq/features/timings/presentation/widgets/timeline_card.dart';
 
 class HomePage extends ConsumerStatefulWidget {
@@ -28,8 +26,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final goal = ref.watch(quranReadingPlanProvider);
-    final reminders = ref.watch(homeRemindersProvider(context));
+     final reminders = ref.watch(homeRemindersProvider(context));
 
     return Scaffold(
       body: CustomScrollView(
@@ -68,17 +65,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             ),
           ),
 
-          //QURAN GOAL CARD
-          if (goal.isActive)
-            const SliverToBoxAdapter(
-              child: HomeSection(
-                padding: EdgeInsets.symmetric(
-                  horizontal: _hPad,
-                  vertical: _v10,
-                ),
-                child: QuranReadingPlanCard(),
-              ),
-            ),
+          
 
           // HARAMAIN CARD
           const SliverToBoxAdapter(

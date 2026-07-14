@@ -78,8 +78,7 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
             ),
             const SizedBox(height: 4),
 
-            //TRANSILT TOGGLE TODO: Will add later
-            SwitchListTile(
+             SwitchListTile(
               value: showTranslit,
               contentPadding: EdgeInsets.zero,
               title: Text('Show Transliteration', style: titleTextstyle),

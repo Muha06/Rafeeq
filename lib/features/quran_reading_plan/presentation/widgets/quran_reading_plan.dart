@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
-import 'package:rafeeq/features/quran/presentation/pages/surah_page.dart';
-import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provider.dart';
-import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_ayah_dialog.dart';
 import 'package:rafeeq/features/quran_reading_plan/presentation/pages/quran_reading_plan_stats.dart';
 import 'package:rafeeq/features/quran_reading_plan/presentation/providers/progress_provider.dart';
 import 'package:rafeeq/features/quran_reading_plan/presentation/providers/quran_reading_plan_provider.dart';
@@ -35,9 +32,10 @@ class QuranReadingPlanCard extends ConsumerWidget {
           color: cs.surface,
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               // Top label
               Row(
@@ -55,11 +53,14 @@ class QuranReadingPlanCard extends ConsumerWidget {
                 ],
               ),
 
+              const SizedBox(height: 8),
+
               // Plan title
               Text(
                 '${readingPlan.dailyTarget} ayahs / day',
                 style: theme.textTheme.titleLarge?.copyWith(color: cs.primary),
               ),
+
               const SizedBox(height: 16),
 
               // Progress row
@@ -84,35 +85,6 @@ class QuranReadingPlanCard extends ConsumerWidget {
                     ),
                   ),
                 ],
-              ),
-              const SizedBox(height: 16),
-
-              // CTA Button
-              SizedBox(
-                width: double.infinity,
-                child: FilledButton(
-                  onPressed: () async {
-                    final surahs = ref.read(surahsProvider).value ?? [];
-
-                    showSurahAyahPickerDialog(
-                      context: context,
-                      surahs: surahs,
-                      onGo: (surahId, surahVerse) {
-                        final selectedSurah = surahs.firstWhere(
-                          (surah) => surah.id == surahId,
-                        );
-                        AppNav.push(
-                          context,
-                          FullSurahPage(
-                            surah: selectedSurah,
-                            autoScrollAyah: surahVerse,
-                          ),
-                        );
-                      },
-                    );
-                  },
-                  child: const Text('Start Reading'),
-                ),
               ),
             ],
           ),

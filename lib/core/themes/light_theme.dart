@@ -242,50 +242,61 @@ ThemeData appLightThemeData() {
 
     textTheme: base.copyWith(
       titleLarge: base.titleLarge?.copyWith(
-        fontSize: 20,
-        fontWeight: FontWeight.w500,
+        fontSize: 22,
+        fontWeight: FontWeight.w600,
+        letterSpacing: -0.3,
+        color: scheme.onSurface,
+      ),
+
+      titleMedium: base.titleMedium?.copyWith(
+        fontSize: 18,
+        fontWeight: FontWeight.w600,
         letterSpacing: -0.2,
         color: scheme.onSurface,
       ),
-      titleMedium: base.titleMedium?.copyWith(
-        fontSize: 16,
-        fontWeight: FontWeight.w500,
-        letterSpacing: -0.1,
-        color: scheme.onSurface,
-      ),
+
       titleSmall: base.titleSmall?.copyWith(
-        fontSize: 14,
+        fontSize: 16,
         fontWeight: FontWeight.w500,
         color: scheme.onSurfaceVariant,
       ),
+
       bodyLarge: base.bodyLarge?.copyWith(
-        fontSize: 15,
-        height: 1.6,
-        color: scheme.onSurface,
-      ),
-      bodyMedium: base.bodyMedium?.copyWith(
-        fontSize: 14,
+        fontSize: 17,
         height: 1.65,
         color: scheme.onSurface,
       ),
-      bodySmall: base.bodySmall?.copyWith(
-        fontSize: 12.5,
-        height: 1.5,
-        color: scheme.onSurfaceVariant,
-      ),
-      labelLarge: base.labelLarge?.copyWith(
-        fontWeight: FontWeight.w600,
-        letterSpacing: 0.2,
+
+      bodyMedium: base.bodyMedium?.copyWith(
+        fontSize: 15.5,
+        height: 1.65,
         color: scheme.onSurface,
       ),
-      labelMedium: base.labelMedium?.copyWith(
-        fontWeight: FontWeight.w500,
-        letterSpacing: 0.2,
+
+      bodySmall: base.bodySmall?.copyWith(
+        fontSize: 14,
+        height: 1.55,
         color: scheme.onSurfaceVariant,
       ),
-      labelSmall: base.labelSmall?.copyWith(
+
+      labelLarge: base.labelLarge?.copyWith(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        letterSpacing: 0,
+        color: scheme.onSurface,
+      ),
+
+      labelMedium: base.labelMedium?.copyWith(
+        fontSize: 14,
         fontWeight: FontWeight.w500,
-        letterSpacing: 0.2,
+        letterSpacing: 0,
+        color: scheme.onSurfaceVariant,
+      ),
+
+      labelSmall: base.labelSmall?.copyWith(
+        fontSize: 13,
+        fontWeight: FontWeight.w500,
+        letterSpacing: 0,
         color: scheme.onSurfaceVariant.withAlpha(210),
       ),
     ),

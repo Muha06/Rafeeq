@@ -100,9 +100,7 @@ final salahNotificationsControllerProvider = Provider<void>((ref) {
 
     //Otherwise if user allowed salah reminders
     //We fetch then schedule
-    final times = await ref.read(
-      todaySalahTimesProvider.future,
-    ); //TODO: check this
+    final times = await ref.read(todaySalahTimesProvider.future);
     final salahRemindersAllowed = ref.read(salahNotifControllerProvider);
 
     if (!salahRemindersAllowed) return;
