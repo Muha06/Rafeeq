@@ -32,7 +32,7 @@ class _BookmarkPageState extends ConsumerState<BookmarkPage> {
                 width: MediaQuery.of(context).size.width * 0.60,
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(999),
                   border: Border.all(color: theme.dividerColor),
                 ),
                 child: TabBar(
@@ -42,7 +42,7 @@ class _BookmarkPageState extends ConsumerState<BookmarkPage> {
 
                   indicatorSize: TabBarIndicatorSize.tab,
                   indicator: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(999),
                     color: theme.colorScheme.primary,
                   ),
                   labelStyle: TextStyle(
