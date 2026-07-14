@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
- import 'package:rafeeq/app/providers/tabs_screen_provider.dart';
 import 'package:rafeeq/core/animations/navigation_animations.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
-import 'package:rafeeq/features/asma_ul_husna/presentation/pages/asma_ul_husna_list_page.dart';
 import 'package:rafeeq/features/haramain-live/presentation/widgets/haramain_card.dart';
-import 'package:rafeeq/features/home/presentation/widgets/quick_action_row.dart';
 import 'package:rafeeq/features/home/presentation/widgets/user_location_chip.dart';
 import 'package:rafeeq/features/home_reminders/presentation/providers/reminder_providers.dart';
 import 'package:rafeeq/features/notifications/presentation/pages/notification_list_page.dart';
@@ -41,44 +38,33 @@ class _HomePageState extends ConsumerState<HomePage> {
           SliverAppBar(
             leading: const UserLocationChip(),
             leadingWidth: 120,
-            toolbarHeight: kToolbarHeight + 32,
+            toolbarHeight: kToolbarHeight + 16,
             actions: [const _NotificationIcon(), const _SettingsIcon()],
             bottom: reminders.isNotEmpty
                 ? const PreferredSize(
-                    preferredSize: Size.fromHeight(74),
+                    preferredSize: Size.fromHeight(60),
                     child: HomeRemindersCarousel(),
                   )
                 : null,
           ),
 
-          // TIMESCARD + QUICK ACTIONS
+          // TIMESCARD
           const SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.only(
+                left: _hPad,
+                right: _hPad,
                 bottom: _v10,
               ), // to accommodate quick actions overlap
               child: HomeTimelineCard(),
             ),
           ),
 
-          //QUICK ROWS
-          SliverToBoxAdapter(
+          // AYAH OF THE DAY
+          const SliverToBoxAdapter(
             child: HomeSection(
-              padding: const EdgeInsets.symmetric(
-                horizontal: _hPad,
-                vertical: _v10,
-              ),
-              child: HomeQuickActionsRow(
-                onQuran: () {
-                  ref.read(tabsScreenIndexProvider.notifier).state = 1;
-                },
-                onAdhkar: () {
-                  ref.read(tabsScreenIndexProvider.notifier).state = 2;
-                },
-                onAllahNames: () {
-                  AppNav.push(context, const AllahNamesPage());
-                },
-              ),
+              padding: EdgeInsets.symmetric(horizontal: _hPad, vertical: _v10),
+              child: AyahOfTheDay(),
             ),
           ),
 
@@ -99,14 +85,6 @@ class _HomePageState extends ConsumerState<HomePage> {
             child: HomeSection(
               padding: EdgeInsets.symmetric(horizontal: _hPad, vertical: _v10),
               child: LiveHubCard(),
-            ),
-          ),
-
-          // AYAH OF THE DAY
-          const SliverToBoxAdapter(
-            child: HomeSection(
-              padding: EdgeInsets.symmetric(horizontal: _hPad, vertical: _v10),
-              child: AyahOfTheDay(),
             ),
           ),
         ],

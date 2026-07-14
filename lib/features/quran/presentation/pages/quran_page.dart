@@ -53,7 +53,7 @@ class _QuranPageState extends ConsumerState<QuranPage> {
               ),
               actions: [
                 IconButton(
-                  icon: Icon(PhosphorIcons.magnifyingGlass),
+                  icon: const Icon(PhosphorIcons.magnifyingGlass),
 
                   onPressed: () {
                     Navigator.push(

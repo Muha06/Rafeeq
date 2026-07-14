@@ -293,40 +293,33 @@ ThemeData appLightThemeData() {
 }
 
 class AppLightColors {
-  // 🌤️ BACKGROUND (soft warm, not pure white)
-  static const canvas = Color(0xFFFAFAF6);
+  // 🌤️ BACKGROUND (iOS system background)
+  static const canvas = Color(0xFFF2F2F7);
 
-  // 🧱 SURFACES (Material 3 ladder tuned warm)
-  static const surface = Color(0xFFFFFFFF);
-  // main cards (clean white pops on warm bg)
+  // 🧱 SURFACES
+  static const surface = Color(0xFFFFFFFF); // Primary cards
+  static const surfaceDim = Color(0xFFF7F7FA); // Grouped sections
+  static const surfaceHigh = Color(0xFFFCFCFD); // Elevated cards
+  static const surfaceHighest = Color(0xFFE3E5EA);
 
-  static const surfaceDim = Color(0xFFF1F1ED);
-  // sections / grouped areas
+  // ➖ BORDERS / DIVIDERS (iOS style)
+  static const outline = Color(0xFFE5E5EA);
+  static const outlineVariant = Color(0xFFF0F0F4);
 
-  static const surfaceHigh = Color(0xFFF7F7F3);
-  // elevated containers (subtle lift)
+  // 🟢 PRIMARY
+  static const brand = Color(0xFF27687E);
 
-  static const surfaceHighest = Color(0xFFEEEEEA);
-  // dialogs / menus (slightly separated)
-
-  // ➖ BORDERS / DIVIDERS (soft, not harsh)
-  static const outline = Color(0xFFE3E3DF);
-  static const outlineVariant = Color(0xFFEDEDE8);
-
-  // 🟢 PRIMARY (muted teal, calm & premium)
-  static const brand = Color(0xFF27687e);
-
-  // 🟡 ACCENT (gold — highlights only, NOT actions)
+  // 🟡 ACCENT
   static const accent = Color(0xFFC9A24A);
 
-  // ✍️ TEXT (softer contrast for premium feel)
+  // ✍️ TEXT
   static const onSurface = Color(0xFF1F2A2C);
   static const onSurface2 = Color(0xFF6B7C7E);
 
-  // ❌ ERROR (slightly softened red)
+  // ❌ ERROR
   static const error = Color(0xFFD64545);
 
-  // 🔘 SWITCH (aligned with brand)
+  // 🔘 SWITCH
   static const switchOn = brand;
   static const switchOnBg = Color(0xFFDCEEEE);
   static const switchRipple = Color(0x1A2F6F73);

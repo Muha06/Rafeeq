@@ -158,7 +158,7 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
                       RafeeqAnalytics.logFeature('logged_Quran_progress');
                     },
 
-                    icon: Icon(PhosphorIcons.floppyDisk),
+                    icon: const Icon(PhosphorIcons.floppyDisk),
                     label: const Text('Save'),
                   ),
                 ),

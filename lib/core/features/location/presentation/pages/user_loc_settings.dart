@@ -56,7 +56,7 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
         backgroundColor: theme.bottomSheetTheme.backgroundColor,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
         textStyle: theme.textTheme.bodyMedium,
-        inputDecoration: InputDecoration(
+        inputDecoration: const InputDecoration(
           hintText: 'Search country…',
           prefixIcon: Icon(PhosphorIcons.magnifyingGlass),
         ),

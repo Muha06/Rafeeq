@@ -99,7 +99,7 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
               children: [
                 IconButton(
                   visualDensity: VisualDensity.comfortable,
-                  icon: Icon(PhosphorIcons.caretDown ),
+                  icon: const Icon(PhosphorIcons.caretDown ),
                   onPressed: () => AppNav.pop(context),
                 ),
 
@@ -220,12 +220,12 @@ class AnimatedPlayPauseBtn extends StatelessWidget {
         child: isBuffering
             ? const CupertinoActivityIndicator()
             : isPlaying
-            ? PhosphorIcon(
-                key: const ValueKey('pause'),
+            ? const PhosphorIcon(
+                key: ValueKey('pause'),
                 PhosphorIcons.pause ,
               )
-            : PhosphorIcon(
-                key: const ValueKey('play'),
+            : const PhosphorIcon(
+                key: ValueKey('play'),
                 PhosphorIcons.play ,
               ),
       ),

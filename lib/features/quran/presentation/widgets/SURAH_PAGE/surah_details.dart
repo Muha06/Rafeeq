@@ -102,7 +102,7 @@ class PlayFullSurahBtn extends ConsumerWidget {
     return OutlinedButton.icon(
       icon: isBuffering
           ? const SizedBox(height: 12, child: CupertinoActivityIndicator())
-          : Icon(PhosphorIcons.playCircle),
+          : const Icon(PhosphorIcons.playCircle),
       onPressed: onPlay,
 
       label: Text(isBuffering ? 'Loading...' : 'Play surah'),

@@ -42,7 +42,6 @@ class _BuildTimelineCard extends StatelessWidget {
       child: Container(
         height: 120,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         decoration: BoxDecoration(
           color: cs.primary.withAlpha(160),
           borderRadius: BorderRadius.circular(12),

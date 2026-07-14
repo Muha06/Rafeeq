@@ -34,7 +34,7 @@ class QuranPlannerPage extends ConsumerWidget {
                 },
               );
             },
-            icon: PhosphorIcon(PhosphorIcons.arrowClockwise),
+            icon: const PhosphorIcon(PhosphorIcons.arrowClockwise),
             tooltip: 'Reset stats',
           ),
         ],

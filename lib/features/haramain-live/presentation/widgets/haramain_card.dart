@@ -27,7 +27,7 @@ class LiveHubCard extends ConsumerWidget {
           // TITLE
           Row(
             children: [
-              Icon(PhosphorIcons.broadcast),
+              const Icon(PhosphorIcons.broadcast),
               const SizedBox(width: 8),
               Text('Live Streams', style: textTheme.labelLarge),
             ],

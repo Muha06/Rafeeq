@@ -13,7 +13,7 @@ final homeRemindersProvider = Provider.family<List<Widget>, BuildContext>((
   bool isFriday = now.weekday == DateTime.friday;
 
   // 🕌 Friday
-  if (!isFriday) {
+  if (isFriday) {
     reminders.add(
       HomeReminderCard(
         title: "Click to view Friday reminders",

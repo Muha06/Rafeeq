@@ -8,7 +8,7 @@ void showFridayVirtuesSheet(BuildContext context) {
     context: context,
     showDragHandle: true,
     child: SizedBox(
-      height: MediaQuery.sizeOf(context).height * 0.7,
+      height: MediaQuery.sizeOf(context).height * 0.9,
       child: ListView(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
         children: [

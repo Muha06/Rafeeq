@@ -68,7 +68,7 @@ class GLobalMiniPlayerSheet extends ConsumerWidget {
                 scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
                 ctrl.stop();
               },
-              icon: Icon(PhosphorIcons.x),
+              icon: const Icon(PhosphorIcons.x),
             ),
           ],
         ),

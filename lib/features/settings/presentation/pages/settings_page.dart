@@ -32,7 +32,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       body: ListView(
         children: [
           SettingsTile(
-            leading: PhosphorIcon(PhosphorIcons.bell),
+            leading: const PhosphorIcon(PhosphorIcons.bell),
             title: 'Salah reminders',
             subtitle: 'Get Salah times reminders',
             isDark: isDark,
@@ -53,7 +53,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           ),
 
           SettingsTile(
-            leading: PhosphorIcon(PhosphorIcons.bell),
+            leading: const PhosphorIcon(PhosphorIcons.bell),
             title: 'Adhkar reminders',
             subtitle: 'Morning & evening adhkars',
             isDark: isDark,
@@ -75,7 +75,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 
           //send feedback
           SettingsTile(
-            leading: PhosphorIcon(PhosphorIcons.chatTeardropText),
+            leading: const PhosphorIcon(PhosphorIcons.chatTeardropText),
             title: 'Share Your Thoughts',
             subtitle:
                 'Share your suggestions and make Rafeeq more beneficial, In shaa Allah',

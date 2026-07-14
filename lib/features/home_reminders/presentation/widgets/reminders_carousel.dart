@@ -21,7 +21,7 @@ class HomeRemindersCarousel extends ConsumerWidget {
       items: items,
       options: CarouselOptions(
         padEnds: true,
-        height: 74, // match your card height area
+        height: 64,
         viewportFraction: 1, // full width (banner style)
         enlargeCenterPage: false,
         enableInfiniteScroll: canAutoPlay,

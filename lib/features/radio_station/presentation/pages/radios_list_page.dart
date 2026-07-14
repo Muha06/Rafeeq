@@ -97,7 +97,7 @@ class _RadioListPageState extends ConsumerState<RadioListPage> {
 }
 
 Widget _emptyState() {
-  return Center(
+  return const Center(
     child: AppStateView(
       icon: PhosphorIcons.radio,
       title: "No stations found",

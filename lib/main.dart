@@ -123,10 +123,7 @@ void main() {
 
       runApp(
         ProviderScope(
-          overrides: [
-            audioHandlerProvider.overrideWithValue(audioHandler),
-            //inject the single audio handler instance so it can be used
-          ],
+          overrides: [audioHandlerProvider.overrideWithValue(audioHandler)],
           child: const MyApp(),
         ),
       );
