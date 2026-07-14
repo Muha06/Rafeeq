@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
- import 'package:rafeeq/features/radio_station/domain/enums/radio_audio_category.dart';
+import 'package:rafeeq/features/radio_station/domain/enums/radio_audio_category.dart';
 
 class RadioCategorySelector extends StatelessWidget {
   const RadioCategorySelector({
@@ -18,7 +18,7 @@ class RadioCategorySelector extends StatelessWidget {
     final tt = theme.textTheme;
 
     return SizedBox(
-      height: 44,
+      height: 36,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: RadioAudioCategory.values.length,
@@ -34,7 +34,7 @@ class RadioCategorySelector extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
                 color: selectedCat ? cs.primaryContainer : cs.surface,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(999),
                 border: Border.all(
                   color: selectedCat
                       ? cs.primary

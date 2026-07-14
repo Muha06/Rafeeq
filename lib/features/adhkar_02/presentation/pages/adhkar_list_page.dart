@@ -61,20 +61,10 @@ class AdhkarPreviewPages extends ConsumerWidget {
                     child: Row(
                       children: [
                         //Number
-                        Container(
-                          height: 24,
-                          width: 36,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(999),
-                            color: cs.surface,
-                          ),
-                          child: Center(
-                            child: Text(
-                              (index + 1).toString(),
-                              style: theme.textTheme.bodySmall!.copyWith(
-                                color: cs.onSurface,
-                              ),
-                            ),
+                        Text(
+                          (index + 1).toString(),
+                          style: theme.textTheme.bodySmall!.copyWith(
+                            color: cs.onSurfaceVariant,
                           ),
                         ),
 

@@ -162,11 +162,13 @@ class AllSalatTimingsCard extends StatelessWidget {
               final isCurrent = p == current;
 
               final lightColors = isCurrent ? cs.tertiary : cs.onPrimary;
-              final darkColors = isCurrent ? cs.primary : cs.onSurface;
+              final darkColors = isCurrent ? cs.primary : cs.onSurfaceVariant;
+              final darkColors2 = isCurrent ? cs.primary : cs.onSurface;
 
               final isDark = theme.brightness == Brightness.dark;
 
               final color = isDark ? darkColors : lightColors;
+              final timesColor = isDark ? darkColors2 : lightColors;
 
               return Column(
                 mainAxisSize: MainAxisSize.min,
@@ -181,12 +183,12 @@ class AllSalatTimingsCard extends StatelessWidget {
 
                   PhosphorIcon(p.icon, size: 24, color: color),
 
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 6),
 
                   Text(
                     _formatHm(t),
                     style: theme.textTheme.titleSmall?.copyWith(
-                      color: color,
+                      color: timesColor,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -214,6 +216,7 @@ class _TimingTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final cs = theme.colorScheme;
 
     final disabled = ref.watch(disabledSalahPrayersProvider);
     final isDisabled = disabled.contains(prayer);
@@ -239,17 +242,23 @@ class _TimingTile extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(prayer.icon, size: 16),
+          Icon(prayer.icon, size: 24),
           const SizedBox(width: 8),
 
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(title, style: theme.textTheme.labelLarge),
-              const SizedBox(height: 12),
+              Text(
+                title,
+                style: theme.textTheme.labelMedium?.copyWith(
+                  color: cs.onSurfaceVariant,
+                ),
+              ),
+              const SizedBox(height: 8),
+
               //time
-              Text(timeText, style: theme.textTheme.titleMedium),
+              Text(timeText, style: theme.textTheme.labelLarge),
             ],
           ),
 
@@ -271,7 +280,7 @@ class _TimingTile extends ConsumerWidget {
               },
 
               icon: Icon(
-                isDisabled ? Icons.notifications : Icons.notifications_off,
+                isDisabled ? PhosphorIcons.bellSlash : PhosphorIcons.bell,
                 color: isDisabled
                     ? theme.colorScheme.error
                     : theme.colorScheme.onSurface,

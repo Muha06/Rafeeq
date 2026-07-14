@@ -69,6 +69,13 @@ ThemeData appDarkThemeData() {
       foregroundColor: scheme.onSurface,
       elevation: 0,
       surfaceTintColor: Colors.transparent,
+      titleTextStyle: base.headlineSmall?.copyWith(
+        fontFamily: 'PlayfairDisplay',
+        fontSize: 22,
+        fontWeight: FontWeight.w600,
+        letterSpacing: -0.4,
+        color: scheme.onSurface,
+      ),
     ),
 
     cardTheme: CardThemeData(
@@ -218,6 +225,12 @@ ThemeData appDarkThemeData() {
       iconColor: scheme.onSurfaceVariant,
       textColor: scheme.onSurface,
       subtitleTextStyle: TextStyle(color: scheme.onSurfaceVariant),
+      titleTextStyle: base.titleMedium?.copyWith(
+        fontSize: 18,
+        fontWeight: FontWeight.w400,
+        letterSpacing: -0.2,
+        color: scheme.onSurface,
+      ),
     ),
 
     switchTheme: SwitchThemeData(
@@ -235,6 +248,14 @@ ThemeData appDarkThemeData() {
     ),
 
     textTheme: base.copyWith(
+      headlineSmall: base.headlineSmall?.copyWith(
+        fontFamily: 'PlayfairDisplay',
+        fontSize: 24,
+        fontWeight: FontWeight.w600,
+        letterSpacing: -0.4,
+        color: scheme.onSurface,
+      ),
+
       titleLarge: base.titleLarge?.copyWith(
         fontSize: 22,
         fontWeight: FontWeight.w500,
@@ -311,8 +332,7 @@ class AppDarkColors {
   static const brand = Color(0xFFe4c169);
 
   static const onSurface = Color(0xFFEAF2F2);
-  static const onSurface2 = Color(0xFFCAD6D8);
-
+  static const onSurface2 = Color(0xFF96A2A5);
   static const error = Color(0xFFFF5A6A);
 
   static const switchOn = Color(0xFFE4C169); // same as brand (unifies identity)

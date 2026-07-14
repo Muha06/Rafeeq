@@ -69,6 +69,13 @@ ThemeData appLightThemeData() {
       foregroundColor: scheme.onSurface,
       elevation: 0,
       surfaceTintColor: Colors.transparent,
+      titleTextStyle: base.headlineSmall?.copyWith(
+        fontFamily: 'PlayfairDisplay',
+        fontSize: 22,
+        fontWeight: FontWeight.w600,
+        letterSpacing: -0.4,
+        color: scheme.onSurface,
+      ),
     ),
 
     cardTheme: CardThemeData(
@@ -224,6 +231,12 @@ ThemeData appLightThemeData() {
       iconColor: scheme.onSurfaceVariant,
       textColor: scheme.onSurface,
       subtitleTextStyle: TextStyle(color: scheme.onSurfaceVariant),
+      titleTextStyle: base.titleMedium?.copyWith(
+        fontSize: 18,
+        fontWeight: FontWeight.w400,
+        letterSpacing: -0.2,
+        color: scheme.onSurface,
+      ),
     ),
 
     switchTheme: SwitchThemeData(

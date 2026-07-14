@@ -333,8 +333,9 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
     final surahId = widget.surah.id;
 
     final theme = Theme.of(context);
-    final isDark = ref.watch(isDarkProvider);
-
+    final cs = theme.colorScheme;
+    final appbarIconColors = cs.onSurface;
+    
     final ayahsAsync = ref.watch(ayahsProvider(surahId));
 
     final showAudioControls = ref.watch(showAudioControlsProvider);
@@ -392,7 +393,10 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
             actions: [
               //Ayah log
               IconButton(
-                icon: const PhosphorIcon(PhosphorIcons.floppyDisk),
+                icon: PhosphorIcon(
+                  PhosphorIcons.floppyDisk,
+                  color: appbarIconColors,
+                ),
                 onPressed: () async {
                   showAyahLogSheet(context, ref);
                 },
@@ -416,7 +420,10 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
                   );
                 },
                 visualDensity: VisualDensity.compact,
-                icon: const PhosphorIcon(PhosphorIcons.bookOpenText),
+                icon: PhosphorIcon(
+                  PhosphorIcons.bookOpenText,
+                  color: appbarIconColors,
+                ),
               ),
 
               //Surah settings
@@ -429,7 +436,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
                     ),
                   );
                 },
-                icon: const PhosphorIcon(PhosphorIcons.gear),
+                icon: PhosphorIcon(PhosphorIcons.gear, color: appbarIconColors),
               ),
             ],
             bottom: appBarBottomDivider(context),
@@ -456,7 +463,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
                   if (index == 0) {
                     return Column(
                       children: [
-                        SurahDetails(surah: surah, isDark: isDark),
+                        SurahDetails(surah: surah),
                         const SizedBox(height: 8),
 
                         PlayFullSurahBtn(
@@ -555,7 +562,10 @@ class AppbarSurahPicker extends ConsumerWidget {
                 children: [
                   Text(
                     "${surah.id}. ${surah.nameTransliteration}",
-                    style: theme.textTheme.titleLarge!.copyWith(fontSize: 16),
+                    style: theme.textTheme.titleLarge!.copyWith(
+                      fontFamily: 'PlayFairDisplay',
+                      fontSize: 16,
+                    ),
                   ),
                   const SizedBox(width: 2),
 

@@ -27,7 +27,7 @@ class _RadioListPageState extends ConsumerState<RadioListPage> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text("📻 Live Radio")),
+      appBar: AppBar(title: const Text("Live Radio")),
 
       body: SafeArea(
         top: false,
@@ -52,7 +52,6 @@ class _RadioListPageState extends ConsumerState<RadioListPage> {
                 child: switch (state) {
                   RadioInitial() => const SizedBox(),
 
-                  //TODO: Use shimmer
                   RadioLoading() => const Center(
                     child: CircularProgressIndicator(),
                   ),
@@ -79,7 +78,7 @@ class _RadioListPageState extends ConsumerState<RadioListPage> {
                                     crossAxisCount: 3,
                                     crossAxisSpacing: 12,
                                     mainAxisSpacing: 12,
-                                    childAspectRatio: 0.7,
+                                    childAspectRatio: 0.56,
                                   ),
                               itemCount: stations.length,
                               itemBuilder: (_, i) =>

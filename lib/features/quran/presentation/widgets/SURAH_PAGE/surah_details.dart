@@ -7,10 +7,9 @@ import 'package:rafeeq/core/themes/app_text_style.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 
 class SurahDetails extends ConsumerWidget {
-  const SurahDetails({super.key, required this.surah, required this.isDark});
+  const SurahDetails({super.key, required this.surah});
 
   final Surah surah;
-  final bool isDark;
 
   @override
   Widget build(BuildContext context, ref) {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
- import 'package:rafeeq/core/helpers/app_sheets.dart';
+import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
 import 'package:rafeeq/features/quran_audio/presentation/widgets/reciter_picker_sheet.dart';
@@ -16,6 +16,7 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final cs = theme.colorScheme;
 
     final s = ref.watch(surahSettingsProvider);
     final sNotifier = ref.read(surahSettingsProvider.notifier);
@@ -39,7 +40,11 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
       surahSettingsProvider.select((s) => s.autoScrollEnabled),
     );
 
-    final titleTextstyle = theme.textTheme.titleMedium;
+    final titleTextstyle = theme.listTileTheme.titleTextStyle;
+    final valueTextstyle = theme.listTileTheme.titleTextStyle?.copyWith(
+      color: cs.onSurfaceVariant,
+      fontSize: 16,
+    );
 
     final selectedReciter = ref.watch(selectedReciterProvider);
 
@@ -78,7 +83,7 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
             ),
             const SizedBox(height: 4),
 
-             SwitchListTile(
+            SwitchListTile(
               value: showTranslit,
               contentPadding: EdgeInsets.zero,
               title: Text('Show Transliteration', style: titleTextstyle),
@@ -88,18 +93,19 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
             ),
             const SizedBox(height: 4),
 
-            //Select Translations
-            _SurahSettingsSelectTile(
-              title: 'Translations',
-              value: '',
-              onTap: () {},
-            ),
+            //TODO: Add Translations
+            // _SurahSettingsSelectTile(
+            //   title: 'Translations',
+            //   value: '',
+            //   onTap: () {},
+            // ),
             const SizedBox(height: 4),
 
             //select reciter
             _SurahSettingsSelectTile(
               title: 'Reciters',
               value: selectedReciter.name,
+              valueStyle: valueTextstyle,
               onTap: () {
                 AppSheets.showBottomSheet(
                   context: context,
@@ -111,10 +117,13 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
             const SizedBox(height: 4),
 
             // Font size slider (Arabic)
-            Text(
-              'Arabic Font Size: ${arabicFontSize.toInt()}',
-              style: titleTextstyle,
+            _LabelValueRow(
+              label: 'Arabic font size: ',
+              value: arabicFontSize.toInt().toString(),
+              labelStyle: titleTextstyle!,
+              valueStyle: valueTextstyle!,
             ),
+
             Slider(
               min: 16,
               max: 36,
@@ -127,10 +136,13 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
             // Font size slider (Translation)
             if (s.showTranslation) ...[
               const SizedBox(height: 8),
-              Text(
-                'Translation Font Size: ${translationSize.toInt()}',
-                style: titleTextstyle,
+              _LabelValueRow(
+                label: 'Translation fontsize: ',
+                value: translationSize.toInt().toString(),
+                labelStyle: titleTextstyle,
+                valueStyle: valueTextstyle,
               ),
+
               Slider(
                 min: 12,
                 max: 28,
@@ -139,26 +151,35 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
                   sNotifier.setTranslationFont(value);
                 },
               ),
-
-              //cancel btn
-              Center(
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    'Close',
-                    style: theme.textTheme.bodyMedium!.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 24),
             ],
           ],
         ),
       ),
+    );
+  }
+}
+
+class _LabelValueRow extends StatelessWidget {
+  const _LabelValueRow({
+    required this.label,
+    required this.value,
+    required this.labelStyle,
+    required this.valueStyle,
+  });
+
+  final String label;
+  final String value;
+  final TextStyle labelStyle;
+  final TextStyle valueStyle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(label, style: labelStyle),
+        Text(value, style: valueStyle),
+      ],
     );
   }
 }
@@ -201,7 +222,7 @@ class _SurahSettingsSelectTile extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
-            const Icon(Icons.chevron_right, size: 16),
+            const Icon(Icons.chevron_right, size: 20),
           ],
         ),
       ),

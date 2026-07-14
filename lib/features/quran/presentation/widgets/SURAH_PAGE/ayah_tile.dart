@@ -37,16 +37,17 @@ class _AyahTileState extends ConsumerState<AyahTile> {
     final bookmarkId = ayah.verseKey;
 
     final cs = theme.colorScheme;
+    final actionsIconColor = cs.onSurfaceVariant;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 6),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           //Controls section
           Card(
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
               decoration: BoxDecoration(
                 color: cs.surface,
                 borderRadius: BorderRadius.circular(8),
@@ -103,9 +104,12 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                           isQuranBookmarkedProvider(bookmarkId),
                         );
 
-                        return isBookmarked
-                            ? const Icon(PhosphorIcons.bookmarkFill)
-                            : const Icon(PhosphorIcons.bookBookmark);
+                        return Icon(
+                          isBookmarked
+                              ? PhosphorIcons.bookmarkFill
+                              : PhosphorIcons.bookBookmark,
+                          color: isBookmarked ? cs.primary : actionsIconColor,
+                        );
                       },
                     ),
                   ),
@@ -134,7 +138,10 @@ class _AyahTileState extends ConsumerState<AyahTile> {
 
                         await controller.share(context: btnCtx, text: text);
                       },
-                      icon: const PhosphorIcon(PhosphorIcons.share),
+                      icon: PhosphorIcon(
+                        PhosphorIcons.share,
+                        color: actionsIconColor,
+                      ),
                     ),
                   ),
                 ],

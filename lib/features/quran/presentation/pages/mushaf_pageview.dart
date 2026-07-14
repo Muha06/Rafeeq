@@ -63,8 +63,9 @@ class _MushafPageViewState extends ConsumerState<MushafPageView> {
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
- 
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
     final showAudioControls = ref.watch(showAudioControlsProvider);
 
     return Scaffold(
@@ -79,7 +80,9 @@ class _MushafPageViewState extends ConsumerState<MushafPageView> {
               children: [
                 Text(
                   'Page $_currentPage',
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontFamily: 'PlayFairDisplay',
+                  ),
                 ),
                 const SizedBox(width: 6),
                 const PhosphorIcon(PhosphorIcons.caretDown, size: 18),

@@ -28,17 +28,15 @@ class RadioCard extends StatelessWidget {
       ),
       child: Container(
         width: double.infinity,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-         ),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
             // IMAGE
             SizedBox(
-              height: 80,
-              width: 80,
+              height: 100,
+              width: 100,
               child: station.imageUrl != null
                   ? AppCachedImage(
                       imageUrl: station.imageUrl,

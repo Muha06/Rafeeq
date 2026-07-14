@@ -36,9 +36,7 @@ class OnboardingSlide extends StatelessWidget {
           Text(
             title,
             textAlign: TextAlign.center,
-            style: theme.textTheme.headlineMedium?.copyWith(
-              color: cs.onSurface,
-            ),
+            style: theme.textTheme.headlineSmall?.copyWith(color: cs.onSurface),
           ),
 
           const SizedBox(height: 10),
@@ -47,7 +45,9 @@ class OnboardingSlide extends StatelessWidget {
           Text(
             subtitle,
             textAlign: TextAlign.center,
-            style: theme.textTheme.bodyMedium?.copyWith(color: cs.onSurface),
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: cs.onSurfaceVariant,
+            ),
           ),
 
           if (child != null) ...[const SizedBox(height: 18), child!],

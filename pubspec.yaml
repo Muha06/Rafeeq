@@ -94,6 +94,17 @@ flutter:
         - asset: assets/fonts/PlusJakartaSans/PlusJakartaSans-Bold.ttf
           weight: 700
 
+    - family: PlayFairDisplay
+      fonts:
+        - asset: assets/fonts/PlayFairDisplay/PlayFairDisplay-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/PlayFairDisplay/PlayFairDisplay-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/PlayFairDisplay/PlayFairDisplay-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/PlayFairDisplay/PlayFairDisplay-Bold.ttf
+          weight: 700
+
   assets:
     - assets/images/
     - assets/images/adhkar/
