@@ -109,7 +109,10 @@ class _TimeToNextText extends ConsumerWidget {
     return remaining.when(
       data: (duration) => Text(
         '${formatRemaining(duration)} until ${next.label}',
-        style: theme.textTheme.bodyMedium?.copyWith(color: cs.onPrimary),
+        style: theme.textTheme.bodyMedium?.copyWith(
+          color: cs.onPrimary,
+          fontSize: 13,
+        ),
       ),
       loading: () => const SizedBox.shrink(),
       error: (error, stackTrace) => const SizedBox.shrink(),

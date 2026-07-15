@@ -4,13 +4,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
 import 'package:rafeeq/core/features/audio/widgets/seek_bar.dart';
-import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
- import 'package:rafeeq/core/widgets/app_cache_image.dart';
+import 'package:rafeeq/core/widgets/app_cache_image.dart';
+import 'package:rafeeq/core/widgets/app_drag_handle.dart';
 import 'package:rafeeq/core/widgets/my_chip.dart';
 import 'package:rafeeq/features/radio_station/domain/entities/radio_station.dart';
 import 'package:rafeeq/features/radio_station/domain/enums/radio_audio_category.dart';
 import 'package:rafeeq/features/radio_station/presentation/widgets/category_fallback_image.dart';
+import 'package:palette_generator_master/palette_generator_master.dart';
 
 class RadioPlayerSheet extends ConsumerStatefulWidget {
   const RadioPlayerSheet({super.key, required this.station});
@@ -23,11 +24,33 @@ class RadioPlayerSheet extends ConsumerStatefulWidget {
 
 class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
   RadioStation get station => widget.station;
+  Color? _dominantColor;
 
   @override
   void initState() {
     super.initState();
+    _loadPalette();
     _autoPlay();
+  }
+
+  Future<void> _loadPalette() async {
+    if (station.imageUrl == null || station.imageUrl!.isEmpty) return;
+
+    try {
+      final palette = await PaletteGeneratorMaster.fromImageProvider(
+        NetworkImage(station.imageUrl!),
+        maximumColorCount: 12,
+        colorSpace: ColorSpace.lab,
+      );
+
+      if (!mounted) return;
+
+      setState(() {
+        _dominantColor = palette.dominantColor?.color;
+      });
+    } catch (e) {
+      debugPrint('Palette error: $e');
+    }
   }
 
   //Auto start Playing
@@ -53,16 +76,16 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
       await ref
           .read(audioControllerProvider.notifier)
           .togglePlay(context: context, currentId: id, url: url, title: title);
-    } catch (e  ) {
+    } catch (e) {
       _showErrorDialog(
         'Failed to play audio. Please check your internet connection.',
       );
       debugPrint("Caught ERROR: $e");
-     }
+    }
   }
 
   void _showErrorDialog(String message) {
-    if (!context.mounted) return;
+    if (!mounted) return;
 
     AppSheets.showErrorDialog(
       context: context,
@@ -76,67 +99,59 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
     final tt = theme.textTheme;
+    final imageHeight = 280.0;
+    final imageWidth = MediaQuery.of(context).size.width * 0.8;
+    final dominant = _dominantColor ?? cs.primary;
+    final tint = Color.lerp(cs.surface, dominant, .18)!;
 
-    return SafeArea(
-      top: false,
-      child: Container(
-        padding: const EdgeInsets.only(left: 16, right: 16, top: 24),
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              cs.surfaceContainerLowest,
-              cs.surfaceContainerLow,
-              cs.surface,
-            ],
-          ),
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 800),
+      curve: Curves.easeOutCubic,
+      height: MediaQuery.of(context).size.height * 1,
+      padding: const EdgeInsets.only(left: 16, right: 16, top: 24),
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        gradient: LinearGradient(
+          colors: [tint, tint.withValues(alpha: .55), cs.surface],
         ),
+      ),
+      child: SingleChildScrollView(
         child: Column(
           children: [
-            Row(
-              children: [
-                IconButton(
-                  visualDensity: VisualDensity.comfortable,
-                  icon: const Icon(PhosphorIcons.caretDown ),
-                  onPressed: () => AppNav.pop(context),
-                ),
+            const AppDragHandle(),
 
-                const Spacer(),
+            const SizedBox(height: 80),
 
-                Text("🔴 Live ", style: tt.labelLarge),
-              ],
-            ),
-
-            const SizedBox(height: 20),
-
-            //  large Image
+            // Image
             Center(
               child: AppCachedImage(
                 imageUrl: station.imageUrl,
-                height: 350,
-                width: double.infinity,
+                height: imageHeight,
+                width: imageWidth,
+                borderRadius: 48,
                 errorWidget: CategoryFallback(
                   station: station,
-                  height: 350,
+                  height: 300,
                   showShadow: false,
                   width: double.infinity,
                 ),
               ),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 32),
 
             // Station name
             Text(
               station.name,
               textAlign: TextAlign.center,
               overflow: TextOverflow.visible,
-              style: tt.headlineSmall!.copyWith(color: cs.onSurface),
+              style: tt.headlineSmall!.copyWith(
+                color: cs.onSurface,
+                fontFamily: 'PlayFairDisplay',
+              ),
             ),
 
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
 
             //Type of audio
             MyChip(
@@ -148,9 +163,8 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
               ),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 32),
 
-            // Audio controls
             // Seekbar
             const SizedBox(
               height: 48,
@@ -203,31 +217,42 @@ class AnimatedPlayPauseBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final iconColor = color ?? Theme.of(context).colorScheme.onSurface;
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
 
-    return IconButton(
-      onPressed: onPressed,
-      iconSize: size,
-      color: iconColor,
-      icon: AnimatedSwitcher(
-        duration: duration,
-        transitionBuilder: (child, animation) {
-          return ScaleTransition(
-            scale: animation,
-            child: FadeTransition(opacity: animation, child: child),
-          );
-        },
-        child: isBuffering
-            ? const CupertinoActivityIndicator()
-            : isPlaying
-            ? const PhosphorIcon(
-                key: ValueKey('pause'),
-                PhosphorIcons.pause ,
-              )
-            : const PhosphorIcon(
-                key: ValueKey('play'),
-                PhosphorIcons.play ,
-              ),
+    final iconColor = color ?? cs.onPrimary;
+
+    return GestureDetector(
+      onTap: isBuffering ? null : onPressed,
+      child: Material(
+        shape: const CircleBorder(),
+        color: cs.onSurface,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: AnimatedSwitcher(
+              duration: duration,
+              transitionBuilder: (child, animation) {
+                return ScaleTransition(
+                  scale: animation,
+                  child: FadeTransition(opacity: animation, child: child),
+                );
+              },
+              child: isBuffering
+                  ? CupertinoActivityIndicator(color: iconColor)
+                  : isPlaying
+                  ? PhosphorIcon(
+                      key: const ValueKey('pause'),
+                      Icons.pause_rounded,
+                      color: iconColor,
+                    )
+                  : const PhosphorIcon(
+                      key: ValueKey('play'),
+                      PhosphorIcons.playFill,
+                    ),
+            ),
+          ),
+        ),
       ),
     );
   }

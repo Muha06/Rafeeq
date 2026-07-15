@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
@@ -25,6 +26,7 @@ class HomePage extends ConsumerStatefulWidget {
 class _HomePageState extends ConsumerState<HomePage> {
   static const double _hPad = 12.0;
   static const double _v10 = 10.0;
+  static const double _appBarIconSize = 26.0;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +44,10 @@ class _HomePageState extends ConsumerState<HomePage> {
             leading: const UserLocationChip(),
             leadingWidth: 120,
             toolbarHeight: kToolbarHeight + 16,
-            actions: [const _NotificationIcon(), const _SettingsIcon()],
+            actions: [
+              const _NotificationIcon(iconSize: _appBarIconSize),
+              const _SettingsIcon(iconSize: _appBarIconSize),
+            ],
             bottom: reminders.isNotEmpty
                 ? const PreferredSize(
                     preferredSize: Size.fromHeight(60),
@@ -98,22 +103,22 @@ class HomeSection extends StatelessWidget {
 }
 
 class _SettingsIcon extends StatelessWidget {
-  const _SettingsIcon({super.key});
-
+  const _SettingsIcon({super.key, required this.iconSize});
+  final double iconSize;
   @override
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: () async {
         pushLeftPage(context, const SettingsPage());
       },
-      icon: const Icon(PhosphorIcons.gear, size: 24),
+      icon: Icon(CupertinoIcons.gear, size: iconSize),
     );
   }
 }
 
 class _NotificationIcon extends StatelessWidget {
-  const _NotificationIcon({super.key});
-
+  const _NotificationIcon({super.key, required this.iconSize});
+  final double iconSize;
   @override
   Widget build(BuildContext context) {
     return Consumer(
@@ -129,7 +134,7 @@ class _NotificationIcon extends StatelessWidget {
               onPressed: () {
                 AppNav.push(context, const NotificationsInboxPage());
               },
-              icon: const PhosphorIcon(PhosphorIcons.bell, size: 24),
+              icon: PhosphorIcon(CupertinoIcons.bell, size: iconSize),
             ),
 
             if (hasUnreadNotifications)

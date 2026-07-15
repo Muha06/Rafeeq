@@ -22,7 +22,7 @@ class UserLocationChip extends ConsumerWidget {
       loading: () => const Chip(label: CupertinoActivityIndicator(radius: 24)),
       data: (userLocation) => _MyUserLocChip(
         icon: PhosphorIcons.mapPin,
-        label: userLocation?.city ?? 'N/A',
+        label: userLocation.city,
         onTap: () => AppNav.push(context, const UserLocSettingsPage()),
       ),
     );
@@ -49,20 +49,21 @@ class _MyUserLocChip extends StatelessWidget {
         color: WidgetStatePropertyAll(cs.surfaceContainerHighest),
         padding: const EdgeInsets.symmetric(horizontal: 4),
         label: SizedBox(
-          width: 80,
+          width: 100,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(icon, size: 16, color: cs.onSurface),
-              const SizedBox(width: 2),
+              const SizedBox(width: 4),
 
               Flexible(
                 child: Text(
                   label,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.labelMedium!.copyWith(
+                  style: theme.textTheme.labelSmall?.copyWith(
                     color: cs.onSurface,
+                    // fontWeight: FontWeight.w300,
                   ),
                 ),
               ),

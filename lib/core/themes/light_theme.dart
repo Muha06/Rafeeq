@@ -322,7 +322,7 @@ ThemeData appLightThemeData() {
 
       labelSmall: base.labelSmall?.copyWith(
         fontSize: 13,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w300,
         letterSpacing: 0,
         color: scheme.onSurfaceVariant.withAlpha(210),
       ),
