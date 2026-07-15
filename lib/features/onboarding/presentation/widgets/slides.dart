@@ -43,7 +43,7 @@ class SalahSlide extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           LocationPermissionCta(btnStyle: btnStyle,),
-          SizedBox(width: 14),
+          const SizedBox(width: 14),
           NotificationsPermissionCta(btnStyle: btnStyle,),
         ],
       ),
@@ -56,6 +56,7 @@ class QuranAdhkarSlide extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return OnboardingSlide(
       imageAsset: 'assets/images/onboarding/quran_feature.png',
       title: 'Stay connected daily',

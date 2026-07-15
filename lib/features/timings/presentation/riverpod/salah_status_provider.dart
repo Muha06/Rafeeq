@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_status.dart';
 import 'package:rafeeq/features/timings/domain/usecases/get_salah_status.dart';
-import 'salah_times_providers.dart';
+import 'package:rafeeq/features/timings/presentation/riverpod/fetch_salah_times_provider.dart';
 
 final salahTickerProvider = NotifierProvider<SalahTickerNotifier, DateTime>(
   SalahTickerNotifier.new,
@@ -41,7 +41,7 @@ class SalahTickerNotifier extends Notifier<DateTime> {
     _timer?.cancel();
 
     // schedule
-    // Wait until the next minute starts, 
+    // Wait until the next minute starts,
     // then update the state to trigger a rebuild
     _timer = Timer(delay, () {
       // After the delay, update the state
@@ -71,7 +71,7 @@ class SalahStatusNotifier extends AsyncNotifier<SalahStatusEntity> {
       _didRegisterDispose = true;
     }
 
-    final times = await ref.watch(todaySalahTimesProvider.future);
+    final times = await ref.watch(fetchTodaySalahTimesProvider.future);
     final status = computeSalahStatus(times: times, now: DateTime.now());
 
     _scheduleNextStatusRefresh(status.nextStart);

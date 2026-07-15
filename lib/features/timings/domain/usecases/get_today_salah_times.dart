@@ -1,19 +1,19 @@
 import 'package:rafeeq/features/timings/domain/entities/salah_times.dart';
 import 'package:rafeeq/features/timings/domain/repository/get_today_salah_times_repo.dart';
 
-class GetTodaySalahTimes {
-  final SalahTimesRepository repo;
+class FetchTodaySalahTimes {
+  final FetchSalahTimesRepo repo;
 
-  const GetTodaySalahTimes(this.repo);
+  const FetchTodaySalahTimes(this.repo);
 
-  Future<SalahTimesEntity> call({
+  Future<SalahTimesEntity> fetchTodayByCoords({
     required double latitude,
     required double longitude,
     required String city,
     required String country,
     int method = 3,
   }) {
-    return repo.getTodayByCoords(
+    return repo.fetchTodayByCoords(
       latitude: latitude,
       longitude: longitude,
       city: city,
@@ -22,11 +22,11 @@ class GetTodaySalahTimes {
     );
   }
 
-  Future<SalahTimesEntity> callByCity({
+  Future<SalahTimesEntity> fetchTodayByCity({
     required String city,
     required String country,
     int method = 3,
   }) {
-    return repo.getTodayByCity(city: city, country: country, method: method);
+    return repo.fetchTodayByCity(city: city, country: country, method: method);
   }
 }

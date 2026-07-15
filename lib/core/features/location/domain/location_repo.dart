@@ -8,7 +8,7 @@ abstract class LocationRepository {
   Future<UserLocation?> getCachedLocation();
 
   /// Refresh using GPS + reverse geocode, then cache it
-  Future<UserLocation> getCurrentLocation();
+  Future<UserLocation> refreshCurrentLocation();
 
   Future<void> saveLocation(UserLocation loc);
 
@@ -22,7 +22,7 @@ class LocationRepositoryImpl implements LocationRepository {
 
   LocationRepositoryImpl({required this.local, required this.gps});
   @override
-  Future<UserLocation?> getCachedLocation() async {
+  Future<UserLocation> getCachedLocation() async {
     try {
       // 1) try local cache first
       final cached = await local.read();
@@ -32,27 +32,38 @@ class LocationRepositoryImpl implements LocationRepository {
         return cached;
       }
 
-      debugPrint('No cached location → returning null');
+      debugPrint('No cached location → returning fallback');
 
-      return null;
+      // return fallback
+      const fallbackLoc = UserLocation(
+        lat: 24.4672,
+        lng: 39.6111,
+        city: 'Madinah',
+        country: 'Saudi Arabia',
+         isAuto: false,
+      );
+
+      return fallbackLoc;
     } catch (e) {
-      debugPrint('Error Fetching cached location');
-      return null;
+      debugPrint('Error Fetching cached location $e');
+      rethrow;
     }
   }
 
   @override
   Future<void> saveLocation(UserLocation loc) async {
-    debugPrint('❤️Saving User location to local');
+    debugPrint('❤️ Saving User location to local');
     await local.write(loc);
   }
 
-  //Fetches
+  // Refreshes current location
+  // Called if user allowed location permissions
   @override
-  Future<UserLocation> getCurrentLocation() async {
+  Future<UserLocation> refreshCurrentLocation() async {
     try {
       final pos = await gps.getCurrentPosition();
 
+      // convert to city & country
       final (city, country) = await gps.reverseGeocode(
         lat: pos.latitude,
         lng: pos.longitude,
@@ -63,8 +74,7 @@ class LocationRepositoryImpl implements LocationRepository {
         lng: pos.longitude,
         city: city,
         country: country,
-        timezone: '$country/$city',
-        isAuto: true,
+         isAuto: true,
       );
 
       await local.write(loc);

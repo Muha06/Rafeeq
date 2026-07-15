@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/app/providers/general_notifications_provider.dart';
+import 'package:rafeeq/core/features/local_notifications/providers/general_notifications_provider.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_prayer.dart';
 
 final disabledSalahPrayersProvider =

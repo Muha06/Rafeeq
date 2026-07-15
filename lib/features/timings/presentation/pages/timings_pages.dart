@@ -5,10 +5,9 @@ import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_times.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/disable_salah_reminders_provider.dart';
+import 'package:rafeeq/features/timings/presentation/riverpod/fetch_salah_times_provider.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/salah_status_provider.dart';
-
 import '../../domain/entities/salah_prayer.dart';
-import '../riverpod/salah_times_providers.dart';
 
 class SalahTimingsPage extends ConsumerStatefulWidget {
   const SalahTimingsPage({super.key});
@@ -22,7 +21,7 @@ class _SalahTimingsPageState extends ConsumerState<SalahTimingsPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final timesAsync = ref.watch(todaySalahTimesProvider);
+    final timesAsync = ref.watch(fetchTodaySalahTimesProvider);
 
     return timesAsync.when(
       loading: () =>

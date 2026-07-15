@@ -4,19 +4,21 @@ import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/data/latest.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
 
-class NotificationService {
-  NotificationService._();
-  static final instance = NotificationService._();
+class LocalNotificationService {
+  LocalNotificationService();
+  // static final instance = LocalNotificationService._(); // Instance
 
-  final _plugin = FlutterLocalNotificationsPlugin();
+  final _plugin = FlutterLocalNotificationsPlugin(); // Plugin
 
   FlutterLocalNotificationsPlugin get plugin => _plugin;
+  static const String _channelId = 'rafeeq_salah_adhan_v5';
+  static const _adhanChannelName = 'Salah (Adhan)';
+  static const _adhanDescription = 'Salah notifications with adhan sound';
 
   Future<bool> ensureExactAlarmsAllowed() => canScheduleExactAlarms();
 
+  //  Request notif permissions
   Future<bool> requestNotificationsPermission() async {
-    // iOS: ask via iOS plugin
-
     final android = _plugin
         .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin
@@ -33,6 +35,7 @@ class NotificationService {
     return granted;
   }
 
+  // Notifications allowed?
   Future<bool> areNotificationsEnabled() async {
     final android = _plugin
         .resolvePlatformSpecificImplementation<
@@ -71,16 +74,16 @@ class NotificationService {
     await _plugin.initialize(initSettings); // init plugin
 
     //adhan channed
-    // ignore: prefer_const_constructors
-   final AndroidNotificationChannel adhanChannel = AndroidNotificationChannel(
-      'rafeeq_salah_adhan_v5',
-      'Salah (Adhan)',
-      description: 'Salah notifications with adhan sound',
-      importance: Importance.max,
-      playSound: true,
-      // ignore: prefer_const_constructors
-      sound: RawResourceAndroidNotificationSound('adhan_normal'),
-    );
+    final AndroidNotificationChannel adhanChannel =
+        const AndroidNotificationChannel(
+          _channelId,
+          _adhanChannelName,
+          description: _adhanDescription,
+          importance: Importance.max,
+          playSound: true,
+          // ignore: prefer_const_constructors
+          sound: RawResourceAndroidNotificationSound('adhan_normal'),
+        );
 
     final androidImpl = _plugin
         .resolvePlatformSpecificImplementation<
@@ -102,13 +105,13 @@ class NotificationService {
   }
 
   Future<void> testAdhanNow() async {
-   // ignore: prefer_const_constructors
-   final details = NotificationDetails(
+    // ignore: prefer_const_constructors
+    final details = NotificationDetails(
       // ignore: prefer_const_constructors
       android: AndroidNotificationDetails(
-        'rafeeq_salah_adhan_v5',
-        'Salah (Adhan)',
-        channelDescription: 'Salah notifications with adhan sound',
+        _channelId,
+        _adhanChannelName,
+        channelDescription: _adhanDescription,
         importance: Importance.max,
         priority: Priority.high,
         playSound: true,
@@ -132,12 +135,12 @@ class NotificationService {
     required String body,
     required tz.TZDateTime scheduled,
   }) async {
-    final channelId = 'rafeeq_salah_adhan_v5';
+    final channelId = _channelId;
 
-  final androidDetails = AndroidNotificationDetails(
+    final androidDetails = AndroidNotificationDetails(
       channelId,
-      'Salah (Adhan)',
-      channelDescription: 'Salah notifications with adhan sound',
+      _adhanChannelName,
+      channelDescription: _adhanDescription,
       importance: Importance.max,
       priority: Priority.high,
       playSound: true,
@@ -156,6 +159,11 @@ class NotificationService {
     final exactAllowed = await canScheduleExactAlarms();
 
     debugPrint("Exact allowed: ${exactAllowed.toString()}");
+
+    await _plugin.cancel(id);
+
+    debugPrint("Scheduling salah reminders");
+    debugPrint("Salah: $id, $title, $body");
 
     await _plugin.zonedSchedule(
       id,
@@ -205,6 +213,10 @@ class NotificationService {
     );
 
     final exactAllowed = await canScheduleExactAlarms();
+
+    await _plugin.cancel(id);
+
+    debugPrint("Scheduling Adhkar reminders");
 
     await _plugin.zonedSchedule(
       id,

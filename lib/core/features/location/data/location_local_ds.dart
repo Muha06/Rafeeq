@@ -27,7 +27,6 @@ class LocationLocalDataSource {
       lng: lng,
       city: (settingsBox.get(_kCity) as String?) ?? '',
       country: (settingsBox.get(_kCountry) as String?) ?? '',
-      timezone: (settingsBox.get(_kTimezone) as String?) ?? 'Africa/Nairobi',
       isAuto: (settingsBox.get(_kIsAuto) as bool?) ?? false,
     );
   }
@@ -37,7 +36,6 @@ class LocationLocalDataSource {
     await settingsBox.put(_kLng, loc.lng);
     await settingsBox.put(_kCity, loc.city);
     await settingsBox.put(_kCountry, loc.country);
-    await settingsBox.put(_kTimezone, loc.timezone);
     await settingsBox.put(_kIsAuto, loc.isAuto);
     debugPrint('Hive wrote');
   }

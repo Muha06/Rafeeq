@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/app/providers/general_notifications_provider.dart';
+import 'package:rafeeq/core/features/local_notifications/providers/general_notifications_provider.dart';
 import 'package:rafeeq/features/settings/presentation/provider/notiffications_controller.dart';
 
 class NotificationsPermissionCta extends ConsumerStatefulWidget {

@@ -4,14 +4,14 @@ import 'package:rafeeq/features/timings/data/models/mappers.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_times.dart';
 import 'package:rafeeq/features/timings/domain/repository/get_today_salah_times_repo.dart';
 
-class SalahTimesRepositoryImpl implements SalahTimesRepository {
+class FetchSalahTimesRepoImpl implements FetchSalahTimesRepo {
   final SalahRemoteDataSource remote;
   final SalahCacheLocalDataSource local;
 
-  const SalahTimesRepositoryImpl({required this.remote, required this.local});
+  const FetchSalahTimesRepoImpl({required this.remote, required this.local});
 
   @override
-  Future<SalahTimesEntity> getTodayByCoords({
+  Future<SalahTimesEntity> fetchTodayByCoords({
     required double latitude,
     required double longitude,
     required String city,
@@ -56,7 +56,7 @@ class SalahTimesRepositoryImpl implements SalahTimesRepository {
   }
 
   @override
-  Future<SalahTimesEntity> getTodayByCity({
+  Future<SalahTimesEntity> fetchTodayByCity({
     required String city,
     required String country,
     int method = 3,

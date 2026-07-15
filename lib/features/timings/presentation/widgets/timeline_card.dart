@@ -19,17 +19,35 @@ class HomeTimelineCard extends ConsumerWidget {
     return salahStatus.when(
       data: (status) => _BuildTimelineCard(status: status),
       loading: () => const SizedBox(),
-      error: (error, stackTrace) => const SizedBox(),
+      error: (error, stackTrace) => const _ErrorCard(),
     );
   }
 }
 
-class _BuildTimelineCard extends StatelessWidget {
+class _ErrorCard extends ConsumerWidget {
+  const _ErrorCard({super.key});
+
+  @override
+  Widget build(BuildContext context, ref) {
+    return Row(
+      children: [
+        const Text('Oops! Failed to fetch Salah times'),
+        const Spacer(),
+        IconButton(
+          onPressed: () => ref.refresh(salahStatusProvider),
+          icon: const Icon(Icons.refresh),
+        ),
+      ],
+    );
+  }
+}
+
+class _BuildTimelineCard extends ConsumerWidget {
   const _BuildTimelineCard({super.key, required this.status});
   final SalahStatusEntity status;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 

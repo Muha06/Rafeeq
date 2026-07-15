@@ -28,7 +28,6 @@ import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_prov
 import 'package:rafeeq/features/quran_audio/presentation/providers/surah_audio_providers.dart';
 import 'package:rafeeq/features/quran_audio/presentation/widgets/reciter_picker_sheet.dart';
 import 'package:rafeeq/features/quran_reading_plan/presentation/widgets/log_ayah_bottomsheet.dart';
-import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:quran/quran.dart' as quran;
 import 'package:wakelock_plus/wakelock_plus.dart';

@@ -1,8 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
 class LocationGpsDataSource {
   Future<Position> getCurrentPosition() async {
+    // Check permissions
     final enabled = await Geolocator.isLocationServiceEnabled();
     if (!enabled) {
       throw Exception('Location services disabled');
@@ -17,10 +19,15 @@ class LocationGpsDataSource {
       throw Exception('Location permission not granted');
     }
 
-    return Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-      timeLimit: const Duration(seconds: 60),
-    );
+    try {
+      return Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+        timeLimit: const Duration(seconds: 60),
+      );
+    } catch (e) {
+      debugPrint("Failed to get current position $e");
+      rethrow;
+    }
   }
 
   Future<(String city, String country)> reverseGeocode({

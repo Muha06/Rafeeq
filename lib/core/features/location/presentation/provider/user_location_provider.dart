@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/features/location/data/location_gps_ds.dart';
 import 'package:rafeeq/core/features/location/data/location_local_ds.dart';
 import 'package:rafeeq/core/features/location/domain/user_location.dart';
-import 'package:rafeeq/core/features/location/domain/user_location_repo.dart';
+import 'package:rafeeq/core/features/location/domain/location_repo.dart';
 import 'package:rafeeq/core/features/location/presentation/provider/general_location_permission_provider.dart';
 import 'package:rafeeq/features/settings/presentation/provider/settings_notifcation_provider.dart';
 
@@ -17,20 +17,18 @@ final locationRepositoryProvider = Provider<LocationRepository>((ref) {
 });
 
 final userLocationProvider =
-    AsyncNotifierProvider<UserLocationNotifier, UserLocation?>(
+    AsyncNotifierProvider<UserLocationNotifier, UserLocation>(
       UserLocationNotifier.new,
     );
 
-class UserLocationNotifier extends AsyncNotifier<UserLocation?> {
-  //
+class UserLocationNotifier extends AsyncNotifier<UserLocation> {
+  LocationRepository get _locationRepo => ref.read(locationRepositoryProvider);
+
   @override
-  Future<UserLocation?> build() async {
-    final repo = ref.read(locationRepositoryProvider);
+  Future<UserLocation> build() async {
+    final cachedLocation = await _locationRepo.getCachedLocation();
 
-    final cachedLocation = await repo.getCachedLocation();
-
-    //If cached is null return null
-    //Set user fallback
+    //If cached is null => Set fallback location (Madinah)
     if (cachedLocation == null) {
       setManual(
         lat: 24.4672,
@@ -39,19 +37,22 @@ class UserLocationNotifier extends AsyncNotifier<UserLocation?> {
         country: 'Saudi Arabia',
         timezone: 'Ksa/Medinah',
       );
-      return null;
+
+      return const UserLocation(
+        lat: 24.4672,
+        lng: 39.6111,
+        city: 'Madinah',
+        country: 'Saudi Arabia',
+        isAuto: false,
+      );
     }
 
     return cachedLocation;
   }
 
-  //
   //refresh
   Future<void> refresh() async {
-    final repo = ref.read(locationRepositoryProvider);
-    final prev = state.value; // keep old
-    state = AsyncData(prev); // keep showing
-    final newLoc = await repo.getCurrentLocation();
+    final newLoc = await _locationRepo.refreshCurrentLocation();
     state = AsyncData(newLoc);
   }
 
@@ -63,34 +64,31 @@ class UserLocationNotifier extends AsyncNotifier<UserLocation?> {
     required String country,
     String? timezone,
   }) async {
-    final repo = ref.read(locationRepositoryProvider);
-
+    // Set Manual location
     final loc = UserLocation(
       lat: lat,
       lng: lng,
       city: city,
       country: country,
-      timezone: timezone ?? 'Africa/Nairobi',
       isAuto: false,
     );
 
-    await repo.saveLocation(loc);
+    await _locationRepo.saveLocation(loc);
     state = AsyncData(loc);
   }
 
   /// Switch back to auto mode (GPS)
   Future<void> setAuto() async {
+    // check permissions
     final access = ref.read(systemLocationAccessProvider.notifier);
 
-    final ok = await access.requestLocation();
+    final ok = await access.requestLocationAccess();
     if (!ok) {
-      throw 'permissions deinied';
-      // don’t switch to GPS mode
+      throw 'permissions denied'; 
       // show a snackbar/dialog based on access.state
     }
 
-    final repo = ref.read(locationRepositoryProvider);
-    final loc = await repo.getCurrentLocation();
+    final loc = await _locationRepo.refreshCurrentLocation();
     state = AsyncData(loc);
   }
 }

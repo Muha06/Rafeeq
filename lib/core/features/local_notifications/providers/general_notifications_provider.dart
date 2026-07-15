@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 import 'package:permission_handler/permission_handler.dart';
-
-import 'package:rafeeq/app/notifications.dart';
+import 'package:rafeeq/core/features/local_notifications/providers/wiring_providers.dart';
+import 'package:rafeeq/core/features/local_notifications/repository/local_notifs_service.dart';
 import 'package:rafeeq/features/settings/presentation/provider/settings_notifcation_provider.dart';
 
 const kAppNotifsAllowedKey = 'app_notifs_allowed';
@@ -44,6 +44,8 @@ class SystemNotifAccessState {
 
 class SystemNotifAccessNotifier extends Notifier<SystemNotifAccessState> {
   Box get _box => ref.read(settingsBoxProvider); //we store user's settings
+  LocalNotificationService get _localNotifService =>
+      ref.read(localNotificationServiceProvider);
 
   @override
   SystemNotifAccessState build() {
@@ -87,12 +89,11 @@ class SystemNotifAccessNotifier extends Notifier<SystemNotifAccessState> {
     final permanentlyDenied = notifPerm.isPermanentlyDenied;
 
     // OS-level enabled toggle
-    final notifsEnabled = await NotificationService.instance
-        .areNotificationsEnabled();
+    final notifsEnabled = await _localNotifService.areNotificationsEnabled();
 
     final notificationsAllowed = notifGranted && notifsEnabled;
 
-    final exactAlarmsAllowed = await NotificationService.instance
+    final exactAlarmsAllowed = await _localNotifService
         .canScheduleExactAlarms();
 
     await _persist(
@@ -142,9 +143,9 @@ class SystemNotifAccessNotifier extends Notifier<SystemNotifAccessState> {
   Future<bool> requestExactAlarms() async {
     state = state.copyWith(isLoading: true);
 
-    final already = await NotificationService.instance.canScheduleExactAlarms();
+    final already = await _localNotifService.canScheduleExactAlarms();
     if (!already) {
-      await NotificationService.instance.requestExactAlarmsPermission();
+      await _localNotifService.requestExactAlarmsPermission();
     }
 
     await sync();

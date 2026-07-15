@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:rafeeq/app/notifications.dart';
+import 'package:rafeeq/core/features/local_notifications/repository/local_notifs_service.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:rafeeq/features/timings/domain/entities/salah_prayer.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_times.dart';
 
-class SalahNotifications {
-  SalahNotifications._();
-  static final instance = SalahNotifications._();
+class SalahNotifSchedulerService {
+  SalahNotifSchedulerService({required this.localNotificationService});
 
+  final LocalNotificationService localNotificationService;
   // Adhan IDs (stable)
   static const _adhanIds = {
     SalahPrayer.fajr: 101,
@@ -28,10 +28,10 @@ class SalahNotifications {
 
   Future<void> cancelAll() async {
     for (final id in _adhanIds.values) {
-      await NotificationService.instance.cancel(id);
+      await localNotificationService.cancel(id);
     }
     for (final id in _reminderIds.values) {
-      await NotificationService.instance.cancel(id);
+      await localNotificationService.cancel(id);
     }
   }
 
@@ -52,7 +52,7 @@ class SalahNotifications {
         adhanTime = adhanTime.add(const Duration(days: 1));
       }
 
-      await NotificationService.instance.scheduleSalah(
+      await LocalNotificationService().scheduleSalah(
         id: _adhanIds[prayer]!,
         title: "Salat time -${prayer.label}",
         body: 'Time for ${prayer.label}',
@@ -60,12 +60,25 @@ class SalahNotifications {
       );
     }
 
-    final pending = await NotificationService.instance.plugin
+    final pending = await localNotificationService.plugin
         .pendingNotificationRequests();
 
     debugPrint('🕌 Pending Salat TOTAL: ${pending.length}');
     for (final p in pending) {
       debugPrint('• id=${p.id}, title=${p.title}');
     }
+  }
+
+  Future<void> testAdhanNow() async {
+    final exactAllowed = await localNotificationService
+        .canScheduleExactAlarms();
+
+    final notifAllowed = await localNotificationService
+        .areNotificationsEnabled();
+
+    debugPrint(
+      "Exact allowed: $exactAllowed \n Notifications allowed: $notifAllowed",
+    );
+    await localNotificationService.testAdhanNow();
   }
 }

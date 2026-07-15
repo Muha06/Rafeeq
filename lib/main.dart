@@ -10,11 +10,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:rafeeq/app/connectivity_plus/app_wrapper.dart';
-import 'package:rafeeq/app/notifications.dart';
-import 'package:rafeeq/app/providers/general_notifications_provider.dart';
+import 'package:rafeeq/core/features/local_notifications/providers/general_notifications_provider.dart';
 import 'package:rafeeq/app/tabs_screen.dart';
 import 'package:rafeeq/core/app_keys.dart';
 import 'package:rafeeq/core/features/audio/data/audio_handler.dart';
+import 'package:rafeeq/core/features/local_notifications/repository/local_notifs_service.dart';
 import 'package:rafeeq/core/themes/dark_theme.dart';
 import 'package:rafeeq/core/themes/light_theme.dart';
 import 'package:rafeeq/features/adhkar/data/models/hive/adhkar_hive_wrapper.dart';
@@ -30,8 +30,6 @@ import 'package:rafeeq/features/onboarding/presentation/pages/onboarding_scaffol
 import 'package:rafeeq/features/onboarding/presentation/provider/providers.dart';
 import 'package:rafeeq/features/quran_reading_plan/data/models/quran_reading_plan_hive.dart';
 import 'package:rafeeq/features/quran_reading_plan/data/models/quran_log_hive.dart';
-import 'package:rafeeq/features/timings/presentation/riverpod/salah_times_providers.dart';
-import 'package:rafeeq/features/settings/presentation/provider/settings_notifcation_provider.dart';
 import 'package:rafeeq/features/timings/data/models/hive/cached_salah_times_hive.dart';
 import 'package:rafeeq/firebase_options.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -108,7 +106,7 @@ void main() {
       await Hive.openBox('adhkar_cache_box');
 
       // Notifications
-      await NotificationService.instance.init();
+      await LocalNotificationService().init();
       final supabase = Supabase.instance.client;
 
       final notificationRemoteDataSource = NotificationRemoteDataSource(
@@ -212,10 +210,6 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
     final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     final hasSeenOnboarding = ref.watch(hasSeenOnboardingProvider);
 
-    //ACTIVATE
-    ref.watch(salahNotificationsControllerProvider);
-    ref.watch(adhkarNotificationsControllerProvider);
-
     return MaterialApp(
       title: 'Rafeeq',
       navigatorObservers: [FirebaseAnalyticsObserver(analytics: analytics)],
@@ -225,7 +219,7 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
       debugShowCheckedModeBanner: false,
       navigatorKey: navigatorKey,
       scaffoldMessengerKey: scaffoldMessengerKey,
-      home: !hasSeenOnboarding
+      home: hasSeenOnboarding
           ? const AppWrapper(child: TabsScreen())
           : const OnboardingPage(),
     );

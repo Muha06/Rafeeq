@@ -7,7 +7,8 @@ import 'package:rafeeq/core/features/location/presentation/provider/open_mateo_p
 import 'package:rafeeq/core/features/location/presentation/provider/user_location_provider.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
-import 'package:rafeeq/features/timings/presentation/riverpod/salah_times_providers.dart';
+import 'package:rafeeq/features/timings/presentation/riverpod/fetch_salah_times_provider.dart';
+import 'package:rafeeq/features/timings/presentation/riverpod/wiring_provider.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 
 class UserLocSettingsPage extends ConsumerStatefulWidget {
@@ -98,7 +99,7 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
       final usecase = ref.read(fetchSalahTimesUsecase);
       final method = ref.read(salahMethodProvider);
 
-      await usecase.call(
+      await usecase.fetchTodayByCoords(
         latitude: p.lat,
         longitude: p.lng,
         city: p.name,
@@ -123,7 +124,7 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
           );
       setState(() => _manualExpanded = true);
 
-      ref.invalidate(todaySalahTimesProvider);
+      ref.invalidate(fetchTodaySalahTimesProvider);
       RafeeqAnalytics.logFeature("location_set_manual");
     } catch (e) {
       setState(() {
@@ -139,7 +140,7 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
 
     final isAuto = ref
         .watch(userLocationProvider)
-        .maybeWhen(data: (loc) => loc?.isAuto ?? true, orElse: () => true);
+        .maybeWhen(data: (loc) => loc.isAuto, orElse: () => true);
 
     final userLocState = ref.watch(userLocationProvider).value;
 
@@ -176,7 +177,7 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
 
               //Save as auto
               await notifier.setAuto();
-              ref.invalidate(todaySalahTimesProvider);
+              ref.invalidate(fetchTodaySalahTimesProvider);
 
               RafeeqAnalytics.logFeature("location_set_auto");
             },

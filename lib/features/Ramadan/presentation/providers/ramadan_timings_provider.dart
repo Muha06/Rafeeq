@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/features/Ramadan/domain/ramadan_times_entity.dart';
- import 'package:rafeeq/features/timings/domain/entities/salah_prayer.dart';
-import 'package:rafeeq/features/timings/presentation/riverpod/salah_times_providers.dart';
+import 'package:rafeeq/features/timings/domain/entities/salah_prayer.dart';
+import 'package:rafeeq/features/timings/presentation/riverpod/fetch_salah_times_provider.dart';
 
 final ramadanTimesProvider = Provider<AsyncValue<RamadanTimesEntity>>((ref) {
-  final timesAsync = ref.watch(todaySalahTimesProvider); //fetch timings
+  final timesAsync = ref.watch(fetchTodaySalahTimesProvider); //fetch timings
 
   return timesAsync.whenData((times) {
     final map = times.times;

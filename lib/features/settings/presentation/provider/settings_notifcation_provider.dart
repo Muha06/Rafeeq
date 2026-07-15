@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
-import 'package:rafeeq/app/notifications.dart';
+import 'package:rafeeq/core/features/local_notifications/providers/wiring_providers.dart';
 import 'package:rafeeq/features/settings/presentation/provider/notiffications_controller.dart';
 
 const kAdhkarEnabled =
@@ -24,21 +24,23 @@ final settingsBoxProvider = Provider<Box>((ref) => Hive.box('settingsBox'));
 
 //Listens to user adhkarsettingsprovider
 final adhkarNotificationsControllerProvider = Provider<void>((ref) async {
+  final localNotifService = ref.read(localNotificationServiceProvider);
+
   Future<void> schedule() async {
     debugPrint('cancelling  ');
-    await NotificationService.instance.cancel(morningNotifId);
-    await NotificationService.instance.cancel(eveningNotifId);
+    await localNotifService.cancel(morningNotifId);
+    await localNotifService.cancel(eveningNotifId);
 
     debugPrint('Scheduling  ');
 
-    await NotificationService.instance.scheduleDaily(
+    await localNotifService.scheduleDaily(
       id: morningNotifId,
       title: 'Morning Adhkār ☀️',
       body: 'Take 2 minutes for your morning adhkār.',
       time: kmorningAdhkarTime,
     );
 
-    await NotificationService.instance.scheduleDaily(
+    await localNotifService.scheduleDaily(
       id: eveningNotifId,
       title: 'Evening Adhkār 🌙',
       body: 'Don’t miss your evening adhkār.',
@@ -56,8 +58,8 @@ final adhkarNotificationsControllerProvider = Provider<void>((ref) async {
   ref.listen<bool>(adhkarNotifControllerProvider, (prev, next) async {
     //if disabled -> only cancel
     if (!next) {
-      await NotificationService.instance.cancel(morningNotifId);
-      await NotificationService.instance.cancel(eveningNotifId);
+      await localNotifService.cancel(morningNotifId);
+      await localNotifService.cancel(eveningNotifId);
       return;
     }
 

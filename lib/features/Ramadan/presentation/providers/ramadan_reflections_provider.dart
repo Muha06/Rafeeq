@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hijri_date/hijri.dart';
-import 'package:rafeeq/app/notifications.dart';
+import 'package:rafeeq/core/features/local_notifications/providers/wiring_providers.dart';
 import 'package:rafeeq/features/Ramadan/data/datasources/local_ramadan_refections.dart';
 import '../../domain/ramadan_reflection.dart';
 
@@ -21,8 +21,10 @@ final ramadanReflectionByDayProvider =
 
       final match = list.firstWhere((r) => day == r.day);
 
+      final notifService = ref.read(localNotificationServiceProvider);
+
       // Example: Schedule reminder here asynchronously
-      await NotificationService.instance.scheduleDaily(
+      await notifService.scheduleDaily(
         id: ramadhanNotifId,
         title: 'Ramadan Reflection',
         body: 'Take a moment for today’s reflection.',
