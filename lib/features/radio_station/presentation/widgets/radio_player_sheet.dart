@@ -228,7 +228,7 @@ class AnimatedPlayPauseBtn extends StatelessWidget {
         shape: const CircleBorder(),
         color: cs.onSurface,
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(12.0),
           child: Center(
             child: AnimatedSwitcher(
               duration: duration,

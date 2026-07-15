@@ -34,71 +34,67 @@ class _QuranPageState extends ConsumerState<QuranPage> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Scaffold(
-      body: SafeArea(
-        child: CustomScrollView(
-          controller: scrollController,
-          physics: const BouncingScrollPhysics(),
-          slivers: [
-            SliverAppBar(
-              pinned: false,
-              floating: true,
-              snap: false,
-              toolbarHeight: theme.appBarTheme.toolbarHeight!,
-              title: GestureDetector(
-                onTap: scrollToTop,
-                child: const Text('Quran'),
-              ),
-              actions: [
-                IconButton(
-                  icon: const Icon(PhosphorIcons.magnifyingGlass),
-
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const SurahSearchPage(),
-                      ),
-                    );
-                  },
-                ),
-              ],
-              bottom: appBarBottomDivider(context),
+      extendBody: true,
+      body: CustomScrollView(
+        controller: scrollController,
+        physics: const BouncingScrollPhysics(),
+        slivers: [
+          SliverAppBar(
+            pinned: false,
+            floating: true,
+            snap: false,
+            title: GestureDetector(
+              onTap: scrollToTop,
+              child: const Text('Quran'),
             ),
-            const SliverToBoxAdapter(child: SizedBox(height: 8)),
+            actions: [
+              IconButton(
+                icon: const Icon(PhosphorIcons.magnifyingGlass),
 
-            // --- Quran Goal Stats Portal ---
-            const SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: QuranReadingPlanCard(),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SurahSearchPage(),
+                    ),
+                  );
+                },
               ),
-            ),
-            const SliverToBoxAdapter(child: SizedBox(height: 8)),
+            ],
+            bottom: appBarBottomDivider(context),
+          ),
+          const SliverToBoxAdapter(child: SizedBox(height: 8)),
 
-            //quick last read
-            const SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12.0),
-                child: QuickLastReadList(),
-              ),
+          // --- Quran Goal Stats Portal ---
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: QuranReadingPlanCard(),
             ),
-            const SliverToBoxAdapter(child: SizedBox(height: 8)),
+          ),
+          const SliverToBoxAdapter(child: SizedBox(height: 8)),
 
-            // QUICKSURAHLINK
-            const SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12.0),
-                child: QuickSurahLinks(),
-              ),
+          //quick last read
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12.0),
+              child: QuickLastReadList(),
             ),
+          ),
+          const SliverToBoxAdapter(child: SizedBox(height: 8)),
 
-            //Surah listview
-            const SliverToBoxAdapter(child: AllSurahsList()),
-          ],
-        ),
+          // QUICKSURAHLINK
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12.0),
+              child: QuickSurahLinks(),
+            ),
+          ),
+
+          //Surah listview
+          const SliverToBoxAdapter(child: AllSurahsList()),
+        ],
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/core/helpers/app_haptics.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/feedback/data/models/feedback_model.dart';
@@ -41,7 +42,9 @@ class _FeedbackPageState extends ConsumerState<FeedbackPage> {
         context: context,
         message: "Thanks for making Rafeeq better!",
       );
+
       FocusScope.of(context).unfocus();
+      AppHaptics.success();
 
       AppNav.pop(context);
     } catch (e) {

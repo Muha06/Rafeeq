@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+import 'package:rafeeq/core/helpers/app_haptics.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/features/feedback/presentation/pages/feedback_page.dart';
@@ -17,8 +18,6 @@ class SettingsPage extends ConsumerStatefulWidget {
 }
 
 class _SettingsPageState extends ConsumerState<SettingsPage> {
- 
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -45,8 +44,11 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 
                 return Switch(
                   value: enabled,
-                  onChanged: (val) =>
-                      controller.toggleSalahReminders(val, context),
+                  onChanged: (val) {
+                    AppHaptics.light();
+
+                    controller.toggleSalahReminders(val, context);
+                  },
                 );
               },
             ),
@@ -66,8 +68,11 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 
                 return Switch(
                   value: enabled,
-                  onChanged: (val) =>
-                      controller.toggleAdhkarReminders(val, context),
+                  onChanged: (val) {
+                    AppHaptics.light();
+
+                    controller.toggleAdhkarReminders(val, context);
+                  },
                 );
               },
             ),

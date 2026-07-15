@@ -37,6 +37,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     ref.watch(adhkarNotificationsControllerProvider); // scheduler adhkar notifs
 
     return Scaffold(
+      extendBody: true,
       body: CustomScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
@@ -83,6 +84,14 @@ class _HomePageState extends ConsumerState<HomePage> {
               child: LiveHubCard(),
             ),
           ),
+          const SliverToBoxAdapter(
+            child: HomeSection(
+              padding: EdgeInsets.symmetric(horizontal: _hPad, vertical: _v10),
+              child: LiveHubCard(),
+            ),
+          ),
+
+          const SliverToBoxAdapter(child: SizedBox(height: 70)),
         ],
       ),
     );

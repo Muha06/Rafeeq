@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/app/providers/tabs_screen_provider.dart';
-import 'package:rafeeq/core/widgets/bottom_bar.dart';
+import 'package:rafeeq/core/helpers/app_haptics.dart';
+import 'package:rafeeq/features/home/presentation/widgets/bottom_bar.dart';
 import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_category_page.dart';
 import 'package:rafeeq/features/quran/presentation/pages/quran_page.dart';
-import 'package:rafeeq/features/home/presentation/home_page.dart';
+import 'package:rafeeq/features/home/presentation/pages/home_page.dart';
 import 'package:rafeeq/features/bookmarks/presentation/pages/bookmark_page.dart';
-import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class TabsScreen extends ConsumerStatefulWidget {
   const TabsScreen({super.key});
@@ -25,17 +25,20 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = ref.watch(isDarkProvider);
     final selectedIndex = ref.watch(tabsScreenIndexProvider);
 
     return Scaffold(
+      extendBody: true,
       body: IndexedStack(index: selectedIndex, children: _pages),
       bottomNavigationBar: MyBottomBar(
         currentIndex: selectedIndex,
-        onTap: (value) => setState(() {
-          ref.read(tabsScreenIndexProvider.notifier).state = value;
-        }),
-        isDarkMode: isDark,
+        onTap: (value) async {
+          await AppHaptics.light();
+
+          setState(() {
+            ref.read(tabsScreenIndexProvider.notifier).state = value;
+          });
+        },
       ),
     );
   }

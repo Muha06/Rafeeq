@@ -189,7 +189,7 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
             Text(widget.lastRead.surahName, style: theme.textTheme.labelLarge),
             Text(
               'Ayah ${widget.lastRead.ayahNumber} of ${widget.lastRead.verseCount}',
-              style: theme.textTheme.bodySmall,
+              style: theme.textTheme.labelSmall,
             ),
           ],
         ),

@@ -19,6 +19,7 @@ class _BookmarkPageState extends ConsumerState<BookmarkPage> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        extendBody: true,
         appBar: AppBar(
           title: const Text('Bookmarks'),
           bottom: appBarBottomDivider(context),

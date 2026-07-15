@@ -24,18 +24,23 @@ class AllSurahsList extends ConsumerWidget {
           return const Center(child: Text('No surahs found.'));
         }
 
-        return ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: surahs.length,
-          itemBuilder: (context, index) {
-            final surah = surahs[index];
+        return SafeArea(
+          top: false,
+          child: ListView.separated(
+            separatorBuilder: (context, index) => const SizedBox(height: 26),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: surahs.length,
+            itemBuilder: (context, index) {
+              final surah = surahs[index];
 
-            return InkWell(
-              onTap: () => AppNav.push(context, FullSurahPage(surah: surah)),
-              child: SurahTile(surah: surah, surahs: surahs, index: index),
-            );
-          },
+              return InkWell(
+                onTap: () => AppNav.push(context, FullSurahPage(surah: surah)),
+                child: SurahTile(surah: surah, surahs: surahs, index: index),
+              );
+            },
+          ),
         );
       },
       error: (error, _) {
@@ -74,59 +79,58 @@ class SurahTile extends ConsumerWidget {
     final theme = Theme.of(context);
     final isDark = ref.watch(isDarkProvider);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 14),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 44,
-            height: 44,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Image.asset(
-                  isDark
-                      ? 'assets/images/quran/surah_badge_dark.png'
-                      : 'assets/images/quran/surah_badge_light.png',
-                  width: 44,
-                  height: 44,
-                  fit: BoxFit.contain,
-                ),
-                Text(surah.id.toString(), style: theme.textTheme.labelLarge),
-              ],
-            ),
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: 44,
+          height: 44,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Image.asset(
+                isDark
+                    ? 'assets/images/quran/surah_badge_dark.png'
+                    : 'assets/images/quran/surah_badge_light.png',
+                width: 44,
+                height: 44,
+                fit: BoxFit.contain,
+              ),
+              Text(surah.id.toString(), style: theme.textTheme.labelLarge),
+            ],
           ),
+        ),
 
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  surah.nameTransliteration,
-                  style: theme.textTheme.labelLarge,
-                ),
-                const SizedBox(height: 6),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                surah.nameTransliteration,
+                style: theme.textTheme.labelLarge,
+              ),
+              const SizedBox(height: 6),
 
-                Text(
-                  "${surah.nameEnglish} • Verses ${surah.versesCount} ",
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.labelMedium,
-                ),
-              ],
-            ),
+              Text(
+                "${surah.nameEnglish} • Verses ${surah.versesCount} ",
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.labelMedium,
+              ),
+            ],
           ),
+        ),
+        const SizedBox(width: 10),
 
-          Text(
-            cleanAyah(surah.nameArabic),
-            style: AppTextStyles.quranAyah.copyWith(
-              color: theme.colorScheme.onSurface,
-              fontWeight: FontWeight.bold,
-            ),
+        Text(
+          cleanAyah(surah.nameArabic),
+          style: AppTextStyles.quranAyah.copyWith(
+            color: theme.colorScheme.onSurface,
+            fontWeight: FontWeight.bold,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

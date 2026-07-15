@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+import 'package:rafeeq/core/helpers/app_haptics.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/features/quran_reading_plan/presentation/providers/progress_provider.dart';
@@ -42,15 +43,6 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
           1.0,
         );
 
-        String encouragement;
-        if (progressPercent < 0.5) {
-          encouragement = "Keep going, you got this!";
-        } else if (progressPercent < 1.0) {
-          encouragement = "Masha’Allah, almost there!";
-        } else {
-          encouragement = "Goal complete! JazakAllahu Khair!";
-        }
-
         return Padding(
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -85,15 +77,7 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
                   minHeight: 8,
                   color: cs.primary,
                 ),
-                const SizedBox(height: 16),
 
-                Text(
-                  encouragement,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: cs.primary,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
                 const SizedBox(height: 16),
 
                 // Increment / Decrement row
@@ -102,7 +86,10 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
                   children: [
                     IconButton(
                       onPressed: ayahsRead > 1
-                          ? () => setState(() => ayahsRead--)
+                          ? () {
+                              AppHaptics.light();
+                              setState(() => ayahsRead--);
+                            }
                           : null,
                       icon: Icon(
                         PhosphorIcons.minus,
@@ -125,7 +112,10 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
                     const SizedBox(width: 16),
 
                     IconButton(
-                      onPressed: () => setState(() => ayahsRead++),
+                      onPressed: () {
+                        AppHaptics.light();
+                        setState(() => ayahsRead++);
+                      },
                       icon: Icon(PhosphorIcons.plus, color: cs.primary),
                     ),
                   ],

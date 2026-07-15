@@ -11,7 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:rafeeq/app/connectivity_plus/app_wrapper.dart';
 import 'package:rafeeq/core/features/local_notifications/providers/general_notifications_provider.dart';
-import 'package:rafeeq/app/tabs_screen.dart';
+import 'package:rafeeq/features/home/presentation/pages/tabs_screen.dart';
 import 'package:rafeeq/core/app_keys.dart';
 import 'package:rafeeq/core/features/audio/data/audio_handler.dart';
 import 'package:rafeeq/core/features/local_notifications/repository/local_notifs_service.dart';

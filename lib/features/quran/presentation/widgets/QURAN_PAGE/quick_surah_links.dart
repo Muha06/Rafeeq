@@ -20,7 +20,7 @@ class QuickSurahLinks extends ConsumerWidget {
     final hasData = quickSurahs.isNotEmpty;
 
     return SizedBox(
-      height: hasData ? 85 : 0,
+      height: hasData ? 80 : 0,
       child: hasData
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,

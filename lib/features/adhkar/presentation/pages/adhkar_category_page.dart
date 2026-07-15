@@ -19,6 +19,7 @@ class _AdhkarCategoryPageState extends ConsumerState<AdhkarCategoryPage> {
     final adhkarCategoriesState = ref.watch(fetchAdhkarCategoriesProvider);
 
     return Scaffold(
+      extendBody: true,
       appBar: AppBar(title: const Text('Adhkars')),
       body: adhkarCategoriesState.when(
         data: (categories) {
