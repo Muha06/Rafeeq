@@ -1,4 +1,3 @@
-import 'package:flutter/widgets.dart';
 import 'package:vibration/vibration.dart';
 
 class AppHaptics {
