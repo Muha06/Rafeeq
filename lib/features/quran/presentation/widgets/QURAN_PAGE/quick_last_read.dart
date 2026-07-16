@@ -84,6 +84,7 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
     });
 
     final theme = Theme.of(context);
+    final cs = theme.colorScheme;
 
     return AppSheets.showBottomSheet(
       context: context,
@@ -100,7 +101,12 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
               const Icon(PhosphorIcons.trash, size: 72),
               const SizedBox(height: 16),
 
-              Text('Remove last read?', style: theme.textTheme.titleMedium),
+              Text(
+                'Remove last read?',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  color: cs.onSurface,
+                ),
+              ),
               const SizedBox(height: 12),
 
               Text(

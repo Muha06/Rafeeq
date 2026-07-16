@@ -55,7 +55,7 @@ class _SurahSearchPageState extends ConsumerState<SurahSearchPage> {
               textInputAction: TextInputAction.search,
               decoration: InputDecoration(
                 isDense: true,
-                hintText: "Search surah (name / number)…",
+                hintText: "name , number…",
                 suffixIcon: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -86,7 +86,9 @@ class _SurahSearchPageState extends ConsumerState<SurahSearchPage> {
             onTap: () => _focus.unfocus(),
             child: filtered.isEmpty
                 ? const Center(child: Text('No surahs found'))
-                : ListView.builder(
+                : ListView.separated(
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 16),
                     keyboardDismissBehavior:
                         ScrollViewKeyboardDismissBehavior.onDrag,
                     itemCount: filtered.length,

@@ -6,12 +6,12 @@ import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 class MyBottomBar extends StatelessWidget {
   final ValueChanged<int> onTap;
   final int currentIndex;
- 
+
   const MyBottomBar({
     super.key,
     required this.onTap,
     required this.currentIndex,
-   });
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -42,31 +42,18 @@ class MyBottomBar extends StatelessWidget {
     ];
     final isDark = Theme.brightnessOf(context) == Brightness.dark;
 
-    final bgColor = isDark ? Colors.black : Colors.grey;
-    final itemColor = isDark ? Colors.white70 : Colors.black;
+    final itemColor = isDark ? Colors.white70 : Colors.black87;
 
     return SafeArea(
       top: false,
       bottom: false,
       child: ClipRect(
         child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
+          filter: ImageFilter.blur(sigmaX: 14, sigmaY: 14),
           child: Container(
             height: 64,
             padding: const EdgeInsets.symmetric(horizontal: 12),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.bottomCenter,
-                end: Alignment.topCenter,
-                colors: [
-                  bgColor,
-                  bgColor.withValues(alpha: 0.9),
-                  bgColor.withValues(alpha: 0.2),
-                  Colors.transparent,
-                ],
-                stops: const [0.0, 0.2, 0.9, 1.0],
-              ),
-            ),
+            decoration: BoxDecoration(color: cs.surface.withAlpha(80)),
             child: Row(
               children: List.generate(items.length, (index) {
                 final item = items[index];

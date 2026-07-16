@@ -167,7 +167,7 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
 
             // Seekbar
             const SizedBox(
-              height: 48,
+              height: 52,
               child: _RadioAudioSeekBar(), // your seekbar
             ),
 
@@ -219,6 +219,8 @@ class AnimatedPlayPauseBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
+    const double controlSize = 48;
+    const double loaderRadius = controlSize / 2;
 
     final iconColor = color ?? cs.onPrimary;
 
@@ -239,16 +241,22 @@ class AnimatedPlayPauseBtn extends StatelessWidget {
                 );
               },
               child: isBuffering
-                  ? CupertinoActivityIndicator(color: iconColor)
+                  ? CupertinoActivityIndicator(
+                      color: iconColor,
+                      radius: loaderRadius,
+                    )
                   : isPlaying
                   ? PhosphorIcon(
                       key: const ValueKey('pause'),
                       Icons.pause_rounded,
                       color: iconColor,
+                      size: controlSize,
                     )
-                  : const PhosphorIcon(
-                      key: ValueKey('play'),
+                  : PhosphorIcon(
+                      key: const ValueKey('play'),
                       PhosphorIcons.playFill,
+                      color: iconColor,
+                      size: controlSize,
                     ),
             ),
           ),

@@ -110,7 +110,7 @@ class SurahTile extends ConsumerWidget {
                 surah.nameTransliteration,
                 style: theme.textTheme.labelLarge,
               ),
-              const SizedBox(height: 6),
+              const SizedBox(height: 2),
 
               Text(
                 "${surah.nameEnglish} • Verses ${surah.versesCount} ",

@@ -69,7 +69,9 @@ class SurahLink extends ConsumerWidget {
         child: Center(
           child: Text(
             surah.nameTransliteration,
-            style: theme.textTheme.labelMedium,
+            style: theme.textTheme.labelMedium?.copyWith(
+              color: cs.onSurfaceVariant,
+            ),
           ),
         ),
       ),

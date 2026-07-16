@@ -351,8 +351,8 @@ class AppLightColors {
   static const accent = Color(0xFFC9A24A);
 
   // ✍️ TEXT
-  static const onSurface = Color(0xFF1F2A2C);
-  static const onSurface2 = Color(0xFF6B7C7E);
+  static const onSurface = Color(0xFF000000);
+  static const onSurface2 = Color(0xFF8A9598);
 
   // ❌ ERROR
   static const error = Color(0xFFD64545);
