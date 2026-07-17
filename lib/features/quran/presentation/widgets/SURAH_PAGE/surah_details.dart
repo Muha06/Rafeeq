@@ -5,6 +5,8 @@ import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
 import 'package:rafeeq/core/themes/app_text_style.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
+import 'package:rafeeq/features/quran/presentation/riverpod/surah_details_provider.dart';
+import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_info_sheet.dart';
 
 class SurahDetails extends ConsumerWidget {
   const SurahDetails({super.key, required this.surah});
@@ -36,54 +38,87 @@ class SurahDetails extends ConsumerWidget {
   }
 }
 
-class _SurahBriefDetailsCard extends StatelessWidget {
+class _SurahBriefDetailsCard extends ConsumerWidget {
   const _SurahBriefDetailsCard({required this.surah});
   final Surah surah;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
     final place = surah.isMeccan ? 'Makkah' : 'Madinah';
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: cs.primary,
-          borderRadius: BorderRadius.circular(18),
-        ),
-        child: SizedBox(
-          width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: cs.primary,
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          /// Header
+          Row(
             children: [
-              // Arabic name (hero)
-              Text(
-                surah.nameArabic,
-                style: AppTextStyles.arabicUi.copyWith(color: cs.onPrimary),
-              ),
-
-              const SizedBox(height: 4),
-
-              // English name (secondary)
-              Text(
-                surah.nameEnglish,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.labelLarge?.copyWith(
-                  color: cs.onPrimary,
+              Expanded(
+                child: Text(
+                  surah.nameEnglish,
+                  style: theme.textTheme.labelLarge?.copyWith(
+                    color: cs.onPrimary,
+                  ),
                 ),
               ),
 
-              const SizedBox(height: 14),
+              IconButton(
+                icon: Icon(Icons.info_outline_rounded, color: cs.onPrimary),
+                visualDensity: VisualDensity.compact,
+                onPressed: () async {
+                  final info = await ref.read(
+                    surahInfoProvider(surah.id).future,
+                  );
 
-              // metadata row (clean + subtle)
-              _Chip(text: '$place • ${surah.versesCount} verses'),
+                  if (!context.mounted || info == null) return;
+
+                  Navigator.of(context).push(
+                    ModalBottomSheetRoute(
+                      isScrollControlled: true,
+                      sheetAnimationStyle: const AnimationStyle(
+                        curve: Curves.easeOutCubic,
+                        reverseCurve: Curves.easeInCubic,
+                        duration: Duration(milliseconds: 400),
+                        reverseDuration: Duration(milliseconds: 300),
+                      ),
+                      builder: (context) {
+                        return SurahInfoSheet(info: info);
+                      },
+                    ),
+                  );
+                },
+              ),
             ],
           ),
-        ),
+
+          const SizedBox(height: 12),
+
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                surah.nameArabic,
+                style: AppTextStyles.arabicUi.copyWith(
+                  color: cs.onPrimary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+
+              const Spacer(),
+
+              _Chip(text: '$place  •  ${surah.versesCount} verses'),
+            ],
+          ),
+        ],
       ),
     );
   }

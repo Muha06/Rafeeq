@@ -3,11 +3,13 @@ import 'package:rafeeq/core/helpers/Quran/quran_db_helpers.dart';
 import 'package:rafeeq/features/quran/domain/entities/ayah.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 import 'package:quran/quran.dart' as quran;
+import 'package:rafeeq/features/quran/domain/entities/surah_info.dart';
 import 'package:sqflite/sqflite.dart';
 
 abstract class QuranLocalDataSource {
   Future<List<Ayah>> getAyahs(int surahId);
   List<Surah> getSurahs();
+  Future<SurahInfo?> getSurahInfo(int surahId);
 }
 
 class QuranLocalDataSourceImpl implements QuranLocalDataSource {
@@ -16,6 +18,7 @@ class QuranLocalDataSourceImpl implements QuranLocalDataSource {
   Database? _enDb;
   Database? _swDb;
   Database? _enTransliterationDb;
+  Database? _surahInfoDb;
 
   Future<void> init() async {
     try {
@@ -35,6 +38,10 @@ class QuranLocalDataSourceImpl implements QuranLocalDataSource {
       _enTransliterationDb = await QuranDbHelper.loadDatabase(
         'assets/db/en_ayah_transliteration.db',
         'quran_en_transliteration.db',
+      );
+      _surahInfoDb = await QuranDbHelper.loadDatabase(
+        'assets/db/surah-info-en.db',
+        'surah_infos.db',
       );
     } catch (e) {
       debugPrint('Error initializing Quran local data source: $e');
@@ -71,11 +78,6 @@ class QuranLocalDataSourceImpl implements QuranLocalDataSource {
       ),
     ]);
 
-    debugPrint(
-      wrapWidth: 1000,
-      "Fetched ${results[0].length} Arabic and ${results[1].length} English ayahs for surah $surahId and ${results[2].length}  Swahili ayahs:",
-    );
-
     final arList = results[0];
     final enList = results[1];
     final swList = results[2];
@@ -106,6 +108,27 @@ class QuranLocalDataSourceImpl implements QuranLocalDataSource {
         juz: null,
       );
     });
+  }
+
+  @override
+  Future<SurahInfo?> getSurahInfo(int surahId) async {
+    final result = await _surahInfoDb!.query(
+      'surah_infos',
+      where: 'surah_number = ?',
+      whereArgs: [surahId],
+      limit: 1,
+    );
+
+    if (result.isEmpty) return null;
+
+    final row = result.first;
+
+    return SurahInfo(
+      surahNumber: row['surah_number'] as int,
+      surahName: row['surah_name'] as String,
+      text: row['text'] as String,
+      shortText: row['short_text'] as String,
+    );
   }
 
   @override
