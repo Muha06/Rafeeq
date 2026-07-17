@@ -66,7 +66,12 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
             child: SafeArea(
               child: Scaffold(
                 appBar: AppBar(
-                  title: Text(dhikr.title, style: theme.textTheme.titleMedium),
+                  title: Text(
+                    dhikr.title,
+                    style: theme.appBarTheme.titleTextStyle?.copyWith(
+                      fontSize: 18,
+                    ),
+                  ),
                   bottom: PreferredSize(
                     preferredSize: const Size.fromHeight(1),
                     child: LinearProgressIndicator(
@@ -118,8 +123,8 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
                       // Fixed bottom nav bar
                       Positioned(
                         bottom: 16,
-                        left: 16,
-                        right: 16,
+                        left: 48,
+                        right: 48,
                         child: _BottomNavBar(dhikr: dhikr),
                       ),
                     ],
@@ -142,7 +147,7 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
               } else {
                 await Vibration.vibrate(
                   duration: 20,
-                  amplitude: 150,
+                  amplitude: 300,
                 ); // soft normal tap
               }
 
@@ -157,7 +162,7 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
           ),
           floatingWidgetHeight: 64,
           floatingWidgetWidth: 64,
-          dy: screenHeight - 150,
+          dy: screenHeight - 170,
           dx: screenWidth - 100,
         );
       },
@@ -243,13 +248,10 @@ class _BottomNavBar extends ConsumerWidget {
                   );
 
                   return _BottomNavItem(
-                    icon: Icon(
-                      size: 20,
-                      color: isBookmarked ? cs.primary : cs.onSurface,
-                      isBookmarked
-                          ? PhosphorIconsFill.bookmark
-                          : PhosphorIcons.bookBookmark,
-                    ),
+                    icon: isBookmarked
+                        ? PhosphorIconsFill.bookmark
+                        : PhosphorIcons.bookBookmark,
+                    iconColor: isBookmarked ? cs.primary : cs.onSurface,
                     label: isBookmarked ? 'Saved' : 'Save',
                     onTap: () {
                       toggleBookmark(dhikr);
@@ -274,19 +276,12 @@ class _BottomNavBar extends ConsumerWidget {
                     final isBuffering = audioState.isBuffering && isCurrent;
                     return _BottomNavItem(
                       icon: isBuffering
-                          ? const SizedBox(
-                              width: 18,
-                              height: 18,
-                              child: CupertinoActivityIndicator(),
-                            )
-                          : PhosphorIcon(
-                              isPlaying
-                                  ? PhosphorIcons.pause
-                                  : PhosphorIcons.play,
-                              color: cs.onSurface,
-                              size: 20,
-                            ),
-                      label: 'Play',
+                          ? CupertinoIcons.circle
+                          : isPlaying
+                          ? PhosphorIcons.pause
+                          : PhosphorIcons.play,
+
+                      label: isPlaying ? 'Stop' : 'Play',
                       onTap: () {
                         audioCtrl.togglePlay(
                           context: context,
@@ -302,7 +297,7 @@ class _BottomNavBar extends ConsumerWidget {
 
               // Copy
               _BottomNavItem(
-                icon: PhosphorIcon(Icons.copy, color: cs.onSurface, size: 20),
+                icon: Icons.copy,
                 label: 'Copy',
                 onTap: () async {
                   copyDhikr(dhikr);
@@ -319,30 +314,49 @@ class _BottomNavBar extends ConsumerWidget {
 class _BottomNavItem extends StatelessWidget {
   const _BottomNavItem({
     required this.icon,
+    this.iconColor,
     required this.label,
     required this.onTap,
   });
 
-  final Widget icon;
+  final IconData icon;
+  final Color? iconColor;
   final String label;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final tt = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+
+    final tt = theme.textTheme;
+    final cs = theme.colorScheme;
 
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
       child: SizedBox(
         height: double.infinity,
-        width: 80,
+        width: 64,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(width: 28, height: 28, child: Center(child: icon)),
+            SizedBox(
+              width: 28,
+              height: 28,
+              child: Center(
+                child: Icon(icon, color: iconColor ?? cs.onSurface),
+              ),
+            ),
+            const SizedBox(height: 2),
 
-            Text(label, style: tt.labelLarge?.copyWith(fontSize: 14)),
+            Text(
+              label,
+              style: tt.labelMedium?.copyWith(
+                fontSize: 12,
+                color: cs.onSurface,
+              ),
+            ),
           ],
         ),
       ),

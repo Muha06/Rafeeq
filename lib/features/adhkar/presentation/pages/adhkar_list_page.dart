@@ -59,6 +59,7 @@ class AdhkarPreviewPages extends ConsumerWidget {
                       vertical: 12,
                     ),
                     child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         //Number
                         Text(
@@ -75,7 +76,7 @@ class AdhkarPreviewPages extends ConsumerWidget {
                             dhikr.title,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: theme.textTheme.titleMedium,
+                            style: theme.textTheme.labelLarge,
                           ),
                         ),
                         const SizedBox(width: 8),
