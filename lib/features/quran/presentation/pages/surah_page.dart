@@ -24,6 +24,7 @@ import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/quran_audi
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_ayah_dialog.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_details.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_settings_sheet.dart';
+import 'package:rafeeq/features/quran_audio/domain/entities/reciter_entity.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/surah_audio_providers.dart';
 import 'package:rafeeq/features/quran_audio/presentation/widgets/reciter_picker_sheet.dart';
@@ -308,8 +309,9 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
         .read(getSurahAudioTrackUseCaseProvider)
         .call(surahId: surahId, surahName: surahName, reciter: reciter);
 
-    //show cntrols
+    //show controls
     ref.read(showAudioControlsProvider.notifier).state = true;
+    if (!mounted) return;
 
     try {
       await ref
@@ -334,7 +336,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
     final appbarIconColors = cs.onSurface;
-    
+
     final ayahsAsync = ref.watch(ayahsProvider(surahId));
 
     final showAudioControls = ref.watch(showAudioControlsProvider);
@@ -352,6 +354,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
         ref.read(showAudioControlsProvider.notifier).state = true;
       }
     });
+
     return PopScope(
       onPopInvokedWithResult: (didPop, result) async {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -468,10 +471,13 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
                         PlayFullSurahBtn(
                           onPlay: () async {
                             //select reciter
-                            await AppSheets.showBottomSheet(
-                              context: context,
-                              child: const ReciterPickerSheet(),
-                            );
+                            final reciter =
+                                await AppSheets.showBottomSheet<ReciterEntity?>(
+                                  context: context,
+                                  child: const ReciterPickerSheet(),
+                                );
+
+                            if (reciter == null) return;
 
                             await playSurahAudio(
                               ref: ref,

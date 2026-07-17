@@ -6,8 +6,7 @@ import 'package:rafeeq/core/helpers/app_sheets.dart';
 void showFridayVirtuesSheet(BuildContext context) {
   AppSheets.showBottomSheet(
     context: context,
-    showDragHandle: true,
-    child: SizedBox(
+     child: SizedBox(
       height: MediaQuery.sizeOf(context).height * 0.9,
       child: ListView(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),

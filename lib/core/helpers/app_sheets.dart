@@ -11,12 +11,10 @@ class AppSheets {
     required BuildContext context,
     required Widget child,
     bool isScrollControlled = true,
-    bool showDragHandle = true,
     bool useSafeArea = true,
     double borderRadius = 24,
   }) {
-    final cs = Theme.of(context).colorScheme;
-
+ 
     return showModalBottomSheet<T>(
       context: context,
       useSafeArea: useSafeArea,
@@ -25,28 +23,7 @@ class AppSheets {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(borderRadius)),
       ),
-      builder: (_) => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          //Custom drag handle
-          if (showDragHandle)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Center(
-                child: Container(
-                  height: 3,
-                  width: 30,
-                  decoration: BoxDecoration(
-                    color: cs.onSurfaceVariant,
-                    borderRadius: BorderRadius.circular(999),
-                  ),
-                ),
-              ),
-            ),
-
-          child,
-        ],
-      ),
+      builder: (_) => child,
     );
   }
 

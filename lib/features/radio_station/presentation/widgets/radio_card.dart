@@ -21,8 +21,7 @@ class RadioCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(16),
       onTap: () => AppSheets.showBottomSheet(
         context: context,
-        showDragHandle: false,
-        useSafeArea: false,
+         useSafeArea: false,
         isScrollControlled: true,
         child: RadioPlayerSheet(station: station),
       ),

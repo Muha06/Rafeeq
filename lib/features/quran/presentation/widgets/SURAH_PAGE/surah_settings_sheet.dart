@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
+import 'package:rafeeq/core/widgets/app_drag_handle.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
 import 'package:rafeeq/features/quran_audio/presentation/widgets/reciter_picker_sheet.dart';
@@ -57,6 +58,8 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
+            const AppDragHandle(),
+
             //Auto scroll
             SwitchListTile(
               title: Text('Auto scroll', style: titleTextstyle),
