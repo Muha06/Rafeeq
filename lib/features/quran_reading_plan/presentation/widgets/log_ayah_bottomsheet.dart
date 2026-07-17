@@ -5,6 +5,7 @@ import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/helpers/app_haptics.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
+import 'package:rafeeq/core/widgets/app_drag_handle.dart';
 import 'package:rafeeq/features/quran_reading_plan/presentation/providers/progress_provider.dart';
 import 'package:rafeeq/features/quran_reading_plan/presentation/providers/quran_reading_plan_provider.dart';
 import 'package:rafeeq/features/quran_reading_plan/presentation/providers/quran_log_provider.dart';
@@ -49,10 +50,11 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
           ),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 14),
-            decoration: BoxDecoration(color: cs.surface),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                const AppDragHandle(),
+
                 // Title
                 Text(
                   'Log your reading',

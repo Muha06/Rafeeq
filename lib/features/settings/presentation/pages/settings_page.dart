@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
@@ -8,7 +7,6 @@ import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/features/feedback/presentation/pages/feedback_page.dart';
 import 'package:rafeeq/features/settings/presentation/provider/notiffications_controller.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
-import 'package:rafeeq/features/settings/presentation/widgets/settings_page_widgets.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({super.key});
@@ -137,80 +135,6 @@ class SettingsTile extends StatelessWidget {
         ),
         Divider(color: theme.dividerColor),
       ],
-    );
-  }
-}
-
-//theme picker
-class ThemePickerSheet extends ConsumerStatefulWidget {
-  const ThemePickerSheet({super.key});
-
-  @override
-  ConsumerState<ThemePickerSheet> createState() => _ThemePickerSheetState();
-}
-
-class _ThemePickerSheetState extends ConsumerState<ThemePickerSheet> {
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final mode = ref.watch(themeModeProvider);
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: RadioGroup(
-        groupValue: mode,
-        onChanged: (value) {
-          //todo: persist with Hive
-          setState(() {
-            ref.read(themeModeProvider.notifier).state = value!;
-          });
-        },
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text('Theme', style: theme.textTheme.titleMedium),
-            const SizedBox(height: 16),
-
-            const ThemeOption(
-              title: 'Light mode',
-              icon: CupertinoIcons.sun_max,
-              value: AppThemeMode.light,
-            ),
-            const SizedBox(height: 12),
-
-            const ThemeOption(
-              title: 'Dark mode',
-              icon: CupertinoIcons.moon,
-              value: AppThemeMode.dark,
-            ),
-            const SizedBox(height: 8),
-
-            const ThemeOption(
-              title: 'Same as device theme',
-              icon: CupertinoIcons.device_phone_portrait,
-              value: AppThemeMode.system,
-            ),
-            const SizedBox(height: 8),
-
-            //divider
-            Divider(color: theme.dividerColor),
-
-            //cancel btn
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text(
-                'Close',
-                style: theme.textTheme.bodyMedium!.copyWith(
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-          ],
-        ),
-      ),
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
@@ -160,14 +161,16 @@ class AllSalatTimingsCard extends StatelessWidget {
               final t = times.at(p);
               final isCurrent = p == current;
 
-              final lightColors = isCurrent ? cs.tertiary : cs.onPrimary;
+              final lightColors = isCurrent ? cs.tertiary : cs.onSurfaceVariant;
               final darkColors = isCurrent ? cs.primary : cs.onSurfaceVariant;
+
+              final lightColors2 = isCurrent ? cs.tertiary : cs.onPrimary;
               final darkColors2 = isCurrent ? cs.primary : cs.onSurface;
 
               final isDark = theme.brightness == Brightness.dark;
 
               final color = isDark ? darkColors : lightColors;
-              final timesColor = isDark ? darkColors2 : lightColors;
+              final timesColor = isDark ? darkColors2 : lightColors2;
 
               return Column(
                 mainAxisSize: MainAxisSize.min,
@@ -241,7 +244,7 @@ class _TimingTile extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(prayer.icon, size: 24),
+          Icon(prayer.icon, size: 24, color: cs.onSurfaceVariant),
           const SizedBox(width: 8),
 
           Column(
@@ -279,7 +282,7 @@ class _TimingTile extends ConsumerWidget {
               },
 
               icon: Icon(
-                isDisabled ? PhosphorIcons.bellSlash : PhosphorIcons.bell,
+                isDisabled ? CupertinoIcons.bell_slash : CupertinoIcons.bell,
                 color: isDisabled
                     ? theme.colorScheme.error
                     : theme.colorScheme.onSurface,

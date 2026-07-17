@@ -305,21 +305,21 @@ ThemeData appDarkThemeData() {
 
       labelLarge: base.labelLarge?.copyWith(
         fontSize: 16,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w500,
         letterSpacing: 0,
         color: scheme.onSurface,
       ),
 
       labelMedium: base.labelMedium?.copyWith(
         fontSize: 14,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w400,
         letterSpacing: 0,
         color: scheme.onSurfaceVariant,
       ),
 
       labelSmall: base.labelSmall?.copyWith(
         fontSize: 13,
-        fontWeight: FontWeight.w300,
+        fontWeight: FontWeight.w400,
         letterSpacing: 0,
         color: scheme.onSurfaceVariant.withAlpha(210),
       ),

@@ -14,7 +14,6 @@ class AppSheets {
     bool useSafeArea = true,
     double borderRadius = 24,
   }) {
- 
     return showModalBottomSheet<T>(
       context: context,
       useSafeArea: useSafeArea,

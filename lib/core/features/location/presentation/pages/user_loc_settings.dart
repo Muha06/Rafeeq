@@ -7,6 +7,7 @@ import 'package:rafeeq/core/features/location/presentation/provider/open_mateo_p
 import 'package:rafeeq/core/features/location/presentation/provider/user_location_provider.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
+import 'package:rafeeq/core/widgets/app_drag_handle.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/fetch_salah_times_provider.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/wiring_provider.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
@@ -47,16 +48,18 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
       onSelect: (Country c) {
         setState(() {
           _country = c.name;
-          _countryCode = c.countryCode; // ✅
+          _countryCode = c.countryCode;
           _selectedPlace = null; // reset city
           _resetVerification();
         });
       },
+      showDragHandle: false,
       countryListTheme: CountryListThemeData(
         bottomSheetHeight: MediaQuery.of(context).size.height * 0.8,
         backgroundColor: theme.bottomSheetTheme.backgroundColor,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
-        textStyle: theme.textTheme.bodyMedium,
+        textStyle: theme.textTheme.labelLarge,
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
         inputDecoration: const InputDecoration(
           hintText: 'Search country…',
           prefixIcon: Icon(PhosphorIcons.magnifyingGlass),
@@ -147,6 +150,8 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
     final notifier = ref.read(userLocationProvider.notifier);
     final cs = theme.colorScheme;
 
+    final canOpenCitySheet = _countryCode == null || !isAuto;
+
     return Scaffold(
       appBar: AppBar(title: const Text('My location')),
       body: ListView(
@@ -177,7 +182,7 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
 
               //Save as auto
               await notifier.setAuto();
-              ref.invalidate(fetchTodaySalahTimesProvider);
+              ref.refresh(fetchTodaySalahTimesProvider);
 
               RafeeqAnalytics.logFeature("location_set_auto");
             },
@@ -218,7 +223,9 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
                             icon: Icons.public_rounded,
                             onTap: _pickCountry,
                           ),
+
                           const SizedBox(height: 10),
+
                           _ActionButton(
                             label: _selectedPlace == null
                                 ? !isAuto
@@ -226,9 +233,9 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
                                       : 'Select city'
                                 : 'City: ${_selectedPlace!.name}',
                             icon: Icons.location_city_rounded,
-                            onTap: _countryCode == null
-                                ? null
-                                : _pickCityViaOpenMeteo,
+                            onTap: canOpenCitySheet
+                                ? _pickCityViaOpenMeteo
+                                : null,
                           ),
 
                           if (_verifying) ...[
@@ -341,10 +348,12 @@ class _CitySearchSheetState extends ConsumerState<CitySearchSheet> {
 
     return Container(
       height: MediaQuery.of(context).size.height * 0.8,
-      padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const AppDragHandle(),
+
           Text(
             'Select city (${widget.countryName})',
             style: theme.textTheme.titleMedium?.copyWith(
@@ -534,7 +543,9 @@ class _ActionButton extends ConsumerWidget {
                 label,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.labelLarge,
+                style: Theme.of(
+                  context,
+                ).textTheme.labelMedium?.copyWith(color: cs.onSurface),
               ),
             ),
           ],
