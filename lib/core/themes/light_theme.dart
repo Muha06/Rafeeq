@@ -168,7 +168,7 @@ ThemeData appLightThemeData() {
 
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
-        iconColor: scheme.onSurface,
+        iconColor: scheme.primary,
         foregroundColor: scheme.primary,
         overlayColor: Colors.transparent,
         splashFactory: NoSplash.splashFactory,

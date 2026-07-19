@@ -3,10 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
+import 'package:rafeeq/core/helpers/app_sheets.dart';
+import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
+import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/core/themes/app_text_style.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
+import 'package:rafeeq/features/quran/presentation/riverpod/show_audio_controls_bar_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/surah_details_provider.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_info_sheet.dart';
+import 'package:rafeeq/features/quran_audio/domain/entities/reciter_entity.dart';
+import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
+import 'package:rafeeq/features/quran_audio/presentation/providers/surah_audio_providers.dart';
+import 'package:rafeeq/features/quran_audio/presentation/widgets/reciter_picker_sheet.dart';
 
 class SurahDetails extends ConsumerWidget {
   const SurahDetails({super.key, required this.surah});
@@ -125,19 +133,70 @@ class _SurahBriefDetailsCard extends ConsumerWidget {
 }
 
 class PlayFullSurahBtn extends ConsumerWidget {
-  const PlayFullSurahBtn({super.key, required this.onPlay});
+  const PlayFullSurahBtn({super.key, required this.surah});
 
-  final VoidCallback onPlay;
+  final Surah surah;
   @override
   Widget build(BuildContext context, ref) {
+    Future<void> playSurahAudio({
+      required WidgetRef ref,
+      required int surahId,
+      required String surahName,
+    }) async {
+      final reciter = ref.read(selectedReciterProvider);
+
+      final audioId = '${surahId}_${reciter.id}';
+
+      final surahTrack = await ref
+          .read(getSurahAudioTrackUseCaseProvider)
+          .call(surahId: surahId, surahName: surahName, reciter: reciter);
+
+      //show controls
+      ref.read(showAudioControlsProvider.notifier).state = true;
+
+      try {
+        await ref
+            .read(audioControllerProvider.notifier)
+            .togglePlay(
+              context: context,
+              artist: reciter.name,
+              showAudioPlayer: false,
+              currentId: audioId,
+              url: surahTrack.url,
+              title: surahTrack.surahName,
+            );
+      } catch (e) {
+        AppSnackBar.showSimple(
+          context: context,
+          message: "Something went wrong",
+        );
+      }
+    }
+
     final audioState = ref.watch(audioControllerProvider);
     final isBuffering = audioState.isBuffering;
 
-    return OutlinedButton.icon(
+    return TextButton.icon(
       icon: isBuffering
           ? const SizedBox(height: 12, child: CupertinoActivityIndicator())
           : const Icon(PhosphorIcons.playCircle),
-      onPressed: onPlay,
+      onPressed: () async {
+        //select reciter
+        final reciter = await AppSheets.showBottomSheet<ReciterEntity?>(
+          context: context,
+          child: const ReciterPickerSheet(),
+        );
+
+        if (reciter == null) return;
+
+        await playSurahAudio(
+          ref: ref,
+          surahId: surah.id,
+          surahName: surah.nameTransliteration,
+        );
+
+        await RafeeqAnalytics.logFeature("Play-surah-audio");
+      },
 
       label: Text(isBuffering ? 'Loading...' : 'Play surah'),
     );

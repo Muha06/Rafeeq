@@ -5,8 +5,9 @@ import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/show_audio_controls_bar_provider.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/quran_audio_controls_bar.dart';
+import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_details.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
-
+ 
 class MushafPageView extends ConsumerStatefulWidget {
   final int page;
   final Surah surah;
@@ -67,8 +68,7 @@ class _MushafPageViewState extends ConsumerState<MushafPageView> {
     final cs = theme.colorScheme;
 
     final showAudioControls = ref.watch(showAudioControlsProvider);
-
-    return Scaffold(
+     return Scaffold(
       appBar: AppBar(
         title: InkWell(
           onTap: _showPagePicker,
@@ -90,6 +90,8 @@ class _MushafPageViewState extends ConsumerState<MushafPageView> {
             ),
           ),
         ),
+        actions: [PlayFullSurahBtn(surah: widget.surah)],
+        actionsPadding: const EdgeInsets.symmetric(horizontal: 8),
       ),
       bottomNavigationBar: showAudioControls
           ? const AudioControlsBarColorWrapper(child: AudioControlsSection())

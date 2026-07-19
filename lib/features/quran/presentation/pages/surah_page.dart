@@ -7,7 +7,6 @@ import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
-import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
@@ -24,10 +23,7 @@ import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/quran_audi
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_ayah_dialog.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_details.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_settings_sheet.dart';
-import 'package:rafeeq/features/quran_audio/domain/entities/reciter_entity.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
-import 'package:rafeeq/features/quran_audio/presentation/providers/surah_audio_providers.dart';
-import 'package:rafeeq/features/quran_audio/presentation/widgets/reciter_picker_sheet.dart';
 import 'package:rafeeq/features/quran_reading_plan/presentation/widgets/log_ayah_bottomsheet.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:quran/quran.dart' as quran;
@@ -296,39 +292,6 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
     super.dispose();
   }
 
-  Future<void> playSurahAudio({
-    required WidgetRef ref,
-    required int surahId,
-    required String surahName,
-  }) async {
-    final reciter = ref.read(selectedReciterProvider);
-
-    final audioId = '${surahId}_${reciter.id}';
-
-    final surahTrack = await ref
-        .read(getSurahAudioTrackUseCaseProvider)
-        .call(surahId: surahId, surahName: surahName, reciter: reciter);
-
-    //show controls
-    ref.read(showAudioControlsProvider.notifier).state = true;
-    if (!mounted) return;
-
-    try {
-      await ref
-          .read(audioControllerProvider.notifier)
-          .togglePlay(
-            context: context,
-            artist: reciter.name,
-            showAudioPlayer: false,
-            currentId: audioId,
-            url: surahTrack.url,
-            title: surahTrack.surahName,
-          );
-    } catch (e) {
-      AppSnackBar.showSimple(context: context, message: "Something went wrong");
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final surahId = widget.surah.id;
@@ -388,7 +351,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
                 )
               : null,
 
-          appBar: AppBar(
+          appBar: AppBar( 
             backgroundColor: theme.scaffoldBackgroundColor,
             title: AppbarSurahPicker(jumpToAyah: jumpToAyah, surah: surah),
 
@@ -446,7 +409,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
           body: ayahsAsync.when(
             loading: () => const Center(child: CircularProgressIndicator()),
 
-            error: (e, _) => AppStateView(
+            error: (_, _) => AppStateView(
               icon: PhosphorIcons.warningCircle,
               title: "Something went wrong",
               message: "We couldn't load the ayahs. Please try again.",
@@ -468,28 +431,8 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
                         SurahDetails(surah: surah),
                         const SizedBox(height: 8),
 
-                        PlayFullSurahBtn(
-                          onPlay: () async {
-                            //select reciter
-                            final reciter =
-                                await AppSheets.showBottomSheet<ReciterEntity?>(
-                                  context: context,
-                                  child: const ReciterPickerSheet(),
-                                );
-
-                            if (reciter == null) return;
-
-                            await playSurahAudio(
-                              ref: ref,
-                              surahId: surahId,
-                              surahName: surah.nameTransliteration,
-                            );
-
-                            await RafeeqAnalytics.logFeature(
-                              "Play-surah-audio",
-                            );
-                          },
-                        ),
+                        PlayFullSurahBtn(surah: surah),
+                        const SizedBox(height: 8),
                       ],
                     );
                   }

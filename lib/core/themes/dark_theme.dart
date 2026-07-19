@@ -78,6 +78,7 @@ ThemeData appDarkThemeData() {
         letterSpacing: -0.4,
         color: scheme.onSurface,
       ),
+      actionsPadding: const EdgeInsets.symmetric(horizontal: 8),
     ),
 
     cardTheme: CardThemeData(
@@ -164,7 +165,7 @@ ThemeData appDarkThemeData() {
 
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
-        iconColor: scheme.onSurface,
+        iconColor: scheme.primary,
         foregroundColor: scheme.primary,
         overlayColor: Colors.transparent,
         splashFactory: NoSplash.splashFactory,
