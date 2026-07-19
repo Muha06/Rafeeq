@@ -20,8 +20,7 @@ class _AdhkarBookmarksTabState extends ConsumerState<AdhkarBookmarksTab> {
   @override
   Widget build(BuildContext context) {
     final bookMarks = ref.watch(dhikrBookmarksProvider);
-    final theme = Theme.of(context);
-
+ 
     return bookMarks.isEmpty
         ? Center(
             child: AppStateView(
@@ -36,9 +35,10 @@ class _AdhkarBookmarksTabState extends ConsumerState<AdhkarBookmarksTab> {
             ),
           )
         : ListView.separated(
-            separatorBuilder: (context, index) {
-              return Divider(color: theme.dividerColor);
+            separatorBuilder: (_, _) {
+              return const SizedBox(height: 16);
             },
+            padding: const EdgeInsets.symmetric(horizontal: 12),
             itemCount: bookMarks.length,
             itemBuilder: (context, index) {
               final bookMark = bookMarks[index];
@@ -59,7 +59,7 @@ class _AdhkarBookmarksTabState extends ConsumerState<AdhkarBookmarksTab> {
                   if (!context.mounted) return;
 
                   final index = adhkar.indexOf(dhikr);
-                  
+
                   AppNav.push(
                     context,
                     AdhkarDetailsPage(adhkars: adhkar, initialIndex: index),

@@ -49,11 +49,11 @@ class MyBottomBar extends StatelessWidget {
       bottom: false,
       child: ClipRect(
         child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 14, sigmaY: 14),
+          filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
           child: Container(
             height: 64,
             padding: const EdgeInsets.symmetric(horizontal: 12),
-            decoration: BoxDecoration(color: cs.surface.withAlpha(80)),
+            decoration: BoxDecoration(color: cs.surface.withAlpha(140)),
             child: Row(
               children: List.generate(items.length, (index) {
                 final item = items[index];

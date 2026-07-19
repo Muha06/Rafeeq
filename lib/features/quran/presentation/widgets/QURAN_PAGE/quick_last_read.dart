@@ -118,8 +118,8 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
               Row(
                 children: [
                   Expanded(
-                    child: OutlinedButton(
-                      onPressed: () => Navigator.pop(context),
+                    child: TextButton(
+                      onPressed: () => AppNav.pop(context),
                       child: const Text('Cancel'),
                     ),
                   ),

@@ -77,62 +77,59 @@ class _BookmarkTileState extends ConsumerState<BookmarkTile> {
 
     final title = quranBookmark?.surahEnglishName ?? dhikrBookmark!.title;
 
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      margin: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Row(
-        children: [
-          Text(
-            widget.indexDisplay.toString(),
-            style: theme.textTheme.labelMedium,
-          ),
-          const SizedBox(width: 16),
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          widget.indexDisplay.toString(),
+          style: theme.textTheme.labelMedium,
+        ),
+        const SizedBox(width: 16),
 
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.labelLarge,
+              ),
+
+              if (quranBookmark != null) ...[
+                const SizedBox(height: 4),
                 Text(
-                  title,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.titleMedium,
+                  ' ${quranBookmark.surahId}:${quranBookmark.ayahNumber}',
+                  style: theme.textTheme.bodySmall,
                 ),
-
-                if (quranBookmark != null) ...[
-                  const SizedBox(height: 8),
-                  Text(
-                    ' ${quranBookmark.surahId}:${quranBookmark.ayahNumber}',
-                    style: theme.textTheme.bodySmall,
-                  ),
-                ],
               ],
-            ),
+            ],
           ),
+        ),
 
-          IconButton(
-            onPressed: () {
-              AppSheets.showBottomSheet(
-                context: context,
-                useSafeArea: true,
-                child: BookmarkActionBottomSheet(
-                  quranBookmark: quranBookmark,
-                  dhikrBookmark: dhikrBookmark,
-                  onDeleteBookmark: () async {
-                    AppNav.pop(context); // close sheet once
-                    if (quranBookmark != null) {
-                      await deleteBookmark(ref, quranBookmark: quranBookmark);
-                    } else {
-                      await deleteBookmark(ref, dhikrBookmark: dhikrBookmark);
-                    }
-                  },
-                ),
-              );
-            },
-            icon: Icon(Icons.more_horiz, color: cs.onSurfaceVariant),
-          ),
-        ],
-      ),
+        IconButton(
+          onPressed: () {
+            AppSheets.showBottomSheet(
+              context: context,
+              useSafeArea: true,
+              child: BookmarkActionBottomSheet(
+                quranBookmark: quranBookmark,
+                dhikrBookmark: dhikrBookmark,
+                onDeleteBookmark: () async {
+                  AppNav.pop(context);
+                  if (quranBookmark != null) {
+                    await deleteBookmark(ref, quranBookmark: quranBookmark);
+                  } else {
+                    await deleteBookmark(ref, dhikrBookmark: dhikrBookmark);
+                  }
+                },
+              ),
+            );
+          },
+          icon: Icon(Icons.more_horiz, color: cs.onSurfaceVariant),
+        ),
+      ],
     );
   }
 }

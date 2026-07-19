@@ -82,6 +82,6 @@ class SurahInfoSheet extends StatelessWidget {
           );
         },
       ),
-    ).animate().fadeIn(duration: 750.ms);
+    ).animate().fadeIn(duration: 300.ms);
   }
 }

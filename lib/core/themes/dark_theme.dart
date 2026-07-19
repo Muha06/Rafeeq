@@ -128,8 +128,8 @@ ThemeData appDarkThemeData() {
         iconColor: scheme.onPrimary,
         disabledBackgroundColor: scheme.surfaceContainerHigh,
         disabledForegroundColor: scheme.onSurfaceVariant,
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
-        textStyle: const TextStyle(fontWeight: FontWeight.w400, fontSize: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 16),
+        textStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
       ),
     ),
@@ -139,7 +139,7 @@ ThemeData appDarkThemeData() {
         backgroundColor: WidgetStatePropertyAll(scheme.surfaceContainerHigh),
         foregroundColor: WidgetStatePropertyAll(scheme.primary.withAlpha(210)),
         padding: const WidgetStatePropertyAll(
-          EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         ),
         textStyle: const WidgetStatePropertyAll(
           TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
@@ -157,7 +157,7 @@ ThemeData appDarkThemeData() {
         iconColor: scheme.primary,
         disabledForegroundColor: scheme.onSurfaceVariant,
         side: BorderSide(color: scheme.onSurface.withAlpha(100)),
-        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
         textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
       ),
     ),

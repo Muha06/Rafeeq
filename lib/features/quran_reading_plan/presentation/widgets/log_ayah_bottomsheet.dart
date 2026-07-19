@@ -5,11 +5,13 @@ import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/helpers/app_haptics.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
+import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/core/widgets/app_drag_handle.dart';
 import 'package:rafeeq/features/quran_reading_plan/presentation/providers/progress_provider.dart';
 import 'package:rafeeq/features/quran_reading_plan/presentation/providers/quran_reading_plan_provider.dart';
 import 'package:rafeeq/features/quran_reading_plan/presentation/providers/quran_log_provider.dart';
 import 'package:rafeeq/features/quran_reading_plan/presentation/providers/today_progress_provider.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 void showAyahLogSheet(BuildContext context, WidgetRef ref) {
   final cs = Theme.of(context).colorScheme;
@@ -57,7 +59,7 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
 
                 // Title
                 Text(
-                  'Log your reading',
+                  'Today\'s Progress',
                   style: theme.textTheme.titleMedium?.copyWith(
                     color: cs.onSurface,
                     fontWeight: FontWeight.bold,
@@ -67,7 +69,7 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
 
                 // Progress info
                 Text(
-                  '$totalAfterLog / ${readingPlan.dailyTarget} ayahs today',
+                  '$totalAfterLog / ${readingPlan.dailyTarget} ayahs',
                   style: Theme.of(
                     context,
                   ).textTheme.bodyMedium?.copyWith(color: cs.onSurfaceVariant),
@@ -86,17 +88,14 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    IconButton(
+                    CircleIconButton(
+                      icon: PhosphorIcons.minus,
                       onPressed: ayahsRead > 1
                           ? () {
                               AppHaptics.light();
                               setState(() => ayahsRead--);
                             }
                           : null,
-                      icon: Icon(
-                        PhosphorIcons.minus,
-                        color: ayahsRead > 1 ? cs.primary : cs.onSurfaceVariant,
-                      ),
                     ),
                     const SizedBox(width: 16),
 
@@ -113,12 +112,12 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
 
                     const SizedBox(width: 16),
 
-                    IconButton(
+                    CircleIconButton(
+                      icon: PhosphorIcons.plus,
                       onPressed: () {
                         AppHaptics.light();
                         setState(() => ayahsRead++);
                       },
-                      icon: Icon(PhosphorIcons.plus, color: cs.primary),
                     ),
                   ],
                 ),
@@ -139,9 +138,17 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
                       final updatedProgress = ref.read(
                         progressProvider(todayRange),
                       );
+                      final goalCompleted =
+                          updatedProgress.totalRead >= readingPlan.dailyTarget;
 
-                      if (updatedProgress.totalRead >=
-                          readingPlan.dailyTarget) {
+                      if (!goalCompleted) {
+                        AppSnackBar.showSimple(
+                          context: context,
+                          message: 'Reading progress updated.',
+                        );
+                      }
+
+                      if (goalCompleted) {
                         showGoalCompletedDialog(
                           context,
                           readingPlan.dailyTarget,
@@ -162,6 +169,50 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
       },
     ),
   );
+}
+
+class CircleIconButton extends StatelessWidget {
+  const CircleIconButton({
+    super.key,
+    required this.icon,
+    this.onPressed,
+    this.size = 44,
+  });
+
+  final IconData icon;
+  final VoidCallback? onPressed;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final enabled = onPressed != null;
+
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.transparent,
+        border: Border.all(
+          color: enabled
+              ? cs.outline
+              : cs.outlineVariant.withValues(alpha: 0.4),
+        ),
+      ),
+      child: InkWell(
+        onTap: onPressed,
+        customBorder: const CircleBorder(),
+        child: Center(
+          child: Icon(
+            icon,
+            size: 20,
+            color: enabled ? cs.primary : cs.onSurfaceVariant,
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class LogAyahTextField extends StatelessWidget {
@@ -206,7 +257,8 @@ class LogAyahTextField extends StatelessWidget {
 }
 
 void showGoalCompletedDialog(BuildContext context, int dailyTarget) {
-  final cs = Theme.of(context).colorScheme;
+  final theme = Theme.of(context);
+  final cs = theme.colorScheme;
 
   showDialog(
     context: context,
@@ -221,42 +273,74 @@ void showGoalCompletedDialog(BuildContext context, int dailyTarget) {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Emoji / Celebration
-            const Text('🎉', style: TextStyle(fontSize: 48)),
-            const SizedBox(height: 16),
-            // Title
-            Text(
-              'Masha’Allah!',
-              style: TextStyle(
-                color: cs.primary,
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 8),
-            // Subtitle / message
-            Text(
-              'You completed your $dailyTarget ayahs today.\nMay Allah ﷻ accept your recitation and reward you abundantly (JazakAllahu Khair)!',
-              style: TextStyle(color: cs.onSurface, fontSize: 16),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 24),
-            // OK button
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () => Navigator.pop(context),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: cs.primary,
-                  foregroundColor: cs.onPrimary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+            CircleAvatar(
+                  radius: 34,
+                  backgroundColor: cs.surfaceContainerHighest,
+                  child: Icon(
+                    Icons.auto_awesome_rounded,
+                    color: cs.primary,
+                    size: 34,
                   ),
-                ),
-                child: const Text('Alhamdulillah!'),
+                )
+                .animate()
+                .scale(
+                  begin: const Offset(.8, .8),
+                  end: const Offset(1, 1),
+                  curve: Curves.elasticOut,
+                  duration: 1.seconds,
+                )
+                .fadeIn(),
+
+            const SizedBox(height: 20),
+
+            Text(
+                  'Masha’Allah!',
+                  style: theme.textTheme.headlineMedium?.copyWith(
+                    color: cs.primary,
+                  ),
+                  textAlign: TextAlign.center,
+                )
+                .animate()
+                .fadeIn(delay: 100.ms)
+                .slideY(begin: .2, end: 0, curve: Curves.easeOutCubic),
+
+            const SizedBox(height: 10),
+
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              decoration: BoxDecoration(
+                color: cs.primaryContainer,
+                borderRadius: BorderRadius.circular(99),
               ),
-            ),
+              child: Text(
+                'Goal completed!',
+                style: theme.textTheme.labelLarge?.copyWith(
+                  color: cs.onPrimaryContainer,
+                ),
+              ),
+            ).animate().fadeIn(delay: 80.ms).scale(),
+
+            const SizedBox(height: 20),
+
+            Text(
+              'You reached your Quran goal for today.\n'
+              'May Allah ﷻ accept your recitation, increase you in guidance, and make the Quran the light of your heart.',
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodyMedium,
+            ).animate().fadeIn(delay: 260.ms),
+
+            const SizedBox(height: 28),
+
+            SizedBox(
+                  width: double.infinity,
+                  child: FilledButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text('Alhamdulillah'),
+                  ),
+                )
+                .animate()
+                .fadeIn(delay: 340.ms)
+                .slideY(begin: .2, end: 0, curve: Curves.easeOutCubic),
           ],
         ),
       ),

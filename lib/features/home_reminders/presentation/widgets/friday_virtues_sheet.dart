@@ -6,7 +6,7 @@ import 'package:rafeeq/core/helpers/app_sheets.dart';
 void showFridayVirtuesSheet(BuildContext context) {
   AppSheets.showBottomSheet(
     context: context,
-     child: SizedBox(
+    child: SizedBox(
       height: MediaQuery.sizeOf(context).height * 0.9,
       child: ListView(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
@@ -14,13 +14,13 @@ void showFridayVirtuesSheet(BuildContext context) {
           Text(
             'Friday Virtues',
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.titleLarge,
+            style: Theme.of(context).textTheme.headlineMedium,
           ),
 
           const SizedBox(height: 12),
 
           Text(
-            'A few Sunnah reminders to make your Jumu‘ah count.',
+            'Maximize the blessings of Jumu\'ah with a few Sunnah practices/',
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyMedium,
           ),
@@ -87,7 +87,7 @@ class _VirtueTile extends ConsumerWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, color: cs.onSurface),
+            Icon(icon, color: cs.onSurfaceVariant),
             const SizedBox(width: 12),
             Expanded(
               child: Column(

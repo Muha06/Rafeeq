@@ -1,6 +1,7 @@
- import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
- 
+
 class HomeReminderCard extends StatelessWidget {
   const HomeReminderCard({super.key, required this.title, required this.onTap});
 
@@ -45,7 +46,7 @@ class HomeReminderCard extends StatelessWidget {
                   right: -18,
                   top: -24,
                   child: Icon(
-                    PhosphorIcons.sparkle ,
+                    PhosphorIcons.moonThin,
                     size: 92,
                     color: cs.onPrimary.withValues(alpha: 0.08),
                   ),
@@ -63,7 +64,7 @@ class HomeReminderCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(14),
                           ),
                           child: Icon(
-                            PhosphorIcons.bellRinging ,
+                            CupertinoIcons.bell,
                             color: cs.onPrimary,
                             size: 22,
                           ),
@@ -74,16 +75,16 @@ class HomeReminderCard extends StatelessWidget {
                             title,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: theme.textTheme.labelLarge?.copyWith(
+                            style: theme.textTheme.titleMedium?.copyWith(
                               color: cs.onPrimary,
                               fontWeight: FontWeight.w800,
-                              height: 1.1,
+                              fontFamily: 'PlayFairDisplay',
                             ),
                           ),
                         ),
                         const SizedBox(width: 8),
                         Icon(
-                          PhosphorIcons.arrowUpRight ,
+                          PhosphorIcons.arrowUpRight,
                           color: cs.onPrimary.withValues(alpha: 0.86),
                           size: 20,
                         ),

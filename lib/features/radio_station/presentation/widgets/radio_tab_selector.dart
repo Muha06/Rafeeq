@@ -21,6 +21,7 @@ class RadioCategorySelector extends StatelessWidget {
       height: 36,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.only(left: 12),
         itemCount: RadioAudioCategory.values.length,
         separatorBuilder: (_, _) => const SizedBox(width: 10),
         itemBuilder: (context, index) {

@@ -23,7 +23,7 @@ final surahsProvider = FutureProvider<List<Surah>>((ref) async {
 //Quick surah links
 final quickSurahLinksProvider = Provider<List<Surah>>((ref) {
   final surahs = ref.watch(surahsProvider).value ?? [];
-  const quickSurahIds = [1, 18, 36, 55, 67];
+  const quickSurahIds = [1, 18, 55, 36, 67];
 
   return surahs.where((s) => quickSurahIds.contains(s.id)).toList();
 });
