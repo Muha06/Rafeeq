@@ -24,7 +24,7 @@ import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_ayah
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_details.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_settings_sheet.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
-import 'package:rafeeq/features/quran_reading_plan/presentation/widgets/log_ayah_bottomsheet.dart';
+import 'package:rafeeq/features/quran_goal/presentation/widgets/log_ayah_bottomsheet.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:quran/quran.dart' as quran;
 import 'package:wakelock_plus/wakelock_plus.dart';

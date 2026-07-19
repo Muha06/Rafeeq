@@ -250,6 +250,34 @@ class LocalNotificationService {
     return granted == true;
   }
 
+  Future<void> showNow({
+    required int id,
+    required String title,
+    required String body,
+    String channelId = 'rafeeq_reminders',
+    String channelName = 'Reminders',
+    String? channelDescription,
+    bool playSound = false,
+  }) async {
+    final details = NotificationDetails(
+      android: AndroidNotificationDetails(
+        channelId,
+        channelName,
+        channelDescription: channelDescription,
+        importance: Importance.high,
+        priority: Priority.high,
+        playSound: playSound,
+      ),
+      iOS: DarwinNotificationDetails(
+        presentAlert: true,
+        presentBadge: true,
+        presentSound: playSound,
+      ),
+    );
+
+    await _plugin.show(id, title, body, details);
+  }
+
   Future<void> cancel(int id) async {
     await _plugin.cancel(id);
   }

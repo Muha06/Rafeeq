@@ -28,8 +28,10 @@ import 'package:rafeeq/features/bookmarks/data/models/dhikr_bookmark_hive_model.
 import 'package:rafeeq/features/bookmarks/data/models/quran_bookmark_hive_model.dart';
 import 'package:rafeeq/features/onboarding/presentation/pages/onboarding_scaffold.dart';
 import 'package:rafeeq/features/onboarding/presentation/provider/providers.dart';
-import 'package:rafeeq/features/quran_reading_plan/data/models/quran_reading_plan_hive.dart';
-import 'package:rafeeq/features/quran_reading_plan/data/models/quran_log_hive.dart';
+import 'package:rafeeq/features/quran_goal/data/models/hive/quran_goal_hive.dart';
+import 'package:rafeeq/features/quran_goal/data/models/hive/quran_goal_type_hive.dart';
+import 'package:rafeeq/features/quran_goal/data/models/hive/quran_log_hive.dart';
+import 'package:rafeeq/features/quran_goal/data/models/hive/quran_target_unit_hive.dart';
 import 'package:rafeeq/features/timings/data/models/hive/cached_salah_times_hive.dart';
 import 'package:rafeeq/firebase_options.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -81,7 +83,9 @@ void main() {
       await Hive.initFlutter();
 
       // Register Hive adapters
-      Hive.registerAdapter(QuranReadingPlanHiveAdapter()); // TypeId = 10
+      Hive.registerAdapter(QuranGoalHiveAdapter()); // TypeId = 10
+      Hive.registerAdapter(QuranGoalTypeHiveAdapter()); // TypeId = 11
+      Hive.registerAdapter(QuranTargetUnitHiveAdapter()); // TypeId = 11
       Hive.registerAdapter(QuranHiveLogAdapter()); // TypeId = 11
       Hive.registerAdapter(AllahNameHiveAdapter()); // TypeId = 30
       Hive.registerAdapter(QuranBookmarkHiveModelAdapter()); // TypeId = 31
@@ -93,7 +97,7 @@ void main() {
       Hive.registerAdapter(CachedSalahTimesHiveAdapter()); // TypeId = 41
 
       // Open Hive boxes
-      await Hive.openBox<QuranReadingPlanHive>('quran_reading_plan');
+      await Hive.openBox<QuranGoalHive>('quran_goal');
       await Hive.openBox<QuranHiveLog>('quran_logs');
       await Hive.openBox<QuranBookmarkHiveModel>('quran_bookmarks_box');
       await Hive.openBox<DhikrBookmarkHiveModel>('dhikr_bookmarks_box');

@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
- import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
+import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/features/quran/presentation/pages/search_surah_page.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/QURAN_PAGE/surah_listview.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/QURAN_PAGE/quick_last_read.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/QURAN_PAGE/quick_surah_links.dart';
-import 'package:rafeeq/features/quran_reading_plan/presentation/widgets/quran_reading_plan.dart';
+import 'package:rafeeq/features/quran_goal/presentation/widgets/quran_goal_card.dart';
 
 class QuranPage extends ConsumerStatefulWidget {
   const QuranPage({super.key});

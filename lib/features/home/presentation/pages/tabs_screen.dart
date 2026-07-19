@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
- import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/app/providers/tabs_screen_provider.dart';
 import 'package:rafeeq/core/helpers/app_haptics.dart';
 import 'package:rafeeq/features/home/presentation/widgets/bottom_bar.dart';
@@ -33,11 +33,13 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
       bottomNavigationBar: MyBottomBar(
         currentIndex: selectedIndex,
         onTap: (value) async {
-          await AppHaptics.light();
-
           setState(() {
             ref.read(tabsScreenIndexProvider.notifier).state = value;
           });
+
+          if (selectedIndex == value) return;
+
+          await AppHaptics.light();
         },
       ),
     );
