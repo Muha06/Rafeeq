@@ -143,7 +143,7 @@ ThemeData appDarkThemeData() {
           EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         ),
         textStyle: const WidgetStatePropertyAll(
-          TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+          TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
         ),
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
@@ -224,7 +224,7 @@ ThemeData appDarkThemeData() {
       ),
     ),
 
-    listTileTheme: ListTileThemeData(
+    listTileTheme: ListTileThemeData( 
       iconColor: scheme.onSurfaceVariant,
       textColor: scheme.onSurface,
       subtitleTextStyle: TextStyle(color: scheme.onSurfaceVariant),

@@ -32,8 +32,8 @@ class QuranGoal {
   });
 
   //helper to void get formatted start date
-  String get formattedStartDate =>
-      DateFormat('EEEE, d MMMM yyyy').format(startDate);
+  String get formattedStartDate => DateFormat('d MMMM yyyy').format(startDate);
+  String get formattedEndDate => DateFormat('d MMMM yyyy').format(endDate);
 
   QuranGoal copyWith({
     int? target,
@@ -65,4 +65,21 @@ class QuranGoal {
       targetUnit: targetUnit.toHive,
     );
   }
+}
+
+// Extensions
+extension QuranGoalTypeX on QuranGoalType {
+  String get label => switch (this) {
+    QuranGoalType.tilawah => 'Tilawah',
+    QuranGoalType.hifz => 'Hifz',
+  };
+}
+
+extension QuranTargetUnitX on QuranTargetUnit {
+  String get label => switch (this) {
+    QuranTargetUnit.ayah => 'Ayahs',
+    QuranTargetUnit.page => 'Pages',
+    QuranTargetUnit.juz => 'Juz',
+    QuranTargetUnit.surah => 'Surahs',
+  };
 }

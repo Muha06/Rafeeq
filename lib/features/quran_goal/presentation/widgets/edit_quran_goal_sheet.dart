@@ -8,19 +8,20 @@ import 'package:rafeeq/features/quran_goal/domain/entities/quran_goal.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/log_ayah_bottomsheet.dart';
 
-class EditQuranReadingPlanSheet extends ConsumerStatefulWidget {
+class EditQuranGoalSheet extends ConsumerStatefulWidget {
   final QuranGoal goal;
-  const EditQuranReadingPlanSheet({super.key, required this.goal});
+  const EditQuranGoalSheet({super.key, required this.goal});
 
   @override
-  ConsumerState<EditQuranReadingPlanSheet> createState() =>
-      _EditQuranReadingPlanSheetState();
+  ConsumerState<EditQuranGoalSheet> createState() =>
+      _EditQuranGoalSheetState();
 }
 
-class _EditQuranReadingPlanSheetState
-    extends ConsumerState<EditQuranReadingPlanSheet> {
+class _EditQuranGoalSheetState
+    extends ConsumerState<EditQuranGoalSheet> {
   late int target;
   late TextEditingController targetController;
+  
   @override
   void initState() {
     super.initState();

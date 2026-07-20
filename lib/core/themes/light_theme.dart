@@ -135,13 +135,13 @@ ThemeData appLightThemeData() {
 
     filledButtonTheme: FilledButtonThemeData(
       style: ButtonStyle(
-        backgroundColor: WidgetStatePropertyAll(scheme.primary),
-        foregroundColor: WidgetStatePropertyAll(scheme.onPrimary),
+        backgroundColor: WidgetStatePropertyAll(scheme.surfaceContainerHighest),
+        foregroundColor: WidgetStatePropertyAll(scheme.onSurface),
         padding: const WidgetStatePropertyAll(
           EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         ),
         textStyle: const WidgetStatePropertyAll(
-          TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
+          TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
         ),
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),

@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
-import 'package:rafeeq/core/features/local_notifications/providers/wiring_providers.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
-import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/quran_goal/domain/entities/quran_goal.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
-import 'package:rafeeq/features/quran_goal/presentation/providers/quran_log_provider.dart';
+import 'package:rafeeq/features/quran_goal/presentation/widgets/goal_actions_sheet.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/progress_bars/daily_progress_bar.dart';
-import 'package:rafeeq/features/quran_goal/presentation/widgets/adjust_quran_goal_sheet.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/progress_bars/monthly_progress_bar.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/weekly_chart.dart';
+import 'package:rafeeq/features/quran_goal/presentation/widgets/create_goal_sheet.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/progress_bars/weekly_progress_bar.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
@@ -29,20 +27,12 @@ class QuranGoalPage extends ConsumerWidget {
           if (hasGoal)
             IconButton(
               onPressed: () {
-                AppSheets.showConfirmSheet(
+                AppSheets.showBottomSheet(
                   context: context,
-                  useSafeArea: true,
-                  title: "Reset stats?",
-                  description: "This will clear all your recorded ayahs.",
-                  destructive: true,
-                  confirmText: "Reset",
-                  onConfirm: () {
-                    ref.read(quranLogProvider.notifier).resetLogs();
-                  },
+                  child: const GoalSheetActionsSheet(),
                 );
               },
-              icon: const PhosphorIcon(PhosphorIcons.arrowClockwise),
-              tooltip: 'Reset stats',
+              icon: const PhosphorIcon(PhosphorIcons.dotsThreeCircle),
             ),
         ],
       ),
@@ -69,7 +59,7 @@ class QuranGoalPage extends ConsumerWidget {
                 ),
               ),
             )
-          : _NoGoalState(onCreateGoal: () {}),
+          : _NoGoalState(onCreateGoal: () => openCreateGoalSheet(context, ref)),
     );
   }
 }
@@ -116,46 +106,12 @@ class MyQuranGoalCard extends ConsumerWidget {
   final QuranGoal quranGoal;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Future<void> toggleGoal() async {
-      final notifier = ref.read(quranGoalProvider.notifier);
-      notifier.updateGoal(isActive: !quranGoal.isActive);
-
-      final updated = ref.read(quranGoalProvider);
-      final goalPaused = !updated!.isActive;
-      AppSnackBar.showSimple(
-        context: context,
-        message: goalPaused ? "Goal unpaused" : "Goal paused",
-      );
-
-      await ref
-          .read(localNotificationServiceProvider)
-          .showNow(
-            id: 1002,
-            title: goalPaused ? 'Goal Paused' : 'Goal Resumed',
-            body: goalPaused
-                ? 'Your Quran goal has been paused. You can resume it anytime.'
-                : 'Your Quran goal has been resumed. Keep up the great progress!',
-          );
-    }
-
-    void showEditSheet() {
-      // Always show bottom sheet to edit
-      AppSheets.showBottomSheet(
-        context: context,
-        child: EditQuranReadingPlanSheet(goal: quranGoal),
-      );
-    }
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _GoalHeader(isActive: quranGoal.isActive),
-
-          const SizedBox(height: 28),
-
-          _GoalHero(dailyTarget: quranGoal.target),
+          _GoalHero(goal: quranGoal),
 
           const SizedBox(height: 28),
 
@@ -163,75 +119,7 @@ class MyQuranGoalCard extends ConsumerWidget {
 
           const SizedBox(height: 24),
 
-          _GoalInfo(
-            startDate: quranGoal.formattedStartDate,
-            isActive: quranGoal.isActive,
-          ),
-
-          const SizedBox(height: 28),
-
-          _GoalActions(
-            isActive: quranGoal.isActive,
-            onEdit: showEditSheet,
-            onToggle: toggleGoal,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _GoalHeader extends StatelessWidget {
-  const _GoalHeader({required this.isActive});
-
-  final bool isActive;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text("Daily Target", style: theme.textTheme.titleMedium),
-
-        _GoalStatusBadge(isActive: isActive),
-      ],
-    );
-  }
-}
-
-class _GoalStatusBadge extends StatelessWidget {
-  const _GoalStatusBadge({required this.isActive});
-
-  final bool isActive;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final cs = theme.colorScheme;
-
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 250),
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-      decoration: BoxDecoration(
-        color: isActive
-            ? Colors.green.withValues(alpha: .12)
-            : cs.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            isActive ? Icons.check_circle_outline : Icons.pause_outlined,
-            size: 16,
-          ),
-          const SizedBox(width: 6),
-          Text(
-            isActive ? "Active" : "Paused",
-            style: theme.textTheme.labelSmall?.copyWith(color: cs.onSurface),
-          ),
+          _GoalInfo(goal: quranGoal),
         ],
       ),
     );
@@ -239,9 +127,9 @@ class _GoalStatusBadge extends StatelessWidget {
 }
 
 class _GoalHero extends StatelessWidget {
-  const _GoalHero({required this.dailyTarget});
+  const _GoalHero({required this.goal});
 
-  final int dailyTarget;
+  final QuranGoal goal;
 
   @override
   Widget build(BuildContext context) {
@@ -254,17 +142,17 @@ class _GoalHero extends StatelessWidget {
           AnimatedSwitcher(
             duration: const Duration(milliseconds: 300),
             child: Text(
-              "$dailyTarget",
-              key: ValueKey(dailyTarget),
-              style: theme.textTheme.displayLarge?.copyWith(
+              "${goal.target}",
+              key: ValueKey(goal.target),
+              style: theme.textTheme.headlineMedium?.copyWith(
                 color: cs.primary,
                 fontWeight: FontWeight.bold,
-                height: .9,
+                fontSize: 64,
               ),
             ),
           ),
           Text(
-            "ayahs per day",
+            goal.targetUnit.label,
             style: theme.textTheme.titleMedium?.copyWith(
               color: cs.onSurfaceVariant,
             ),
@@ -276,28 +164,20 @@ class _GoalHero extends StatelessWidget {
 }
 
 class _GoalInfo extends StatelessWidget {
-  const _GoalInfo({required this.startDate, required this.isActive});
+  const _GoalInfo({required this.goal});
 
-  final String startDate;
-  final bool isActive;
+  final QuranGoal goal;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: _InfoTile(title: "Started", value: startDate),
-        ),
+        _InfoTile(title: "Started", value: goal.formattedStartDate),
 
         const Spacer(),
 
-        Expanded(
-          child: _InfoTile(
-            title: "Status",
-            value: isActive ? "In Progress" : "Paused",
-          ),
-        ),
+        _InfoTile(title: "End Date", value: goal.formattedEndDate),
       ],
     );
   }
@@ -319,39 +199,6 @@ class _InfoTile extends StatelessWidget {
         Text(title, style: theme.textTheme.labelMedium),
         const SizedBox(height: 4),
         Text(value, style: theme.textTheme.labelLarge),
-      ],
-    );
-  }
-}
-
-class _GoalActions extends StatelessWidget {
-  const _GoalActions({
-    required this.onEdit,
-    required this.onToggle,
-    required this.isActive,
-  });
-
-  final VoidCallback onEdit;
-  final VoidCallback onToggle;
-  final bool isActive;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        TextButton.icon(
-          onPressed: onEdit,
-          icon: const Icon(Icons.edit_outlined),
-          label: const Text("Edit"),
-        ),
-        const Spacer(),
-        TextButton.icon(
-          onPressed: onToggle,
-          icon: Icon(
-            isActive ? Icons.pause_circle_outline : Icons.play_circle_outline,
-          ),
-          label: Text(isActive ? "Pause" : "Resume"),
-        ),
       ],
     );
   }
@@ -417,7 +264,6 @@ class _NoGoalState extends StatelessWidget {
                 child:
                     ElevatedButton(
                           onPressed: onCreateGoal,
-                          // icon: const Icon(Icons.add_rounded),
                           child: const Text('Create Goal'),
                         )
                         .animate(delay: 320.ms)

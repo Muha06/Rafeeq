@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
+import 'package:rafeeq/features/quran_goal/domain/entities/quran_goal.dart';
 import 'package:rafeeq/features/quran_goal/presentation/pages/quran_goal_stats.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/progress_provider.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
@@ -65,7 +66,7 @@ class QuranReadingPlanCard extends ConsumerWidget {
 
               // Plan title
               Text(
-                '${quranGoal.target} ${quranGoal.targetUnit.name}',
+                '${quranGoal.target} ${quranGoal.targetUnit.label}',
                 style: theme.textTheme.titleLarge?.copyWith(color: cs.primary),
               ),
 

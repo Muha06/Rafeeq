@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:rafeeq/core/features/local_notifications/providers/wiring_providers.dart';
 import 'package:rafeeq/features/quran_goal/data/models/hive/quran_goal_hive.dart';
 import 'package:rafeeq/features/quran_goal/domain/entities/quran_goal.dart';
 
@@ -47,14 +48,32 @@ class QuranGoalNotifier extends Notifier<QuranGoal?> {
     _save(updated);
   }
 
-  void createGoal(QuranGoal goal) {
+  void createGoal(QuranGoal goal) async {
     state = goal;
     _save(goal);
+
+    await ref
+        .read(localNotificationServiceProvider)
+        .showNow(
+          id: 1002,
+          title: 'Goal Created',
+          body:
+              'Your Quran goal has been created successfully. Stay consistent and may Allah bless your journey with the Quran.',
+        );
   }
 
-  void deleteGoal() {
+  void deleteGoal() async {
     box.delete(_goalKey);
     state = null;
+
+    await ref
+        .read(localNotificationServiceProvider)
+        .showNow(
+          id: 1002,
+          title: 'Goal Deleted',
+          body:
+              'Your Quran goal has been deleted successfully. You can create a new goal anytime.',
+        );
   }
 
   void _save(QuranGoal? goal) {

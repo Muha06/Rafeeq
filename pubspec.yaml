@@ -67,9 +67,8 @@ dependencies:
   cupertino_icons: ^1.0.9
   flutter_html: ^3.0.0
   smooth_sheets: ^1.0.3
-  animations: ^2.2.0
   flutter_animate: ^4.5.2
-   
+  dropdown_button2: ^3.1.0
 
 dev_dependencies:
   flutter_test:
