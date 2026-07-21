@@ -47,7 +47,35 @@ class _CreateGoalSheetState extends ConsumerState<CreateGoalSheet> {
   TimeOfDay reminder = const TimeOfDay(hour: 20, minute: 0);
 
   final goalTypeNotifier = ValueNotifier(QuranGoalType.tilawah);
-  final targetUnitNotifier = ValueNotifier(QuranTargetUnit.page);
+  final targetUnitNotifier = ValueNotifier(QuranTargetUnit.ayah);
+
+  void createGoal() {
+    final target = int.tryParse(targetController.text.trim());
+
+    if (target == null || target <= 0) {
+      AppSheets.showErrorDialog(
+        context: context,
+        message: "Target cannot be empty",
+      );
+
+      debugPrint("error");
+      return;
+    }
+
+    final goal = QuranGoal(
+      type: goalTypeNotifier.value,
+      targetUnit: targetUnitNotifier.value,
+      target: target,
+      startDate: startDate,
+      endDate: endDate,
+      remindMeAt: reminder,
+    );
+
+    AppNav.pop(context);
+
+    ref.read(quranGoalProvider.notifier).createGoal(goal);
+  }
+
   Future<void> pickStartDate() async {
     final picked = await showDatePicker(
       context: context,
@@ -91,33 +119,6 @@ class _CreateGoalSheetState extends ConsumerState<CreateGoalSheet> {
     }
   }
 
-  void createGoal() {
-    final target = int.tryParse(targetController.text.trim());
-
-    if (target == null || target <= 0) {
-      AppSheets.showErrorDialog(
-        context: context,
-        message: "Target cannot be empty",
-      );
-
-      debugPrint("error");
-      return;
-    }
-
-    final goal = QuranGoal(
-      type: goalTypeNotifier.value,
-      targetUnit: targetUnitNotifier.value,
-      target: target,
-      startDate: startDate,
-      endDate: endDate,
-      remindMeAt: reminder,
-    );
-
-    AppNav.pop(context);
-
-    ref.read(quranGoalProvider.notifier).createGoal(goal);
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -143,34 +144,9 @@ class _CreateGoalSheetState extends ConsumerState<CreateGoalSheet> {
 
             const SizedBox(height: 24),
 
-            Row(
-              children: [
-                Expanded(
-                  child: GoalDropdown<QuranGoalType>(
-                    label: 'Goal Type',
-                    valueListenable: goalTypeNotifier,
-                    items: QuranGoalType.values,
-                    itemLabel: (e) => e.label,
-                    onChanged: (value) {
-                      if (value == null) return;
-                      goalTypeNotifier.value = value;
-                    },
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: GoalDropdown<QuranTargetUnit>(
-                    label: 'Target Unit',
-                    valueListenable: targetUnitNotifier,
-                    items: QuranTargetUnit.values,
-                    itemLabel: (e) => e.label,
-                    onChanged: (value) {
-                      if (value == null) return;
-                      targetUnitNotifier.value = value;
-                    },
-                  ),
-                ),
-              ],
+            GoalTypeTargetRow(
+              goalTypeNotifier: goalTypeNotifier,
+              targetUnitNotifier: targetUnitNotifier,
             ),
 
             const SizedBox(height: 4),
@@ -213,6 +189,50 @@ class _CreateGoalSheetState extends ConsumerState<CreateGoalSheet> {
   }
 }
 
+class GoalTypeTargetRow extends StatelessWidget {
+  const GoalTypeTargetRow({
+    super.key,
+    required this.goalTypeNotifier,
+    required this.targetUnitNotifier,
+  });
+
+  final ValueNotifier<QuranGoalType> goalTypeNotifier;
+  final ValueNotifier<QuranTargetUnit> targetUnitNotifier;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: GoalDropdown<QuranGoalType>(
+            label: 'Goal Type',
+            valueListenable: goalTypeNotifier,
+            items: QuranGoalType.values,
+            itemLabel: (e) => e.label,
+            onChanged: (value) {
+              if (value == null) return;
+              goalTypeNotifier.value = value;
+            },
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: GoalDropdown<QuranTargetUnit>(
+            label: 'Target Unit',
+            valueListenable: targetUnitNotifier,
+            items: QuranTargetUnit.values,
+            itemLabel: (e) => e.label,
+            onChanged: (value) {
+              if (value == null) return;
+              targetUnitNotifier.value = value;
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class GoalScheduleTile extends StatelessWidget {
   const GoalScheduleTile({
     super.key,
@@ -237,7 +257,7 @@ class GoalScheduleTile extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+          padding: const EdgeInsets.symmetric(vertical: 12),
           child: Row(
             children: [
               Icon(icon, size: 18, color: cs.onSurfaceVariant),
@@ -316,7 +336,7 @@ class GoalDropdown<T> extends StatelessWidget {
       ),
       dropdownStyleData: DropdownStyleData(
         decoration: BoxDecoration(
-          color: cs.surfaceContainer,
+          color: cs.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(18),
         ),
         elevation: 8,

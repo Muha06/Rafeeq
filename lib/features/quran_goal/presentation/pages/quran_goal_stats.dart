@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
+import 'package:rafeeq/core/widgets/app_drag_handle.dart';
 import 'package:rafeeq/features/quran_goal/domain/entities/quran_goal.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/goal_actions_sheet.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/progress_bars/daily_progress_bar.dart';
-import 'package:rafeeq/features/quran_goal/presentation/widgets/progress_bars/monthly_progress_bar.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/weekly_chart.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/create_goal_sheet.dart';
-import 'package:rafeeq/features/quran_goal/presentation/widgets/progress_bars/weekly_progress_bar.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:sliding_up_panel2/sliding_up_panel2.dart';
 
 class QuranGoalPage extends ConsumerWidget {
   const QuranGoalPage({super.key});
@@ -23,79 +23,97 @@ class QuranGoalPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Quran Goal'),
+        centerTitle: true,
         actions: [
           if (hasGoal)
             IconButton(
-              onPressed: () {
-                AppSheets.showBottomSheet(
-                  context: context,
-                  child: const GoalSheetActionsSheet(),
-                );
-              },
+              onPressed: () => _showGoalActionsSheet(context),
               icon: const PhosphorIcon(PhosphorIcons.dotsThreeCircle),
             ),
         ],
       ),
       body: hasGoal
-          ? Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    MyQuranGoalCard(quranGoal: quranGoal),
-                    const SizedBox(height: 8),
-
-                    const ProgressBars(
-                      bars: [
-                        TodayQuranProgressArc(),
-                        WeeklyQuranProgressArc(),
-                        MonthlyQuranProgressArc(),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-
-                    const WeeklyQuranChart(),
-                  ],
-                ),
-              ),
-            )
+          ? _GoalPageBody(quranGoal: quranGoal)
           : _NoGoalState(onCreateGoal: () => openCreateGoalSheet(context, ref)),
     );
   }
 }
 
-class ProgressBars extends StatelessWidget {
-  const ProgressBars({super.key, required this.bars});
-  final List<Widget> bars;
+class _GoalPageBody extends StatefulWidget {
+  const _GoalPageBody({required this.quranGoal});
+
+  final QuranGoal quranGoal;
+
+  @override
+  State<_GoalPageBody> createState() => _GoalPageBodyState();
+}
+
+class _GoalPageBodyState extends State<_GoalPageBody> {
+  final controller = PanelController();
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final cs = theme.colorScheme;
+    final collapsedHeight = MediaQuery.sizeOf(context).height * .45;
 
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(14),
-        color: cs.surface,
+    return SlidingUpPanel(
+      controller: controller,
+
+      minHeight: collapsedHeight,
+      maxHeight: MediaQuery.sizeOf(context).height * .65,
+
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+
+      color: theme.colorScheme.surfaceContainerLow,
+      backdropEnabled: true,
+      parallaxEnabled: true,
+      parallaxOffset: .12,
+
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.only(bottom: collapsedHeight),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
+            child: MyQuranGoalCard(quranGoal: widget.quranGoal),
+          ),
+        ),
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text('My Progress', style: theme.textTheme.titleMedium),
-          ),
-          const SizedBox(height: 16),
 
-          Wrap(
-            alignment: WrapAlignment.spaceEvenly,
-            spacing: 0,
-            children: bars,
-          ),
-        ],
+      panelBuilder: () => const _ProgressPanel(),
+    );
+  }
+}
+
+class _ProgressPanel extends StatelessWidget {
+  const _ProgressPanel({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4.0),
+        child: Column(
+          children: [
+            const AppDragHandle(),
+
+            const SizedBox(height: 8),
+
+            Text(
+              'My Progress',
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontFamily: 'PlayFairDisplay',
+              ),
+            ),
+
+            const SizedBox(height: 8),
+
+            const TotalQuranProgressArc(height: 160, width: 250),
+
+            const WeeklyQuranChart(),
+          ],
+        ),
       ),
     );
   }
@@ -137,27 +155,32 @@ class _GoalHero extends StatelessWidget {
     final cs = theme.colorScheme;
 
     return Center(
-      child: Column(
-        children: [
-          AnimatedSwitcher(
-            duration: const Duration(milliseconds: 300),
-            child: Text(
-              "${goal.target}",
-              key: ValueKey(goal.target),
-              style: theme.textTheme.headlineMedium?.copyWith(
-                color: cs.primary,
-                fontWeight: FontWeight.bold,
-                fontSize: 64,
+      child: GestureDetector(
+        onTap: () => _showGoalActionsSheet(context),
+        child: Column(
+          children: [
+            const _GoalCompletedBadge(),
+
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              child: Text(
+                "${goal.target}",
+                key: ValueKey(goal.target),
+                style: theme.textTheme.headlineMedium?.copyWith(
+                  color: cs.primary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 64,
+                ),
               ),
             ),
-          ),
-          Text(
-            goal.targetUnit.label,
-            style: theme.textTheme.titleMedium?.copyWith(
-              color: cs.onSurfaceVariant,
+            Text(
+              goal.targetUnit.label,
+              style: theme.textTheme.titleMedium?.copyWith(
+                color: cs.onSurfaceVariant,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -276,6 +299,42 @@ class _NoGoalState extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+void _showGoalActionsSheet(BuildContext context) {
+  AppSheets.showBottomSheet(
+    context: context,
+    child: const GoalSheetActionsSheet(),
+  );
+}
+
+class _GoalCompletedBadge extends StatelessWidget {
+  const _GoalCompletedBadge({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+      decoration: BoxDecoration(
+        color: cs.tertiaryContainer.withAlpha(100),
+        borderRadius: BorderRadius.circular(999),
+       ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            "🏆 Goal Completed!",
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: cs.onTertiaryContainer,
+            ),
+          ),
+        ],
       ),
     );
   }

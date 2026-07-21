@@ -233,7 +233,7 @@ ThemeData appLightThemeData() {
       subtitleTextStyle: TextStyle(color: scheme.onSurfaceVariant),
       titleTextStyle: base.titleMedium?.copyWith(
         fontSize: 18,
-        fontWeight: FontWeight.w400,
+        fontWeight: FontWeight.w500,
         letterSpacing: -0.2,
         color: scheme.onSurface,
       ),

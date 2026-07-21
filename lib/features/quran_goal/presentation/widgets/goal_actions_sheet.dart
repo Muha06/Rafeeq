@@ -103,7 +103,7 @@ class _EditGoalAction extends StatelessWidget {
 
     return ListTile(
       leading: Icon(icon),
-      title: Text(title, style: theme.textTheme.labelLarge),
+      title: Text(title),
       trailing: Icon(Icons.chevron_right, color: cs.onSurfaceVariant),
       onTap: onTap,
     );

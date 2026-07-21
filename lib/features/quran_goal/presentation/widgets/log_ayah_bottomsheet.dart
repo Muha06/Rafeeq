@@ -27,7 +27,7 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
       builder: (context, setState) {
         final theme = Theme.of(context);
 
-        // Whenever we update ayahsRead programmatically, update controller
+        // Called Whenever we update ayahsRead using Textfield
         void updateController(int value) {
           ayahsRead = value;
           ayahController.text = value.toString();
@@ -103,7 +103,7 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
                       controller: ayahController,
                       onChanged: (value) {
                         final parsed = int.tryParse(value);
-                        if (parsed != null && parsed > 0) {
+                        if (parsed != null) {
                           setState(() => updateController(parsed));
                         }
                       },
@@ -126,30 +126,40 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
                   width: double.infinity,
                   child: ElevatedButton.icon(
                     onPressed: () async {
+                      if (ayahsRead < 1) {
+                        AppSheets.showErrorDialog(
+                          context: context,
+                          message: "Value must be greater than 0",
+                        );
+                        return;
+                      }
+
+                      final wasCompleted =
+                          todayProgress.totalRead >= goal.target;
+
                       // Save log
                       ref.read(quranLogProvider.notifier).addLog(ayahsRead);
 
                       // Close bottom sheet first
-                      Navigator.pop(context);
+                      AppNav.pop(context);
 
                       // Re-read AFTER saving
 
                       final updatedProgress = ref.read(
                         progressProvider(todayRange),
                       );
-                      final goalCompleted =
+                      final isCompleted =
                           updatedProgress.totalRead >= goal.target;
 
-                      if (!goalCompleted) {
+                      if (!wasCompleted && isCompleted) {
+                        showGoalCompletedDialog(context, ref, goal.target);
+                      } else {
                         AppSnackBar.showSimple(
                           context: context,
                           message: 'Reading progress updated.',
                         );
                       }
 
-                      if (goalCompleted) {
-                        showGoalCompletedDialog(context, ref, goal.target);
-                      }
                       RafeeqAnalytics.logFeature('logged_Quran_progress');
                     },
 

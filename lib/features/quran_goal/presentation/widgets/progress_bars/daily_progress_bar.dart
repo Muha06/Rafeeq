@@ -1,46 +1,59 @@
 import 'package:arc_progress_bar_new/arc_progress_bar_new.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/features/quran_goal/domain/entities/quran_goal.dart';
+import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/today_progress_provider.dart';
 
-class TodayQuranProgressArc extends ConsumerWidget {
-  const TodayQuranProgressArc({super.key});
-
+class TotalQuranProgressArc extends ConsumerWidget {
+  const TotalQuranProgressArc({
+    super.key,
+    required this.height,
+    required this.width,
+  });
+  final double height;
+  final double width;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
+    final goal = ref.watch(quranGoalProvider);
 
     final progress = ref.watch(todayProgressProvider);
-    final total = progress.totalRead;
-    final target = progress.totalTarget;
+    final totalRead = progress.totalRead;
+    final totalTarget = progress.totalTarget;
 
-    final percentage = target == 0 ? 0.0 : (total / target) * 100;
+    final percentage = totalTarget == 0 ? 0.0 : (totalRead / totalTarget) * 100;
 
-    return Column(
-      children: [
-        Text('Today', style: theme.textTheme.labelMedium!.copyWith(height: 1)),
-
-        SizedBox(
-          height: 116,
-          width: 108,
-          child: ArcProgressBar(
-            percentage: percentage.clamp(0, 100),
-            handleColor: cs.primary,
-            foregroundColor: cs.primary,
-            backgroundColor: cs.surfaceContainerHighest,
-            handleSize: 0,
-            centerWidget: Text(
+    return SizedBox(
+      height: height,
+      width: width,
+      child: ArcProgressBar(
+        percentage: percentage.clamp(0, 100),
+        handleColor: cs.primary,
+        foregroundColor: cs.primary,
+        backgroundColor: cs.surfaceContainerHighest,
+        handleSize: 0,
+        centerWidget: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
               "${percentage.clamp(0, 100).toStringAsFixed(0)} %",
-              style: theme.textTheme.bodySmall!.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: theme.textTheme.titleMedium!.copyWith(),
             ),
-            arcThickness: 6,
-            strokeCap: StrokeCap.round,
-          ),
+
+            const SizedBox(height: 8),
+
+            Text(
+              "${totalRead.toString()} ${goal?.targetUnit.label} read",
+              maxLines: 2,
+              style: theme.textTheme.titleSmall,
+            ),
+          ],
         ),
-      ],
+        arcThickness: 6,
+        strokeCap: StrokeCap.round,
+      ),
     );
   }
 }

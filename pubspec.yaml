@@ -69,6 +69,8 @@ dependencies:
   smooth_sheets: ^1.0.3
   flutter_animate: ^4.5.2
   dropdown_button2: ^3.1.0
+  sliding_up_panel2: ^3.3.0+1
+  hugeicons: ^1.1.7
 
 dev_dependencies:
   flutter_test:

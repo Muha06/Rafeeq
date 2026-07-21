@@ -70,9 +70,7 @@ class AppSheets {
               Text(
                 description,
                 textAlign: TextAlign.center,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: cs.onSurfaceVariant,
-                ),
+                style: theme.textTheme.bodyMedium,
               ),
               const SizedBox(height: 24),
 
@@ -89,7 +87,7 @@ class AppSheets {
                   },
                   child: Text(
                     confirmText,
-                    style: theme.textTheme.bodyMedium!.copyWith(
+                    style: theme.textTheme.labelLarge!.copyWith(
                       color: destructive ? cs.onError : cs.onPrimary,
                     ),
                   ),

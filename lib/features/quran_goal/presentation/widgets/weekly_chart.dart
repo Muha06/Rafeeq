@@ -18,11 +18,11 @@ class WeeklyQuranChart extends ConsumerWidget {
     final days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
     return Container(
-      height: 200,
+      height: 220,
       width: double.infinity,
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(16),
         color: cs.surface,
       ),
       child: BarChart(
@@ -44,7 +44,9 @@ class WeeklyQuranChart extends ConsumerWidget {
                 interval: target / 5,
                 getTitlesWidget: (val, meta) => Text(
                   val.toInt().toString(),
-                  style: theme.textTheme.bodySmall,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: cs.onSurface,
+                  ),
                 ),
               ),
             ),
@@ -53,9 +55,13 @@ class WeeklyQuranChart extends ConsumerWidget {
                 showTitles: true,
                 getTitlesWidget: (val, meta) {
                   final index = val.toInt();
-                  return Text(
-                    days[index % 7],
-                    style: theme.textTheme.bodySmall,
+                  return Center(
+                    child: Text(
+                      days[index % 7],
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: cs.onSurface,
+                      ),
+                    ),
                   );
                 },
               ),
