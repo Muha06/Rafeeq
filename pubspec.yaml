@@ -121,6 +121,7 @@ flutter:
     - assets/images/quran/
     - assets/images/quran/pages/
     - assets/images/onboarding/
+    - assets/images/salah/
     - assets/db/
     - .env
 

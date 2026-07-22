@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
 import 'package:rafeeq/core/features/audio/widgets/seek_bar.dart';
@@ -142,7 +143,9 @@ class AudioControlsSection extends ConsumerWidget {
                   ? null
                   : () => audioState.isPlaying ? ctrl.pause() : ctrl.play(),
               icon: Icon(
-                audioState.isPlaying ? PhosphorIcons.pause : PhosphorIcons.play,
+                audioState.isPlaying
+                    ? HugeIconsStroke.pause
+                    : HugeIconsStroke.play,
               ),
             ),
 
@@ -159,7 +162,7 @@ class AudioControlsSection extends ConsumerWidget {
                 );
               },
               icon: Icon(
-                PhosphorIcons.repeat,
+                HugeIconsStroke.repeat,
                 color: isRepeatEnabled ? cs.primary : null,
               ),
             ),

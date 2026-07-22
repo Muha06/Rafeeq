@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hijri_date/hijri.dart';
+import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
 import 'package:rafeeq/core/themes/app_text_style.dart';
+import 'package:rafeeq/core/widgets/app_drag_handle.dart';
 import 'package:rafeeq/features/calendar/presentation/widgets/day_cell.dart';
+import 'package:rafeeq/features/quran_goal/presentation/widgets/log_ayah_bottomsheet.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
+import 'package:sliding_up_panel2/sliding_up_panel2.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../providers/hijri_date_providers.dart';
 
@@ -32,22 +36,25 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
             final state = ref.watch(hijriDateProvider);
             final notifier = ref.read(hijriDateProvider.notifier);
 
+            final theme = Theme.of(context);
+            final cs = theme.colorScheme;
+
             return Padding(
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    'Adjust Hijri Date',
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
+                  const AppDragHandle(),
+                  const SizedBox(height: 4),
+
+                  Text('Adjust Hijri Date', style: theme.textTheme.titleMedium),
                   const SizedBox(height: 8),
 
                   Text(
                     'Hijri dates can vary slightly depending on your region.',
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
                     ),
                   ),
 
@@ -55,19 +62,23 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
 
                   Text(
                     state.formatted,
-                    style: Theme.of(context).textTheme.bodyLarge,
+                    style: theme.textTheme.labelLarge?.copyWith(
+                      color: cs.primary,
+                    ),
                   ),
 
                   const SizedBox(height: 16),
+
                   Row(
                     children: [
-                      IconButton(
+                      CircleIconButton(
                         onPressed: state.offsetDays <= -2
                             ? null
                             : () => notifier.decrement(),
 
-                        icon: const Icon(Icons.remove),
+                        icon: Icons.remove,
                       ),
+
                       Expanded(
                         child: Slider(
                           min: -2,
@@ -78,14 +89,17 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                           onChanged: (v) => notifier.setOffset(v.round()),
                         ),
                       ),
-                      IconButton(
+
+                      CircleIconButton(
                         onPressed: state.offsetDays >= 2
                             ? null
                             : notifier.increment,
-                        icon: const Icon(Icons.add),
+                        icon: Icons.add,
                       ),
                     ],
                   ),
+
+                  const SizedBox(height: 8),
 
                   Row(
                     children: [
@@ -100,7 +114,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                       const SizedBox(width: 12),
                       Expanded(
                         child: FilledButton(
-                          onPressed: () => Navigator.pop(context),
+                          onPressed: () => AppNav.pop(context),
                           child: const Text('Done'),
                         ),
                       ),
@@ -166,26 +180,36 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
     final offset = hijriState.offsetDays;
     final isDark = ref.watch(isDarkProvider);
     final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+    final collapsedHeight = MediaQuery.sizeOf(context).height * .2;
 
     final events = _monthEvents();
 
-    return SafeArea(
-      top: false,
-      bottom: true,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Calendar'),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-              child: TextButton.icon(
-                icon: const Icon(Icons.tune),
-                label: Text('Adjust date', style: theme.textTheme.labelLarge),
-                onPressed: () => _openHijriOffsetSheet(context),
-              ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Calendar'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            child: TextButton.icon(
+              icon: Icon(HugeIconsStroke.settings05, color: cs.onSurface),
+              label: Text('Adjust date', style: theme.textTheme.labelLarge),
+              onPressed: () => _openHijriOffsetSheet(context),
             ),
-          ],
-        ),
+          ),
+        ],
+      ),
+      body: SlidingUpPanel(
+        minHeight: collapsedHeight,
+        maxHeight: MediaQuery.sizeOf(context).height * .5,
+
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+
+        color: theme.colorScheme.surfaceContainerLow,
+        backdropEnabled: true,
+        parallaxEnabled: true,
+        parallaxOffset: .12,
+
         body: Padding(
           padding: const EdgeInsets.all(16),
           child: SingleChildScrollView(
@@ -203,7 +227,9 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                     children: [
                       Text(
                         hijriState.formatted,
-                        style: theme.textTheme.labelLarge,
+                        style: theme.textTheme.labelLarge?.copyWith(
+                          color: cs.primary,
+                        ),
                       ),
 
                       Text(
@@ -297,43 +323,56 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                 ),
 
                 const SizedBox(height: 16),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Events in ${hijriState.hijri.longMonthName}",
-                          style: Theme.of(context).textTheme.labelLarge,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-
-                      events.isNotEmpty
-                          ? Column(
-                              children: events.map((event) {
-                                final today = ref
-                                    .read(hijriDateProvider)
-                                    .hijri
-                                    .hDay;
-                                final isToday = event.days.contains(today);
-                                return IslamicEventTile(
-                                  isToday: isToday,
-                                  event: event,
-                                );
-                              }).toList(),
-                            )
-                          : const Text('No events this month'),
-                    ],
-                  ),
-                ),
               ],
             ),
           ),
         ),
+
+        panelBuilder: () =>
+            _MonthlyEvenetsPanel(hijriState: hijriState, events: events),
+      ),
+    );
+  }
+}
+
+class _MonthlyEvenetsPanel extends ConsumerWidget {
+  const _MonthlyEvenetsPanel({
+    super.key,
+    required this.hijriState,
+    required this.events,
+  });
+  final List<IslamicEvent> events;
+  final TodayHijriDate hijriState;
+
+  @override
+  Widget build(BuildContext context, ref) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const AppDragHandle(),
+
+          Text(
+            "Events in ${hijriState.hijri.longMonthName}",
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontFamily: 'PlayFairDisplay'),
+          ),
+          const SizedBox(height: 16),
+
+          events.isNotEmpty
+              ? Expanded(
+                  child: ListView(
+                    children: events.map((event) {
+                      final today = ref.read(hijriDateProvider).hijri.hDay;
+                      final isToday = event.days.contains(today);
+                      return IslamicEventTile(isToday: isToday, event: event);
+                    }).toList(),
+                  ),
+                )
+              : const Text('No events this month'),
+        ],
       ),
     );
   }
@@ -354,62 +393,24 @@ class IslamicEventTile extends StatelessWidget {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
-    return InkWell(
+    return ListTile(
       onTap: () {
         _showEventDetailsSheet(context, event);
       },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: IntrinsicHeight(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Timeline indicator
-              Column(
-                children: [
-                  Container(
-                    width: 12,
-                    height: 12,
-                    decoration: BoxDecoration(
-                      color: isToday ? cs.primary : cs.onSurfaceVariant,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      width: 2,
-                      color: cs.onSurfaceVariant.withAlpha(60),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(width: 12),
-
-              // Content
-              Expanded(
-                child: Text(
-                  event.getTitle('en'),
-                  style: theme.textTheme.bodyLarge!.copyWith(
-                    fontWeight: isToday ? FontWeight.bold : FontWeight.w300,
-                  ),
+      title: Text(event.getTitle('en')),
+      trailing: isToday
+          ? Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Text(
+                "Today",
+                style: TextStyle(
+                  color: cs.primary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
                 ),
               ),
-              if (isToday)
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: Text(
-                    "Today",
-                    style: TextStyle(
-                      color: cs.primary,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12,
-                    ),
-                  ),
-                ),
-            ],
-          ),
-        ),
-      ),
+            )
+          : null,
     );
   }
 }

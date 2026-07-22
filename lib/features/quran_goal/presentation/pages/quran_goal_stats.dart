@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/widgets/app_drag_handle.dart';
@@ -262,7 +263,7 @@ class _NoGoalState extends StatelessWidget {
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
-                      PhosphorIcons.flag,
+                      HugeIconsStroke.quran01,
                       size: 42,
                       color: cs.primary,
                     ),

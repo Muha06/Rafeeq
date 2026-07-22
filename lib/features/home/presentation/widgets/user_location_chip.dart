@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
@@ -38,7 +37,7 @@ class _MyUserLocChip extends StatelessWidget {
   final IconData icon;
   final String label;
   final VoidCallback onTap;
-  
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);

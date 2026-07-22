@@ -59,32 +59,62 @@ class _BuildTimelineCard extends ConsumerWidget {
       onTap: () => AppNav.push(context, const SalahTimingsPage()),
       child: Container(
         height: 120,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         decoration: BoxDecoration(
           color: cs.primary.withAlpha(160),
           borderRadius: BorderRadius.circular(12),
         ),
-        child: Column(
+        clipBehavior: Clip.antiAlias,
+        child: Stack(
+          fit: StackFit.expand,
           children: [
-            // Row 1
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _CurrentSalat(current: current, currentStart: currentStart),
-                const Spacer(),
-                HijriDateToday(foregroundColor: cs.onPrimary, fontSize: 14),
-              ],
+            // Background image
+            Image.asset(
+              'assets/images/salah/masjid_dark.jpeg',
+              fit: BoxFit.cover,
             ),
 
-            const Spacer(),
+            const DecoratedBox(
+              decoration: BoxDecoration(color: Colors.black38),
+            ),
 
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Row(
+            // Content
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              child: Column(
                 children: [
-                  Icon(PhosphorIcons.clock, color: cs.onPrimary, size: 14),
-                  const SizedBox(width: 2),
-                  _TimeToNextText(next: next),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _CurrentSalat(
+                        current: current,
+                        currentStart: currentStart,
+                      ),
+
+                      const Spacer(),
+
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.white54),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: const HijriDateToday(
+                          foregroundColor: Colors.white,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const Spacer(),
+
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: _TimeToNextText(next: next),
+                  ),
                 ],
               ),
             ),
@@ -103,16 +133,23 @@ class _TimeToNextText extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final cs = theme.colorScheme;
     final remaining = ref.watch(salahTimeToNextProvider);
 
     return remaining.when(
-      data: (duration) => Text(
-        '${formatRemaining(duration)} until ${next.label}',
-        style: theme.textTheme.bodyMedium?.copyWith(
-          color: cs.onPrimary,
-          fontSize: 13,
-        ),
+      data: (duration) => Row(
+        children: [
+          const Icon(PhosphorIcons.clock, color: Colors.white, size: 14),
+
+          const SizedBox(width: 2),
+
+          Text(
+            '${formatRemaining(duration)} until ${next.label}',
+            style: theme.textTheme.labelLarge?.copyWith(
+              color: Colors.white,
+              // fontSize: 13,
+            ),
+          ),
+        ],
       ),
       loading: () => const SizedBox.shrink(),
       error: (error, stackTrace) => const SizedBox.shrink(),
@@ -128,27 +165,30 @@ class _CurrentSalat extends StatelessWidget {
   });
   final SalahPrayer current;
   final DateTime currentStart;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final tt = theme.textTheme;
-    final cs = theme.colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Label
         Text(
           current.label,
-          style: tt.labelMedium?.copyWith(color: cs.onPrimary),
+          style: tt.labelMedium?.copyWith(color: Colors.white),
         ),
+
+        const SizedBox(height: 0),
 
         // Time
         Text(
           formatTime(currentStart),
-          style: tt.labelLarge?.copyWith(
+          style: tt.headlineMedium?.copyWith(
+            fontFamily: 'PlayFairDisplay',
             fontWeight: FontWeight.bold,
-            fontSize: 20,
-            color: cs.onPrimary,
+            // fontSize: 20,
+            color: Colors.white,
           ),
         ),
       ],
