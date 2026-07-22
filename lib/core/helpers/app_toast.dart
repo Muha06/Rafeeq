@@ -66,19 +66,67 @@ class AppToast {
                 color: Colors.transparent,
                 child: Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 10,
+                    horizontal: 12,
+                    vertical: 8,
                   ),
                   decoration: BoxDecoration(
-                    color: backgroundColor ?? cs.surfaceContainerHighest,
+                    color: backgroundColor ?? cs.onSurface,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    message,
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: foregroundColor ?? cs.surface,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  static void showError({
+    required BuildContext context,
+    required String message,
+    Alignment alignment = Alignment.center,
+    Color? backgroundColor,
+    Color? foregroundColor,
+    Duration duration = const Duration(seconds: 2),
+  }) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
+    toastification.dismissAll();
+
+    toastification.showCustom(
+      context: context,
+      alignment: alignment,
+      autoCloseDuration: duration,
+      animationDuration: const Duration(milliseconds: 250),
+      builder: (context, holder) {
+        return SafeArea(
+          child: Center(
+            child: IntrinsicWidth(
+              child: Material(
+                color: Colors.transparent,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: backgroundColor ?? cs.errorContainer,
                     borderRadius: BorderRadius.circular(999),
                   ),
                   child: Text(
                     message,
                     textAlign: TextAlign.center,
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: foregroundColor ?? cs.onSurface,
-                      fontWeight: FontWeight.w600,
+                      color: foregroundColor ?? cs.onError,
                     ),
                   ),
                 ),
@@ -94,57 +142,48 @@ class AppToast {
     required BuildContext context,
     required String message,
     Alignment alignment = Alignment.topCenter,
+    Color? backgroundColor,
+    Color? foregroundColor,
     Duration duration = const Duration(seconds: 2),
   }) {
     final theme = Theme.of(context);
+    final cs = theme.colorScheme;
 
     toastification.dismissAll();
 
-    toastification.show(
+    toastification.showCustom(
       context: context,
       alignment: alignment,
       autoCloseDuration: duration,
-      showProgressBar: false,
-      dragToClose: true,
       animationDuration: const Duration(milliseconds: 250),
-      borderRadius: BorderRadius.circular(999),
-      style: ToastificationStyle.flat,
-      type: ToastificationType.success,
-      title: Text(
-        message,
-        style: theme.textTheme.bodyMedium?.copyWith(
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-    );
-  }
-
-  static void showError({
-    required BuildContext context,
-    required String message,
-    Alignment alignment = Alignment.topCenter,
-    Duration duration = const Duration(seconds: 3),
-  }) {
-    final theme = Theme.of(context);
-
-    toastification.dismissAll();
-
-    toastification.show(
-      context: context,
-      alignment: alignment,
-      autoCloseDuration: duration,
-      showProgressBar: false,
-      dragToClose: true,
-      animationDuration: const Duration(milliseconds: 250),
-      borderRadius: BorderRadius.circular(999),
-      style: ToastificationStyle.flat,
-      type: ToastificationType.error,
-      title: Text(
-        message,
-        style: theme.textTheme.bodyMedium?.copyWith(
-          fontWeight: FontWeight.w600,
-        ),
-      ),
+      builder: (context, holder) {
+        return SafeArea(
+          child: Center(
+            child: IntrinsicWidth(
+              child: Material(
+                color: Colors.transparent,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 10,
+                  ),
+                  decoration: BoxDecoration(
+                    color: backgroundColor ?? Colors.green,
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                  child: Text(
+                    message,
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: foregroundColor ?? cs.onError,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

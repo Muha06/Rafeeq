@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
+import 'package:rafeeq/core/helpers/app_toast.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/core/themes/app_text_style.dart';
@@ -151,14 +152,14 @@ class PlayFullSurahBtn extends ConsumerWidget {
 
       final audioId = '${surahId}_${reciter.id}';
 
-      final surahTrack = await ref
-          .read(getSurahAudioTrackUseCaseProvider)
-          .call(surahId: surahId, surahName: surahName, reciter: reciter);
-
-      //show controls
-      ref.read(showAudioControlsProvider.notifier).state = true;
-
       try {
+        final surahTrack = await ref
+            .read(getSurahAudioTrackUseCaseProvider)
+            .call(surahId: surahId, surahName: surahName, reciter: reciter);
+
+        //show controls
+        ref.read(showAudioControlsProvider.notifier).state = true;
+
         await ref
             .read(audioControllerProvider.notifier)
             .togglePlay(
@@ -170,10 +171,9 @@ class PlayFullSurahBtn extends ConsumerWidget {
               title: surahTrack.surahName,
             );
       } catch (e) {
-        AppSnackBar.showSimple(
-          context: context,
-          message: "Something went wrong",
-        );
+        debugPrint("Error playng : $e");
+
+        AppToast.showError(context: context, message: "Something went wrong");
       }
     }
 

@@ -117,24 +117,17 @@ class SettingsTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        ListTile(
-          enabled: enabled,
-          onTap: enabled ? onTap : null,
-          contentPadding:
-              contentPadding ?? const EdgeInsets.symmetric(horizontal: 16),
-          leading: leading,
-          title: Text(title, style: theme.textTheme.titleMedium),
-          subtitle: subtitle == null
-              ? null
-              : Text(subtitle!, style: theme.textTheme.labelMedium),
-          trailing:
-              trailing ?? const Icon(Icons.keyboard_arrow_right, size: 32),
-        ),
-        Divider(color: theme.dividerColor),
-      ],
+    return ListTile(
+      enabled: enabled,
+      onTap: enabled ? onTap : null,
+      contentPadding:
+          contentPadding ?? const EdgeInsets.symmetric(horizontal: 16),
+      leading: leading,
+      title: Text(title, style: theme.textTheme.titleMedium),
+      subtitle: subtitle == null
+          ? null
+          : Text(subtitle!, style: theme.textTheme.labelMedium),
+      trailing: trailing ?? const Icon(Icons.keyboard_arrow_right, size: 32),
     );
   }
 }

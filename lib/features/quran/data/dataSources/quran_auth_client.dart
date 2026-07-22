@@ -53,7 +53,7 @@ class QuranAuthClient {
 
       return _accessToken!;
     } catch (e) {
-      debugPrint('Error fetching access token');
+      debugPrint('Error fetching access token $e');
       rethrow;
     }
   }
