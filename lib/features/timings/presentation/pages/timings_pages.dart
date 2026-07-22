@@ -143,17 +143,13 @@ class AllSalatTimingsCard extends StatelessWidget {
     ];
 
     return Stack(
+      fit: StackFit.expand,
       children: [
         //image
-        Positioned.fill(
-          child: Image.asset(
-            "assets/images/home/mosque2.jpeg",
-            fit: BoxFit.cover,
-          ),
-        ),
+        Image.asset('assets/images/salah/masjid_dark.jpeg', fit: BoxFit.cover),
 
         //DARK OVERLAY
-        Positioned.fill(child: Container(color: Colors.black.withAlpha(120))),
+        const DecoratedBox(decoration: BoxDecoration(color: Colors.black38)),
 
         Center(
           child: SingleChildScrollView(
@@ -165,10 +161,12 @@ class AllSalatTimingsCard extends StatelessWidget {
 
                 final lightColors = isCurrent
                     ? cs.tertiary
-                    : cs.onSurfaceVariant;
-                final darkColors = isCurrent ? cs.primary : cs.onSurfaceVariant;
-
+                    : cs.onPrimary.withAlpha(200);
                 final lightColors2 = isCurrent ? cs.tertiary : cs.onPrimary;
+
+                final darkColors = isCurrent
+                    ? cs.primary
+                    : cs.onSurface.withAlpha(200);
                 final darkColors2 = isCurrent ? cs.primary : cs.onSurface;
 
                 final isDark = theme.brightness == Brightness.dark;
@@ -187,7 +185,10 @@ class AllSalatTimingsCard extends StatelessWidget {
                       p.label,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.bodySmall?.copyWith(color: color),
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: color,
+                        fontWeight: isCurrent ? FontWeight.bold : null,
+                      ),
                     ),
                     const SizedBox(height: 6),
 
@@ -195,7 +196,7 @@ class AllSalatTimingsCard extends StatelessWidget {
                       _formatHm(t),
                       style: theme.textTheme.titleSmall?.copyWith(
                         color: timesColor,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ],

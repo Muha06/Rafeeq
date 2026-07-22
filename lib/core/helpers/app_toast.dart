@@ -27,7 +27,7 @@ class AppToast {
       animationDuration: const Duration(milliseconds: 250),
       borderRadius: BorderRadius.circular(999),
       borderSide: BorderSide.none,
-      style: ToastificationStyle.flat,
+      showIcon: false,
       backgroundColor: backgroundColor ?? cs.surfaceContainerHighest,
       foregroundColor: foregroundColor ?? cs.onSurface,
       title: Text(

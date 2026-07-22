@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
-import 'package:rafeeq/core/helpers/snackbars.dart';
+import 'package:rafeeq/core/helpers/app_toast.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/dhikr_bookmark.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/quran_bookmark.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/Quran/quran_notifier_provider.dart';
@@ -50,16 +50,17 @@ class _BookmarkTileState extends ConsumerState<BookmarkTile> {
             .read(quranBookmarksProvider.notifier)
             .removeBookmark(quranBookmark!.id);
       }
+      
       if (context.mounted) {
-        AppSnackBar.showSimple(
+        AppToast.showCompact(
           context: context,
-          message: 'Bookmark removed ❌',
+          message: 'Bookmark removed',
           duration: const Duration(seconds: 2),
         );
       }
     } catch (e) {
       if (context.mounted) {
-        AppSnackBar.showSimple(
+        AppToast.showCompact(
           context: context,
           message: 'Delete failed. Please try again.',
           duration: const Duration(seconds: 2),

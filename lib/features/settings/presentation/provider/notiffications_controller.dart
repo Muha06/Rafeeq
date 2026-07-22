@@ -2,10 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/features/local_notifications/providers/general_notifications_provider.dart';
+import 'package:rafeeq/core/helpers/app_toast.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
-import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/settings/presentation/provider/settings_notifcation_provider.dart';
- 
+
 /// ---------------- Salah Notif Controller ----------------
 /// Manages Salah reminder state + Hive persistence + permission handling
 class SalahNotifController extends Notifier<bool> {
@@ -52,7 +52,7 @@ class SalahNotifController extends Notifier<bool> {
           debugPrint('Permissions not granted not toggling salah reminders');
 
           if (showSnack != null && showSnack) {
-            AppSnackBar.showSimple(
+            AppToast.showCompact(
               context: context,
               message: 'Notification permissions denied.',
             );
@@ -67,9 +67,9 @@ class SalahNotifController extends Notifier<bool> {
       RafeeqAnalytics.logFeature("enable_salah_reminders");
 
       if (showSnack != null && showSnack) {
-        AppSnackBar.showSimple(
+        AppToast.showCompact(
           context: context,
-          message: 'Scheduling Salah reminders...',
+          message: 'Scheduling Salah reminders',
         );
       }
     } finally {
@@ -125,7 +125,7 @@ class AdhkarNotifController extends Notifier<bool> {
           state = false;
 
           if (showSnack) {
-            AppSnackBar.showSimple(
+            AppToast.showCompact(
               context: context,
               message: 'Notification permissions denied.',
             );
@@ -140,9 +140,9 @@ class AdhkarNotifController extends Notifier<bool> {
       RafeeqAnalytics.logFeature("enable_adhkar_reminders");
 
       if (showSnack) {
-        AppSnackBar.showSimple(
+        AppToast.showCompact(
           context: context,
-          message: '✅ Turning on Adhkar reminders...',
+          message: 'Turning on Adhkar reminders...',
         );
       }
     } finally {

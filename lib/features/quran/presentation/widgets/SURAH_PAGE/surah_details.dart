@@ -6,7 +6,6 @@ import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/helpers/app_toast.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
-import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/core/themes/app_text_style.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/show_audio_controls_bar_provider.dart';

@@ -7,7 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
-import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/core/themes/app_text_style.dart';
 import 'package:rafeeq/features/adhkar/domain/entities/dhikr_entity.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/dhikr_bookmark.dart';
@@ -217,10 +216,6 @@ class _BottomNavBar extends ConsumerWidget {
       buffer.writeln("Repeat ${dhikr.repeat} times");
 
       await Clipboard.setData(ClipboardData(text: buffer.toString().trim()));
-
-      if (context.mounted) {
-        AppSnackBar.showSimple(context: context, message: "Dhikr copied");
-      }
     }
 
     return ClipRRect(

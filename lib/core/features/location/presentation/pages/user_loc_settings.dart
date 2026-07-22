@@ -5,9 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/features/location/domain/open_mateo.dart';
 import 'package:rafeeq/core/features/location/presentation/provider/open_mateo_provider.dart';
 import 'package:rafeeq/core/features/location/presentation/provider/user_location_provider.dart';
+import 'package:rafeeq/core/helpers/app_toast.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
-import 'package:rafeeq/core/helpers/snackbars.dart';
-import 'package:rafeeq/core/widgets/app_drag_handle.dart';
+ import 'package:rafeeq/core/widgets/app_drag_handle.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/fetch_salah_times_provider.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/wiring_provider.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
@@ -150,8 +150,6 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
     final notifier = ref.read(userLocationProvider.notifier);
     final cs = theme.colorScheme;
 
-    final canOpenCitySheet = _countryCode == null || !isAuto;
-
     return Scaffold(
       appBar: AppBar(title: const Text('My location')),
       body: ListView(
@@ -174,14 +172,25 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
                 _verifiedCity = null;
               });
 
-              AppSnackBar.showSimple(
+              AppToast.showSimple(
                 context: context,
                 duration: const Duration(seconds: 3),
                 message: 'Setting to GPS mode...',
               );
 
               //Save as auto
-              await notifier.setAuto();
+              final permissionGranted = await notifier.setAuto();
+
+              if (!context.mounted) return;
+
+              if (!permissionGranted) {
+                AppToast.showError(
+                  context: context,
+                  message: 'Please grant location permissions to continue',
+                );
+                return;
+              }
+
               ref.refresh(fetchTodaySalahTimesProvider);
 
               RafeeqAnalytics.logFeature("location_set_auto");
@@ -233,9 +242,7 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
                                       : 'Select city'
                                 : 'City: ${_selectedPlace!.name}',
                             icon: Icons.location_city_rounded,
-                            onTap: canOpenCitySheet
-                                ? _pickCityViaOpenMeteo
-                                : null,
+                            onTap: _pickCityViaOpenMeteo,
                           ),
 
                           if (_verifying) ...[

@@ -24,6 +24,7 @@ import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_ayah
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_details.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_settings_sheet.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
+import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/log_ayah_bottomsheet.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:quran/quran.dart' as quran;
@@ -311,6 +312,8 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
     final reciter = ref.watch(selectedReciterProvider);
     final currentAudioId = '${surahId}_${reciter.id}';
 
+    final hasGoal = ref.watch(quranGoalProvider) != null;
+
     ref.listen(audioControllerProvider, (prev, next) {
       if (next.currentId != currentAudioId) {
         ref.read(showAudioControlsProvider.notifier).state = false;
@@ -333,7 +336,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
               });
         }
 
-        // ✅ reset UI state + provider when leaving page
+        //  reset UI state + provider when leaving page
         ref.read(surahSettingsProvider.notifier).setAutoScrollEnabled(false);
       },
       child: SafeArea(
@@ -358,13 +361,18 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
 
             actions: [
               //Ayah log
-              IconButton(
-                icon: Icon(HugeIconsStroke.floppyDisk, color: appbarIconColors),
+              if (hasGoal)
+                IconButton(
+                  icon: Icon(
+                    HugeIconsStroke.floppyDisk,
+                    color: appbarIconColors,
+                  ),
 
-                onPressed: () async {
-                  showAyahLogSheet(context, ref);
-                },
-              ),
+                  onPressed: () async {
+                    showAyahLogSheet(context, ref);
+                  },
+                  tooltip: 'Save Goal progress',
+                ),
 
               //Mushaf mode
               IconButton(
@@ -385,6 +393,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
                 },
                 visualDensity: VisualDensity.compact,
                 icon: Icon(HugeIconsStroke.quran01, color: appbarIconColors),
+                tooltip: 'Mushaf Mode',
               ),
 
               //Surah settings

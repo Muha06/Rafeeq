@@ -78,17 +78,18 @@ class UserLocationNotifier extends AsyncNotifier<UserLocation> {
   }
 
   /// Switch back to auto mode (GPS)
-  Future<void> setAuto() async {
+  Future<bool> setAuto() async {
     // check permissions
     final access = ref.read(systemLocationAccessProvider.notifier);
 
     final ok = await access.requestLocationAccess();
+
     if (!ok) {
-      throw 'permissions denied'; 
-      // show a snackbar/dialog based on access.state
+      return false;
     }
 
     final loc = await _locationRepo.refreshCurrentLocation();
     state = AsyncData(loc);
+    return true;
   }
 }
