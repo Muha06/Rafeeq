@@ -1,42 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/widgets/app_cache_image.dart';
 import 'package:rafeeq/core/widgets/my_chip.dart';
 import 'package:rafeeq/features/quran_radio/domain/enums/radio_audio_category.dart';
+import 'package:rafeeq/features/quran_radio/presentation/providers/selected_station_provider.dart';
 import 'package:rafeeq/features/quran_radio/presentation/widgets/category_fallback_image.dart';
 import 'package:rafeeq/features/quran_radio/presentation/widgets/radio_player_sheet.dart';
 import '../../domain/entities/radio_station.dart';
 
-class RadioCard extends StatefulWidget {
+class RadioCard extends ConsumerStatefulWidget {
   final RadioStation station;
 
   const RadioCard({super.key, required this.station});
 
   @override
-  State<RadioCard> createState() => _RadioCardState();
+  ConsumerState<RadioCard> createState() => _RadioCardState();
 }
 
-class _RadioCardState extends State<RadioCard> {
-  bool isSelected = false;
+class _RadioCardState extends ConsumerState<RadioCard> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
+    final selected = ref.watch(currentStationProvider);
+    final isSelected = selected == widget.station;
 
     return InkWell(
       borderRadius: BorderRadius.circular(16),
-      onTap: () {
-        
-        AppSheets.showBottomSheet(
+      onTap: () async {
+        await AppSheets.showBottomSheet(
           context: context,
           useSafeArea: false,
           isScrollControlled: true,
           child: RadioPlayerSheet(station: widget.station),
         );
 
-        setState(() {
-          isSelected = true;
-        });
+        ref.read(currentStationProvider.notifier).state = widget.station;
       },
       child: Container(
         width: double.infinity,

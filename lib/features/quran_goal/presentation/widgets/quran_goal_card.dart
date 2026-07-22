@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/features/quran_goal/domain/entities/quran_goal.dart';
 import 'package:rafeeq/features/quran_goal/presentation/pages/quran_goal_stats.dart';
@@ -13,6 +14,7 @@ class QuranReadingPlanCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final quranGoal = ref.watch(quranGoalProvider);
     final hasGoal = quranGoal != null;
+
     if (!hasGoal) {
       return _NoQuranGoalCard(
         onTap: () {
@@ -134,7 +136,10 @@ class _NoQuranGoalCard extends StatelessWidget {
                   color: cs.primaryContainer,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(Icons.flag_rounded, color: cs.onPrimaryContainer),
+                child: Icon(
+                  HugeIconsStroke.quran01,
+                  color: cs.onPrimaryContainer,
+                ),
               ),
 
               const SizedBox(width: 16),

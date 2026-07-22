@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/themes/app_text_style.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
+import 'package:rafeeq/core/helpers/app_toast.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/Quran/quran_notifier_provider.dart';
 import 'package:rafeeq/features/quran/domain/entities/ayah.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/ayah_of_the_day.dart';
@@ -85,11 +86,11 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                             .read(quranBookmarksProvider.notifier)
                             .toggle(bookmark);
 
-                        AppSnackBar.showSimple(
+                        AppToast.showCompact(
                           context: context,
                           message: isBookmarked
-                              ? 'Added to bookmarks'
-                              : 'Removed from bookmars',
+                              ? "Ayah Bookmarked"
+                              : "Removed from bookmarks",
                         );
                       } catch (e) {
                         AppSnackBar.showSimple(

@@ -25,7 +25,7 @@ class HomePage extends ConsumerStatefulWidget {
 class _HomePageState extends ConsumerState<HomePage> {
   static const double _hPad = 12.0;
   static const double _v10 = 10.0;
-  static const double _appBarIconSize = 26.0;
+  static const double _appBarIconSize = 22.0;
 
   @override
   Widget build(BuildContext context) {

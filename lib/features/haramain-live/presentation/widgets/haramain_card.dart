@@ -27,7 +27,7 @@ class LiveHubCard extends ConsumerWidget {
           // TITLE
           Row(
             children: [
-              const Icon(HugeIconsStroke.liveStreaming01),
+              Icon(HugeIconsStroke.liveStreaming01, color: cs.onSurface),
               const SizedBox(width: 8),
               Text('Live', style: textTheme.labelLarge),
             ],
@@ -103,7 +103,7 @@ class _LiveTile extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(icon),
+            Icon(icon, color: cs.onSurface),
 
             const SizedBox(width: 12),
 

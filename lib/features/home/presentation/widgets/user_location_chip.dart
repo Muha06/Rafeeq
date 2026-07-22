@@ -19,7 +19,7 @@ class UserLocationChip extends ConsumerWidget {
         label: 'retry',
         onTap: () => ref.read(userLocationProvider.notifier).refresh(),
       ),
-      loading: () => const Chip(label: CupertinoActivityIndicator(radius: 24)),
+      loading: () => const SizedBox.shrink(),
       data: (userLocation) => _MyUserLocChip(
         icon: PhosphorIcons.mapPin,
         label: userLocation.city,
@@ -38,6 +38,7 @@ class _MyUserLocChip extends StatelessWidget {
   final IconData icon;
   final String label;
   final VoidCallback onTap;
+  
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -48,26 +49,27 @@ class _MyUserLocChip extends StatelessWidget {
       child: Chip(
         color: WidgetStatePropertyAll(cs.surfaceContainerHighest),
         padding: const EdgeInsets.symmetric(horizontal: 4),
-        label: SizedBox(
-          width: 100,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(icon, size: 16, color: cs.onSurface),
-              const SizedBox(width: 4),
+        label: IntrinsicWidth(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 320),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(icon, size: 16, color: cs.onSurface),
+                const SizedBox(width: 4),
 
-              Flexible(
-                child: Text(
-                  label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    color: cs.onSurface,
-                    // fontWeight: FontWeight.w300,
+                Flexible(
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: cs.onSurface,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

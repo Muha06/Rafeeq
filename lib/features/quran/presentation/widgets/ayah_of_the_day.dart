@@ -21,19 +21,7 @@ class AyahOfTheDay extends ConsumerWidget {
         return FadeTransition(opacity: animation, child: child);
       },
       child: ayahAsync.when(
-        loading: () => Container(
-          key: const ValueKey('loading'),
-          width: double.infinity,
-          height: 100,
-          decoration: BoxDecoration(
-            color: theme.cardColor,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-          child: const Center(
-            child: CupertinoActivityIndicator(animating: true, radius: 18),
-          ),
-        ),
+        loading: () => const SizedBox.shrink(),
         error: (e, _) => const SizedBox.shrink(),
         data: (ayah) {
           if (ayah == null) return const SizedBox.shrink();

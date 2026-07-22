@@ -18,7 +18,7 @@ class HomeTimelineCard extends ConsumerWidget {
 
     return salahStatus.when(
       data: (status) => _BuildTimelineCard(status: status),
-      loading: () => const SizedBox(),
+      loading: () => const SizedBox.shrink(),
       error: (error, stackTrace) => const _ErrorCard(),
     );
   }
