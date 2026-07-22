@@ -28,6 +28,7 @@ import 'package:rafeeq/features/quran_goal/presentation/widgets/log_ayah_bottoms
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:quran/quran.dart' as quran;
 import 'package:wakelock_plus/wakelock_plus.dart';
+import 'package:hugeicons_pro/hugeicons.dart';
 
 class FullSurahPage extends ConsumerStatefulWidget {
   final Surah surah;
@@ -351,17 +352,15 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
                 )
               : null,
 
-          appBar: AppBar( 
+          appBar: AppBar(
             backgroundColor: theme.scaffoldBackgroundColor,
             title: AppbarSurahPicker(jumpToAyah: jumpToAyah, surah: surah),
 
             actions: [
               //Ayah log
               IconButton(
-                icon: PhosphorIcon(
-                  PhosphorIcons.floppyDisk,
-                  color: appbarIconColors,
-                ),
+                icon: Icon(HugeIconsStroke.floppyDisk, color: appbarIconColors),
+
                 onPressed: () async {
                   showAyahLogSheet(context, ref);
                 },
@@ -385,10 +384,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
                   );
                 },
                 visualDensity: VisualDensity.compact,
-                icon: PhosphorIcon(
-                  PhosphorIcons.bookOpenText,
-                  color: appbarIconColors,
-                ),
+                icon: Icon(HugeIconsStroke.quran01, color: appbarIconColors),
               ),
 
               //Surah settings
@@ -401,7 +397,10 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
                     ),
                   );
                 },
-                icon: PhosphorIcon(PhosphorIcons.gear, color: appbarIconColors),
+                icon: PhosphorIcon(
+                  HugeIconsStroke.gears,
+                  color: appbarIconColors,
+                ),
               ),
             ],
             bottom: appBarBottomDivider(context),

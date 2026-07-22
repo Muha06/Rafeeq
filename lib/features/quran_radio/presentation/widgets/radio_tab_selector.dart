@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rafeeq/features/radio_station/domain/enums/radio_audio_category.dart';
+import 'package:rafeeq/features/quran_radio/domain/enums/radio_audio_category.dart';
 
 class RadioCategorySelector extends StatelessWidget {
   const RadioCategorySelector({
@@ -36,16 +36,16 @@ class RadioCategorySelector extends StatelessWidget {
               decoration: BoxDecoration(
                 color: selectedCat ? cs.primaryContainer : cs.surface,
                 borderRadius: BorderRadius.circular(999),
-                border: Border.all(
-                  color: selectedCat
-                      ? cs.primary
-                      : cs.onSurfaceVariant.withAlpha(120),
-                ),
+                // border: Border.all(
+                //   color: selectedCat
+                //       ? cs.primary
+                //       : cs.onSurfaceVariant.withAlpha(120),
+                // ),
               ),
               child: Row(
                 children: [
                   Icon(
-                    selected.icon,
+                    cat.icon,
                     size: 18,
                     color: selectedCat ? cs.onPrimaryContainer : cs.onSurface,
                   ),

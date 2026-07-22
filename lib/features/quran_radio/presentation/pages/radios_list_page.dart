@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/widgets/app_state_view.dart';
-import 'package:rafeeq/features/radio_station/domain/enums/radio_audio_category.dart';
-import 'package:rafeeq/features/radio_station/presentation/providers/radio_controller.dart';
-import 'package:rafeeq/features/radio_station/presentation/widgets/radio_tab_selector.dart';
+import 'package:rafeeq/features/quran_radio/domain/enums/radio_audio_category.dart';
+import 'package:rafeeq/features/quran_radio/presentation/providers/radio_controller.dart';
+import 'package:rafeeq/features/quran_radio/presentation/widgets/radio_tab_selector.dart';
 import '../widgets/radio_card.dart';
 
 class RadioListPage extends ConsumerStatefulWidget {
@@ -33,8 +33,6 @@ class _RadioListPageState extends ConsumerState<RadioListPage> {
         top: false,
         child: Column(
           children: [
-            const SizedBox(height: 10),
-
             // CATEGORY SELECTOR
             RadioCategorySelector(
               selected: _selectedCategory, // default selection

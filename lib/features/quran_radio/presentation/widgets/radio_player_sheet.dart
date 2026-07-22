@@ -8,9 +8,9 @@ import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/widgets/app_cache_image.dart';
 import 'package:rafeeq/core/widgets/app_drag_handle.dart';
 import 'package:rafeeq/core/widgets/my_chip.dart';
-import 'package:rafeeq/features/radio_station/domain/entities/radio_station.dart';
-import 'package:rafeeq/features/radio_station/domain/enums/radio_audio_category.dart';
-import 'package:rafeeq/features/radio_station/presentation/widgets/category_fallback_image.dart';
+import 'package:rafeeq/features/quran_radio/domain/entities/radio_station.dart';
+import 'package:rafeeq/features/quran_radio/domain/enums/radio_audio_category.dart';
+import 'package:rafeeq/features/quran_radio/presentation/widgets/category_fallback_image.dart';
 import 'package:palette_generator_master/palette_generator_master.dart';
 
 class RadioPlayerSheet extends ConsumerStatefulWidget {

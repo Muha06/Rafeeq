@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:rafeeq/core/animations/navigation_animations.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/features/haramain-live/presentation/widgets/haramain_card.dart';
@@ -84,12 +83,6 @@ class _HomePageState extends ConsumerState<HomePage> {
               child: LiveHubCard(),
             ),
           ),
-          const SliverToBoxAdapter(
-            child: HomeSection(
-              padding: EdgeInsets.symmetric(horizontal: _hPad, vertical: _v10),
-              child: LiveHubCard(),
-            ),
-          ),
 
           const SliverToBoxAdapter(child: SizedBox(height: 70)),
         ],
@@ -120,7 +113,7 @@ class _SettingsIcon extends StatelessWidget {
       onPressed: () async {
         pushLeftPage(context, const SettingsPage());
       },
-      icon: Icon(CupertinoIcons.gear, size: iconSize),
+      icon: Icon(HugeIconsStroke.settings01, size: iconSize),
     );
   }
 }
@@ -143,13 +136,13 @@ class _NotificationIcon extends StatelessWidget {
               onPressed: () {
                 AppNav.push(context, const NotificationsInboxPage());
               },
-              icon: PhosphorIcon(CupertinoIcons.bell, size: iconSize),
+              icon: Icon(HugeIconsStroke.notification02, size: iconSize),
             ),
 
             if (hasUnreadNotifications)
               Positioned(
                 top: 8,
-                left: 8,
+                right: 8,
                 child: Container(
                   height: 10,
                   width: 10,

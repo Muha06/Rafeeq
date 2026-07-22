@@ -39,7 +39,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
 
           if (selectedIndex == value) return;
 
-          await AppHaptics.light();
+          AppHaptics.selection();
         },
       ),
     );

@@ -34,6 +34,15 @@ class QuranGoal {
   //helper to void get formatted start date
   String get formattedStartDate => DateFormat('d MMMM yyyy').format(startDate);
   String get formattedEndDate => DateFormat('d MMMM yyyy').format(endDate);
+  String get formattedReminderTime {
+    if (remindMeAt == null) return 'No reminder';
+
+    final hour = remindMeAt!.hourOfPeriod == 0 ? 12 : remindMeAt!.hourOfPeriod;
+    final minute = remindMeAt!.minute.toString().padLeft(2, '0');
+    final period = remindMeAt!.period == DayPeriod.am ? 'AM' : 'PM';
+
+    return '$hour:$minute $period';
+  }
 
   QuranGoal copyWith({
     int? target,

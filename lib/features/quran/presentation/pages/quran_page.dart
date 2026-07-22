@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
@@ -7,6 +6,7 @@ import 'package:rafeeq/features/quran/presentation/widgets/QURAN_PAGE/surah_list
 import 'package:rafeeq/features/quran/presentation/widgets/QURAN_PAGE/quick_last_read.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/QURAN_PAGE/quick_surah_links.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/quran_goal_card.dart';
+import 'package:hugeicons_pro/hugeicons.dart';
 
 class QuranPage extends ConsumerStatefulWidget {
   const QuranPage({super.key});
@@ -50,7 +50,7 @@ class _QuranPageState extends ConsumerState<QuranPage> {
             ),
             actions: [
               IconButton(
-                icon: const Icon(CupertinoIcons.search),
+                icon: const Icon(HugeIconsSolid.search01),
 
                 onPressed: () {
                   Navigator.push(

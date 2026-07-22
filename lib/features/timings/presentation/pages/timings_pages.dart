@@ -9,6 +9,7 @@ import 'package:rafeeq/features/timings/presentation/riverpod/disable_salah_remi
 import 'package:rafeeq/features/timings/presentation/riverpod/fetch_salah_times_provider.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/salah_status_provider.dart';
 import '../../domain/entities/salah_prayer.dart';
+import 'package:hugeicons_pro/hugeicons.dart';
 
 class SalahTimingsPage extends ConsumerStatefulWidget {
   const SalahTimingsPage({super.key});
@@ -155,48 +156,52 @@ class AllSalatTimingsCard extends StatelessWidget {
         Positioned.fill(child: Container(color: Colors.black.withAlpha(120))),
 
         Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: salats.map((p) {
-              final t = times.at(p);
-              final isCurrent = p == current;
+          child: SingleChildScrollView(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: salats.map((p) {
+                final t = times.at(p);
+                final isCurrent = p == current;
 
-              final lightColors = isCurrent ? cs.tertiary : cs.onSurfaceVariant;
-              final darkColors = isCurrent ? cs.primary : cs.onSurfaceVariant;
+                final lightColors = isCurrent
+                    ? cs.tertiary
+                    : cs.onSurfaceVariant;
+                final darkColors = isCurrent ? cs.primary : cs.onSurfaceVariant;
 
-              final lightColors2 = isCurrent ? cs.tertiary : cs.onPrimary;
-              final darkColors2 = isCurrent ? cs.primary : cs.onSurface;
+                final lightColors2 = isCurrent ? cs.tertiary : cs.onPrimary;
+                final darkColors2 = isCurrent ? cs.primary : cs.onSurface;
 
-              final isDark = theme.brightness == Brightness.dark;
+                final isDark = theme.brightness == Brightness.dark;
 
-              final color = isDark ? darkColors : lightColors;
-              final timesColor = isDark ? darkColors2 : lightColors2;
+                final color = isDark ? darkColors : lightColors;
+                final timesColor = isDark ? darkColors2 : lightColors2;
 
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    p.label,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: theme.textTheme.labelSmall?.copyWith(color: color),
-                  ),
-                  const SizedBox(height: 4),
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    PhosphorIcon(p.icon, size: 24, color: color),
 
-                  PhosphorIcon(p.icon, size: 24, color: color),
+                    const SizedBox(height: 4),
 
-                  const SizedBox(height: 6),
-
-                  Text(
-                    _formatHm(t),
-                    style: theme.textTheme.titleSmall?.copyWith(
-                      color: timesColor,
-                      fontWeight: FontWeight.w600,
+                    Text(
+                      p.label,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.bodySmall?.copyWith(color: color),
                     ),
-                  ),
-                ],
-              );
-            }).toList(),
+                    const SizedBox(height: 6),
+
+                    Text(
+                      _formatHm(t),
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        color: timesColor,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                );
+              }).toList(),
+            ),
           ),
         ),
       ],
@@ -282,7 +287,9 @@ class _TimingTile extends ConsumerWidget {
               },
 
               icon: Icon(
-                isDisabled ? CupertinoIcons.bell_slash : CupertinoIcons.bell,
+                isDisabled
+                    ? HugeIconsStroke.notificationOff01
+                    : CupertinoIcons.bell,
                 color: isDisabled
                     ? theme.colorScheme.error
                     : theme.colorScheme.onSurface,

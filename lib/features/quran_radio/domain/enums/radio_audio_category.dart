@@ -1,4 +1,5 @@
-import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+import 'package:flutter/material.dart';
+import 'package:hugeicons_pro/hugeicons.dart';
 
 enum RadioAudioCategory {
   quran,
@@ -12,24 +13,24 @@ enum RadioAudioCategory {
 }
 
 extension RadioAudioCategoryX on RadioAudioCategory {
-  PhosphorIconData get icon {
+  IconData get icon {
     switch (this) {
       case RadioAudioCategory.quran:
-        return PhosphorIcons.bookOpen; // revelation / reading
+        return HugeIconsStroke.book01; // revelation / reading
       case RadioAudioCategory.hadith:
-        return PhosphorIcons.chatCenteredText; // narration / sayings
+        return HugeIconsStroke.chat; // narration / sayings
       case RadioAudioCategory.tafsir:
-        return PhosphorIcons.magnifyingGlass; // explanation / deep dive
+        return HugeIconsStroke.search01; // explanation / deep dive
       case RadioAudioCategory.adhkar:
-        return PhosphorIcons.sun; // remembrance / du'a vibe
+        return HugeIconsStroke.sun01; // remembrance / du'a vibe
       case RadioAudioCategory.seerah:
-        return PhosphorIcons.person; // life story / biography
+        return HugeIconsStroke.user; // life story / biography
       case RadioAudioCategory.fiqh:
-        return PhosphorIcons.scales; // rulings / balance / law
+        return HugeIconsStroke.weightScale; // rulings / balance / law
       case RadioAudioCategory.qisas:
-        return PhosphorIcons.bookBookmark; // stories / narratives
+        return HugeIconsStroke.bookBookmark01; // stories / narratives
       case RadioAudioCategory.fatwa:
-        return PhosphorIcons.question; // asking rulings / Q&A
+        return HugeIconsStroke.question; // asking rulings / Q&A
     }
   }
 

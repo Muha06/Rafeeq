@@ -2,16 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/widgets/app_cache_image.dart';
 import 'package:rafeeq/core/widgets/my_chip.dart';
-import 'package:rafeeq/features/radio_station/domain/enums/radio_audio_category.dart';
-import 'package:rafeeq/features/radio_station/presentation/widgets/category_fallback_image.dart';
-import 'package:rafeeq/features/radio_station/presentation/widgets/radio_player_sheet.dart';
+import 'package:rafeeq/features/quran_radio/domain/enums/radio_audio_category.dart';
+import 'package:rafeeq/features/quran_radio/presentation/widgets/category_fallback_image.dart';
+import 'package:rafeeq/features/quran_radio/presentation/widgets/radio_player_sheet.dart';
 import '../../domain/entities/radio_station.dart';
 
-class RadioCard extends StatelessWidget {
+class RadioCard extends StatefulWidget {
   final RadioStation station;
 
   const RadioCard({super.key, required this.station});
 
+  @override
+  State<RadioCard> createState() => _RadioCardState();
+}
+
+class _RadioCardState extends State<RadioCard> {
+  bool isSelected = false;
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -19,15 +25,25 @@ class RadioCard extends StatelessWidget {
 
     return InkWell(
       borderRadius: BorderRadius.circular(16),
-      onTap: () => AppSheets.showBottomSheet(
-        context: context,
-         useSafeArea: false,
-        isScrollControlled: true,
-        child: RadioPlayerSheet(station: station),
-      ),
+      onTap: () {
+        
+        AppSheets.showBottomSheet(
+          context: context,
+          useSafeArea: false,
+          isScrollControlled: true,
+          child: RadioPlayerSheet(station: widget.station),
+        );
+
+        setState(() {
+          isSelected = true;
+        });
+      },
       child: Container(
         width: double.infinity,
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: isSelected ? cs.primary.withAlpha(64) : null,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
@@ -36,14 +52,14 @@ class RadioCard extends StatelessWidget {
             SizedBox(
               height: 100,
               width: 100,
-              child: station.imageUrl != null
+              child: widget.station.imageUrl != null
                   ? AppCachedImage(
-                      imageUrl: station.imageUrl,
+                      imageUrl: widget.station.imageUrl,
                       shape: AppImageShape.circle,
                       fit: BoxFit.cover,
                     )
                   : CategoryFallback(
-                      station: station,
+                      station: widget.station,
                       height: 80,
                       width: 80,
                       isSheet: false,
@@ -55,7 +71,7 @@ class RadioCard extends StatelessWidget {
 
             // TEXT SECTION
             Text(
-              station.name,
+              widget.station.name,
               textAlign: TextAlign.center,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
@@ -67,7 +83,7 @@ class RadioCard extends StatelessWidget {
             // TAG
             MyChip(
               child: Text(
-                station.category.label,
+                widget.station.category.label,
                 style: theme.textTheme.labelSmall!.copyWith(
                   color: theme.colorScheme.onSurface,
                 ),

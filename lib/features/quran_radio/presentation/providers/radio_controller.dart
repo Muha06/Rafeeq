@@ -1,7 +1,7 @@
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/features/radio_station/domain/enums/radio_audio_category.dart';
-import 'package:rafeeq/features/radio_station/presentation/providers/wiring_providers.dart';
+import 'package:rafeeq/features/quran_radio/domain/enums/radio_audio_category.dart';
+import 'package:rafeeq/features/quran_radio/presentation/providers/wiring_providers.dart';
 import '../../domain/entities/radio_station.dart';
 import '../../domain/repository/radio_repository.dart';
 

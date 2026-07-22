@@ -9,6 +9,7 @@ import 'package:rafeeq/features/quran/presentation/riverpod/ayah_of_the_day.dart
 import 'package:rafeeq/features/quran/presentation/riverpod/ayah_share_cotroller_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/quran_bookmark.dart';
+import 'package:hugeicons_pro/hugeicons.dart';
 
 class AyahTile extends ConsumerStatefulWidget {
   final String surahNameTranslit;
@@ -58,7 +59,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                   Text(
                     '${ayah.surahId}: ${ayahNumber.toString()}',
                     textAlign: TextAlign.center,
-                    style: theme.textTheme.labelLarge,
+                    style: theme.textTheme.labelMedium,
                   ),
                   const Spacer(),
 
@@ -106,8 +107,8 @@ class _AyahTileState extends ConsumerState<AyahTile> {
 
                         return Icon(
                           isBookmarked
-                              ? PhosphorIcons.bookmarkFill
-                              : PhosphorIcons.bookBookmark,
+                              ? HugeIconsSolid.bookmark01
+                              : HugeIconsStroke.bookmark01,
                           color: isBookmarked ? cs.primary : actionsIconColor,
                         );
                       },
@@ -139,7 +140,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                         await controller.share(context: btnCtx, text: text);
                       },
                       icon: PhosphorIcon(
-                        PhosphorIcons.share,
+                        HugeIconsStroke.share01,
                         color: actionsIconColor,
                       ),
                     ),

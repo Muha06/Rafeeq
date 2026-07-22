@@ -2,6 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:rafeeq/features/quran_goal/data/models/hive/quran_log_hive.dart';
 import 'package:rafeeq/features/quran_goal/domain/entities/quran_log.dart';
+import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
+import 'package:rafeeq/features/quran_goal/presentation/providers/today_progress_provider.dart';
 
 final quranLogProvider = NotifierProvider<QuranLogsNotifier, List<QuranLog>>(
   QuranLogsNotifier.new,
@@ -31,3 +33,12 @@ class QuranLogsNotifier extends Notifier<List<QuranLog>> {
     state = []; // update provider state
   }
 }
+
+final hasCompletedQuranGoalProvider = Provider<bool>((ref) {
+  final goal = ref.watch(quranGoalProvider);
+  if (goal == null) return false;
+
+  final progress = ref.watch(todayProgressProvider);
+
+  return progress.totalRead >= progress.totalTarget;
+});

@@ -920,14 +920,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.1.2"
-  hugeicons:
+  hugeicons_pro:
     dependency: "direct main"
     description:
-      name: hugeicons
-      sha256: "5a4bb3f3e0a34df5ab8c41f43eb8c63382af8b3dcb8d63e8231b3d4dda3433e5"
+      name: hugeicons_pro
+      sha256: "3f63f59b17effd423195869d9fde60f84d2b36cee14bc6fbbbde8e50f486e68f"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.7"
+    version: "0.0.3"
   image:
     dependency: transitive
     description:
@@ -1240,6 +1240,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.0"
+  pausable_timer:
+    dependency: transitive
+    description:
+      name: pausable_timer
+      sha256: "6ef1a95441ec3439de6fb63f39a011b67e693198e7dae14e20675c3c00e86074"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.0+3"
   percent_indicator:
     dependency: "direct main"
     description:
@@ -1733,6 +1741,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.2"
+  toastification:
+    dependency: "direct main"
+    description:
+      name: toastification
+      sha256: "66c96678e3dece8ba24de3ea31634bd65a80aaecb8105f9bafe946e5f0d7590a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.2.0"
   typed_data:
     dependency: transitive
     description:

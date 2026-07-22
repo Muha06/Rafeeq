@@ -1,5 +1,5 @@
-import 'package:rafeeq/features/radio_station/domain/entities/radio_station.dart';
-import 'package:rafeeq/features/radio_station/domain/enums/radio_audio_category.dart';
+import 'package:rafeeq/features/quran_radio/domain/entities/radio_station.dart';
+import 'package:rafeeq/features/quran_radio/domain/enums/radio_audio_category.dart';
 
 class RadioStationModel {
   final String id;

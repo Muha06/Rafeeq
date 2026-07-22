@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/features/haramain-live/presentation/pages/haramain_live_page.dart';
-import 'package:rafeeq/features/radio_station/presentation/pages/radios_list_page.dart';
+import 'package:rafeeq/features/quran_radio/presentation/pages/radios_list_page.dart';
+import 'package:hugeicons_pro/hugeicons.dart';
 
 class LiveHubCard extends ConsumerWidget {
   const LiveHubCard({super.key});
@@ -27,7 +27,7 @@ class LiveHubCard extends ConsumerWidget {
           // TITLE
           Row(
             children: [
-              const Icon(PhosphorIcons.broadcast),
+              const Icon(HugeIconsStroke.liveStreaming01),
               const SizedBox(width: 8),
               Text('Live', style: textTheme.labelLarge),
             ],
@@ -46,7 +46,7 @@ class LiveHubCard extends ConsumerWidget {
           _LiveTile(
             title: 'Haramain',
             subtitle: 'Makkah • Madinah live',
-            icon: PhosphorIcons.mosque,
+            icon: HugeIconsStroke.mosque05,
             onTap: () {
               AppNav.push(
                 context,
@@ -61,7 +61,7 @@ class LiveHubCard extends ConsumerWidget {
           _LiveTile(
             title: 'Quran Radio',
             subtitle: 'Reciters • Tafsir • Adhkar',
-            icon: PhosphorIcons.radio,
+            icon: HugeIconsStroke.radio,
             onTap: () {
               AppNav.push(
                 context,

@@ -231,6 +231,59 @@ class LocalNotificationService {
     );
   }
 
+  Future<void> scheduleQuranGoalReminder({
+    required int id,
+    required String title,
+    required String body,
+    required TimeOfDay time,
+  }) async {
+    final now = tz.TZDateTime.now(tz.local);
+
+    var scheduled = tz.TZDateTime(
+      tz.local,
+      now.year,
+      now.month,
+      now.day,
+      time.hour,
+      time.minute,
+    );
+
+    if (scheduled.isBefore(now)) {
+      scheduled = scheduled.add(const Duration(days: 1));
+    }
+
+    const androidDetails = AndroidNotificationDetails(
+      'quran_goal_reminder',
+      'Reminders',
+      channelDescription: 'Quran goal reminders',
+      importance: Importance.high,
+      priority: Priority.high,
+    );
+
+    const details = NotificationDetails(
+      android: androidDetails,
+      iOS: DarwinNotificationDetails(),
+    );
+
+    final exactAllowed = await canScheduleExactAlarms();
+
+    await _plugin.cancel(id);
+
+    debugPrint("Scheduling Quran goal reminders");
+
+    await _plugin.zonedSchedule(
+      id,
+      title,
+      body,
+      scheduled,
+      details,
+      androidScheduleMode: exactAllowed
+          ? AndroidScheduleMode.exactAllowWhileIdle
+          : AndroidScheduleMode.inexactAllowWhileIdle, // fallback
+      matchDateTimeComponents: DateTimeComponents.time,
+    );
+  }
+
   Future<bool> canScheduleExactAlarms() async {
     final android = _plugin
         .resolvePlatformSpecificImplementation<
@@ -275,10 +328,17 @@ class LocalNotificationService {
       ),
     );
 
+    await cancel(id);
+
     await _plugin.show(id, title, body, details);
   }
 
   Future<void> cancel(int id) async {
-    await _plugin.cancel(id);
+    try {
+      debugPrint("Cancelling $id");
+      await _plugin.cancel(id);
+    } catch (e) {
+      debugPrint("Error cancelling $e");
+    }
   }
 }

@@ -15,6 +15,7 @@ import 'package:rafeeq/features/quran_audio/domain/entities/reciter_entity.dart'
 import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/surah_audio_providers.dart';
 import 'package:rafeeq/features/quran_audio/presentation/widgets/reciter_picker_sheet.dart';
+import 'package:hugeicons_pro/hugeicons.dart';
 
 class SurahDetails extends ConsumerWidget {
   const SurahDetails({super.key, required this.surah});
@@ -79,7 +80,10 @@ class _SurahBriefDetailsCard extends ConsumerWidget {
               ),
 
               IconButton(
-                icon: Icon(Icons.info_outline_rounded, color: cs.onPrimary),
+                icon: Icon(
+                  HugeIconsStroke.informationCircle,
+                  color: cs.onPrimary,
+                ),
                 visualDensity: VisualDensity.compact,
                 onPressed: () async {
                   final info = await ref.read(

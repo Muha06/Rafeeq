@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+ import 'package:hugeicons_pro/hugeicons.dart';
 
 class MyBottomBar extends StatelessWidget {
   final ValueChanged<int> onTap;
@@ -20,23 +20,23 @@ class MyBottomBar extends StatelessWidget {
 
     final List<({IconData icon, IconData active, String label})> items = [
       (
-        icon: PhosphorIcons.house,
-        active: PhosphorIcons.houseFill,
+        icon: HugeIconsStroke.home09,
+        active: HugeIconsSolid.home09,
         label: 'Home',
       ),
       (
-        icon: PhosphorIcons.bookOpenText,
-        active: PhosphorIcons.bookOpenTextFill,
+        icon: HugeIconsStroke.quran02,
+        active: HugeIconsSolid.quran02,
         label: "Qur'an",
       ),
       (
-        icon: PhosphorIcons.handsPraying,
-        active: PhosphorIcons.handsPrayingFill,
+        icon: HugeIconsStroke.tasbih,
+        active: HugeIconsSolid.tasbih,
         label: 'Adhkār',
       ),
       (
-        icon: PhosphorIcons.bookmark,
-        active: PhosphorIcons.bookmarkFill,
+        icon: HugeIconsStroke.bookmark01,
+        active: HugeIconsSolid.bookmark01,
         label: 'Bookmarks',
       ),
     ];

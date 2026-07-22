@@ -1,11 +1,9 @@
 import 'dart:ui';
-
 import 'package:floating_draggable_widget/floating_draggable_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
@@ -15,6 +13,7 @@ import 'package:rafeeq/features/adhkar/domain/entities/dhikr_entity.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/dhikr_bookmark.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/dhikr/dhikr_notifier_provider.dart';
 import 'package:vibration/vibration.dart';
+import 'package:hugeicons_pro/hugeicons.dart';
 
 class AdhkarDetailsPage extends ConsumerStatefulWidget {
   const AdhkarDetailsPage({
@@ -249,8 +248,8 @@ class _BottomNavBar extends ConsumerWidget {
 
                   return _BottomNavItem(
                     icon: isBookmarked
-                        ? PhosphorIconsFill.bookmark
-                        : PhosphorIcons.bookBookmark,
+                        ? HugeIconsSolid.bookmark01
+                        : HugeIconsStroke.bookmark01,
                     iconColor: isBookmarked ? cs.primary : cs.onSurface,
                     label: isBookmarked ? 'Saved' : 'Save',
                     onTap: () {
@@ -278,8 +277,8 @@ class _BottomNavBar extends ConsumerWidget {
                       icon: isBuffering
                           ? CupertinoIcons.circle
                           : isPlaying
-                          ? PhosphorIcons.pause
-                          : PhosphorIcons.play,
+                          ? HugeIconsStroke.pause
+                          : HugeIconsStroke.play,
 
                       label: isPlaying ? 'Stop' : 'Play',
                       onTap: () {
@@ -297,7 +296,7 @@ class _BottomNavBar extends ConsumerWidget {
 
               // Copy
               _BottomNavItem(
-                icon: Icons.copy,
+                icon: HugeIconsStroke.copy01,
                 label: 'Copy',
                 onTap: () async {
                   copyDhikr(dhikr);

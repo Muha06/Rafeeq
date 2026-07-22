@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/features/quran/domain/entities/last_read_ayah.dart';
@@ -72,7 +72,7 @@ class QuickLastReadCard extends ConsumerStatefulWidget {
 }
 
 class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
-  bool _isSelected = false; //for long press style
+  bool _isSelected = false;
 
   Future<void> _showDeleteLastReadSheet(
     BuildContext context,
@@ -98,7 +98,7 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(PhosphorIcons.trash, size: 72),
+              const Icon(HugeIconsStroke.delete01, size: 72),
               const SizedBox(height: 16),
 
               Text(

@@ -1,4 +1,4 @@
-import 'package:rafeeq/features/radio_station/data/models/radio_station_model.dart';
+import 'package:rafeeq/features/quran_radio/data/models/radio_station_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class RadioRemoteDataSource {

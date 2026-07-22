@@ -5,6 +5,7 @@ import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/widgets/app_drag_handle.dart';
 import 'package:rafeeq/features/quran_goal/domain/entities/quran_goal.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
+import 'package:rafeeq/features/quran_goal/presentation/providers/quran_log_provider.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/goal_actions_sheet.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/progress_bars/daily_progress_bar.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/weekly_chart.dart';
@@ -54,7 +55,7 @@ class _GoalPageBodyState extends State<_GoalPageBody> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final collapsedHeight = MediaQuery.sizeOf(context).height * .45;
+    final collapsedHeight = MediaQuery.sizeOf(context).height * .4;
 
     return SlidingUpPanel(
       controller: controller,
@@ -144,22 +145,23 @@ class MyQuranGoalCard extends ConsumerWidget {
   }
 }
 
-class _GoalHero extends StatelessWidget {
+class _GoalHero extends ConsumerWidget {
   const _GoalHero({required this.goal});
 
   final QuranGoal goal;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
+    final hasCompleted = ref.watch(hasCompletedQuranGoalProvider);
 
     return Center(
       child: GestureDetector(
         onTap: () => _showGoalActionsSheet(context),
         child: Column(
           children: [
-            const _GoalCompletedBadge(),
+            if (hasCompleted) const _GoalCompletedBadge(),
 
             AnimatedSwitcher(
               duration: const Duration(milliseconds: 300),
@@ -193,14 +195,21 @@ class _GoalInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
       children: [
-        _InfoTile(title: "Started", value: goal.formattedStartDate),
+        Row(
+          children: [
+            _InfoTile(title: "Started", value: goal.formattedStartDate),
 
-        const Spacer(),
+            const Spacer(),
 
-        _InfoTile(title: "End Date", value: goal.formattedEndDate),
+            _InfoTile(title: "End Date", value: goal.formattedEndDate),
+          ],
+        ),
+
+        const SizedBox(height: 20),
+
+        _InfoTile(title: "Remind Me At", value: goal.formattedReminderTime),
       ],
     );
   }
@@ -324,7 +333,7 @@ class _GoalCompletedBadge extends StatelessWidget {
       decoration: BoxDecoration(
         color: cs.tertiaryContainer.withAlpha(100),
         borderRadius: BorderRadius.circular(999),
-       ),
+      ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
