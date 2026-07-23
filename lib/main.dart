@@ -28,6 +28,7 @@ import 'package:rafeeq/features/bookmarks/data/models/dhikr_bookmark_hive_model.
 import 'package:rafeeq/features/bookmarks/data/models/quran_bookmark_hive_model.dart';
 import 'package:rafeeq/features/onboarding/presentation/pages/onboarding_scaffold.dart';
 import 'package:rafeeq/features/onboarding/presentation/provider/providers.dart';
+import 'package:rafeeq/features/quran/presentation/riverpod/ayah_of_day_scheduler.dart';
 import 'package:rafeeq/features/quran_goal/data/models/hive/quran_goal_hive.dart';
 import 'package:rafeeq/features/quran_goal/data/models/hive/quran_goal_type_hive.dart';
 import 'package:rafeeq/features/quran_goal/data/models/hive/quran_log_hive.dart';
@@ -201,6 +202,9 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
 
     //SYNC
     await ref.read(systemNotifAccessProvider.notifier).sync();
+
+    // Schedule ayah of day notifications
+    await ref.read(ayahNotificationSchedulerProvider.notifier).schedule();
   }
 
   @override
