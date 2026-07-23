@@ -2,7 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
-import 'package:rafeeq/features/quran_goal/presentation/providers/weeky_progress_provider.dart';
+import 'package:rafeeq/features/quran_goal/presentation/providers/weeky_bar_chart_provider.dart';
 
 class WeeklyQuranChart extends ConsumerWidget {
   const WeeklyQuranChart({super.key});

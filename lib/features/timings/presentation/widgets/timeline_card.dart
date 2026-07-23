@@ -31,7 +31,7 @@ class _ErrorCard extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     return Row(
       children: [
-        const Text('Oops! Failed to fetch Salah times'),
+        const Text('Oops! Failed to fetch prayer times'),
         const Spacer(),
         IconButton(
           onPressed: () => ref.refresh(salahStatusProvider),

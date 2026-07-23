@@ -23,14 +23,7 @@ class QuranReadingPlanCard extends ConsumerWidget {
       );
     }
 
-    // Today range for V1
-    final today = DateTime.now();
-    final todayRange = DateTimeRange(
-      start: DateTime(today.year, today.month, today.day),
-      end: DateTime(today.year, today.month, today.day, 23, 59, 59),
-    );
-
-    final progress = ref.watch(progressProvider(todayRange));
+    final progress = ref.watch(progressProvider);
 
     final theme = Theme.of(context);
     final cs = theme.colorScheme;

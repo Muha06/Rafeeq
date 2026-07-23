@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:rafeeq/core/features/local_notifications/providers/wiring_providers.dart';
 import 'package:rafeeq/core/features/local_notifications/repository/local_notifs_service.dart';
+import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/features/quran_goal/data/models/hive/quran_goal_hive.dart';
 import 'package:rafeeq/features/quran_goal/domain/entities/quran_goal.dart';
 
@@ -66,6 +67,15 @@ class QuranGoalNotifier extends Notifier<QuranGoal?> {
     } else {
       await notifications.cancel(dailyReminderNotificationId);
     }
+
+    RafeeqAnalytics.logFeature(
+      'update-quran-goal',
+      parameters: {
+        'start_date': goal.startDate.toIso8601String(),
+        'end_date': goal.endDate.toIso8601String(),
+        'target': updated.target,
+      },
+    );
   }
 
   void createGoal(QuranGoal goal) async {
@@ -84,6 +94,16 @@ class QuranGoalNotifier extends Notifier<QuranGoal?> {
     if (goal.remindMeAt != null) {
       _scheduleReminder(goal);
     }
+
+    RafeeqAnalytics.logFeature(
+      'create_quran_goal',
+      parameters: {
+        'goal_type': goal.type.name, // tilawah / hifz
+        'start_date': goal.startDate.toIso8601String(),
+        'end_date': goal.endDate.toIso8601String(),
+        'target': goal.target,
+      },
+    );
   }
 
   Future<void> deleteGoal() async {
@@ -100,6 +120,15 @@ class QuranGoalNotifier extends Notifier<QuranGoal?> {
       title: 'Goal Deleted',
       body:
           'Your Quran goal has been deleted successfully. You can create a new goal anytime.',
+    );
+
+    RafeeqAnalytics.logFeature(
+      'delete_quran_goal',
+      parameters: {
+        'goal_type': goal.type.name,
+        'target': goal.target,
+        'days_since_created': DateTime.now().difference(goal.createdAt).inDays,
+      },
     );
   }
 

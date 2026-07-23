@@ -25,11 +25,13 @@ class RafeeqAnalytics {
     String featureName, {
     Map<String, Object>? parameters,
   }) async {
-    if (kDebugMode) return;
+    if (kDebugMode) {
+      debugPrint("logging feature worked (only debugged)");
+      return;
+    }
 
     try {
       await _analytics.logEvent(name: featureName, parameters: parameters);
-      debugPrint("logging feature");
     } catch (e) {
       debugPrint("Error logging feature $e");
     }

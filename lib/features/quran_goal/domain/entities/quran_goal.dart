@@ -20,6 +20,7 @@ class QuranGoal {
   final TimeOfDay? remindMeAt;
 
   final bool isActive;
+  final DateTime createdAt;
 
   const QuranGoal({
     required this.type,
@@ -27,6 +28,7 @@ class QuranGoal {
     required this.targetUnit,
     required this.startDate,
     required this.endDate,
+    required this.createdAt,
     this.remindMeAt,
     this.isActive = true,
   });
@@ -61,6 +63,7 @@ class QuranGoal {
       startDate: startDate ?? this.startDate,
       isActive: isActive ?? this.isActive,
       type: type ?? this.type,
+      createdAt: createdAt,
     );
   }
 
@@ -72,6 +75,7 @@ class QuranGoal {
       isActive: isActive,
       type: type.toHive,
       targetUnit: targetUnit.toHive,
+      createdAt: createdAt,
     );
   }
 }

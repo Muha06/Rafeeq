@@ -69,6 +69,7 @@ class _CreateGoalSheetState extends ConsumerState<CreateGoalSheet> {
       startDate: startDate,
       endDate: endDate,
       remindMeAt: reminder,
+      createdAt: DateTime.now(),
     );
 
     AppNav.pop(context);

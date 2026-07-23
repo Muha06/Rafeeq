@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of '../quran_goal_hive.dart';
+part of 'quran_goal_hive.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
@@ -20,6 +20,7 @@ class QuranGoalHiveAdapter extends TypeAdapter<QuranGoalHive> {
       target: fields[0] as int,
       startDate: fields[1] as DateTime,
       endDate: fields[2] as DateTime,
+      createdAt: fields[8] as DateTime,
       isActive: fields[3] as bool,
       type: fields[4] as QuranGoalTypeHive,
       targetUnit: fields[7] as QuranTargetUnitHive,
@@ -31,7 +32,7 @@ class QuranGoalHiveAdapter extends TypeAdapter<QuranGoalHive> {
   @override
   void write(BinaryWriter writer, QuranGoalHive obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.target)
       ..writeByte(1)
@@ -47,7 +48,9 @@ class QuranGoalHiveAdapter extends TypeAdapter<QuranGoalHive> {
       ..writeByte(6)
       ..write(obj.reminderMinute)
       ..writeByte(7)
-      ..write(obj.targetUnit);
+      ..write(obj.targetUnit)
+      ..writeByte(8)
+      ..write(obj.createdAt);
   }
 
   @override

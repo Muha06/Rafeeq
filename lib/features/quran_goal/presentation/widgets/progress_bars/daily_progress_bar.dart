@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/features/quran_goal/domain/entities/quran_goal.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
-import 'package:rafeeq/features/quran_goal/presentation/providers/today_progress_provider.dart';
+import 'package:rafeeq/features/quran_goal/presentation/providers/total_progress_provider.dart';
 
 class TotalQuranProgressArc extends ConsumerWidget {
   const TotalQuranProgressArc({
@@ -19,7 +19,7 @@ class TotalQuranProgressArc extends ConsumerWidget {
     final cs = theme.colorScheme;
     final goal = ref.watch(quranGoalProvider);
 
-    final progress = ref.watch(todayProgressProvider);
+    final progress = ref.watch(totalQuranProgressProvider);
     final totalRead = progress.totalRead;
     final totalTarget = progress.totalTarget;
 

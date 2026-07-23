@@ -12,7 +12,6 @@ import 'package:rafeeq/core/widgets/app_drag_handle.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/progress_provider.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/quran_log_provider.dart';
-import 'package:rafeeq/features/quran_goal/presentation/providers/today_progress_provider.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 void showAyahLogSheet(BuildContext context, WidgetRef ref) {
@@ -38,11 +37,10 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
         }
 
         // calculate progress
-        final todayRange = ref.read(todayRangeProvider);
         final goal = ref.read(quranGoalProvider);
-        final todayProgress = ref.watch(progressProvider(todayRange));
+        final progress = ref.watch(progressProvider);
 
-        final totalAfterLog = todayProgress.totalRead + ayahsRead;
+        final totalAfterLog = progress.totalRead + ayahsRead;
         final progressPercent = (totalAfterLog / goal!.target).clamp(0.0, 1.0);
 
         return Padding(
@@ -134,8 +132,7 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
                         return;
                       }
 
-                      final wasCompleted =
-                          todayProgress.totalRead >= goal.target;
+                      final wasCompleted = progress.totalRead >= goal.target;
 
                       // Save log
                       ref.read(quranLogProvider.notifier).addLog(ayahsRead);
@@ -145,9 +142,7 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
 
                       // Re-read AFTER saving
 
-                      final updatedProgress = ref.read(
-                        progressProvider(todayRange),
-                      );
+                      final updatedProgress = ref.read(progressProvider);
                       final isCompleted =
                           updatedProgress.totalRead >= goal.target;
 

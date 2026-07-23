@@ -4,7 +4,7 @@ import 'package:rafeeq/features/quran_goal/data/models/hive/quran_goal_type_hive
 import 'package:rafeeq/features/quran_goal/data/models/hive/quran_target_unit_hive.dart';
 import 'package:rafeeq/features/quran_goal/domain/entities/quran_goal.dart';
 
-part 'generated/quran_goal_hive.g.dart';
+part 'quran_goal_hive.g.dart';
 
 @HiveType(typeId: 10)
 class QuranGoalHive extends HiveObject {
@@ -32,10 +32,14 @@ class QuranGoalHive extends HiveObject {
   @HiveField(7)
   QuranTargetUnitHive targetUnit;
 
+  @HiveField(8)
+  DateTime createdAt;
+
   QuranGoalHive({
     required this.target,
     required this.startDate,
     required this.endDate,
+    required this.createdAt,
     required this.isActive,
     required this.type,
     required this.targetUnit,
@@ -55,6 +59,7 @@ class QuranGoalHive extends HiveObject {
       remindMeAt: reminderHour == null || reminderMinute == null
           ? null
           : TimeOfDay(hour: reminderHour!, minute: reminderMinute!),
+      createdAt: createdAt,
     );
   }
 
@@ -69,6 +74,7 @@ class QuranGoalHive extends HiveObject {
       targetUnit: goal.targetUnit.toHive,
       reminderHour: goal.remindMeAt?.hour,
       reminderMinute: goal.remindMeAt?.minute,
+      createdAt: goal.createdAt,
     );
   }
 }
