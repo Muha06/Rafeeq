@@ -135,27 +135,23 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
             count: _dhikrCount,
             total: dhikr.repeat,
             onTap: () async {
-              final isCompleting = _dhikrCount + 1 >= dhikr.repeat;
+              setState(() {
+                _dhikrCount++;
+              });
+
+              debugPrint("Count: $_dhikrCount");
+              debugPrint('repeat: ${dhikr.repeat}');
+
+              final isCompleting = _dhikrCount >= dhikr.repeat;
 
               if (isCompleting) {
-                await Vibration.vibrate(
-                  pattern: [0, 80, 50, 120],
-                  amplitude: 255,
-                );
+                await Vibration.vibrate(duration: 300, amplitude: 255);
               } else {
                 await Vibration.vibrate(
                   duration: 20,
-                  amplitude: 300,
+                  // amplitude: 300,
                 ); // soft normal tap
               }
-
-              setState(() {
-                if (_dhikrCount >= dhikr.repeat) {
-                  _dhikrCount = 0;
-                } else {
-                  _dhikrCount++;
-                }
-              });
             },
           ),
           floatingWidgetHeight: 64,
@@ -185,8 +181,6 @@ class _BottomNavBar extends ConsumerWidget {
       );
 
       ref.read(dhikrBookmarksProvider.notifier).toggle(bookmark);
-
-      RafeeqAnalytics.logFeature('bookmarked_dhikr');
     }
 
     Future<void> copyDhikr(Dhikr dhikr) async {
@@ -214,6 +208,8 @@ class _BottomNavBar extends ConsumerWidget {
 
       // Repeat
       buffer.writeln("Repeat ${dhikr.repeat} times");
+
+      RafeeqAnalytics.logFeature('copy_dhikr');
 
       await Clipboard.setData(ClipboardData(text: buffer.toString().trim()));
     }
@@ -276,14 +272,16 @@ class _BottomNavBar extends ConsumerWidget {
                           : HugeIconsStroke.play,
 
                       label: isPlaying ? 'Stop' : 'Play',
-                      onTap: () {
-                        audioCtrl.togglePlay(
+                      onTap: () async {
+                        await audioCtrl.togglePlay(
                           context: context,
                           currentId: dhikr.id.toString(),
                           url: dhikr.audioUrl!,
                           showAudioPlayer: true,
                           title: dhikr.transliteration ?? 'adhkar',
                         );
+
+                        RafeeqAnalytics.logFeature('play_adhkar_audio');
                       },
                     );
                   },

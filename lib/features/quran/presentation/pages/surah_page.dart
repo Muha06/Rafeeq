@@ -7,6 +7,7 @@ import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
+import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
@@ -390,6 +391,8 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
                       jumpToAyah: jumpToAyah,
                     ),
                   );
+
+                  RafeeqAnalytics.logFeature('open_mushaf_mode');
                 },
                 visualDensity: VisualDensity.compact,
                 icon: Icon(HugeIconsStroke.quran01, color: appbarIconColors),

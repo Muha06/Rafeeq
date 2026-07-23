@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/features/Ramadan/domain/ramadan_reflection.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
@@ -44,7 +45,7 @@ class AyahShareController {
     return buffer.toString();
   }
 
-//Build Ramadan reflection text
+  //Build Ramadan reflection text
   String buildRamadanReflectionText({
     required RamadanReflection reflection,
     bool includeLesson = true,
@@ -96,5 +97,7 @@ class AyahShareController {
             : box.localToGlobal(Offset.zero) & box.size,
       ),
     );
+
+    RafeeqAnalytics.logFeature('share_ayah');
   }
 }
