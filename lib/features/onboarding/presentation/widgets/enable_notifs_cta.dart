@@ -28,7 +28,7 @@ class _NotificationsPermissionCtaState
     if (perm.notificationsAllowed) {
       return ElevatedButton.icon(
         onPressed: null,
-        icon: const Icon(Icons.check_circle_rounded),
+        icon: const Icon(Icons.check_circle_rounded, color: Colors.green),
         label: const Text('Notifications Enabled'),
         style: widget.btnStyle,
       );

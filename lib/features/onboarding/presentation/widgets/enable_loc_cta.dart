@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/features/location/presentation/provider/location_prov.dart';
 
 class LocationPermissionCta extends ConsumerStatefulWidget {
-  const LocationPermissionCta({super.key,   this.btnStyle});
+  const LocationPermissionCta({super.key, this.btnStyle});
   final ButtonStyle? btnStyle;
 
   @override
@@ -21,7 +21,7 @@ class _LocationPermissionCtaState extends ConsumerState<LocationPermissionCta> {
     if (perm.isGranted) {
       return ElevatedButton.icon(
         onPressed: null,
-        icon: const Icon(Icons.check_circle_rounded),
+        icon: const Icon(Icons.check_circle_rounded, color: Colors.green),
         label: const Text('Location Enabled'),
         style: widget.btnStyle,
       );

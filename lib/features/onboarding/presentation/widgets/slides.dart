@@ -26,12 +26,14 @@ class SalahSlide extends StatelessWidget {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
-
     final btnStyle = theme.elevatedButtonTheme.style?.copyWith(
-          backgroundColor: WidgetStatePropertyAll(cs.tertiary),
-          foregroundColor: WidgetStatePropertyAll(cs.onTertiary),
-          iconColor: WidgetStatePropertyAll(cs.onTertiary),
-        );
+      backgroundColor: WidgetStatePropertyAll(cs.tertiary),
+      foregroundColor: WidgetStatePropertyAll(cs.onTertiary),
+      iconColor: WidgetStatePropertyAll(cs.onTertiary),
+      shape: WidgetStatePropertyAll(
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+      ),
+    );
 
     return OnboardingSlide(
       imageAsset: 'assets/images/onboarding/salat_feature.png',
@@ -39,12 +41,20 @@ class SalahSlide extends StatelessWidget {
       subtitle:
           'Enable Location & Notification to calculate and send accurate prayer reminders for where you are.',
       accent: Theme.of(context).colorScheme.primary,
-      child:   Row(
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          LocationPermissionCta(btnStyle: btnStyle,),
-          const SizedBox(width: 14),
-          NotificationsPermissionCta(btnStyle: btnStyle,),
+          SizedBox(
+            width: double.infinity,
+            child: LocationPermissionCta(btnStyle: btnStyle),
+          ),
+
+          const SizedBox(height: 14),
+
+          SizedBox(
+            width: double.infinity,
+            child: NotificationsPermissionCta(btnStyle: btnStyle),
+          ),
         ],
       ),
     );
@@ -56,7 +66,6 @@ class QuranAdhkarSlide extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     return OnboardingSlide(
       imageAsset: 'assets/images/onboarding/quran_feature.png',
       title: 'Stay connected daily',
