@@ -26,7 +26,7 @@ class BookmarksLocalDataSourceImpl implements BookmarksLocalDataSource {
   }
 
   @override
-  bool isBookMarked(String bookmarkId)   {
+  bool isBookMarked(String bookmarkId) {
     return box.containsKey(bookmarkId);
   }
 

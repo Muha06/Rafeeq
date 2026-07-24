@@ -93,7 +93,7 @@ class AppAudioHandler extends BaseAudioHandler with SeekHandler {
         id: id,
         title: 'Rafeeq - $title',
         duration: duration,
-        artist: artist, 
+        artist: artist,
         playable: true,
       ), //this is will be displayed in the notification and controls
     );

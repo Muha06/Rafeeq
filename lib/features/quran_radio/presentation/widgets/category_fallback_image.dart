@@ -22,7 +22,7 @@ class CategoryFallback extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
- 
+
     return Container(
       height: height,
       width: width,
@@ -40,7 +40,7 @@ class CategoryFallback extends StatelessWidget {
             : null,
       ),
       child: Icon(
-        station.category.icon,  
+        station.category.icon,
         size: isSheet ? 48 : 32,
         color: cs.primary,
       ),

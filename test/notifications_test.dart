@@ -23,7 +23,7 @@ void main() {
   tearDown(() async {
     await supabase.from('notifications').delete().eq('type', 'test');
   });
-  
+
   group('NotificationRemoteDataSource', () {
     test('should fetch notification by id', () async {
       // arrange: insert test data first

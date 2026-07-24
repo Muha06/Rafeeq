@@ -57,9 +57,7 @@ class GLobalMiniPlayerSheet extends ConsumerWidget {
                   : () => isPlaying ? ctrl.pause() : ctrl.play(),
               icon: isBuffering
                   ? const CupertinoActivityIndicator()
-                  : Icon(
-                      isPlaying ? PhosphorIcons.pause : PhosphorIcons.play,
-                    ),
+                  : Icon(isPlaying ? PhosphorIcons.pause : PhosphorIcons.play),
             ),
 
             //stop

@@ -38,7 +38,7 @@ class DhikrHiveModel extends HiveObject {
   @HiveField(10)
   final String categoryId;
 
-    DhikrHiveModel({
+  DhikrHiveModel({
     required this.id,
     required this.title,
     required this.arabicText,

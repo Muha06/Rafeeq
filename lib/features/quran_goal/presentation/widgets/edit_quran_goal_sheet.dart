@@ -137,7 +137,7 @@ class _EditQuranGoalSheetState extends ConsumerState<EditQuranGoalSheet> {
           children: [
             const AppDragHandle(),
 
-            Text("Edit My Qur'an Goal", style: theme.textTheme.titleMedium),
+            Text("Edit your Qur'an Goal", style: theme.textTheme.titleMedium),
 
             const SizedBox(height: 24),
 
@@ -158,7 +158,7 @@ class _EditQuranGoalSheetState extends ConsumerState<EditQuranGoalSheet> {
             if (reminder != null)
               GoalScheduleTile(
                 icon: Icons.notifications_active_outlined,
-                title: 'Daily Reminder',
+                title: 'Remind me at',
                 value: reminder!.format(context),
                 onTap: pickReminder,
               ),

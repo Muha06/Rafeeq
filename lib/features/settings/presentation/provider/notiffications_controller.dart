@@ -51,6 +51,8 @@ class SalahNotifController extends Notifier<bool> {
           state = false;
           debugPrint('Permissions not granted not toggling salah reminders');
 
+          if (!context.mounted) return;
+
           if (showSnack != null && showSnack) {
             AppToast.showCompact(
               context: context,
@@ -65,6 +67,7 @@ class SalahNotifController extends Notifier<bool> {
       await box.put(kSalahEnabled, true);
       state = true; // update UI
       RafeeqAnalytics.logFeature("enable_salah_reminders");
+      if (!context.mounted) return;
 
       if (showSnack != null && showSnack) {
         AppToast.showCompact(
@@ -124,7 +127,7 @@ class AdhkarNotifController extends Notifier<bool> {
           await box.put(kAdhkarEnabled, false);
           state = false;
 
-          if (showSnack) {
+          if (showSnack && context.mounted) {
             AppToast.showCompact(
               context: context,
               message: 'Notification permissions denied.',
@@ -139,7 +142,7 @@ class AdhkarNotifController extends Notifier<bool> {
       state = true;
       RafeeqAnalytics.logFeature("enable_adhkar_reminders");
 
-      if (showSnack) {
+      if (showSnack&&context.mounted) {
         AppToast.showCompact(
           context: context,
           message: 'Turning on Adhkar reminders...',

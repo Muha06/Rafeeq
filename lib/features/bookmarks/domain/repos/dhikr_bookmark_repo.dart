@@ -1,4 +1,4 @@
- import 'package:rafeeq/features/bookmarks/domain/entities/dhikr_bookmark.dart';
+import 'package:rafeeq/features/bookmarks/domain/entities/dhikr_bookmark.dart';
 
 abstract class DhikrBookmarksRepository {
   //ADD BOOKMARK

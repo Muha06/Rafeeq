@@ -15,7 +15,6 @@ class AyahNotificationScheduler extends AsyncNotifier<void> {
 
     final notifications = ref.read(localNotificationServiceProvider);
 
- 
     await notifications.scheduleDaily(
       id: 0402,
       title: '📖 Ayah of the Day',

@@ -20,7 +20,7 @@ class _AdhkarBookmarksTabState extends ConsumerState<AdhkarBookmarksTab> {
   @override
   Widget build(BuildContext context) {
     final bookMarks = ref.watch(dhikrBookmarksProvider);
- 
+
     return bookMarks.isEmpty
         ? Center(
             child: AppStateView(

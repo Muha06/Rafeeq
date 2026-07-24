@@ -2,15 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
+import 'package:rafeeq/core/widgets/app_drag_handle.dart';
 
 void showFridayVirtuesSheet(BuildContext context) {
   AppSheets.showBottomSheet(
     context: context,
+    isScrollControlled: true,
     child: SizedBox(
       height: MediaQuery.sizeOf(context).height * 0.9,
       child: ListView(
         padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
         children: [
+          const AppDragHandle(),
+
           Text(
             'Friday Virtues',
             textAlign: TextAlign.center,

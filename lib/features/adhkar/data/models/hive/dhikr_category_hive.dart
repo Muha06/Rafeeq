@@ -23,7 +23,7 @@ class DhikrCategoryHive extends HiveObject {
   @HiveField(5)
   final DateTime updatedAt;
 
-    DhikrCategoryHive({
+  DhikrCategoryHive({
     required this.id,
     required this.title,
     required this.slug,

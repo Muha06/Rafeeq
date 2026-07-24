@@ -28,7 +28,7 @@ class AppNotification {
       body: body ?? this.body,
       imageUrl: imageUrl ?? this.imageUrl,
       isRead: isRead ?? this.isRead,
-      createdAt: createdAt
+      createdAt: createdAt,
     );
   }
 }

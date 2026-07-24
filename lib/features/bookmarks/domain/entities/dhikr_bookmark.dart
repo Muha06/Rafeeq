@@ -1,7 +1,7 @@
 class DhikrBookmark {
   final String dhikrId; // points to Dhikr.id
   final String title; // quick display
-  final String categoryId; 
+  final String categoryId;
   final DateTime createdAt;
 
   const DhikrBookmark({

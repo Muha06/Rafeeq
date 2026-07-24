@@ -67,7 +67,7 @@ ThemeData appDarkThemeData() {
 
     appBarTheme: AppBarTheme(
       backgroundColor: scheme.surfaceContainerLowest,
-      toolbarHeight: 52,
+      toolbarHeight: 40,
       foregroundColor: scheme.onSurface,
       elevation: 0,
       surfaceTintColor: Colors.transparent,

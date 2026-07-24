@@ -86,6 +86,8 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                             .read(quranBookmarksProvider.notifier)
                             .toggle(bookmark);
 
+                        if (!context.mounted) return;
+
                         AppToast.showCompact(
                           context: context,
                           message: isBookmarked
@@ -188,13 +190,6 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                       translationFontSize: translationFontSize,
                     ),
                     const SizedBox(height: 16),
-
-                    _TranslationSection(
-                      label: 'Swahili',
-                      ayahText: ayah.textSwahili,
-                      translationFontSize: translationFontSize,
-                    ),
-                    const SizedBox(height: 20),
                   ],
 
                   //Transliterations

@@ -27,20 +27,23 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
   Widget build(BuildContext context) {
     final selectedIndex = ref.watch(tabsScreenIndexProvider);
 
-    return Scaffold(
-      extendBody: true,
-      body: IndexedStack(index: selectedIndex, children: _pages),
-      bottomNavigationBar: MyBottomBar(
-        currentIndex: selectedIndex,
-        onTap: (value) async {
-          setState(() {
-            ref.read(tabsScreenIndexProvider.notifier).state = value;
-          });
+    return SafeArea(
+      top: false,
+      child: Scaffold(
+        extendBody: true,
+        body: IndexedStack(index: selectedIndex, children: _pages),
+        bottomNavigationBar: MyBottomBar(
+          currentIndex: selectedIndex,
+          onTap: (value) async {
+            setState(() {
+              ref.read(tabsScreenIndexProvider.notifier).state = value;
+            });
 
-          if (selectedIndex == value) return;
+            if (selectedIndex == value) return;
 
-          AppHaptics.selection();
-        },
+            AppHaptics.selection();
+          },
+        ),
       ),
     );
   }

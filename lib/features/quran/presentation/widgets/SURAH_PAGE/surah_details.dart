@@ -162,7 +162,6 @@ class PlayFullSurahBtn extends ConsumerWidget {
         await ref
             .read(audioControllerProvider.notifier)
             .togglePlay(
-              context: context,
               artist: reciter.name,
               showAudioPlayer: false,
               currentId: audioId,
@@ -171,6 +170,7 @@ class PlayFullSurahBtn extends ConsumerWidget {
             );
       } catch (e) {
         debugPrint("Error playng : $e");
+        if (!context.mounted) return;
 
         AppToast.showError(context: context, message: "Something went wrong");
       }

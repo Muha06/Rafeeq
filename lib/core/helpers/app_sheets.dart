@@ -3,7 +3,7 @@ import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/widgets/app_drag_handle.dart';
 
 class AppSheets {
-  AppSheets._(); // private constructor (no instantiation)
+  AppSheets._();
 
   // ---------------------------
   // BASE BOTTOM SHEET
@@ -21,10 +21,12 @@ class AppSheets {
       useSafeArea: useSafeArea,
       isScrollControlled: isScrollControlled,
       showDragHandle: false,
+      enableDrag: true,
+      isDismissible: true,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(borderRadius)),
       ),
-      builder: (_) => child,
+      builder: (_) => SafeArea(top: false, child: child),
     );
   }
 
@@ -67,7 +69,7 @@ class AppSheets {
                 ),
               ),
               const SizedBox(height: 8),
-              
+
               Text(
                 description,
                 textAlign: TextAlign.center,

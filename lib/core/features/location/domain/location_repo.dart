@@ -40,7 +40,7 @@ class LocationRepositoryImpl implements LocationRepository {
         lng: 39.6111,
         city: 'Madinah',
         country: 'Saudi Arabia',
-         isAuto: false,
+        isAuto: false,
       );
 
       return fallbackLoc;
@@ -74,7 +74,7 @@ class LocationRepositoryImpl implements LocationRepository {
         lng: pos.longitude,
         city: city,
         country: country,
-         isAuto: true,
+        isAuto: true,
       );
 
       await local.write(loc);

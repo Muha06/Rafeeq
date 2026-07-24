@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
- import 'package:hugeicons_pro/hugeicons.dart';
+import 'package:hugeicons_pro/hugeicons.dart';
 
 class MyBottomBar extends StatelessWidget {
   final ValueChanged<int> onTap;
@@ -67,26 +67,26 @@ class MyBottomBar extends StatelessWidget {
                       highlightColor: Colors.transparent,
                       splashColor: Colors.transparent,
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 4),
-                            child: AnimatedSwitcher(
-                              duration: const Duration(milliseconds: 350),
-                              child: Icon(
-                                isSelected ? item.active : item.icon,
-                                key: ValueKey(isSelected), // simpler
-                                color: isSelected ? cs.primary : itemColor,
-                                size: 24,
-                              ),
+                          AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 350),
+                            child: Icon(
+                              isSelected ? item.active : item.icon,
+                              key: ValueKey(isSelected), // simpler
+                              color: isSelected ? cs.primary : itemColor,
+                              size: 24,
                             ),
                           ),
+
+                          const SizedBox(height: 4),
 
                           Text(
                             item.label,
                             style: theme.textTheme.labelSmall?.copyWith(
                               fontSize: 12,
                               height: 1,
-                              color: itemColor,
+                              color: isSelected ? cs.primary : itemColor,
                             ),
                           ),
                         ],

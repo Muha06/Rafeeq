@@ -48,6 +48,9 @@ class _FeedbackPageState extends ConsumerState<FeedbackPage> {
 
       AppNav.pop(context);
     } catch (e) {
+            if (!mounted) return;
+
+
       AppSnackBar.showSimple(
         context: context,
         message: "Something went wrong.",

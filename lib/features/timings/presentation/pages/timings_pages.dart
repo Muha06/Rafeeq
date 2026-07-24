@@ -62,6 +62,7 @@ class _SalahTimingsPageState extends ConsumerState<SalahTimingsPage> {
           child: Scaffold(
             appBar: AppBar(
               title: const Text('Today\'s Timings'),
+              centerTitle: true,
               bottom: appBarBottomDivider(context),
             ),
             body: Column(
@@ -279,7 +280,7 @@ class _TimingTile extends ConsumerWidget {
                     .read(disabledSalahPrayersProvider.notifier)
                     .toggle(prayer);
 
-                if (!isDisabled) {
+                if (!isDisabled && context.mounted) {
                   AppSnackBar.showSimple(
                     context: context,
                     message: 'Disabled reminders for ${prayer.label}',

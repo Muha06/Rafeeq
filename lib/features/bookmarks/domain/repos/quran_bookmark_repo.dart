@@ -7,9 +7,9 @@ abstract class BookmarksRepository {
   //REMOVE BOOKMARK
   Future<void> removeBookmark(String bookmarkId);
 
-//is bookmarked
+  //is bookmarked
   bool isBookmarked(String bookmarkId);
-  
+
   //GET ALL BOOKMARKS
   List<QuranBookmarkEntity> getAllBookmarks();
 

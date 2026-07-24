@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-  import 'package:rafeeq/features/quran_goal/presentation/providers/quran_log_provider.dart';
+import 'package:rafeeq/features/quran_goal/presentation/providers/quran_log_provider.dart';
 
 final weeklyRangeProvider = Provider<DateTimeRange>((ref) {
   final now = DateTime.now();
@@ -18,7 +18,6 @@ final weeklyRangeProvider = Provider<DateTimeRange>((ref) {
   return DateTimeRange(start: start, end: end);
 });
 
- 
 //====================FOR BAR CHART=============================
 final weeklyProgressByDayProvider = Provider<List<int>>((ref) {
   final logs = ref.watch(quranLogProvider);

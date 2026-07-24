@@ -1,4 +1,3 @@
- 
 class QuranBookmarkEntity {
   final String id;
   final int surahId;

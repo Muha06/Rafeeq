@@ -141,8 +141,9 @@ class QuranGoalNotifier extends Notifier<QuranGoal?> {
   Future<void> _scheduleReminder(QuranGoal goal) async {
     await notifications.scheduleQuranGoalReminder(
       id: dailyReminderNotificationId,
-      title: 'Complete Today\'s Goal',
-      body: 'You\'re one step closer. Continue your Quran recitation.',
+      title: 'Time for Your Quran Goal',
+      body:
+          'Continue your Quran journey today and make progress toward your goal.',
       time: goal.remindMeAt!,
     );
   }

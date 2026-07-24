@@ -1,7 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/features/quran_audio/data/datasources/reciters_seed.dart';
 import 'package:rafeeq/features/quran_audio/domain/entities/reciter_entity.dart';
- final quranRecitersProvider = Provider<List<ReciterEntity>>((ref) {
+
+final quranRecitersProvider = Provider<List<ReciterEntity>>((ref) {
   return kQuranRecitersSeed;
 });
 

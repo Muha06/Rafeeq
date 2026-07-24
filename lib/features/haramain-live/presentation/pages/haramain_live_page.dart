@@ -15,7 +15,7 @@ class _HaramainLivePageState extends State<HaramainLivePage>
   late TabController _tabController;
 
   String? _error;
-  bool _isLoading = true;
+  bool isLoading = true;
   String _currentUrl = makkahLive;
   int _retryCount = 0;
   bool _isRetrying = false;
@@ -46,7 +46,7 @@ class _HaramainLivePageState extends State<HaramainLivePage>
 
   Future<void> _initController(String url) async {
     setState(() {
-      _isLoading = true;
+      isLoading = true;
       _error = null;
     });
 
@@ -72,7 +72,7 @@ class _HaramainLivePageState extends State<HaramainLivePage>
           if (_error == null) {
             setState(() {
               _error = "Stream interrupted...";
-              _isLoading = false;
+              isLoading = false;
             });
 
             _autoReconnect(_currentUrl);
@@ -85,7 +85,7 @@ class _HaramainLivePageState extends State<HaramainLivePage>
       await _controller?.play();
 
       setState(() {
-        _isLoading = false;
+        isLoading = false;
         _error = null;
         _retryCount = 0;
         _isRetrying = false;
@@ -94,7 +94,7 @@ class _HaramainLivePageState extends State<HaramainLivePage>
       if (!mounted) return;
       setState(() {
         _error = "Stream dropped. Reconnecting...";
-        _isLoading = false;
+        isLoading = false;
       });
 
       debugPrint('Error $e');

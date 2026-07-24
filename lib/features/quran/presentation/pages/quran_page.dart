@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/features/quran/presentation/pages/search_surah_page.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/QURAN_PAGE/surah_listview.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/QURAN_PAGE/quick_last_read.dart';
@@ -62,14 +61,13 @@ class _QuranPageState extends ConsumerState<QuranPage> {
                 },
               ),
             ],
-            bottom: appBarBottomDivider(context),
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 8)),
 
           // --- Quran Goal Stats Portal ---
           const SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: EdgeInsets.symmetric(horizontal: 8.0),
               child: QuranReadingPlanCard(),
             ),
           ),

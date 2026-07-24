@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/features/bookmarks/presentation/pages/adhkar_bookmark_tab.dart';
 import 'package:rafeeq/features/bookmarks/presentation/pages/quran_bookmark_tab.dart';
 
@@ -20,10 +19,7 @@ class _BookmarkPageState extends ConsumerState<BookmarkPage> {
       length: 2,
       child: Scaffold(
         extendBody: true,
-        appBar: AppBar(
-          title: const Text('Bookmarks'),
-          bottom: appBarBottomDivider(context),
-        ),
+        appBar: AppBar(title: const Text('Bookmarks')),
         body: Column(
           children: [
             const SizedBox(height: 8),

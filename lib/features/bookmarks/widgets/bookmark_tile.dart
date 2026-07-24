@@ -50,14 +50,13 @@ class _BookmarkTileState extends ConsumerState<BookmarkTile> {
             .read(quranBookmarksProvider.notifier)
             .removeBookmark(quranBookmark!.id);
       }
-      
-      if (context.mounted) {
-        AppToast.showCompact(
-          context: context,
-          message: 'Bookmark removed',
-          duration: const Duration(seconds: 2),
-        );
-      }
+      if (!mounted) return;
+
+      AppToast.showCompact(
+        context: context,
+        message: 'Bookmark removed',
+        duration: const Duration(seconds: 2),
+      );
     } catch (e) {
       if (context.mounted) {
         AppToast.showCompact(

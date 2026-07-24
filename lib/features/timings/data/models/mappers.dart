@@ -12,8 +12,7 @@ extension AladhanTimingsModelMapper on AladhanTimingsModel {
   //Method that returns entity model
 
   SalahTimesEntity toEntity() {
- 
-   final sunriseDT = parseAladhanTime(raw: sunrise, date: date);
+    final sunriseDT = parseAladhanTime(raw: sunrise, date: date);
 
     return SalahTimesEntity(
       date: date,
@@ -29,7 +28,6 @@ extension AladhanTimingsModelMapper on AladhanTimingsModel {
         SalahPrayer.tahajjud: parseAladhanTime(raw: tahajjud, date: date),
       },
     );
-
   }
 }
 

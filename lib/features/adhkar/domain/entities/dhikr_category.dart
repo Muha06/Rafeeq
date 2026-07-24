@@ -5,7 +5,7 @@ class DhikrCategory {
   final int sortOrder;
   final DateTime createdAt;
   final DateTime updatedAt;
- 
+
   const DhikrCategory({
     required this.id,
     required this.title,
@@ -13,5 +13,5 @@ class DhikrCategory {
     required this.sortOrder,
     required this.createdAt,
     required this.updatedAt,
-   });
+  });
 }

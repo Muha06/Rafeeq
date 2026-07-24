@@ -20,7 +20,7 @@ class AllahNamesRemoteDataSourceImpl implements AllahNamesRemoteDataSource {
     if (body is! Map) return const [];
 
     final data = body['data']; //data
-    
+
     if (data is! List) return const [];
 
     return data

@@ -75,7 +75,7 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
     try {
       await ref
           .read(audioControllerProvider.notifier)
-          .togglePlay(context: context, currentId: id, url: url, title: title);
+          .togglePlay(currentId: id, url: url, title: title);
     } catch (e) {
       _showErrorDialog(
         'Failed to play audio. Please check your internet connection.',

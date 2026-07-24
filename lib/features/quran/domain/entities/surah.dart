@@ -15,5 +15,3 @@ class Surah {
     required this.isMeccan,
   });
 }
-
-

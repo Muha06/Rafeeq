@@ -274,8 +274,7 @@ class _BottomNavBar extends ConsumerWidget {
                       label: isPlaying ? 'Stop' : 'Play',
                       onTap: () async {
                         await audioCtrl.togglePlay(
-                          context: context,
-                          currentId: dhikr.id.toString(),
+                           currentId: dhikr.id.toString(),
                           url: dhikr.audioUrl!,
                           showAudioPlayer: true,
                           title: dhikr.transliteration ?? 'adhkar',

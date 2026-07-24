@@ -96,12 +96,6 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
             ),
             const SizedBox(height: 4),
 
-            //TODO: Add Translations
-            // _SurahSettingsSelectTile(
-            //   title: 'Translations',
-            //   value: '',
-            //   onTap: () {},
-            // ),
             const SizedBox(height: 4),
 
             //select reciter

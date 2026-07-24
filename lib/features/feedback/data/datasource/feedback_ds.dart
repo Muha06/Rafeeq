@@ -1,6 +1,6 @@
 import 'package:rafeeq/features/feedback/data/models/feedback_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
- 
+
 abstract class FeedbackRemoteDataSource {
   Future<void> submitFeedback(FeedbackItem feedback);
 }

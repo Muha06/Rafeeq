@@ -14,7 +14,6 @@ DateTime parseAladhanTime({required String raw, required DateTime date}) {
   return DateTime(date.year, date.month, date.day, hour, minute);
 }
 
-
 String formatTime(DateTime dateTime) {
   return DateFormat('h.mma').format(dateTime).toLowerCase();
 }

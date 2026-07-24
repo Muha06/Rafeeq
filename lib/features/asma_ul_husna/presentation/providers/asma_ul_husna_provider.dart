@@ -1,4 +1,4 @@
- import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:rafeeq/features/asma_ul_husna/data/datasources/asma_ul_husna_ds.dart';
 import 'package:rafeeq/features/asma_ul_husna/data/datasources/local_ds.dart';
@@ -40,6 +40,6 @@ final allahNamesRepositoryProvider = Provider<AllahNamesRepository>((ref) {
 final allahNamesProvider = FutureProvider.autoDispose<List<AllahName>>((
   ref,
 ) async {
-   final repo = ref.watch(allahNamesRepositoryProvider);
+  final repo = ref.watch(allahNamesRepositoryProvider);
   return repo.getAllahNames();
 });

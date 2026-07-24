@@ -8,7 +8,6 @@ final disabledSalahPrayersProvider =
       DisabledSalahPrayersNotifier.new,
     );
 
-
 const actualSalats = <SalahPrayer>{
   SalahPrayer.fajr,
   SalahPrayer.dhuhr,

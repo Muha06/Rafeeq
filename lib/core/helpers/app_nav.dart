@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
- 
+
 class AppNav {
   AppNav._(); // private constructor
 

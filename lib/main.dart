@@ -181,7 +181,9 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
     final isDark =
         WidgetsBinding.instance.platformDispatcher.platformBrightness ==
         Brightness.dark;
-    final navColor = isDark ? const Color(0xFF12100e) : const Color(0xffFAFAF6);
+    final navColor = isDark
+        ? AppDarkColors.surfaceHigh
+        : AppLightColors.surfaceHighest;
 
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(

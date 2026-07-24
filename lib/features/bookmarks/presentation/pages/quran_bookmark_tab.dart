@@ -14,7 +14,7 @@ class QuranBookmarksTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bookMarks = ref.watch(quranBookmarksProvider);
- 
+
     return bookMarks.isEmpty
         ? Center(
             child: AppStateView(

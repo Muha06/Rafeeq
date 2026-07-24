@@ -24,7 +24,7 @@ class BookmarkActionBottomSheet extends ConsumerWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _ActionTile( 
+            _ActionTile(
               icon: PhosphorIcons.trash,
               title: 'Delete',
               subtitle: 'This can’t be undone',

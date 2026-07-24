@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 /// Pushes a page with a smooth zoom-in transition
 void pushZoomPage(BuildContext context, Widget page) async {
   await Future.delayed(const Duration(milliseconds: 160));
+  if (!context.mounted) return;
 
   Navigator.of(context).push(
     PageRouteBuilder(
@@ -48,6 +49,8 @@ void pushZoomPage(BuildContext context, Widget page) async {
 
 void pushLeftPage(BuildContext context, Widget page) async {
   await Future.delayed(const Duration(milliseconds: 160));
+  if (!context.mounted) return;
+
 
   Navigator.of(context).push(
     PageRouteBuilder(
