@@ -4,7 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
+import 'package:rafeeq/core/features/audio/domain/entities/audio_item.dart';
+import 'package:rafeeq/core/features/audio/presentation/providers/audio_controller.dart';
 import 'package:rafeeq/core/helpers/app_haptics.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
@@ -273,12 +274,13 @@ class _BottomNavBar extends ConsumerWidget {
 
                       label: isPlaying ? 'Stop' : 'Play',
                       onTap: () async {
-                        await audioCtrl.togglePlay(
-                          currentId: dhikr.id.toString(),
-                          url: dhikr.audioUrl!,
-                          showAudioPlayer: true,
+                        final item = AudioItem(
+                          id: dhikr.id,
                           title: dhikr.transliteration ?? 'adhkar',
+                          url: dhikr.audioUrl!,
                         );
+                        
+                        await audioCtrl.togglePlay(item: item);
 
                         RafeeqAnalytics.logFeature('play_adhkar_audio');
                       },

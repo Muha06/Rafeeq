@@ -72,6 +72,8 @@ dependencies:
   sliding_up_panel2: ^3.3.0+1
   hugeicons_pro: ^0.0.3
   toastification: ^3.2.0
+  text_scroll: ^0.2.1
+  animated_gradient: ^0.0.3
 
 dev_dependencies:
   flutter_test:

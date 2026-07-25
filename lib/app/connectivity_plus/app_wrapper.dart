@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/app/connectivity_plus/conectivity_plus_provider.dart';
-import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
-import 'package:rafeeq/core/features/audio/widgets/global_mini_player.dart';
+import 'package:rafeeq/core/features/audio/presentation/providers/audio_controller.dart';
+import 'package:rafeeq/core/features/audio/presentation/widgets/global_mini_player.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 
 class AppWrapper extends ConsumerWidget {

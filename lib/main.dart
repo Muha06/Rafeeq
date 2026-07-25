@@ -36,7 +36,7 @@ import 'package:rafeeq/features/quran_goal/data/models/hive/quran_target_unit_hi
 import 'package:rafeeq/features/timings/data/models/hive/cached_salah_times_hive.dart';
 import 'package:rafeeq/firebase_options.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:rafeeq/core/features/audio/providers/audio_handler_provider.dart';
+import 'package:rafeeq/core/features/audio/presentation/providers/audio_handler_provider.dart';
 
 late AppAudioHandler audioHandler;
 
@@ -162,40 +162,10 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
       _bootstrap();
 
       SystemChrome.setEnabledSystemUIMode(
-        SystemUiMode.manual,
+        SystemUiMode.immersiveSticky,
         overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom],
       );
-
-      Future.microtask(() {
-        _updateSystemUI();
-      });
     });
-  }
-
-  @override
-  void didChangePlatformBrightness() {
-    _updateSystemUI();
-  }
-
-  void _updateSystemUI() {
-    final isDark =
-        WidgetsBinding.instance.platformDispatcher.platformBrightness ==
-        Brightness.dark;
-    final navColor = isDark
-        ? AppDarkColors.surfaceHigh
-        : AppLightColors.surfaceHighest;
-
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        systemNavigationBarColor: navColor,
-        systemNavigationBarIconBrightness: isDark
-            ? Brightness.light
-            : Brightness.dark,
-        statusBarColor: Colors.transparent,
-        statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
-        systemNavigationBarContrastEnforced: false,
-      ),
-    );
   }
 
   Future<void> _bootstrap() async {

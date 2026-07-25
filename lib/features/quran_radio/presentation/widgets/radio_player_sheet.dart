@@ -1,36 +1,55 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
-import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
-import 'package:rafeeq/core/features/audio/widgets/seek_bar.dart';
+import 'package:rafeeq/core/features/audio/domain/entities/audio_item.dart';
+import 'package:rafeeq/core/features/audio/presentation/providers/audio_controller.dart';
+import 'package:rafeeq/core/features/audio/presentation/widgets/seek_bar.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/widgets/app_cache_image.dart';
 import 'package:rafeeq/core/widgets/app_drag_handle.dart';
 import 'package:rafeeq/core/widgets/my_chip.dart';
 import 'package:rafeeq/features/quran_radio/domain/entities/radio_station.dart';
 import 'package:rafeeq/features/quran_radio/domain/enums/radio_audio_category.dart';
+import 'package:rafeeq/features/quran_radio/presentation/providers/selected_station_provider.dart';
 import 'package:rafeeq/features/quran_radio/presentation/widgets/category_fallback_image.dart';
 import 'package:palette_generator_master/palette_generator_master.dart';
+import 'package:text_scroll/text_scroll.dart';
 
 class RadioPlayerSheet extends ConsumerStatefulWidget {
-  const RadioPlayerSheet({super.key, required this.station});
+  const RadioPlayerSheet({
+    super.key,
+    required this.stations,
+    required this.initialIndex,
+  });
 
-  final RadioStation station;
+  final List<RadioStation> stations;
+  final int initialIndex;
 
   @override
   ConsumerState<RadioPlayerSheet> createState() => _RadioPlayerSheetState();
 }
 
 class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
-  RadioStation get station => widget.station;
+  late int _currentIndex;
+
+  RadioStation get station => widget.stations[_currentIndex];
+
   Color? _dominantColor;
 
   @override
   void initState() {
     super.initState();
+    _currentIndex = widget.initialIndex;
+
     _loadPalette();
-    _autoPlay();
+
+    // Delay autoplay until after the first frame
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _autoPlay();
+    });
   }
 
   Future<void> _loadPalette() async {
@@ -40,6 +59,7 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
       final palette = await PaletteGeneratorMaster.fromImageProvider(
         NetworkImage(station.imageUrl!),
         maximumColorCount: 12,
+        generateHarmony: true,
         colorSpace: ColorSpace.lab,
       );
 
@@ -57,30 +77,60 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
   Future<void> _autoPlay() async {
     final state = ref.read(audioControllerProvider);
     final currentId = station.id;
+    ref.read(currentStationProvider.notifier).state = station;
 
     if (state.currentId == currentId && state.isPlaying) {
       return; // already playing this station
     }
 
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _togglePlay();
-    });
-  }
-
-  Future<void> _togglePlay() async {
-    final id = station.id;
-    final title = station.name;
-    final url = station.streamUrl;
+    final playlist = widget.stations.map((station) {
+      return AudioItem(
+        id: station.id,
+        title: station.name,
+        imageUrl: station.imageUrl,
+        url: station.streamUrl,
+      );
+    }).toList();
 
     try {
       await ref
           .read(audioControllerProvider.notifier)
-          .togglePlay(currentId: id, url: url, title: title);
+          .loadPlaylist(items: playlist, initialIndex: _currentIndex);
+    } catch (e) {
+      debugPrint("Error playing playlist $e");
+    }
+  }
+
+  Future<void> _togglePlay() async {
+    try {
+      final items = widget.stations
+          .map(
+            (station) => AudioItem(
+              id: station.id,
+              title: station.name,
+              imageUrl: station.imageUrl,
+              url: station.streamUrl,
+            ),
+          )
+          .toList();
+
+      final state = ref.read(audioControllerProvider);
+
+      if (state.currentId == station.id) {
+        if (state.isPlaying) {
+          await ref.read(audioControllerProvider.notifier).pause();
+        } else {
+          await ref.read(audioControllerProvider.notifier).play();
+        }
+      } else {
+        await ref
+            .read(audioControllerProvider.notifier)
+            .loadPlaylist(items: items, initialIndex: _currentIndex);
+      }
     } catch (e) {
       _showErrorDialog(
         'Failed to play audio. Please check your internet connection.',
       );
-      debugPrint("Caught ERROR: $e");
     }
   }
 
@@ -104,14 +154,20 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
     final dominant = _dominantColor ?? cs.primary;
     final tint = Color.lerp(cs.surface, dominant, .18)!;
 
+    final station = widget.stations[_currentIndex];
+
+    final showPrevIcon = _currentIndex > 0;
+    final showNextIcon = _currentIndex < widget.stations.length - 1;
+
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 800),
-      curve: Curves.easeOutCubic,
-      height: MediaQuery.of(context).size.height * 1,
+      duration: const Duration(milliseconds: 200),
+      height: double.infinity,
       padding: const EdgeInsets.only(left: 16, right: 16, top: 24),
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
           colors: [tint, tint.withValues(alpha: .55), cs.surface],
         ),
       ),
@@ -124,34 +180,45 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
 
             // Image
             Center(
-              child: AppCachedImage(
-                imageUrl: station.imageUrl,
-                height: imageHeight,
-                width: imageWidth,
-                borderRadius: 48,
-                errorWidget: CategoryFallback(
-                  station: station,
-                  height: 300,
-                  showShadow: false,
-                  width: double.infinity,
+                  child: AppCachedImage(
+                    imageUrl: station.imageUrl,
+                    height: imageHeight,
+                    width: imageWidth,
+                    borderRadius: 48,
+                    errorWidget: CategoryFallback(
+                      station: station,
+                      height: 300,
+                      showShadow: false,
+                      width: double.infinity,
+                    ),
+                  ),
+                )
+                .animate(key: ValueKey(station.id))
+                .fade(duration: 600.ms)
+                .scale(
+                  begin: const Offset(1, 1),
+                  end: const Offset(.94, .94),
+                  curve: Curves.easeOutCubic,
+                  duration: 600.ms,
                 ),
-              ),
-            ),
-
-            const SizedBox(height: 32),
-
-            // Station name
-            Text(
-              station.name,
-              textAlign: TextAlign.center,
-              overflow: TextOverflow.visible,
-              style: tt.headlineSmall!.copyWith(
-                color: cs.onSurface,
-                fontFamily: 'PlayFairDisplay',
-              ),
-            ),
 
             const SizedBox(height: 16),
+
+            SizedBox(
+              width: double.infinity,
+              child: TextScroll(
+                station.name,
+                mode: TextScrollMode.bouncing,
+                velocity: const Velocity(pixelsPerSecond: Offset(48, 0)),
+                delayBefore: const Duration(milliseconds: 500),
+                pauseOnBounce: const Duration(milliseconds: 800),
+                pauseBetween: const Duration(milliseconds: 400),
+                textAlign: TextAlign.center,
+                style: tt.titleMedium?.copyWith(fontFamily: 'PlayFairDisplay'),
+              ),
+            ),
+
+            const SizedBox(height: 8),
 
             //Type of audio
             MyChip(
@@ -171,29 +238,68 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
               child: _RadioAudioSeekBar(), // your seekbar
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
 
-            // Play/pause
-            Consumer(
-              builder: (_, context, _) {
-                final state = ref.watch(audioControllerProvider);
-                final isBuffering = state.isBuffering;
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                IconButton(
+                  onPressed: showPrevIcon
+                      ? () => _goTo(_currentIndex - 1)
+                      : null,
+                  icon: Icon(
+                    HugeIconsSolid.previous,
+                    color: showPrevIcon ? cs.onSurface : cs.onSurfaceVariant,
+                  ),
+                ),
 
-                final isCurrent = state.currentId == station.id;
-                final isPlaying = isCurrent && state.isPlaying;
+                // Play/pause
+                Consumer(
+                  builder: (_, context, _) {
+                    final state = ref.watch(audioControllerProvider);
+                    final isBuffering = state.isBuffering;
 
-                return AnimatedPlayPauseBtn(
-                  onPressed: _togglePlay,
-                  size: 36,
-                  isPlaying: isPlaying,
-                  isBuffering: isBuffering,
-                );
-              },
+                    final isCurrent = state.currentId == station.id;
+                    final isPlaying = isCurrent && state.isPlaying;
+
+                    return AnimatedPlayPauseBtn(
+                      onPressed: _togglePlay,
+                      size: 36,
+                      isPlaying: isPlaying,
+                      isBuffering: isBuffering,
+                    );
+                  },
+                ),
+
+                IconButton(
+                  onPressed: showNextIcon
+                      ? () => _goTo(_currentIndex + 1)
+                      : null,
+                  icon: Icon(
+                    HugeIconsSolid.next,
+                    color: showNextIcon ? cs.onSurface : cs.onSurfaceVariant,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> _goTo(int newIndex) async {
+    if (newIndex < 0 || newIndex >= widget.stations.length) return;
+
+    setState(() {
+      _currentIndex = newIndex;
+    });
+
+    ref.read(currentStationProvider.notifier).state = widget.stations[newIndex];
+
+    await ref.read(audioControllerProvider.notifier).skipToIndex(newIndex);
+
+    await _loadPalette();
   }
 }
 

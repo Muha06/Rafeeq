@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
-import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
+import 'package:rafeeq/core/features/audio/domain/entities/audio_item.dart';
+import 'package:rafeeq/core/features/audio/presentation/providers/audio_controller.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/helpers/app_toast.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
@@ -159,15 +160,14 @@ class PlayFullSurahBtn extends ConsumerWidget {
         //show controls
         ref.read(showAudioControlsProvider.notifier).state = true;
 
-        await ref
-            .read(audioControllerProvider.notifier)
-            .togglePlay(
-              artist: reciter.name,
-              showAudioPlayer: false,
-              currentId: audioId,
-              url: surahTrack.url,
-              title: surahTrack.surahName,
-            );
+        final item = AudioItem(
+          id: audioId,
+          title: surahTrack.surahName,
+          artist: reciter.name,
+          url: surahTrack.url,
+        );
+
+        await ref.read(audioControllerProvider.notifier).togglePlay(item: item);
       } catch (e) {
         debugPrint("Error playng : $e");
         if (!context.mounted) return;

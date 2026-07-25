@@ -1,10 +1,12 @@
+import 'dart:async';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/features/audio/data/audio_handler.dart';
+import 'package:rafeeq/core/features/audio/domain/entities/audio_item.dart';
 import 'package:rafeeq/core/features/audio/domain/entities/audio_state.dart';
-import 'package:rafeeq/core/features/audio/providers/audio_handler_provider.dart';
-import 'package:rafeeq/core/helpers/audio_helpers.dart';
+import 'package:rafeeq/core/features/audio/presentation/providers/audio_handler_provider.dart';
 
 /// This is the single source of truth for audio UI state.
 ///
@@ -18,43 +20,80 @@ class AudioController extends Notifier<AudioState> {
   late final AppAudioHandler _handler;
   static const _notificationPrefix = 'Rafeeq - ';
 
+  late final StreamSubscription _playbackSub;
+  late final StreamSubscription _mediaSub;
+
   @override
   AudioState build() {
     _handler = ref.read(audioHandlerProvider);
     _listenToHandler();
+
+    ref.onDispose(() {
+      _playbackSub.cancel();
+      _mediaSub.cancel();
+    });
+
     return const AudioState();
   }
 
   /// Loads a new audio track and starts playback.
-  Future<void> loadAndPlay({
-    required String currentId,
-    required String url,
-    String? artist,
-    required String title,
-  }) async {
+  Future<void> loadAndPlay({required AudioItem item}) async {
+    final oldState = state;
     try {
+      // Update state
+
       state = state.copyWith(
-        currentId: currentId,
-        title: title,
+        currentId: item.id,
+        title: item.title,
         isBuffering: true,
       );
 
-      debugPrint('Loading audio: $currentId');
+      debugPrint('Loading audio: ${item.id}');
 
-      await _handler.load(
-        currentId: currentId,
-        title: title,
-        artist: artist,
-        url: AudioHelpers.secureUrl(url),
-      );
+      await _handler.load(item: item);
 
       await _handler.setSingleTrackLoop(state.isRepeatEnabled);
     } catch (e, st) {
       debugPrint('Audio load failed: $e');
       debugPrint('$st');
-      state = state.copyWith(isBuffering: false);
+      state = oldState;
       rethrow;
     }
+  }
+
+  Future<void> loadPlaylist({
+    required List<AudioItem> items,
+    required int initialIndex,
+  }) async {
+    final oldState = state;
+    try {
+      final current = items[initialIndex];
+
+      state = state.copyWith(
+        currentId: current.id,
+        title: current.title,
+        isBuffering: true,
+      );
+
+      await _handler.loadPlaylist(items: items, initialIndex: initialIndex);
+
+      await _handler.setSingleTrackLoop(state.isRepeatEnabled);
+    } catch (e) {
+      state = oldState;
+      rethrow;
+    }
+  }
+
+  Future<void> next() async {
+    await _handler.skipToNext();
+  }
+
+  Future<void> previous() async {
+    await _handler.skipToPrevious();
+  }
+
+  Future<void> skipToIndex(int index) async {
+    await _handler.skipToQueueItem(index);
   }
 
   Future<void> play() async {
@@ -107,7 +146,8 @@ class AudioController extends Notifier<AudioState> {
   }
 
   void _listenToHandler() {
-    _handler.playbackState.listen(
+    // Listen to handler
+    _playbackSub = _handler.playbackState.listen(
       (playbackState) {
         final isPlaying = playbackState.playing;
         final isBuffering =
@@ -128,12 +168,14 @@ class AudioController extends Notifier<AudioState> {
     );
 
     // Listen to media item updates (e.g. title, duration)
-    _handler.mediaItem.listen((item) {
+    _mediaSub = _handler.mediaItem.listen((item) {
       if (item == null) return;
 
       //update title and duration
       //when media item changes (e.g. new track loaded)
+      // Ensure `currentId` is kept in-sync with the handler's media item
       state = state.copyWith(
+        currentId: item.id,
         title: _stripNotificationPrefix(item.title),
         duration: item.duration ?? Duration.zero,
       );
@@ -151,28 +193,16 @@ class AudioController extends Notifier<AudioState> {
   /// Smart play/pause handler:
   /// - New track -> load & play
   /// - Same track -> toggle play/pause
-  Future<void> togglePlay({
-     bool showAudioPlayer = true,
-    required String currentId,
-    String? artist,
-    required String url,
-    required String title,
-  }) async {
+  Future<void> togglePlay({required AudioItem item}) async {
     try {
-      debugPrint('togglePlay called: $currentId, $url');
+      debugPrint('togglePlay called: ${item.id}, ${item.url}');
 
-      final isNewTrack =
-          state.currentId == null || state.currentId != currentId;
+      final isNewTrack = state.currentId == null || state.currentId != item.id;
 
       if (isNewTrack) {
-        debugPrint('Switching to new track: $currentId');
+        debugPrint('Switching to new track: ${item.id}');
 
-        await loadAndPlay(
-          currentId: currentId,
-          artist: artist,
-          url: url,
-          title: title,
-        );
+        await loadAndPlay(item: item);
 
         return;
       }

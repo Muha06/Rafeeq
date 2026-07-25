@@ -9,34 +9,37 @@ import 'package:rafeeq/features/quran_radio/presentation/widgets/category_fallba
 import 'package:rafeeq/features/quran_radio/presentation/widgets/radio_player_sheet.dart';
 import '../../domain/entities/radio_station.dart';
 
-class RadioCard extends ConsumerStatefulWidget {
-  final RadioStation station;
+class RadioCard extends ConsumerWidget {
+  const RadioCard({
+    super.key,
+    required this.stations,
+    required this.initialIndex,
+  });
 
-  const RadioCard({super.key, required this.station});
+  final List<RadioStation> stations;
+  final int initialIndex;
 
   @override
-  ConsumerState<RadioCard> createState() => _RadioCardState();
-}
-
-class _RadioCardState extends ConsumerState<RadioCard> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
-    final selected = ref.watch(currentStationProvider);
-    final isSelected = selected == widget.station;
+
+    final station = stations[initialIndex];
+
+    final isSelected = ref.watch(currentStationProvider)?.id == station.id;
 
     return InkWell(
       borderRadius: BorderRadius.circular(16),
       onTap: () async {
-        await AppSheets.showBottomSheet(
+        AppSheets.showBottomSheet(
           context: context,
           useSafeArea: false,
           isScrollControlled: true,
-          child: RadioPlayerSheet(station: widget.station),
+          child: RadioPlayerSheet(
+            stations: stations,
+            initialIndex: initialIndex,
+          ),
         );
-
-        ref.read(currentStationProvider.notifier).state = widget.station;
       },
       child: Container(
         width: double.infinity,
@@ -52,14 +55,14 @@ class _RadioCardState extends ConsumerState<RadioCard> {
             SizedBox(
               height: 100,
               width: 100,
-              child: widget.station.imageUrl != null
+              child: station.imageUrl != null
                   ? AppCachedImage(
-                      imageUrl: widget.station.imageUrl,
+                      imageUrl: station.imageUrl,
                       shape: AppImageShape.circle,
                       fit: BoxFit.cover,
                     )
                   : CategoryFallback(
-                      station: widget.station,
+                      station: station,
                       height: 80,
                       width: 80,
                       isSheet: false,
@@ -71,7 +74,7 @@ class _RadioCardState extends ConsumerState<RadioCard> {
 
             // TEXT SECTION
             Text(
-              widget.station.name,
+              station.name,
               textAlign: TextAlign.center,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
@@ -83,7 +86,7 @@ class _RadioCardState extends ConsumerState<RadioCard> {
             // TAG
             MyChip(
               child: Text(
-                widget.station.category.label,
+                station.category.label,
                 style: theme.textTheme.labelSmall!.copyWith(
                   color: theme.colorScheme.onSurface,
                 ),

@@ -33,6 +33,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.0"
+  animated_gradient:
+    dependency: "direct main"
+    description:
+      name: animated_gradient
+      sha256: "472473a6f3b9e54979169b24bff53394e49bcad5552d79db8e2cca60f6fd086f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.3"
   ansicolor:
     dependency: transitive
     description:
@@ -1725,6 +1733,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.11"
+  text_scroll:
+    dependency: "direct main"
+    description:
+      name: text_scroll
+      sha256: "164b49e6134fca874989213d4e7ba225e2c3f9e30d9e32f14d543b2fc55716a0"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.1"
   timezone:
     dependency: "direct main"
     description:

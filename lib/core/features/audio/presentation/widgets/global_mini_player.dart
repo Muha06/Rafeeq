@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/app_keys.dart';
-import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
+import 'package:rafeeq/core/features/audio/presentation/providers/audio_controller.dart';
 
 class GLobalMiniPlayerSheet extends ConsumerWidget {
   const GLobalMiniPlayerSheet({super.key});

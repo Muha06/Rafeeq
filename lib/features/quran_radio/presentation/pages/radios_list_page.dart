@@ -78,7 +78,7 @@ class _RadioListPageState extends ConsumerState<RadioListPage> {
                                 ),
                             itemCount: stations.length,
                             itemBuilder: (_, i) =>
-                                RadioCard(station: stations[i]),
+                                RadioCard(stations: stations, initialIndex: i),
                           ),
                         ),
               },
