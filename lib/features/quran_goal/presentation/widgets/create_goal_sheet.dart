@@ -11,14 +11,11 @@ import 'package:flutter/services.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
 
 void openCreateGoalSheet(BuildContext context, WidgetRef ref) {
-  showModalBottomSheet(
+  AppSheets.showBottomSheet(
     context: context,
     isScrollControlled: true,
     useSafeArea: true,
-    showDragHandle: false,
-    builder: (context) {
-      return const CreateGoalSheet();
-    },
+    child: const CreateGoalSheet(),
   );
 }
 
@@ -129,7 +126,7 @@ class _CreateGoalSheetState extends ConsumerState<CreateGoalSheet> {
         12,
         8,
         12,
-        MediaQuery.of(context).viewInsets.bottom + 24,
+        MediaQuery.of(context).viewInsets.bottom,
       ),
       child: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,

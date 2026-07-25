@@ -43,15 +43,17 @@ class _HomePageState extends ConsumerState<HomePage> {
           SliverAppBar(
             leading: const UserLocationChip(),
             leadingWidth: 120,
-            toolbarHeight: kToolbarHeight + 16,
             actions: [
               const _NotificationIcon(iconSize: _appBarIconSize),
               const _SettingsIcon(iconSize: _appBarIconSize),
             ],
             bottom: reminders.isNotEmpty
                 ? const PreferredSize(
-                    preferredSize: Size.fromHeight(60),
-                    child: HomeRemindersCarousel(),
+                    preferredSize: Size.fromHeight(74),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 8.0),
+                      child: HomeRemindersCarousel(),
+                    ),
                   )
                 : null,
           ),

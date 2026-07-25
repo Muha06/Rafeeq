@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/features/audio/providers/audio_controller.dart';
+import 'package:rafeeq/core/helpers/app_haptics.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/core/themes/app_text_style.dart';
@@ -92,12 +93,17 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
                         duration: duration,
                         curve: Curves.fastOutSlowIn,
                       );
+                      if (currentIndex > 0) AppHaptics.selection();
                     } else if (dx > screenWidth - edgeWidth) {
                       // Right edge tapped
                       _controller.nextPage(
                         duration: duration,
                         curve: Curves.fastOutSlowIn,
                       );
+
+                      if (currentIndex < widget.adhkars.length - 1) {
+                        AppHaptics.selection();
+                      }
                     }
                   },
                   child: Stack(
@@ -139,24 +145,18 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
                 _dhikrCount++;
               });
 
-              debugPrint("Count: $_dhikrCount");
-              debugPrint('repeat: ${dhikr.repeat}');
-
               final isCompleting = _dhikrCount >= dhikr.repeat;
 
               if (isCompleting) {
                 await Vibration.vibrate(duration: 300, amplitude: 255);
               } else {
-                await Vibration.vibrate(
-                  duration: 20,
-                  // amplitude: 300,
-                ); // soft normal tap
+                await Vibration.vibrate(duration: 20);
               }
             },
           ),
           floatingWidgetHeight: 64,
           floatingWidgetWidth: 64,
-          dy: screenHeight - 170,
+          dy: screenHeight - 200,
           dx: screenWidth - 100,
         );
       },
@@ -274,7 +274,7 @@ class _BottomNavBar extends ConsumerWidget {
                       label: isPlaying ? 'Stop' : 'Play',
                       onTap: () async {
                         await audioCtrl.togglePlay(
-                           currentId: dhikr.id.toString(),
+                          currentId: dhikr.id.toString(),
                           url: dhikr.audioUrl!,
                           showAudioPlayer: true,
                           title: dhikr.transliteration ?? 'adhkar',
