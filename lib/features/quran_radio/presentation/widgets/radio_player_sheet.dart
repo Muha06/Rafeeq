@@ -5,14 +5,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/features/audio/domain/entities/audio_item.dart';
+import 'package:rafeeq/core/features/audio/domain/entities/audio_source_type.dart';
 import 'package:rafeeq/core/features/audio/presentation/providers/audio_controller.dart';
 import 'package:rafeeq/core/features/audio/presentation/widgets/seek_bar.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/widgets/app_cache_image.dart';
 import 'package:rafeeq/core/widgets/app_drag_handle.dart';
 import 'package:rafeeq/core/widgets/my_chip.dart';
+import 'package:rafeeq/features/quran_radio/domain/entities/radio_context.dart';
 import 'package:rafeeq/features/quran_radio/domain/entities/radio_station.dart';
 import 'package:rafeeq/features/quran_radio/domain/enums/radio_audio_category.dart';
+import 'package:rafeeq/features/quran_radio/presentation/providers/radio_context_provider.dart';
 import 'package:rafeeq/features/quran_radio/presentation/providers/selected_station_provider.dart';
 import 'package:rafeeq/features/quran_radio/presentation/widgets/category_fallback_image.dart';
 import 'package:palette_generator_master/palette_generator_master.dart';
@@ -86,8 +89,10 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
     final playlist = widget.stations.map((station) {
       return AudioItem(
         id: station.id,
-        title: station.name,
+        title: 'Quran Radio',
+        artist: station.name,
         imageUrl: station.imageUrl,
+        sourceType: AudioSourceType.quranRadio,
         url: station.streamUrl,
       );
     }).toList();
@@ -96,6 +101,13 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
       await ref
           .read(audioControllerProvider.notifier)
           .loadPlaylist(items: playlist, initialIndex: _currentIndex);
+
+      ref
+          .read(radioPlaybackSessionProvider.notifier)
+          .state = RadioPlaybackSession(
+        stations: widget.stations,
+        currentIndex: _currentIndex,
+      );
     } catch (e) {
       debugPrint("Error playing playlist $e");
     }
@@ -107,7 +119,9 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
           .map(
             (station) => AudioItem(
               id: station.id,
-              title: station.name,
+              title: 'Quran Radio',
+              artist: station.name,
+              sourceType: AudioSourceType.quranRadio,
               imageUrl: station.imageUrl,
               url: station.streamUrl,
             ),
@@ -127,6 +141,13 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
             .read(audioControllerProvider.notifier)
             .loadPlaylist(items: items, initialIndex: _currentIndex);
       }
+
+      ref
+          .read(radioPlaybackSessionProvider.notifier)
+          .state = RadioPlaybackSession(
+        stations: widget.stations,
+        currentIndex: _currentIndex,
+      );
     } catch (e) {
       _showErrorDialog(
         'Failed to play audio. Please check your internet connection.',
@@ -207,12 +228,9 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
             SizedBox(
               width: double.infinity,
               child: TextScroll(
-                station.name,
-                mode: TextScrollMode.bouncing,
-                velocity: const Velocity(pixelsPerSecond: Offset(48, 0)),
-                delayBefore: const Duration(milliseconds: 500),
-                pauseOnBounce: const Duration(milliseconds: 800),
-                pauseBetween: const Duration(milliseconds: 400),
+                "${station.name} ",
+                mode: TextScrollMode.endless,
+                velocity: const Velocity(pixelsPerSecond: Offset(20, 0)),
                 textAlign: TextAlign.center,
                 style: tt.titleMedium?.copyWith(fontFamily: 'PlayFairDisplay'),
               ),
@@ -296,6 +314,9 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
     });
 
     ref.read(currentStationProvider.notifier).state = widget.stations[newIndex];
+
+    ref.read(radioPlaybackSessionProvider.notifier).state =
+        RadioPlaybackSession(stations: widget.stations, currentIndex: newIndex);
 
     await ref.read(audioControllerProvider.notifier).skipToIndex(newIndex);
 

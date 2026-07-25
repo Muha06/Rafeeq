@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/app/connectivity_plus/conectivity_plus_provider.dart';
-import 'package:rafeeq/core/features/audio/presentation/providers/audio_controller.dart';
-import 'package:rafeeq/core/features/audio/presentation/widgets/global_mini_player.dart';
-import 'package:rafeeq/core/helpers/snackbars.dart';
+import 'package:rafeeq/core/helpers/app_toast.dart';
 
 class AppWrapper extends ConsumerWidget {
   final Widget child;
@@ -15,14 +13,14 @@ class AppWrapper extends ConsumerWidget {
     ref.listen<bool>(connectivityProvider, (previous, next) {
       if (previous == true && next == false) {
         // Went offline
-        AppSnackBar.showSimple(
+        AppToast.showCompact(
           context: context,
           message: 'You are offline',
           duration: const Duration(seconds: 7),
         );
       } else if (previous == false && next == true) {
         // Back online
-        AppSnackBar.showSimple(
+        AppToast.showCompact(
           context: context,
           message: 'Back online 🎉',
           duration: const Duration(seconds: 7),
@@ -30,23 +28,6 @@ class AppWrapper extends ConsumerWidget {
       }
     });
 
-    final s = ref.watch(audioControllerProvider);
-    final miniPlayer = AnimatedSwitcher(
-      duration: const Duration(milliseconds: 250),
-      child: (s.currentId != null && s.currentId!.isNotEmpty)
-          ? const GLobalMiniPlayerSheet()
-          : const SizedBox.shrink(),
-    );
-
-    return Scaffold(
-      body: Stack(
-        children: [
-          child,
-
-          //Mini player
-          Positioned(left: 0, right: 0, bottom: 72, child: miniPlayer),
-        ],
-      ),
-    );
+    return Scaffold(body: Stack(children: [child]));
   }
 }

@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:rafeeq/core/features/audio/domain/entities/audio_source_type.dart';
 
 /// Represents the current state of the global audio player.
 ///
@@ -13,6 +14,15 @@ class AudioState extends Equatable {
 
   /// Title of current audio (e.g. Surah name)
   final String? title;
+
+  /// Artist of current audio (e.g. Surah name)
+  final String? artist;
+
+  /// Imarge of current audio (e.g. Muhammad Sheba)
+  final String? imageUrl;
+
+  /// audio source type of current audio (e.g. Quran radio)
+  final AudioSourceType sourceType;
 
   /// Current playback position
   final Duration position;
@@ -41,6 +51,9 @@ class AudioState extends Equatable {
     this.isPlaying = false,
     this.isBuffering = false,
     this.isRepeatEnabled = false,
+    this.artist,
+    this.imageUrl,
+    this.sourceType = AudioSourceType.other,
   });
 
   /// Progress from 0.0 → 1.0
@@ -61,16 +74,22 @@ class AudioState extends Equatable {
   AudioState copyWith({
     String? currentId,
     String? title,
+    String? artist,
+    String? imageUrl,
     Duration? position,
     Duration? duration,
     bool? isPlaying,
     bool? isBuffering,
     Duration? bufferedPosition,
     bool? isRepeatEnabled,
+    AudioSourceType? sourceType,
   }) {
     return AudioState(
       currentId: currentId ?? this.currentId,
       title: title ?? this.title,
+      artist: artist ?? this.artist,
+      imageUrl: imageUrl ?? this.imageUrl,
+      sourceType: sourceType ?? this.sourceType,
       position: position ?? this.position,
       duration: duration ?? this.duration,
       isPlaying: isPlaying ?? this.isPlaying,
@@ -84,6 +103,9 @@ class AudioState extends Equatable {
   List<Object?> get props => [
     currentId,
     title,
+    artist,
+    imageUrl,
+    sourceType,
     position,
     duration,
     isPlaying,

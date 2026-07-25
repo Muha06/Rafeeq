@@ -38,7 +38,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     return Scaffold(
       extendBody: true,
       body: CustomScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
           SliverAppBar(
             leading: const UserLocationChip(),
@@ -80,13 +79,17 @@ class _HomePageState extends ConsumerState<HomePage> {
 
           // HARAMAIN CARD
           const SliverToBoxAdapter(
-            child: HomeSection(
-              padding: EdgeInsets.symmetric(horizontal: _hPad, vertical: _v10),
-              child: LiveHubCard(),
+            child: SafeArea(
+              top: false,
+              child: HomeSection(
+                padding: EdgeInsets.symmetric(
+                  horizontal: _hPad,
+                  vertical: _v10,
+                ),
+                child: LiveHubCard(),
+              ),
             ),
           ),
-
-          const SliverToBoxAdapter(child: SizedBox(height: 70)),
         ],
       ),
     );

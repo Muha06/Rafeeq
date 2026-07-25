@@ -83,6 +83,7 @@ class AppAudioHandler extends BaseAudioHandler with SeekHandler {
           id: item.id,
           title: 'Rafeeq - ${item.title}',
           artist: item.artist,
+          artUri: item.imageUrl != null ? Uri.tryParse(item.imageUrl!) : null,
           duration: duration,
           playable: true,
         ),

@@ -1,9 +1,12 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
+import 'package:rafeeq/core/features/audio/presentation/providers/audio_controller.dart';
+import 'package:rafeeq/core/features/audio/presentation/widgets/global_mini_player.dart';
 
-class MyBottomBar extends StatelessWidget {
+class MyBottomBar extends ConsumerWidget {
   final ValueChanged<int> onTap;
   final int currentIndex;
 
@@ -14,7 +17,7 @@ class MyBottomBar extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
@@ -43,61 +46,77 @@ class MyBottomBar extends StatelessWidget {
     final isDark = Theme.brightnessOf(context) == Brightness.dark;
 
     final itemColor = isDark ? Colors.white70 : Colors.black87;
+    final s = ref.watch(audioControllerProvider);
+    final miniPlayer = AnimatedSwitcher(
+      duration: const Duration(milliseconds: 250),
+      child: (s.currentId != null && s.currentId!.isNotEmpty)
+          ? const GLobalMiniPlayerSheet()
+          : const SizedBox.shrink(),
+    );
 
     return SafeArea(
-      top: false,
+      top: true,
       bottom: false,
-      child: ClipRect(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-          child: Container(
-            height: 64,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            decoration: BoxDecoration(color: cs.surface.withAlpha(140)),
-            child: Row(
-              children: List.generate(items.length, (index) {
-                final item = items[index];
-                final isSelected = currentIndex == index;
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          miniPlayer,
 
-                return Expanded(
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: () => onTap(index),
-                      highlightColor: Colors.transparent,
-                      splashColor: Colors.transparent,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 350),
-                            child: Icon(
-                              isSelected ? item.active : item.icon,
-                              key: ValueKey(isSelected), // simpler
-                              color: isSelected ? cs.primary : itemColor,
-                              size: 24,
-                            ),
+          const SizedBox(height: 8),
+
+          ClipRect(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+              child: Container(
+                height: 64,
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                decoration: BoxDecoration(color: cs.surface.withAlpha(140)),
+                child: Row(
+                  children: List.generate(items.length, (index) {
+                    final item = items[index];
+                    final isSelected = currentIndex == index;
+
+                    return Expanded(
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: () => onTap(index),
+                          highlightColor: Colors.transparent,
+                          splashColor: Colors.transparent,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              AnimatedSwitcher(
+                                duration: const Duration(milliseconds: 350),
+                                child: Icon(
+                                  isSelected ? item.active : item.icon,
+                                  key: ValueKey(isSelected), // simpler
+                                  color: isSelected ? cs.primary : itemColor,
+                                  size: 24,
+                                ),
+                              ),
+
+                              const SizedBox(height: 4),
+
+                              Text(
+                                item.label,
+                                style: theme.textTheme.labelSmall?.copyWith(
+                                  fontSize: 12,
+                                  height: 1,
+                                  color: isSelected ? cs.primary : itemColor,
+                                ),
+                              ),
+                            ],
                           ),
-
-                          const SizedBox(height: 4),
-
-                          Text(
-                            item.label,
-                            style: theme.textTheme.labelSmall?.copyWith(
-                              fontSize: 12,
-                              height: 1,
-                              color: isSelected ? cs.primary : itemColor,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                );
-              }),
+                    );
+                  }),
+                ),
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

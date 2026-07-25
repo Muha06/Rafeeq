@@ -45,6 +45,9 @@ class AudioController extends Notifier<AudioState> {
       state = state.copyWith(
         currentId: item.id,
         title: item.title,
+        artist: item.artist,
+        sourceType: item.sourceType,
+        imageUrl: item.imageUrl,
         isBuffering: true,
       );
 
@@ -72,6 +75,9 @@ class AudioController extends Notifier<AudioState> {
       state = state.copyWith(
         currentId: current.id,
         title: current.title,
+        imageUrl: current.imageUrl,
+        sourceType: current.sourceType,
+        artist: current.artist,
         isBuffering: true,
       );
 
@@ -171,12 +177,12 @@ class AudioController extends Notifier<AudioState> {
     _mediaSub = _handler.mediaItem.listen((item) {
       if (item == null) return;
 
-      //update title and duration
-      //when media item changes (e.g. new track loaded)
-      // Ensure `currentId` is kept in-sync with the handler's media item
+      // Update track metadata when media item changes (e.g. new track loaded).
       state = state.copyWith(
         currentId: item.id,
         title: _stripNotificationPrefix(item.title),
+        artist: item.artist,
+        imageUrl: item.artUri?.toString(),
         duration: item.duration ?? Duration.zero,
       );
     });

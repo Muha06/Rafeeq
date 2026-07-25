@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/features/audio/domain/entities/audio_item.dart';
+import 'package:rafeeq/core/features/audio/domain/entities/audio_source_type.dart';
 import 'package:rafeeq/core/features/audio/presentation/providers/audio_controller.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/helpers/app_toast.dart';
@@ -163,6 +164,8 @@ class PlayFullSurahBtn extends ConsumerWidget {
         final item = AudioItem(
           id: audioId,
           title: surahTrack.surahName,
+          sourceType: AudioSourceType.quranSurah,
+          imageUrl: null,
           artist: reciter.name,
           url: surahTrack.url,
         );
