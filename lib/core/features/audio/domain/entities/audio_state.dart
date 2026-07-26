@@ -18,7 +18,7 @@ class AudioState extends Equatable {
   /// Artist of current audio (e.g. Surah name)
   final String? artist;
 
-  /// Imarge of current audio (e.g. Muhammad Sheba)
+  /// Imarge of current audio
   final String? imageUrl;
 
   /// audio source type of current audio (e.g. Quran radio)
@@ -56,6 +56,8 @@ class AudioState extends Equatable {
     this.sourceType = AudioSourceType.other,
   });
 
+  static const _unset = Object();
+
   /// Progress from 0.0 → 1.0
   /// Used for progress bar UI
   double get progress {
@@ -74,8 +76,8 @@ class AudioState extends Equatable {
   AudioState copyWith({
     String? currentId,
     String? title,
-    String? artist,
-    String? imageUrl,
+    Object? artist = _unset,
+    Object? imageUrl = _unset,
     Duration? position,
     Duration? duration,
     bool? isPlaying,
@@ -87,15 +89,17 @@ class AudioState extends Equatable {
     return AudioState(
       currentId: currentId ?? this.currentId,
       title: title ?? this.title,
-      artist: artist ?? this.artist,
-      imageUrl: imageUrl ?? this.imageUrl,
-      sourceType: sourceType ?? this.sourceType,
+      artist: identical(artist, _unset) ? this.artist : artist as String?,
+      imageUrl: identical(imageUrl, _unset)
+          ? this.imageUrl
+          : imageUrl as String?,
       position: position ?? this.position,
       duration: duration ?? this.duration,
       isPlaying: isPlaying ?? this.isPlaying,
       isBuffering: isBuffering ?? this.isBuffering,
       bufferedPosition: bufferedPosition ?? this.bufferedPosition,
       isRepeatEnabled: isRepeatEnabled ?? this.isRepeatEnabled,
+      sourceType: sourceType ?? this.sourceType,
     );
   }
 

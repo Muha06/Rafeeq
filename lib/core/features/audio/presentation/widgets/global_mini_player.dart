@@ -30,14 +30,13 @@ class GLobalMiniPlayerSheet extends ConsumerWidget {
         : audioState.position.inMilliseconds /
               audioState.duration.inMilliseconds;
     final session = ref.watch(radioPlaybackSessionProvider);
-    debugPrint("Imageurl: ${audioState.imageUrl}");
-    
+    debugPrint("Mini player has Image: ${audioState.imageUrl != null}");
+
     return SafeArea(
       top: false,
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {
-          debugPrint("Hello");
           switch (audioState.sourceType) {
             case AudioSourceType.quranRadio:
               if (session == null) return;

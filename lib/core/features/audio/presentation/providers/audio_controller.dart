@@ -201,12 +201,16 @@ class AudioController extends Notifier<AudioState> {
   /// - Same track -> toggle play/pause
   Future<void> togglePlay({required AudioItem item}) async {
     try {
-      debugPrint('togglePlay called: ${item.id}, ${item.url}');
+      debugPrint(
+        'togglePlay called: ${item.id}, ${item.url}, image: ${item.imageUrl}',
+      );
 
       final isNewTrack = state.currentId == null || state.currentId != item.id;
 
       if (isNewTrack) {
-        debugPrint('Switching to new track: ${item.id}');
+        debugPrint(
+          'Switching to new track: ${item.id} has image: ${item.imageUrl != null}',
+        );
 
         await loadAndPlay(item: item);
 
