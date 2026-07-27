@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/salat_times.dart';
@@ -34,8 +35,8 @@ class _ErrorCard extends ConsumerWidget {
         const Text('Oops! Failed to fetch prayer times'),
         const Spacer(),
         IconButton(
-          onPressed: () => ref.refresh(salahStatusProvider),
-          icon: const Icon(Icons.refresh),
+          onPressed: () => ref.invalidate(salahStatusProvider),
+          icon: const Icon(HugeIconsSolid.refresh),
         ),
       ],
     );

@@ -20,6 +20,7 @@ import 'package:rafeeq/features/quran/presentation/riverpod/last_read_provider.d
 import 'package:rafeeq/features/quran/presentation/riverpod/show_audio_controls_bar_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/ayah_tile.dart';
+import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/play_surah_btn.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/quran_audio_controls_bar.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_ayah_dialog.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_details.dart';
@@ -33,10 +34,14 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
 
 class FullSurahPage extends ConsumerStatefulWidget {
-  final Surah surah;
+  final int initialIndex;
   final int? autoScrollAyah;
 
-  const FullSurahPage({super.key, required this.surah, this.autoScrollAyah});
+  const FullSurahPage({
+    super.key,
+    required this.initialIndex,
+    this.autoScrollAyah,
+  });
 
   @override
   ConsumerState<FullSurahPage> createState() => _FullSurahPageState();
@@ -63,6 +68,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
   bool _autoOn = false; //whether ticker is running or paused
 
   bool _autoTickBusy = false;
+  List<Surah> get surahs => ref.read(surahsProvider).value ?? [];
 
   @override
   void initState() {
@@ -79,7 +85,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
   }
 
   Surah get surah {
-    return widget.surah;
+    return surahs[widget.initialIndex];
   }
 
   bool _isAtEnd() {
@@ -297,7 +303,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
 
   @override
   Widget build(BuildContext context) {
-    final surahId = widget.surah.id;
+    final surahId = surah.id;
 
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
@@ -305,7 +311,6 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
 
     final ayahsAsync = ref.watch(ayahsProvider(surahId));
 
-    final showAudioControls = ref.watch(showAudioControlsProvider);
     final showSpeedControls = ref
         .watch(surahSettingsProvider)
         .autoScrollEnabled;
@@ -322,6 +327,8 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
         ref.read(showAudioControlsProvider.notifier).state = true;
       }
     });
+
+    debugPrint("Initial index: ${widget.initialIndex}");
 
     return PopScope(
       onPopInvokedWithResult: (didPop, result) async {
@@ -344,18 +351,25 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
         bottom: true,
         top: false,
         child: Scaffold(
-          bottomNavigationBar: (showAudioControls || showSpeedControls)
-              ? QuranAudioControlsBar(
-                  currentId: surahId.toString(),
-                  onStart: _startAutoScroll,
-                  onPause: _pauseAutoScroll,
-                  autoOn: _autoOn,
-                  onExit: _exitAutoScroll,
-                  showAudioControls: showAudioControls,
-                  showSpeedControls: showSpeedControls,
-                )
-              : null,
-
+          // bottomNavigationBar:
+          //     (showSpeedControls || ref.watch(showAudioControlsProvider))
+          //     ? QuranAudioControlsBar(
+          //         currentId: surahId.toString(),
+          //         onStart: _startAutoScroll,
+          //         onPause: _pauseAutoScroll,
+          //         autoOn: _autoOn,
+          //         onExit: _exitAutoScroll,
+          //         showSpeedControls: showSpeedControls,
+          //       )
+          //     : null,
+          bottomNavigationBar: QuranAudioControlsBar(
+            currentId: surahId.toString(),
+            onStart: _startAutoScroll,
+            onPause: _pauseAutoScroll,
+            autoOn: _autoOn,
+            onExit: _exitAutoScroll,
+            showSpeedControls: showSpeedControls,
+          ),
           appBar: AppBar(
             backgroundColor: theme.scaffoldBackgroundColor,
             title: AppbarSurahPicker(jumpToAyah: jumpToAyah, surah: surah),
@@ -442,7 +456,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
                         SurahDetails(surah: surah),
                         const SizedBox(height: 8),
 
-                        PlayFullSurahBtn(surah: surah),
+                        PlayFullSurahBtn(initialIndex: widget.initialIndex),
                         const SizedBox(height: 8),
                       ],
                     );
@@ -500,13 +514,13 @@ class AppbarSurahPicker extends ConsumerWidget {
                     return;
                   }
 
-                  final newSurah = surahs.firstWhere((s) => s.id == surahId);
+                  debugPrint("Pushing page to surah index: $surahId");
 
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                       builder: (_) => FullSurahPage(
-                        surah: newSurah,
-                        autoScrollAyah: ayahNumber, // ✅ scroll after load
+                        initialIndex: surahId - 1,
+                        autoScrollAyah: ayahNumber,  
                       ),
                     ),
                   );

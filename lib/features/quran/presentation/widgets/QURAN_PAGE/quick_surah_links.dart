@@ -57,7 +57,12 @@ class SurahLink extends ConsumerWidget {
 
     return GestureDetector(
       onTap: () {
-        AppNav.push(context, FullSurahPage(surah: surah));
+        final surahs = ref.read(surahsProvider).value ?? [];
+        final s = surahs.firstWhere((s) => s.id == surah.id);
+
+        final index = surahs.indexOf(s);
+
+        AppNav.push(context, FullSurahPage(initialIndex: index));
       },
       child: Container(
         decoration: BoxDecoration(

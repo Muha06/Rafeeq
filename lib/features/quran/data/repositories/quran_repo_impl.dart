@@ -5,25 +5,22 @@ import 'package:rafeeq/features/quran/domain/entities/surah_info.dart';
 import 'package:rafeeq/features/quran/domain/repository/quran_repo.dart';
 
 class QuranRepoImpl implements QuranRepository {
-  final Future<QuranLocalDataSource> localDs;
+  final QuranLocalDataSource localDs;
 
   QuranRepoImpl({required this.localDs});
 
   @override
   Future<SurahInfo?> getSurahInfo(int surahId) async {
-    final ds = await localDs;
-    return await ds.getSurahInfo(surahId);
+    return await localDs.getSurahInfo(surahId);
   }
 
   @override
   Future<List<Ayah>> getAyahs(int surahId) async {
-    final ds = await localDs;
-    return await ds.getAyahs(surahId);
+    return await localDs.getAyahs(surahId);
   }
 
   @override
   Future<List<Surah>> getSurahs() async {
-    final ds = await localDs;
-    return ds.getSurahs();
+    return localDs.getSurahs();
   }
 }

@@ -1,4 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:rafeeq/core/app_keys.dart';
@@ -25,6 +26,8 @@ class PushNotificationService {
   }
 
   Future<void> _saveToken(String token) async {
+    if (kDebugMode) return;
+    
     try {
       await notificationRemoteDataSource.saveToken(token);
     } catch (e) {

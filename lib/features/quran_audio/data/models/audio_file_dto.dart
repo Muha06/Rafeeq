@@ -1,3 +1,5 @@
+import 'package:rafeeq/features/quran_audio/domain/entities/surah_track.dart';
+
 class AudioFileDto {
   final int id;
   final int chapterId;
@@ -23,11 +25,19 @@ class AudioFileDto {
     );
   }
 
-  Map<String, dynamic> toJson() => {
-    'id': id,
-    'chapter_id': chapterId,
-    'file_size': fileSize,
-    'format': format,
-    'audio_url': audioUrl,
-  };
+  SurahTrack toSurahTrack({
+    required int reciterId,
+    required int surahId,
+    required String surahName,
+    required String reciterName,
+  }) {
+    return SurahTrack(
+      trackId: 'quran:$reciterId:$surahId',
+      surahId: chapterId,
+      surahName: surahName,
+      reciterId: reciterId,
+      reciterName: reciterName,
+      url: audioUrl,
+    );
+  }
 }

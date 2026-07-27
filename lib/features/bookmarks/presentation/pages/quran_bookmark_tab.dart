@@ -7,6 +7,7 @@ import 'package:rafeeq/features/bookmarks/presentation/riverpod/Quran/quran_noti
 import 'package:rafeeq/features/quran/presentation/pages/surah_page.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/ayah_of_the_day.dart';
 import 'package:rafeeq/features/bookmarks/widgets/bookmark_tile.dart';
+import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provider.dart';
 
 class QuranBookmarksTab extends ConsumerWidget {
   const QuranBookmarksTab({super.key});
@@ -44,12 +45,18 @@ class QuranBookmarksTab extends ConsumerWidget {
                     ayahSurahProvider(bookMark.surahId),
                   );
 
+                  final surahs = ref.read(surahsProvider).value ?? [];
+
+                  final s = surahs.firstWhere((s) => s.id == bookMark.surahId);
+
+                  final index = surahs.indexOf(s);
+
                   if (bookMarkSurah != null) {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => FullSurahPage(
-                          surah: bookMarkSurah,
+                          initialIndex: index,
                           autoScrollAyah: bookMark.ayahNumber,
                         ),
                       ),

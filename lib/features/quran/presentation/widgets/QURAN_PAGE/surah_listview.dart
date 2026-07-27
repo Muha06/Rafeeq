@@ -36,7 +36,8 @@ class AllSurahsList extends ConsumerWidget {
               final surah = surahs[index];
 
               return InkWell(
-                onTap: () => AppNav.push(context, FullSurahPage(surah: surah)),
+                onTap: () =>
+                    AppNav.push(context, FullSurahPage(initialIndex: index)),
                 child: SurahTile(surah: surah, surahs: surahs, index: index),
               );
             },

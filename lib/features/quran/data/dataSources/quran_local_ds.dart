@@ -1,76 +1,45 @@
-import 'package:flutter/widgets.dart';
-import 'package:rafeeq/core/helpers/Quran/quran_db_helpers.dart';
+import 'package:rafeeq/features/quran/data/dataSources/quran_db_manager.dart';
 import 'package:rafeeq/features/quran/domain/entities/ayah.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 import 'package:quran/quran.dart' as quran;
 import 'package:rafeeq/features/quran/domain/entities/surah_info.dart';
-import 'package:sqflite/sqflite.dart';
 
 abstract class QuranLocalDataSource {
   Future<List<Ayah>> getAyahs(int surahId);
   List<Surah> getSurahs();
+  Surah getSurahById(int surahId);
   Future<SurahInfo?> getSurahInfo(int surahId);
 }
 
 class QuranLocalDataSourceImpl implements QuranLocalDataSource {
   //Translation dbs
-  Database? _arDb;
-  Database? _enDb;
-  Database? _swDb;
-  Database? _enTransliterationDb;
-  Database? _surahInfoDb;
+  QuranDatabaseManager dbs;
 
-  Future<void> init() async {
-    try {
-      _arDb = await QuranDbHelper.loadDatabase(
-        'assets/db/ar_ayah_text.db',
-        'quran_ar.db',
-      );
-
-      _enDb = await QuranDbHelper.loadDatabase(
-        'assets/db/en_ayah_text.db',
-        'quran_en.db',
-      );
-      _swDb = await QuranDbHelper.loadDatabase(
-        'assets/db/sw_ayah_text.db',
-        'quran_sw.db',
-      );
-      _enTransliterationDb = await QuranDbHelper.loadDatabase(
-        'assets/db/en_ayah_transliteration.db',
-        'quran_en_transliteration.db',
-      );
-      _surahInfoDb = await QuranDbHelper.loadDatabase(
-        'assets/db/surah-info-en.db',
-        'surah_infos.db',
-      );
-    } catch (e) {
-      debugPrint('Error initializing Quran local data source: $e');
-    }
-  }
+  QuranLocalDataSourceImpl({required this.dbs});
 
   @override
   Future<List<Ayah>> getAyahs(int surahId) async {
-    // 🔥 fetch both at the same time
+    //  fetch both at the same time
     final results = await Future.wait([
-      _arDb!.query(
+      dbs.arDb.query(
         'verses',
         where: 'surah = ?',
         whereArgs: [surahId],
         // orderBy: 'ayah ASC',
       ),
-      _enDb!.query(
+      dbs.enDb.query(
         'translation',
         where: 'sura = ?',
         whereArgs: [surahId],
         orderBy: 'ayah ASC',
       ),
-      _swDb!.query(
+      dbs.swDb.query(
         'translation',
         where: 'sura = ?',
         whereArgs: [surahId],
         orderBy: 'ayah ASC',
       ),
-      _enTransliterationDb!.query(
+      dbs.enTransliterationDb.query(
         'transliterations',
         where: 'sura = ?',
         whereArgs: [surahId],
@@ -112,7 +81,7 @@ class QuranLocalDataSourceImpl implements QuranLocalDataSource {
 
   @override
   Future<SurahInfo?> getSurahInfo(int surahId) async {
-    final result = await _surahInfoDb!.query(
+    final result = await dbs.surahInfoDb.query(
       'surah_infos',
       where: 'surah_number = ?',
       whereArgs: [surahId],
@@ -147,5 +116,12 @@ class QuranLocalDataSourceImpl implements QuranLocalDataSource {
         versesCount: quran.getVerseCount(id),
       );
     });
+  }
+
+  @override
+  Surah getSurahById(int surahId) {
+    final surahs = getSurahs();
+
+    return surahs.firstWhere((s) => s.id == surahId);
   }
 }

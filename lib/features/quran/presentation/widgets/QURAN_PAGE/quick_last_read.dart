@@ -159,11 +159,12 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
         final surahs = ref.read(surahsProvider).value ?? [];
         final surah = surahs.firstWhere((s) => s.id == widget.lastRead.surahId);
 
+        final index = surahs.indexOf(surah);
         AppNav.push(
           context,
           FullSurahPage(
             autoScrollAyah: widget.lastRead.ayahNumber,
-            surah: surah,
+            initialIndex: index,
           ),
         );
       },

@@ -17,18 +17,18 @@ class QuranAudioControlsBar extends ConsumerWidget {
     required this.onPause,
     required this.autoOn,
     required this.onExit,
-    required this.showAudioControls,
     required this.showSpeedControls,
   });
   final VoidCallback onStart;
   final String currentId;
   final VoidCallback onPause;
   final VoidCallback onExit;
-  final bool showAudioControls;
   final bool showSpeedControls;
   final bool autoOn;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final showAudioControls = ref.watch(showAudioControlsProvider);
+
     return SafeArea(
       top: false,
       child: AnimatedSize(
@@ -38,7 +38,7 @@ class QuranAudioControlsBar extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               //Audio
-              if (showAudioControls) ...[const AudioControlsSection()],
+              const AudioControlsSection(),
 
               //show controls conditionally
               if (showSpeedControls) ...[
@@ -55,43 +55,6 @@ class QuranAudioControlsBar extends ConsumerWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class AudioControlsBarColorWrapper extends StatelessWidget {
-  const AudioControlsBarColorWrapper({super.key, required this.child});
-
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
-
-    final gradientColors = [
-      cs.surfaceContainerHighest.withAlpha(220),
-      cs.surfaceContainerHighest.withAlpha(180),
-      cs.surfaceContainerHighest.withAlpha(150),
-      cs.surfaceContainerHighest.withAlpha(120),
-      cs.surfaceContainerHighest.withAlpha(100),
-      cs.surfaceContainerHighest.withAlpha(20),
-      cs.surfaceContainerHighest.withAlpha(10),
-    ];
-
-    return SafeArea(
-      top: false,
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: gradientColors,
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(14)),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-        child: child,
       ),
     );
   }
@@ -137,6 +100,13 @@ class AudioControlsSection extends ConsumerWidget {
               ),
             ),
 
+            IconButton(
+              onPressed: () async {
+                await ctrl.previous();
+              },
+              icon: const Icon(HugeIconsSolid.previous),
+            ),
+
             //Play/pause button
             IconButton(
               onPressed: audioState.isBuffering
@@ -169,11 +139,17 @@ class AudioControlsSection extends ConsumerWidget {
 
             //Stop button
             IconButton(
-              onPressed: () {
+              onPressed: () async {
                 ref.read(showAudioControlsProvider.notifier).state = false;
                 ctrl.stop();
               },
               icon: const Icon(PhosphorIcons.x),
+            ),
+            IconButton(
+              onPressed: () async {
+                await ctrl.next();
+              },
+              icon: const Icon(HugeIconsSolid.next),
             ),
           ],
         ),
@@ -235,6 +211,43 @@ class AutoScrollControlsSection extends ConsumerWidget {
           icon: Icon(autoOn ? Icons.pause : Icons.play_arrow),
         ),
       ],
+    );
+  }
+}
+
+class AudioControlsBarColorWrapper extends StatelessWidget {
+  const AudioControlsBarColorWrapper({super.key, required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+
+    final gradientColors = [
+      cs.surfaceContainerHighest.withAlpha(220),
+      cs.surfaceContainerHighest.withAlpha(180),
+      cs.surfaceContainerHighest.withAlpha(150),
+      cs.surfaceContainerHighest.withAlpha(120),
+      cs.surfaceContainerHighest.withAlpha(100),
+      cs.surfaceContainerHighest.withAlpha(20),
+      cs.surfaceContainerHighest.withAlpha(10),
+    ];
+
+    return SafeArea(
+      top: false,
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: gradientColors,
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(14)),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+        child: child,
+      ),
     );
   }
 }

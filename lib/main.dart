@@ -10,6 +10,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:rafeeq/app/connectivity_plus/app_wrapper.dart';
+import 'package:rafeeq/core/constants/hive_boxes.dart';
 import 'package:rafeeq/core/features/local_notifications/providers/general_notifications_provider.dart';
 import 'package:rafeeq/features/home/presentation/pages/tabs_screen.dart';
 import 'package:rafeeq/core/app_keys.dart';
@@ -28,7 +29,11 @@ import 'package:rafeeq/features/bookmarks/data/models/dhikr_bookmark_hive_model.
 import 'package:rafeeq/features/bookmarks/data/models/quran_bookmark_hive_model.dart';
 import 'package:rafeeq/features/onboarding/presentation/pages/onboarding_scaffold.dart';
 import 'package:rafeeq/features/onboarding/presentation/provider/providers.dart';
+import 'package:rafeeq/features/quran/data/dataSources/quran_db_manager.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/ayah_of_day_scheduler.dart';
+import 'package:rafeeq/features/quran/presentation/riverpod/wiring_providers.dart';
+import 'package:rafeeq/features/quran_audio/data/models/hive/reciter_playlist_tracks_hive.dart';
+import 'package:rafeeq/features/quran_audio/data/models/hive/surah_track_hive.dart';
 import 'package:rafeeq/features/quran_goal/data/models/hive/quran_goal_hive.dart';
 import 'package:rafeeq/features/quran_goal/data/models/hive/quran_goal_type_hive.dart';
 import 'package:rafeeq/features/quran_goal/data/models/hive/quran_log_hive.dart';
@@ -96,6 +101,8 @@ void main() {
       Hive.registerAdapter(CategoryCacheHiveAdapter()); // TypeId = 35
       Hive.registerAdapter(AdhkarHiveWrapperAdapter()); // TypeId = 36
       Hive.registerAdapter(CachedSalahTimesHiveAdapter()); // TypeId = 41
+      Hive.registerAdapter(ReciterPlaylistTracksHiveAdapter()); // TypeId = 37
+      Hive.registerAdapter(SurahTrackHiveAdapter()); // TypeId = 37
 
       // Open Hive boxes
       await Hive.openBox<QuranGoalHive>('quran_goal');
@@ -109,6 +116,9 @@ void main() {
       await Hive.openBox('settingsBox');
       await Hive.openBox('read_notifications');
       await Hive.openBox('adhkar_cache_box');
+      await Hive.openBox<ReciterPlaylistTracksHive>(
+        HiveBoxes.reciterPlaylistTracks,
+      );
 
       // Notifications
       await LocalNotificationService().init();
@@ -123,10 +133,15 @@ void main() {
       );
 
       await pushService.init();
+      final quranDbsManager = QuranDatabaseManager();
+      await quranDbsManager.init();
 
       runApp(
         ProviderScope(
-          overrides: [audioHandlerProvider.overrideWithValue(audioHandler)],
+          overrides: [
+            audioHandlerProvider.overrideWithValue(audioHandler),
+            quranDbsManagerProvider.overrideWithValue(quranDbsManager),
+          ],
           child: const MyApp(),
         ),
       );

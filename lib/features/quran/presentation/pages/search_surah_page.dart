@@ -106,7 +106,9 @@ class _SurahSearchPageState extends ConsumerState<SurahSearchPage> {
                             context,
                             MaterialPageRoute(
                               builder: (context) {
-                                return FullSurahPage(surah: surah);
+                                return FullSurahPage(
+                                  initialIndex: realSurahIndex,
+                                );
                               },
                             ),
                           );

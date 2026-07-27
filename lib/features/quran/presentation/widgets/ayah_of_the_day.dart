@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/features/quran/presentation/pages/surah_page.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/ayah_of_the_day.dart';
+import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provider.dart';
 
 class AyahOfTheDay extends ConsumerWidget {
   const AyahOfTheDay({super.key});
@@ -27,16 +28,21 @@ class AyahOfTheDay extends ConsumerWidget {
 
           //Fetch surah for the ayah
           final ayahSurah = ref.watch(ayahSurahProvider(ayah.surahId));
-
           if (ayahSurah == null) return const SizedBox.shrink();
 
           return GestureDetector(
             key: const ValueKey('data'),
             onTap: () {
+              final surahs = ref.read(surahsProvider).value ?? [];
+
+              final s = surahs.firstWhere((s) => s.id == ayah.surahId);
+
+              final index = surahs.indexOf(s);
+
               AppNav.push(
                 context,
                 FullSurahPage(
-                  surah: ayahSurah,
+                  initialIndex: index,
                   autoScrollAyah: ayah.ayahNumber,
                 ),
               );

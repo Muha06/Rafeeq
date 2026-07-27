@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/features/quran/data/dataSources/quran_db_manager.dart';
 import 'package:rafeeq/features/quran/data/dataSources/quran_local_ds.dart';
 import 'package:rafeeq/features/quran/data/repositories/quran_repo_impl.dart';
 import 'package:rafeeq/features/quran/domain/repository/quran_repo.dart';
@@ -16,17 +17,22 @@ final httpClientProvider = Provider<http.Client>((ref) {
   return client;
 });
 
-final quranLocalDsProvider = FutureProvider<QuranLocalDataSource>((ref) async {
-  final ds = QuranLocalDataSourceImpl();
-  await ds.init();
-  return ds;
+final quranLocalDsProvider = Provider<QuranLocalDataSource>((ref) {
+  final databases = ref.read(quranDbsManagerProvider);
+  return QuranLocalDataSourceImpl(dbs: databases);
 });
 
 //repository
 final quranRepoProvider = Provider<QuranRepository>((ref) {
-  final localDs = ref.read(quranLocalDsProvider.future);
+  final localDs = ref.read(quranLocalDsProvider);
 
   return QuranRepoImpl(localDs: localDs);
+});
+
+final quranDbsManagerProvider = Provider<QuranDatabaseManager>((ref) {
+  throw UnimplementedError(
+    'QuranDatabaseManager must be overridden at app startup.',
+  );
 });
 
 // UseCase provider
