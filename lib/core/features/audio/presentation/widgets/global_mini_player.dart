@@ -2,13 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/app_keys.dart';
 import 'package:rafeeq/core/features/audio/domain/entities/audio_source_type.dart';
 import 'package:rafeeq/core/features/audio/presentation/providers/audio_controller.dart';
 import 'package:rafeeq/core/features/audio/presentation/widgets/seek_bar.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/widgets/app_cache_image.dart';
-import 'package:rafeeq/features/quran_goal/presentation/widgets/log_ayah_bottomsheet.dart';
 import 'package:rafeeq/features/quran_radio/presentation/providers/radio_context_provider.dart';
 import 'package:rafeeq/features/quran_radio/presentation/providers/selected_station_provider.dart';
 import 'package:rafeeq/features/quran_radio/presentation/widgets/radio_player_sheet.dart';
@@ -47,8 +47,7 @@ class _GLobalMiniPlayerSheetState extends ConsumerState<GLobalMiniPlayerSheet> {
 
     final session = ref.watch(radioPlaybackSessionProvider);
 
-    final base = cs.surfaceContainerHighest;
-    final accent = cs.primary;
+    final controlsIconSize = 24.0;
 
     return SafeArea(
       top: false,
@@ -76,22 +75,12 @@ class _GLobalMiniPlayerSheetState extends ConsumerState<GLobalMiniPlayerSheet> {
           }
         },
         child: Container(
-          margin: const EdgeInsets.fromLTRB(12, 0, 12, 0),
-          padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+          margin: EdgeInsets.zero,
+          padding: const EdgeInsets.fromLTRB(8, 4, 8, 0),
 
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Color.lerp(base, accent, 0.18)!),
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Color.lerp(base, accent, 0.22)!,
-                Color.lerp(base, accent, 0.12)!,
-                base,
-              ],
-              stops: const [0.0, 0.45, 1.0],
-            ),
+            color: cs.surfaceContainerHighest,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -128,7 +117,7 @@ class _GLobalMiniPlayerSheetState extends ConsumerState<GLobalMiniPlayerSheet> {
                           SizedBox(
                             width: double.infinity,
                             child: TextScroll(
-                              audioState.artist!,
+                              "🎧 ${audioState.artist!}",
                               mode: TextScrollMode.endless,
                               velocity: const Velocity(
                                 pixelsPerSecond: Offset(20, 0),
@@ -143,20 +132,21 @@ class _GLobalMiniPlayerSheetState extends ConsumerState<GLobalMiniPlayerSheet> {
 
                   isBuffering
                       ? const CupertinoActivityIndicator()
-                      : CircleIconButton(
+                      : IconButton(
                           onPressed: isBuffering
                               ? null
                               : () => isPlaying ? ctrl.pause() : ctrl.play(),
-                          icon: isPlaying
-                              ? HugeIconsStroke.pause
-                              : HugeIconsStroke.play,
-                          size: 36,
+                          icon: Icon(
+                            isPlaying
+                                ? HugeIconsStroke.pause
+                                : PhosphorIcons.play,
+                            size: controlsIconSize,
+                          ),
+                          visualDensity: VisualDensity.compact,
                         ),
 
-                  const SizedBox(width: 4),
-
                   //stop
-                  CircleIconButton(
+                  IconButton(
                     onPressed: () {
                       ref.read(currentStationProvider.notifier).state = null;
 
@@ -166,8 +156,11 @@ class _GLobalMiniPlayerSheetState extends ConsumerState<GLobalMiniPlayerSheet> {
                       ctrl.stop();
                       scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
                     },
-                    icon: HugeIconsStroke.cancel01,
-                    size: 36,
+                    icon: Icon(
+                      HugeIconsStroke.cancel01,
+                      size: controlsIconSize,
+                    ),
+                    visualDensity: VisualDensity.compact,
                   ),
                 ],
               ),

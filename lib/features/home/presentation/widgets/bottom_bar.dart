@@ -45,7 +45,8 @@ class MyBottomBar extends ConsumerWidget {
     ];
     final isDark = Theme.brightnessOf(context) == Brightness.dark;
 
-    final itemColor = isDark ? Colors.white70 : Colors.black87;
+    final itemColor = isDark ? Colors.white70 : Colors.black;
+
     final s = ref.watch(audioControllerProvider);
     final miniPlayer = AnimatedSwitcher(
       duration: const Duration(milliseconds: 300),
@@ -68,69 +69,74 @@ class MyBottomBar extends ConsumerWidget {
           : const SizedBox(key: ValueKey('empty')),
     );
 
+    final blurSize = isDark ? 4.0 : 16.0;
+
     return SafeArea(
       top: true,
       bottom: false,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          miniPlayer,
+      child: ClipRRect(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: blurSize, sigmaY: blurSize),
 
-          const SizedBox(height: 8),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              miniPlayer,
 
-          ClipRect(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
-              child: Container(
-                height: 64,
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                decoration: BoxDecoration(color: cs.surface.withAlpha(140)),
-                child: Row(
-                  children: List.generate(items.length, (index) {
-                    final item = items[index];
-                    final isSelected = currentIndex == index;
+              // const SizedBox(height: 6),
+              SafeArea(
+                top: false,
+                child: Container(
+                  height: 56,
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  decoration: const BoxDecoration(color: Colors.black26),
+                  child: Row(
+                    children: List.generate(items.length, (index) {
+                      final item = items[index];
+                      final isSelected = currentIndex == index;
 
-                    return Expanded(
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          onTap: () => onTap(index),
-                          highlightColor: Colors.transparent,
-                          splashColor: Colors.transparent,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              AnimatedSwitcher(
-                                duration: const Duration(milliseconds: 350),
-                                child: Icon(
-                                  isSelected ? item.active : item.icon,
-                                  key: ValueKey(isSelected), // simpler
-                                  color: isSelected ? cs.primary : itemColor,
-                                  size: 24,
+                      return Expanded(
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () => onTap(index),
+                            highlightColor: Colors.transparent,
+                            splashColor: Colors.transparent,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                AnimatedSwitcher(
+                                  duration: const Duration(milliseconds: 350),
+                                  child: Icon(
+                                    isSelected ? item.active : item.icon,
+                                    key: ValueKey(isSelected), // simpler
+                                    color: isSelected ? cs.primary : itemColor,
+                                    size: 24,
+                                  ),
                                 ),
-                              ),
 
-                              const SizedBox(height: 4),
+                                const SizedBox(height: 4),
 
-                              Text(
-                                item.label,
-                                style: theme.textTheme.labelSmall?.copyWith(
-                                  fontSize: 12,
-                                  height: 1,
-                                  color: isSelected ? cs.primary : itemColor,
+                                Text(
+                                  item.label,
+                                  style: theme.textTheme.labelSmall?.copyWith(
+                                    fontSize: 12,
+                                    height: 1,
+                                    color: isSelected ? cs.primary : itemColor,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  }),
+                      );
+                    }),
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
