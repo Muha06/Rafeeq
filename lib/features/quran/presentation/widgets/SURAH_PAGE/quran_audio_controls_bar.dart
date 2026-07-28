@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
-import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/features/audio/presentation/providers/audio_controller.dart';
 import 'package:rafeeq/core/features/audio/presentation/widgets/seek_bar.dart';
-import 'package:rafeeq/core/helpers/snackbars.dart';
-import 'package:rafeeq/features/quran/presentation/riverpod/show_audio_controls_bar_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
+import 'package:rafeeq/features/quran_goal/presentation/widgets/log_ayah_bottomsheet.dart';
 
 class QuranAudioControlsBar extends ConsumerWidget {
   const QuranAudioControlsBar({
@@ -15,19 +13,23 @@ class QuranAudioControlsBar extends ConsumerWidget {
     required this.currentId,
     required this.onStart,
     required this.onPause,
-    required this.autoOn,
     required this.onExit,
-    required this.showSpeedControls,
   });
   final VoidCallback onStart;
   final String currentId;
   final VoidCallback onPause;
   final VoidCallback onExit;
-  final bool showSpeedControls;
-  final bool autoOn;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final showAudioControls = ref.watch(showAudioControlsProvider);
+    final showAudioControls = ref
+        .watch(surahSettingsProvider)
+        .showAudioControls;
+
+    final showAutoScrollControls = ref
+        .watch(surahSettingsProvider)
+        .showAutoScrollControls;
+
+    debugPrint("✅✅✅ Show audio controls: $showAudioControls");
 
     return SafeArea(
       top: false,
@@ -38,17 +40,15 @@ class QuranAudioControlsBar extends ConsumerWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               //Audio
-              const AudioControlsSection(),
+              if (showAudioControls) const AudioControlsSection(),
 
               //show controls conditionally
-              if (showSpeedControls) ...[
-                if (showSpeedControls && showAudioControls)
-                  const SizedBox(height: 8),
+              if (showAutoScrollControls) ...[
+                const SizedBox(height: 8),
 
                 AutoScrollControlsSection(
                   onStart: onStart,
                   onPause: onPause,
-                  autoOn: autoOn,
                   onExit: onExit,
                 ),
               ],
@@ -72,24 +72,41 @@ class AudioControlsSection extends ConsumerWidget {
     final ctrl = ref.read(audioControllerProvider.notifier);
     final selectedReciter = ref.watch(selectedReciterProvider);
 
-    final isRepeatEnabled = audioState.isRepeatEnabled;
+    final prevNextIconSize = 24.0;
+    final prevNextIconColor = cs.onSurfaceVariant;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Row(
           children: [
+            // stop btn
+            GestureDetector(
+              onTap: () async {
+                ref
+                    .read(surahSettingsProvider.notifier)
+                    .showAudioControls(false);
+                ctrl.stop();
+              },
+              child: const Icon(HugeIconsStroke.cancel01, size: 18),
+              // visualDensity: VisualDensity.compact,
+            ),
+
+            const SizedBox(width: 12),
+
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     audioState.title ?? '—',
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w600,
+                    style: theme.textTheme.labelLarge?.copyWith(
                       color: cs.onSurface,
                     ),
                   ),
+
+                  const SizedBox(height: 2),
+
                   Text(
                     selectedReciter.name,
                     style: theme.textTheme.bodySmall?.copyWith(
@@ -104,52 +121,32 @@ class AudioControlsSection extends ConsumerWidget {
               onPressed: () async {
                 await ctrl.previous();
               },
-              icon: const Icon(HugeIconsSolid.previous),
+              icon: Icon(
+                HugeIconsStroke.previous,
+                size: prevNextIconSize,
+                color: prevNextIconColor,
+              ),
             ),
 
             //Play/pause button
-            IconButton(
+            CircleIconButton(
               onPressed: audioState.isBuffering
                   ? null
                   : () => audioState.isPlaying ? ctrl.pause() : ctrl.play(),
-              icon: Icon(
-                audioState.isPlaying
-                    ? HugeIconsStroke.pause
-                    : HugeIconsStroke.play,
-              ),
+              icon: audioState.isPlaying
+                  ? HugeIconsStroke.pause
+                  : HugeIconsStroke.play,
             ),
 
-            //Repeat mode
-            IconButton(
-              onPressed: () {
-                ctrl.toggleRepeatMode();
-
-                AppSnackBar.showSimple(
-                  context: context,
-                  message: isRepeatEnabled
-                      ? 'Repeat surah disabled'
-                      : 'Repeat surah enabled',
-                );
-              },
-              icon: Icon(
-                HugeIconsStroke.repeat,
-                color: isRepeatEnabled ? cs.primary : null,
-              ),
-            ),
-
-            //Stop button
-            IconButton(
-              onPressed: () async {
-                ref.read(showAudioControlsProvider.notifier).state = false;
-                ctrl.stop();
-              },
-              icon: const Icon(PhosphorIcons.x),
-            ),
             IconButton(
               onPressed: () async {
                 await ctrl.next();
               },
-              icon: const Icon(HugeIconsSolid.next),
+              icon: Icon(
+                HugeIconsStroke.next,
+                size: prevNextIconSize,
+                color: prevNextIconColor,
+              ),
             ),
           ],
         ),
@@ -161,6 +158,7 @@ class AudioControlsSection extends ConsumerWidget {
           buffered: audioState.bufferedPosition,
           duration: audioState.duration,
           onSeek: ctrl.seek,
+          showDurations: false,
         ),
       ],
     );
@@ -170,13 +168,11 @@ class AudioControlsSection extends ConsumerWidget {
 class AutoScrollControlsSection extends ConsumerWidget {
   const AutoScrollControlsSection({
     super.key,
-    required this.autoOn,
     required this.onStart,
     required this.onPause,
     required this.onExit,
   });
 
-  final bool autoOn;
   final VoidCallback onStart;
   final VoidCallback onPause;
   final VoidCallback onExit;
@@ -185,6 +181,7 @@ class AutoScrollControlsSection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final speed = ref.watch(surahSettingsProvider).autoScrollSpeed;
     final notifier = ref.read(surahSettingsProvider.notifier);
+    final isAutoScrolling = ref.watch(surahSettingsProvider).isAutoScrolling;
 
     return Row(
       children: [
@@ -207,8 +204,8 @@ class AutoScrollControlsSection extends ConsumerWidget {
         const Spacer(),
 
         IconButton(
-          onPressed: autoOn ? onPause : onStart,
-          icon: Icon(autoOn ? Icons.pause : Icons.play_arrow),
+          onPressed: isAutoScrolling ? onPause : onStart,
+          icon: Icon(isAutoScrolling ? Icons.pause : Icons.play_arrow),
         ),
       ],
     );
@@ -224,25 +221,11 @@ class AudioControlsBarColorWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
 
-    final gradientColors = [
-      cs.surfaceContainerHighest.withAlpha(220),
-      cs.surfaceContainerHighest.withAlpha(180),
-      cs.surfaceContainerHighest.withAlpha(150),
-      cs.surfaceContainerHighest.withAlpha(120),
-      cs.surfaceContainerHighest.withAlpha(100),
-      cs.surfaceContainerHighest.withAlpha(20),
-      cs.surfaceContainerHighest.withAlpha(10),
-    ];
-
     return SafeArea(
       top: false,
       child: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: gradientColors,
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
+          color: cs.surfaceContainerHighest,
           borderRadius: const BorderRadius.vertical(top: Radius.circular(14)),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),

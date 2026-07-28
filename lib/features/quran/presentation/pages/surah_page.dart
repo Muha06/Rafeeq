@@ -17,7 +17,6 @@ import 'package:rafeeq/features/quran/presentation/pages/mushaf_pageview.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/fetch_ayah_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/last_read_provider.dart';
-import 'package:rafeeq/features/quran/presentation/riverpod/show_audio_controls_bar_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/ayah_tile.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/play_surah_btn.dart';
@@ -111,7 +110,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
       _autoOn = true;
     });
 
-    ref.read(surahSettingsProvider.notifier).setAutoScrollEnabled(true);
+    ref.read(surahSettingsProvider.notifier).setAutoScroll(true);
 
     const tick = Duration(milliseconds: 500); //duration to wait b4 next scroll
 
@@ -155,7 +154,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
     _autoTimer?.cancel();
     _autoTimer = null;
 
-    ref.read(surahSettingsProvider.notifier).setAutoScrollEnabled(false);
+    ref.read(surahSettingsProvider.notifier).setAutoScroll(false);
 
     setState(() => _autoOn = false);
   }
@@ -311,24 +310,23 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
 
     final ayahsAsync = ref.watch(ayahsProvider(surahId));
 
-    final showSpeedControls = ref
-        .watch(surahSettingsProvider)
-        .autoScrollEnabled;
-
     final reciter = ref.watch(selectedReciterProvider);
     final currentAudioId = '${surahId}_${reciter.id}';
 
     final hasGoal = ref.watch(quranGoalProvider) != null;
 
-    ref.listen(audioControllerProvider, (prev, next) {
-      if (next.currentId != currentAudioId) {
-        ref.read(showAudioControlsProvider.notifier).state = false;
-      } else {
-        ref.read(showAudioControlsProvider.notifier).state = true;
-      }
-    });
+    // ref.listen(audioControllerProvider, (prev, next) {
+    //   if (next.currentId != currentAudioId) {
+    //     ref.read(surahSettingsProvider.notifier).showAudioControls(false);
+    //   } else {
+    //     ref.read(surahSettingsProvider.notifier).showAudioControls(true);
+    //   }
+    // });
 
-    debugPrint("Initial index: ${widget.initialIndex}");
+    final showAudioControls = ref
+        .watch(surahSettingsProvider)
+        .showAudioControls;
+    debugPrint("✅✅✅ Show audio controls: $showAudioControls");
 
     return PopScope(
       onPopInvokedWithResult: (didPop, result) async {
@@ -345,31 +343,21 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
         }
 
         //  reset UI state + provider when leaving page
-        ref.read(surahSettingsProvider.notifier).setAutoScrollEnabled(false);
+        ref.read(surahSettingsProvider.notifier).setAutoScroll(false);
       },
       child: SafeArea(
         bottom: true,
         top: false,
         child: Scaffold(
-          // bottomNavigationBar:
-          //     (showSpeedControls || ref.watch(showAudioControlsProvider))
-          //     ? QuranAudioControlsBar(
-          //         currentId: surahId.toString(),
-          //         onStart: _startAutoScroll,
-          //         onPause: _pauseAutoScroll,
-          //         autoOn: _autoOn,
-          //         onExit: _exitAutoScroll,
-          //         showSpeedControls: showSpeedControls,
-          //       )
-          //     : null,
-          bottomNavigationBar: QuranAudioControlsBar(
-            currentId: surahId.toString(),
-            onStart: _startAutoScroll,
-            onPause: _pauseAutoScroll,
-            autoOn: _autoOn,
-            onExit: _exitAutoScroll,
-            showSpeedControls: showSpeedControls,
-          ),
+          bottomNavigationBar: (showAudioControls)
+              ? QuranAudioControlsBar(
+                  currentId: surahId.toString(),
+                  onStart: _startAutoScroll,
+                  onPause: _pauseAutoScroll,
+                  onExit: _exitAutoScroll,
+                )
+              : null,
+
           appBar: AppBar(
             backgroundColor: theme.scaffoldBackgroundColor,
             title: AppbarSurahPicker(jumpToAyah: jumpToAyah, surah: surah),
@@ -520,7 +508,7 @@ class AppbarSurahPicker extends ConsumerWidget {
                     MaterialPageRoute(
                       builder: (_) => FullSurahPage(
                         initialIndex: surahId - 1,
-                        autoScrollAyah: ayahNumber,  
+                        autoScrollAyah: ayahNumber,
                       ),
                     ),
                   );

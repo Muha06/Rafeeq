@@ -47,10 +47,9 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
     super.initState();
     _currentIndex = widget.initialIndex;
 
-    _loadPalette();
-
     // Delay autoplay until after the first frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadPalette();
       _autoPlay();
     });
   }
@@ -58,10 +57,12 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
   Future<void> _loadPalette() async {
     if (station.imageUrl == null || station.imageUrl!.isEmpty) return;
 
+    await Future.delayed(450.ms);
+
     try {
       final palette = await PaletteGeneratorMaster.fromImageProvider(
         NetworkImage(station.imageUrl!),
-        maximumColorCount: 12,
+        maximumColorCount: 16,
         generateHarmony: true,
         colorSpace: ColorSpace.lab,
       );
@@ -181,7 +182,7 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
     final showNextIcon = _currentIndex < widget.stations.length - 1;
 
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 650),
+      duration: const Duration(milliseconds: 250),
       height: double.infinity,
       padding: const EdgeInsets.only(left: 16, right: 16, top: 24),
       decoration: BoxDecoration(
@@ -208,19 +209,24 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
                     borderRadius: 48,
                     errorWidget: CategoryFallback(
                       station: station,
-                      height: 300,
                       showShadow: false,
+                      height: 300,
                       width: double.infinity,
+                    ),
+                    placeholder: Container(
+                      height: 300,
+                      width: double.infinity,
+                      color: Colors.transparent,
                     ),
                   ),
                 )
                 .animate(key: ValueKey(station.id))
-                .fade(duration: 600.ms)
+                .fade(duration: 300.ms)
                 .scale(
                   begin: const Offset(1, 1),
-                  end: const Offset(.94, .94),
+                  end: const Offset(.96, .96),
                   curve: Curves.easeOutCubic,
-                  duration: 600.ms,
+                  duration: 300.ms,
                 ),
 
             const SizedBox(height: 16),
@@ -409,6 +415,7 @@ class _RadioAudioSeekBar extends ConsumerWidget {
       buffered: buffered,
       duration: duration,
       onSeek: onSeek,
+      showDurations: false,
     );
   }
 }

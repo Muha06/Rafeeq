@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 
 Future<void> showSurahAyahPickerDialog({
@@ -90,14 +91,15 @@ Future<void> showSurahAyahPickerDialog({
                                 },
                                 children: [
                                   for (final s in surahs)
-                                    Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 10,
-                                        ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                      ),
+                                      child: Align(
+                                        alignment: Alignment.centerLeft,
                                         child: Text(
                                           '${s.id}. ${s.nameTransliteration}',
-                                          textAlign: TextAlign.center,
+                                          textAlign: TextAlign.left,
                                         ),
                                       ),
                                     ),
@@ -134,7 +136,7 @@ Future<void> showSurahAyahPickerDialog({
                                     Center(
                                       child: Text(
                                         a.toString(),
-                                        style: theme.textTheme.titleLarge,
+                                        style: theme.textTheme.labelLarge,
                                       ),
                                     ),
                                 ],
@@ -148,8 +150,15 @@ Future<void> showSurahAyahPickerDialog({
                     const SizedBox(height: 12),
 
                     Text(
-                      '${selectedSurah.nameTransliteration} • Ayah ${ayahIndex + 1}',
+                      'Surat ${selectedSurah.nameTransliteration}',
                       style: Theme.of(context).textTheme.labelLarge,
+                    ),
+
+                    const SizedBox(height: 6),
+
+                    Text(
+                      'Ayah ${ayahIndex + 1}',
+                      style: Theme.of(context).textTheme.labelMedium,
                     ),
 
                     const SizedBox(height: 14),
@@ -159,13 +168,13 @@ Future<void> showSurahAyahPickerDialog({
                       children: [
                         Expanded(
                           child: TextButton(
-                            onPressed: () => Navigator.pop(context),
+                            onPressed: () => AppNav.pop(context),
                             child: const Text('Cancel'),
                           ),
                         ),
                         const SizedBox(width: 12),
                         Expanded(
-                          child: FilledButton(
+                          child: ElevatedButton(
                             onPressed: () {
                               final s = surahs[surahIndex];
                               Navigator.pop(context);

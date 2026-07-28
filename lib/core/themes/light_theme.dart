@@ -341,7 +341,7 @@ class AppLightColors {
   static const surfaceHighest = Color(0xFFE3E5EA);
 
   // ➖ BORDERS / DIVIDERS (iOS style)
-  static const outline = Color(0xFFE5E5EA);
+  static const outline = Color(0xFFCFCFD6);
   static const outlineVariant = Color(0xFFD0D0D8);
 
   // 🟢 PRIMARY

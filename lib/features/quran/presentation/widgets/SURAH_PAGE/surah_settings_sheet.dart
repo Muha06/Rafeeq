@@ -38,7 +38,7 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
     );
 
     final autoScrollEnabled = ref.watch(
-      surahSettingsProvider.select((s) => s.autoScrollEnabled),
+      surahSettingsProvider.select((s) => s.showAutoScrollControls),
     );
 
     final titleTextstyle = theme.listTileTheme.titleTextStyle;
@@ -66,7 +66,7 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
               value: autoScrollEnabled,
               contentPadding: EdgeInsets.zero,
               onChanged: (v) {
-                sNotifier.setAutoScrollEnabled(v);
+                sNotifier.setAutoScroll(v);
                 widget.onToggleAutoScroll();
                 if (v) {
                   Navigator.pop(context);

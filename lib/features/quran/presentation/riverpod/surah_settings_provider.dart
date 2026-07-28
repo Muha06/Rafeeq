@@ -1,21 +1,26 @@
 // Show/hide translation
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SurahSettings {
   final bool showTranslation;
   final bool showTranslit;
+  final bool showAutoScrollControls;
+  final bool isAutoScrolling;
+  final bool showAudioControls;
   final double arabicFontSize;
   final double translationFontSize;
   final double autoScrollSpeed; // ayahs per minute
-  final bool autoScrollEnabled;
   final bool mushafMode;
 
   const SurahSettings({
     required this.showTranslation,
+    required this.showAutoScrollControls,
+    required this.showAudioControls,
+    required this.isAutoScrolling,
     required this.arabicFontSize,
     required this.translationFontSize,
     required this.autoScrollSpeed,
-    required this.autoScrollEnabled,
     required this.showTranslit,
     required this.mushafMode,
   });
@@ -28,15 +33,21 @@ class SurahSettings {
     bool? autoScrollEnabled,
     bool? showTranslit,
     bool? mushafMode,
+    bool? isAutoScrolling,
+    bool? showAutoScrollControls,
+    bool? showAudioControls,
   }) {
     return SurahSettings(
       showTranslation: showTranslation ?? this.showTranslation,
       arabicFontSize: arabicFontSize ?? this.arabicFontSize,
       translationFontSize: translationFontSize ?? this.translationFontSize,
       autoScrollSpeed: autoScrollSpeed ?? this.autoScrollSpeed,
-      autoScrollEnabled: autoScrollEnabled ?? this.autoScrollEnabled,
       showTranslit: showTranslit ?? this.showTranslit,
       mushafMode: mushafMode ?? this.mushafMode,
+      isAutoScrolling: isAutoScrolling ?? this.isAutoScrolling,
+      showAudioControls: showAudioControls ?? this.showAudioControls,
+      showAutoScrollControls:
+          showAutoScrollControls ?? this.showAutoScrollControls,
     );
   }
 }
@@ -54,9 +65,11 @@ class SurahSettingsNotifier extends StateNotifier<SurahSettings> {
           arabicFontSize: 24,
           translationFontSize: 16,
           autoScrollSpeed: 20,
-          autoScrollEnabled: false,
           showTranslit: true,
           mushafMode: false,
+          isAutoScrolling: false,
+          showAudioControls: false,
+          showAutoScrollControls: false,
         ),
       );
 
@@ -73,9 +86,16 @@ class SurahSettingsNotifier extends StateNotifier<SurahSettings> {
   void setAutoScrollSpeed(double v) =>
       state = state.copyWith(autoScrollSpeed: v);
 
-  void setAutoScrollEnabled(bool v) {
-    if (state.autoScrollEnabled == v) return;
+  void setAutoScroll(bool v) {
+    if (state.showAutoScrollControls == v) return;
     state = state.copyWith(autoScrollEnabled: v);
+  }
+
+  void showAudioControls(bool v) {
+    if (state.showAudioControls == v) return;
+    debugPrint("✅✅✅ Setting controls to : $v");
+
+    state = state.copyWith(showAudioControls: v);
   }
 
   void increaseSpeed() {

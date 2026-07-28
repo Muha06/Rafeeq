@@ -48,10 +48,24 @@ class MyBottomBar extends ConsumerWidget {
     final itemColor = isDark ? Colors.white70 : Colors.black87;
     final s = ref.watch(audioControllerProvider);
     final miniPlayer = AnimatedSwitcher(
-      duration: const Duration(milliseconds: 250),
+      duration: const Duration(milliseconds: 300),
+      switchInCurve: Curves.easeOutCubic,
+      switchOutCurve: Curves.easeInCubic,
+      transitionBuilder: (child, animation) {
+        return FadeTransition(
+          opacity: animation,
+          child: SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(0, 0.3),
+              end: Offset.zero,
+            ).animate(animation),
+            child: child,
+          ),
+        );
+      },
       child: (s.currentId != null && s.currentId!.isNotEmpty)
-          ? const GLobalMiniPlayerSheet()
-          : const SizedBox.shrink(),
+          ? const GLobalMiniPlayerSheet(key: ValueKey('mini-player'))
+          : const SizedBox(key: ValueKey('empty')),
     );
 
     return SafeArea(

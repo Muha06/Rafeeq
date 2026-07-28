@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provider.dart';
-import 'package:rafeeq/features/quran/presentation/riverpod/show_audio_controls_bar_provider.dart';
+import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/quran_audio/domain/entities/reciter_entity.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/wiring_providers.dart';
@@ -88,7 +88,7 @@ class _PlayFullSurahBtnState extends ConsumerState<PlayFullSurahBtn> {
           debugPrint("Playlist loaded");
         }
 
-        ref.read(showAudioControlsProvider.notifier).state = true;
+        ref.read(surahSettingsProvider.notifier).showAudioControls(true);
       } catch (e, st) {
         debugPrint('Error playing surah audio: $e');
         debugPrintStack(stackTrace: st);
