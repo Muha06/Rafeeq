@@ -6,12 +6,14 @@ class AudioSeekBar extends StatefulWidget {
     required this.position,
     required this.buffered,
     required this.duration,
+    this.showDurations = true,
     required this.onSeek,
   });
 
   final Duration position;
   final Duration buffered;
   final Duration duration;
+  final bool? showDurations;
   final void Function(Duration position) onSeek;
 
   @override
@@ -106,14 +108,12 @@ class _AudioSeekBarState extends State<AudioSeekBar> {
                   secondaryActiveTrackColor: Colors.transparent,
                   overlayColor: cs.primary.withAlpha(35),
                   thumbColor: cs.primary,
-                  overlayShape: const RoundSliderOverlayShape(
-                    overlayRadius: 10,
-                  ),
+                  overlayShape: const RoundSliderOverlayShape(overlayRadius: 0),
                   thumbShape: const RoundSliderThumbShape(
-                    enabledThumbRadius: 7.5,
+                    enabledThumbRadius: 0,
                     elevation: 0,
                     pressedElevation: 0,
-                    disabledThumbRadius: 4,
+                    disabledThumbRadius: 0,
                   ),
                 ),
                 child: Slider(
@@ -143,18 +143,22 @@ class _AudioSeekBarState extends State<AudioSeekBar> {
             ],
           ),
         ),
-        const SizedBox(height: 6),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            // While dragging, show the temporary position to match the thumb.
-            Text(
-              _format(Duration(milliseconds: effectivePositionMs.round())),
-              style: theme.textTheme.bodySmall,
-            ),
-            Text(_format(widget.duration), style: theme.textTheme.bodySmall),
-          ],
-        ),
+
+        if (widget.showDurations == true) ...[
+          const SizedBox(height: 6),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // While dragging, show the temporary position to match the thumb.
+              Text(
+                _format(Duration(milliseconds: effectivePositionMs.round())),
+                style: theme.textTheme.bodySmall,
+              ),
+              Text(_format(widget.duration), style: theme.textTheme.bodySmall),
+            ],
+          ),
+        ],
       ],
     );
   }

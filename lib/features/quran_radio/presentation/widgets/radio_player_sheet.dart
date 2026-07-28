@@ -173,7 +173,7 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
     final imageHeight = 280.0;
     final imageWidth = MediaQuery.of(context).size.width * 0.8;
     final dominant = _dominantColor ?? cs.primary;
-    final tint = Color.lerp(cs.surface, dominant, .18)!;
+    final tint = Color.lerp(cs.onPrimary, dominant, 0.4)!;
 
     final station = widget.stations[_currentIndex];
 
@@ -181,7 +181,7 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
     final showNextIcon = _currentIndex < widget.stations.length - 1;
 
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 650),
       height: double.infinity,
       padding: const EdgeInsets.only(left: 16, right: 16, top: 24),
       decoration: BoxDecoration(
@@ -189,7 +189,7 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [tint, tint.withValues(alpha: .55), cs.surface],
+          colors: [dominant, tint, cs.onPrimary],
         ),
       ),
       child: SingleChildScrollView(
@@ -240,11 +240,12 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
 
             //Type of audio
             MyChip(
+              borderRadius: 6,
               child: Text(
                 station.category.label,
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.visible,
-                style: tt.labelMedium!.copyWith(color: cs.onSurfaceVariant),
+                style: tt.labelMedium!.copyWith(color: cs.onSurface),
               ),
             ),
 
@@ -259,17 +260,20 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
             const SizedBox(height: 16),
 
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
                   onPressed: showPrevIcon
                       ? () => _goTo(_currentIndex - 1)
                       : null,
                   icon: Icon(
+                    size: 36,
                     HugeIconsSolid.previous,
                     color: showPrevIcon ? cs.onSurface : cs.onSurfaceVariant,
                   ),
                 ),
+
+                const SizedBox(width: 24),
 
                 // Play/pause
                 Consumer(
@@ -289,12 +293,15 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
                   },
                 ),
 
+                const SizedBox(width: 24),
+
                 IconButton(
                   onPressed: showNextIcon
                       ? () => _goTo(_currentIndex + 1)
                       : null,
                   icon: Icon(
                     HugeIconsSolid.next,
+                    size: 36,
                     color: showNextIcon ? cs.onSurface : cs.onSurfaceVariant,
                   ),
                 ),
@@ -313,14 +320,14 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
       _currentIndex = newIndex;
     });
 
+    _loadPalette();
+
     ref.read(currentStationProvider.notifier).state = widget.stations[newIndex];
 
     ref.read(radioPlaybackSessionProvider.notifier).state =
         RadioPlaybackSession(stations: widget.stations, currentIndex: newIndex);
 
     await ref.read(audioControllerProvider.notifier).skipToIndex(newIndex);
-
-    await _loadPalette();
   }
 }
 
@@ -346,7 +353,7 @@ class AnimatedPlayPauseBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
-    const double controlSize = 48;
+    const double controlSize = 40;
     const double loaderRadius = controlSize / 2;
 
     final iconColor = color ?? cs.onPrimary;
@@ -359,33 +366,24 @@ class AnimatedPlayPauseBtn extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Center(
-            child: AnimatedSwitcher(
-              duration: duration,
-              transitionBuilder: (child, animation) {
-                return ScaleTransition(
-                  scale: animation,
-                  child: FadeTransition(opacity: animation, child: child),
-                );
-              },
-              child: isBuffering
-                  ? CupertinoActivityIndicator(
-                      color: iconColor,
-                      radius: loaderRadius,
-                    )
-                  : isPlaying
-                  ? PhosphorIcon(
-                      key: const ValueKey('pause'),
-                      Icons.pause_rounded,
-                      color: iconColor,
-                      size: controlSize,
-                    )
-                  : PhosphorIcon(
-                      key: const ValueKey('play'),
-                      PhosphorIcons.playFill,
-                      color: iconColor,
-                      size: controlSize,
-                    ),
-            ),
+            child: isBuffering
+                ? CupertinoActivityIndicator(
+                    color: iconColor,
+                    radius: loaderRadius,
+                  )
+                : isPlaying
+                ? PhosphorIcon(
+                    key: const ValueKey('pause'),
+                    Icons.pause_rounded,
+                    color: iconColor,
+                    size: controlSize,
+                  )
+                : PhosphorIcon(
+                    key: const ValueKey('play'),
+                    Icons.play_arrow,
+                    color: iconColor,
+                    size: controlSize,
+                  ),
           ),
         ),
       ),

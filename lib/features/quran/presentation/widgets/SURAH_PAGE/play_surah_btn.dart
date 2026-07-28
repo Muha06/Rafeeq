@@ -70,7 +70,8 @@ class _PlayFullSurahBtnState extends ConsumerState<PlayFullSurahBtn> {
               .map(
                 (t) => AudioItem(
                   id: '${t.reciterId}:${t.surahId}',
-                  title: t.surahName,
+                  title: "Surat ${t.surahName}",
+                  artist: reciter.name,
                   url: t.url,
                   sourceType: AudioSourceType.quranSurah,
                 ),
