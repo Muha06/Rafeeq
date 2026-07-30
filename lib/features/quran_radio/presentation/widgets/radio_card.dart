@@ -64,7 +64,7 @@ class RadioCard extends ConsumerWidget {
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            color: isSelected ? cs.primary.withAlpha(64) : null,
+            // color: isSelected ? cs.primary.withAlpha(64) : null,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -97,7 +97,8 @@ class RadioCard extends ConsumerWidget {
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: theme.textTheme.labelMedium?.copyWith(
-                  color: cs.onSurface,
+                  color: isSelected ? cs.primary : cs.onSurface,
+                  fontWeight: isSelected ? FontWeight.bold : null,
                 ),
               ),
             ],

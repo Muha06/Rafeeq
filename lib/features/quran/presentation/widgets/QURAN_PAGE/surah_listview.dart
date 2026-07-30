@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+ import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
 import 'package:rafeeq/core/themes/app_text_style.dart';
@@ -29,19 +29,22 @@ class AllSurahsList extends ConsumerWidget {
         return SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
 
-          sliver: SliverList.separated(
-            separatorBuilder: (context, index) => const SizedBox(height: 26),
-            itemCount: surahs.length,
-            addAutomaticKeepAlives: true,
-            itemBuilder: (context, index) {
-              final surah = surahs[index];
+          sliver: SliverSafeArea(
+            top: false,
+            sliver: SliverList.separated(
+              separatorBuilder: (context, index) => const SizedBox(height: 24),
+              itemCount: surahs.length,
+              addAutomaticKeepAlives: true,
+              itemBuilder: (context, index) {
+                final surah = surahs[index];
 
-              return GestureDetector(
-                onTap: () =>
-                    AppNav.push(context, FullSurahPage(initialIndex: index)),
-                child: SurahTile(surah: surah, surahs: surahs, index: index),
-              );
-            },
+                return GestureDetector(
+                  onTap: () =>
+                      AppNav.push(context, FullSurahPage(initialIndex: index)),
+                  child: SurahTile(surah: surah, surahs: surahs, index: index),
+                );
+              },
+            ),
           ),
         );
       },
@@ -92,32 +95,11 @@ class _SurahTileState extends ConsumerState<SurahTile>
     super.build(context);
 
     final theme = Theme.of(context);
-    final isDark = ref.watch(isDarkProvider);
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          width: 44,
-          height: 44,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Image.asset(
-                isDark
-                    ? 'assets/images/quran/surah_badge_dark.png'
-                    : 'assets/images/quran/surah_badge_light.png',
-                width: 44,
-                height: 44,
-                fit: BoxFit.contain,
-              ),
-              Text(
-                widget.surah.id.toString(),
-                style: theme.textTheme.labelLarge,
-              ),
-            ],
-          ),
-        ),
+        SurahTileNumber(surahId: widget.surah.id),
 
         const SizedBox(width: 10),
         Expanded(
@@ -131,7 +113,7 @@ class _SurahTileState extends ConsumerState<SurahTile>
               const SizedBox(height: 2),
 
               Text(
-                "${widget.surah.nameEnglish} • Verses ${widget.surah.versesCount} ",
+                widget.surah.nameEnglish,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: theme.textTheme.labelMedium,
@@ -149,6 +131,45 @@ class _SurahTileState extends ConsumerState<SurahTile>
           ),
         ),
       ],
+    );
+  }
+}
+
+class SurahTileNumber extends ConsumerWidget {
+  const SurahTileNumber({super.key, required this.surahId});
+
+  final int surahId;
+
+  @override
+  Widget build(BuildContext context, ref) {
+    final isDark = ref.watch(isDarkProvider);
+    final theme = Theme.of(context);
+
+    return SizedBox(
+      width: 44,
+      height: 44,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Image.asset(
+            isDark
+                ? 'assets/images/quran/surah_badge_dark.png'
+                : 'assets/images/quran/surah_badge_light.png',
+            width: 44,
+            height: 44,
+            fit: BoxFit.contain,
+          ),
+          Center(
+            child: Text(
+              surahId.toString(),
+              textAlign: TextAlign.center,
+              style: theme.textTheme.labelLarge?.copyWith(
+                fontFamily: 'PlayFairDisplay',
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

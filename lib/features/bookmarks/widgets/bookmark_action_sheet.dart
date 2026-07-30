@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+import 'package:rafeeq/core/widgets/app_drag_handle.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/dhikr_bookmark.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/quran_bookmark.dart';
 
@@ -18,19 +20,24 @@ class BookmarkActionBottomSheet extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 14),
       child: SafeArea(
         top: false,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _ActionTile(
-              icon: PhosphorIcons.trash,
-              title: 'Delete',
-              subtitle: 'This can’t be undone',
-              onTap: onDeleteBookmark,
-            ),
-          ],
+        child: SizedBox(
+          height: 120,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const AppDragHandle(),
+
+              _ActionTile(
+                icon: HugeIconsStroke.delete03,
+                title: 'Delete',
+                subtitle: 'This can’t be undone',
+                onTap: onDeleteBookmark,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -47,50 +54,37 @@ class _ActionTile extends ConsumerWidget {
 
   final IconData icon;
   final String title;
-  final String subtitle;
+  final String? subtitle;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context, ref) {
     final theme = Theme.of(context);
-    final cs = theme.colorScheme;
 
-    return Material(
-      color: cs.surfaceContainerHighest,
-      borderRadius: BorderRadius.circular(16),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(16),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-          child: Row(
-            children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: PhosphorIcon(icon),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(title, style: theme.textTheme.labelLarge),
-                    const SizedBox(height: 2),
-                    Text(
-                      subtitle,
-                      style: theme.textTheme.bodySmall?.copyWith(),
-                    ),
-                  ],
-                ),
-              ),
-              const Icon(Icons.chevron_right_rounded),
-            ],
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Row(
+        children: [
+          PhosphorIcon(icon),
+
+          const SizedBox(width: 12),
+
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: theme.textTheme.labelLarge),
+                const SizedBox(height: 2),
+
+                if (subtitle != null)
+                  Text(subtitle!, style: theme.textTheme.bodySmall?.copyWith()),
+              ],
+            ),
           ),
-        ),
+          const Icon(Icons.chevron_right_rounded),
+        ],
       ),
     );
   }

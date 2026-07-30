@@ -6,6 +6,7 @@ import 'package:rafeeq/core/features/audio/presentation/widgets/seek_bar.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/log_ayah_bottomsheet.dart';
+import 'package:text_scroll/text_scroll.dart';
 
 class QuranAudioControlsBar extends ConsumerWidget {
   const QuranAudioControlsBar({
@@ -105,8 +106,11 @@ class AudioControlsSection extends ConsumerWidget {
 
                   const SizedBox(height: 2),
 
-                  Text(
+                  TextScroll(
                     selectedReciter.name,
+                    mode: TextScrollMode.endless,
+                    intervalSpaces: 24,
+                    velocity: const Velocity(pixelsPerSecond: Offset(16, 0)),
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: cs.onSurfaceVariant,
                     ),
@@ -131,9 +135,9 @@ class AudioControlsSection extends ConsumerWidget {
               onPressed: audioState.isBuffering
                   ? null
                   : () => audioState.isPlaying ? ctrl.pause() : ctrl.play(),
-              icon: audioState.isPlaying
-                  ? HugeIconsStroke.pause
-                  : HugeIconsStroke.play,
+              icon: audioState.isPlaying ? Icons.pause : Icons.play_arrow,
+              enabledBgColor: cs.onSurface,
+              labelColor: cs.surface,
             ),
 
             IconButton(

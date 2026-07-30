@@ -25,7 +25,7 @@ class QuickSurahLinks extends ConsumerWidget {
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Quick links', style: theme.textTheme.bodySmall),
+                Text('Quick Access', style: theme.textTheme.bodySmall),
                 const SizedBox(height: 12),
 
                 SingleChildScrollView(

@@ -23,9 +23,9 @@ class AppSheets {
       showDragHandle: false,
       enableDrag: true,
       isDismissible: true,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(borderRadius)),
-      ),
+      // shape: RoundedRectangleBorder(
+      //   borderRadius: BorderRadius.vertical(top: Radius.circular(borderRadius)),
+      // ),
       builder: (_) => SafeArea(top: false, child: child),
     );
   }

@@ -284,12 +284,16 @@ class CircleIconButton extends StatelessWidget {
     super.key,
     required this.icon,
     this.onPressed,
+    this.enabledBgColor,
+    this.labelColor,
     this.size = 44,
   });
 
   final IconData icon;
   final VoidCallback? onPressed;
   final double size;
+  final Color? enabledBgColor;
+  final Color? labelColor;
 
   @override
   Widget build(BuildContext context) {
@@ -301,12 +305,14 @@ class CircleIconButton extends StatelessWidget {
       height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: Colors.transparent,
-        border: Border.all(
-          color: enabled
-              ? cs.outline
-              : cs.outlineVariant.withValues(alpha: 0.4),
-        ),
+        color: enabledBgColor ?? Colors.transparent,
+        border: enabledBgColor == null
+            ? Border.all(
+                color: enabled
+                    ? cs.onSurfaceVariant
+                    : cs.outlineVariant.withValues(alpha: 0.4),
+              )
+            : null,
       ),
       child: InkWell(
         onTap: onPressed,
@@ -315,7 +321,7 @@ class CircleIconButton extends StatelessWidget {
           child: Icon(
             icon,
             size: 20,
-            color: enabled ? cs.primary : cs.onSurfaceVariant,
+            color: enabled ? labelColor ?? cs.primary : cs.onSurfaceVariant,
           ),
         ),
       ),

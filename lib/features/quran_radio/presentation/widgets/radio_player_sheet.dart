@@ -154,16 +154,20 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
     final showPrevIcon = _currentIndex > 0;
     final showNextIcon = _currentIndex < widget.stations.length - 1;
 
+    final itemColor = Colors.white;
+
     return SizedBox(
       height: double.infinity,
       child: Stack(
         children: [
-          Positioned.fill(
-            child: ImageFiltered(
-              imageFilter: ImageFilter.blur(sigmaX: 48, sigmaY: 48),
-              child: Image.network(station.imageUrl!, fit: BoxFit.cover),
+          if (station.imageUrl != null)
+            Positioned.fill(
+              child: ImageFiltered(
+                key: ValueKey(station.imageUrl),
+                imageFilter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
+                child: Image.network(station.imageUrl!, fit: BoxFit.cover,),
+              ),
             ),
-          ),
 
           Positioned.fill(
             child: Container(
@@ -177,10 +181,10 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  const AppDragHandle(),
-
+                  AppDragHandle(color: itemColor),
+            
                   const SizedBox(height: 80),
-
+            
                   // Image
                   Center(
                     child: AppCachedImage(
@@ -201,46 +205,51 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
                       ),
                     ),
                   ).animate(key: ValueKey(station.id)).fade(duration: 300.ms),
-
+            
                   const SizedBox(height: 16),
-
+            
                   SizedBox(
                     width: double.infinity,
                     child: TextScroll(
                       "${station.name} ",
                       mode: TextScrollMode.endless,
                       intervalSpaces: 16,
-                      velocity: const Velocity(pixelsPerSecond: Offset(20, 0)),
+                      velocity: const Velocity(
+                        pixelsPerSecond: Offset(20, 0),
+                      ),
                       textAlign: TextAlign.center,
                       style: tt.titleMedium?.copyWith(
                         fontFamily: 'PlayFairDisplay',
+                        color: itemColor,
                       ),
                     ),
                   ),
-
+            
                   const SizedBox(height: 8),
-
+            
                   //Type of audio
                   MyChip(
                     borderRadius: 6,
+                    backgroundColor: cs.primary,
+                    foregroundColor: cs.onPrimary,
                     child: Text(
                       station.category.label,
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.visible,
-                      style: tt.labelMedium!.copyWith(color: cs.onSurface),
+                      style: tt.labelMedium!.copyWith(color: itemColor),
                     ),
                   ),
-
+            
                   const SizedBox(height: 32),
-
+            
                   // Seekbar
                   const SizedBox(
                     height: 52,
                     child: _RadioAudioSeekBar(), // your seekbar
                   ),
-
+            
                   const SizedBox(height: 16),
-
+            
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -252,33 +261,35 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
                           size: 36,
                           HugeIconsSolid.previous,
                           color: showPrevIcon
-                              ? cs.onSurface
+                              ? itemColor
                               : cs.onSurfaceVariant,
                         ),
                       ),
-
+            
                       const SizedBox(width: 24),
-
+            
                       // Play/pause
                       Consumer(
                         builder: (_, context, _) {
                           final state = ref.watch(audioControllerProvider);
                           final isBuffering = state.isBuffering;
-
+            
                           final isCurrent = state.currentId == station.id;
                           final isPlaying = isCurrent && state.isPlaying;
-
+            
                           return AnimatedPlayPauseBtn(
                             onPressed: _togglePlay,
                             size: 36,
                             isPlaying: isPlaying,
                             isBuffering: isBuffering,
+                            bgColor: itemColor,
+                            labelColor: Colors.black,
                           );
                         },
                       ),
-
+            
                       const SizedBox(width: 24),
-
+            
                       IconButton(
                         onPressed: showNextIcon
                             ? () => _goTo(_currentIndex + 1)
@@ -287,7 +298,7 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
                           HugeIconsSolid.next,
                           size: 36,
                           color: showNextIcon
-                              ? cs.onSurface
+                              ? itemColor
                               : cs.onSurfaceVariant,
                         ),
                       ),
@@ -326,7 +337,8 @@ class AnimatedPlayPauseBtn extends StatelessWidget {
     required this.isBuffering,
     this.duration = const Duration(milliseconds: 300),
     this.size = 40,
-    this.color,
+    this.bgColor,
+    this.labelColor,
   });
 
   final bool isPlaying;
@@ -334,7 +346,8 @@ class AnimatedPlayPauseBtn extends StatelessWidget {
   final VoidCallback onPressed;
   final Duration duration;
   final double size;
-  final Color? color;
+  final Color? bgColor;
+  final Color? labelColor;
 
   @override
   Widget build(BuildContext context) {
@@ -342,13 +355,13 @@ class AnimatedPlayPauseBtn extends StatelessWidget {
     final cs = theme.colorScheme;
     const double controlSize = 40;
 
-    final iconColor = color ?? cs.onPrimary;
+    final iconColor = labelColor ?? cs.onPrimary;
 
     return GestureDetector(
       onTap: isBuffering ? null : onPressed,
       child: Material(
         shape: const CircleBorder(),
-        color: cs.onSurface,
+        color: bgColor,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Center(
