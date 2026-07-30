@@ -35,26 +35,37 @@ class _GLobalMiniPlayerSheetState extends ConsumerState<GLobalMiniPlayerSheet> {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
-    final audioState = ref.watch(audioControllerProvider);
-    final ctrl = ref.read(audioControllerProvider.notifier);
+    final isPlaying = ref.watch(
+      audioControllerProvider.select((s) => s.isPlaying),
+    );
 
-    final isPlaying = audioState.isPlaying;
-    final isBuffering = audioState.isBuffering;
-    final position = audioState.position;
-    final buffered = audioState.bufferedPosition;
-    final duration = audioState.duration;
+    final isBuffering = ref.watch(
+      audioControllerProvider.select((s) => s.isBuffering),
+    );
+
+    final title = ref.watch(audioControllerProvider.select((s) => s.title));
+    final imageUrl = ref.watch(
+      audioControllerProvider.select((s) => s.imageUrl),
+    );
+    final sourceType = ref.watch(
+      audioControllerProvider.select((s) => s.sourceType),
+    );
+    final artist = ref.watch(audioControllerProvider.select((s) => s.artist));
+
+    final ctrl = ref.read(audioControllerProvider.notifier);
     final onSeek = ctrl.seek;
 
     final session = ref.watch(radioPlaybackSessionProvider);
 
     final controlsIconSize = 24.0;
+    debugPrint("Mini player rebuilt");
 
     return SafeArea(
       top: false,
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () {
-          switch (audioState.sourceType) {
+          switch (sourceType) {
             case AudioSourceType.quranRadio:
               if (session == null) return;
 
@@ -84,15 +95,16 @@ class _GLobalMiniPlayerSheetState extends ConsumerState<GLobalMiniPlayerSheet> {
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (audioState.imageUrl != null) ...[
+                  if (imageUrl != null) ...[
                     AppCachedImage(
-                      imageUrl: audioState.imageUrl,
+                      imageUrl: imageUrl,
                       height: 48,
                       width: 48,
                       borderRadius: 12,
@@ -110,18 +122,19 @@ class _GLobalMiniPlayerSheetState extends ConsumerState<GLobalMiniPlayerSheet> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         TextScroll(
-                          audioState.title ?? 'Now playing',
+                          key: ValueKey(sourceType),
+                          title ?? 'Now playing',
                           style: theme.textTheme.labelLarge,
                         ),
 
                         // Artist
-                        if (audioState.artist != null)
+                        if (artist != null)
                           SizedBox(
                             width: double.infinity,
                             child: TextScroll(
-                              key: ValueKey("Radio ${audioState.artist!}"),
-                              "🎧 ${audioState.artist!}",
+                              "🎧 $artist",
                               mode: TextScrollMode.endless,
+                              intervalSpaces: 16,
                               velocity: const Velocity(
                                 pixelsPerSecond: Offset(20, 0),
                               ),
@@ -172,14 +185,8 @@ class _GLobalMiniPlayerSheetState extends ConsumerState<GLobalMiniPlayerSheet> {
 
               const SizedBox(height: 6),
 
-              if (audioState.sourceType == AudioSourceType.quranSurah)
-                AudioSeekBar(
-                  position: position,
-                  buffered: buffered,
-                  duration: duration,
-                  onSeek: onSeek,
-                  showDurations: false,
-                ),
+              if (sourceType == AudioSourceType.quranSurah)
+                AudioSeekBar(onSeek: onSeek, showDurations: false),
             ],
           ),
         ),

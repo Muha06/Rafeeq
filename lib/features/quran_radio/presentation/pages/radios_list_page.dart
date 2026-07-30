@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+import 'package:rafeeq/core/features/audio/presentation/providers/audio_controller.dart';
+import 'package:rafeeq/core/features/audio/presentation/widgets/global_mini_player.dart';
 import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/features/quran_radio/domain/enums/radio_audio_category.dart';
 import 'package:rafeeq/features/quran_radio/presentation/providers/radio_controller.dart';
 import 'package:rafeeq/features/quran_radio/presentation/widgets/radio_tab_selector.dart';
 import '../widgets/radio_card.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class RadioListPage extends ConsumerStatefulWidget {
   const RadioListPage({super.key});
@@ -26,9 +29,19 @@ class _RadioListPageState extends ConsumerState<RadioListPage> {
       _selectedCategory = state.selectedCategory;
     }
 
+    final hasAudio = ref.watch(
+      audioControllerProvider.select(
+        (s) => s.currentId != null && s.currentId!.isNotEmpty,
+      ),
+    );
+    final miniPlayer = hasAudio
+        ? const GLobalMiniPlayerSheet(key: ValueKey('mini-player'))
+        : const SizedBox(key: ValueKey('empty'));
+
     return Scaffold(
       appBar: AppBar(title: const Text("Live Radio")),
-
+      bottomNavigationBar: miniPlayer,
+      extendBody: true,
       body: SafeArea(
         top: false,
         child: Column(
@@ -66,19 +79,21 @@ class _RadioListPageState extends ConsumerState<RadioListPage> {
                       ? _emptyState()
                       : RefreshIndicator(
                           onRefresh: () => controller.loadAll(),
-                          child: GridView.builder(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            physics: const AlwaysScrollableScrollPhysics(),
+                          child: MasonryGridView.builder(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
                             gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                const SliverSimpleGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 3,
-                                  crossAxisSpacing: 12,
-                                  mainAxisSpacing: 12,
-                                  childAspectRatio: 0.56,
                                 ),
+                            mainAxisSpacing: 12,
+                            crossAxisSpacing: 20,
                             itemCount: stations.length,
-                            itemBuilder: (_, i) =>
-                                RadioCard(stations: stations, initialIndex: i),
+                            itemBuilder: (_, i) {
+                              return RadioCard(
+                                stations: stations,
+                                initialIndex: i,
+                              );
+                            },
                           ),
                         ),
               },

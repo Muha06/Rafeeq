@@ -46,8 +46,7 @@ class MyBottomBar extends ConsumerWidget {
     final isDark = Theme.brightnessOf(context) == Brightness.dark;
 
     final itemColor = isDark ? Colors.white70 : Colors.black87;
-    // final bgColor = isDark?
-    final s = ref.watch(audioControllerProvider);
+     final s = ref.watch(audioControllerProvider);
     final miniPlayer = AnimatedSwitcher(
       duration: const Duration(milliseconds: 300),
       switchInCurve: Curves.easeOutCubic,

@@ -12,7 +12,7 @@ class RadioRemoteDataSource {
         .from('radio_stations')
         .select()
         .eq('is_active', true)
-        .order('name');
+        .order('name', ascending: true);
 
     final data = response as List<dynamic>;
 

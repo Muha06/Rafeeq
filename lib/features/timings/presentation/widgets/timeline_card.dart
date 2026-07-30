@@ -110,8 +110,9 @@ class _BuildTimelineCard extends ConsumerWidget {
                     ],
                   ),
 
-                  const Spacer(),
 
+                  const Spacer(),
+                  
                   Align(
                     alignment: Alignment.centerLeft,
                     child: _TimeToNextText(next: next),

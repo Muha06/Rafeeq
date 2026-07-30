@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -18,7 +20,6 @@ import 'package:rafeeq/features/quran_radio/domain/enums/radio_audio_category.da
 import 'package:rafeeq/features/quran_radio/presentation/providers/radio_context_provider.dart';
 import 'package:rafeeq/features/quran_radio/presentation/providers/selected_station_provider.dart';
 import 'package:rafeeq/features/quran_radio/presentation/widgets/category_fallback_image.dart';
-import 'package:palette_generator_master/palette_generator_master.dart';
 import 'package:text_scroll/text_scroll.dart';
 
 class RadioPlayerSheet extends ConsumerStatefulWidget {
@@ -40,8 +41,6 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
 
   RadioStation get station => widget.stations[_currentIndex];
 
-  Color? _dominantColor;
-
   @override
   void initState() {
     super.initState();
@@ -49,32 +48,8 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
 
     // Delay autoplay until after the first frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _loadPalette();
       _autoPlay();
     });
-  }
-
-  Future<void> _loadPalette() async {
-    if (station.imageUrl == null || station.imageUrl!.isEmpty) return;
-
-    await Future.delayed(450.ms);
-
-    try {
-      final palette = await PaletteGeneratorMaster.fromImageProvider(
-        NetworkImage(station.imageUrl!),
-        maximumColorCount: 16,
-        generateHarmony: true,
-        colorSpace: ColorSpace.lab,
-      );
-
-      if (!mounted) return;
-
-      setState(() {
-        _dominantColor = palette.dominantColor?.color;
-      });
-    } catch (e) {
-      debugPrint('Palette error: $e');
-    }
   }
 
   //Auto start Playing
@@ -173,148 +148,156 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
     final tt = theme.textTheme;
     final imageHeight = 280.0;
     final imageWidth = MediaQuery.of(context).size.width * 0.8;
-    final dominant = _dominantColor ?? cs.primary;
-    final tint = Color.lerp(cs.onPrimary, dominant, 0.4)!;
 
     final station = widget.stations[_currentIndex];
 
     final showPrevIcon = _currentIndex > 0;
     final showNextIcon = _currentIndex < widget.stations.length - 1;
 
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 250),
+    return SizedBox(
       height: double.infinity,
-      padding: const EdgeInsets.only(left: 16, right: 16, top: 24),
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [dominant, tint, cs.onPrimary],
-        ),
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            const AppDragHandle(),
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: ImageFiltered(
+              imageFilter: ImageFilter.blur(sigmaX: 48, sigmaY: 48),
+              child: Image.network(station.imageUrl!, fit: BoxFit.cover),
+            ),
+          ),
 
-            const SizedBox(height: 80),
+          Positioned.fill(
+            child: Container(
+              decoration: const BoxDecoration(color: Colors.black87),
+            ),
+          ),
 
-            // Image
-            Center(
-                  child: AppCachedImage(
-                    imageUrl: station.imageUrl,
-                    height: imageHeight,
-                    width: imageWidth,
-                    borderRadius: 48,
-                    errorWidget: CategoryFallback(
-                      station: station,
-                      showShadow: false,
-                      height: 300,
-                      width: double.infinity,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14.0),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  const AppDragHandle(),
+
+                  const SizedBox(height: 80),
+
+                  // Image
+                  Center(
+                    child: AppCachedImage(
+                      imageUrl: station.imageUrl,
+                      height: imageHeight,
+                      width: imageWidth,
+                      borderRadius: 32,
+                      errorWidget: CategoryFallback(
+                        station: station,
+                        showShadow: false,
+                        height: 300,
+                        width: double.infinity,
+                      ),
+                      placeholder: Container(
+                        height: 300,
+                        width: double.infinity,
+                        color: Colors.transparent,
+                      ),
                     ),
-                    placeholder: Container(
-                      height: 300,
-                      width: double.infinity,
-                      color: Colors.transparent,
+                  ).animate(key: ValueKey(station.id)).fade(duration: 300.ms),
+
+                  const SizedBox(height: 16),
+
+                  SizedBox(
+                    width: double.infinity,
+                    child: TextScroll(
+                      "${station.name} ",
+                      mode: TextScrollMode.endless,
+                      intervalSpaces: 16,
+                      velocity: const Velocity(pixelsPerSecond: Offset(20, 0)),
+                      textAlign: TextAlign.center,
+                      style: tt.titleMedium?.copyWith(
+                        fontFamily: 'PlayFairDisplay',
+                      ),
                     ),
                   ),
-                )
-                .animate(key: ValueKey(station.id))
-                .fade(duration: 300.ms)
-                .scale(
-                  begin: const Offset(1, 1),
-                  end: const Offset(.96, .96),
-                  curve: Curves.easeOutCubic,
-                  duration: 300.ms,
-                ),
 
-            const SizedBox(height: 16),
+                  const SizedBox(height: 8),
 
-            SizedBox(
-              width: double.infinity,
-              child: TextScroll(
-                "${station.name} ",
-                mode: TextScrollMode.endless,
-                velocity: const Velocity(pixelsPerSecond: Offset(20, 0)),
-                textAlign: TextAlign.center,
-                style: tt.titleMedium?.copyWith(fontFamily: 'PlayFairDisplay'),
+                  //Type of audio
+                  MyChip(
+                    borderRadius: 6,
+                    child: Text(
+                      station.category.label,
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.visible,
+                      style: tt.labelMedium!.copyWith(color: cs.onSurface),
+                    ),
+                  ),
+
+                  const SizedBox(height: 32),
+
+                  // Seekbar
+                  const SizedBox(
+                    height: 52,
+                    child: _RadioAudioSeekBar(), // your seekbar
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        onPressed: showPrevIcon
+                            ? () => _goTo(_currentIndex - 1)
+                            : null,
+                        icon: Icon(
+                          size: 36,
+                          HugeIconsSolid.previous,
+                          color: showPrevIcon
+                              ? cs.onSurface
+                              : cs.onSurfaceVariant,
+                        ),
+                      ),
+
+                      const SizedBox(width: 24),
+
+                      // Play/pause
+                      Consumer(
+                        builder: (_, context, _) {
+                          final state = ref.watch(audioControllerProvider);
+                          final isBuffering = state.isBuffering;
+
+                          final isCurrent = state.currentId == station.id;
+                          final isPlaying = isCurrent && state.isPlaying;
+
+                          return AnimatedPlayPauseBtn(
+                            onPressed: _togglePlay,
+                            size: 36,
+                            isPlaying: isPlaying,
+                            isBuffering: isBuffering,
+                          );
+                        },
+                      ),
+
+                      const SizedBox(width: 24),
+
+                      IconButton(
+                        onPressed: showNextIcon
+                            ? () => _goTo(_currentIndex + 1)
+                            : null,
+                        icon: Icon(
+                          HugeIconsSolid.next,
+                          size: 36,
+                          color: showNextIcon
+                              ? cs.onSurface
+                              : cs.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-
-            const SizedBox(height: 8),
-
-            //Type of audio
-            MyChip(
-              borderRadius: 6,
-              child: Text(
-                station.category.label,
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.visible,
-                style: tt.labelMedium!.copyWith(color: cs.onSurface),
-              ),
-            ),
-
-            const SizedBox(height: 32),
-
-            // Seekbar
-            const SizedBox(
-              height: 52,
-              child: _RadioAudioSeekBar(), // your seekbar
-            ),
-
-            const SizedBox(height: 16),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  onPressed: showPrevIcon
-                      ? () => _goTo(_currentIndex - 1)
-                      : null,
-                  icon: Icon(
-                    size: 36,
-                    HugeIconsSolid.previous,
-                    color: showPrevIcon ? cs.onSurface : cs.onSurfaceVariant,
-                  ),
-                ),
-
-                const SizedBox(width: 24),
-
-                // Play/pause
-                Consumer(
-                  builder: (_, context, _) {
-                    final state = ref.watch(audioControllerProvider);
-                    final isBuffering = state.isBuffering;
-
-                    final isCurrent = state.currentId == station.id;
-                    final isPlaying = isCurrent && state.isPlaying;
-
-                    return AnimatedPlayPauseBtn(
-                      onPressed: _togglePlay,
-                      size: 36,
-                      isPlaying: isPlaying,
-                      isBuffering: isBuffering,
-                    );
-                  },
-                ),
-
-                const SizedBox(width: 24),
-
-                IconButton(
-                  onPressed: showNextIcon
-                      ? () => _goTo(_currentIndex + 1)
-                      : null,
-                  icon: Icon(
-                    HugeIconsSolid.next,
-                    size: 36,
-                    color: showNextIcon ? cs.onSurface : cs.onSurfaceVariant,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -325,8 +308,6 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
     setState(() {
       _currentIndex = newIndex;
     });
-
-    _loadPalette();
 
     ref.read(currentStationProvider.notifier).state = widget.stations[newIndex];
 
@@ -360,7 +341,6 @@ class AnimatedPlayPauseBtn extends StatelessWidget {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
     const double controlSize = 40;
-    const double loaderRadius = controlSize / 2;
 
     final iconColor = color ?? cs.onPrimary;
 
@@ -370,12 +350,13 @@ class AnimatedPlayPauseBtn extends StatelessWidget {
         shape: const CircleBorder(),
         color: cs.onSurface,
         child: Padding(
-          padding: const EdgeInsets.all(12.0),
+          padding: const EdgeInsets.all(8.0),
           child: Center(
             child: isBuffering
-                ? CupertinoActivityIndicator(
-                    color: iconColor,
-                    radius: loaderRadius,
+                ? SizedBox(
+                    height: controlSize,
+                    width: controlSize,
+                    child: CircularProgressIndicator(color: iconColor),
                   )
                 : isPlaying
                 ? PhosphorIcon(
@@ -402,20 +383,10 @@ class _RadioAudioSeekBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final audioState = ref.watch(audioControllerProvider);
     final ctrl = ref.watch(audioControllerProvider.notifier);
 
-    final position = audioState.position;
-    final buffered = audioState.bufferedPosition;
-    final duration = audioState.duration;
     final onSeek = ctrl.seek;
 
-    return AudioSeekBar(
-      position: position,
-      buffered: buffered,
-      duration: duration,
-      onSeek: onSeek,
-      showDurations: false,
-    );
+    return AudioSeekBar(onSeek: onSeek, showDurations: false);
   }
 }

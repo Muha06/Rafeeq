@@ -45,6 +45,7 @@ class AppCachedImage extends StatelessWidget {
       return _buildWrapper(error);
     }
 
+ 
     return _buildWrapper(
       CachedNetworkImage(
         imageUrl: imageUrl!,

@@ -1,26 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/core/features/audio/presentation/providers/audio_controller.dart';
 
-class AudioSeekBar extends StatefulWidget {
+class AudioSeekBar extends ConsumerStatefulWidget {
   const AudioSeekBar({
-    super.key,
-    required this.position,
-    required this.buffered,
-    required this.duration,
+    super.key, 
     this.showDurations = true,
     required this.onSeek,
   });
-
-  final Duration position;
-  final Duration buffered;
-  final Duration duration;
+ 
   final bool? showDurations;
   final void Function(Duration position) onSeek;
 
   @override
-  State<AudioSeekBar> createState() => _AudioSeekBarState();
+  ConsumerState<AudioSeekBar> createState() => _AudioSeekBarState();
 }
 
-class _AudioSeekBarState extends State<AudioSeekBar> {
+class _AudioSeekBarState extends ConsumerState<AudioSeekBar> {
   double? _dragValueMs;
 
   @override
@@ -28,22 +24,33 @@ class _AudioSeekBarState extends State<AudioSeekBar> {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
+ final position = ref.watch(
+      audioControllerProvider.select((s) => s.position),
+    );
+    final buffered = ref.watch(
+      audioControllerProvider.select((s) => s.bufferedPosition),
+    );
+
+    final duration = ref.watch(
+      audioControllerProvider.select((s) => s.duration),
+    );
+
     // Avoid divide-by-zero and give Slider a valid non-zero max.
-    final totalMs = widget.duration.inMilliseconds <= 0
+    final totalMs = duration.inMilliseconds <= 0
         ? 1.0
-        : widget.duration.inMilliseconds.toDouble();
+        : duration.inMilliseconds.toDouble();
 
     // While dragging, we render the temporary thumb position immediately
     // instead of waiting for the audio engine to report the new position back.
     final effectivePositionMs =
-        (_dragValueMs ?? widget.position.inMilliseconds.toDouble()).clamp(
+        (_dragValueMs ?? position.inMilliseconds.toDouble()).clamp(
           0.0,
           totalMs,
         );
 
     // The buffered track is rendered separately behind the slider so it remains
     // visible instead of being painted over by the Slider's built-in track.
-    final bufferedMs = widget.buffered.inMilliseconds.toDouble().clamp(
+    final bufferedMs = buffered.inMilliseconds.toDouble().clamp(
       0.0,
       totalMs,
     );
@@ -155,7 +162,7 @@ class _AudioSeekBarState extends State<AudioSeekBar> {
                 _format(Duration(milliseconds: effectivePositionMs.round())),
                 style: theme.textTheme.bodySmall,
               ),
-              Text(_format(widget.duration), style: theme.textTheme.bodySmall),
+              Text(_format(duration), style: theme.textTheme.bodySmall),
             ],
           ),
         ],

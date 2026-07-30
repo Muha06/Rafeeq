@@ -32,6 +32,7 @@ class AllSurahsList extends ConsumerWidget {
           sliver: SliverList.separated(
             separatorBuilder: (context, index) => const SizedBox(height: 26),
             itemCount: surahs.length,
+            addAutomaticKeepAlives: true,
             itemBuilder: (context, index) {
               final surah = surahs[index];
 
@@ -65,7 +66,7 @@ class AllSurahsList extends ConsumerWidget {
   }
 }
 
-class SurahTile extends ConsumerWidget {
+class SurahTile extends ConsumerStatefulWidget {
   final Surah surah;
   final List<Surah> surahs;
   final int index;
@@ -78,7 +79,18 @@ class SurahTile extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SurahTile> createState() => _SurahTileState();
+}
+
+class _SurahTileState extends ConsumerState<SurahTile>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+
     final theme = Theme.of(context);
     final isDark = ref.watch(isDarkProvider);
 
@@ -99,7 +111,10 @@ class SurahTile extends ConsumerWidget {
                 height: 44,
                 fit: BoxFit.contain,
               ),
-              Text(surah.id.toString(), style: theme.textTheme.labelLarge),
+              Text(
+                widget.surah.id.toString(),
+                style: theme.textTheme.labelLarge,
+              ),
             ],
           ),
         ),
@@ -110,13 +125,13 @@ class SurahTile extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                surah.nameTransliteration,
+                widget.surah.nameTransliteration,
                 style: theme.textTheme.labelLarge,
               ),
               const SizedBox(height: 2),
 
               Text(
-                "${surah.nameEnglish} • Verses ${surah.versesCount} ",
+                "${widget.surah.nameEnglish} • Verses ${widget.surah.versesCount} ",
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: theme.textTheme.labelMedium,
@@ -127,7 +142,7 @@ class SurahTile extends ConsumerWidget {
         const SizedBox(width: 10),
 
         Text(
-          cleanAyah(surah.nameArabic),
+          cleanAyah(widget.surah.nameArabic),
           style: AppTextStyles.quranAyah.copyWith(
             color: theme.colorScheme.onSurface,
             fontWeight: FontWeight.bold,

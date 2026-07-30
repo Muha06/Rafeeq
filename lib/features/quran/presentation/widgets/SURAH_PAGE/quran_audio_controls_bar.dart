@@ -28,7 +28,7 @@ class QuranAudioControlsBar extends ConsumerWidget {
     final showAutoScrollControls = ref
         .watch(surahSettingsProvider)
         .showAutoScrollControls;
- 
+
     return SafeArea(
       top: false,
       child: AnimatedSize(
@@ -151,13 +151,7 @@ class AudioControlsSection extends ConsumerWidget {
 
         const SizedBox(height: 8),
 
-        AudioSeekBar(
-          position: audioState.position,
-          buffered: audioState.bufferedPosition,
-          duration: audioState.duration,
-          onSeek: ctrl.seek,
-          showDurations: false,
-        ),
+        AudioSeekBar(onSeek: ctrl.seek, showDurations: false),
       ],
     );
   }
