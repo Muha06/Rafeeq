@@ -45,8 +45,8 @@ class MyBottomBar extends ConsumerWidget {
     ];
     final isDark = Theme.brightnessOf(context) == Brightness.dark;
 
-    final itemColor = isDark ? Colors.white70 : Colors.black;
-
+    final itemColor = isDark ? Colors.white70 : Colors.black87;
+    // final bgColor = isDark?
     final s = ref.watch(audioControllerProvider);
     final miniPlayer = AnimatedSwitcher(
       duration: const Duration(milliseconds: 300),
@@ -69,27 +69,28 @@ class MyBottomBar extends ConsumerWidget {
           : const SizedBox(key: ValueKey('empty')),
     );
 
-    final blurSize = isDark ? 4.0 : 16.0;
+    final blurSize = 16.0;
 
     return SafeArea(
       top: true,
       bottom: false,
-      child: ClipRRect(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: blurSize, sigmaY: blurSize),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+            child: miniPlayer,
+          ),
 
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              miniPlayer,
-
-              // const SizedBox(height: 6),
-              SafeArea(
-                top: false,
+           SafeArea(
+            top: false,
+            child: ClipRRect(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: blurSize, sigmaY: blurSize),
                 child: Container(
                   height: 56,
                   padding: const EdgeInsets.symmetric(horizontal: 12),
-                  decoration: const BoxDecoration(color: Colors.black26),
+                  decoration: const BoxDecoration(color: Colors.black12),
                   child: Row(
                     children: List.generate(items.length, (index) {
                       final item = items[index];
@@ -134,9 +135,9 @@ class MyBottomBar extends ConsumerWidget {
                   ),
                 ),
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

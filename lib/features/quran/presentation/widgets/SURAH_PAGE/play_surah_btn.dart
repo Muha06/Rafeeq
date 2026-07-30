@@ -18,9 +18,11 @@ import 'package:rafeeq/core/helpers/app_toast.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 
 class PlayFullSurahBtn extends ConsumerStatefulWidget {
-  const PlayFullSurahBtn({super.key, required this.initialIndex});
+  const PlayFullSurahBtn({super.key, required this.initialIndex, this.builder});
 
   final int initialIndex;
+  final Widget Function(bool isBuffering, bool isLoading, bool isPlaying)?
+  builder;
 
   @override
   ConsumerState<PlayFullSurahBtn> createState() => _PlayFullSurahBtnState();
@@ -48,12 +50,12 @@ class _PlayFullSurahBtnState extends ConsumerState<PlayFullSurahBtn> {
       final ctrl = ref.read(audioControllerProvider.notifier);
 
       final isPlaying = state.isPlaying;
-      final isNewTrack = state.currentId != audioId;
+      final isSameTrack = state.currentId == audioId;
 
       try {
-        if (!isNewTrack) {
+        if (isSameTrack) {
           if (isPlaying) {
-            await ctrl.stop();
+            await ctrl.pause();
           } else {
             await ctrl.play();
           }
@@ -107,9 +109,20 @@ class _PlayFullSurahBtnState extends ConsumerState<PlayFullSurahBtn> {
     final isBuffering = audioState.isBuffering;
     final isPlaying = audioState.isPlaying;
 
-    final surah = surahs[widget.initialIndex];
     if (surahs.length <= widget.initialIndex) {
       return const SizedBox.shrink();
+    }
+
+    final surah = surahs[widget.initialIndex];
+
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
+    if (widget.builder != null) {
+      return GestureDetector(
+        onTap: () => playSurahAudio(surah: surah),
+        child: widget.builder!(isBuffering, _isLoading, isPlaying),
+      );
     }
 
     return TextButton.icon(
@@ -122,7 +135,7 @@ class _PlayFullSurahBtnState extends ConsumerState<PlayFullSurahBtn> {
         if (isBuffering || _isLoading) return;
 
         if (isPlaying) {
-          ref.read(audioControllerProvider.notifier).stop();
+          await ref.read(audioControllerProvider.notifier).pause();
           return;
         }
 
@@ -147,6 +160,11 @@ class _PlayFullSurahBtnState extends ConsumerState<PlayFullSurahBtn> {
             : isPlaying
             ? 'Stop'
             : 'Play surah',
+        style: theme.textButtonTheme.style?.textStyle
+            ?.resolve({})
+            ?.copyWith(
+              color: _isLoading || isBuffering ? cs.onSurfaceVariant : null,
+            ),
       ),
     );
   }

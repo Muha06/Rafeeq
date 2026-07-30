@@ -75,11 +75,11 @@ class _GLobalMiniPlayerSheetState extends ConsumerState<GLobalMiniPlayerSheet> {
           }
         },
         child: Container(
-          margin: EdgeInsets.zero,
-          padding: const EdgeInsets.fromLTRB(8, 4, 8, 0),
+          // margin: EdgeInsets.zero,
+          padding: const EdgeInsets.fromLTRB(12, 8, 8, 8),
 
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(8),
             color: cs.surfaceContainerHighest,
           ),
           child: Column(
@@ -97,8 +97,10 @@ class _GLobalMiniPlayerSheetState extends ConsumerState<GLobalMiniPlayerSheet> {
                       width: 48,
                       borderRadius: 12,
                     ),
-                    const SizedBox(width: 12),
+                  ] else ...[
+                    const Icon(HugeIconsSolid.audioWave01),
                   ],
+                  const SizedBox(width: 12),
 
                   // Column
                   Expanded(
@@ -117,6 +119,7 @@ class _GLobalMiniPlayerSheetState extends ConsumerState<GLobalMiniPlayerSheet> {
                           SizedBox(
                             width: double.infinity,
                             child: TextScroll(
+                              key: ValueKey("Radio ${audioState.artist!}"),
                               "🎧 ${audioState.artist!}",
                               mode: TextScrollMode.endless,
                               velocity: const Velocity(
@@ -144,6 +147,8 @@ class _GLobalMiniPlayerSheetState extends ConsumerState<GLobalMiniPlayerSheet> {
                           ),
                           visualDensity: VisualDensity.compact,
                         ),
+
+                  // const SizedBox(width: 2),
 
                   //stop
                   IconButton(

@@ -23,7 +23,6 @@ import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/quran_audi
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_ayah_dialog.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_details.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_settings_sheet.dart';
-import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/log_ayah_bottomsheet.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -147,6 +146,8 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
 
     _autoTimer?.cancel();
     _autoTimer = null;
+
+    ref.read(surahSettingsProvider.notifier).setAutoScrollActive(false);
   }
 
   void _exitAutoScroll() {
@@ -158,7 +159,13 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
     setState(() => _autoOn = false);
   }
 
-  void _toggleAutoScroll() => _autoOn ? _exitAutoScroll() : _startAutoScroll();
+  void _handleAutoScrollSetting(bool enabled) {
+    if (enabled) {
+      _startAutoScroll();
+    } else {
+      _exitAutoScroll();
+    }
+  }
 
   Future<void> jumpToAyah(int ayahNumber, {bool suppressSave = false}) async {
     int attempts = 0;
@@ -309,23 +316,14 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
 
     final ayahsAsync = ref.watch(ayahsProvider(surahId));
 
-    final reciter = ref.watch(selectedReciterProvider);
-    final currentAudioId = '${surahId}_${reciter.id}';
-
     final hasGoal = ref.watch(quranGoalProvider) != null;
-
-    // ref.listen(audioControllerProvider, (prev, next) {
-    //   if (next.currentId != currentAudioId) {
-    //     ref.read(surahSettingsProvider.notifier).showAudioControls(false);
-    //   } else {
-    //     ref.read(surahSettingsProvider.notifier).showAudioControls(true);
-    //   }
-    // });
 
     final showAudioControls = ref
         .watch(surahSettingsProvider)
         .showAudioControls;
-    debugPrint("✅✅✅ Show audio controls: $showAudioControls");
+    final showAutoScrollControls = ref.watch(
+      surahSettingsProvider.select((s) => s.showAutoScrollControls),
+    );
 
     return PopScope(
       onPopInvokedWithResult: (didPop, result) async {
@@ -348,7 +346,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
         bottom: true,
         top: false,
         child: Scaffold(
-          bottomNavigationBar: (showAudioControls)
+          bottomNavigationBar: (showAudioControls || showAutoScrollControls)
               ? QuranAudioControlsBar(
                   currentId: surahId.toString(),
                   onStart: _startAutoScroll,
@@ -406,7 +404,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
                   AppSheets.showBottomSheet(
                     context: context,
                     child: SurahSettingsSheet(
-                      onToggleAutoScroll: _toggleAutoScroll,
+                      onAutoScrollChanged: _handleAutoScrollSetting,
                     ),
                   );
                 },

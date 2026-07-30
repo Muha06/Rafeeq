@@ -21,21 +21,21 @@ class AllSurahsList extends ConsumerWidget {
     return surahsAsync.when(
       data: (surahs) {
         if (surahs.isEmpty) {
-          return const Center(child: Text('No surahs found.'));
+          return const SliverToBoxAdapter(
+            child: Center(child: Text('No surahs found.')),
+          );
         }
 
-        return SafeArea(
-          top: false,
-          child: ListView.separated(
+        return SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+
+          sliver: SliverList.separated(
             separatorBuilder: (context, index) => const SizedBox(height: 26),
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
             itemCount: surahs.length,
             itemBuilder: (context, index) {
               final surah = surahs[index];
 
-              return InkWell(
+              return GestureDetector(
                 onTap: () =>
                     AppNav.push(context, FullSurahPage(initialIndex: index)),
                 child: SurahTile(surah: surah, surahs: surahs, index: index),
@@ -45,20 +45,22 @@ class AllSurahsList extends ConsumerWidget {
         );
       },
       error: (error, _) {
-        return Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: AppStateView(
-              icon: PhosphorIcons.warningCircle,
-              title: "Something went wrong",
-              message: "We couldn't load the surahs. Please try again Later.",
-              buttonText: "Retry",
-              onPressed: () => ref.refresh(surahsProvider),
+        return SliverToBoxAdapter(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: AppStateView(
+                icon: PhosphorIcons.warningCircle,
+                title: "Something went wrong",
+                message: "We couldn't load the surahs. Please try again Later.",
+                buttonText: "Retry",
+                onPressed: () => ref.refresh(surahsProvider),
+              ),
             ),
           ),
         );
       },
-      loading: () => const SurahTileShimmer(),
+      loading: () => const SliverToBoxAdapter(child: SurahTileShimmer()),
     );
   }
 }

@@ -28,9 +28,7 @@ class QuranAudioControlsBar extends ConsumerWidget {
     final showAutoScrollControls = ref
         .watch(surahSettingsProvider)
         .showAutoScrollControls;
-
-    debugPrint("✅✅✅ Show audio controls: $showAudioControls");
-
+ 
     return SafeArea(
       top: false,
       child: AnimatedSize(

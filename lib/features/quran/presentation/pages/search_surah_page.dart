@@ -86,42 +86,53 @@ class _SurahSearchPageState extends ConsumerState<SurahSearchPage> {
             onTap: () => _focus.unfocus(),
             child: filtered.isEmpty
                 ? const Center(child: Text('No surahs found'))
-                : ListView.separated(
-                    separatorBuilder: (context, index) =>
-                        const SizedBox(height: 16),
-                    keyboardDismissBehavior:
-                        ScrollViewKeyboardDismissBehavior.onDrag,
-                    itemCount: filtered.length,
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    itemBuilder: (context, index) {
-                      final surah = filtered[index];
-
-                      final realSurahIndex = surahs.indexWhere(
-                        (s) => s.id == surah.id,
-                      );
-
-                      return InkWell(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return FullSurahPage(
-                                  initialIndex: realSurahIndex,
-                                );
-                              },
-                            ),
-                          );
-
-                          RafeeqAnalytics.logScreenView('surah_page');
-                        },
-                        child: SurahTile(
-                          surah: surah,
-                          surahs: surahs,
-                          index: realSurahIndex,
-                        ),
-                      );
+                : ShaderMask(
+                    shaderCallback: (Rect rect) {
+                      return const LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [Colors.transparent, Colors.green],
+                        stops: [0.9, 1.0],
+                      ).createShader(rect);
                     },
+                    blendMode: BlendMode.dstOut,
+                    child: ListView.separated(
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: 16),
+                      keyboardDismissBehavior:
+                          ScrollViewKeyboardDismissBehavior.onDrag,
+                      itemCount: filtered.length,
+                      padding: const EdgeInsets.fromLTRB(8, 8, 8, 16),
+                      itemBuilder: (context, index) {
+                        final surah = filtered[index];
+
+                        final realSurahIndex = surahs.indexWhere(
+                          (s) => s.id == surah.id,
+                        );
+
+                        return InkWell(
+                          onTap: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return FullSurahPage(
+                                    initialIndex: realSurahIndex,
+                                  );
+                                },
+                              ),
+                            );
+
+                            RafeeqAnalytics.logScreenView('surah_page');
+                          },
+                          child: SurahTile(
+                            surah: surah,
+                            surahs: surahs,
+                            index: realSurahIndex,
+                          ),
+                        );
+                      },
+                    ),
                   ),
           ),
         ),

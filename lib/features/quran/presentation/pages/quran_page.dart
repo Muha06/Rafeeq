@@ -91,7 +91,7 @@ class _QuranPageState extends ConsumerState<QuranPage> {
           ),
 
           //Surah listview
-          const SliverToBoxAdapter(child: AllSurahsList()),
+          const AllSurahsList(),
         ],
       ),
     );

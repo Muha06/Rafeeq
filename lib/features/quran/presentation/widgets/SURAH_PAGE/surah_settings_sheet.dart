@@ -7,8 +7,8 @@ import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_prov
 import 'package:rafeeq/features/quran_audio/presentation/widgets/reciter_picker_sheet.dart';
 
 class SurahSettingsSheet extends ConsumerStatefulWidget {
-  const SurahSettingsSheet({super.key, required this.onToggleAutoScroll});
-  final VoidCallback onToggleAutoScroll;
+  const SurahSettingsSheet({super.key, required this.onAutoScrollChanged});
+  final ValueChanged<bool> onAutoScrollChanged;
   @override
   ConsumerState<SurahSettingsSheet> createState() => _SurahSettingsSheetState();
 }
@@ -67,7 +67,7 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
               contentPadding: EdgeInsets.zero,
               onChanged: (v) {
                 sNotifier.setAutoScroll(v);
-                widget.onToggleAutoScroll();
+                widget.onAutoScrollChanged(v);
                 if (v) {
                   Navigator.pop(context);
                 }

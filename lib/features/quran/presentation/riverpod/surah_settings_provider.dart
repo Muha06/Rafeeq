@@ -30,7 +30,6 @@ class SurahSettings {
     double? arabicFontSize,
     double? translationFontSize,
     double? autoScrollSpeed,
-    bool? autoScrollEnabled,
     bool? showTranslit,
     bool? mushafMode,
     bool? isAutoScrolling,
@@ -87,9 +86,26 @@ class SurahSettingsNotifier extends StateNotifier<SurahSettings> {
       state = state.copyWith(autoScrollSpeed: v);
 
   void setAutoScroll(bool v) {
-    if (state.showAutoScrollControls == v) return;
-    state = state.copyWith(autoScrollEnabled: v);
+    debugPrint("✅✅✅ Setting autoscroll state to : $v");
+
+    state = state.copyWith(showAutoScrollControls: v, isAutoScrolling: v);
   }
+
+  void setAutoScrollActive(bool v) {
+    if (state.isAutoScrolling == v) return;
+    debugPrint("✅✅✅ Setting autoscroll active state to : $v");
+
+    state = state.copyWith(isAutoScrolling: v);
+  }
+
+  void setShowAutoScrollControls(bool v) {
+    if (state.showAutoScrollControls == v) return;
+    debugPrint("✅✅✅ Setting autoscroll controls visibility to : $v");
+
+    state = state.copyWith(showAutoScrollControls: v);
+  }
+
+  void setIsAutoScrolling(bool v) => setAutoScrollActive(v);
 
   void showAudioControls(bool v) {
     if (state.showAudioControls == v) return;

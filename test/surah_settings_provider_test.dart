@@ -28,5 +28,24 @@ void main() {
 
       expect(updated.showAudioControls, isTrue);
     });
+
+    test('setAutoScroll(true) reveals the controls and starts scrolling', () {
+      final notifier = SurahSettingsNotifier();
+
+      notifier.setAutoScroll(true);
+
+      expect(notifier.state.showAutoScrollControls, isTrue);
+      expect(notifier.state.isAutoScrolling, isTrue);
+    });
+
+    test('setAutoScroll(false) hides the controls and stops scrolling', () {
+      final notifier = SurahSettingsNotifier();
+
+      notifier.setAutoScroll(true);
+      notifier.setAutoScroll(false);
+
+      expect(notifier.state.showAutoScrollControls, isFalse);
+      expect(notifier.state.isAutoScrolling, isFalse);
+    });
   });
 }
