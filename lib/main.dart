@@ -40,6 +40,7 @@ import 'package:rafeeq/features/quran_goal/data/models/hive/quran_log_hive.dart'
 import 'package:rafeeq/features/quran_goal/data/models/hive/quran_target_unit_hive.dart';
 import 'package:rafeeq/features/timings/data/models/hive/cached_salah_times_hive.dart';
 import 'package:rafeeq/firebase_options.dart';
+import 'package:smooth_sheets/smooth_sheets.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:rafeeq/core/features/audio/presentation/providers/audio_handler_provider.dart';
 
@@ -214,9 +215,11 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
       debugShowCheckedModeBanner: false,
       navigatorKey: navigatorKey,
       scaffoldMessengerKey: scaffoldMessengerKey,
-      home: hasSeenOnboarding
-          ? const AppWrapper(child: TabsScreen())
-          : const OnboardingPage(),
+      home: SheetViewport(
+        child: hasSeenOnboarding
+            ? const AppWrapper(child: TabsScreen())
+            : const OnboardingPage(),
+      ),
     );
   }
 }

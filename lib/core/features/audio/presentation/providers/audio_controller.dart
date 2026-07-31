@@ -229,6 +229,27 @@ class AudioController extends Notifier<AudioState> {
       rethrow;
     }
   }
+
+  Future skipForward10() async {
+    final newPosition = state.position + const Duration(seconds: 10);
+
+    final duration = state.duration;
+    if (newPosition > duration) {
+      await seek(duration);
+    } else {
+      await seek(newPosition);
+    }
+  }
+
+  Future skipBackward10() async {
+    final newPosition = state.position - const Duration(seconds: 10);
+
+    if (newPosition.isNegative) {
+      await seek(Duration.zero);
+    } else {
+      await seek(newPosition);
+    }
+  }
 }
 
 final audioControllerProvider = NotifierProvider<AudioController, AudioState>(

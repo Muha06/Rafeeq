@@ -14,6 +14,9 @@ class AppSheets {
     bool isScrollControlled = true,
     bool useSafeArea = true,
     double borderRadius = 24,
+    Duration? animationDuration = const Duration(milliseconds: 500),
+    Duration? reverseAnimationDuration = const Duration(milliseconds: 350),
+    Clip? clipBehavior = Clip.hardEdge,
   }) {
     return showModalBottomSheet<T>(
       context: context,
@@ -22,10 +25,14 @@ class AppSheets {
       isScrollControlled: isScrollControlled,
       showDragHandle: false,
       enableDrag: true,
+      clipBehavior: clipBehavior,
+      sheetAnimationStyle: AnimationStyle(
+        duration: animationDuration,
+        reverseDuration: reverseAnimationDuration,
+        curve: Curves.easeOutCubic,
+        reverseCurve: Curves.easeInCubic,
+      ),
       isDismissible: true,
-      // shape: RoundedRectangleBorder(
-      //   borderRadius: BorderRadius.vertical(top: Radius.circular(borderRadius)),
-      // ),
       builder: (_) => SafeArea(top: false, child: child),
     );
   }

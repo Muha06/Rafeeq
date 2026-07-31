@@ -272,23 +272,11 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
                       const SizedBox(width: 24),
 
                       // Play/pause
-                      Consumer(
-                        builder: (_, context, _) {
-                          final state = ref.watch(audioControllerProvider);
-                          final isBuffering = state.isBuffering;
-
-                          final isCurrent = state.currentId == station.id;
-                          final isPlaying = isCurrent && state.isPlaying;
-
-                          return AnimatedPlayPauseBtn(
-                            onPressed: _togglePlay,
-                            size: 36,
-                            isPlaying: isPlaying,
-                            isBuffering: isBuffering,
-                            bgColor: itemColor,
-                            labelColor: Colors.black,
-                          );
-                        },
+                      AnimatedPlayPauseBtn(
+                        onPressed: _togglePlay,
+                        size: 36,
+                        bgColor: itemColor,
+                        labelColor: Colors.black,
                       ),
 
                       const SizedBox(width: 24),
@@ -330,20 +318,16 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
   }
 }
 
-class AnimatedPlayPauseBtn extends StatelessWidget {
+class AnimatedPlayPauseBtn extends ConsumerWidget {
   const AnimatedPlayPauseBtn({
     super.key,
     required this.onPressed,
-    required this.isPlaying,
-    required this.isBuffering,
     this.duration = const Duration(milliseconds: 300),
     this.size = 40,
     this.bgColor,
     this.labelColor,
   });
 
-  final bool isPlaying;
-  final bool isBuffering;
   final VoidCallback onPressed;
   final Duration duration;
   final double size;
@@ -351,13 +335,19 @@ class AnimatedPlayPauseBtn extends StatelessWidget {
   final Color? labelColor;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
     const double controlSize = 40;
 
     final iconColor = labelColor ?? cs.onPrimary;
 
+    final isPlaying = ref.watch(
+      audioControllerProvider.select((state) => state.isPlaying),
+    );
+    final isBuffering = ref.watch(
+      audioControllerProvider.select((state) => state.isBuffering),
+    );
     return GestureDetector(
       onTap: isBuffering ? null : onPressed,
       child: Material(
@@ -397,7 +387,7 @@ class _RadioAudioSeekBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final ctrl = ref.watch(audioControllerProvider.notifier);
+    final ctrl = ref.read(audioControllerProvider.notifier);
 
     final onSeek = ctrl.seek;
 

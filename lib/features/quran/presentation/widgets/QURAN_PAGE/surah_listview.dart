@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
- import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
 import 'package:rafeeq/core/themes/app_text_style.dart';
@@ -41,6 +41,7 @@ class AllSurahsList extends ConsumerWidget {
                 return GestureDetector(
                   onTap: () =>
                       AppNav.push(context, FullSurahPage(initialIndex: index)),
+                  behavior: HitTestBehavior.opaque,
                   child: SurahTile(surah: surah, surahs: surahs, index: index),
                 );
               },
