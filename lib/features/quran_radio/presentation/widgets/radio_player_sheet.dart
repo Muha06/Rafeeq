@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -165,7 +164,15 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
               child: ImageFiltered(
                 key: ValueKey(station.imageUrl),
                 imageFilter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
-                child: Image.network(station.imageUrl!, fit: BoxFit.cover,),
+                child: Image.network(station.imageUrl!, fit: BoxFit.cover)
+                    .animate()
+                    .fadeIn(duration: 400.ms, curve: Curves.easeOut)
+                    .scale(
+                      begin: const Offset(1.15, 1.15),
+                      end: const Offset(1.0, 1.0),
+                      duration: 500.ms,
+                      curve: Curves.easeOutCubic,
+                    ),
               ),
             ),
 
@@ -182,9 +189,9 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   AppDragHandle(color: itemColor),
-            
+
                   const SizedBox(height: 80),
-            
+
                   // Image
                   Center(
                     child: AppCachedImage(
@@ -205,18 +212,16 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
                       ),
                     ),
                   ).animate(key: ValueKey(station.id)).fade(duration: 300.ms),
-            
+
                   const SizedBox(height: 16),
-            
+
                   SizedBox(
                     width: double.infinity,
                     child: TextScroll(
                       "${station.name} ",
                       mode: TextScrollMode.endless,
                       intervalSpaces: 16,
-                      velocity: const Velocity(
-                        pixelsPerSecond: Offset(20, 0),
-                      ),
+                      velocity: const Velocity(pixelsPerSecond: Offset(20, 0)),
                       textAlign: TextAlign.center,
                       style: tt.titleMedium?.copyWith(
                         fontFamily: 'PlayFairDisplay',
@@ -224,9 +229,9 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
                       ),
                     ),
                   ),
-            
+
                   const SizedBox(height: 8),
-            
+
                   //Type of audio
                   MyChip(
                     borderRadius: 6,
@@ -239,17 +244,17 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
                       style: tt.labelMedium!.copyWith(color: itemColor),
                     ),
                   ),
-            
+
                   const SizedBox(height: 32),
-            
+
                   // Seekbar
                   const SizedBox(
                     height: 52,
                     child: _RadioAudioSeekBar(), // your seekbar
                   ),
-            
+
                   const SizedBox(height: 16),
-            
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -260,23 +265,21 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
                         icon: Icon(
                           size: 36,
                           HugeIconsSolid.previous,
-                          color: showPrevIcon
-                              ? itemColor
-                              : cs.onSurfaceVariant,
+                          color: showPrevIcon ? itemColor : cs.onSurfaceVariant,
                         ),
                       ),
-            
+
                       const SizedBox(width: 24),
-            
+
                       // Play/pause
                       Consumer(
                         builder: (_, context, _) {
                           final state = ref.watch(audioControllerProvider);
                           final isBuffering = state.isBuffering;
-            
+
                           final isCurrent = state.currentId == station.id;
                           final isPlaying = isCurrent && state.isPlaying;
-            
+
                           return AnimatedPlayPauseBtn(
                             onPressed: _togglePlay,
                             size: 36,
@@ -287,9 +290,9 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
                           );
                         },
                       ),
-            
+
                       const SizedBox(width: 24),
-            
+
                       IconButton(
                         onPressed: showNextIcon
                             ? () => _goTo(_currentIndex + 1)
@@ -297,9 +300,7 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
                         icon: Icon(
                           HugeIconsSolid.next,
                           size: 36,
-                          color: showNextIcon
-                              ? itemColor
-                              : cs.onSurfaceVariant,
+                          color: showNextIcon ? itemColor : cs.onSurfaceVariant,
                         ),
                       ),
                     ],

@@ -80,20 +80,17 @@ class _PlayFullSurahBtnState extends ConsumerState<PlayFullSurahBtn> {
               )
               .toList();
 
-          debugPrint("Loading playlist...");
-
+ 
           ctrl.loadPlaylist(
             items: audioItems,
             initialIndex: widget.initialIndex,
           );
 
-          debugPrint("Playlist loaded");
-        }
+         }
 
         ref.read(surahSettingsProvider.notifier).showAudioControls(true);
       } catch (e, st) {
-        debugPrint('Error playing surah audio: $e');
-        debugPrintStack(stackTrace: st);
+         debugPrintStack(stackTrace: st);
 
         if (!context.mounted) return;
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/features/onboarding/presentation/widgets/enable_loc_cta.dart';
 import 'package:rafeeq/features/onboarding/presentation/widgets/enable_notifs_cta.dart';
+import 'package:rafeeq/features/timings/presentation/riverpod/fetch_salah_times_provider.dart';
 import 'onboarding_slide.dart';
 
 class WelcomeSlide extends ConsumerWidget {
@@ -61,11 +62,13 @@ class SalahSlide extends StatelessWidget {
   }
 }
 
-class QuranAdhkarSlide extends StatelessWidget {
+class QuranAdhkarSlide extends ConsumerWidget {
   const QuranAdhkarSlide({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
+    ref.watch(fetchTodaySalahTimesProvider);
+    
     return OnboardingSlide(
       imageAsset: 'assets/images/onboarding/quran_feature.png',
       title: 'Stay connected daily',

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+import 'package:rafeeq/core/helpers/app_haptics.dart';
 import 'package:rafeeq/core/themes/app_text_style.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/core/helpers/app_toast.dart';
@@ -68,6 +69,8 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                     visualDensity: VisualDensity.compact,
                     onPressed: () async {
                       try {
+                        AppHaptics.selection();
+
                         final ayahSurah = ref.read(
                           ayahSurahProvider(ayah.surahId),
                         );
@@ -123,6 +126,8 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                     builder: (btnCtx) => IconButton(
                       visualDensity: VisualDensity.compact,
                       onPressed: () async {
+                        AppHaptics.selection();
+
                         final surahName = widget.surahNameTranslit;
 
                         final controller = ref.read(
