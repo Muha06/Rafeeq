@@ -42,7 +42,7 @@ class AllSurahsList extends ConsumerWidget {
                   onTap: () =>
                       AppNav.push(context, FullSurahPage(initialIndex: index)),
                   behavior: HitTestBehavior.opaque,
-                  child: SurahTile(surah: surah, surahs: surahs, index: index),
+                  child: SurahTile(surah: surah,   index: index),
                 );
               },
             ),
@@ -72,14 +72,12 @@ class AllSurahsList extends ConsumerWidget {
 
 class SurahTile extends ConsumerStatefulWidget {
   final Surah surah;
-  final List<Surah> surahs;
-  final int index;
+   final int index;
 
   const SurahTile({
     super.key,
     required this.surah,
-    required this.surahs,
-    required this.index,
+     required this.index,
   });
 
   @override

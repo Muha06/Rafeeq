@@ -4,12 +4,18 @@ import 'package:rafeeq/core/features/audio/presentation/providers/audio_controll
 
 class AudioSeekBar extends ConsumerStatefulWidget {
   const AudioSeekBar({
-    super.key, 
+    super.key,
     this.showDurations = true,
+    this.baseTrackColor,
+    this.bufferedTrackColor,
+    this.playedTrackColor,
     required this.onSeek,
   });
- 
+
   final bool? showDurations;
+  final Color? baseTrackColor;
+  final Color? bufferedTrackColor;
+  final Color? playedTrackColor;
   final void Function(Duration position) onSeek;
 
   @override
@@ -24,7 +30,7 @@ class _AudioSeekBarState extends ConsumerState<AudioSeekBar> {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
- final position = ref.watch(
+    final position = ref.watch(
       audioControllerProvider.select((s) => s.position),
     );
     final buffered = ref.watch(
@@ -50,10 +56,7 @@ class _AudioSeekBarState extends ConsumerState<AudioSeekBar> {
 
     // The buffered track is rendered separately behind the slider so it remains
     // visible instead of being painted over by the Slider's built-in track.
-    final bufferedMs = buffered.inMilliseconds.toDouble().clamp(
-      0.0,
-      totalMs,
-    );
+    final bufferedMs = buffered.inMilliseconds.toDouble().clamp(0.0, totalMs);
 
     final playedFraction = effectivePositionMs / totalMs;
     final bufferedFraction = bufferedMs / totalMs;
@@ -70,7 +73,9 @@ class _AudioSeekBarState extends ConsumerState<AudioSeekBar> {
               Container(
                 height: 4,
                 decoration: BoxDecoration(
-                  color: cs.onSurfaceVariant.withAlpha(100),
+                  color:
+                      widget.baseTrackColor ??
+                      cs.onSurfaceVariant.withAlpha(100),
                   borderRadius: BorderRadius.circular(999),
                 ),
               ),
@@ -83,7 +88,9 @@ class _AudioSeekBarState extends ConsumerState<AudioSeekBar> {
                   child: Container(
                     height: 4,
                     decoration: BoxDecoration(
-                      color: cs.onSurface.withAlpha(80),
+                      color:
+                          widget.bufferedTrackColor ??
+                          cs.onSurface.withAlpha(80),
                       borderRadius: BorderRadius.circular(999),
                     ),
                   ),
@@ -98,7 +105,7 @@ class _AudioSeekBarState extends ConsumerState<AudioSeekBar> {
                   child: Container(
                     height: 4,
                     decoration: BoxDecoration(
-                      color: cs.primary,
+                      color: widget.playedTrackColor ?? cs.primary,
                       borderRadius: BorderRadius.circular(999),
                     ),
                   ),

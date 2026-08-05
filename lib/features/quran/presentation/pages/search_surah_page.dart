@@ -127,8 +127,7 @@ class _SurahSearchPageState extends ConsumerState<SurahSearchPage> {
                           },
                           child: SurahTile(
                             surah: surah,
-                            surahs: surahs,
-                            index: realSurahIndex,
+                             index: realSurahIndex,
                           ),
                         );
                       },

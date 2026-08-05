@@ -77,6 +77,7 @@ class AudioControlsSection extends ConsumerWidget {
     final prevNextIconColor = cs.onSurfaceVariant;
 
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () => AppSheets.showBottomSheet(
         context: context,
         isScrollControlled: true,
@@ -99,7 +100,6 @@ class AudioControlsSection extends ConsumerWidget {
                   ctrl.stop();
                 },
                 child: const Icon(HugeIconsStroke.cancel01, size: 18),
-                // visualDensity: VisualDensity.compact,
               ),
 
               const SizedBox(width: 12),
@@ -115,7 +115,7 @@ class AudioControlsSection extends ConsumerWidget {
                       ),
                     ),
 
-                    const SizedBox(height: 2),
+                    const SizedBox(height: 0),
 
                     TextScroll(
                       selectedReciter.name,
@@ -134,6 +134,7 @@ class AudioControlsSection extends ConsumerWidget {
                 onPressed: () async {
                   await ctrl.previous();
                 },
+                visualDensity: VisualDensity.compact,
                 icon: Icon(
                   HugeIconsStroke.previous,
                   size: prevNextIconSize,
@@ -164,7 +165,7 @@ class AudioControlsSection extends ConsumerWidget {
             ],
           ),
 
-          const SizedBox(height: 8),
+          const SizedBox(height: 4),
 
           AudioSeekBar(onSeek: ctrl.seek, showDurations: false),
         ],

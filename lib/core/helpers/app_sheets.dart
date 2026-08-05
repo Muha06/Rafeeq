@@ -14,8 +14,8 @@ class AppSheets {
     bool isScrollControlled = true,
     bool useSafeArea = true,
     double borderRadius = 24,
-    Duration? animationDuration = const Duration(milliseconds: 500),
-    Duration? reverseAnimationDuration = const Duration(milliseconds: 350),
+    Duration? animationDuration = const Duration(milliseconds: 300),
+    Duration? reverseAnimationDuration = const Duration(milliseconds: 200),
     Clip? clipBehavior = Clip.hardEdge,
   }) {
     return showModalBottomSheet<T>(

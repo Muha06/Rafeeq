@@ -308,7 +308,7 @@ ThemeData appLightThemeData() {
 
       labelLarge: base.labelLarge?.copyWith(
         fontSize: 16,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w500,
         letterSpacing: 0,
         color: scheme.onSurface,
       ),

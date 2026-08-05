@@ -37,12 +37,12 @@ class QuickLastReadList extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Title
-            Text('Last read', style: theme.textTheme.bodySmall),
+            Text('Last read', style: theme.textTheme.labelSmall),
             const SizedBox(height: 8),
 
             // Horizontal scrollable cards
             SizedBox(
-              height: 80,
+              height: 90,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: lastReadAyahs.length,
@@ -154,6 +154,10 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
+    final progress =
+        widget.lastRead.ayahNumber.toDouble() /
+        widget.lastRead.verseCount.toDouble();
+
     return GestureDetector(
       onTap: () {
         final surahs = ref.read(surahsProvider).value ?? [];
@@ -178,27 +182,40 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
 
         await _showDeleteLastReadSheet(context, ref, widget.lastRead);
 
-        setState(() {
-          _isSelected = false;
-        });
+        if (mounted) {
+          setState(() => _isSelected = false);
+        }
       },
-      child: Container(
-        margin: const EdgeInsets.only(top: 8, bottom: 8, right: 8),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: _isSelected ? cs.surfaceContainerHighest : cs.surface,
-          borderRadius: BorderRadius.circular(14),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(widget.lastRead.surahName, style: theme.textTheme.labelLarge),
-            Text(
-              'Ayah ${widget.lastRead.ayahNumber} of ${widget.lastRead.verseCount}',
-              style: theme.textTheme.labelSmall,
-            ),
-          ],
+      child: IntrinsicWidth(
+        child: Container(
+          margin: const EdgeInsets.only(top: 8, bottom: 8, right: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+            color: _isSelected ? cs.surfaceContainerHighest : cs.surface,
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                widget.lastRead.surahName,
+                style: theme.textTheme.labelLarge,
+              ),
+              Text(
+                'Ayah ${widget.lastRead.ayahNumber} of ${widget.lastRead.verseCount}',
+                style: theme.textTheme.labelSmall,
+              ),
+
+              const SizedBox(height: 4),
+
+              LinearProgressIndicator(
+                value: progress.clamp(0, 1),
+                color: cs.primary,
+                backgroundColor: cs.onSurface.withValues(alpha: 0.1),
+              ),
+            ],
+          ),
         ),
       ),
     );

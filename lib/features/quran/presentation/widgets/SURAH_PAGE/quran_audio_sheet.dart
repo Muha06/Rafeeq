@@ -6,8 +6,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:rafeeq/core/features/audio/presentation/providers/audio_controller.dart';
 import 'package:rafeeq/core/features/audio/presentation/widgets/seek_bar.dart';
+import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/helpers/app_toast.dart';
 import 'package:rafeeq/core/widgets/app_drag_handle.dart';
+import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/quran_audio_playlist_sheet.dart';
 import 'package:rafeeq/features/quran_radio/presentation/widgets/radio_player_sheet.dart';
 import 'package:text_scroll/text_scroll.dart';
 
@@ -55,8 +57,8 @@ class _QuranAudioSheetState extends ConsumerState<QuranAudioSheet> {
                       // Image
                       Image.asset(
                             'assets/images/quran/quran.png',
-                            height: 240,
-                            width: 240,
+                            height: 280,
+                            width: 280,
                           )
                           .animate()
                           .fadeIn(duration: 900.ms)
@@ -66,7 +68,7 @@ class _QuranAudioSheetState extends ConsumerState<QuranAudioSheet> {
                             curve: Curves.easeOutBack,
                           ),
 
-                      const SizedBox(height: 78),
+                      const SizedBox(height: 84),
 
                       // Surah reciter row
                       const _AudioDetailsRow().animate().fadeIn(
@@ -82,9 +84,12 @@ class _QuranAudioSheetState extends ConsumerState<QuranAudioSheet> {
                               .read(audioControllerProvider.notifier)
                               .seek(position);
                         },
+                        playedTrackColor: Colors.white,
+                        bufferedTrackColor: Colors.white.withAlpha(80),
+                        baseTrackColor: Colors.white.withAlpha(100),
                       ).animate().fadeIn(duration: 800.ms),
 
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 32),
 
                       //Controls
                       const _AudioControls().animate().fadeIn(duration: 800.ms),
@@ -210,20 +215,22 @@ class _AudioDetailsRow extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            TextScroll(
               title,
+              mode: TextScrollMode.endless,
+              intervalSpaces: 24,
               style: tt.titleLarge?.copyWith(
                 fontFamily: 'PlayFairDisplay',
                 color: itemColor,
               ),
             ),
 
-            const SizedBox(height: 6),
+            const SizedBox(height: 4),
 
             TextScroll(
               reciter,
-              style: tt.titleSmall?.copyWith(color: cs.onSurfaceVariant),
               mode: TextScrollMode.endless,
+              style: tt.titleSmall?.copyWith(color: cs.onSurfaceVariant),
               intervalSpaces: 24,
             ),
           ],
@@ -235,7 +242,16 @@ class _AudioDetailsRow extends ConsumerWidget {
         Row(
           children: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                AppSheets.showBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  clipBehavior: Clip.hardEdge,
+                  useSafeArea: false,
+                  animationDuration: const Duration(milliseconds: 400),
+                  child: const QuranAudioPlaylistSheet(),
+                );
+              },
               icon: Icon(HugeIconsSolid.playlist03, color: itemColor),
             ),
 
