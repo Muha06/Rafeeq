@@ -3,9 +3,9 @@ import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/quran_audio/domain/entities/reciter_entity.dart';
+import 'package:rafeeq/features/quran_audio/presentation/providers/get_surah_tracks_provider.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
-import 'package:rafeeq/features/quran_audio/presentation/providers/wiring_providers.dart';
-import 'package:rafeeq/features/quran_audio/presentation/widgets/reciter_picker_sheet.dart';
+ import 'package:rafeeq/features/quran_audio/presentation/widgets/reciter_picker_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
@@ -64,9 +64,7 @@ class _PlayFullSurahBtnState extends ConsumerState<PlayFullSurahBtn> {
             _isLoading = true;
           });
 
-          final tracks = await ref
-              .read(getSurahAudioTrackUseCaseProvider)
-              .call(reciter: reciter);
+          final tracks = await ref.read(surahTracksProvider(reciter).future);
 
           final audioItems = tracks
               .map(
@@ -80,17 +78,15 @@ class _PlayFullSurahBtnState extends ConsumerState<PlayFullSurahBtn> {
               )
               .toList();
 
- 
           ctrl.loadPlaylist(
             items: audioItems,
             initialIndex: widget.initialIndex,
           );
-
-         }
+        }
 
         ref.read(surahSettingsProvider.notifier).showAudioControls(true);
       } catch (e, st) {
-         debugPrintStack(stackTrace: st);
+        debugPrintStack(stackTrace: st);
 
         if (!context.mounted) return;
 
