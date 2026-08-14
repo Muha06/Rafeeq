@@ -5,12 +5,12 @@ import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
-import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/play_surah_btn.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/quran_audio_controls_bar.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/log_ayah_bottomsheet.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
- class MushafPageView extends ConsumerStatefulWidget {
+
+class MushafPageView extends ConsumerStatefulWidget {
   final int page;
   final Surah surah;
   final Function(int, {bool suppressSave}) jumpToAyah;
@@ -74,7 +74,7 @@ class _MushafPageViewState extends ConsumerState<MushafPageView> {
         .showAudioControls;
 
     final hasGoal = ref.watch(quranGoalProvider) != null;
-     return Scaffold(
+    return Scaffold(
       appBar: AppBar(
         title: InkWell(
           onTap: _showPagePicker,
@@ -97,17 +97,6 @@ class _MushafPageViewState extends ConsumerState<MushafPageView> {
           ),
         ),
         actions: [
-          PlayFullSurahBtn(
-            initialIndex: widget.surah.id,
-            builder: (isBuffering, isLoading, isPlaying) => Icon(
-              isPlaying
-                  ? HugeIconsSolid.pause
-                  : (isBuffering || isLoading)
-                  ? HugeIconsSolid.circle
-                  : HugeIconsSolid.play,
-            ),
-          ),
-
           if (hasGoal)
             IconButton(
               icon: const Icon(HugeIconsStroke.floppyDisk),

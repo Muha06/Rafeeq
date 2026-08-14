@@ -37,7 +37,7 @@ class QuranGoal {
   String get formattedStartDate => DateFormat('d MMMM yyyy').format(startDate);
   String get formattedEndDate => DateFormat('d MMMM yyyy').format(endDate);
   String get formattedReminderTime {
-    if (remindMeAt == null) return 'No reminder';
+    if (remindMeAt == null) return 'No reminder set';
 
     final hour = remindMeAt!.hourOfPeriod == 0 ? 12 : remindMeAt!.hourOfPeriod;
     final minute = remindMeAt!.minute.toString().padLeft(2, '0');

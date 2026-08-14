@@ -9,6 +9,7 @@ import 'package:rafeeq/core/features/audio/presentation/providers/audio_controll
 import 'package:rafeeq/core/features/audio/presentation/widgets/seek_bar.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/widgets/app_cache_image.dart';
+import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/quran_audio_sheet.dart';
 import 'package:rafeeq/features/quran_radio/presentation/providers/radio_context_provider.dart';
 import 'package:rafeeq/features/quran_radio/presentation/providers/selected_station_provider.dart';
 import 'package:rafeeq/features/quran_radio/presentation/widgets/radio_player_sheet.dart';
@@ -66,6 +67,17 @@ class _GLobalMiniPlayerSheetState extends ConsumerState<GLobalMiniPlayerSheet> {
         behavior: HitTestBehavior.opaque,
         onTap: () {
           switch (sourceType) {
+            case AudioSourceType.quranSurah:
+              AppSheets.showBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                clipBehavior: Clip.hardEdge,
+                useSafeArea: false,
+                animationDuration: const Duration(milliseconds: 400),
+                child: const QuranAudioSheet(),
+              );
+              break;
+
             case AudioSourceType.quranRadio:
               if (session == null) return;
 

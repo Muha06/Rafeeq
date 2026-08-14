@@ -40,7 +40,7 @@ class _FeedbackPageState extends ConsumerState<FeedbackPage> {
 
       AppSnackBar.showSimple(
         context: context,
-        message: "Thanks for making Rafeeq better!",
+        message: "Thank you for making Rafeeq better!",
       );
 
       FocusScope.of(context).unfocus();
@@ -48,8 +48,7 @@ class _FeedbackPageState extends ConsumerState<FeedbackPage> {
 
       AppNav.pop(context);
     } catch (e) {
-            if (!mounted) return;
-
+      if (!mounted) return;
 
       AppSnackBar.showSimple(
         context: context,

@@ -62,10 +62,16 @@ class AdhkarPreviewPages extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         //Number
-                        Text(
-                          (index + 1).toString(),
-                          style: theme.textTheme.bodySmall!.copyWith(
-                            color: cs.onSurfaceVariant,
+                        SizedBox(
+                          height: 28,
+                          width: 28,
+                          child: Center(
+                            child: Text(
+                              (index + 1).toString(),
+                              style: theme.textTheme.bodySmall!.copyWith(
+                                color: cs.onSurfaceVariant,
+                              ),
+                            ),
                           ),
                         ),
 

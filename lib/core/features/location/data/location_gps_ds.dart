@@ -20,7 +20,7 @@ class LocationGpsDataSource {
     }
 
     try {
-      return Geolocator.getCurrentPosition(
+      return await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
         timeLimit: const Duration(seconds: 60),
       );
