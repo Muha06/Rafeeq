@@ -53,7 +53,7 @@ class AppStateView extends StatelessWidget {
               textAlign: TextAlign.center,
               style: Theme.of(
                 context,
-              ).textTheme.titleMedium?.copyWith(color: fg),
+              ).textTheme.titleLarge?.copyWith(color: fg),
             ),
 
             const SizedBox(height: 8),

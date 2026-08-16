@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rafeeq/core/themes/light_theme.dart';
+import 'package:rafeeq/core/constants/colors/dark_colors.dart';
 
 ThemeData appDarkThemeData() {
   final scheme =
@@ -28,9 +28,7 @@ ThemeData appDarkThemeData() {
         shadow: AppDarkColors.onSurface2.withAlpha(64),
       );
 
-  final base = Typography.material2021().white.apply(
-    fontFamily: 'PlusJakartaSans',
-  );
+  final base = Typography.material2021().white.apply(fontFamily: 'Nunito Sans');
 
   return ThemeData(
     useMaterial3: true,
@@ -251,101 +249,69 @@ ThemeData appDarkThemeData() {
     ),
 
     textTheme: base.copyWith(
-      headlineMedium: base.headlineSmall?.copyWith(
-        fontFamily: 'PlayFairDisplay',
-        fontSize: 26,
-        fontWeight: FontWeight.w600,
-        letterSpacing: -0.4,
-        color: scheme.onSurface,
-      ),
+      // ─────────────────────────────────────────────
+      // HEADINGS
+      // ─────────────────────────────────────────────
 
-      headlineSmall: base.headlineSmall?.copyWith(
+      // Big page titles / AppBar titles
+      headlineSmall: const TextStyle(
+        fontFamily: 'PlayFairDisplay',
         fontSize: 24,
         fontWeight: FontWeight.w600,
         letterSpacing: -0.4,
-        color: scheme.onSurface,
       ),
 
-      titleLarge: base.titleLarge?.copyWith(
+      // Sheet / Dialog headers
+      titleLarge: const TextStyle(
         fontSize: 22,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w700,
         letterSpacing: -0.3,
-        color: scheme.onSurface,
       ),
 
-      titleMedium: base.titleMedium?.copyWith(
+      // ─────────────────────────────────────────────
+      // UI TEXT
+      // ─────────────────────────────────────────────
+
+      // Tile / Card titles
+      labelLarge: const TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w700,
+        letterSpacing: 0,
+      ),
+
+      // Secondary tile text
+      labelMedium: const TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+        letterSpacing: 0,
+      ),
+
+      // Small metadata / captions
+      labelSmall: TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.w300,
+        color: scheme.onSurfaceVariant,
+        letterSpacing: 0,
+      ),
+
+      // ─────────────────────────────────────────────
+      // LONG-FORM CONTENT
+      // ─────────────────────────────────────────────
+
+      // Primary paragraphs / readable content
+      bodyLarge: const TextStyle(
         fontSize: 18,
-        fontWeight: FontWeight.w600,
-        letterSpacing: -0.2,
-        color: scheme.onSurface,
-      ),
-
-      titleSmall: base.titleSmall?.copyWith(
-        fontSize: 16,
-        fontWeight: FontWeight.w500,
-        color: scheme.onSurfaceVariant,
-      ),
-
-      bodyLarge: base.bodyLarge?.copyWith(
-        fontSize: 17,
-        height: 1.65,
-        color: scheme.onSurface,
-      ),
-
-      bodyMedium: base.bodyMedium?.copyWith(
-        fontSize: 15.5,
-        height: 1.65,
-        color: scheme.onSurface,
-      ),
-
-      bodySmall: base.bodySmall?.copyWith(
-        fontSize: 14,
-        height: 1.55,
-        color: scheme.onSurfaceVariant,
-      ),
-
-      labelLarge: base.labelLarge?.copyWith(
-        fontSize: 16,
-        fontWeight: FontWeight.w500,
-        letterSpacing: 0,
-        color: scheme.onSurface,
-      ),
-
-      labelMedium: base.labelMedium?.copyWith(
-        fontSize: 14,
         fontWeight: FontWeight.w400,
-        letterSpacing: 0,
-        color: scheme.onSurfaceVariant,
+        height: 1.65,
       ),
 
-      labelSmall: base.labelSmall?.copyWith(
-        fontSize: 13,
+      // Secondary / smaller paragraphs
+      bodyMedium: TextStyle(
+        fontSize: 16,
         fontWeight: FontWeight.w400,
-        letterSpacing: 0,
-        color: scheme.onSurfaceVariant.withAlpha(210),
+        color: scheme.onSurfaceVariant,
+        height: 1.65,
       ),
     ),
   );
-}
-
-class AppDarkColors {
-  static const canvas = Color(0xFF12100e);
-
-  static const surface = Color(0xFF1e1a16);
-  static const surfaceDim = Color(0xFF171310); // lowest elevation
-  static const surfaceHigh = Color(0xFF2a241f);
-
-  static const outline = Color(0xFF3A332D);
-  static const outlineVariant = Color(0xFF2A241F);
-
-  static const tertiary = AppLightColors.brand;
-  static const brand = Color(0xFFe4c169);
-
-  static const onSurface = Color(0xFFEAF2F2);
-  static const onSurface2 = Color(0xFF96A2A5);
-  static const error = Color(0xFFFF5A6A);
-
-  static const switchOn = Color(0xFFE4C169); // same as brand (unifies identity)
-  static const switchOnBg = Color(0xFF2A241F); // matches surfaceHigh tone
-  static const switchRipple = Color(0x33E4C169); // soft gold glow
 }

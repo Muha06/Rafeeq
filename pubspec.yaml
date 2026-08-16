@@ -2,7 +2,7 @@ name: rafeeq
 description: "An Islamic companion app."
 publish_to: "none"
 
-version: 0.0.4+4
+version: 0.0.6+6
 
 environment:
   sdk: ^3.10.4
@@ -94,16 +94,22 @@ flutter:
       fonts:
         - asset: assets/fonts/uthmani_hafs_2.ttf
 
-    - family: PlusJakartaSans
+    - family: Nunito Sans
       fonts:
-        - asset: assets/fonts/PlusJakartaSans/PlusJakartaSans-Regular.ttf
+        - asset: assets/fonts/Nunito/nunito-sans.light.ttf
+          weight: 300
+
+        - asset: assets/fonts/Nunito/nunito-sans.regular.ttf
           weight: 400
-        - asset: assets/fonts/PlusJakartaSans/PlusJakartaSans-Medium.ttf
-          weight: 500
-        - asset: assets/fonts/PlusJakartaSans/PlusJakartaSans-SemiBold.ttf
+
+        - asset: assets/fonts/Nunito/nunito-sans.semibold.ttf
           weight: 600
-        - asset: assets/fonts/PlusJakartaSans/PlusJakartaSans-Bold.ttf
+
+        - asset: assets/fonts/Nunito/nunito-sans.bold.ttf
           weight: 700
+
+        - asset: assets/fonts/Nunito/nunito-sans.extrabold.ttf
+          weight: 800
 
     - family: PlayFairDisplay
       fonts:
@@ -117,7 +123,7 @@ flutter:
           weight: 700
 
   assets:
-    - assets/images/ 
+    - assets/images/
     - assets/images/quran/
     - assets/images/quran/pages/
     - assets/images/onboarding/

@@ -85,7 +85,7 @@ class NotificationDetailPage extends ConsumerWidget {
                         // Body
                         Linkify(
                           text: notif.body,
-                          style: tt.bodyLarge?.copyWith(fontSize: 16),
+                          style: tt.bodyLarge,
                           linkStyle: tt.bodyLarge?.copyWith(
                             fontWeight: FontWeight.bold,
                             color: Colors.blue,

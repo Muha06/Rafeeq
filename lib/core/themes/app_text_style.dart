@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rafeeq/core/themes/dark_theme.dart';
+import 'package:rafeeq/core/constants/colors/dark_colors.dart';
 
 class AppTextStyles {
   // Qur'an Arabic

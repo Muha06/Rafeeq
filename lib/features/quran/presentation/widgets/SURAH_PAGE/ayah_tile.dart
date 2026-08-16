@@ -242,7 +242,7 @@ class _TranslationSection extends StatelessWidget {
         Text(
           ayahText,
           textAlign: TextAlign.left,
-          style: tt.bodyMedium!.copyWith(fontSize: translationFontSize),
+          style: tt.bodyLarge!.copyWith(fontSize: translationFontSize),
         ),
       ],
     );

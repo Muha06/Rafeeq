@@ -55,8 +55,7 @@ class _OnboardingSlideState extends State<OnboardingSlide>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final cs = theme.colorScheme;
-    return FadeTransition(
+     return FadeTransition(
       opacity: _fade,
       child: SlideTransition(
         position: _slide,
@@ -75,18 +74,16 @@ class _OnboardingSlideState extends State<OnboardingSlide>
               Text(
                 widget.title,
                 textAlign: TextAlign.center,
-                style: theme.textTheme.headlineMedium,
+                style: theme.textTheme.headlineSmall,
               ),
 
-              const SizedBox(height: 10),
+              const SizedBox(height: 26),
 
               // subtitle
               Text(
                 widget.subtitle,
                 textAlign: TextAlign.center,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: cs.onSurfaceVariant,
-                ),
+                style: theme.textTheme.bodyMedium,
               ),
 
               if (widget.child != null) ...[

@@ -113,7 +113,7 @@ class NotificationTile extends ConsumerWidget {
                       notification.body,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: tt.bodyMedium,
+                      style: tt.labelMedium,
                     ),
                   ],
                 ),

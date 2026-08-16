@@ -57,12 +57,14 @@ class QuranReadingPlanCard extends ConsumerWidget {
                 ],
               ),
 
-              const SizedBox(height: 8),
+              const SizedBox(height: 6),
 
               // Plan title
               Text(
                 '${quranGoal.target} ${quranGoal.targetUnit.label}',
-                style: theme.textTheme.titleLarge?.copyWith(color: cs.primary),
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  color: cs.primary,
+                ),
               ),
 
               const SizedBox(height: 16),
@@ -143,16 +145,14 @@ class _NoQuranGoalCard extends StatelessWidget {
                   children: [
                     Text(
                       'Create a Quran Goal',
-                      style: theme.textTheme.titleMedium,
+                      style: theme.textTheme.labelLarge,
                     ),
 
                     const SizedBox(height: 4),
 
                     Text(
                       'Set a reading or hifz goal and stay consistent every day.',
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: cs.onSurfaceVariant,
-                      ),
+                      style: theme.textTheme.bodyMedium,
                     ),
                   ],
                 ),

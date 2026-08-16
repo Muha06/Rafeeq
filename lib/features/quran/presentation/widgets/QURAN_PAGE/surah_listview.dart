@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
-import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
-import 'package:rafeeq/core/themes/app_text_style.dart';
 import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/quran/presentation/pages/surah_page.dart';
@@ -42,7 +40,7 @@ class AllSurahsList extends ConsumerWidget {
                   onTap: () =>
                       AppNav.push(context, FullSurahPage(initialIndex: index)),
                   behavior: HitTestBehavior.opaque,
-                  child: SurahTile(surah: surah,   index: index),
+                  child: SurahTile(surah: surah, index: index),
                 );
               },
             ),
@@ -72,13 +70,9 @@ class AllSurahsList extends ConsumerWidget {
 
 class SurahTile extends ConsumerStatefulWidget {
   final Surah surah;
-   final int index;
+  final int index;
 
-  const SurahTile({
-    super.key,
-    required this.surah,
-     required this.index,
-  });
+  const SurahTile({super.key, required this.surah, required this.index});
 
   @override
   ConsumerState<SurahTile> createState() => _SurahTileState();
@@ -96,7 +90,7 @@ class _SurahTileState extends ConsumerState<SurahTile>
     final theme = Theme.of(context);
 
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         SurahTileNumber(surahId: widget.surah.id),
 
@@ -109,13 +103,13 @@ class _SurahTileState extends ConsumerState<SurahTile>
                 widget.surah.nameTransliteration,
                 style: theme.textTheme.labelLarge,
               ),
-              const SizedBox(height: 2),
+              const SizedBox(height: 6),
 
               Text(
                 widget.surah.nameEnglish,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.labelMedium,
+                style: theme.textTheme.labelSmall,
               ),
             ],
           ),
@@ -123,11 +117,8 @@ class _SurahTileState extends ConsumerState<SurahTile>
         const SizedBox(width: 10),
 
         Text(
-          cleanAyah(widget.surah.nameArabic),
-          style: AppTextStyles.quranAyah.copyWith(
-            color: theme.colorScheme.onSurface,
-            fontWeight: FontWeight.bold,
-          ),
+          "${widget.surah.versesCount} ayahs",
+          style: theme.textTheme.labelSmall,
         ),
       ],
     );
