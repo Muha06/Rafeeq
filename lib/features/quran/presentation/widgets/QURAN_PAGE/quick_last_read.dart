@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
+import 'package:rafeeq/core/constants/spacing/app_spacing.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/features/quran/domain/entities/last_read_ayah.dart';
@@ -83,69 +84,24 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
       _isSelected = true;
     });
 
-    final theme = Theme.of(context);
-    final cs = theme.colorScheme;
-
-    return AppSheets.showBottomSheet(
+    return AppSheets.showConfirmSheet(
       context: context,
-      child: SafeArea(
-        top: false,
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(HugeIconsStroke.delete01, size: 72),
-              const SizedBox(height: 16),
+      icon: HugeIconsSolid.delete02,
+      title: 'Remove last read?',
+      useSafeArea: true,
+      destructive: true,
+      onConfirm: () async {
+        await ref
+            .read(lastReadRepositoryProvider)
+            .removeLastRead(lastRead.surahId);
 
-              Text(
-                'Remove last read?',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  color: cs.onSurface,
-                ),
-              ),
-              const SizedBox(height: 12),
-
-              Text(
-                '${lastRead.surahName} • Ayah ${lastRead.ayahNumber}',
-                style: theme.textTheme.bodySmall,
-              ),
-              const SizedBox(height: 32),
-
-              Row(
-                children: [
-                  Expanded(
-                    child: TextButton(
-                      onPressed: () => AppNav.pop(context),
-                      child: const Text('Cancel'),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-
-                  Expanded(
-                    child: FilledButton(
-                      onPressed: () async {
-                        await ref
-                            .read(lastReadRepositoryProvider)
-                            .removeLastRead(lastRead.surahId);
-
-                        if (context.mounted) {
-                          ref.invalidate(lastReadAyahsProvider);
-                          Navigator.pop(context);
-                        }
-                      },
-                      child: const Text('Delete'),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
+        if (context.mounted) {
+          ref.invalidate(lastReadAyahsProvider);
+          AppNav.pop(context);
+        }
+      },
+      description: "Are you sure you want to delete last read?",
+      confirmText: 'Yes, delete',
     );
   }
 
@@ -188,8 +144,11 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
       },
       child: IntrinsicWidth(
         child: Container(
-          margin: const EdgeInsets.only(top: 8, bottom: 8, right: 8),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          margin: const EdgeInsets.only(top: 8, bottom: 8, right: 16),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.md,
+            vertical: 8,
+          ),
           decoration: BoxDecoration(
             color: _isSelected ? cs.surfaceContainerHighest : cs.surface,
             borderRadius: BorderRadius.circular(14),

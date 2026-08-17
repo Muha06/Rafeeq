@@ -14,6 +14,8 @@ class _BookmarkPageState extends ConsumerState<BookmarkPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final tt = theme.textTheme;
+    final cs = theme.colorScheme;
 
     return DefaultTabController(
       length: 2,
@@ -27,6 +29,7 @@ class _BookmarkPageState extends ConsumerState<BookmarkPage> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.60,
+                height: 48,
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(999),
@@ -42,14 +45,14 @@ class _BookmarkPageState extends ConsumerState<BookmarkPage> {
                     borderRadius: BorderRadius.circular(999),
                     color: theme.colorScheme.primary,
                   ),
-                  labelStyle: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: theme.colorScheme.onPrimary,
-                    fontSize: 13,
-                  ),
-                  unselectedLabelStyle: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 13,
+
+                  labelStyle: tt.labelLarge?.copyWith(
+                    color: cs.onPrimary,
+                  ), // selected
+
+                  unselectedLabelStyle: tt.labelLarge?.copyWith(
+                    color: cs.onSurface,
+                    fontSize: 14,
                   ),
 
                   tabs: const [

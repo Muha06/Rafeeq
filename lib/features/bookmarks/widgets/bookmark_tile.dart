@@ -88,7 +88,7 @@ class _BookmarkTileState extends ConsumerState<BookmarkTile> {
         else
           Text(
             widget.indexDisplay.toString(),
-            style: theme.textTheme.labelMedium,
+            style: theme.textTheme.labelSmall,
           ),
 
         const SizedBox(width: 16),
@@ -108,7 +108,7 @@ class _BookmarkTileState extends ConsumerState<BookmarkTile> {
                 const SizedBox(height: 4),
                 Text(
                   'Ayah ${quranBookmark.ayahNumber}',
-                  style: theme.textTheme.bodySmall,
+                  style: theme.textTheme.labelSmall,
                 ),
               ],
             ],

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
-import 'package:rafeeq/core/features/audio/presentation/providers/audio_controller.dart';
-import 'package:rafeeq/core/features/audio/presentation/widgets/global_mini_player.dart';
+import 'package:rafeeq/core/constants/spacing/app_spacing.dart';
 import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/features/quran_radio/domain/enums/radio_audio_category.dart';
 import 'package:rafeeq/features/quran_radio/presentation/providers/radio_controller.dart';
@@ -29,35 +28,30 @@ class _RadioListPageState extends ConsumerState<RadioListPage> {
       _selectedCategory = state.selectedCategory;
     }
 
-    final hasAudio = ref.watch(
-      audioControllerProvider.select(
-        (s) => s.currentId != null && s.currentId!.isNotEmpty,
-      ),
-    );
-    final miniPlayer = hasAudio
-        ? const GLobalMiniPlayerSheet(key: ValueKey('mini-player'))
-        : const SizedBox(key: ValueKey('empty'));
-
-    return Scaffold(
-      appBar: AppBar(title: const Text("Live Radio")),
-      bottomNavigationBar: miniPlayer,
-      extendBody: true,
-      body: SafeArea(
-        top: false,
-        child: Column(
-          children: [
-            // CATEGORY SELECTOR
-            RadioCategorySelector(
+    return SafeArea(
+      top: false,
+      child: Column(
+        children: [
+          // CATEGORY SELECTOR
+          Padding(
+            padding: const EdgeInsets.only(top: 16.0),
+            child: RadioCategorySelector(
               selected: _selectedCategory, // default selection
               onChanged: (cat) {
                 controller.setCategory(cat);
               },
             ),
+          ),
 
-            const SizedBox(height: 10),
+          const SizedBox(height: 10),
 
-            // CONTENT
-            Expanded(
+          // CONTENT
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.screenHorizontal,
+                vertical: AppSpacing.screenVertical,
+              ),
               child: switch (state) {
                 RadioInitial() => const SizedBox(),
 
@@ -98,8 +92,8 @@ class _RadioListPageState extends ConsumerState<RadioListPage> {
                         ),
               },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

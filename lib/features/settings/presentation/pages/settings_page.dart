@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/helpers/app_haptics.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
-import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/features/feedback/presentation/pages/feedback_page.dart';
 import 'package:rafeeq/features/settings/presentation/provider/notiffications_controller.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
@@ -24,7 +23,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings', style: theme.appBarTheme.titleTextStyle),
-        bottom: appBarBottomDivider(context),
       ),
       body: ListView(
         children: [
@@ -115,19 +113,15 @@ class SettingsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return ListTile(
       enabled: enabled,
       onTap: enabled ? onTap : null,
       contentPadding:
           contentPadding ?? const EdgeInsets.symmetric(horizontal: 16),
       leading: leading,
-      title: Text(title, style: theme.textTheme.titleMedium),
-      subtitle: subtitle == null
-          ? null
-          : Text(subtitle!, style: theme.textTheme.labelMedium),
-      trailing: trailing ?? const Icon(Icons.keyboard_arrow_right, size: 32),
+      title: Text(title),
+      subtitle: subtitle == null ? null : Text(subtitle!),
+      trailing: trailing ?? const Icon(Icons.keyboard_arrow_right, size: 24),
     );
   }
 }

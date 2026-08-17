@@ -76,20 +76,6 @@ class _HomePageState extends ConsumerState<HomePage> {
               child: AyahOfTheDay(),
             ),
           ),
-
-          // HARAMAIN CARD
-          const SliverToBoxAdapter(
-            child: SafeArea(
-              top: false,
-              child: HomeSection(
-                padding: EdgeInsets.symmetric(
-                  horizontal: _hPad,
-                  vertical: _v10,
-                ),
-                child: LiveHubCard(),
-              ),
-            ),
-          ),
         ],
       ),
     );

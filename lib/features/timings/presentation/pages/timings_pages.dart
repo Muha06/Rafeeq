@@ -9,7 +9,6 @@ import 'package:rafeeq/features/timings/presentation/riverpod/disable_salah_remi
 import 'package:rafeeq/features/timings/presentation/riverpod/fetch_salah_times_provider.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/salah_status_provider.dart';
 import '../../domain/entities/salah_prayer.dart';
-import 'package:hugeicons_pro/hugeicons.dart';
 
 class SalahTimingsPage extends ConsumerStatefulWidget {
   const SalahTimingsPage({super.key});
@@ -81,7 +80,7 @@ class _SalahTimingsPageState extends ConsumerState<SalahTimingsPage> {
                         // 🕌 Obligatory prayers
                         Text(
                           'Obligatory Prayers',
-                          style: theme.textTheme.bodySmall,
+                          style: theme.textTheme.labelSmall,
                         ),
                         const SizedBox(height: 12),
 
@@ -97,7 +96,7 @@ class _SalahTimingsPageState extends ConsumerState<SalahTimingsPage> {
                         const SizedBox(height: 16),
 
                         // 🌤️ Other times
-                        Text('Other Times', style: theme.textTheme.bodySmall),
+                        Text('Other Times', style: theme.textTheme.labelSmall),
                         const SizedBox(height: 12),
 
                         ...otherTimes.map((p) {
@@ -106,6 +105,7 @@ class _SalahTimingsPageState extends ConsumerState<SalahTimingsPage> {
                             prayer: p,
                             title: p.label,
                             timeText: _formatHm(t),
+                            canToggle: false,
                           );
                         }),
                       ],
@@ -161,14 +161,14 @@ class AllSalatTimingsCard extends StatelessWidget {
                 final isCurrent = p == current;
 
                 final lightColors = isCurrent
-                    ? cs.tertiary
+                    ? Colors.amber
                     : cs.onPrimary.withAlpha(200);
-                final lightColors2 = isCurrent ? cs.tertiary : cs.onPrimary;
+                final lightColors2 = isCurrent ? Colors.amber : cs.onPrimary;
 
                 final darkColors = isCurrent
-                    ? cs.primary
+                    ? Colors.amber
                     : cs.onSurface.withAlpha(200);
-                final darkColors2 = isCurrent ? cs.primary : cs.onSurface;
+                final darkColors2 = isCurrent ? Colors.amber : cs.onSurface;
 
                 final isDark = theme.brightness == Brightness.dark;
 
@@ -186,7 +186,7 @@ class AllSalatTimingsCard extends StatelessWidget {
                       p.label,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.bodySmall?.copyWith(
+                      style: theme.textTheme.labelMedium?.copyWith(
                         color: color,
                         fontWeight: isCurrent ? FontWeight.bold : null,
                       ),
@@ -216,12 +216,13 @@ class _TimingTile extends ConsumerWidget {
     required this.prayer,
     required this.title,
     required this.timeText,
+    this.canToggle = true,
   });
 
   final SalahPrayer prayer;
   final String title;
   final String timeText;
-
+  final bool? canToggle;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
@@ -240,64 +241,48 @@ class _TimingTile extends ConsumerWidget {
 
     final showBell = actualSalats.contains(prayer);
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-      decoration: BoxDecoration(
-        color: theme.cardColor,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(prayer.icon, size: 24, color: cs.onSurfaceVariant),
-          const SizedBox(width: 8),
+    Future<void> toggleSalahReminders() async {
+      await ref.read(disabledSalahPrayersProvider.notifier).toggle(prayer);
 
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                title,
-                style: theme.textTheme.labelMedium?.copyWith(
-                  color: cs.onSurfaceVariant,
+      if (!isDisabled && context.mounted) {
+        AppSnackBar.showSimple(
+          context: context,
+          message: 'Disabled reminders for ${prayer.label}',
+        );
+      }
+    }
+
+    return ListTile(
+      leading: Icon(prayer.icon, size: 24, color: cs.onSurfaceVariant),
+      title: Text(title),
+      contentPadding: EdgeInsets.zero,
+      onTap: canToggle! ? toggleSalahReminders : null,
+      trailing: IntrinsicWidth(
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              timeText,
+              style: theme.textTheme.labelLarge?.copyWith(fontSize: 16),
+            ),
+
+            const SizedBox(width: 8),
+
+            if (showBell)
+              IconButton(
+                onPressed: toggleSalahReminders,
+
+                icon: Icon(
+                  isDisabled
+                      ? CupertinoIcons.speaker_slash
+                      : CupertinoIcons.speaker_1,
+                  color: isDisabled
+                      ? theme.colorScheme.error
+                      : theme.colorScheme.onSurface,
                 ),
               ),
-              const SizedBox(height: 8),
-
-              //time
-              Text(timeText, style: theme.textTheme.labelLarge),
-            ],
-          ),
-
-          const Spacer(),
-
-          if (showBell)
-            IconButton(
-              onPressed: () async {
-                await ref
-                    .read(disabledSalahPrayersProvider.notifier)
-                    .toggle(prayer);
-
-                if (!isDisabled && context.mounted) {
-                  AppSnackBar.showSimple(
-                    context: context,
-                    message: 'Disabled reminders for ${prayer.label}',
-                  );
-                }
-              },
-
-              icon: Icon(
-                isDisabled
-                    ? HugeIconsStroke.notificationOff01
-                    : CupertinoIcons.bell,
-                color: isDisabled
-                    ? theme.colorScheme.error
-                    : theme.colorScheme.onSurface,
-              ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }

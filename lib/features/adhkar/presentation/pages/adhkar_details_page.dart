@@ -375,7 +375,7 @@ class _AdhkarDetailsSectionState extends ConsumerState<AdhkarDetailsSection> {
     final textTheme = theme.textTheme;
     final dhikr = widget.dhikr;
 
-    final bodyTextstyle = textTheme.bodyMedium!.copyWith(fontSize: 20);
+    final bodyTextstyle = textTheme.bodyLarge;
     final cs = theme.colorScheme;
 
     Widget section(String title, String? text) {
@@ -386,7 +386,7 @@ class _AdhkarDetailsSectionState extends ConsumerState<AdhkarDetailsSection> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: textTheme.bodySmall), //header
+          Text(title, style: textTheme.labelSmall), //header
           const SizedBox(height: 8),
 
           Text(text, style: bodyTextstyle), //text
@@ -410,7 +410,6 @@ class _AdhkarDetailsSectionState extends ConsumerState<AdhkarDetailsSection> {
                 textDirection: TextDirection.rtl,
                 style: AppTextStyles.quranAyah.copyWith(
                   color: cs.onSurface,
-                  fontWeight: FontWeight.w700,
                   fontSize: 30,
                   height: 1.8,
                 ),
@@ -464,12 +463,12 @@ class DhikrFloatingButton extends StatelessWidget {
             height: 72,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: cs.surfaceContainer,
+              color: cs.primary,
               boxShadow: [
                 BoxShadow(
                   color: cs.shadow,
-                  blurRadius: 16,
-                  offset: const Offset(0, 4),
+                  blurRadius: 3,
+                  offset: const Offset(0, 2),
                 ),
               ],
             ),
@@ -484,8 +483,14 @@ class DhikrFloatingButton extends StatelessWidget {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("$count", style: tt.titleLarge),
-              Text("/ $total", style: tt.labelMedium),
+              Text(
+                "$count",
+                style: tt.titleLarge?.copyWith(color: cs.onPrimary),
+              ),
+              Text(
+                "/ $total",
+                style: tt.labelMedium?.copyWith(color: cs.onPrimary),
+              ),
             ],
           ),
         ],

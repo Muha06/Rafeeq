@@ -59,32 +59,14 @@ class _ActionTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final theme = Theme.of(context);
-
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
-      child: Row(
-        children: [
-          PhosphorIcon(icon),
-
-          const SizedBox(width: 12),
-
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title, style: theme.textTheme.labelLarge),
-                const SizedBox(height: 2),
-
-                if (subtitle != null)
-                  Text(subtitle!, style: theme.textTheme.bodySmall?.copyWith()),
-              ],
-            ),
-          ),
-          const Icon(Icons.chevron_right_rounded),
-        ],
+      child: ListTile(
+        leading: PhosphorIcon(icon),
+        title: Text(title),
+        subtitle: Text(subtitle!),
+        trailing: const Icon(Icons.chevron_right_rounded),
       ),
     );
   }

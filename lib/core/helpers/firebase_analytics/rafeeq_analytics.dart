@@ -8,7 +8,10 @@ class RafeeqAnalytics {
   // Log screen views
   // -------------------------
   static Future<void> logScreenView(String screenName) async {
-    if (kDebugMode) return;
+    if (kDebugMode) {
+      debugPrint("logging feature worked (only debugged)");
+      return;
+    }
 
     try {
       await _analytics.logScreenView(screenName: screenName);
@@ -41,7 +44,10 @@ class RafeeqAnalytics {
   // Log first open / install
   // -------------------------
   static Future<void> logFirstOpen() async {
-    if (kDebugMode) return;
+    if (kDebugMode) {
+      debugPrint("logging feature worked (only debugged)");
+      return;
+    }
 
     await _analytics.logEvent(
       name: 'first_app_open_custom',

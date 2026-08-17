@@ -56,7 +56,7 @@ class _GoalPageBodyState extends State<_GoalPageBody> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final collapsedHeight = MediaQuery.sizeOf(context).height * .4;
+    final collapsedHeight = MediaQuery.sizeOf(context).height * .45;
 
     return SlidingUpPanel(
       controller: controller,
@@ -102,12 +102,7 @@ class _ProgressPanel extends StatelessWidget {
 
             const SizedBox(height: 8),
 
-            Text(
-              'My Progress',
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontFamily: 'PlayFairDisplay',
-              ),
-            ),
+            Text('My Progress', style: theme.textTheme.headlineSmall),
 
             const SizedBox(height: 8),
 
@@ -229,7 +224,7 @@ class _InfoTile extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: theme.textTheme.labelMedium),
+        Text(title, style: theme.textTheme.labelSmall),
         const SizedBox(height: 4),
         Text(value, style: theme.textTheme.labelLarge),
       ],

@@ -13,8 +13,8 @@ class SurahInfoSheet extends StatelessWidget {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
     final tt = theme.textTheme;
+    final bLarge = tt.bodyLarge;
     final bMedium = tt.bodyMedium;
-    final tMedium = tt.titleMedium;
 
     return SafeArea(
       child: DraggableScrollableSheet(
@@ -25,7 +25,7 @@ class SurahInfoSheet extends StatelessWidget {
         builder: (context, controller) {
           return SingleChildScrollView(
             controller: controller,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -36,26 +36,20 @@ class SurahInfoSheet extends StatelessWidget {
                     const SizedBox(width: 10),
                     Text(
                       'About this Surah',
-                      style: theme.textTheme.headlineMedium,
+                      style: theme.textTheme.headlineSmall,
                     ),
                   ],
                 ),
 
                 const SizedBox(height: 24),
 
-                Text(info.surahName, style: theme.textTheme.titleMedium),
-
+                // Surah short text
                 if (info.shortText.isNotEmpty) ...[
                   const SizedBox(height: 8),
-                  Text(
-                    info.shortText,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      // color: cs.onSurfaceVariant,
-                    ),
-                  ),
+                  Text(info.shortText, style: theme.textTheme.bodyLarge),
                 ],
 
-                const SizedBox(height: 20),
+                const SizedBox(height: 24),
                 const Divider(),
                 const SizedBox(height: 8),
 
@@ -63,16 +57,18 @@ class SurahInfoSheet extends StatelessWidget {
                   data: info.text,
                   style: {
                     "h2": Style(
-                      fontSize: FontSize(tMedium?.fontSize ?? 22),
-                      fontWeight: tMedium?.fontWeight,
+                      fontSize: FontSize(bMedium?.fontSize ?? 22),
+                      fontWeight: bMedium!.fontWeight,
+                      color: bMedium.color,
                       margin: Margins.only(top: 20, bottom: 10),
                     ),
                     "body": Style(
                       margin: Margins.zero,
                       padding: HtmlPaddings.zero,
-                      fontSize: FontSize(bMedium?.fontSize ?? 22),
-                      fontWeight: bMedium?.fontWeight,
-                      lineHeight: const LineHeight(1.8),
+                      fontSize: FontSize(bLarge?.fontSize ?? 22),
+                      fontWeight: FontWeight.w400,
+                      color: bLarge!.color,
+                      lineHeight: LineHeight(bLarge.height),
                     ),
                     "p": Style(margin: Margins.only(bottom: 18)),
                   },

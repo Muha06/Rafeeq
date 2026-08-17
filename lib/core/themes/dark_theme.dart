@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:rafeeq/core/constants/colors/dark_colors.dart';
-
+import 'package:rafeeq/core/constants/spacing/app_spacing.dart';
+import 'package:rafeeq/core/constants/typography/app_text_theme.dart';
+ 
 ThemeData appDarkThemeData() {
   final scheme =
       const ColorScheme.dark(
@@ -60,6 +62,7 @@ ThemeData appDarkThemeData() {
           scheme.onSurface.withAlpha(18), // subtle ripple
         ),
         visualDensity: VisualDensity.compact,
+        padding: const WidgetStatePropertyAll(EdgeInsets.zero),
       ),
     ),
 
@@ -76,7 +79,7 @@ ThemeData appDarkThemeData() {
         letterSpacing: -0.4,
         color: scheme.onSurface,
       ),
-      actionsPadding: const EdgeInsets.symmetric(horizontal: 8),
+      actionsPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
     ),
 
     cardTheme: CardThemeData(
@@ -226,11 +229,10 @@ ThemeData appDarkThemeData() {
       iconColor: scheme.onSurfaceVariant,
       textColor: scheme.onSurface,
       subtitleTextStyle: TextStyle(color: scheme.onSurfaceVariant),
-      titleTextStyle: base.titleMedium?.copyWith(
-        fontSize: 18,
-        fontWeight: FontWeight.w500,
-        letterSpacing: -0.2,
-        color: scheme.onSurface,
+      titleTextStyle: const TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w600,
+        letterSpacing: 1,
       ),
     ),
 
@@ -248,70 +250,6 @@ ThemeData appDarkThemeData() {
       overlayColor: const WidgetStatePropertyAll(AppDarkColors.switchRipple),
     ),
 
-    textTheme: base.copyWith(
-      // ─────────────────────────────────────────────
-      // HEADINGS
-      // ─────────────────────────────────────────────
-
-      // Big page titles / AppBar titles
-      headlineSmall: const TextStyle(
-        fontFamily: 'PlayFairDisplay',
-        fontSize: 24,
-        fontWeight: FontWeight.w600,
-        letterSpacing: -0.4,
-      ),
-
-      // Sheet / Dialog headers
-      titleLarge: const TextStyle(
-        fontSize: 22,
-        fontWeight: FontWeight.w700,
-        letterSpacing: -0.3,
-      ),
-
-      // ─────────────────────────────────────────────
-      // UI TEXT
-      // ─────────────────────────────────────────────
-
-      // Tile / Card titles
-      labelLarge: const TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w700,
-        letterSpacing: 0,
-      ),
-
-      // Secondary tile text
-      labelMedium: const TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w400,
-        letterSpacing: 0,
-      ),
-
-      // Small metadata / captions
-      labelSmall: TextStyle(
-        fontSize: 14,
-        fontWeight: FontWeight.w300,
-        color: scheme.onSurfaceVariant,
-        letterSpacing: 0,
-      ),
-
-      // ─────────────────────────────────────────────
-      // LONG-FORM CONTENT
-      // ─────────────────────────────────────────────
-
-      // Primary paragraphs / readable content
-      bodyLarge: const TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.w400,
-        height: 1.65,
-      ),
-
-      // Secondary / smaller paragraphs
-      bodyMedium: TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w400,
-        color: scheme.onSurfaceVariant,
-        height: 1.65,
-      ),
-    ),
+    textTheme: AppTextTheme.build(scheme),
   );
 }

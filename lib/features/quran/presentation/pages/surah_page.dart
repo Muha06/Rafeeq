@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+import 'package:rafeeq/core/constants/spacing/app_spacing.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
@@ -325,6 +326,9 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
       surahSettingsProvider.select((s) => s.showAutoScrollControls),
     );
 
+    const horizontalPadding = AppSpacing.lg;
+    // const verticalPadding = AppSpacing.screenHorizontal;
+
     return PopScope(
       onPopInvokedWithResult: (didPop, result) async {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -416,6 +420,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
             ],
             bottom: appBarBottomDivider(context),
           ),
+
           body: ayahsAsync.when(
             loading: () => const Center(child: CircularProgressIndicator()),
 
@@ -433,7 +438,9 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
                 itemPositionsListener: itemPositionsListener,
                 scrollOffsetController: scrollOffsetController,
                 scrollOffsetListener: scrollOffsetListener,
-
+                padding: const EdgeInsets.symmetric(
+                  horizontal: horizontalPadding,
+                ),
                 itemBuilder: (context, index) {
                   if (index == 0) {
                     return Column(

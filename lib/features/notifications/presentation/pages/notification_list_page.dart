@@ -79,50 +79,62 @@ class NotificationTile extends ConsumerWidget {
     final tt = theme.textTheme;
     final cs = theme.colorScheme;
 
-    return Material(
-      color: cs.surface,
-      borderRadius: BorderRadius.circular(12),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: () async {
-          AppNav.push(
-            context,
-            NotificationDetailPage(notificationId: notification.id),
-          );
+    return GestureDetector(
+      onTap: () async {
+        AppNav.push(
+          context,
+          NotificationDetailPage(notificationId: notification.id),
+        );
 
-          await ref
-              .read(allNotificationsProvider.notifier)
-              .markAsRead(notification.id);
-        },
-        child: Container(
-          padding: const EdgeInsets.all(14),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: isRead ? cs.surface : cs.primary.withAlpha(30),
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(notification.title, style: tt.labelLarge),
-                    const SizedBox(height: 4),
-                    Text(
-                      notification.body,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: tt.labelMedium,
-                    ),
-                  ],
-                ),
+        await ref
+            .read(allNotificationsProvider.notifier)
+            .markAsRead(notification.id);
+      },
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          if (!isRead) ...[
+            Container(
+              height: 12,
+              width: 12,
+              decoration: BoxDecoration(
+                color: cs.primary,
+                shape: BoxShape.circle,
               ),
+            ),
 
-              const PhosphorIcon(PhosphorIcons.caretRight, size: 24),
-            ],
+            const SizedBox(width: 8),
+          ],
+
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  notification.title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: tt.labelLarge,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  notification.body,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: tt.labelMedium,
+                ),
+              ],
+            ),
           ),
-        ),
+
+          const SizedBox(width: 8),
+
+          PhosphorIcon(
+            PhosphorIcons.caretRight,
+            color: cs.onSurfaceVariant,
+            size: 18,
+          ),
+        ],
       ),
     );
   }

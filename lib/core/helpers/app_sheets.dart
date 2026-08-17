@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
-import 'package:rafeeq/core/widgets/app_drag_handle.dart';
 
 class AppSheets {
   AppSheets._();
@@ -51,6 +50,7 @@ class AppSheets {
     String confirmText = "Confirm",
     String cancelText = "Cancel",
     bool destructive = false,
+    IconData? icon,
   }) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
@@ -62,14 +62,20 @@ class AppSheets {
       isScrollControlled: true,
       showDragHandle: false,
       builder: (context) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+        padding: const EdgeInsets.all(22),
         child: SafeArea(
           top: false,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const AppDragHandle(),
+              Icon(
+                icon,
+                color: destructive ? cs.error : cs.onSurfaceVariant,
+                size: 48,
+              ),
+
+              const SizedBox(height: 8),
 
               Text(
                 title,
@@ -86,36 +92,36 @@ class AppSheets {
               ),
               const SizedBox(height: 24),
 
-              SizedBox(
-                width: double.infinity,
-                child: FilledButton(
-                  style: theme.filledButtonTheme.style?.copyWith(
-                    backgroundColor: WidgetStatePropertyAll(
-                      destructive ? cs.error : cs.primary,
+              Row(
+                children: [
+                  Expanded(
+                    child: FilledButton(
+                      style: theme.filledButtonTheme.style?.copyWith(
+                        backgroundColor: WidgetStatePropertyAll(
+                          destructive ? cs.error : cs.primary,
+                        ),
+                      ),
+                      onPressed: () {
+                        onConfirm();
+                      },
+                      child: Text(
+                        confirmText,
+                        style: theme.textTheme.labelLarge!.copyWith(
+                          color: destructive ? cs.onError : cs.onPrimary,
+                        ),
+                      ),
                     ),
                   ),
-                  onPressed: () {
-                    onConfirm();
-                  },
-                  child: Text(
-                    confirmText,
-                    style: theme.textTheme.labelLarge!.copyWith(
-                      color: destructive ? cs.onError : cs.onPrimary,
+
+                  const SizedBox(width: 12),
+
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => AppNav.pop(context),
+                      child: Text(cancelText),
                     ),
                   ),
-                ),
-              ),
-
-              const SizedBox(height: 16),
-
-              TextButton(
-                onPressed: () => AppNav.pop(context),
-                child: Text(
-                  cancelText,
-                  style: theme.textTheme.labelLarge?.copyWith(
-                    color: cs.onSurface,
-                  ),
-                ),
+                ],
               ),
             ],
           ),

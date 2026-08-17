@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+import 'package:rafeeq/core/constants/spacing/app_spacing.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
@@ -15,6 +16,7 @@ class AllSurahsList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final surahsAsync = ref.watch(surahsProvider);
+    const screenHorizontal = AppSpacing.screenHorizontal;
 
     return surahsAsync.when(
       data: (surahs) {
@@ -25,7 +27,10 @@ class AllSurahsList extends ConsumerWidget {
         }
 
         return SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+          padding: const EdgeInsets.symmetric(
+            horizontal: screenHorizontal,
+            vertical: 8,
+          ),
 
           sliver: SliverSafeArea(
             top: false,

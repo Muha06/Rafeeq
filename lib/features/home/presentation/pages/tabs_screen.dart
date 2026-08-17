@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/app/providers/tabs_screen_provider.dart';
 import 'package:rafeeq/core/helpers/app_haptics.dart';
+import 'package:rafeeq/features/home/presentation/pages/live_tabs.dart';
 import 'package:rafeeq/features/home/presentation/widgets/bottom_bar.dart';
 import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_category_page.dart';
 import 'package:rafeeq/features/quran/presentation/pages/quran_page.dart';
@@ -20,6 +21,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
     const HomePage(),
     const QuranPage(),
     const AdhkarCategoryPage(),
+    const LiveHubTabs(),
     const BookmarkPage(),
   ];
 
@@ -31,7 +33,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
       top: false,
       child: Scaffold(
         extendBody: true,
-        body: IndexedStack(index: selectedIndex, children: _pages),
+        body: _pages[selectedIndex],
         bottomNavigationBar: MyBottomBar(
           currentIndex: selectedIndex,
           onTap: (value) async {

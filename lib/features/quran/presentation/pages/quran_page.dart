@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/core/constants/spacing/app_spacing.dart';
 import 'package:rafeeq/features/quran/presentation/pages/search_surah_page.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/QURAN_PAGE/surah_listview.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/QURAN_PAGE/quick_last_read.dart';
-import 'package:rafeeq/features/quran/presentation/widgets/QURAN_PAGE/quick_surah_links.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/quran_goal_card.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
 
@@ -33,6 +33,8 @@ class _QuranPageState extends ConsumerState<QuranPage> {
 
   @override
   Widget build(BuildContext context) {
+    const horizontalPadding = AppSpacing.screenHorizontal;
+
     return Scaffold(
       extendBody: true,
       body: CustomScrollView(
@@ -67,7 +69,7 @@ class _QuranPageState extends ConsumerState<QuranPage> {
           // --- Quran Goal Stats Portal ---
           const SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.0),
+              padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
               child: QuranReadingPlanCard(),
             ),
           ),
@@ -76,20 +78,14 @@ class _QuranPageState extends ConsumerState<QuranPage> {
           //quick last read
           const SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12.0),
+              padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
               child: QuickLastReadList(),
             ),
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 8)),
 
-          // QUICKSURAHLINK
-          const SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12.0),
-              child: QuickSurahLinks(),
-            ),
-          ),
-
+          // TODO: Add Search field
+          
           //Surah listview
           const AllSurahsList(),
         ],

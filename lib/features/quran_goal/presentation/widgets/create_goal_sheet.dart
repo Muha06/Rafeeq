@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:rafeeq/core/constants/spacing/app_spacing.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/widgets/app_drag_handle.dart';
@@ -128,60 +129,62 @@ class _CreateGoalSheetState extends ConsumerState<CreateGoalSheet> {
         12,
         MediaQuery.of(context).viewInsets.bottom,
       ),
-      child: SingleChildScrollView(
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const AppDragHandle(),
+      child: SafeArea(
+        child: SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const AppDragHandle(),
 
-            Text(
-              "Create Goal",
-              style: theme.textTheme.headlineMedium?.copyWith(fontSize: 24),
-            ),
+              Text(
+                "Create Quran Goal",
+                style: theme.textTheme.headlineSmall?.copyWith(fontSize: 24),
+              ),
 
-            const SizedBox(height: 24),
+              const SizedBox(height: AppSpacing.xxl),
 
-            GoalTypeTargetRow(
-              goalTypeNotifier: goalTypeNotifier,
-              targetUnitNotifier: targetUnitNotifier,
-            ),
+              GoalTypeTargetRow(
+                goalTypeNotifier: goalTypeNotifier,
+                targetUnitNotifier: targetUnitNotifier,
+              ),
 
-            const SizedBox(height: 4),
+              const SizedBox(height: 8),
 
-            GoalTargetField(
-              controller: targetController,
-              unit: targetUnit.label,
-            ),
+              GoalTargetField(
+                controller: targetController,
+                unit: targetUnit.label,
+              ),
 
-            const SizedBox(height: 28),
+              const SizedBox(height: 28),
 
-            GoalScheduleTile(
-              icon: Icons.calendar_today_outlined,
-              title: 'Start Date',
-              value: formatDate(startDate),
-              onTap: pickStartDate,
-            ),
+              GoalScheduleTile(
+                icon: Icons.calendar_today_outlined,
+                title: 'Start Date',
+                value: formatDate(startDate),
+                onTap: pickStartDate,
+              ),
 
-            GoalScheduleTile(
-              icon: Icons.event_outlined,
-              title: 'End Date',
-              value: formatDate(endDate),
-              onTap: pickEndDate,
-            ),
+              GoalScheduleTile(
+                icon: Icons.event_outlined,
+                title: 'End Date',
+                value: formatDate(endDate),
+                onTap: pickEndDate,
+              ),
 
-            GoalScheduleTile(
-              icon: Icons.notifications_active_outlined,
-              title: 'Daily Reminder',
-              value: reminder.format(context),
-              onTap: pickReminder,
-            ),
+              GoalScheduleTile(
+                icon: Icons.notifications_active_outlined,
+                title: 'Daily Reminder',
+                value: reminder.format(context),
+                onTap: pickReminder,
+              ),
 
-            const SizedBox(height: 24),
+              const SizedBox(height: 24),
 
-            GoalCreateButton(onPressed: createGoal),
-          ],
-        ).animate().fade(),
+              GoalCreateButton(onPressed: createGoal),
+            ],
+          ).animate().fade(),
+        ),
       ),
     );
   }
@@ -264,7 +267,7 @@ class GoalScheduleTile extends StatelessWidget {
 
               Expanded(child: Text(title, style: theme.textTheme.labelLarge)),
 
-              Text(value, style: theme.textTheme.labelMedium),
+              Text(value, style: theme.textTheme.bodyMedium),
 
               const SizedBox(width: 4),
 

@@ -19,7 +19,7 @@ class LiveHubCard extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: cs.surface,
+        color: Colors.transparent,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -27,19 +27,21 @@ class LiveHubCard extends ConsumerWidget {
           // TITLE
           Row(
             children: [
-              Icon(HugeIconsStroke.liveStreaming01, color: cs.onSurface),
-              const SizedBox(width: 8),
-              Text('Live', style: textTheme.labelLarge),
+              Row(
+                children: [
+                  Icon(HugeIconsStroke.liveStreaming01, color: cs.onSurface),
+                  const SizedBox(width: 8),
+                  Text('Live', style: textTheme.labelLarge),
+                ],
+              ),
+
+              const Spacer(),
+
+              const LiveChip(),
             ],
           ),
 
-          const SizedBox(height: 4),
-
-          Text(
-            'Haramain & Quran radio — always live',
-            style: textTheme.bodyMedium!.copyWith(color: cs.onSurfaceVariant),
-          ),
-
+        
           const SizedBox(height: 16),
 
           // HARAMAIN
@@ -112,13 +114,11 @@ class _LiveTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(title, style: theme.textTheme.labelLarge),
-                  const SizedBox(height: 4),
-                  Text(subtitle, style: theme.textTheme.bodySmall),
+                  const SizedBox(height: 2),
+                  Text(subtitle, style: theme.textTheme.labelSmall),
                 ],
               ),
             ),
-
-            const LiveChip(),
           ],
         ),
       ),

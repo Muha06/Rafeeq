@@ -44,9 +44,7 @@ class WeeklyQuranChart extends ConsumerWidget {
                 interval: target / 5,
                 getTitlesWidget: (val, meta) => Text(
                   val.toInt().toString(),
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: cs.onSurface,
-                  ),
+                  style: theme.textTheme.bodySmall,
                 ),
               ),
             ),
@@ -58,9 +56,7 @@ class WeeklyQuranChart extends ConsumerWidget {
                   return Center(
                     child: Text(
                       days[index % 7],
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: cs.onSurface,
-                      ),
+                      style: theme.textTheme.labelLarge,
                     ),
                   );
                 },

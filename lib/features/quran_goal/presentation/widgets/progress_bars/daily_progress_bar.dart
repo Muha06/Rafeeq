@@ -47,7 +47,7 @@ class TotalQuranProgressArc extends ConsumerWidget {
             Text(
               "${totalRead.toString()} ${goal?.targetUnit.label} read",
               maxLines: 2,
-              style: theme.textTheme.titleSmall,
+              style: theme.textTheme.labelSmall,
             ),
           ],
         ),

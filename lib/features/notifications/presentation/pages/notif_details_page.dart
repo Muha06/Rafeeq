@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/core/helpers/url_launcher.dart';
+ import 'package:rafeeq/core/helpers/url_launcher.dart';
 import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/features/notifications/presentation/providers/notification_provider.dart';
 import 'package:intl/intl.dart';
@@ -66,7 +66,7 @@ class NotificationDetailPage extends ConsumerWidget {
                         const SizedBox(height: 12),
 
                         // Divider
-                        Container(height: 1, color: cs.outlineVariant),
+                        Divider(height: 1, color: cs.outlineVariant),
 
                         const SizedBox(height: 16),
 
@@ -74,9 +74,7 @@ class NotificationDetailPage extends ConsumerWidget {
                           alignment: Alignment.centerLeft,
                           child: Text(
                             DateFormat('MMM dd, yyyy').format(notif.createdAt),
-                            style: tt.bodySmall!.copyWith(
-                              color: cs.onSurfaceVariant,
-                            ),
+                            style: tt.bodyMedium,
                           ),
                         ),
 

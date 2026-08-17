@@ -43,7 +43,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
     final actionsIconColor = cs.onSurfaceVariant;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 6),
+      padding: const EdgeInsets.symmetric(vertical: 6),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -235,9 +235,9 @@ class _TranslationSection extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         //label
-        Text(label, style: tt.bodySmall),
+        Text(label, style: tt.labelSmall),
 
-        const SizedBox(height: 0),
+        const SizedBox(height: 6),
 
         Text(
           ayahText,

@@ -69,7 +69,7 @@ class AyahOfTheDay extends ConsumerWidget {
                   Text(
                     '"${ayah.textEnglish}"',
                     textAlign: TextAlign.left,
-                    style: theme.textTheme.bodyMedium,
+                    style: theme.textTheme.bodyLarge,
                   ),
                   const SizedBox(height: 12),
 
@@ -79,16 +79,13 @@ class AyahOfTheDay extends ConsumerWidget {
                     children: [
                       Text(
                         'Quran ${ayahSurah.id}:${ayah.ayahNumber}',
-                        style: theme.textTheme.bodySmall!.copyWith(
-                          // color: AppLightColors.textBody,
-                        ),
+                        style: theme.textTheme.labelSmall,
                       ),
 
                       Text(
-                        'Click to read more >',
-                        style: theme.textTheme.bodySmall!.copyWith(
+                        'Read more >',
+                        style: theme.textTheme.labelLarge?.copyWith(
                           color: cs.primary,
-                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ],

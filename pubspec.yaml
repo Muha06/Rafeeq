@@ -94,21 +94,24 @@ flutter:
       fonts:
         - asset: assets/fonts/uthmani_hafs_2.ttf
 
-    - family: Nunito Sans
+    - family: PlusJakartaSans
       fonts:
-        - asset: assets/fonts/Nunito/nunito-sans.light.ttf
+        - asset: assets/fonts/PlusJakartaSans/PlusJakartaSans-light.ttf
           weight: 300
 
-        - asset: assets/fonts/Nunito/nunito-sans.regular.ttf
+        - asset: assets/fonts/PlusJakartaSans/PlusJakartaSans-regular.ttf
           weight: 400
 
-        - asset: assets/fonts/Nunito/nunito-sans.semibold.ttf
+        - asset: assets/fonts/PlusJakartaSans/PlusJakartaSans-medium.ttf
+          weight: 500
+
+        - asset: assets/fonts/PlusJakartaSans/PlusJakartaSans-semibold.ttf
           weight: 600
 
-        - asset: assets/fonts/Nunito/nunito-sans.bold.ttf
+        - asset: assets/fonts/PlusJakartaSans/PlusJakartaSans-bold.ttf
           weight: 700
 
-        - asset: assets/fonts/Nunito/nunito-sans.extrabold.ttf
+        - asset: assets/fonts/PlusJakartaSans/PlusJakartaSans-extrabold.ttf
           weight: 800
 
     - family: PlayFairDisplay

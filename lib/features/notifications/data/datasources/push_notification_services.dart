@@ -26,8 +26,11 @@ class PushNotificationService {
   }
 
   Future<void> _saveToken(String token) async {
-    if (kDebugMode) return;
-    
+    if (kDebugMode) {
+      debugPrint("Save token called (only debugged)");
+      return;
+    }
+
     try {
       await notificationRemoteDataSource.saveToken(token);
     } catch (e) {
@@ -39,6 +42,11 @@ class PushNotificationService {
   // 2. Token
   // -------------------------
   Future<void> _getAndStoreToken() async {
+    if (kDebugMode) {
+      debugPrint("Get & save token called (only debugged)");
+      return;
+    }
+
     try {
       final token = await _messaging.getToken();
 
@@ -67,6 +75,11 @@ class PushNotificationService {
 
   //Retry fetch token
   Future<void> _retryTokenFetch() async {
+    if (kDebugMode) {
+      debugPrint("Retry token called (only debugged)");
+      return;
+    }
+
     try {
       final token = await _messaging.getToken();
 

@@ -25,16 +25,8 @@ class SalahSlide extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final cs = theme.colorScheme;
 
-    final btnStyle = theme.elevatedButtonTheme.style?.copyWith(
-      backgroundColor: WidgetStatePropertyAll(cs.tertiary),
-      foregroundColor: WidgetStatePropertyAll(cs.onTertiary),
-      iconColor: WidgetStatePropertyAll(cs.onTertiary),
-      shape: WidgetStatePropertyAll(
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-      ),
-    );
+    final btnStyle = theme.elevatedButtonTheme.style;
 
     return OnboardingSlide(
       imageAsset: 'assets/images/onboarding/salat_feature.png',
@@ -45,17 +37,11 @@ class SalahSlide extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(
-            width: double.infinity,
-            child: LocationPermissionCta(btnStyle: btnStyle),
-          ),
+          LocationPermissionCta(btnStyle: btnStyle),
 
           const SizedBox(height: 14),
 
-          SizedBox(
-            width: double.infinity,
-            child: NotificationsPermissionCta(btnStyle: btnStyle),
-          ),
+          NotificationsPermissionCta(btnStyle: btnStyle),
         ],
       ),
     );
@@ -68,7 +54,7 @@ class QuranAdhkarSlide extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     ref.watch(fetchTodaySalahTimesProvider);
-    
+
     return OnboardingSlide(
       imageAsset: 'assets/images/onboarding/quran_feature.png',
       title: 'Stay connected daily',

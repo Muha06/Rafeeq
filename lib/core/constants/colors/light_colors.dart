@@ -1,31 +1,30 @@
 import 'package:flutter/painting.dart';
 
 class AppLightColors {
-  //  BACKGROUND  
-  static const canvas = Color(0xFFF2F2F7);
+  //  BACKGROUND
+  static const canvas = Color(0xFFFFFFFF);
 
   //  SURFACES
-  static const surface = Color(0xFFFFFFFF); // Primary cards
-  static const surfaceDim = Color(0xFFF7F7FA); // Grouped sections
+  static const surface = Color(0xFFF2F7F8); // Primary cards
   static const surfaceHigh = Color(0xFFFCFCFD); // Elevated cards
-  static const surfaceHighest = Color(0xFFE3E5EA);
+  static const surfaceHighest = Color(0xFFF3F6F8);
 
-  //  BORDERS / DIVIDERS  
-  static const outline = Color(0xFFCFCFD6);
-  static const outlineVariant = Color(0xFFD0D0D8);
+  //  BORDERS / DIVIDERS
+  static const outline = Color(0xFFE1E6E8);
+  static const outlineVariant = Color(0xFFCDD4D7);
 
-  //  PRIMARY
-  static const brand = Color(0xFF27687E);
+  //  PRIMARY || SECONDARY || TERTIARY
+  static const brand = Color(0xFF1DB1BD);
+  static const secondary = Color(0xFF7DDDE3);
+  static const tertiary = Color(0xFFAFF0F2);
 
-  //  ACCENT
-  static const accent = Color(0xFFC9A24A);
-
-  //  TEXT
-  static const onSurface = Color(0xFF000000);
-  static const onSurface2 = Color(0xFF8A9598);
+  static const onSurface = Color(0xFF23282E);
+  static const onSurface2 = Color(0xFF568A91);
+  static const onSurface3 = Color(0xFF9AAEB1);
 
   //  ERROR
-  static const error = Color(0xFFD64545);
+  static const error = Color(0xFFC95A5A);
+  static const onError = canvas;
 
   //  SWITCH
   static const switchOn = brand;

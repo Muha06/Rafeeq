@@ -23,10 +23,7 @@ class GoalSheetActionsSheet extends ConsumerWidget {
         children: [
           const AppDragHandle(),
 
-          Text(
-            'Edit Goal',
-            style: theme.textTheme.headlineMedium?.copyWith(fontSize: 18),
-          ),
+          Text('Edit Goal', style: theme.textTheme.headlineSmall),
 
           // Actions
           _EditGoalAction(

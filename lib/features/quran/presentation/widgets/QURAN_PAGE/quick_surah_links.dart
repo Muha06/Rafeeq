@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/core/constants/spacing/app_spacing.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/quran/presentation/pages/surah_page.dart';
@@ -25,14 +26,22 @@ class QuickSurahLinks extends ConsumerWidget {
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Quick Access', style: theme.textTheme.labelSmall),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.screenHorizontal,
+                  ),
+                  child: Text(
+                    'Quick Access',
+                    style: theme.textTheme.labelSmall,
+                  ),
+                ),
+
                 const SizedBox(height: 12),
 
                 SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
                     children: quickSurahs
                         .map((surah) => SurahLink(surah: surah))
                         .toList(),
@@ -67,14 +76,14 @@ class SurahLink extends ConsumerWidget {
       child: Container(
         decoration: BoxDecoration(
           color: cs.surface,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(999),
         ),
         margin: const EdgeInsets.only(right: 8),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         child: Center(
           child: Text(
             surah.nameTransliteration,
-            style: theme.textTheme.labelMedium,
+            style: theme.textTheme.labelMedium?.copyWith(fontSize: 15),
           ),
         ),
       ),

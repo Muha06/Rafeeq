@@ -44,7 +44,12 @@ class QuranReadingPlanCard extends ConsumerWidget {
               // Top label
               Row(
                 children: [
-                  Text('My Quran Goal', style: theme.textTheme.labelLarge),
+                  Text(
+                    'My Quran Journey',
+                    style: theme.textTheme.labelLarge?.copyWith(
+                      fontFamily: 'PlayFairDisplay',
+                    ),
+                  ),
                   const Spacer(),
 
                   IconButton(
@@ -117,7 +122,6 @@ class _NoQuranGoalCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: cs.surface,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: cs.outlineVariant),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -145,7 +149,9 @@ class _NoQuranGoalCard extends StatelessWidget {
                   children: [
                     Text(
                       'Create a Quran Goal',
-                      style: theme.textTheme.labelLarge,
+                      style: theme.textTheme.labelLarge?.copyWith(
+                        fontFamily: 'PlayFairDisplay',
+                      ),
                     ),
 
                     const SizedBox(height: 4),

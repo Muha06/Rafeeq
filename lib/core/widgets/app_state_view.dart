@@ -7,7 +7,6 @@ class AppStateView extends StatelessWidget {
   final String message;
   final String? buttonText;
   final VoidCallback? onPressed;
-  final Color? foregroundColor;
 
   const AppStateView({
     super.key,
@@ -15,14 +14,12 @@ class AppStateView extends StatelessWidget {
     required this.title,
     required this.message,
     this.buttonText,
-    this.foregroundColor,
     this.onPressed,
   });
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-    final fg = foregroundColor ?? colors.onSurface;
+    final cs = Theme.of(context).colorScheme;
 
     return Center(
       child: Padding(
@@ -35,13 +32,13 @@ class AppStateView extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: colors.surfaceContainerHighest,
+                  color: cs.surfaceContainerHighest,
                   shape: BoxShape.circle,
                 ),
                 child: PhosphorIcon(
                   icon!,
                   size: 32,
-                  color: colors.onSurfaceVariant,
+                  color: cs.onSurfaceVariant,
                 ),
               ),
 
@@ -53,7 +50,7 @@ class AppStateView extends StatelessWidget {
               textAlign: TextAlign.center,
               style: Theme.of(
                 context,
-              ).textTheme.titleLarge?.copyWith(color: fg),
+              ).textTheme.labelLarge?.copyWith(color: cs.onSurface),
             ),
 
             const SizedBox(height: 8),
@@ -64,14 +61,14 @@ class AppStateView extends StatelessWidget {
               textAlign: TextAlign.center,
               style: Theme.of(
                 context,
-              ).textTheme.bodyMedium!.copyWith(color: fg),
+              ).textTheme.bodyMedium?.copyWith(color: cs.onSurfaceVariant),
             ),
 
             if (buttonText != null && onPressed != null) ...[
               const SizedBox(height: 20),
 
               //   Action Button
-              FilledButton(onPressed: onPressed, child: Text(buttonText!)),
+              TextButton(onPressed: onPressed, child: Text(buttonText!)),
             ],
           ],
         ),

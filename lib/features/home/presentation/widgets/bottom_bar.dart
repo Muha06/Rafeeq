@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
@@ -38,15 +36,20 @@ class MyBottomBar extends ConsumerWidget {
         label: 'Adhkār',
       ),
       (
+        icon: HugeIconsStroke.liveStreaming01,
+        active: HugeIconsSolid.liveStreaming01,
+        label: 'Live',
+      ),
+      (
         icon: HugeIconsStroke.bookmark01,
         active: HugeIconsSolid.bookmark01,
         label: 'Bookmarks',
       ),
     ];
-    final isDark = Theme.brightnessOf(context) == Brightness.dark;
 
-    final itemColor = isDark ? Colors.white70 : Colors.black87;
-     final s = ref.watch(audioControllerProvider);
+    final itemColor = cs.onSurfaceVariant;
+
+    final s = ref.watch(audioControllerProvider);
     final miniPlayer = AnimatedSwitcher(
       duration: const Duration(milliseconds: 300),
       switchInCurve: Curves.easeOutCubic,
@@ -68,8 +71,6 @@ class MyBottomBar extends ConsumerWidget {
           : const SizedBox(key: ValueKey('empty')),
     );
 
-    final blurSize = 16.0;
-
     return SafeArea(
       top: true,
       bottom: false,
@@ -81,58 +82,49 @@ class MyBottomBar extends ConsumerWidget {
             child: miniPlayer,
           ),
 
-           SafeArea(
+          SafeArea(
             top: false,
-            child: ClipRRect(
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: blurSize, sigmaY: blurSize),
-                child: Container(
-                  height: 56,
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  decoration: const BoxDecoration(color: Colors.black12),
-                  child: Row(
-                    children: List.generate(items.length, (index) {
-                      final item = items[index];
-                      final isSelected = currentIndex == index;
+            child: Container(
+              height: 72,
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              decoration: BoxDecoration(color: cs.surfaceContainerLowest),
+              child: Row(
+                children: List.generate(items.length, (index) {
+                  final item = items[index];
+                  final isSelected = currentIndex == index;
 
-                      return Expanded(
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            onTap: () => onTap(index),
-                            highlightColor: Colors.transparent,
-                            splashColor: Colors.transparent,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                AnimatedSwitcher(
-                                  duration: const Duration(milliseconds: 350),
-                                  child: Icon(
-                                    isSelected ? item.active : item.icon,
-                                    key: ValueKey(isSelected), // simpler
-                                    color: isSelected ? cs.primary : itemColor,
-                                    size: 24,
-                                  ),
-                                ),
-
-                                const SizedBox(height: 4),
-
-                                Text(
-                                  item.label,
-                                  style: theme.textTheme.labelSmall?.copyWith(
-                                    fontSize: 12,
-                                    height: 1,
-                                    color: isSelected ? cs.primary : itemColor,
-                                  ),
-                                ),
-                              ],
+                  return Expanded(
+                    child: InkWell(
+                      onTap: () => onTap(index),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 250),
+                            child: Icon(
+                              isSelected ? item.active : item.icon,
+                              key: ValueKey(isSelected), // simpler
+                              color: isSelected ? cs.primary : itemColor,
+                              size: 24,
                             ),
                           ),
-                        ),
-                      );
-                    }),
-                  ),
-                ),
+
+                          const SizedBox(height: 4),
+
+                          Text(
+                            item.label,
+                            style: theme.textTheme.labelSmall?.copyWith(
+                              fontSize: 12,
+                              height: 1,
+                              fontWeight: isSelected ? FontWeight.w700 : null,
+                              color: isSelected ? cs.primary : itemColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }),
               ),
             ),
           ),

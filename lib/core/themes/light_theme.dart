@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:rafeeq/core/constants/colors/light_colors.dart';
+import 'package:rafeeq/core/constants/strings/app_strings.dart';
+import 'package:rafeeq/core/constants/typography/app_text_theme.dart';
 
 ThemeData appLightThemeData() {
   final scheme =
       const ColorScheme.light(
         brightness: Brightness.light,
         primary: AppLightColors.brand,
-        onPrimary: Colors.white,
-
-        tertiary: AppLightColors.accent,
+        secondary: AppLightColors.secondary,
+        tertiary: AppLightColors.tertiary,
 
         surface: AppLightColors.surface,
+        outline: AppLightColors.outline,
+
+        onPrimary: Colors.white,
         onSurface: AppLightColors.onSurface,
 
         error: AppLightColors.error,
         onError: Colors.white,
-
-        outline: AppLightColors.outline,
       ).copyWith(
         surfaceContainerLowest: AppLightColors.canvas,
-        surfaceContainerLow: AppLightColors.surfaceDim,
+        surfaceContainerLow: AppLightColors.canvas,
         surfaceContainer: AppLightColors.surface,
         surfaceContainerHigh: AppLightColors.surfaceHigh,
         surfaceContainerHighest: AppLightColors.surfaceHighest,
@@ -28,7 +30,9 @@ ThemeData appLightThemeData() {
         onSurfaceVariant: AppLightColors.onSurface2,
       );
 
-  final base = Typography.material2021().black.apply(fontFamily: 'Nunito Sans');
+  final base = Typography.material2021().black.apply(
+    fontFamily: 'PlusJakartaSans',
+  );
 
   return ThemeData(
     useMaterial3: true,
@@ -54,10 +58,9 @@ ThemeData appLightThemeData() {
     iconTheme: IconThemeData(color: scheme.onSurface),
     iconButtonTheme: IconButtonThemeData(
       style: ButtonStyle(
-        iconColor: WidgetStatePropertyAll(scheme.onSurface),
-        overlayColor: WidgetStatePropertyAll(
-          scheme.onSurface.withAlpha(18), // subtle ripple
-        ),
+        iconColor: WidgetStatePropertyAll(scheme.onSurfaceVariant),
+        surfaceTintColor: const WidgetStatePropertyAll(Colors.transparent),
+        overlayColor: const WidgetStatePropertyAll(Colors.transparent),
         visualDensity: VisualDensity.compact,
       ),
     ),
@@ -76,6 +79,21 @@ ThemeData appLightThemeData() {
         color: scheme.onSurface,
       ),
     ),
+    tabBarTheme: const TabBarThemeData(
+      labelStyle: TextStyle(
+        fontFamily: AppStrings.primaryFont,
+        fontSize: 17,
+        fontWeight: FontWeight.w600,
+        letterSpacing: -0.3,
+        color: AppLightColors.onSurface,
+      ),
+      unselectedLabelStyle: TextStyle(
+        fontFamily: AppStrings.primaryFont,
+        fontSize: 15.5,
+        fontWeight: FontWeight.w600,
+        color: AppLightColors.onSurface2,
+      ),
+    ),
 
     cardTheme: CardThemeData(
       color: scheme.surfaceContainer,
@@ -86,10 +104,19 @@ ThemeData appLightThemeData() {
     ),
 
     chipTheme: ChipThemeData(
-      backgroundColor: scheme.primary.withAlpha(48),
-      labelStyle: TextStyle(color: scheme.onSurfaceVariant),
+      backgroundColor: scheme.surface,
+      selectedColor: scheme.primary,
+      disabledColor: scheme.secondary,
+      secondarySelectedColor: scheme.primary,
+      showCheckmark: false,
+      surfaceTintColor: Colors.transparent,
+      labelStyle: TextStyle(
+        color: scheme.onPrimary,
+        fontWeight: FontWeight.w500,
+        fontSize: 16,
+      ),
       iconTheme: IconThemeData(color: scheme.onSurfaceVariant),
-      padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(999),
         side: const BorderSide(color: Colors.transparent),
@@ -97,9 +124,9 @@ ThemeData appLightThemeData() {
     ),
 
     bottomSheetTheme: BottomSheetThemeData(
-      backgroundColor: scheme.surface,
+      backgroundColor: Colors.white,
       showDragHandle: true,
-      modalBackgroundColor: scheme.surface,
+      modalBackgroundColor: scheme.surfaceContainerLowest,
       surfaceTintColor: Colors.transparent,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
@@ -126,7 +153,7 @@ ThemeData appLightThemeData() {
         iconColor: scheme.onPrimary,
         disabledBackgroundColor: scheme.surfaceContainerHighest,
         disabledForegroundColor: scheme.onSurfaceVariant,
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         textStyle: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
       ),
@@ -137,10 +164,10 @@ ThemeData appLightThemeData() {
         backgroundColor: WidgetStatePropertyAll(scheme.surfaceContainerHighest),
         foregroundColor: WidgetStatePropertyAll(scheme.onSurface),
         padding: const WidgetStatePropertyAll(
-          EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          EdgeInsets.symmetric(horizontal: 24, vertical: 10),
         ),
         textStyle: const WidgetStatePropertyAll(
-          TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+          TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
         ),
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
@@ -157,11 +184,15 @@ ThemeData appLightThemeData() {
         disabledForegroundColor: scheme.onSurfaceVariant,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(999),
-          side: BorderSide(color: scheme.onSurface),
+          side: BorderSide(color: scheme.primary),
         ),
-        side: BorderSide(color: scheme.onSurface),
+        side: BorderSide(color: scheme.primary, width: 1.25),
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
-        textStyle: const TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
+        textStyle: TextStyle(
+          fontWeight: FontWeight.w600,
+          color: scheme.primary,
+          fontSize: 16,
+        ),
       ),
     ),
 
@@ -179,7 +210,7 @@ ThemeData appLightThemeData() {
     ),
 
     dialogTheme: DialogThemeData(
-      backgroundColor: scheme.surface,
+      backgroundColor: scheme.surfaceContainerLowest,
       surfaceTintColor: Colors.transparent,
       elevation: 0,
       shape: RoundedRectangleBorder(
@@ -226,15 +257,22 @@ ThemeData appLightThemeData() {
       ),
     ),
 
-    listTileTheme: ListTileThemeData(
-      iconColor: scheme.onSurfaceVariant,
-      textColor: scheme.onSurface,
-      subtitleTextStyle: TextStyle(color: scheme.onSurfaceVariant),
-      titleTextStyle: base.titleMedium?.copyWith(
-        fontSize: 18,
-        fontWeight: FontWeight.w500,
-        letterSpacing: -0.2,
-        color: scheme.onSurface,
+    listTileTheme: const ListTileThemeData(
+      iconColor: AppLightColors.onSurface2,
+      enableFeedback: true,
+      contentPadding: EdgeInsets.zero,
+      titleTextStyle: TextStyle(
+        fontFamily: 'PlusJakartaSans',
+        fontSize: 17,
+        fontWeight: FontWeight.w600,
+        letterSpacing: -0.3,
+        color: AppLightColors.onSurface,
+      ),
+      subtitleTextStyle: TextStyle(
+        fontFamily: 'PlusJakartaSans',
+        fontSize: 15,
+        fontWeight: FontWeight.w400,
+        color: AppLightColors.onSurface2,
       ),
     ),
 
@@ -252,79 +290,6 @@ ThemeData appLightThemeData() {
       overlayColor: const WidgetStatePropertyAll(AppLightColors.switchRipple),
     ),
 
-    textTheme: base.copyWith(
-      headlineMedium: base.headlineSmall?.copyWith(
-        fontFamily: 'PlayFairDisplay',
-        fontSize: 26,
-        fontWeight: FontWeight.w600,
-        letterSpacing: -0.4,
-        color: scheme.onSurface,
-      ),
-
-      headlineSmall: base.headlineSmall?.copyWith(
-        fontSize: 24,
-        fontWeight: FontWeight.w600,
-        letterSpacing: -0.4,
-        color: scheme.onSurface,
-      ),
-      titleLarge: base.titleLarge?.copyWith(
-        fontSize: 22,
-        fontWeight: FontWeight.w600,
-        letterSpacing: -0.3,
-        color: scheme.onSurface,
-      ),
-
-      titleMedium: base.titleMedium?.copyWith(
-        fontSize: 18,
-        fontWeight: FontWeight.w600,
-        letterSpacing: -0.2,
-        color: scheme.onSurface,
-      ),
-
-      titleSmall: base.titleSmall?.copyWith(
-        fontSize: 16,
-        fontWeight: FontWeight.w500,
-        color: scheme.onSurfaceVariant,
-      ),
-
-      bodyLarge: base.bodyLarge?.copyWith(
-        fontSize: 16,
-        height: 1.65,
-        color: scheme.onSurface,
-      ),
-
-      bodyMedium: base.bodyMedium?.copyWith(
-        fontSize: 15.5,
-        height: 1.65,
-        color: scheme.onSurface,
-      ),
-
-      bodySmall: base.bodySmall?.copyWith(
-        fontSize: 14,
-        height: 1.55,
-        color: scheme.onSurfaceVariant,
-      ),
-
-      labelLarge: base.labelLarge?.copyWith(
-        fontSize: 16,
-        fontWeight: FontWeight.w600,
-        letterSpacing: 0,
-        color: scheme.onSurface,
-      ),
-
-      labelMedium: base.labelMedium?.copyWith(
-        fontSize: 14,
-        fontWeight: FontWeight.w400,
-        letterSpacing: 0,
-        color: scheme.onSurfaceVariant,
-      ),
-
-      labelSmall: base.labelSmall?.copyWith(
-        fontSize: 13,
-        fontWeight: FontWeight.w400,
-        letterSpacing: 0,
-        color: scheme.onSurfaceVariant.withAlpha(210),
-      ),
-    ),
+    textTheme: AppTextTheme.build(scheme),
   );
 }

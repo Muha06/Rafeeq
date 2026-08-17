@@ -46,80 +46,83 @@ class _SurahBriefDetailsCard extends ConsumerWidget {
     final cs = theme.colorScheme;
     final place = surah.isMeccan ? 'Makkah' : 'Madinah';
 
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      decoration: BoxDecoration(
-        color: cs.primary,
-        borderRadius: BorderRadius.circular(18),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          /// Header
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  surah.nameEnglish,
-                  style: theme.textTheme.labelLarge?.copyWith(
-                    color: cs.onPrimary,
+    Future<void> openSurahInfoSheet() async {
+      final info = await ref.read(surahInfoProvider(surah.id).future);
+
+      if (!context.mounted || info == null) return;
+
+      Navigator.of(context).push(
+        ModalBottomSheetRoute(
+          isScrollControlled: true,
+          sheetAnimationStyle: const AnimationStyle(
+            curve: Curves.easeOutCubic,
+            reverseCurve: Curves.easeInCubic,
+            duration: Duration(milliseconds: 400),
+            reverseDuration: Duration(milliseconds: 300),
+          ),
+          builder: (context) {
+            return SurahInfoSheet(info: info);
+          },
+        ),
+      );
+    }
+
+    return GestureDetector(
+      onTap: openSurahInfoSheet,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        decoration: BoxDecoration(
+          color: cs.primary,
+          borderRadius: BorderRadius.circular(18),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            /// Header
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    surah.nameEnglish,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      color: cs.onPrimary,
+                    ),
                   ),
                 ),
-              ),
 
-              IconButton(
-                icon: Icon(
-                  HugeIconsStroke.informationCircle,
-                  color: cs.onPrimary,
+                IconButton(
+                  icon: Icon(
+                    HugeIconsStroke.informationCircle,
+                    color: cs.onPrimary,
+                  ),
+                  visualDensity: VisualDensity.compact,
+                  onPressed: openSurahInfoSheet,
                 ),
-                visualDensity: VisualDensity.compact,
-                onPressed: () async {
-                  final info = await ref.read(
-                    surahInfoProvider(surah.id).future,
-                  );
+              ],
+            ),
 
-                  if (!context.mounted || info == null) return;
+            const SizedBox(height: 12),
 
-                  Navigator.of(context).push(
-                    ModalBottomSheetRoute(
-                      isScrollControlled: true,
-                      sheetAnimationStyle: const AnimationStyle(
-                        curve: Curves.easeOutCubic,
-                        reverseCurve: Curves.easeInCubic,
-                        duration: Duration(milliseconds: 400),
-                        reverseDuration: Duration(milliseconds: 300),
-                      ),
-                      builder: (context) {
-                        return SurahInfoSheet(info: info);
-                      },
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 12),
-
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                surah.nameArabic,
-                style: AppTextStyles.arabicUi.copyWith(
-                  color: cs.onPrimary,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  surah.nameArabic,
+                  style: AppTextStyles.arabicUi.copyWith(
+                    color: cs.onPrimary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
                 ),
-              ),
 
-              const Spacer(),
+                const Spacer(),
 
-              _Chip(text: '$place  •  ${surah.versesCount} verses'),
-            ],
-          ),
-        ],
+                _Chip(text: '$place  •  ${surah.versesCount} verses'),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

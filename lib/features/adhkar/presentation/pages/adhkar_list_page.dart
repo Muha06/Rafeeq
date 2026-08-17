@@ -68,9 +68,7 @@ class AdhkarPreviewPages extends ConsumerWidget {
                           child: Center(
                             child: Text(
                               (index + 1).toString(),
-                              style: theme.textTheme.bodySmall!.copyWith(
-                                color: cs.onSurfaceVariant,
-                              ),
+                              style: theme.textTheme.labelSmall,
                             ),
                           ),
                         ),
