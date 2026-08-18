@@ -33,7 +33,8 @@ class QuranReadingPlanCard extends ConsumerWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14),
-          color: cs.surface,
+          // color: cs.surface,
+          border: Border.all(color: cs.outline),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
@@ -120,7 +121,8 @@ class _NoQuranGoalCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(16),
       child: Ink(
         decoration: BoxDecoration(
-          color: cs.surface,
+          // color: cs.surface,
+          border: Border.all(color: cs.outline),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Padding(

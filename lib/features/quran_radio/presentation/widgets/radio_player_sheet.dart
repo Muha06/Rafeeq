@@ -213,7 +213,7 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
                     ),
                   ).animate(key: ValueKey(station.id)).fade(duration: 300.ms),
 
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 32),
 
                   SizedBox(
                     width: double.infinity,
@@ -230,18 +230,20 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
                     ),
                   ),
 
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 28),
 
                   //Type of audio
                   MyChip(
-                    borderRadius: 6,
-                    backgroundColor: cs.primary,
-                    foregroundColor: cs.onPrimary,
+                    borderRadius: 999,
+                    backgroundColor: cs.surface,
                     child: Text(
                       station.category.label,
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.visible,
-                      style: tt.labelMedium!.copyWith(color: itemColor),
+                      style: tt.labelLarge!.copyWith(
+                        color: cs.onSurface,
+                        fontSize: 12,
+                      ),
                     ),
                   ),
 

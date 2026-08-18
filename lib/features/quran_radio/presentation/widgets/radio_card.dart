@@ -98,7 +98,8 @@ class RadioCard extends ConsumerWidget {
                 overflow: TextOverflow.ellipsis,
                 style: theme.textTheme.labelMedium?.copyWith(
                   color: isSelected ? cs.primary : cs.onSurface,
-                  fontWeight: isSelected ? FontWeight.bold : null,
+                  fontSize: 13,
+                  fontWeight: isSelected ? FontWeight.w600 : null,
                 ),
               ),
             ],

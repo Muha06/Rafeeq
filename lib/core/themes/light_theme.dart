@@ -4,31 +4,32 @@ import 'package:rafeeq/core/constants/strings/app_strings.dart';
 import 'package:rafeeq/core/constants/typography/app_text_theme.dart';
 
 ThemeData appLightThemeData() {
-  final scheme =
-      const ColorScheme.light(
-        brightness: Brightness.light,
-        primary: AppLightColors.brand,
-        secondary: AppLightColors.secondary,
-        tertiary: AppLightColors.tertiary,
+  final scheme = const ColorScheme.light(
+    brightness: Brightness.light,
+    primary: AppLightColors.brand,
+    secondary: AppLightColors.secondary,
+    tertiary: AppLightColors.tertiary,
 
-        surface: AppLightColors.surface,
-        outline: AppLightColors.outline,
+    surface: AppLightColors.surface,
+    outline: AppLightColors.outline,
 
-        onPrimary: Colors.white,
-        onSurface: AppLightColors.onSurface,
+    onPrimary: Colors.white,
+    onSurface: AppLightColors.onSurface,
 
-        error: AppLightColors.error,
-        onError: Colors.white,
-      ).copyWith(
-        surfaceContainerLowest: AppLightColors.canvas,
-        surfaceContainerLow: AppLightColors.canvas,
-        surfaceContainer: AppLightColors.surface,
-        surfaceContainerHigh: AppLightColors.surfaceHigh,
-        surfaceContainerHighest: AppLightColors.surfaceHighest,
+    error: AppLightColors.error,
+    onError: Colors.white,
+    surfaceContainerLowest: AppLightColors.canvas,
+    surfaceContainerLow: AppLightColors.canvas,
+    surfaceContainer: AppLightColors.surface,
+    surfaceContainerHigh: AppLightColors.surfaceHigh,
+    surfaceContainerHighest: AppLightColors.surfaceHighest,
 
-        outlineVariant: AppLightColors.outlineVariant,
-        onSurfaceVariant: AppLightColors.onSurface2,
-      );
+    outlineVariant: AppLightColors.outlineVariant,
+    onSurfaceVariant: AppLightColors.onSurface2,
+
+    shadow: AppLightColors.shadow,
+    scrim: AppLightColors.scrim,
+  );
 
   final base = Typography.material2021().black.apply(
     fontFamily: 'PlusJakartaSans',
@@ -55,30 +56,33 @@ ThemeData appLightThemeData() {
     dividerColor: scheme.outlineVariant,
     dividerTheme: DividerThemeData(color: scheme.outlineVariant),
 
-    iconTheme: IconThemeData(color: scheme.onSurface),
+    appBarTheme: AppBarThemeData(
+      backgroundColor: scheme.surfaceContainerLowest,
+      toolbarHeight: 56,
+      foregroundColor: scheme.onSurface,
+      elevation: 0,
+      surfaceTintColor: Colors.transparent,
+      actionsIconTheme: IconThemeData(color: scheme.onSurface, weight: 1),
+      iconTheme: IconThemeData(color: scheme.onSurface),
+      titleTextStyle: base.headlineSmall?.copyWith(
+        fontFamily: 'PlayfairDisplay',
+        fontSize: 24,
+        fontWeight: FontWeight.w800,
+        letterSpacing: -0.4,
+        color: scheme.primary,
+      ),
+    ),
+
     iconButtonTheme: IconButtonThemeData(
       style: ButtonStyle(
-        iconColor: WidgetStatePropertyAll(scheme.onSurfaceVariant),
+        iconColor: WidgetStatePropertyAll(scheme.onSurface),
         surfaceTintColor: const WidgetStatePropertyAll(Colors.transparent),
         overlayColor: const WidgetStatePropertyAll(Colors.transparent),
         visualDensity: VisualDensity.compact,
       ),
     ),
 
-    appBarTheme: AppBarTheme(
-      backgroundColor: scheme.surfaceContainerLowest,
-      toolbarHeight: 56,
-      foregroundColor: scheme.onSurface,
-      elevation: 0,
-      surfaceTintColor: Colors.transparent,
-      titleTextStyle: base.headlineSmall?.copyWith(
-        fontFamily: 'PlayfairDisplay',
-        fontSize: 22,
-        fontWeight: FontWeight.w600,
-        letterSpacing: -0.4,
-        color: scheme.onSurface,
-      ),
-    ),
+    // iconTheme: IconThemeData(color: scheme.onSurface),
     tabBarTheme: const TabBarThemeData(
       labelStyle: TextStyle(
         fontFamily: AppStrings.primaryFont,
@@ -126,11 +130,17 @@ ThemeData appLightThemeData() {
     bottomSheetTheme: BottomSheetThemeData(
       backgroundColor: Colors.white,
       showDragHandle: true,
-      modalBackgroundColor: scheme.surfaceContainerLowest,
+      modalBarrierColor: scheme.scrim,
+      modalBackgroundColor: Colors.white,
       surfaceTintColor: Colors.transparent,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
+    ),
+
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      backgroundColor: Colors.white,
+      elevation: 2,
     ),
 
     progressIndicatorTheme: ProgressIndicatorThemeData(
@@ -153,8 +163,8 @@ ThemeData appLightThemeData() {
         iconColor: scheme.onPrimary,
         disabledBackgroundColor: scheme.surfaceContainerHighest,
         disabledForegroundColor: scheme.onSurfaceVariant,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        textStyle: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+        textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
       ),
     ),
@@ -167,7 +177,7 @@ ThemeData appLightThemeData() {
           EdgeInsets.symmetric(horizontal: 24, vertical: 10),
         ),
         textStyle: const WidgetStatePropertyAll(
-          TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
+          TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
         ),
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
@@ -187,12 +197,8 @@ ThemeData appLightThemeData() {
           side: BorderSide(color: scheme.primary),
         ),
         side: BorderSide(color: scheme.primary, width: 1.25),
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
-        textStyle: TextStyle(
-          fontWeight: FontWeight.w600,
-          color: scheme.primary,
-          fontSize: 16,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+        textStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
       ),
     ),
 
@@ -226,33 +232,39 @@ ThemeData appLightThemeData() {
     ),
 
     inputDecorationTheme: InputDecorationTheme(
-      hintStyle: TextStyle(color: scheme.onSurfaceVariant),
+      hintStyle: TextStyle(
+        fontFamily: AppStrings.primaryFont,
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        color: scheme.onSurfaceVariant,
+      ),
       iconColor: scheme.onSurface,
+      fillColor: scheme.surface,
       contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
-        borderSide: BorderSide(color: scheme.outlineVariant),
+        borderRadius: BorderRadius.circular(999),
+        borderSide: const BorderSide(color: Colors.transparent),
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
-        borderSide: BorderSide(color: scheme.outlineVariant),
+        borderRadius: BorderRadius.circular(999),
+        borderSide: const BorderSide(color: Colors.transparent),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
-        borderSide: BorderSide(color: scheme.primary),
+        borderRadius: BorderRadius.circular(999),
+        borderSide: const BorderSide(color: Colors.transparent),
       ),
       disabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
-        borderSide: BorderSide(color: scheme.outlineVariant.withAlpha(100)),
+        borderRadius: BorderRadius.circular(999),
+        borderSide: const BorderSide(color: Colors.transparent),
       ),
 
       errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(999),
         borderSide: BorderSide(color: scheme.error),
       ),
 
       focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(999),
         borderSide: BorderSide(color: scheme.error),
       ),
     ),

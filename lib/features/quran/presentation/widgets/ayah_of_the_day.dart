@@ -50,7 +50,8 @@ class AyahOfTheDay extends ConsumerWidget {
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                color: cs.surface,
+                // color: cs.surface,
+                border: Border.all(color: cs.outline),
                 borderRadius: BorderRadius.circular(14),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),

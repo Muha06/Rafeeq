@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/constants/spacing/app_spacing.dart';
-import 'package:rafeeq/features/quran/presentation/pages/search_surah_page.dart';
+import 'package:rafeeq/features/quran/presentation/widgets/QURAN_PAGE/search_surah_field.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/QURAN_PAGE/surah_listview.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/QURAN_PAGE/quick_last_read.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/quran_goal_card.dart';
-import 'package:hugeicons_pro/hugeicons.dart';
 
 class QuranPage extends ConsumerStatefulWidget {
   const QuranPage({super.key});
@@ -49,20 +48,6 @@ class _QuranPageState extends ConsumerState<QuranPage> {
               onTap: scrollToTop,
               child: const Text('Quran'),
             ),
-            actions: [
-              IconButton(
-                icon: const Icon(HugeIconsSolid.search01),
-
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SurahSearchPage(),
-                    ),
-                  );
-                },
-              ),
-            ],
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 8)),
 
@@ -85,7 +70,15 @@ class _QuranPageState extends ConsumerState<QuranPage> {
           const SliverToBoxAdapter(child: SizedBox(height: 8)),
 
           // TODO: Add Search field
-          
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+              child: SearchSurahField(),
+            ),
+          ),
+
+          const SliverToBoxAdapter(child: SizedBox(height: 8)),
+
           //Surah listview
           const AllSurahsList(),
         ],

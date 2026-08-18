@@ -157,82 +157,75 @@ class _HaramainLivePageState extends State<HaramainLivePage> {
     final isMakkah = _selectedIndex == 0;
     final isMadinah = !isMakkah;
 
-    return PopScope(
-      onPopInvokedWithResult: (didPop, result) {
-        _controller?.dispose();
-        WakelockPlus.disable();
-      },
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: Row(
-              children: [
-                ChoiceChip(
-                  label: Text(
-                    'Makkah',
-                    style: theme.chipTheme.labelStyle?.copyWith(
-                      color: isMakkah ? cs.onPrimary : cs.onSurfaceVariant,
-                    ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Row(
+            children: [
+              ChoiceChip(
+                label: Text(
+                  'Makkah',
+                  style: theme.chipTheme.labelStyle?.copyWith(
+                    color: isMakkah ? cs.onPrimary : cs.onSurfaceVariant,
                   ),
-                  selected: isMakkah,
-                  backgroundColor: _selectedIndex == 0
-                      ? cs.primary
-                      : cs.surface,
-                  onSelected: (_) {
-                    _switchStream(0, makkahLive);
-                  },
                 ),
+                selected: isMakkah,
+                backgroundColor: _selectedIndex == 0 ? cs.primary : cs.surface,
+                onSelected: (_) {
+                  _switchStream(0, makkahLive);
+                },
+              ),
 
-                const SizedBox(width: 8),
+              const SizedBox(width: 8),
 
-                ChoiceChip(
-                  label: Text(
-                    'Madinah',
-                    style: theme.chipTheme.labelStyle?.copyWith(
-                      color: isMadinah ? cs.onPrimary : cs.onSurfaceVariant,
-                    ),
+              ChoiceChip(
+                label: Text(
+                  'Madinah',
+                  style: theme.chipTheme.labelStyle?.copyWith(
+                    color: isMadinah ? cs.onPrimary : cs.onSurfaceVariant,
                   ),
-                  selected: isMadinah,
-                  backgroundColor: isMadinah ? cs.primary : cs.surface,
-                  onSelected: (_) {
-                    _switchStream(1, madinahLive);
-                  },
                 ),
-              ],
-            ),
+                selected: isMadinah,
+                backgroundColor: isMadinah ? cs.primary : cs.surface,
+                onSelected: (_) {
+                  _switchStream(1, madinahLive);
+                },
+              ),
+            ],
           ),
+        ),
 
-          const SizedBox(height: AppSpacing.xxxl),
+        const SizedBox(height: AppSpacing.xxxl),
 
-          _error != null
-              ? _buildError()
-              : isLoading
-              ? const SizedBox(
-                  height: 24,
-                  width: 24,
-                  child: CircularProgressIndicator(),
-                )
-              : (_controller != null && _controller!.value.isInitialized)
-              ? Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child:
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: AspectRatio(
-                          aspectRatio: _controller!.value.aspectRatio,
-                          child: VideoPlayer(_controller!),
-                        ),
-                      ).animate().scale(
-                        begin: const Offset(0.95, 0.95),
-                        end: const Offset(1.0, 1.0),
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.easeOutBack,
+        _error != null
+            ? _buildError()
+            : isLoading
+            ? const SizedBox(
+                height: 24,
+                width: 24,
+                child: CircularProgressIndicator(),
+              )
+            : (_controller != null && _controller!.value.isInitialized)
+            ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child:
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: AspectRatio(
+                        aspectRatio: _controller!.value.aspectRatio,
+                        child: VideoPlayer(_controller!),
                       ),
-                )
-              : const CircularProgressIndicator(),
-        ],
-      ),
+                    ).animate().scale(
+                      begin: const Offset(0.95, 0.95),
+                      end: const Offset(1.0, 1.0),
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.easeOutBack,
+                    ),
+              )
+            : const CircularProgressIndicator(),
+      ],
     );
   }
 }

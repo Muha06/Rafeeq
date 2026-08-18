@@ -14,21 +14,67 @@ class _LiveHubTabsState extends State<LiveHubTabs> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Live Hub'),
-          bottom: const TabBar(
-            tabs: [
-              Tab(text: 'Radio'),
-              Tab(text: "Haramain"),
-            ],
+      child: SafeArea(
+        child: Scaffold(
+          body: NestedScrollView(
+            headerSliverBuilder: (context, innerBoxIsScrolled) {
+              return [
+                const SliverAppBar(
+                  title: Text('Live Hub'),
+                  floating: true,
+                  snap: true,
+                  pinned: false,
+                ),
+
+                SliverPersistentHeader(
+                  pinned: true,
+                  delegate: _TabBarDelegate(
+                    const TabBar(
+                      tabs: [
+                        Tab(text: 'Radio'),
+                        Tab(text: 'Haramain'),
+                      ],
+                    ),
+                  ),
+                ),
+              ];
+            },
+            body: const TabBarView(
+              physics: NeverScrollableScrollPhysics(),
+              children: [RadioListPage(), HaramainLivePage()],
+            ),
           ),
-        ),
-        body: const TabBarView(
-          physics: NeverScrollableScrollPhysics(),
-          children: [RadioListPage(), HaramainLivePage()],
         ),
       ),
     );
+  }
+}
+
+class _TabBarDelegate extends SliverPersistentHeaderDelegate {
+  final TabBar tabBar; // What to make sticky
+
+  _TabBarDelegate(this.tabBar);
+
+  @override
+  double get minExtent => tabBar.preferredSize.height;
+
+  @override
+  double get maxExtent => tabBar.preferredSize.height;
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return Material(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      child: tabBar,
+    );
+  }
+
+  @override
+  bool shouldRebuild(covariant _TabBarDelegate oldDelegate) {
+    return false;
   }
 }

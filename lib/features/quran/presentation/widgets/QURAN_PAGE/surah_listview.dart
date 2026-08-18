@@ -20,6 +20,17 @@ class AllSurahsList extends ConsumerWidget {
 
     return surahsAsync.when(
       data: (surahs) {
+        final searchSurahText = ref.watch(searchSurahTextProvider);
+        final q = searchSurahText.trim().toLowerCase();
+
+        final filtered = q.isEmpty
+            ? surahs
+            : surahs.where((s) {
+                return s.nameTransliteration.toLowerCase().contains(q) ||
+                    s.nameEnglish.toLowerCase().contains(q) ||
+                    s.id.toString() == q;
+              }).toList();
+
         if (surahs.isEmpty) {
           return const SliverToBoxAdapter(
             child: Center(child: Text('No surahs found.')),
@@ -36,10 +47,10 @@ class AllSurahsList extends ConsumerWidget {
             top: false,
             sliver: SliverList.separated(
               separatorBuilder: (context, index) => const SizedBox(height: 24),
-              itemCount: surahs.length,
+              itemCount: filtered.length,
               addAutomaticKeepAlives: true,
               itemBuilder: (context, index) {
-                final surah = surahs[index];
+                final surah = filtered[index];
 
                 return GestureDetector(
                   onTap: () =>

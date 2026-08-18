@@ -146,7 +146,7 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
         child: Container(
           margin: const EdgeInsets.only(top: 8, bottom: 8, right: 16),
           padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.md,
+            horizontal: AppSpacing.lg,
             vertical: 8,
           ),
           decoration: BoxDecoration(
@@ -163,7 +163,7 @@ class _QuickLastReadCardState extends ConsumerState<QuickLastReadCard> {
               ),
               Text(
                 'Ayah ${widget.lastRead.ayahNumber} of ${widget.lastRead.verseCount}',
-                style: theme.textTheme.labelSmall,
+                style: theme.textTheme.labelSmall?.copyWith(fontSize: 12),
               ),
 
               const SizedBox(height: 4),

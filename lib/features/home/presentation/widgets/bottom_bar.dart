@@ -50,6 +50,8 @@ class MyBottomBar extends ConsumerWidget {
     final itemColor = cs.onSurfaceVariant;
 
     final s = ref.watch(audioControllerProvider);
+    final hasAudio = s.currentId != null && s.currentId!.isNotEmpty;
+
     final miniPlayer = AnimatedSwitcher(
       duration: const Duration(milliseconds: 300),
       switchInCurve: Curves.easeOutCubic,
@@ -66,70 +68,79 @@ class MyBottomBar extends ConsumerWidget {
           ),
         );
       },
-      child: (s.currentId != null && s.currentId!.isNotEmpty)
+      child: (hasAudio)
           ? const GLobalMiniPlayerSheet(key: ValueKey('mini-player'))
-          : const SizedBox(key: ValueKey('empty')),
+          : const SizedBox.shrink(key: ValueKey('empty')),
     );
 
-    return SafeArea(
-      top: true,
-      bottom: false,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (hasAudio) ...[
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
             child: miniPlayer,
           ),
+        ],
 
-          SafeArea(
-            top: false,
-            child: Container(
-              height: 72,
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              decoration: BoxDecoration(color: cs.surfaceContainerLowest),
-              child: Row(
-                children: List.generate(items.length, (index) {
-                  final item = items[index];
-                  final isSelected = currentIndex == index;
+        SafeArea(
+          top: false,
+          child: Container(
+            height: 72,
+            padding: const EdgeInsets.symmetric(horizontal: 2),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  offset: const Offset(0, -2),
+                  blurRadius: 12,
+                  spreadRadius: 0,
+                  color: cs.shadow,
+                ),
+              ],
+            ),
+            child: Row(
+              children: List.generate(items.length, (index) {
+                final item = items[index];
+                final isSelected = currentIndex == index;
 
-                  return Expanded(
-                    child: InkWell(
-                      onTap: () => onTap(index),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 250),
-                            child: Icon(
-                              isSelected ? item.active : item.icon,
-                              key: ValueKey(isSelected), // simpler
-                              color: isSelected ? cs.primary : itemColor,
-                              size: 24,
-                            ),
+                return Expanded(
+                  child: InkWell(
+                    onTap: () => onTap(index),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 250),
+                          child: Icon(
+                            isSelected ? item.active : item.icon,
+                            key: ValueKey(isSelected), // simpler
+                            color: isSelected ? cs.primary : itemColor,
+                            size: 24,
                           ),
+                        ),
 
-                          const SizedBox(height: 4),
+                        const SizedBox(height: 4),
 
-                          Text(
-                            item.label,
-                            style: theme.textTheme.labelSmall?.copyWith(
-                              fontSize: 12,
-                              height: 1,
-                              fontWeight: isSelected ? FontWeight.w700 : null,
-                              color: isSelected ? cs.primary : itemColor,
-                            ),
+                        Text(
+                          item.label,
+                          maxLines: 1,
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            fontSize: 12,
+                            height: 1,
+                            fontWeight: isSelected ? FontWeight.w700 : null,
+                            color: isSelected ? cs.primary : itemColor,
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  );
-                }),
-              ),
+                  ),
+                );
+              }),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

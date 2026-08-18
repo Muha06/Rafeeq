@@ -30,69 +30,59 @@ class _RadioListPageState extends ConsumerState<RadioListPage> {
 
     return SafeArea(
       top: false,
-      child: Column(
-        children: [
-          // CATEGORY SELECTOR
-          Padding(
-            padding: const EdgeInsets.only(top: 16.0),
-            child: RadioCategorySelector(
-              selected: _selectedCategory, // default selection
-              onChanged: (cat) {
-                controller.setCategory(cat);
-              },
+      child: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 16),
+              child: RadioCategorySelector(
+                selected: _selectedCategory,
+                onChanged: (cat) {
+                  controller.setCategory(cat);
+                },
+              ),
             ),
           ),
 
-          const SizedBox(height: 10),
+          const SliverToBoxAdapter(child: SizedBox(height: 10)),
 
-          // CONTENT
-          Expanded(
-            child: Padding(
+          switch (state) {
+            RadioInitial() => const SliverFillRemaining(child: SizedBox()),
+
+            RadioLoading() => const SliverFillRemaining(
+              child: Center(child: CircularProgressIndicator()),
+            ),
+
+            RadioError() => SliverFillRemaining(
+              child: AppStateView(
+                icon: PhosphorIcons.radio,
+                title: "Error loading stations",
+                message:
+                    "We couldn't load the radio stations, please try again later.",
+                buttonText: "retry",
+                onPressed: () => controller.loadAll(),
+              ),
+            ),
+
+            RadioLoaded(:final stations) when stations.isEmpty =>
+              SliverFillRemaining(child: _emptyState()),
+
+            RadioLoaded(:final stations) => SliverPadding(
               padding: const EdgeInsets.symmetric(
                 horizontal: AppSpacing.screenHorizontal,
                 vertical: AppSpacing.screenVertical,
               ),
-              child: switch (state) {
-                RadioInitial() => const SizedBox(),
-
-                RadioLoading() => const Center(
-                  child: CircularProgressIndicator(),
-                ),
-
-                RadioError() => AppStateView(
-                  icon: PhosphorIcons.radio,
-                  title: "Error loading stations",
-                  message:
-                      "We couldn't load the radio stations, please try again later.",
-                  buttonText: "retry",
-                  onPressed: () => controller.loadAll(),
-                ),
-
-                RadioLoaded(:final stations) =>
-                  stations.isEmpty
-                      ? _emptyState()
-                      : RefreshIndicator(
-                          onRefresh: () => controller.loadAll(),
-                          child: MasonryGridView.builder(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            gridDelegate:
-                                const SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3,
-                                ),
-                            mainAxisSpacing: 12,
-                            crossAxisSpacing: 20,
-                            itemCount: stations.length,
-                            itemBuilder: (_, i) {
-                              return RadioCard(
-                                stations: stations,
-                                initialIndex: i,
-                              );
-                            },
-                          ),
-                        ),
-              },
+              sliver: SliverMasonryGrid.count(
+                crossAxisCount: 3,
+                mainAxisSpacing: 12,
+                crossAxisSpacing: 20,
+                childCount: stations.length,
+                itemBuilder: (_, i) {
+                  return RadioCard(stations: stations, initialIndex: i);
+                },
+              ),
             ),
-          ),
+          },
         ],
       ),
     );

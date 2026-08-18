@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:rafeeq/core/animations/navigation_animations.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
-import 'package:rafeeq/features/haramain-live/presentation/widgets/haramain_card.dart';
 import 'package:rafeeq/features/home/presentation/widgets/user_location_chip.dart';
 import 'package:rafeeq/features/home_reminders/presentation/providers/reminder_providers.dart';
 import 'package:rafeeq/features/notifications/presentation/pages/notification_list_page.dart';
@@ -25,11 +24,12 @@ class HomePage extends ConsumerStatefulWidget {
 class _HomePageState extends ConsumerState<HomePage> {
   static const double _hPad = 12.0;
   static const double _v10 = 10.0;
-  static const double _appBarIconSize = 22.0;
+  static const double _appBarIconSize = 26.0;
 
   @override
   Widget build(BuildContext context) {
     final reminders = ref.watch(homeRemindersProvider(context));
+    final cs = Theme.of(context).colorScheme;
 
     //ACTIVATE
     ref.watch(salahNotifSchedulerProvider); // scheduler salah notifs
@@ -43,8 +43,18 @@ class _HomePageState extends ConsumerState<HomePage> {
             leading: const UserLocationChip(),
             leadingWidth: 120,
             actions: [
-              const _NotificationIcon(iconSize: _appBarIconSize),
-              const _SettingsIcon(iconSize: _appBarIconSize),
+              Container(
+                decoration: BoxDecoration(
+                  color: cs.surface,
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                child: const Row(
+                  children: [
+                    _NotificationIcon(iconSize: _appBarIconSize),
+                    _SettingsIcon(iconSize: _appBarIconSize),
+                  ],
+                ),
+              ),
             ],
             bottom: reminders.isNotEmpty
                 ? const PreferredSize(
@@ -98,13 +108,21 @@ class HomeSection extends StatelessWidget {
 class _SettingsIcon extends StatelessWidget {
   const _SettingsIcon({super.key, required this.iconSize});
   final double iconSize;
+
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+
     return IconButton(
       onPressed: () async {
         pushLeftPage(context, const SettingsPage());
       },
-      icon: Icon(HugeIconsStroke.settings01, size: iconSize),
+      icon: Icon(
+        HugeIconsStroke.settings01,
+        color: cs.onSurface,
+        size: iconSize,
+        fontWeight: FontWeight.w400,
+      ),
     );
   }
 }
@@ -112,8 +130,11 @@ class _SettingsIcon extends StatelessWidget {
 class _NotificationIcon extends StatelessWidget {
   const _NotificationIcon({super.key, required this.iconSize});
   final double iconSize;
+
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+
     return Consumer(
       builder: (context, ref, child) {
         final hasUnreadNotifications = ref.watch(
@@ -127,7 +148,12 @@ class _NotificationIcon extends StatelessWidget {
               onPressed: () {
                 AppNav.push(context, const NotificationsInboxPage());
               },
-              icon: Icon(HugeIconsStroke.notification02, size: iconSize),
+              icon: Icon(
+                HugeIconsStroke.notification01,
+                color: cs.onSurface,
+                size: iconSize,
+                fontWeight: FontWeight.w400,
+              ),
             ),
 
             if (hasUnreadNotifications)
