@@ -25,18 +25,23 @@ class BookmarkActionBottomSheet extends ConsumerWidget {
         top: false,
         child: SizedBox(
           height: 120,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const AppDragHandle(),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const AppDragHandle(),
 
-              _ActionTile(
-                icon: HugeIconsStroke.delete03,
-                title: 'Delete',
-                subtitle: 'This can’t be undone',
-                onTap: onDeleteBookmark,
-              ),
-            ],
+                const SizedBox(height: 12),
+
+                _ActionTile(
+                  icon: HugeIconsStroke.delete03,
+                  title: 'Delete',
+                  subtitle: 'This can’t be undone',
+                  onTap: onDeleteBookmark,
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -66,7 +71,6 @@ class _ActionTile extends ConsumerWidget {
         leading: PhosphorIcon(icon),
         title: Text(title),
         subtitle: Text(subtitle!),
-        trailing: const Icon(Icons.chevron_right_rounded),
       ),
     );
   }
