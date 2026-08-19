@@ -4,7 +4,6 @@ import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/salat_times.dart';
-import 'package:rafeeq/features/home/presentation/widgets/hijri_date.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_prayer.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_status.dart';
 import 'package:rafeeq/features/timings/presentation/pages/timings_pages.dart';
@@ -124,24 +123,31 @@ class _TimeToNextText extends ConsumerWidget {
     final theme = Theme.of(context);
     final remaining = ref.watch(salahTimeToNextProvider);
 
+    final color = Colors.white.withAlpha(250);
+
     return remaining.when(
       data: (duration) => Row(
         children: [
-          const Icon(PhosphorIcons.clock, color: Colors.white, size: 14),
+          Icon(
+            PhosphorIcons.clock,
+            color: color,
+            fontWeight: FontWeight.w400,
+            size: 14,
+          ),
 
           const SizedBox(width: 2),
 
           Text(
             '${formatRemaining(duration)} until ${next.label}',
-            style: theme.textTheme.labelLarge?.copyWith(
-              color: Colors.white,
-              // fontSize: 13,
+            style: theme.textTheme.labelMedium?.copyWith(
+              color: color,
+              fontWeight: FontWeight.w400,
             ),
           ),
         ],
       ),
       loading: () => const SizedBox.shrink(),
-      error: (error, stackTrace) => const SizedBox.shrink(),
+      error: (_, _) => const SizedBox.shrink(),
     );
   }
 }
@@ -159,6 +165,7 @@ class _CurrentSalat extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final tt = theme.textTheme;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
