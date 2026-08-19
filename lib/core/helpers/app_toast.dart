@@ -67,11 +67,11 @@ class AppToast {
                 child: Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 12,
-                    vertical: 4,
+                    vertical: 12,
                   ),
                   decoration: BoxDecoration(
                     color: backgroundColor ?? cs.onSurface,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
                     message,

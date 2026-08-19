@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rafeeq/core/helpers/extensions/page_animate_ext.dart';
 import 'package:rafeeq/features/haramain-live/presentation/pages/haramain_live_page.dart';
 import 'package:rafeeq/features/quran_radio/presentation/pages/radios_list_page.dart';
 
@@ -46,7 +47,7 @@ class _LiveHubTabsState extends State<LiveHubTabs> {
           ),
         ),
       ),
-    );
+    ).animatePage();
   }
 }
 

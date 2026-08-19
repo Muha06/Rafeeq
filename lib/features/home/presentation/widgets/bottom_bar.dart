@@ -89,15 +89,17 @@ class MyBottomBar extends ConsumerWidget {
             height: 72,
             padding: const EdgeInsets.symmetric(horizontal: 2),
             decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  offset: const Offset(0, -2),
-                  blurRadius: 12,
-                  spreadRadius: 0,
-                  color: cs.shadow,
-                ),
-              ],
+              color: theme.bottomNavigationBarTheme.backgroundColor,
+              boxShadow: !hasAudio
+                  ? [
+                      BoxShadow(
+                        offset: const Offset(0, -2),
+                        blurRadius: 12,
+                        spreadRadius: 0,
+                        color: cs.shadow,
+                      ),
+                    ]
+                  : null,
             ),
             child: Row(
               children: List.generate(items.length, (index) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/core/helpers/extensions/page_animate_ext.dart';
 import 'package:rafeeq/features/bookmarks/presentation/pages/adhkar_bookmark_tab.dart';
 import 'package:rafeeq/features/bookmarks/presentation/pages/quran_bookmark_tab.dart';
 
@@ -73,6 +74,6 @@ class _BookmarkPageState extends ConsumerState<BookmarkPage> {
           ],
         ),
       ),
-    );
+    ).animatePage();
   }
 }

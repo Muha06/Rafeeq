@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/constants/spacing/app_spacing.dart';
+import 'package:rafeeq/core/helpers/extensions/page_animate_ext.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/QURAN_PAGE/search_surah_field.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/QURAN_PAGE/surah_listview.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/QURAN_PAGE/quick_last_read.dart';
@@ -69,7 +70,7 @@ class _QuranPageState extends ConsumerState<QuranPage> {
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 8)),
 
-          // TODO: Add Search field
+          //  Add Search field
           const SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
@@ -83,6 +84,6 @@ class _QuranPageState extends ConsumerState<QuranPage> {
           const AllSurahsList(),
         ],
       ),
-    );
+    ).animatePage();
   }
 }

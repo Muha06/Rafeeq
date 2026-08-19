@@ -32,7 +32,7 @@ class AppSheets {
       ),
       isDismissible: true,
       builder: (context) {
-        return SafeArea(top: false, child: child);
+        return child;
       },
     );
   }

@@ -7,7 +7,7 @@ import 'package:rafeeq/features/bookmarks/domain/entities/dhikr_bookmark.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/quran_bookmark.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/Quran/quran_notifier_provider.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/dhikr/dhikr_notifier_provider.dart';
-import 'package:rafeeq/features/bookmarks/widgets/bookmark_action_sheet.dart';
+import 'package:rafeeq/features/bookmarks/presentation/widgets/bookmark_action_sheet.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/QURAN_PAGE/surah_listview.dart';
 
 class BookmarkTile extends ConsumerStatefulWidget {

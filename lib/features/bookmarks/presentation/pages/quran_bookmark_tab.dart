@@ -6,7 +6,7 @@ import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/Quran/quran_notifier_provider.dart';
 import 'package:rafeeq/features/quran/presentation/pages/surah_page.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/ayah_of_the_day.dart';
-import 'package:rafeeq/features/bookmarks/widgets/bookmark_tile.dart';
+import 'package:rafeeq/features/bookmarks/presentation/widgets/bookmark_tile.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provider.dart';
 
 class QuranBookmarksTab extends ConsumerWidget {

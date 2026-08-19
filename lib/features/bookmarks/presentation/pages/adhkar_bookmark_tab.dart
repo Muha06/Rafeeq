@@ -7,7 +7,7 @@ import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_details_page.dart';
 import 'package:rafeeq/features/adhkar/presentation/providers/adhkar_providers.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/dhikr/dhikr_notifier_provider.dart';
-import 'package:rafeeq/features/bookmarks/widgets/bookmark_tile.dart';
+import 'package:rafeeq/features/bookmarks/presentation/widgets/bookmark_tile.dart';
 
 class AdhkarBookmarksTab extends ConsumerStatefulWidget {
   const AdhkarBookmarksTab({super.key});

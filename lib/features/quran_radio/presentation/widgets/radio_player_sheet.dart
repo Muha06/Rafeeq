@@ -183,7 +183,7 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
           ),
 
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14.0),
+            padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 16),
             child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.max,
@@ -211,7 +211,7 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
                         color: Colors.transparent,
                       ),
                     ),
-                  ).animate(key: ValueKey(station.id)).fade(duration: 300.ms),
+                  ),
 
                   const SizedBox(height: 32),
 

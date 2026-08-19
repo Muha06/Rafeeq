@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/constants/spacing/app_spacing.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
+import 'package:rafeeq/core/widgets/app_drag_handle.dart';
+import 'package:rafeeq/core/widgets/app_icon_container.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
 
 class ReciterPickerSheet extends ConsumerWidget {
@@ -29,15 +31,19 @@ class ReciterPickerSheet extends ConsumerWidget {
             minChildSize: 0.45,
             maxChildSize: 1,
             builder: (context, scrollCtrl) {
-              return Column(
-                children: [
-                  // Header
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: horizontalPadding,
-                      vertical: 16,
-                    ),
-                    child: Row(
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: horizontalPadding,
+                  vertical: 16,
+                ),
+                child: Column(
+                  children: [
+                    const AppDragHandle(),
+
+                    const SizedBox(height: 12),
+
+                    // Header
+                    Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
 
                       children: [
@@ -61,106 +67,76 @@ class ReciterPickerSheet extends ConsumerWidget {
                         ),
                       ],
                     ),
-                  ),
 
-                  const SizedBox(height: AppSpacing.lg),
+                    const SizedBox(height: AppSpacing.lg),
 
-                  // List
-                  Expanded(
-                    child: ListView.separated(
-                      controller: scrollCtrl,
-                      itemCount: reciters.length,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: horizontalPadding,
-                      ),
-                      separatorBuilder: (_, _) =>
-                          const SizedBox(height: AppSpacing.xl),
-                      itemBuilder: (context, i) {
-                        final r = reciters[i];
-                        final isSelected = r.id == selected.id;
+                    // List
+                    Expanded(
+                      child: ListView.separated(
+                        controller: scrollCtrl,
+                        itemCount: reciters.length,
+                        separatorBuilder: (_, _) =>
+                            const SizedBox(height: AppSpacing.xl),
+                        itemBuilder: (context, i) {
+                          final r = reciters[i];
+                          final isSelected = r.id == selected.id;
 
-                        return GestureDetector(
-                          onTap: () {
-                            ref.read(selectedReciterProvider.notifier).state =
-                                r;
-                            AppNav.pop(context, r);
-                          },
-                          child: Row(
-                            children: [
-                              // Leading "avatar"
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.transparent,
-                                  border: Border.all(
-                                    color: cs.onSurfaceVariant.withAlpha(120),
+                          return GestureDetector(
+                            onTap: () {
+                              ref.read(selectedReciterProvider.notifier).state =
+                                  r;
+                              AppNav.pop(context, r);
+                            },
+                            child: Row(
+                              children: [
+                                // Leading "avatar"
+                                AppIconContainer(
+                                  backgroundColor: cs.primaryContainer,
+                                  borderRadius: 999,
+                                  child: Center(
+                                    child: Text(
+                                      r.name.trim().isNotEmpty
+                                          ? r.name.trim()[0].toUpperCase()
+                                          : '?',
+                                      style: theme.textTheme.labelLarge!
+                                          .copyWith(color: cs.onSurface),
+                                    ),
                                   ),
-                                  borderRadius: BorderRadius.circular(999),
                                 ),
-                                width: 36,
-                                height: 36,
-                                child: Center(
+                                const SizedBox(width: 12),
+
+                                // Name
+                                Expanded(
                                   child: Text(
-                                    r.name.trim().isNotEmpty
-                                        ? r.name.trim()[0].toUpperCase()
-                                        : '?',
-                                    style: theme.textTheme.labelLarge!.copyWith(
+                                    r.name,
+                                    maxLines: 2,
+                                    style: theme.textTheme.labelLarge?.copyWith(
+                                      fontWeight: isSelected
+                                          ? FontWeight.bold
+                                          : FontWeight.w500,
                                       color: isSelected
                                           ? cs.primary
                                           : cs.onSurface,
                                     ),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(width: 12),
 
-                              // Name
-                              Expanded(
-                                child: Text(
-                                  r.name,
-                                  maxLines: 2,
-                                  style: theme.textTheme.labelLarge?.copyWith(
-                                    fontWeight: isSelected
-                                        ? FontWeight.bold
-                                        : FontWeight.w500,
-                                    color: isSelected
-                                        ? cs.primary
-                                        : cs.onSurface,
-                                  ),
-                                ),
-                              ),
-
-                              // Selected chip + check
-                              if (isSelected) ...[
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 6,
-                                    vertical: 4,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(999),
-                                    color: cs.primary.withAlpha(200),
-                                  ),
-                                  child: Icon(
+                                // Selected chip + check
+                                if (isSelected) ...[
+                                  Icon(
                                     Icons.check_circle,
-                                    size: 16,
-                                    color: cs.onPrimary,
+                                    size: 24,
+                                    color: cs.onSurface,
                                   ),
-                                ),
-                              ] else ...[
-                                Icon(
-                                  Icons.chevron_right,
-                                  color: theme.iconTheme.color?.withValues(
-                                    alpha: 0.6,
-                                  ),
-                                ),
+                                ],
                               ],
-                            ],
-                          ),
-                        );
-                      },
+                            ),
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               );
             },
           );

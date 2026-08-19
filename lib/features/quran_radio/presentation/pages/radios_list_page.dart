@@ -28,63 +28,60 @@ class _RadioListPageState extends ConsumerState<RadioListPage> {
       _selectedCategory = state.selectedCategory;
     }
 
-    return SafeArea(
-      top: false,
-      child: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 16),
-              child: RadioCategorySelector(
-                selected: _selectedCategory,
-                onChanged: (cat) {
-                  controller.setCategory(cat);
-                },
-              ),
+    return CustomScrollView(
+      slivers: [
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 16),
+            child: RadioCategorySelector(
+              selected: _selectedCategory,
+              onChanged: (cat) {
+                controller.setCategory(cat);
+              },
+            ),
+          ),
+        ),
+
+        const SliverToBoxAdapter(child: SizedBox(height: 10)),
+
+        switch (state) {
+          RadioInitial() => const SliverFillRemaining(child: SizedBox()),
+
+          RadioLoading() => const SliverFillRemaining(
+            child: Center(child: CircularProgressIndicator()),
+          ),
+
+          RadioError() => SliverFillRemaining(
+            child: AppStateView(
+              icon: PhosphorIcons.radio,
+              title: "Error loading stations",
+              message:
+                  "We couldn't load the radio stations, please try again later.",
+              buttonText: "retry",
+              onPressed: () => controller.loadAll(),
             ),
           ),
 
-          const SliverToBoxAdapter(child: SizedBox(height: 10)),
+          RadioLoaded(:final stations) when stations.isEmpty =>
+            SliverFillRemaining(child: _emptyState()),
 
-          switch (state) {
-            RadioInitial() => const SliverFillRemaining(child: SizedBox()),
-
-            RadioLoading() => const SliverFillRemaining(
-              child: Center(child: CircularProgressIndicator()),
+          RadioLoaded(:final stations) => SliverPadding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.screenHorizontal,
+              vertical: AppSpacing.screenVertical,
             ),
-
-            RadioError() => SliverFillRemaining(
-              child: AppStateView(
-                icon: PhosphorIcons.radio,
-                title: "Error loading stations",
-                message:
-                    "We couldn't load the radio stations, please try again later.",
-                buttonText: "retry",
-                onPressed: () => controller.loadAll(),
-              ),
+            sliver: SliverMasonryGrid.count(
+              crossAxisCount: 3,
+              mainAxisSpacing: 12,
+              crossAxisSpacing: 20,
+              childCount: stations.length,
+              itemBuilder: (_, i) {
+                return RadioCard(stations: stations, initialIndex: i);
+              },
             ),
-
-            RadioLoaded(:final stations) when stations.isEmpty =>
-              SliverFillRemaining(child: _emptyState()),
-
-            RadioLoaded(:final stations) => SliverPadding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.screenHorizontal,
-                vertical: AppSpacing.screenVertical,
-              ),
-              sliver: SliverMasonryGrid.count(
-                crossAxisCount: 3,
-                mainAxisSpacing: 12,
-                crossAxisSpacing: 20,
-                childCount: stations.length,
-                itemBuilder: (_, i) {
-                  return RadioCard(stations: stations, initialIndex: i);
-                },
-              ),
-            ),
-          },
-        ],
-      ),
+          ),
+        },
+      ],
     );
   }
 }

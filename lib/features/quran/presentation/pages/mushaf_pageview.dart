@@ -110,7 +110,7 @@ class _MushafPageViewState extends ConsumerState<MushafPageView> {
         actionsPadding: const EdgeInsets.symmetric(horizontal: 16),
       ),
       bottomNavigationBar: showAudioControls
-          ? const AudioControlsBarColorWrapper(child: AudioControlsSection())
+          ? const AudioControlsSection()
           : null,
       body: PageView.builder(
         controller: pageController,

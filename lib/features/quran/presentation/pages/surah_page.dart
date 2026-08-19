@@ -443,11 +443,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
               ),
             ],
             elevation: 16,
-            shadowColor: cs.shadow,
-            // bottom: PreferredSize(
-            //   preferredSize: const Size(double.infinity, 40),
-            //   child: _SurahDetails(surah: surah),
-            // ),
+            shadowColor: cs.shadow, 
           ),
 
           body: ayahsAsync.when(

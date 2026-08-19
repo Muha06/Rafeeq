@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/widgets/app_cache_image.dart';
 import 'package:rafeeq/features/quran_radio/domain/entities/radio_context.dart';
 import 'package:rafeeq/features/quran_radio/presentation/providers/radio_context_provider.dart';
@@ -39,23 +40,16 @@ class RadioCard extends ConsumerWidget {
 
         if (!context.mounted) return;
 
-        Navigator.of(context).push(
-          ModalBottomSheetRoute(
-            isScrollControlled: true,
-            clipBehavior: Clip.hardEdge,
-            sheetAnimationStyle: const AnimationStyle(
-              curve: Curves.easeOutCubic,
-              reverseCurve: Curves.easeInCubic,
-              duration: Duration(milliseconds: 400),
-              reverseDuration: Duration(milliseconds: 300),
-            ),
-            showDragHandle: false,
-            builder: (context) {
-              return RadioPlayerSheet(
-                stations: stations,
-                initialIndex: initialIndex,
-              );
-            },
+        AppSheets.showBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          clipBehavior: Clip.hardEdge,
+          useSafeArea: false,
+          animationDuration: const Duration(milliseconds: 400),
+          reverseAnimationDuration: const Duration(milliseconds: 300),
+          child: RadioPlayerSheet(
+            stations: stations,
+            initialIndex: initialIndex,
           ),
         );
       },

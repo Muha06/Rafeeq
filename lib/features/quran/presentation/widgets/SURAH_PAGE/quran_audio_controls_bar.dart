@@ -32,11 +32,18 @@ class QuranAudioControlsBar extends ConsumerWidget {
         .watch(surahSettingsProvider)
         .showAutoScrollControls;
 
+    final cs = Theme.of(context).colorScheme;
+
     return SafeArea(
       top: false,
       child: AnimatedSize(
         duration: const Duration(milliseconds: 250),
-        child: AudioControlsBarColorWrapper(
+        child: Container(
+          decoration: BoxDecoration(
+            color: cs.surfaceContainerHigh,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(14)),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -45,7 +52,7 @@ class QuranAudioControlsBar extends ConsumerWidget {
 
               //show controls conditionally
               if (showAutoScrollControls) ...[
-                const SizedBox(height: 8),
+                if (showAudioControls) const SizedBox(height: 8),
 
                 AutoScrollControlsSection(
                   onStart: onStart,
@@ -222,29 +229,6 @@ class AutoScrollControlsSection extends ConsumerWidget {
           icon: Icon(isAutoScrolling ? Icons.pause : Icons.play_arrow),
         ),
       ],
-    );
-  }
-}
-
-class AudioControlsBarColorWrapper extends StatelessWidget {
-  const AudioControlsBarColorWrapper({super.key, required this.child});
-
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
-
-    return SafeArea(
-      top: false,
-      child: Container(
-        decoration: BoxDecoration(
-          color: cs.surfaceContainerHighest,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(14)),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-        child: child,
-      ),
     );
   }
 }

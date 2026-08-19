@@ -84,7 +84,7 @@ ThemeData appLightThemeData() {
       actionsIconTheme: IconThemeData(color: scheme.onSurface, weight: 1),
       iconTheme: IconThemeData(color: scheme.onSurface),
       titleTextStyle: base.headlineSmall?.copyWith(
-        fontFamily: AppStrings.primaryFont,
+        fontFamily: AppStrings.displayFont,
         fontSize: 24,
         fontWeight: FontWeight.w800,
         letterSpacing: -0.4,

@@ -52,7 +52,6 @@ class _GLobalMiniPlayerSheetState extends ConsumerState<GLobalMiniPlayerSheet> {
     final session = ref.watch(radioPlaybackSessionProvider);
 
     final controlsIconSize = 24.0;
-    debugPrint("Mini player rebuilt");
 
     return SafeArea(
       top: false,
@@ -94,7 +93,7 @@ class _GLobalMiniPlayerSheetState extends ConsumerState<GLobalMiniPlayerSheet> {
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(999),
-            color: cs.surfaceContainerHighest,
+            color: cs.primaryContainer,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

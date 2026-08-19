@@ -199,6 +199,8 @@ class _AyahActionsSheetState extends ConsumerState<AyahActionsSheet> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
     final bookmarkId = widget.ayah.verseKey;
 
     return Padding(
@@ -220,6 +222,7 @@ class _AyahActionsSheetState extends ConsumerState<AyahActionsSheet> {
           //Actions
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Consumer(
                 builder: (context, ref, child) {
@@ -231,7 +234,9 @@ class _AyahActionsSheetState extends ConsumerState<AyahActionsSheet> {
                     iconData: isBookmarked
                         ? HugeIconsSolid.bookmark01
                         : HugeIconsStroke.bookmark01,
-                    label: 'Bookmark',
+                    label: isBookmarked ? 'Remove bookmark' : 'Bookmark',
+                    bgColor: isBookmarked ? cs.primary : null,
+                    fgColor: isBookmarked ? cs.onPrimary : null,
                     onPressed: () async {
                       try {
                         AppHaptics.selection();

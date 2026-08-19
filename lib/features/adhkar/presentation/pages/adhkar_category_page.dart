@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
+import 'package:rafeeq/core/helpers/extensions/page_animate_ext.dart';
 import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/features/adhkar/domain/entities/dhikr_category.dart';
 import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_list_page.dart';
@@ -57,7 +58,7 @@ class _AdhkarCategoryPageState extends ConsumerState<AdhkarCategoryPage> {
         ),
         loading: () => const Center(child: CircularProgressIndicator()),
       ),
-    );
+    ).animatePage();
   }
 }
 
