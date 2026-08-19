@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+import 'package:rafeeq/core/helpers/app_haptics.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/widgets/app_drag_handle.dart';
+import 'package:rafeeq/core/widgets/bottom_sheet_action.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/quran_log_provider.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/edit_quran_goal_sheet.dart';
@@ -18,66 +21,85 @@ class GoalSheetActionsSheet extends ConsumerWidget {
 
     return SafeArea(
       top: false,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const AppDragHandle(),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const AppDragHandle(),
 
-          Text('Edit Goal', style: theme.textTheme.headlineSmall),
+            const SizedBox(height: 16),
 
-          // Actions
-          _EditGoalAction(
-            icon: PhosphorIcons.pen,
-            title: 'Adjust',
-            onTap: () {
-              AppSheets.showBottomSheet(
-                context: context,
-                child: EditQuranGoalSheet(goal: goal!),
-              );
-            },
-          ),
+            Text('Manage Your Quran Goal', style: theme.textTheme.titleMedium),
 
-          _EditGoalAction(
-            icon: PhosphorIcons.trash,
-            title: 'Delete Goal',
-            onTap: () {
-              AppSheets.showConfirmSheet(
-                context: context,
-                useSafeArea: true,
-                title: "Delete Goal?",
-                description:
-                    "This will delete your current Quran goal and reset your stats",
-                destructive: true,
-                confirmText: "Delete",
-                onConfirm: () {
-                  ref.read(quranGoalProvider.notifier).deleteGoal();
-                  AppNav.pop(context);
-                  AppNav.pop(context);
-                },
-              );
-            },
-          ),
+            const SizedBox(height: 16),
 
-          _EditGoalAction(
-            icon: PhosphorIcons.arrowArcRight,
-            title: 'Reset Stats',
-            onTap: () {
-              AppSheets.showConfirmSheet(
-                context: context,
-                useSafeArea: true,
-                title: "Reset stats?",
-                description: "This will clear all your recorded ayahs.",
-                destructive: true,
-                confirmText: "Reset",
-                onConfirm: () {
-                  ref.read(quranLogProvider.notifier).resetLogs();
-                  AppNav.pop(context);
-                  AppNav.pop(context);
-                },
-              );
-            },
-          ),
-        ],
+            // Actions
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _EditGoalAction(
+                  icon: PhosphorIcons.pen,
+                  title: 'Adjust',
+                  onTap: () {
+                    AppSheets.showBottomSheet(
+                      context: context,
+                      child: EditQuranGoalSheet(goal: goal!),
+                    );
+                  },
+                ),
+
+                _EditGoalAction(
+                  icon: PhosphorIcons.trash,
+                  title: 'Delete',
+                  onTap: () {
+                    AppSheets.showConfirmSheet(
+                      context: context,
+                      useSafeArea: true,
+                      icon: HugeIconsSolid.delete02,
+                      title: "Delete Goal?",
+                      description:
+                          "This will delete your current Quran goal and reset your progress",
+                      destructive: true,
+                      confirmText: "Delete",
+                      onConfirm: () {
+                        AppHaptics.selection();
+                        ref.read(quranGoalProvider.notifier).deleteGoal();
+                        AppNav.pop(context);
+                        AppNav.pop(context);
+                      },
+                    );
+                  },
+                ),
+
+                _EditGoalAction(
+                  icon: PhosphorIcons.arrowArcRight,
+                  title: 'Reset',
+                  onTap: () {
+                    AppSheets.showConfirmSheet(
+                      context: context,
+                      useSafeArea: true,
+                      icon: PhosphorIcons.arrowArcRight,
+                      title: "Reset stats?",
+                      description:
+                          "This will clear all your recorded progress.",
+                      destructive: true,
+                      confirmText: "Reset",
+                      onConfirm: () {
+                        AppHaptics.selection();
+                        ref.read(quranLogProvider.notifier).resetLogs();
+                        AppNav.pop(context);
+                        AppNav.pop(context);
+                      },
+                    );
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -95,14 +117,13 @@ class _EditGoalAction extends StatelessWidget {
   final VoidCallback onTap;
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final cs = theme.colorScheme;
-
-    return ListTile(
-      leading: Icon(icon),
-      title: Text(title),
-      trailing: Icon(Icons.chevron_right, color: cs.onSurfaceVariant),
-      onTap: onTap,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: BottomSheetActionBtn(
+        iconData: icon,
+        label: title,
+        onPressed: onTap,
+      ),
     );
   }
 }

@@ -77,6 +77,7 @@ class _GLobalMiniPlayerSheetState extends ConsumerState<GLobalMiniPlayerSheet> {
                 context: context,
                 useSafeArea: false,
                 isScrollControlled: true,
+                animationDuration: const Duration(milliseconds: 400),
                 child: RadioPlayerSheet(
                   stations: session.stations,
                   initialIndex: session.currentIndex,

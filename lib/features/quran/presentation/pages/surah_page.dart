@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/constants/spacing/app_spacing.dart';
+import 'package:rafeeq/core/constants/strings/app_strings.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
@@ -443,7 +444,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
               ),
             ],
             elevation: 16,
-            shadowColor: cs.shadow, 
+            shadowColor: cs.shadow,
           ),
 
           body: ayahsAsync.when(
@@ -529,8 +530,6 @@ class AppbarSurahPicker extends ConsumerWidget {
                     return;
                   }
 
-                  debugPrint("Pushing page to surah index: $surahId");
-
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                       builder: (_) => FullSurahPage(
@@ -545,20 +544,22 @@ class AppbarSurahPicker extends ConsumerWidget {
             borderRadius: BorderRadius.circular(10),
             child: SizedBox(
               height: kToolbarHeight, // fills AppBar height
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    "${surah.id}. ${surah.nameTransliteration}",
-                    style: theme.textTheme.titleLarge!.copyWith(
-                      fontFamily: 'PlayFairDisplay',
-                      fontSize: 16,
+              child: IntrinsicWidth(
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      "${surah.id}. ${surah.nameTransliteration}",
+                      style: theme.textTheme.titleLarge!.copyWith(
+                        fontFamily: AppStrings.displayFont,
+                        fontSize: 16,
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 2),
+                    const SizedBox(width: 2),
 
-                  const PhosphorIcon(PhosphorIcons.caretDown),
-                ],
+                    const PhosphorIcon(PhosphorIcons.caretDown, size: 16),
+                  ],
+                ),
               ),
             ),
           ),

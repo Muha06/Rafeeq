@@ -68,13 +68,15 @@ class AppSheets {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Icon(
-                icon,
-                color: destructive ? cs.error : cs.onSurfaceVariant,
-                size: 48,
-              ),
+              if (icon != null) ...[
+                Icon(
+                  icon,
+                  color: destructive ? cs.error : cs.onSurfaceVariant,
+                  size: 48,
+                ),
 
-              const SizedBox(height: 8),
+                const SizedBox(height: 8),
+              ],
 
               Text(
                 title,

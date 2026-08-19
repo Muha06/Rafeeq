@@ -126,7 +126,7 @@ class _EditQuranGoalSheetState extends ConsumerState<EditQuranGoalSheet> {
       padding: EdgeInsets.only(
         left: 16,
         right: 16,
-        top: 0,
+        top: 16,
         bottom: MediaQuery.of(context).viewInsets.bottom + 16,
       ),
       child: SafeArea(
@@ -137,7 +137,9 @@ class _EditQuranGoalSheetState extends ConsumerState<EditQuranGoalSheet> {
           children: [
             const AppDragHandle(),
 
-            Text("Edit your Qur'an Goal", style: theme.textTheme.titleMedium),
+            const SizedBox(height: 16),
+
+            Text("Edit", style: theme.textTheme.titleMedium),
 
             const SizedBox(height: 24),
 

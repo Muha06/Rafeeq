@@ -6,6 +6,7 @@ import 'package:rafeeq/core/features/local_notifications/repository/local_notifs
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/features/quran_goal/data/models/hive/quran_goal_hive.dart';
 import 'package:rafeeq/features/quran_goal/domain/entities/quran_goal.dart';
+ import 'package:rafeeq/features/quran_goal/presentation/providers/quran_log_provider.dart';
 
 final quranGoalProvider = NotifierProvider<QuranGoalNotifier, QuranGoal?>(
   QuranGoalNotifier.new,
@@ -121,6 +122,8 @@ class QuranGoalNotifier extends Notifier<QuranGoal?> {
       body:
           'Your Quran goal has been deleted successfully. You can create a new goal anytime.',
     );
+
+    ref.read(quranLogProvider.notifier).resetLogs();
 
     RafeeqAnalytics.logFeature(
       'delete_quran_goal',

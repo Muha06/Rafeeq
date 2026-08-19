@@ -125,9 +125,9 @@ class _CreateGoalSheetState extends ConsumerState<CreateGoalSheet> {
     return Padding(
       padding: EdgeInsets.fromLTRB(
         12,
-        8,
         12,
-        MediaQuery.of(context).viewInsets.bottom,
+        12,
+        MediaQuery.of(context).viewInsets.bottom + 8,
       ),
       child: SafeArea(
         child: SingleChildScrollView(
@@ -136,6 +136,8 @@ class _CreateGoalSheetState extends ConsumerState<CreateGoalSheet> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const AppDragHandle(),
+
+              const SizedBox(height: 8),
 
               Text(
                 "Create Quran Goal",
@@ -149,14 +151,14 @@ class _CreateGoalSheetState extends ConsumerState<CreateGoalSheet> {
                 targetUnitNotifier: targetUnitNotifier,
               ),
 
-              const SizedBox(height: 8),
+              const SizedBox(height: 16),
 
               GoalTargetField(
                 controller: targetController,
                 unit: targetUnit.label,
               ),
 
-              const SizedBox(height: 28),
+              const SizedBox(height: 16),
 
               GoalScheduleTile(
                 icon: Icons.calendar_today_outlined,
@@ -179,7 +181,7 @@ class _CreateGoalSheetState extends ConsumerState<CreateGoalSheet> {
                 onTap: pickReminder,
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
 
               GoalCreateButton(onPressed: createGoal),
             ],
@@ -364,6 +366,7 @@ class GoalTargetField extends StatelessWidget {
 
     return SizedBox(
       width: 160,
+      height: 48,
       child: TextField(
         controller: controller,
         autofocus: true,
@@ -372,7 +375,8 @@ class GoalTargetField extends StatelessWidget {
         textAlign: TextAlign.center,
         style: theme.textTheme.headlineMedium?.copyWith(
           color: cs.primary,
-          fontSize: 30,
+          fontSize: 36,
+          fontWeight: FontWeight.bold,
         ),
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         decoration: InputDecoration(
@@ -408,11 +412,6 @@ class GoalCreateButton extends StatelessWidget {
         onPressed: onPressed,
         icon: const Icon(Icons.auto_stories_outlined),
         label: const Text("Create Goal"),
-        style: FilledButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18),
-          ),
-        ),
       ),
     );
   }

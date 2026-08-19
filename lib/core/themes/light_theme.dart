@@ -86,7 +86,7 @@ ThemeData appLightThemeData() {
       titleTextStyle: base.headlineSmall?.copyWith(
         fontFamily: AppStrings.displayFont,
         fontSize: 24,
-        fontWeight: FontWeight.w800,
+        fontWeight: FontWeight.w700,
         letterSpacing: -0.4,
         color: scheme.onSurface,
       ),
