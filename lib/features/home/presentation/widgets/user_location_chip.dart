@@ -41,34 +41,34 @@ class _MyUserLocChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final cs = theme.colorScheme;
+    // final cs = theme.colorScheme;
+    final fgColor = Colors.white;
 
     return GestureDetector(
       onTap: onTap,
-      child: Chip(
-        color: WidgetStatePropertyAll(cs.surfaceContainerHighest),
-        padding: const EdgeInsets.symmetric(horizontal: 4),
-        label: IntrinsicWidth(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 320),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(icon, size: 16, color: cs.onSurface),
-                const SizedBox(width: 4),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(999),
+          border: Border.all(color: fgColor.withAlpha(160)),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+        child: IntrinsicWidth(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, size: 14, color: fgColor),
+              const SizedBox(width: 4),
 
-                Flexible(
-                  child: Text(
-                    label,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      color: cs.onSurface,
-                    ),
-                  ),
+              Flexible(
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.labelSmall?.copyWith(color: fgColor),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

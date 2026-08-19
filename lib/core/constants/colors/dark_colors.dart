@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:rafeeq/core/constants/colors/light_colors.dart';
-
+ 
 class AppDarkColors {
   static const canvas = Color(0xFF1E252D);
 
@@ -11,8 +10,13 @@ class AppDarkColors {
   static const outline = Color(0xFF3A332D);
   static const outlineVariant = Color(0xFF2A241F);
 
-  static const tertiary = AppLightColors.brand;
-  static const brand = Color(0xFF1E97A8);
+  // static const tertiary = AppLightColors.brand;
+  static const primary = Color(0xFF1E97A8);
+
+  // CONTAINERS
+  // static const primaryContainer = Color(0xFF1D98A8);
+  // static const secondaryContainer = Color(0xFFD3FAF9);
+  // static const tertiaryContainer = Color(0xFFAFF0F2);
 
   static const onSurface = Color(0xFFEAF2F2);
   static const onSurface2 = Color(0xFF96A2A5);

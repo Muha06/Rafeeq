@@ -13,6 +13,7 @@ class HijriDateToday extends ConsumerWidget {
   });
   final Color foregroundColor;
   final double fontSize;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
@@ -28,7 +29,7 @@ class HijriDateToday extends ConsumerWidget {
         children: [
           Text(
             hijriState.hijri.toFormat('dd MMMM yyyy'),
-            style: theme.textTheme.labelMedium?.copyWith(
+            style: theme.textTheme.labelLarge?.copyWith(
               color: foregroundColor,
               fontSize: fontSize,
             ),
@@ -36,7 +37,12 @@ class HijriDateToday extends ConsumerWidget {
 
           const SizedBox(width: 4),
 
-          Icon(PhosphorIcons.caretRight, size: 16, color: foregroundColor),
+          Icon(
+            PhosphorIcons.caretRight,
+            size: 16,
+            fontWeight: FontWeight.w700,
+            color: foregroundColor,
+          ),
         ],
       ),
     );

@@ -9,6 +9,7 @@ import 'package:rafeeq/features/timings/domain/entities/salah_prayer.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_status.dart';
 import 'package:rafeeq/features/timings/presentation/pages/timings_pages.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/salah_status_provider.dart';
+import 'package:rafeeq/features/home/presentation/widgets/user_location_chip.dart';
 
 class HomeTimelineCard extends ConsumerWidget {
   const HomeTimelineCard({super.key});
@@ -93,26 +94,26 @@ class _BuildTimelineCard extends ConsumerWidget {
 
                       const Spacer(),
 
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 2,
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.white54),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: const HijriDateToday(
-                          foregroundColor: Colors.white,
-                          fontSize: 14,
-                        ),
-                      ),
+                      // Container(
+                      //   padding: const EdgeInsets.symmetric(
+                      //     horizontal: 10,
+                      //     vertical: 2,
+                      //   ),
+                      //   decoration: BoxDecoration(
+                      //     border: Border.all(color: Colors.white54),
+                      //     borderRadius: BorderRadius.circular(20),
+                      //   ),
+                      //   child: const HijriDateToday(
+                      //     foregroundColor: Colors.white,
+                      //     fontSize: 14,
+                      //   ),
+                      // ),
+                      const UserLocationChip(),
                     ],
                   ),
 
-
                   const Spacer(),
-                  
+
                   Align(
                     alignment: Alignment.centerLeft,
                     child: _TimeToNextText(next: next),

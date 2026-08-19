@@ -2,19 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:rafeeq/core/constants/colors/dark_colors.dart';
 import 'package:rafeeq/core/constants/spacing/app_spacing.dart';
 import 'package:rafeeq/core/constants/typography/app_text_theme.dart';
- 
+
 ThemeData appDarkThemeData() {
   final scheme =
       const ColorScheme.dark(
-        primary: AppDarkColors.brand, // accent color
+        primary: AppDarkColors.primary, // accent color
         onPrimary: AppDarkColors.canvas, // text/icons on accent
         surface: AppDarkColors.surface, // base surface for cards
         onSurface: AppDarkColors.onSurface, // main text/icons on surfaces
         error: AppDarkColors.error,
         onError: Colors.white,
         outline: AppDarkColors.outline, // outlines
-        tertiary: AppDarkColors
-            .tertiary, // used for chips and highlights above primary
+        // tertiary: AppDarkColors.t,
         onTertiary: AppDarkColors.onSurface,
       ).copyWith(
         // Material 3 container ladder

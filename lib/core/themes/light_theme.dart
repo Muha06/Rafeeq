@@ -6,17 +6,36 @@ import 'package:rafeeq/core/constants/typography/app_text_theme.dart';
 ThemeData appLightThemeData() {
   final scheme = const ColorScheme.light(
     brightness: Brightness.light,
-    primary: AppLightColors.brand,
+
+    // PRIMARY || SECONDARY || TERTIARY
+    primary: AppLightColors.primary,
     secondary: AppLightColors.secondary,
     tertiary: AppLightColors.tertiary,
 
-    surface: AppLightColors.surface,
-    outline: AppLightColors.outline,
+    // ON PRIMARY || SECONDARY || TERTIARY
+    onPrimary: AppLightColors.canvas,
+    onSecondary: AppLightColors.canvas,
+    onTertiary: AppLightColors.onTertiary,
 
-    onPrimary: Colors.white,
+    // CONTAINERS
+    primaryContainer: AppLightColors.primaryContainer,
+    secondaryContainer: AppLightColors.secondaryContainer,
+    tertiaryContainer: AppLightColors.tertiaryContainer,
+
+    // ON CONTAINERS
+    onPrimaryContainer: AppLightColors.onPrimaryContainer,
+    onSecondaryContainer: AppLightColors.onSecondaryContainer,
+    onTertiaryContainer: AppLightColors.onTertiaryContainer,
+
+    surface: AppLightColors.surface,
     onSurface: AppLightColors.onSurface,
 
+    outline: AppLightColors.outline,
+
     error: AppLightColors.error,
+    errorContainer: AppLightColors.errorContainer,
+    onErrorContainer: AppLightColors.onErrorContainer,
+
     onError: Colors.white,
     surfaceContainerLowest: AppLightColors.canvas,
     surfaceContainerLow: AppLightColors.canvas,
@@ -32,7 +51,7 @@ ThemeData appLightThemeData() {
   );
 
   final base = Typography.material2021().black.apply(
-    fontFamily: 'PlusJakartaSans',
+    fontFamily: AppStrings.primaryFont,
   );
 
   return ThemeData(
@@ -69,7 +88,7 @@ ThemeData appLightThemeData() {
         fontSize: 24,
         fontWeight: FontWeight.w800,
         letterSpacing: -0.4,
-        color: scheme.primary,
+        color: scheme.onSurface,
       ),
     ),
 

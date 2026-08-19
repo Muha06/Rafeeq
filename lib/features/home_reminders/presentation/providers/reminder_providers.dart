@@ -16,7 +16,8 @@ final homeRemindersProvider = Provider.family<List<Widget>, BuildContext>((
   if (!isFriday) {
     reminders.add(
       HomeReminderCard(
-        title: "View Friday Virtues",
+        title: "Friday is here!",
+        message: 'Tap to explore the virtues and sunnahs of Friday.',
         onTap: () => showFridayVirtuesSheet(context),
       ),
     );

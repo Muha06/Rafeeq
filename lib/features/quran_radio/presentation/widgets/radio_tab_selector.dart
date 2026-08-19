@@ -34,26 +34,22 @@ class RadioCategorySelector extends StatelessWidget {
               duration: const Duration(milliseconds: 200),
               padding: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
-                color: selectedCat ? cs.primaryContainer : cs.surface,
+                color: selectedCat ? cs.primary : cs.surface,
                 borderRadius: BorderRadius.circular(999),
-                // border: Border.all(
-                //   color: selectedCat
-                //       ? cs.primary
-                //       : cs.onSurfaceVariant.withAlpha(120),
-                // ),
               ),
               child: Row(
                 children: [
                   Icon(
                     cat.icon,
                     size: 18,
-                    color: selectedCat ? cs.onPrimaryContainer : cs.onSurface,
+                    color: selectedCat ? cs.onPrimary : cs.onSurface,
                   ),
                   const SizedBox(width: 6),
                   Text(
                     cat.label,
                     style: tt.labelMedium!.copyWith(
-                      color: selectedCat ? cs.onPrimaryContainer : cs.onSurface,
+                      color: selectedCat ? cs.onPrimary : cs.onSurface,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],
