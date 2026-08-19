@@ -10,65 +10,76 @@ void showFridayVirtuesSheet(BuildContext context) {
   AppSheets.showBottomSheet(
     context: context,
     isScrollControlled: true,
-    child: SizedBox(
-      height: MediaQuery.sizeOf(context).height * 0.9,
-      child: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
-        children: [
-          const AppDragHandle(),
+    child: DraggableScrollableSheet(
+      expand: false,
+      minChildSize: 0.7,
+      initialChildSize: 0.8,
+      maxChildSize: 1,
+      builder: (context, controller) {
+        return Padding(
+          padding: const EdgeInsets.all(16),
+          child: ListView(
+            controller: controller,
+            children: [
+              const AppDragHandle(),
 
-          const SizedBox(height: 16),
+              const SizedBox(height: 16),
 
-          Text(
-            'Friday Virtues',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.headlineSmall,
+              Text(
+                'Friday Virtues',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+
+              const SizedBox(height: 12),
+
+              Text(
+                'Maximize the blessings of Jumu\'ah with a few Sunnah practices/',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              const SizedBox(height: 16),
+
+              const _VirtueTile(
+                title: 'Recite Sūrah Al-Kahf',
+                body:
+                    'A beautiful Friday habit. If you can’t finish, start and continue — consistency wins.',
+                icon: PhosphorIcons.bookOpen,
+              ),
+
+              const _VirtueTile(
+                title: 'Send ṣalawāt',
+                body:
+                    'Increase blessings by sending prayers upon the Prophet ﷺ throughout the day.',
+                icon: PhosphorIcons.heart,
+              ),
+
+              const _VirtueTile(
+                title: 'Ghusl + early Jumu‘ah',
+                body: 'Prepare for Jumu‘ah like it matters — because it does.',
+                icon: PhosphorIcons.drop,
+              ),
+
+              const _VirtueTile(
+                title: 'Make duʿā',
+                body:
+                    'Keep a short duʿā list. Ask for guidance, forgiveness, and barakah in your time.',
+                icon: PhosphorIcons.handsPraying,
+              ),
+
+              const SizedBox(height: 14),
+
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () => AppNav.pop(context),
+                  child: const Text('Got it'),
+                ),
+              ),
+            ],
           ),
-
-          const SizedBox(height: 12),
-
-          Text(
-            'Maximize the blessings of Jumu\'ah with a few Sunnah practices/',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-          const SizedBox(height: 16),
-
-          const _VirtueTile(
-            title: 'Recite Sūrah Al-Kahf',
-            body:
-                'A beautiful Friday habit. If you can’t finish, start and continue — consistency wins.',
-            icon: PhosphorIcons.bookOpen,
-          ),
-          
-          const _VirtueTile(
-            title: 'Send ṣalawāt',
-            body:
-                'Increase blessings by sending prayers upon the Prophet ﷺ throughout the day.',
-            icon: PhosphorIcons.heart,
-          ),
-
-          const _VirtueTile(
-            title: 'Ghusl + early Jumu‘ah',
-            body: 'Prepare for Jumu‘ah like it matters — because it does.',
-            icon: PhosphorIcons.drop,
-          ),
-
-          const _VirtueTile(
-            title: 'Make duʿā',
-            body:
-                'Keep a short duʿā list. Ask for guidance, forgiveness, and barakah in your time.',
-            icon: PhosphorIcons.handsPraying,
-          ),
-
-          const SizedBox(height: 14),
-
-          ElevatedButton(
-            onPressed: () => AppNav.pop(context),
-            child: const Text('Got it'),
-          ),
-        ],
-      ),
+        );
+      },
     ),
   );
 }

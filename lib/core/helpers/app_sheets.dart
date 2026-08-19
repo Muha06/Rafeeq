@@ -17,24 +17,23 @@ class AppSheets {
     Duration? reverseAnimationDuration = const Duration(milliseconds: 200),
     Clip? clipBehavior = Clip.hardEdge,
   }) {
-    return Navigator.of(context).push(
-      ModalBottomSheetRoute(
-        useSafeArea: useSafeArea,
-        isScrollControlled: isScrollControlled,
-        showDragHandle: false,
-        enableDrag: true,
-        clipBehavior: clipBehavior,
-        isDismissible: true,
-        sheetAnimationStyle: AnimationStyle(
-          curve: Curves.easeOutCubic,
-          reverseCurve: Curves.easeInCubic,
-          duration: animationDuration,
-          reverseDuration: reverseAnimationDuration,
-        ),
-        builder: (context) {
-          return SafeArea(top: false, child: child);
-        },
+    return showModalBottomSheet(
+      context: context,
+      useSafeArea: useSafeArea,
+      isScrollControlled: isScrollControlled,
+      showDragHandle: false,
+      enableDrag: true,
+      clipBehavior: clipBehavior,
+      sheetAnimationStyle: AnimationStyle(
+        curve: Curves.easeOutCubic,
+        reverseCurve: Curves.easeInCubic,
+        duration: animationDuration,
+        reverseDuration: reverseAnimationDuration,
       ),
+      isDismissible: true,
+      builder: (context) {
+        return SafeArea(top: false, child: child);
+      },
     );
   }
 

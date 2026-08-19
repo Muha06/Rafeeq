@@ -94,20 +94,6 @@ class _BuildTimelineCard extends ConsumerWidget {
 
                       const Spacer(),
 
-                      // Container(
-                      //   padding: const EdgeInsets.symmetric(
-                      //     horizontal: 10,
-                      //     vertical: 2,
-                      //   ),
-                      //   decoration: BoxDecoration(
-                      //     border: Border.all(color: Colors.white54),
-                      //     borderRadius: BorderRadius.circular(20),
-                      //   ),
-                      //   child: const HijriDateToday(
-                      //     foregroundColor: Colors.white,
-                      //     fontSize: 14,
-                      //   ),
-                      // ),
                       const UserLocationChip(),
                     ],
                   ),
