@@ -17,8 +17,7 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final cs = theme.colorScheme;
-
+ 
     final s = ref.watch(surahSettingsProvider);
     final sNotifier = ref.read(surahSettingsProvider.notifier);
 
@@ -42,18 +41,15 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
     );
 
     final titleTextstyle = theme.listTileTheme.titleTextStyle;
-    final valueTextstyle = theme.listTileTheme.titleTextStyle?.copyWith(
-      color: cs.onSurfaceVariant,
-      fontSize: 16,
-    );
+    final valueTextstyle = theme.textTheme.bodyMedium;
 
     final selectedReciter = ref.watch(selectedReciterProvider);
 
     return SafeArea(
       top: false,
       bottom: true,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,

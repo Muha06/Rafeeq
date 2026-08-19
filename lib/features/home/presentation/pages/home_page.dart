@@ -36,7 +36,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     ref.watch(adhkarNotificationsControllerProvider); // scheduler adhkar notifs
 
     return Scaffold(
-      extendBody: true,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(

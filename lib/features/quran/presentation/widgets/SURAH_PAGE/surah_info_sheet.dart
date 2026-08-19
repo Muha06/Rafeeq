@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:rafeeq/core/widgets/app_drag_handle.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah_info.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
@@ -25,10 +26,14 @@ class SurahInfoSheet extends StatelessWidget {
         builder: (context, controller) {
           return SingleChildScrollView(
             controller: controller,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const AppDragHandle(),
+
+                const SizedBox(height: 8),
+
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -41,17 +46,11 @@ class SurahInfoSheet extends StatelessWidget {
                   ],
                 ),
 
-                const SizedBox(height: 24),
-
                 // Surah short text
                 if (info.shortText.isNotEmpty) ...[
                   const SizedBox(height: 8),
                   Text(info.shortText, style: theme.textTheme.bodyLarge),
                 ],
-
-                const SizedBox(height: 24),
-                const Divider(),
-                const SizedBox(height: 8),
 
                 Html(
                   data: info.text,
@@ -70,7 +69,14 @@ class SurahInfoSheet extends StatelessWidget {
                       color: bLarge!.color,
                       lineHeight: LineHeight(bLarge.height),
                     ),
-                    "p": Style(margin: Margins.only(bottom: 18)),
+                    "p": Style(
+                      margin: Margins.only(bottom: 18),
+                      padding: HtmlPaddings.zero,
+                      fontSize: FontSize(bLarge.fontSize ?? 22),
+                      fontWeight: FontWeight.w400,
+                      color: bLarge.color,
+                      lineHeight: LineHeight(bLarge.height),
+                    ),
                   },
                 ),
               ],

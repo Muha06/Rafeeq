@@ -9,7 +9,6 @@ import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/core/widgets/app_state_view.dart';
-import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/quran/domain/entities/last_read_ayah.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
@@ -17,12 +16,13 @@ import 'package:rafeeq/features/quran/presentation/pages/mushaf_pageview.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/fetch_ayah_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/last_read_provider.dart';
+import 'package:rafeeq/features/quran/presentation/riverpod/surah_details_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/ayah_tile.dart';
-import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/play_surah_btn.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/quran_audio_controls_bar.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_ayah_dialog.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_details.dart';
+import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_info_sheet.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/surah_settings_sheet.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/log_ayah_bottomsheet.dart';
@@ -296,6 +296,19 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
     }
   }
 
+  Future<void> openSurahInfoSheet() async {
+    final info = await ref.read(surahInfoProvider(surah.id).future);
+
+    if (!context.mounted || info == null) return;
+    AppSheets.showBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      animationDuration: const Duration(milliseconds: 400),
+      reverseAnimationDuration: const Duration(milliseconds: 300),
+      child: SurahInfoSheet(info: info),
+    );
+  }
+
   @override
   void dispose() {
     _autoTimer?.cancel();
@@ -365,7 +378,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
 
             actions: [
               //Ayah log
-              if (hasGoal)
+              if (hasGoal) ...[
                 IconButton(
                   icon: Icon(
                     HugeIconsStroke.floppyDisk,
@@ -377,6 +390,17 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
                   },
                   tooltip: 'Save Goal progress',
                 ),
+              ],
+
+              IconButton(
+                icon: Icon(
+                  HugeIconsStroke.informationCircle,
+                  color: appbarIconColors,
+                ),
+                visualDensity: VisualDensity.compact,
+                onPressed: openSurahInfoSheet,
+                tooltip: 'Surah info',
+              ),
 
               //Mushaf mode
               IconButton(
@@ -413,12 +437,17 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
                   );
                 },
                 icon: PhosphorIcon(
-                  HugeIconsStroke.gears,
+                  HugeIconsStroke.settings01,
                   color: appbarIconColors,
                 ),
               ),
             ],
-            bottom: appBarBottomDivider(context),
+            elevation: 16,
+            shadowColor: cs.shadow,
+            // bottom: PreferredSize(
+            //   preferredSize: const Size(double.infinity, 40),
+            //   child: _SurahDetails(surah: surah),
+            // ),
           ),
 
           body: ayahsAsync.when(
@@ -443,14 +472,12 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
                 ),
                 itemBuilder: (context, index) {
                   if (index == 0) {
-                    return Column(
-                      children: [
-                        SurahDetails(surah: surah),
-                        const SizedBox(height: 8),
-
-                        PlayFullSurahBtn(initialIndex: widget.initialIndex),
-                        const SizedBox(height: 8),
-                      ],
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 24.0),
+                      child: BasmallaPlayBtnColumn(
+                        surah: surah,
+                        initialIndex: widget.initialIndex,
+                      ),
                     );
                   }
 

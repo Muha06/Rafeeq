@@ -82,7 +82,6 @@ ThemeData appLightThemeData() {
       ),
     ),
 
-    // iconTheme: IconThemeData(color: scheme.onSurface),
     tabBarTheme: const TabBarThemeData(
       labelStyle: TextStyle(
         fontFamily: AppStrings.primaryFont,
@@ -295,9 +294,10 @@ ThemeData appLightThemeData() {
         return scheme.onSurfaceVariant;
       }),
       trackColor: WidgetStateProperty.resolveWith((s) {
-        if (s.contains(WidgetState.disabled)) return scheme.surfaceContainer;
-        if (s.contains(WidgetState.selected)) return AppLightColors.switchOnBg;
-        return scheme.surfaceContainerHigh;
+        if (s.contains(WidgetState.disabled)) return AppLightColors.switchBg;
+        if (s.contains(WidgetState.selected)) return AppLightColors.switchBg;
+
+        return AppLightColors.switchBg;
       }),
       overlayColor: const WidgetStatePropertyAll(AppLightColors.switchRipple),
     ),

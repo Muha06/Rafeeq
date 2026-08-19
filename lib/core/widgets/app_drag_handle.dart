@@ -5,7 +5,7 @@ class AppDragHandle extends StatelessWidget {
     super.key,
     this.width = 40,
     this.height = 5,
-    this.margin = const EdgeInsets.symmetric(vertical: 12),
+    this.margin = const EdgeInsets.symmetric(vertical: 0),
     this.color,
     this.radius = 999,
   });

@@ -13,8 +13,7 @@ class HomeRemindersCarousel extends ConsumerWidget {
     final items = ref.watch(homeRemindersProvider(context));
 
     if (items.isEmpty) return const SizedBox.shrink();
-    debugPrint("HomeRemindersCarousel: items.length = ${items.length}");
-
+ 
     final canAutoPlay = items.length > 1;
 
     return CarouselSlider(

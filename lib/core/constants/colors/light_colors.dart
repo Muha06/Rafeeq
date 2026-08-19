@@ -32,6 +32,6 @@ class AppLightColors {
 
   //  SWITCH
   static const switchOn = brand;
-  static const switchOnBg = Color(0xFFDCEEEE);
+  static const switchBg = Color(0xFFDCEEEE);
   static const switchRipple = Color(0x1A2F6F73);
 }

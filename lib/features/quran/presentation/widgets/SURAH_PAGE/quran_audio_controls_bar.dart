@@ -86,89 +86,94 @@ class AudioControlsSection extends ConsumerWidget {
         animationDuration: const Duration(milliseconds: 400),
         child: const QuranAudioSheet(),
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            children: [
-              // stop btn
-              GestureDetector(
-                onTap: () async {
-                  ref
-                      .read(surahSettingsProvider.notifier)
-                      .showAudioControls(false);
-                  ctrl.stop();
-                },
-                child: const Icon(HugeIconsStroke.cancel01, size: 18),
-              ),
+      child: Container(
+        decoration: BoxDecoration(color: cs.surfaceContainerLowest),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                // stop btn
+                GestureDetector(
+                  onTap: () async {
+                    ref
+                        .read(surahSettingsProvider.notifier)
+                        .showAudioControls(false);
+                    ctrl.stop();
+                  },
+                  child: const Icon(HugeIconsStroke.cancel01, size: 18),
+                ),
 
-              const SizedBox(width: 12),
+                const SizedBox(width: 12),
 
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      audioState.title ?? '—',
-                      style: theme.textTheme.labelLarge?.copyWith(
-                        color: cs.onSurface,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        audioState.title ?? '—',
+                        style: theme.textTheme.labelLarge?.copyWith(
+                          color: cs.onSurface,
+                        ),
                       ),
-                    ),
 
-                    const SizedBox(height: 0),
+                      const SizedBox(height: 0),
 
-                    TextScroll(
-                      selectedReciter.name,
-                      mode: TextScrollMode.endless,
-                      intervalSpaces: 24,
-                      velocity: const Velocity(pixelsPerSecond: Offset(16, 0)),
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: cs.onSurfaceVariant,
+                      TextScroll(
+                        selectedReciter.name,
+                        mode: TextScrollMode.endless,
+                        intervalSpaces: 24,
+                        velocity: const Velocity(
+                          pixelsPerSecond: Offset(16, 0),
+                        ),
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: cs.onSurfaceVariant,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
 
-              IconButton(
-                onPressed: () async {
-                  await ctrl.previous();
-                },
-                visualDensity: VisualDensity.compact,
-                icon: Icon(
-                  HugeIconsStroke.previous,
-                  size: prevNextIconSize,
-                  color: prevNextIconColor,
+                IconButton(
+                  onPressed: () async {
+                    await ctrl.previous();
+                  },
+                  visualDensity: VisualDensity.compact,
+                  icon: Icon(
+                    HugeIconsStroke.previous,
+                    size: prevNextIconSize,
+                    color: prevNextIconColor,
+                  ),
                 ),
-              ),
 
-              //Play/pause button
-              CircleIconButton(
-                onPressed: audioState.isBuffering
-                    ? null
-                    : () => audioState.isPlaying ? ctrl.pause() : ctrl.play(),
-                icon: audioState.isPlaying ? Icons.pause : Icons.play_arrow,
-                enabledBgColor: cs.onSurface,
-                labelColor: cs.surface,
-              ),
-
-              IconButton(
-                onPressed: () async {
-                  await ctrl.next();
-                },
-                icon: Icon(
-                  HugeIconsStroke.next,
-                  size: prevNextIconSize,
-                  color: prevNextIconColor,
+                //Play/pause button
+                CircleIconButton(
+                  onPressed: audioState.isBuffering
+                      ? null
+                      : () => audioState.isPlaying ? ctrl.pause() : ctrl.play(),
+                  icon: audioState.isPlaying ? Icons.pause : Icons.play_arrow,
+                  enabledBgColor: cs.onSurface,
+                  labelColor: cs.surface,
                 ),
-              ),
-            ],
-          ),
 
-          const SizedBox(height: 4),
+                IconButton(
+                  onPressed: () async {
+                    await ctrl.next();
+                  },
+                  icon: Icon(
+                    HugeIconsStroke.next,
+                    size: prevNextIconSize,
+                    color: prevNextIconColor,
+                  ),
+                ),
+              ],
+            ),
 
-          AudioSeekBar(onSeek: ctrl.seek, showDurations: false),
-        ],
+            const SizedBox(height: 4),
+
+            AudioSeekBar(onSeek: ctrl.seek, showDurations: false),
+          ],
+        ),
       ),
     );
   }
