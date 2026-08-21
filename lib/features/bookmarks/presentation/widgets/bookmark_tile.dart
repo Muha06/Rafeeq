@@ -80,30 +80,21 @@ class _BookmarkTileState extends ConsumerState<BookmarkTile> {
 
     final isQuran = quranBookmark != null;
 
+    if (isQuran) {
+      return const _QuranBookmarkTile();
+    }
+
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (isQuran)
           SurahTileNumber(surahId: quranBookmark.surahId)
         else
-          Text(
-            widget.indexDisplay.toString(),
-            style: theme.textTheme.labelSmall,
-          ),
-
-        const SizedBox(width: 16),
+          const SizedBox(width: 16),
 
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                title,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: theme.textTheme.labelLarge,
-              ),
-
               if (isQuran) ...[
                 const SizedBox(height: 4),
                 Text(
@@ -136,6 +127,70 @@ class _BookmarkTileState extends ConsumerState<BookmarkTile> {
           },
           icon: Icon(Icons.more_horiz, color: cs.onSurfaceVariant),
         ),
+      ],
+    );
+  }
+}
+
+class _QuranBookmarkTile extends StatelessWidget {
+  const _QuranBookmarkTile({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+
+class _DhikrBookmarkTile extends StatelessWidget {
+  const _DhikrBookmarkTile({
+    super.key,
+    required this.indexDisplay,
+    required this.title,
+  });
+  final int indexDisplay;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(indexDisplay.toString(), style: theme.textTheme.labelSmall),
+
+        const SizedBox(width: 8),
+
+        Text(
+          title,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: theme.textTheme.labelLarge,
+        ),
+        const SizedBox(width: 8),
+
+        //  IconButton(
+        //   onPressed: () {
+        //     AppSheets.showBottomSheet(
+        //       context: context,
+        //       useSafeArea: true,
+        //       child: BookmarkActionBottomSheet(
+        //         quranBookmark: quranBookmark,
+        //         dhikrBookmark: dhikrBookmark,
+        //         onDeleteBookmark: () async {
+        //           AppNav.pop(context);
+        //           if (quranBookmark != null) {
+        //             await deleteBookmark(ref, quranBookmark: quranBookmark);
+        //           } else {
+        //             await deleteBookmark(ref, dhikrBookmark: dhikrBookmark);
+        //           }
+        //         },
+        //       ),
+        //     );
+        //   },
+        //   icon: Icon(Icons.more_horiz, color: cs.onSurfaceVariant),
+        // ),
       ],
     );
   }
