@@ -1,83 +1,102 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
+import 'package:rafeeq/core/constants/strings/app_strings.dart';
 import 'package:rafeeq/core/features/audio/presentation/providers/audio_controller.dart';
 import 'package:rafeeq/core/widgets/app_drag_handle.dart';
-import 'package:rafeeq/core/widgets/scroll_fade_mask.dart';
-import 'package:rafeeq/features/quran/domain/entities/surah.dart';
+ import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provider.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/play_surah_btn.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
+import 'package:rafeeq/core/widgets/app_sliver_stichy_header.dart';
 
-class QuranAudioPlaylistSheet extends StatefulWidget {
+class QuranAudioPlaylistSheet extends ConsumerStatefulWidget {
   const QuranAudioPlaylistSheet({super.key});
 
   @override
-  State<QuranAudioPlaylistSheet> createState() =>
+  ConsumerState<QuranAudioPlaylistSheet> createState() =>
       _QuranAudioPlaylistSheetState();
 }
 
-class _QuranAudioPlaylistSheetState extends State<QuranAudioPlaylistSheet> {
+class _QuranAudioPlaylistSheetState
+    extends ConsumerState<QuranAudioPlaylistSheet> {
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+     final surahs = ref.watch(surahsProvider).value ?? [];
 
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.5,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const AppDragHandle(margin: EdgeInsets.only(top: 8)),
-            const SizedBox(height: 4),
-
-            // Text: Queue
-            Text(
-              'Queue',
-              style: theme.textTheme.titleLarge?.copyWith(
-                fontFamily: 'PlayFairDisplay',
+    return DraggableScrollableSheet(
+      minChildSize: 0.5,
+      initialChildSize: 0.5,
+      maxChildSize: 1,
+      expand: false,
+      builder: (context, scrollController) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: CustomScrollView(
+            controller: scrollController,
+            slivers: [
+              const SliverPersistentHeader(
+                pinned: true,
+                delegate: AppSliverPinnedHeaderDelegate(
+                  height: 100,
+                  child: _QueueHeader(),
+                ),
               ),
-            ),
-            const SizedBox(height: 12),
 
-            const _PlayingSurahIndicator(),
-            const SizedBox(height: 16),
-
-            // List of queued items
-            const Expanded(child: QuranAudioPlaylist()),
-          ],
-        ),
-      ),
+              SliverList.separated(
+                itemCount: surahs.length,
+                itemBuilder: (context, index) {
+                  return QuranAudioPlaylistTile(surah: surahs[index]);
+                },
+                separatorBuilder: (context, index) {
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 6),
+                    child: Divider(height: 12),
+                  );
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
 
-class QuranAudioPlaylist extends ConsumerWidget {
-  const QuranAudioPlaylist({super.key});
+class _QueueHeader extends StatelessWidget {
+  const _QueueHeader();
 
   @override
-  Widget build(BuildContext context, ref) {
-    final surahs = ref.watch(surahsProvider).value ?? [];
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
 
-    return ScrollFadeMask(
-      showTop: false,
-      child: ListView.separated(
-        scrollCacheExtent: const ScrollCacheExtent.pixels(164),
-        clipBehavior: Clip.hardEdge,
-        separatorBuilder: (context, i) => const Padding(
-          padding: EdgeInsets.symmetric(vertical: 6.0),
-          child: Divider(height: 12),
-        ),
-        physics: const BouncingScrollPhysics(),
-        itemCount: surahs.length,
-        itemBuilder: (context, i) {
-          final surah = surahs[i];
+    return Container(
+      color: theme.scaffoldBackgroundColor,
+      child: Column(
+        children: [
+          const AppDragHandle(margin: EdgeInsets.only(top: 8)),
 
-          return QuranAudioPlaylistTile(surah: surah);
-        },
+          const SizedBox(height: 4),
+
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              'Queue',
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontFamily: AppStrings.displayFont,
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 12),
+
+          const Align(
+            alignment: Alignment.centerLeft,
+            child: _PlayingSurahIndicator(),
+          ),
+
+          const SizedBox(height: 16),
+        ],
       ),
     );
   }
@@ -154,6 +173,7 @@ class QuranAudioPlaylistTile extends ConsumerWidget {
                   surah.nameTransliteration,
                   style: tt.labelLarge?.copyWith(
                     color: isPlaying ? Colors.green : null,
+                    fontWeight: isPlaying ? FontWeight.bold : null,
                   ),
                 ),
                 const SizedBox(height: 2),

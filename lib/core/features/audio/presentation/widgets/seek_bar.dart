@@ -9,6 +9,7 @@ class AudioSeekBar extends ConsumerStatefulWidget {
     this.baseTrackColor,
     this.bufferedTrackColor,
     this.playedTrackColor,
+    this.durationColor,
     required this.onSeek,
   });
 
@@ -16,6 +17,7 @@ class AudioSeekBar extends ConsumerStatefulWidget {
   final Color? baseTrackColor;
   final Color? bufferedTrackColor;
   final Color? playedTrackColor;
+  final Color? durationColor;
   final void Function(Duration position) onSeek;
 
   @override
@@ -60,6 +62,10 @@ class _AudioSeekBarState extends ConsumerState<AudioSeekBar> {
 
     final playedFraction = effectivePositionMs / totalMs;
     final bufferedFraction = bufferedMs / totalMs;
+
+    final durationsStyle = theme.textTheme.bodySmall?.copyWith(
+      color: widget.durationColor ?? cs.onSurface,
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -167,9 +173,9 @@ class _AudioSeekBarState extends ConsumerState<AudioSeekBar> {
               // While dragging, show the temporary position to match the thumb.
               Text(
                 _format(Duration(milliseconds: effectivePositionMs.round())),
-                style: theme.textTheme.bodySmall,
+                style: durationsStyle,
               ),
-              Text(_format(duration), style: theme.textTheme.bodySmall),
+              Text(_format(duration), style: durationsStyle),
             ],
           ),
         ],

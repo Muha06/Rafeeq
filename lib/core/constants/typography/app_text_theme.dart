@@ -42,7 +42,7 @@ class AppTextTheme {
       labelLarge: TextStyle(
         fontFamily: primaryFont,
         fontSize: 17,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w500,
         letterSpacing: -0.3,
         color: colors.onSurface,
       ),
@@ -66,7 +66,7 @@ class AppTextTheme {
       // ─────────────────────────────────────────────
       bodyLarge: TextStyle(
         fontFamily: primaryFont,
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: FontWeight.w400,
         height: 1.65,
         color: colors.onSurface,

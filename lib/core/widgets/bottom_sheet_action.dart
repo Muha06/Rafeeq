@@ -20,7 +20,7 @@ class BottomSheetActionBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
-    const width = 64.0;
+    const width = 68.0;
 
     return AnimatedSize(
       duration: const Duration(milliseconds: 250),

@@ -33,9 +33,7 @@ class DayCell extends ConsumerWidget {
     final opacity = isOutside ? 0.35 : 1.0;
     final dateTextColor = isSelected ? cs.onPrimary : cs.onSurface;
 
-    final todayBgColor = isToday
-        ? cs.surfaceContainerHighest
-        : Colors.transparent;
+    final todayBgColor = isToday ? cs.surfaceContainerHigh : Colors.transparent;
 
     return Opacity(
       opacity: opacity,

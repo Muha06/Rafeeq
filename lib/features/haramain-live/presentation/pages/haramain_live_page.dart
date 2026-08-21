@@ -141,7 +141,7 @@ class _HaramainLivePageState extends State<HaramainLivePage> {
         const SizedBox(height: 10),
         Text(_error!, textAlign: TextAlign.center),
         const SizedBox(height: 12),
-        ElevatedButton(
+        TextButton(
           onPressed: () => _initController(_currentUrl),
           child: const Text('Retry'),
         ),

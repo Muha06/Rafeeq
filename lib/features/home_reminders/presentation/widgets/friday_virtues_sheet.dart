@@ -10,6 +10,7 @@ void showFridayVirtuesSheet(BuildContext context) {
   AppSheets.showBottomSheet(
     context: context,
     isScrollControlled: true,
+    useSafeArea: false,
     child: DraggableScrollableSheet(
       expand: false,
       minChildSize: 0.7,

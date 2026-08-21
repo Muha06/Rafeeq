@@ -339,7 +339,7 @@ class GoalDropdown<T> extends StatelessWidget {
       ),
       dropdownStyleData: DropdownStyleData(
         decoration: BoxDecoration(
-          color: cs.surfaceContainerHighest,
+          color: cs.surfaceContainer,
           borderRadius: BorderRadius.circular(18),
         ),
         elevation: 8,

@@ -325,18 +325,19 @@ class _GoalCompletedBadge extends StatelessWidget {
     final cs = theme.colorScheme;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
-        color: cs.tertiaryContainer.withAlpha(100),
+        color: cs.tertiaryContainer,
         borderRadius: BorderRadius.circular(999),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            "🏆 Goal Completed!",
+            "🏆  Goal Completed!",
             style: theme.textTheme.labelSmall?.copyWith(
               color: cs.onTertiaryContainer,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ],

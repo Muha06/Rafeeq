@@ -1,30 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/features/local_notifications/providers/wiring_providers.dart';
 import 'package:rafeeq/core/helpers/app_haptics.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
+import 'package:rafeeq/core/helpers/app_toast.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
-import 'package:rafeeq/core/helpers/snackbars.dart';
-import 'package:rafeeq/core/widgets/app_drag_handle.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/progress_provider.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/quran_log_provider.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 void showAyahLogSheet(BuildContext context, WidgetRef ref) {
-  final cs = Theme.of(context).colorScheme;
-
   int ayahsRead = 1;
   final ayahController = TextEditingController(text: ayahsRead.toString());
 
   AppSheets.showBottomSheet(
     context: context,
+    reverseAnimationDuration: 450.ms,
     child: StatefulBuilder(
       builder: (context, setState) {
         final theme = Theme.of(context);
+        final cs = theme.colorScheme;
 
         // Called Whenever we update ayahsRead using Textfield
         void updateController(int value) {
@@ -45,6 +45,7 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
 
         return Padding(
           padding: EdgeInsets.only(
+            top: 16,
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
           child: Container(
@@ -52,24 +53,23 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const AppDragHandle(),
+                Icon(
+                  HugeIconsStroke.floppyDisk,
+                  color: cs.onSurfaceVariant,
+                  size: 64,
+                ),
+                const SizedBox(height: 10),
 
                 // Title
-                Text(
-                  'Today\'s Progress',
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    color: cs.onSurface,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                Text('Save your progress', style: theme.textTheme.titleMedium),
                 const SizedBox(height: 16),
 
                 // Progress info
                 Text(
                   '$totalAfterLog / ${goal.target} ${goal.targetUnit.name}',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyMedium?.copyWith(color: cs.onSurfaceVariant),
+                  style: theme.textTheme.labelLarge?.copyWith(
+                    // color: cs.onSurfaceVariant,
+                  ),
                 ),
                 const SizedBox(height: 8),
 
@@ -149,7 +149,7 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
                       if (!wasCompleted && isCompleted) {
                         showGoalCompletedDialog(context, ref, goal.target);
                       } else {
-                        AppSnackBar.showSimple(
+                        AppToast.showCompact(
                           context: context,
                           message: 'Reading progress updated.',
                         );
@@ -195,7 +195,7 @@ void showGoalCompletedDialog(
           children: [
             CircleAvatar(
                   radius: 34,
-                  backgroundColor: cs.surfaceContainerHighest,
+                  backgroundColor: cs.surfaceContainerHigh,
                   child: Icon(
                     Icons.auto_awesome_rounded,
                     color: cs.primary,
@@ -215,7 +215,7 @@ void showGoalCompletedDialog(
 
             Text(
                   'Masha’Allah!',
-                  style: theme.textTheme.headlineMedium?.copyWith(
+                  style: theme.textTheme.headlineSmall?.copyWith(
                     color: cs.primary,
                   ),
                   textAlign: TextAlign.center,
@@ -234,7 +234,7 @@ void showGoalCompletedDialog(
               ),
               child: Text(
                 'Goal completed!',
-                style: theme.textTheme.labelLarge?.copyWith(
+                style: theme.textTheme.labelMedium?.copyWith(
                   color: cs.onPrimaryContainer,
                 ),
               ),
@@ -253,9 +253,11 @@ void showGoalCompletedDialog(
 
             SizedBox(
                   width: double.infinity,
-                  child: FilledButton(
+                  child: ElevatedButton(
                     onPressed: () async {
                       AppNav.pop(context);
+
+                      await Future.delayed(3.seconds);
 
                       await ref
                           .read(localNotificationServiceProvider)

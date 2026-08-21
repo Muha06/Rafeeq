@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:rafeeq/core/features/audio/presentation/providers/audio_controller.dart';
 import 'package:rafeeq/core/features/audio/presentation/widgets/seek_bar.dart';
+import 'package:rafeeq/core/helpers/app_haptics.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/helpers/app_toast.dart';
 import 'package:rafeeq/core/widgets/app_drag_handle.dart';
@@ -87,6 +88,7 @@ class _QuranAudioSheetState extends ConsumerState<QuranAudioSheet> {
                         playedTrackColor: Colors.white,
                         bufferedTrackColor: Colors.white.withAlpha(80),
                         baseTrackColor: Colors.white.withAlpha(100),
+                        durationColor: Colors.white,
                       ).animate().fadeIn(duration: 800.ms),
 
                       const SizedBox(height: 32),
@@ -126,12 +128,10 @@ class __AudioControlsState extends ConsumerState<_AudioControls> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final cs = theme.colorScheme;
     final ctrl = ref.read(audioControllerProvider.notifier);
 
     final itemColor = Colors.white;
-    final itemColorLight = cs.onSurfaceVariant;
+    final itemColorLight = itemColor.withAlpha(160);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -227,10 +227,11 @@ class _AudioDetailsRow extends ConsumerWidget {
 
             const SizedBox(height: 4),
 
+            // Reciter
             TextScroll(
               reciter,
               mode: TextScrollMode.endless,
-              style: tt.titleSmall?.copyWith(color: cs.onSurfaceVariant),
+              style: tt.labelLarge?.copyWith(color: itemColor.withAlpha(160)),
               intervalSpaces: 24,
             ),
           ],
@@ -243,6 +244,8 @@ class _AudioDetailsRow extends ConsumerWidget {
           children: [
             IconButton(
               onPressed: () {
+                // AppHaptics.selection();
+
                 AppSheets.showBottomSheet(
                   context: context,
                   isScrollControlled: true,
@@ -259,6 +262,8 @@ class _AudioDetailsRow extends ConsumerWidget {
 
             IconButton(
               onPressed: () {
+                AppHaptics.selection();
+
                 ctrl.toggleRepeatMode();
 
                 AppToast.showCompact(

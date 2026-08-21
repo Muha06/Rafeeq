@@ -181,7 +181,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
     final isDark = ref.watch(isDarkProvider);
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
-    final collapsedHeight = MediaQuery.sizeOf(context).height * .2;
+    final collapsedHeight = MediaQuery.sizeOf(context).height * .15;
 
     final events = _monthEvents();
 
@@ -229,6 +229,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                         hijriState.formatted,
                         style: theme.textTheme.labelLarge?.copyWith(
                           color: cs.primary,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
 
@@ -347,17 +348,17 @@ class _MonthlyEvenetsPanel extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 0),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const AppDragHandle(),
 
+          const SizedBox(height: 8),
+
           Text(
             "Events in ${hijriState.hijri.longMonthName}",
-            style: Theme.of(
-              context,
-            ).textTheme.titleMedium?.copyWith(fontFamily: 'PlayFairDisplay'),
+            style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 16),
 

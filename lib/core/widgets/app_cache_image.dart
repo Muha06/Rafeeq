@@ -32,7 +32,7 @@ class AppCachedImage extends StatelessWidget {
         placeholder ??
         Container(
           decoration: BoxDecoration(
-            color: cs.surfaceContainerHighest,
+            color: cs.surface,
             borderRadius: BorderRadius.circular(borderRadius),
           ),
         );
@@ -45,7 +45,6 @@ class AppCachedImage extends StatelessWidget {
       return _buildWrapper(error);
     }
 
- 
     return _buildWrapper(
       CachedNetworkImage(
         imageUrl: imageUrl!,
