@@ -9,7 +9,7 @@ part 'quran_goal_hive.g.dart';
 @HiveType(typeId: 10)
 class QuranGoalHive extends HiveObject {
   @HiveField(0)
-  int target;
+  int dailyTarget;
 
   @HiveField(1)
   DateTime startDate;
@@ -36,7 +36,7 @@ class QuranGoalHive extends HiveObject {
   DateTime createdAt;
 
   QuranGoalHive({
-    required this.target,
+    required this.dailyTarget,
     required this.startDate,
     required this.endDate,
     required this.createdAt,
@@ -50,7 +50,7 @@ class QuranGoalHive extends HiveObject {
   /// Hive → Domain
   QuranGoal toDomain() {
     return QuranGoal(
-      target: target,
+      dailyTarget: dailyTarget,
       startDate: startDate,
       endDate: endDate,
       isActive: isActive,
@@ -66,7 +66,7 @@ class QuranGoalHive extends HiveObject {
   /// Domain → Hive
   QuranGoalHive toHive(QuranGoal goal) {
     return QuranGoalHive(
-      target: goal.target,
+      dailyTarget: goal.dailyTarget,
       startDate: goal.startDate,
       endDate: goal.endDate,
       isActive: goal.isActive,

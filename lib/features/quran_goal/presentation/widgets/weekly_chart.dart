@@ -13,7 +13,7 @@ class WeeklyQuranChart extends ConsumerWidget {
     final cs = theme.colorScheme;
 
     final weeklyRead = ref.watch(weeklyProgressByDayProvider);
-    final target = ref.watch(quranGoalProvider)!.target;
+    final dailyTarget = ref.watch(quranGoalProvider)!.dailyTarget;
 
     final days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
@@ -28,7 +28,7 @@ class WeeklyQuranChart extends ConsumerWidget {
       child: BarChart(
         BarChartData(
           alignment: BarChartAlignment.spaceAround,
-          maxY: target.toDouble(), // Fixed scale
+          maxY: dailyTarget.toDouble(), // Fixed scale
           barTouchData: const BarTouchData(enabled: false),
           titlesData: FlTitlesData(
             topTitles: const AxisTitles(
@@ -41,7 +41,7 @@ class WeeklyQuranChart extends ConsumerWidget {
               sideTitles: SideTitles(
                 showTitles: true,
                 reservedSize: 28,
-                interval: target / 5,
+                interval: dailyTarget / 5,
                 getTitlesWidget: (val, meta) => Text(
                   val.toInt().toString(),
                   style: theme.textTheme.bodySmall,
@@ -56,7 +56,7 @@ class WeeklyQuranChart extends ConsumerWidget {
                   return Center(
                     child: Text(
                       days[index % 7],
-                      style: theme.textTheme.labelLarge,
+                      style: theme.textTheme.labelMedium,
                     ),
                   );
                 },
@@ -67,7 +67,7 @@ class WeeklyQuranChart extends ConsumerWidget {
           borderData: FlBorderData(show: false),
           barGroups: List.generate(7, (index) {
             final value = weeklyRead[index]
-                .clamp(0, target.toDouble())
+                .clamp(0, dailyTarget.toDouble())
                 .toDouble();
             final todayIndex = DateTime.now().weekday - 1; // Mon=0
             final isToday = todayIndex == index;
@@ -76,7 +76,7 @@ class WeeklyQuranChart extends ConsumerWidget {
               barRods: [
                 BarChartRodData(
                   toY: value,
-                  color: value == target
+                  color: value == dailyTarget
                       ? cs.primary
                       : isToday
                       ? cs.primary

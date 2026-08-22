@@ -17,7 +17,7 @@ class QuranGoalHiveAdapter extends TypeAdapter<QuranGoalHive> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return QuranGoalHive(
-      target: fields[0] as int,
+      dailyTarget: fields[0] as int,
       startDate: fields[1] as DateTime,
       endDate: fields[2] as DateTime,
       createdAt: fields[8] as DateTime,
@@ -34,7 +34,7 @@ class QuranGoalHiveAdapter extends TypeAdapter<QuranGoalHive> {
     writer
       ..writeByte(9)
       ..writeByte(0)
-      ..write(obj.target)
+      ..write(obj.dailyTarget)
       ..writeByte(1)
       ..write(obj.startDate)
       ..writeByte(2)

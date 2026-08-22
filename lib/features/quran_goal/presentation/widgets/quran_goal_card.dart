@@ -67,7 +67,7 @@ class QuranReadingPlanCard extends ConsumerWidget {
 
               // Plan title
               Text(
-                '${quranGoal.target} ${quranGoal.targetUnit.label}',
+                '${quranGoal.dailyTarget} ${quranGoal.targetUnit.label}',
                 style: theme.textTheme.headlineSmall?.copyWith(
                   color: cs.primary,
                 ),

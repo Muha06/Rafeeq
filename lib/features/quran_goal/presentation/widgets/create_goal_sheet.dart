@@ -48,22 +48,21 @@ class _CreateGoalSheetState extends ConsumerState<CreateGoalSheet> {
   final targetUnitNotifier = ValueNotifier(QuranTargetUnit.ayah);
 
   void createGoal() {
-    final target = int.tryParse(targetController.text.trim());
+    final dailyTarget = int.tryParse(targetController.text.trim());
 
-    if (target == null || target <= 0) {
+    if (dailyTarget == null || dailyTarget <= 0) {
       AppSheets.showErrorDialog(
         context: context,
-        message: "Target cannot be empty",
+        message: "Set a daily target",
       );
 
-      debugPrint("error");
       return;
     }
 
     final goal = QuranGoal(
       type: goalTypeNotifier.value,
       targetUnit: targetUnitNotifier.value,
-      target: target,
+      dailyTarget: dailyTarget,
       startDate: startDate,
       endDate: endDate,
       remindMeAt: reminder,
@@ -380,9 +379,9 @@ class GoalTargetField extends StatelessWidget {
         ),
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         decoration: InputDecoration(
-          hintText: "Target e.g. 30",
+          hintText: "Daily Target",
           hintStyle: theme.inputDecorationTheme.hintStyle?.copyWith(
-            fontSize: 24,
+            fontSize: 18,
           ),
           border: const OutlineInputBorder(borderSide: BorderSide.none),
           enabledBorder: const OutlineInputBorder(borderSide: BorderSide.none),

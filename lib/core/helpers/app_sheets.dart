@@ -217,14 +217,18 @@ class AppSheets {
                 Text(
                   title,
                   textAlign: TextAlign.center,
-                  style: theme.textTheme.titleMedium?.copyWith(color: cs.error),
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: cs.onSurface,
+                  ),
                 ),
               const SizedBox(height: 12),
 
               Text(
                 message,
                 textAlign: TextAlign.center,
-                style: theme.textTheme.bodyMedium,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: cs.onSurface,
+                ),
               ),
 
               const SizedBox(height: 20),

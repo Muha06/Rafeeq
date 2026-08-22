@@ -102,7 +102,7 @@ class _ProgressPanel extends StatelessWidget {
 
             const SizedBox(height: 8),
 
-            Text('My Progress', style: theme.textTheme.headlineSmall),
+            Text('My Progress', style: theme.textTheme.titleMedium),
 
             const SizedBox(height: 8),
 
@@ -162,8 +162,8 @@ class _GoalHero extends ConsumerWidget {
             AnimatedSwitcher(
               duration: const Duration(milliseconds: 300),
               child: Text(
-                "${goal.target}",
-                key: ValueKey(goal.target),
+                "${goal.dailyTarget}",
+                key: ValueKey(goal.dailyTarget),
                 style: theme.textTheme.headlineMedium?.copyWith(
                   color: cs.primary,
                   fontWeight: FontWeight.bold,

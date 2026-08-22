@@ -52,7 +52,7 @@ final hasCompletedQuranGoalProvider = Provider<bool>((ref) {
       'complete_quran_goal',
       parameters: {
         'goal_type': goal.type.name,
-        'target': goal.target,
+        'target': goal.dailyTarget,
         'completed_on_time': !DateTime.now().isAfter(goal.endDate),
       },
     );

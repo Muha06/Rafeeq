@@ -41,7 +41,7 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
         final progress = ref.watch(progressProvider);
 
         final totalAfterLog = progress.totalRead + ayahsRead;
-        final progressPercent = (totalAfterLog / goal!.target).clamp(0.0, 1.0);
+        final progressPercent = (totalAfterLog / goal!.dailyTarget).clamp(0.0, 1.0);
 
         return Padding(
           padding: EdgeInsets.only(
@@ -66,7 +66,7 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
 
                 // Progress info
                 Text(
-                  '$totalAfterLog / ${goal.target} ${goal.targetUnit.name}',
+                  '$totalAfterLog / ${goal.dailyTarget} ${goal.targetUnit.name}',
                   style: theme.textTheme.labelLarge?.copyWith(
                     // color: cs.onSurfaceVariant,
                   ),
@@ -132,7 +132,7 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
                         return;
                       }
 
-                      final wasCompleted = progress.totalRead >= goal.target;
+                      final wasCompleted = progress.totalRead >= goal.dailyTarget;
 
                       // Save log
                       ref.read(quranLogProvider.notifier).addLog(ayahsRead);
@@ -144,10 +144,10 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
 
                       final updatedProgress = ref.read(progressProvider);
                       final isCompleted =
-                          updatedProgress.totalRead >= goal.target;
+                          updatedProgress.totalRead >= goal.dailyTarget;
 
                       if (!wasCompleted && isCompleted) {
-                        showGoalCompletedDialog(context, ref, goal.target);
+                        showGoalCompletedDialog(context, ref, goal.dailyTarget);
                       } else {
                         AppToast.showCompact(
                           context: context,

@@ -44,7 +44,7 @@ class QuranGoalNotifier extends Notifier<QuranGoal?> {
     if (goal == null) return;
 
     final updated = goal.copyWith(
-      target: target,
+      dailyTarget: target,
       startDate: startDate,
       endDate: endDate,
       remindMeAt: remindMeAt,
@@ -74,7 +74,7 @@ class QuranGoalNotifier extends Notifier<QuranGoal?> {
       parameters: {
         'start_date': goal.startDate.toIso8601String(),
         'end_date': goal.endDate.toIso8601String(),
-        'target': updated.target,
+        'target': updated.dailyTarget,
       },
     );
   }
@@ -102,7 +102,7 @@ class QuranGoalNotifier extends Notifier<QuranGoal?> {
         'goal_type': goal.type.name, // tilawah / hifz
         'start_date': goal.startDate.toIso8601String(),
         'end_date': goal.endDate.toIso8601String(),
-        'target': goal.target,
+        'target': goal.dailyTarget,
       },
     );
   }
@@ -129,7 +129,7 @@ class QuranGoalNotifier extends Notifier<QuranGoal?> {
       'delete_quran_goal',
       parameters: {
         'goal_type': goal.type.name,
-        'target': goal.target,
+        'target': goal.dailyTarget,
         'days_since_created': DateTime.now().difference(goal.createdAt).inDays,
       },
     );

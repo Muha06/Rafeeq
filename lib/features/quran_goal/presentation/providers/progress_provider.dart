@@ -10,5 +10,5 @@ final progressProvider = Provider<Progress>((ref) {
 
   final totalRead = logs.fold(0, (sum, log) => sum + log.ayahsRead);
 
-  return Progress(totalRead: totalRead, totalTarget: quranGoal!.target);
+  return Progress(totalRead: totalRead, totalTarget: quranGoal!.dailyTarget);
 });

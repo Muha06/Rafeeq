@@ -4,15 +4,15 @@ import 'package:rafeeq/features/quran_goal/data/models/hive/quran_goal_hive.dart
 import 'package:rafeeq/features/quran_goal/data/models/hive/quran_goal_type_hive.dart';
 import 'package:rafeeq/features/quran_goal/data/models/hive/quran_target_unit_hive.dart';
 
-enum QuranGoalType { tilawah, hifz }
+enum QuranGoalType { tilawah, hifz } // Goal Type
 
-enum QuranTargetUnit { ayah, page, juz, surah }
+enum QuranTargetUnit { ayah, page, juz, surah } // Target unit
 
 class QuranGoal {
   final QuranGoalType type;
   final QuranTargetUnit targetUnit;
 
-  final int target;
+  final int dailyTarget;
 
   final DateTime startDate;
   final DateTime endDate;
@@ -24,7 +24,7 @@ class QuranGoal {
 
   const QuranGoal({
     required this.type,
-    required this.target,
+    required this.dailyTarget,
     required this.targetUnit,
     required this.startDate,
     required this.endDate,
@@ -47,7 +47,7 @@ class QuranGoal {
   }
 
   QuranGoal copyWith({
-    int? target,
+    int? dailyTarget,
     DateTime? startDate,
     DateTime? endDate,
     TimeOfDay? remindMeAt,
@@ -56,7 +56,7 @@ class QuranGoal {
     QuranTargetUnit? targetUnit,
   }) {
     return QuranGoal(
-      target: target ?? this.target,
+      dailyTarget: dailyTarget ?? this.dailyTarget,
       targetUnit: targetUnit ?? this.targetUnit,
       endDate: endDate ?? this.endDate,
       remindMeAt: remindMeAt ?? this.remindMeAt,
@@ -69,7 +69,7 @@ class QuranGoal {
 
   QuranGoalHive toHive() {
     return QuranGoalHive(
-      target: target,
+      dailyTarget: dailyTarget,
       startDate: startDate,
       endDate: endDate,
       isActive: isActive,

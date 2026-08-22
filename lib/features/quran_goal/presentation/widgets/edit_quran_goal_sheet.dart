@@ -33,7 +33,7 @@ class _EditQuranGoalSheetState extends ConsumerState<EditQuranGoalSheet> {
   void initState() {
     super.initState();
 
-    target = widget.goal.target;
+    target = widget.goal.dailyTarget;
     endDate = widget.goal.endDate;
     reminder = widget.goal.remindMeAt;
 
