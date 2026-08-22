@@ -6,7 +6,6 @@ import 'package:rafeeq/core/helpers/app_haptics.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
-import 'package:rafeeq/core/widgets/app_drag_handle.dart';
 import 'package:rafeeq/features/quran_goal/domain/entities/quran_goal.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/create_goal_sheet.dart';
@@ -135,11 +134,7 @@ class _EditQuranGoalSheetState extends ConsumerState<EditQuranGoalSheet> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const AppDragHandle(),
-
-            const SizedBox(height: 16),
-
-            Text("Edit", style: theme.textTheme.titleMedium),
+            Text("Adjust Goal", style: theme.textTheme.titleMedium),
 
             const SizedBox(height: 24),
 

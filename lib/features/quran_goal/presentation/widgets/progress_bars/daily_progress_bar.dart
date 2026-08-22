@@ -51,7 +51,7 @@ class TotalQuranProgressArc extends ConsumerWidget {
             ),
           ],
         ),
-        arcThickness: 6,
+        arcThickness: 12,
         strokeCap: StrokeCap.round,
       ),
     );

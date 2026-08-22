@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
+import 'package:rafeeq/core/constants/strings/app_strings.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/features/quran_goal/domain/entities/quran_goal.dart';
 import 'package:rafeeq/features/quran_goal/presentation/pages/quran_goal_stats.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/progress_provider.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
+import 'package:rafeeq/features/quran_goal/presentation/widgets/progress_custom_paint.dart';
 
 class QuranReadingPlanCard extends ConsumerWidget {
   const QuranReadingPlanCard({super.key});
@@ -31,75 +33,80 @@ class QuranReadingPlanCard extends ConsumerWidget {
     return GestureDetector(
       onTap: () => AppNav.push(context, const QuranGoalPage()),
       child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14),
-          // color: cs.surface,
           border: Border.all(color: cs.outline),
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Top label
-              Row(
+        child: Row(
+          children: [
+            CustomPaint(
+              size: const Size(72, 72),
+              painter: QuranProgressPainter(
+                progress: progress.percentage,
+                backgroundColor: cs.surfaceContainerHigh,
+                progressColor: cs.primary,
+                strokeWidth: 8,
+                label: progress.totalRead.toString(),
+              ),
+            ),
+
+            const SizedBox(width: 8),
+
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
+                  // Top label
                   Text(
-                    'My Quran Journey',
+                    'Your Quran Journey',
                     style: theme.textTheme.labelLarge?.copyWith(
-                      fontFamily: 'PlayFairDisplay',
+                      fontFamily: AppStrings.displayFont,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                  const Spacer(),
 
-                  IconButton(
-                    visualDensity: VisualDensity.compact,
-                    onPressed: () {
-                      AppNav.push(context, const QuranGoalPage());
-                    },
-                    icon: const Icon(Icons.chevron_right),
-                  ),
-                ],
-              ),
+                  const SizedBox(height: 6),
 
-              const SizedBox(height: 6),
-
-              // Plan title
-              Text(
-                '${quranGoal.dailyTarget} ${quranGoal.targetUnit.label}',
-                style: theme.textTheme.headlineSmall?.copyWith(
-                  color: cs.primary,
-                ),
-              ),
-
-              const SizedBox(height: 16),
-
-              // Progress row
-              Row(
-                children: [
-                  Expanded(
-                    child: LinearProgressIndicator(
-                      value: progress.percentage,
-                      color: cs.primary.withAlpha(200),
-                      backgroundColor: cs.surfaceContainerHighest,
-                      minHeight: 8,
-                      borderRadius: BorderRadius.circular(999),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-
+                  // Plan title
                   Text(
-                    '${(progress.percentage * 100).round()}%',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: cs.onSurfaceVariant,
-                      fontWeight: FontWeight.bold,
+                    '${quranGoal.dailyTarget} ${quranGoal.targetUnit.label}',
+                    style: theme.textTheme.headlineSmall?.copyWith(
+                      color: cs.primary,
                     ),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // Progress row
+                  Row(
+                    children: [
+                      Expanded(
+                        child: LinearProgressIndicator(
+                          value: progress.percentage,
+                          color: cs.primary.withAlpha(200),
+                          backgroundColor: cs.surfaceContainerHighest,
+                          minHeight: 8,
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+
+                      Text(
+                        '${(progress.percentage * 100).round()}%',
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: cs.onSurface,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

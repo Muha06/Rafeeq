@@ -24,7 +24,7 @@ class QuranGoalPage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Quran Goal'),
+        title: const Text('Your Quran Goal'),
         centerTitle: true,
         actions: [
           if (hasGoal)
@@ -102,7 +102,7 @@ class _ProgressPanel extends StatelessWidget {
 
             const SizedBox(height: 8),
 
-            Text('My Progress', style: theme.textTheme.titleMedium),
+            Text('Your Progress', style: theme.textTheme.titleMedium),
 
             const SizedBox(height: 8),
 
@@ -158,6 +158,13 @@ class _GoalHero extends ConsumerWidget {
         child: Column(
           children: [
             if (hasCompleted) const _GoalCompletedBadge(),
+
+            Text(
+              'Daily target:',
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: cs.onSurfaceVariant,
+              ),
+            ),
 
             AnimatedSwitcher(
               duration: const Duration(milliseconds: 300),

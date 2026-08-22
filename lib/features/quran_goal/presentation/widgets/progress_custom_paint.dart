@@ -1,26 +1,42 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:rafeeq/core/constants/strings/app_strings.dart';
 
 /// Draws a circular progress indicator using the Canvas.
 class QuranProgressPainter extends CustomPainter {
   /// Progress from 0.0 to 1.0
   final double progress;
+  final Color progressColor;
+  final Color backgroundColor;
+  final String? label;
+  final TextStyle? labelStyle;
+  final double? strokeWidth;
+  final double? progressWidth;
 
-  QuranProgressPainter({required this.progress});
+  QuranProgressPainter({
+    required this.progress,
+    required this.progressColor,
+    required this.backgroundColor,
+    this.strokeWidth,
+    this.progressWidth,
+    this.label,
+    this.labelStyle,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
     // Paint object describes HOW we draw.
     final backgroundPaint = Paint()
-      ..color = Colors.grey.shade300
-      ..strokeWidth = 10
-      ..style = PaintingStyle.stroke
+      ..color = backgroundColor
+      ..strokeWidth = strokeWidth ?? 8
+      ..style = PaintingStyle
+          .stroke // fill bg?
       ..strokeCap = StrokeCap.round;
 
     final progressPaint = Paint()
       ..color =
-          const Color(0xFF27687E) // Rafeeq brand colour
-      ..strokeWidth = 10
+          progressColor // Rafeeq brand colour
+      ..strokeWidth = progressWidth ?? 10
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
 
@@ -45,6 +61,31 @@ class QuranProgressPainter extends CustomPainter {
 
     // Draw the coloured progress.
     canvas.drawArc(rect, startAngle, sweepAngle, false, progressPaint);
+
+    if (label != null) {
+      final textPainter = TextPainter(
+        text: TextSpan(
+          text: label,
+          style:
+              labelStyle ??
+              const TextStyle(
+                fontFamily: AppStrings.displayFont,
+                fontSize: 22,
+                height: 1,
+                fontWeight: FontWeight.w600,
+                color: Colors.black,
+              ),
+        ),
+        textDirection: TextDirection.ltr,
+      )..layout();
+
+      final textOffset = Offset(
+        center.dx - textPainter.width / 2,
+        center.dy - textPainter.height / 2,
+      );
+
+      textPainter.paint(canvas, textOffset);
+    }
   }
 
   @override

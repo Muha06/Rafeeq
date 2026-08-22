@@ -70,7 +70,7 @@ ThemeData appLightThemeData() {
     canvasColor: scheme.surfaceContainerLowest,
     hintColor: scheme.onSurfaceVariant,
     disabledColor: scheme.onSurfaceVariant.withAlpha(140),
-    fontFamily: 'PlusJakartaSans',
+    fontFamily: AppStrings.primaryFont,
 
     dividerColor: scheme.outlineVariant,
     dividerTheme: DividerThemeData(color: scheme.outlineVariant),
@@ -85,7 +85,7 @@ ThemeData appLightThemeData() {
       iconTheme: IconThemeData(color: scheme.onSurface),
       titleTextStyle: base.headlineSmall?.copyWith(
         fontFamily: AppStrings.displayFont,
-        fontSize: 24,
+        fontSize: 20,
         fontWeight: FontWeight.w700,
         letterSpacing: -0.4,
         color: scheme.onSurface,
