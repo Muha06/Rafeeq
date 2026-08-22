@@ -73,7 +73,7 @@ Future<void> showSurahAyahPickerDialog({
                               title: 'Surah',
                               child: CupertinoPicker(
                                 scrollController: surahController,
-                                itemExtent: 36,
+                                itemExtent: 56,
                                 magnification: 0.9,
                                 useMagnifier: true,
                                 selectionOverlay: null,

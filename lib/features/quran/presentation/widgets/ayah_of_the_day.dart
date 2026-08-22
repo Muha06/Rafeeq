@@ -101,6 +101,7 @@ class AyahOfTheDay extends ConsumerWidget {
 
                           return CircleIconButton(
                             size: 36,
+                            
                             icon: isBookmarked
                                 ? HugeIconsSolid.bookmark01
                                 : HugeIconsStroke.bookmark01,

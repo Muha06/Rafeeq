@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/constants/spacing/app_spacing.dart';
+import 'package:rafeeq/core/constants/strings/app_strings.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
@@ -152,8 +153,8 @@ class SurahTileNumber extends ConsumerWidget {
     final theme = Theme.of(context);
 
     return SizedBox(
-      width: 44,
-      height: 44,
+      width: 46,
+      height: 46,
       child: Stack(
         alignment: Alignment.center,
         children: [
@@ -161,17 +162,16 @@ class SurahTileNumber extends ConsumerWidget {
             isDark
                 ? 'assets/images/quran/surah_badge_dark.png'
                 : 'assets/images/quran/surah_badge_light.png',
-            width: 44,
-            height: 44,
+            width: 48,
+            height: 48,
             fit: BoxFit.contain,
           ),
-          Center(
-            child: Text(
-              surahId.toString(),
-              textAlign: TextAlign.center,
-              style: theme.textTheme.labelLarge?.copyWith(
-                fontFamily: 'PlayFairDisplay',
-              ),
+          Text(
+            surahId.toString(),
+            textAlign: TextAlign.center,
+            style: theme.textTheme.labelLarge?.copyWith(
+              fontFamily: AppStrings.displayFont,
+              height: 1,
             ),
           ),
         ],

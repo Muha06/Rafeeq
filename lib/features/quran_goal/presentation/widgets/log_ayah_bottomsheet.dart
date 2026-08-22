@@ -41,7 +41,10 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
         final progress = ref.watch(progressProvider);
 
         final totalAfterLog = progress.totalRead + ayahsRead;
-        final progressPercent = (totalAfterLog / goal!.dailyTarget).clamp(0.0, 1.0);
+        final progressPercent = (totalAfterLog / goal!.dailyTarget).clamp(
+          0.0,
+          1.0,
+        );
 
         return Padding(
           padding: EdgeInsets.only(
@@ -56,7 +59,7 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
                 Icon(
                   HugeIconsStroke.floppyDisk,
                   color: cs.onSurfaceVariant,
-                  size: 64,
+                  size: 48,
                 ),
                 const SizedBox(height: 10),
 
@@ -132,7 +135,8 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
                         return;
                       }
 
-                      final wasCompleted = progress.totalRead >= goal.dailyTarget;
+                      final wasCompleted =
+                          progress.totalRead >= goal.dailyTarget;
 
                       // Save log
                       ref.read(quranLogProvider.notifier).addLog(ayahsRead);
@@ -287,6 +291,7 @@ class CircleIconButton extends StatelessWidget {
     required this.icon,
     this.onPressed,
     this.enabledBgColor,
+    this.enabledBorderColor,
     this.labelColor,
     this.size = 44,
   });
@@ -295,6 +300,7 @@ class CircleIconButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final double size;
   final Color? enabledBgColor;
+  final Color? enabledBorderColor;
   final Color? labelColor;
 
   @override
@@ -302,19 +308,18 @@ class CircleIconButton extends StatelessWidget {
     final cs = Theme.of(context).colorScheme;
     final enabled = onPressed != null;
 
+    final enabledBColors = cs.outline;
+    final borderColor = enabled
+        ? enabledBorderColor ?? enabledBColors
+        : cs.outlineVariant.withValues(alpha: 0.4);
+
     return Container(
       width: size,
       height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: enabledBgColor ?? Colors.transparent,
-        border: enabledBgColor == null
-            ? Border.all(
-                color: enabled
-                    ? cs.onSurfaceVariant
-                    : cs.outlineVariant.withValues(alpha: 0.4),
-              )
-            : null,
+        border: enabledBgColor == null ? Border.all(color: borderColor) : null,
       ),
       child: InkWell(
         onTap: onPressed,

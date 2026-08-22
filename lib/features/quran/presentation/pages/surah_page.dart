@@ -376,7 +376,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
           appBar: AppBar(
             backgroundColor: theme.scaffoldBackgroundColor,
             title: AppbarSurahPicker(jumpToAyah: jumpToAyah, surah: surah),
-
+            centerTitle: false,
             actions: [
               //Ayah log
               if (hasGoal) ...[
@@ -544,22 +544,20 @@ class AppbarSurahPicker extends ConsumerWidget {
             borderRadius: BorderRadius.circular(10),
             child: SizedBox(
               height: kToolbarHeight, // fills AppBar height
-              child: IntrinsicWidth(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      "${surah.id}. ${surah.nameTransliteration}",
-                      style: theme.textTheme.titleLarge!.copyWith(
-                        fontFamily: AppStrings.displayFont,
-                        fontSize: 16,
-                      ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    surah.nameTransliteration,
+                    style: theme.textTheme.titleLarge!.copyWith(
+                      fontFamily: AppStrings.displayFont,
+                      fontSize: 14,
                     ),
-                    const SizedBox(width: 2),
+                  ),
+                  const SizedBox(width: 2),
 
-                    const PhosphorIcon(PhosphorIcons.caretDown, size: 16),
-                  ],
-                ),
+                  const PhosphorIcon(PhosphorIcons.caretDown, size: 16),
+                ],
               ),
             ),
           ),

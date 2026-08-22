@@ -21,7 +21,6 @@ class _FeedbackPageState extends ConsumerState<FeedbackPage> {
 
   Future<String> getAppVersion() async {
     final info = await PackageInfo.fromPlatform();
-    // Returns something like '1.0.0+1'
     return '${info.version}+${info.buildNumber}';
   }
 
@@ -40,7 +39,7 @@ class _FeedbackPageState extends ConsumerState<FeedbackPage> {
 
       AppSnackBar.showSimple(
         context: context,
-        message: "Thank you for making Rafeeq better!",
+        message: "Thank you for making Rafeeq better! 🎉",
       );
 
       FocusScope.of(context).unfocus();
@@ -66,10 +65,14 @@ class _FeedbackPageState extends ConsumerState<FeedbackPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
+    final cs = theme.colorScheme;
 
     final state = ref.watch(feedbackControllerProvider);
     final isLoading = state.isLoading;
+    final border = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: BorderSide(color: cs.surface),
+    );
 
     return Scaffold(
       appBar: AppBar(title: const Text('Give Feedback')),
@@ -81,7 +84,10 @@ class _FeedbackPageState extends ConsumerState<FeedbackPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Help Us Improve', style: theme.textTheme.titleLarge),
+                Text(
+                  'Help Us Improve Rafeeq',
+                  style: theme.textTheme.headlineSmall,
+                ),
 
                 const SizedBox(height: 12),
 
@@ -98,9 +104,11 @@ class _FeedbackPageState extends ConsumerState<FeedbackPage> {
                   onChanged: (_) => setState(() {}),
                   decoration: InputDecoration(
                     hintText: 'Share your idea or suggestion...',
-                    hintStyle: theme.textTheme.bodySmall?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                    ),
+                    border: border,
+                    filled: true,
+                    fillColor: cs.surface,
+                    enabledBorder: border,
+                    focusedBorder: border,
                   ),
                 ),
 

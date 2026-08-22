@@ -24,7 +24,7 @@ class AppTextTheme {
       titleLarge: TextStyle(
         fontFamily: primaryFont,
         fontSize: 22,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w600,
         letterSpacing: -0.3,
         color: colors.onSurface,
       ),
@@ -32,7 +32,7 @@ class AppTextTheme {
       titleMedium: TextStyle(
         fontFamily: primaryFont,
         fontSize: 20,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w500,
         color: colors.onSurface,
       ),
 
@@ -42,21 +42,22 @@ class AppTextTheme {
       labelLarge: TextStyle(
         fontFamily: primaryFont,
         fontSize: 17,
-        fontWeight: FontWeight.w500,
-        letterSpacing: -0.3,
+        fontWeight: FontWeight.w400,
+        letterSpacing: -0.7,
         color: colors.onSurface,
       ),
 
       labelMedium: TextStyle(
         fontFamily: primaryFont,
-        fontSize: 15,
+        fontSize: 14,
         fontWeight: FontWeight.w400,
-        color: colors.onSurface,
+        letterSpacing: 1,
+        color: colors.onSurfaceVariant,
       ),
 
       labelSmall: TextStyle(
         fontFamily: primaryFont,
-        fontSize: 14,
+        fontSize: 13.5,
         fontWeight: FontWeight.w400,
         color: colors.onSurfaceVariant,
       ),
@@ -66,7 +67,7 @@ class AppTextTheme {
       // ─────────────────────────────────────────────
       bodyLarge: TextStyle(
         fontFamily: primaryFont,
-        fontSize: 16,
+        fontSize: 17,
         fontWeight: FontWeight.w400,
         height: 1.65,
         color: colors.onSurface,
@@ -75,7 +76,7 @@ class AppTextTheme {
       bodyMedium: TextStyle(
         fontFamily: primaryFont,
         fontSize: 16.5,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w400,
         height: 1.55,
         color: colors.onSurfaceVariant,
       ),

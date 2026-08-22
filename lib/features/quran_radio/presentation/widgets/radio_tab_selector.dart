@@ -49,7 +49,6 @@ class RadioCategorySelector extends StatelessWidget {
                     cat.label,
                     style: tt.labelMedium!.copyWith(
                       color: selectedCat ? cs.onPrimary : cs.onSurface,
-                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],

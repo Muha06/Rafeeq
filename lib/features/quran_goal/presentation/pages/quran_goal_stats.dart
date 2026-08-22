@@ -159,12 +159,7 @@ class _GoalHero extends ConsumerWidget {
           children: [
             if (hasCompleted) const _GoalCompletedBadge(),
 
-            Text(
-              'Daily target:',
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: cs.onSurfaceVariant,
-              ),
-            ),
+            Text('Daily target:', style: theme.textTheme.labelSmall),
 
             AnimatedSwitcher(
               duration: const Duration(milliseconds: 300),
@@ -178,12 +173,7 @@ class _GoalHero extends ConsumerWidget {
                 ),
               ),
             ),
-            Text(
-              goal.targetUnit.label,
-              style: theme.textTheme.titleMedium?.copyWith(
-                color: cs.onSurfaceVariant,
-              ),
-            ),
+            Text(goal.targetUnit.label, style: theme.textTheme.titleMedium),
           ],
         ),
       ),
@@ -231,7 +221,7 @@ class _InfoTile extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: theme.textTheme.labelSmall),
+        Text(title, style: theme.textTheme.labelMedium),
         const SizedBox(height: 4),
         Text(value, style: theme.textTheme.labelLarge),
       ],

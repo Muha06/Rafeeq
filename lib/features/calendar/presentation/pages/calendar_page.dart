@@ -7,6 +7,7 @@ import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
 import 'package:rafeeq/core/helpers/app_text_style.dart';
 import 'package:rafeeq/core/widgets/app_drag_handle.dart';
+import 'package:rafeeq/core/widgets/app_icon_container.dart';
 import 'package:rafeeq/features/calendar/presentation/widgets/day_cell.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/log_ayah_bottomsheet.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
@@ -40,13 +41,10 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
             final cs = theme.colorScheme;
 
             return Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const AppDragHandle(),
-                  const SizedBox(height: 4),
-
                   Text('Adjust Hijri Date', style: theme.textTheme.titleMedium),
                   const SizedBox(height: 8),
 
@@ -113,7 +111,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                       ),
                       const SizedBox(width: 12),
                       Expanded(
-                        child: FilledButton(
+                        child: ElevatedButton(
                           onPressed: () => AppNav.pop(context),
                           child: const Text('Done'),
                         ),
@@ -229,7 +227,6 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                         hijriState.formatted,
                         style: theme.textTheme.labelLarge?.copyWith(
                           color: cs.primary,
-                          fontWeight: FontWeight.w600,
                         ),
                       ),
 
@@ -268,9 +265,19 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                     weekdayStyle: theme.textTheme.labelLarge!,
                     weekendStyle: theme.textTheme.labelLarge!,
                   ),
-                  headerStyle: const HeaderStyle(
+                  headerStyle: HeaderStyle(
                     formatButtonVisible: false,
                     titleCentered: true,
+                    leftChevronIcon: AppIconContainer(
+                      backgroundColor: cs.primary,
+                      borderRadius: 999,
+                      child: Icon(Icons.chevron_left, color: cs.onPrimary),
+                    ),
+                    rightChevronIcon: AppIconContainer(
+                      backgroundColor: cs.primary,
+                      borderRadius: 999,
+                      child: Icon(Icons.chevron_right, color: cs.onPrimary),
+                    ),
                   ),
                   calendarBuilders: CalendarBuilders(
                     headerTitleBuilder: (context, day) {
@@ -282,15 +289,22 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                       );
                       return Column(
                         mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
                             gregorianTitle,
-                            style: theme.textTheme.labelLarge,
+                            style: theme.textTheme.titleMedium,
                           ),
 
                           const SizedBox(height: 2),
 
-                          Text(hijriTitle, style: theme.textTheme.bodySmall),
+                          Text(
+                            hijriTitle,
+                            style: theme.textTheme.labelMedium?.copyWith(
+                              color: cs.onSurface,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
                         ],
                       );
                     },

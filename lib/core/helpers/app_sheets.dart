@@ -78,12 +78,7 @@ class AppSheets {
                 const SizedBox(height: 8),
               ],
 
-              Text(
-                title,
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              Text(title, style: theme.textTheme.titleMedium),
               const SizedBox(height: 8),
 
               Text(

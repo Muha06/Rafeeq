@@ -98,7 +98,7 @@ class QuranReadingPlanCard extends ConsumerWidget {
                         '${(progress.percentage * 100).round()}%',
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: cs.onSurface,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ],
@@ -158,8 +158,8 @@ class _NoQuranGoalCard extends StatelessWidget {
                   children: [
                     Text(
                       'Create a Quran Goal',
-                      style: theme.textTheme.labelLarge?.copyWith(
-                        fontFamily: 'PlayFairDisplay',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontFamily: AppStrings.displayFont,
                       ),
                     ),
 

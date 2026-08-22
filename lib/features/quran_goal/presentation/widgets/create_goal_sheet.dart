@@ -375,7 +375,7 @@ class GoalTargetField extends StatelessWidget {
         style: theme.textTheme.headlineMedium?.copyWith(
           color: cs.primary,
           fontSize: 36,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w500,
         ),
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         decoration: InputDecoration(

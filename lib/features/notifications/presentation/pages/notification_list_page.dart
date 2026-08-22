@@ -90,51 +90,58 @@ class NotificationTile extends ConsumerWidget {
             .read(allNotificationsProvider.notifier)
             .markAsRead(notification.id);
       },
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          if (!isRead) ...[
-            Container(
-              height: 12,
-              width: 12,
-              decoration: BoxDecoration(
-                color: cs.primary,
-                shape: BoxShape.circle,
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: cs.surface,
+          borderRadius: BorderRadius.circular(14),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            if (!isRead) ...[
+              Container(
+                height: 12,
+                width: 12,
+                decoration: BoxDecoration(
+                  color: cs.primary,
+                  shape: BoxShape.circle,
+                ),
+              ),
+
+              const SizedBox(width: 8),
+            ],
+
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    notification.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: tt.labelLarge,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    notification.body,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: tt.bodyMedium,
+                  ),
+                ],
               ),
             ),
 
             const SizedBox(width: 8),
-          ],
 
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  notification.title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: tt.labelLarge,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  notification.body,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: tt.labelMedium,
-                ),
-              ],
+            PhosphorIcon(
+              PhosphorIcons.caretRight,
+              color: cs.onSurfaceVariant,
+              size: 18,
             ),
-          ),
-
-          const SizedBox(width: 8),
-
-          PhosphorIcon(
-            PhosphorIcons.caretRight,
-            color: cs.onSurfaceVariant,
-            size: 18,
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

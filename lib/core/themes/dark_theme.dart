@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rafeeq/core/constants/colors/dark_colors.dart';
 import 'package:rafeeq/core/constants/spacing/app_spacing.dart';
+import 'package:rafeeq/core/constants/strings/app_strings.dart';
 import 'package:rafeeq/core/constants/typography/app_text_theme.dart';
 
 ThemeData appDarkThemeData() {
@@ -47,7 +48,7 @@ ThemeData appDarkThemeData() {
     canvasColor: scheme.surfaceContainerLowest,
     hintColor: scheme.onSurfaceVariant,
     disabledColor: scheme.onSurfaceVariant.withAlpha(140),
-    fontFamily: 'PlusJakartaSans',
+    fontFamily: AppStrings.primaryFont,
 
     dividerColor: scheme.outlineVariant,
     dividerTheme: DividerThemeData(color: scheme.outlineVariant),

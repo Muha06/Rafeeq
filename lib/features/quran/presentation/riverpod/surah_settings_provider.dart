@@ -1,5 +1,3 @@
-// Show/hide translation
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SurahSettings {
@@ -62,7 +60,7 @@ class SurahSettingsNotifier extends StateNotifier<SurahSettings> {
         const SurahSettings(
           showTranslation: true,
           arabicFontSize: 24,
-          translationFontSize: 15,
+          translationFontSize: 17,
           autoScrollSpeed: 20,
           showTranslit: true,
           mushafMode: false,
@@ -86,21 +84,17 @@ class SurahSettingsNotifier extends StateNotifier<SurahSettings> {
       state = state.copyWith(autoScrollSpeed: v);
 
   void setAutoScroll(bool v) {
-    debugPrint("✅✅✅ Setting autoscroll state to : $v");
-
     state = state.copyWith(showAutoScrollControls: v, isAutoScrolling: v);
   }
 
   void setAutoScrollActive(bool v) {
     if (state.isAutoScrolling == v) return;
-    debugPrint("✅✅✅ Setting autoscroll active state to : $v");
 
     state = state.copyWith(isAutoScrolling: v);
   }
 
   void setShowAutoScrollControls(bool v) {
     if (state.showAutoScrollControls == v) return;
-    debugPrint("✅✅✅ Setting autoscroll controls visibility to : $v");
 
     state = state.copyWith(showAutoScrollControls: v);
   }
@@ -109,7 +103,6 @@ class SurahSettingsNotifier extends StateNotifier<SurahSettings> {
 
   void showAudioControls(bool v) {
     if (state.showAudioControls == v) return;
-    debugPrint("✅✅✅ Setting controls to : $v");
 
     state = state.copyWith(showAudioControls: v);
   }
