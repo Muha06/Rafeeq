@@ -80,11 +80,6 @@ class _QuranAudioSheetState extends ConsumerState<QuranAudioSheet> {
 
                       //Audio seekbar
                       AudioSeekBar(
-                        onSeek: (position) {
-                          ref
-                              .read(audioControllerProvider.notifier)
-                              .seek(position);
-                        },
                         playedTrackColor: Colors.white,
                         bufferedTrackColor: Colors.white.withAlpha(80),
                         baseTrackColor: Colors.white.withAlpha(100),

@@ -5,7 +5,7 @@ import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provi
 import 'package:rafeeq/features/quran_audio/domain/entities/reciter_entity.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/get_surah_tracks_provider.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
- import 'package:rafeeq/features/quran_audio/presentation/widgets/reciter_picker_sheet.dart';
+import 'package:rafeeq/features/quran_audio/presentation/widgets/reciter_picker_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
@@ -101,6 +101,7 @@ class _PlayFullSurahBtnState extends ConsumerState<PlayFullSurahBtn> {
     final audioState = ref.watch(audioControllerProvider);
     final isBuffering = audioState.isBuffering;
     final isPlaying = audioState.isPlaying;
+    final sourceType = audioState.sourceType;
 
     if (surahs.length <= widget.initialIndex) {
       return const SizedBox.shrink();
@@ -121,7 +122,7 @@ class _PlayFullSurahBtnState extends ConsumerState<PlayFullSurahBtn> {
     return TextButton.icon(
       icon: (isBuffering || _isLoading)
           ? const SizedBox(height: 12, child: CupertinoActivityIndicator())
-          : isPlaying
+          : (isPlaying && sourceType == AudioSourceType.quranSurah)
           ? const Icon(HugeIconsStroke.stop)
           : const Icon(PhosphorIcons.playCircle),
       onPressed: () async {
@@ -150,7 +151,7 @@ class _PlayFullSurahBtnState extends ConsumerState<PlayFullSurahBtn> {
             ? 'Loading...'
             : _isLoading
             ? 'Downloading surah tracks...'
-            : isPlaying
+            : (isPlaying && sourceType == AudioSourceType.quranSurah)
             ? 'Stop'
             : 'Play surah',
         style: theme.textButtonTheme.style?.textStyle

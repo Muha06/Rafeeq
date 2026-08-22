@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
+import 'package:rafeeq/core/features/audio/domain/entities/audio_source_type.dart';
 import 'package:rafeeq/core/features/audio/presentation/providers/audio_controller.dart';
 import 'package:rafeeq/core/features/audio/presentation/widgets/seek_bar.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
@@ -85,14 +86,17 @@ class AudioControlsSection extends ConsumerWidget {
     final prevNextIconSize = 24.0;
     final prevNextIconColor = cs.onPrimaryContainer;
 
+    if (audioState.sourceType != AudioSourceType.quranSurah) {
+      return const SizedBox.shrink();
+    }
+
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () => AppSheets.showBottomSheet(
         context: context,
         isScrollControlled: true,
         clipBehavior: Clip.hardEdge,
-        useSafeArea: false,
-        animationDuration: const Duration(milliseconds: 400),
+        useSafeArea: false, 
         child: const QuranAudioSheet(),
       ),
       child: Column(
@@ -185,7 +189,7 @@ class AudioControlsSection extends ConsumerWidget {
 
           const SizedBox(height: 4),
 
-          AudioSeekBar(onSeek: ctrl.seek, showDurations: false),
+          AudioSeekBar(  showDurations: false),
         ],
       ),
     );

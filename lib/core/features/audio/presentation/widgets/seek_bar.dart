@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/features/audio/presentation/providers/audio_controller.dart';
+import 'package:rafeeq/core/features/audio/presentation/providers/is_seeking_provider.dart';
 
 class AudioSeekBar extends ConsumerStatefulWidget {
   const AudioSeekBar({
@@ -10,7 +11,6 @@ class AudioSeekBar extends ConsumerStatefulWidget {
     this.bufferedTrackColor,
     this.playedTrackColor,
     this.durationColor,
-    required this.onSeek,
   });
 
   final bool? showDurations;
@@ -18,7 +18,6 @@ class AudioSeekBar extends ConsumerStatefulWidget {
   final Color? bufferedTrackColor;
   final Color? playedTrackColor;
   final Color? durationColor;
-  final void Function(Duration position) onSeek;
 
   @override
   ConsumerState<AudioSeekBar> createState() => _AudioSeekBarState();
@@ -31,6 +30,8 @@ class _AudioSeekBarState extends ConsumerState<AudioSeekBar> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
+
+    final ctrl = ref.read(audioControllerProvider.notifier);
 
     final position = ref.watch(
       audioControllerProvider.select((s) => s.position),
@@ -144,6 +145,10 @@ class _AudioSeekBarState extends ConsumerState<AudioSeekBar> {
                     setState(() {
                       _dragValueMs = value;
                     });
+
+                    /// Update local provider instead of AudioState to prevent
+                    /// repeated calling the provider & API
+                    ref.read(isSeekingAudioProvider.notifier).state = true;
                   },
                   // Update the thumb immediately while the user drags.
                   onChanged: (value) {
@@ -156,7 +161,9 @@ class _AudioSeekBarState extends ConsumerState<AudioSeekBar> {
                     setState(() {
                       _dragValueMs = null;
                     });
-                    widget.onSeek(Duration(milliseconds: value.round()));
+
+                    ref.read(isSeekingAudioProvider.notifier).state = false;
+                    ctrl.seek(Duration(milliseconds: value.round()));
                   },
                 ),
               ),

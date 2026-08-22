@@ -42,6 +42,8 @@ class AudioState extends Equatable {
   /// Whether the current track should restart after it completes.
   final bool isRepeatEnabled;
 
+  final bool isSeekingAudio;
+
   const AudioState({
     this.currentId,
     this.title,
@@ -54,6 +56,7 @@ class AudioState extends Equatable {
     this.artist,
     this.imageUrl,
     this.sourceType = AudioSourceType.other,
+    this.isSeekingAudio = false,
   });
 
   static const _unset = Object();
@@ -85,6 +88,7 @@ class AudioState extends Equatable {
     Duration? bufferedPosition,
     bool? isRepeatEnabled,
     AudioSourceType? sourceType,
+    bool? isSeekingAudio,
   }) {
     return AudioState(
       currentId: currentId ?? this.currentId,
@@ -100,6 +104,7 @@ class AudioState extends Equatable {
       bufferedPosition: bufferedPosition ?? this.bufferedPosition,
       isRepeatEnabled: isRepeatEnabled ?? this.isRepeatEnabled,
       sourceType: sourceType ?? this.sourceType,
+      isSeekingAudio: isSeekingAudio ?? this.isSeekingAudio,
     );
   }
 
@@ -116,5 +121,6 @@ class AudioState extends Equatable {
     isBuffering,
     bufferedPosition,
     isRepeatEnabled,
+    isSeekingAudio,
   ];
 }

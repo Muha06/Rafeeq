@@ -131,10 +131,13 @@ class AudioController extends Notifier<AudioState> {
   }
 
   Future<void> seek(Duration position) async {
+      state = state.copyWith(isSeekingAudio: true);
     try {
       await _handler.seek(position);
     } catch (e) {
       debugPrint('Seek failed: $e');
+    } finally {
+      state = state.copyWith(isSeekingAudio: false);
     }
   }
 

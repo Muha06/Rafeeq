@@ -384,15 +384,11 @@ class AnimatedPlayPauseBtn extends ConsumerWidget {
   }
 }
 
-class _RadioAudioSeekBar extends ConsumerWidget {
+class _RadioAudioSeekBar extends StatelessWidget {
   const _RadioAudioSeekBar();
 
   @override
-  Widget build(BuildContext context, ref) {
-    final ctrl = ref.read(audioControllerProvider.notifier);
-
-    final onSeek = ctrl.seek;
-
-    return AudioSeekBar(onSeek: onSeek, showDurations: false);
+  Widget build(BuildContext context) {
+    return const AudioSeekBar(showDurations: false);
   }
 }
