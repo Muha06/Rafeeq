@@ -189,7 +189,7 @@ class AudioControlsSection extends ConsumerWidget {
 
           const SizedBox(height: 4),
 
-          AudioSeekBar(  showDurations: false),
+          const AudioSeekBar(  showDurations: false),
         ],
       ),
     );

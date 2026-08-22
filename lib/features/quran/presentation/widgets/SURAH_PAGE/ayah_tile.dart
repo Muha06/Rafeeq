@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/helpers/app_haptics.dart';
+import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
-import 'package:rafeeq/core/themes/app_text_style.dart';
+import 'package:rafeeq/core/helpers/app_text_style.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/core/helpers/app_toast.dart';
 import 'package:rafeeq/core/widgets/app_drag_handle.dart';
@@ -245,12 +246,14 @@ class _AyahActionsSheetState extends ConsumerState<AyahActionsSheet> {
                           ayahSurahProvider(widget.ayah.surahId),
                         );
 
+                        final ayah = widget.ayah;
                         final bookmark = QuranBookmarkEntity(
                           id: bookmarkId,
-                          surahId: widget.ayah.surahId,
-                          surahEnglishName:
-                              ayahSurah?.nameTransliteration ?? '',
-                          ayahNumber: widget.ayah.ayahNumber,
+                          surahId: ayah.surahId,
+                          surahName: ayahSurah?.nameTransliteration ?? '',
+                          ayahArabic: ayah.textArabic,
+                          ayahTranslation: ayah.textEnglish,
+                          ayahNumber: ayah.ayahNumber,
                           createdAt: DateTime.now(),
                         );
 
@@ -273,6 +276,8 @@ class _AyahActionsSheetState extends ConsumerState<AyahActionsSheet> {
                           message:
                               "Failed to bookmark ayah. Please try again later",
                         );
+                      } finally {
+                        AppNav.pop(context);
                       }
                     },
                   );

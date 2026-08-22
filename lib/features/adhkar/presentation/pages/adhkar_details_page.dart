@@ -10,7 +10,7 @@ import 'package:rafeeq/core/features/audio/presentation/providers/audio_controll
 import 'package:rafeeq/core/helpers/app_haptics.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
-import 'package:rafeeq/core/themes/app_text_style.dart';
+import 'package:rafeeq/core/helpers/app_text_style.dart';
 import 'package:rafeeq/features/adhkar/domain/entities/dhikr_entity.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/dhikr_bookmark.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/dhikr/dhikr_notifier_provider.dart';

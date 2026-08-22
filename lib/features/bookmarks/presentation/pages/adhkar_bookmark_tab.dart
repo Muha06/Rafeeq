@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/app/providers/tabs_screen_provider.dart';
-import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/widgets/app_state_view.dart';
-import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_details_page.dart';
-import 'package:rafeeq/features/adhkar/presentation/providers/adhkar_providers.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/dhikr/dhikr_notifier_provider.dart';
 import 'package:rafeeq/features/bookmarks/presentation/widgets/bookmark_tile.dart';
 
@@ -44,31 +41,9 @@ class _AdhkarBookmarksTabState extends ConsumerState<AdhkarBookmarksTab> {
               final bookMark = bookMarks[index];
               final indexDisplay = index + 1;
 
-              return GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () async {
-                  //fetching adhkars
-
-                  final adhkar = await ref.read(
-                    fetchAllAdhkarProvider(bookMark.categoryId).future,
-                  );
-                  final dhikr = adhkar.firstWhere(
-                    (e) => e.id == bookMark.dhikrId,
-                  );
-
-                  if (!context.mounted) return;
-
-                  final index = adhkar.indexOf(dhikr);
-
-                  AppNav.push(
-                    context,
-                    AdhkarDetailsPage(adhkars: adhkar, initialIndex: index),
-                  );
-                },
-                child: BookmarkTile(
-                  dhikrBookmark: bookMark,
-                  indexDisplay: indexDisplay,
-                ),
+              return BookmarkTile(
+                dhikrBookmark: bookMark,
+                indexDisplay: indexDisplay,
               );
             },
           );

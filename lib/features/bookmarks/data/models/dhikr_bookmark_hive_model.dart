@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
 
-part 'dhikr_bookmark_hive_model.g.dart';
+part 'generated/dhikr_bookmark_hive_model.g.dart';
 
 @HiveType(typeId: 32) // make sure this ID is unique in your app
 class DhikrBookmarkHiveModel extends HiveObject {

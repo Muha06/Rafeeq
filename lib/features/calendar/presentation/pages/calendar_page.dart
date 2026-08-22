@@ -5,7 +5,7 @@ import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
-import 'package:rafeeq/core/themes/app_text_style.dart';
+import 'package:rafeeq/core/helpers/app_text_style.dart';
 import 'package:rafeeq/core/widgets/app_drag_handle.dart';
 import 'package:rafeeq/features/calendar/presentation/widgets/day_cell.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/log_ayah_bottomsheet.dart';

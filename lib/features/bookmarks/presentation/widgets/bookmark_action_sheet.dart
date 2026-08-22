@@ -17,6 +17,7 @@ class BookmarkActionBottomSheet extends ConsumerWidget {
   final QuranBookmarkEntity? quranBookmark;
   final DhikrBookmark? dhikrBookmark;
   final VoidCallback onDeleteBookmark;
+
   @override
   Widget build(BuildContext context, ref) {
     return Padding(
@@ -24,7 +25,7 @@ class BookmarkActionBottomSheet extends ConsumerWidget {
       child: SafeArea(
         top: false,
         child: SizedBox(
-          height: 120,
+          height: 140,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 12.0),
             child: Column(

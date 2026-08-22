@@ -20,7 +20,7 @@ class BottomSheetActionBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
-    const width = 68.0;
+    final maxWidth = 86.0;
 
     return AnimatedSize(
       duration: const Duration(milliseconds: 250),
@@ -28,46 +28,47 @@ class BottomSheetActionBtn extends StatelessWidget {
       child: GestureDetector(
         onTap: onPressed,
         behavior: HitTestBehavior.opaque,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            AnimatedContainer(
-              duration: 250.ms,
-              height: 64,
-              width: width,
-              decoration: BoxDecoration(
-                color: bgColor ?? cs.surfaceContainerHigh,
-                shape: BoxShape.circle,
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Center(
-                  child: Icon(
-                    iconData,
-                    size: 32,
-                    color: fgColor ?? cs.onSurfaceVariant,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: maxWidth),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AnimatedContainer(
+                duration: 250.ms,
+                height: 64,
+                decoration: BoxDecoration(
+                  color: bgColor ?? cs.surfaceContainerHigh,
+                  shape: BoxShape.circle,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                    child: Icon(
+                      iconData,
+                      size: 32,
+                      color: fgColor ?? cs.onSurfaceVariant,
+                    ),
                   ),
                 ),
               ),
-            ),
 
-            const SizedBox(height: 6),
+              const SizedBox(height: 6),
 
-            SizedBox(
-              width: width + 12,
-              child: Text(
-                label,
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                overflow: TextOverflow.visible,
-                style: theme.textTheme.labelSmall?.copyWith(
-                  color: cs.onSurface,
+              SizedBox(
+                child: Text(
+                  label,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.visible,
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: cs.onSurface,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

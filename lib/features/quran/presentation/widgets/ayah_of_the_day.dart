@@ -115,8 +115,10 @@ class AyahOfTheDay extends ConsumerWidget {
                                 final bookmark = QuranBookmarkEntity(
                                   id: bookmarkId,
                                   surahId: ayah.surahId,
-                                  surahEnglishName:
+                                  surahName:
                                       ayahSurah?.nameTransliteration ?? '',
+                                  ayahArabic: ayah.textArabic,
+                                  ayahTranslation: ayah.textEnglish,
                                   ayahNumber: ayah.ayahNumber,
                                   createdAt: DateTime.now(),
                                 );

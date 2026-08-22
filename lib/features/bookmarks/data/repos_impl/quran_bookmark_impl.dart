@@ -42,7 +42,9 @@ class BookmarksRepositoryImpl implements BookmarksRepository {
     return QuranBookmarkHiveModel(
       id: e.id,
       surahId: e.surahId,
-      surahEnglishName: e.surahEnglishName,
+      surahName: e.surahName,
+      ayahArabic: e.ayahArabic,
+      ayahTranslation: e.ayahTranslation,
       ayahNumber: e.ayahNumber,
       createdAtMillis: e.createdAt.millisecondsSinceEpoch,
     );
@@ -52,8 +54,10 @@ class BookmarksRepositoryImpl implements BookmarksRepository {
     return QuranBookmarkEntity(
       id: m.id,
       surahId: m.surahId,
-      surahEnglishName: m.surahEnglishName,
+      surahName: m.surahName,
+      ayahArabic: m.ayahArabic,
       ayahNumber: m.ayahNumber,
+      ayahTranslation: m.ayahTranslation,
       createdAt: DateTime.fromMillisecondsSinceEpoch(m.createdAtMillis),
     );
   }
