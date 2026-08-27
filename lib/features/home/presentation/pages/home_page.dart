@@ -5,7 +5,8 @@ import 'package:rafeeq/core/animations/navigation_animations.dart';
 import 'package:rafeeq/core/constants/strings/app_strings.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/extensions/page_animate_ext.dart';
- import 'package:rafeeq/features/home_reminders/presentation/providers/reminder_providers.dart';
+import 'package:rafeeq/features/home/presentation/widgets/hijri_date.dart';
+import 'package:rafeeq/features/home_reminders/presentation/providers/reminder_providers.dart';
 import 'package:rafeeq/features/notifications/presentation/pages/notification_list_page.dart';
 import 'package:rafeeq/features/notifications/presentation/providers/notification_provider.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/ayah_of_the_day.dart';
@@ -37,60 +38,74 @@ class _HomePageState extends ConsumerState<HomePage> {
     ref.watch(salahNotifSchedulerProvider); // scheduler salah notifs
     ref.watch(adhkarNotificationsControllerProvider); // scheduler adhkar notifs
 
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            title: const Row(children: [Expanded(child: _GreetUserSection())]),
-            toolbarHeight: 84,
-            actionsPadding: const EdgeInsets.all(12),
-            actions: [
-              Container(
-                decoration: BoxDecoration(
-                  color: cs.surface,
-                  borderRadius: BorderRadius.circular(999),
-                ),
-                child: const Row(
-                  children: [
-                    _NotificationIcon(iconSize: _appBarIconSize),
-                    _SettingsIcon(iconSize: _appBarIconSize),
-                  ],
-                ),
+    return SafeArea(
+      top: false,
+      child: Scaffold(
+        body: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              title: const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _GreetUserSection(),
+                  SizedBox(height: 8),
+                  HijriDateToday(foregroundColor: Colors.black, fontSize: 14),
+                ],
               ),
-            ],
-            bottom: reminders.isNotEmpty
-                ? const PreferredSize(
-                    preferredSize: Size.fromHeight(74),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8.0),
-                      child: HomeRemindersCarousel(),
-                    ),
-                  )
-                : null,
-          ),
-
-          // TIMESCARD
-          const SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.only(
-                left: _hPad,
-                right: _hPad,
-                bottom: _v10,
-              ), // to accommodate quick actions overlap
-              child: HomeTimelineCard(),
+              toolbarHeight: 116,
+              actionsPadding: const EdgeInsets.all(12),
+              actions: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: cs.surface,
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                  child: const Row(
+                    children: [
+                      _NotificationIcon(iconSize: _appBarIconSize),
+                      _SettingsIcon(iconSize: _appBarIconSize),
+                    ],
+                  ),
+                ),
+              ],
+              bottom: reminders.isNotEmpty
+                  ? const PreferredSize(
+                      preferredSize: Size.fromHeight(74),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 8.0),
+                        child: HomeRemindersCarousel(),
+                      ),
+                    )
+                  : null,
             ),
-          ),
 
-          // AYAH OF THE DAY
-          const SliverToBoxAdapter(
-            child: HomeSection(
-              padding: EdgeInsets.symmetric(horizontal: _hPad, vertical: _v10),
-              child: AyahOfTheDay(),
+            // TIMESCARD
+            const SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.only(
+                  left: _hPad,
+                  right: _hPad,
+                  bottom: _v10,
+                ), // to accommodate quick actions overlap
+                child: HomeTimelineCard(),
+              ),
             ),
-          ),
-        ],
-      ),
-    ).animatePage();
+
+            // AYAH OF THE DAY
+            const SliverToBoxAdapter(
+              child: HomeSection(
+                padding: EdgeInsets.symmetric(
+                  horizontal: _hPad,
+                  vertical: _v10,
+                ),
+                child: AyahOfTheDay(),
+              ),
+            ),
+          ],
+        ),
+      ).animatePage(),
+    );
   }
 }
 
@@ -117,8 +132,7 @@ class _GreetUserSection extends ConsumerWidget {
           overflow: TextOverflow.ellipsis,
           style: tt.labelLarge?.copyWith(
             fontFamily: AppStrings.displayFont,
-            color: cs.primary,
-            fontSize: hasName ? 22 : 20,
+            fontSize: 18,
           ),
         ),
 
@@ -128,8 +142,9 @@ class _GreetUserSection extends ConsumerWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: tt.titleLarge?.copyWith(
-              fontWeight: FontWeight.w500,
               fontFamily: AppStrings.displayFont,
+              fontWeight: FontWeight.w500,
+              color: cs.primary,
             ),
           ),
       ],

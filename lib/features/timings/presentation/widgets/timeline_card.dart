@@ -5,7 +5,6 @@ import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/constants/strings/app_strings.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/salat_times.dart';
-import 'package:rafeeq/features/home/presentation/widgets/hijri_date.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_prayer.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_status.dart';
 import 'package:rafeeq/features/timings/presentation/pages/timings_pages.dart';
@@ -101,19 +100,9 @@ class _BuildTimelineCard extends ConsumerWidget {
 
                   const Spacer(),
 
-                  Row(
-                    children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: _TimeToNextText(next: next),
-                      ),
-                      const Spacer(),
-
-                      const HijriDateToday(
-                        foregroundColor: Colors.white,
-                        fontSize: 14,
-                      ),
-                    ],
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: _TimeToNextText(next: next),
                   ),
                 ],
               ),
