@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
-import 'package:rafeeq/core/widgets/appbar_bottom_divider.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_times.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/disable_salah_reminders_provider.dart';
@@ -62,7 +61,6 @@ class _SalahTimingsPageState extends ConsumerState<SalahTimingsPage> {
             appBar: AppBar(
               title: const Text('Today\'s Timings'),
               centerTitle: true,
-              bottom: appBarBottomDivider(context),
             ),
             body: Column(
               children: [
@@ -197,7 +195,7 @@ class AllSalatTimingsCard extends StatelessWidget {
                       _formatHm(t),
                       style: theme.textTheme.titleSmall?.copyWith(
                         color: timesColor,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ],

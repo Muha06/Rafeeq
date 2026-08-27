@@ -1,28 +1,65 @@
-import 'package:flutter/cupertino.dart';
- 
+import 'package:flutter/painting.dart';
+
 class AppDarkColors {
-  static const canvas = Color(0xFF1E252D);
+  // BACKGROUND
 
-  static const surface = Color(0xFF1e1a16);
-  static const surfaceDim = Color(0xFF171310); // lowest elevation
-  static const surfaceHigh = Color(0xFF2a241f);
+  static const canvas = Color(0xFF10161C);
 
-  static const outline = Color(0xFF3A332D);
-  static const outlineVariant = Color(0xFF2A241F);
+  // SURFACES
 
-  // static const tertiary = AppLightColors.brand;
-  static const primary = Color(0xFF1E97A8);
+  static const surface = Color(0xFF1A222A);
+  static const surfaceHigh = Color(0xFF333B48);
+  static const surfaceHighest = Color(0xFF424B58);
+
+  // BORDERS / DIVIDERS
+
+  static const outline = Color(0xFF3A444C);
+  static const outlineVariant = Color(0xFF3F4952);
+
+  // PRIMARY || SECONDARY || TERTIARY
+
+  static const primary = Color(0xFF1D7382);
+  static const secondary = Color(0xFFA7B3BC);
+  static const tertiary = Color(0xFFA4DF3F); // Special accent (Used sparingly)
+
+  // ON P | S | T
+
+  static const onPrimary = Color(0xFFFFFFFF);
+  static const onSecondary = Color(0xFF1E252D);
+  static const onTertiary = Color(0xFF1E252D);
 
   // CONTAINERS
-  // static const primaryContainer = Color(0xFF1D98A8);
-  // static const secondaryContainer = Color(0xFFD3FAF9);
-  // static const tertiaryContainer = Color(0xFFAFF0F2);
 
-  static const onSurface = Color(0xFFEAF2F2);
-  static const onSurface2 = Color(0xFF96A2A5);
-  static const error = Color(0xFFFF5A6A);
+  static const primaryContainer = Color(0xFF274A50);
+  static const secondaryContainer = Color(0xFF343E46);
+  static const tertiaryContainer = Color(0xFF35491F);
 
-  static const switchOn = Color(0xFFE4C169); // same as brand (unifies identity)
-  static const switchOnBg = Color(0xFF2A241F); // matches surfaceHigh tone
-  static const switchRipple = Color(0x33E4C169); // soft gold glow
+  // ON CONTAINERS
+
+  static const onPrimaryContainer = Color(0xFFD3FAF9);
+  static const onSecondaryContainer = Color(0xFFDCE2E6);
+  static const onTertiaryContainer = Color(0xFFDBEEBA);
+
+  // ON SURFACES
+
+  static const onSurface = Color(0xFFF1F3F4);
+  static const onSurface2 = Color(0xFF718B9C);
+
+  // ERROR
+
+  static const error = Color(0xFFC95A5A);
+  static const onError = canvas;
+  static const errorContainer = Color(0xFFF9DEDC);
+  static const onErrorContainer = Color(0xFF410E0B);
+
+  // SHADOW
+  static const shadow = Color(0x206B737A);
+
+  static const scrim = Color(0x99000000);
+
+  // SWITCH
+
+  static const switchOn = primary;
+  static const switchBg = Color(0xFF35434A);
+  static const switchRipple = Color(0x1A9FC4C8);
 }

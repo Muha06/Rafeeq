@@ -12,18 +12,12 @@ class AppDialogs {
     String cancelText = 'Cancel',
   }) {
     final theme = Theme.of(context);
-    final cs = theme.colorScheme;
 
     return showDialog<bool>(
       context: context,
       builder: (dialogContext) => Dialog(
-        backgroundColor: Colors.transparent,
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: cs.surface,
-            borderRadius: BorderRadius.circular(24),
-          ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -44,22 +38,18 @@ class AppDialogs {
 
               const SizedBox(height: 20),
 
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () => AppNav.pop(dialogContext, false),
-                      child: Text(cancelText),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: FilledButton(
-                      onPressed: () => AppNav.pop(dialogContext, true),
-                      child: Text(confirmText),
-                    ),
-                  ),
-                ],
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton(
+                  onPressed: () => AppNav.pop(dialogContext, true),
+                  child: Text(confirmText),
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              TextButton(
+                onPressed: () => AppNav.pop(dialogContext, false),
+                child: Text(cancelText),
               ),
             ],
           ),

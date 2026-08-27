@@ -341,8 +341,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
     );
 
     const horizontalPadding = AppSpacing.lg;
-    // const verticalPadding = AppSpacing.screenHorizontal;
-
+ 
     return PopScope(
       onPopInvokedWithResult: (didPop, result) async {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();

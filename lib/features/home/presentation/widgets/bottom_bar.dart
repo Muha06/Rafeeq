@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
+import 'package:rafeeq/core/features/audio/domain/entities/audio_source_type.dart';
 import 'package:rafeeq/core/features/audio/presentation/providers/audio_controller.dart';
 import 'package:rafeeq/core/features/audio/presentation/widgets/global_mini_player.dart';
 
@@ -50,6 +51,7 @@ class MyBottomBar extends ConsumerWidget {
     final itemColor = cs.onSurfaceVariant;
 
     final s = ref.watch(audioControllerProvider);
+    final canShow = s.sourceType != AudioSourceType.adhkar;
     final hasAudio = s.currentId != null && s.currentId!.isNotEmpty;
 
     final miniPlayer = AnimatedSwitcher(
@@ -68,7 +70,7 @@ class MyBottomBar extends ConsumerWidget {
           ),
         );
       },
-      child: (hasAudio)
+      child: (hasAudio && canShow)
           ? const GLobalMiniPlayerSheet(key: ValueKey('mini-player'))
           : const SizedBox.shrink(key: ValueKey('empty')),
     );

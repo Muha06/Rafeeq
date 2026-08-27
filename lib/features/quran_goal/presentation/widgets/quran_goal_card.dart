@@ -41,13 +41,13 @@ class QuranReadingPlanCard extends ConsumerWidget {
         child: Row(
           children: [
             CustomPaint(
-              size: const Size(72, 72),
+              size: const Size(78, 78),
               painter: QuranProgressPainter(
                 progress: progress.percentage,
+                label: "${progress.totalRead}%",
                 backgroundColor: cs.surfaceContainerHigh,
                 progressColor: cs.primary,
                 strokeWidth: 8,
-                label: progress.totalRead.toString(),
               ),
             ),
 
@@ -62,9 +62,8 @@ class QuranReadingPlanCard extends ConsumerWidget {
                   Text(
                     'Your Quran Journey',
                     style: theme.textTheme.labelLarge?.copyWith(
-                      fontFamily: AppStrings.displayFont,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
+                      fontFamily: AppStrings.primaryFont,
+                      fontSize: 20,
                     ),
                   ),
 
@@ -76,32 +75,6 @@ class QuranReadingPlanCard extends ConsumerWidget {
                     style: theme.textTheme.headlineSmall?.copyWith(
                       color: cs.primary,
                     ),
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  // Progress row
-                  Row(
-                    children: [
-                      Expanded(
-                        child: LinearProgressIndicator(
-                          value: progress.percentage,
-                          color: cs.primary.withAlpha(200),
-                          backgroundColor: cs.surfaceContainerHighest,
-                          minHeight: 8,
-                          borderRadius: BorderRadius.circular(999),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-
-                      Text(
-                        '${(progress.percentage * 100).round()}%',
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: cs.onSurface,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
                   ),
                 ],
               ),

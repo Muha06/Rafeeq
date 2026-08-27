@@ -101,7 +101,7 @@ class AyahOfTheDay extends ConsumerWidget {
 
                           return CircleIconButton(
                             size: 36,
-                            
+
                             icon: isBookmarked
                                 ? HugeIconsSolid.bookmark01
                                 : HugeIconsStroke.bookmark01,
@@ -167,6 +167,8 @@ class AyahOfTheDay extends ConsumerWidget {
                   Text(
                     '"${ayah.textEnglish}"',
                     textAlign: TextAlign.left,
+                    maxLines: 6,
+                    overflow: TextOverflow.ellipsis,
                     style: theme.textTheme.bodyLarge,
                   ),
                   const SizedBox(height: 12),

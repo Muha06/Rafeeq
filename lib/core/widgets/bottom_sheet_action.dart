@@ -48,7 +48,7 @@ class BottomSheetActionBtn extends StatelessWidget {
                     child: Icon(
                       iconData,
                       size: 32,
-                      color: fgColor ?? cs.onSurfaceVariant,
+                      color: fgColor ?? cs.primary,
                     ),
                   ),
                 ),

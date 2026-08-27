@@ -68,12 +68,12 @@ class QuranProgressPainter extends CustomPainter {
           text: label,
           style:
               labelStyle ??
-              const TextStyle(
+              TextStyle(
                 fontFamily: AppStrings.displayFont,
-                fontSize: 22,
+                fontSize: 20,
                 height: 1,
                 fontWeight: FontWeight.w600,
-                color: Colors.black,
+                color: progressColor,
               ),
         ),
         textDirection: TextDirection.ltr,

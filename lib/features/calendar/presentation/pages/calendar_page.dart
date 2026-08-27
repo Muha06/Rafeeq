@@ -203,7 +203,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
 
         borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
 
-        color: theme.colorScheme.surfaceContainerLow,
+        color: theme.colorScheme.surface,
         backdropEnabled: true,
         parallaxEnabled: true,
         parallaxOffset: .12,
@@ -382,6 +382,7 @@ class _MonthlyEvenetsPanel extends ConsumerWidget {
                     children: events.map((event) {
                       final today = ref.read(hijriDateProvider).hijri.hDay;
                       final isToday = event.days.contains(today);
+
                       return IslamicEventTile(isToday: isToday, event: event);
                     }).toList(),
                   ),

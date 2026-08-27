@@ -6,8 +6,6 @@ class AppLightColors {
 
   //  SURFACES
   static const surface = Color(0xFFF3F7F8);
-  // static const surfaceHigh = Color(0xFFa3acbf);
-  // static const surfaceHighest = Color(0xFFF3F6F8);
   static const surfaceHigh = Color(0xFFD5E0E4);
   static const surfaceHighest = Color(0xFFBACBD1);
 
@@ -23,7 +21,7 @@ class AppLightColors {
   // ON  P | S | T
   static const onPrimary = canvas;
   static const onSecondary = onSurface;
-  static const onTertiary = canvas;
+  static const onTertiary = onSurface;
 
   // CONTAINERS
   static const primaryContainer = Color(0xFFD3FAF9); // lighter primary
@@ -36,9 +34,8 @@ class AppLightColors {
   static const onTertiaryContainer = onSurface;
 
   // ON SURFACES
-  static const onSurface = Color(0xFF232427);
+  static const onSurface = Color(0xFF303236);
   static const onSurface2 = Color(0xFF568A91);
-  static const onSurface3 = Color(0xFF9AAEB1);
 
   //  ERROR
   static const error = Color(0xFFC95A5A);
@@ -48,7 +45,6 @@ class AppLightColors {
 
   // SHADOW
   static const shadow = Color(0x0A000000);
-  // static const scrim = Color(0xB3010101);
   static const scrim = Color(0x99000000);
 
   //  SWITCH

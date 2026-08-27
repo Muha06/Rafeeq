@@ -67,7 +67,7 @@ class AppToast {
                 child: Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 12,
-                    vertical: 12,
+                    vertical: 8,
                   ),
                   decoration: BoxDecoration(
                     color: backgroundColor ?? cs.onSurface,
@@ -78,6 +78,7 @@ class AppToast {
                     textAlign: TextAlign.center,
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: foregroundColor ?? cs.surface,
+                      fontSize: 14.5,
                     ),
                   ),
                 ),

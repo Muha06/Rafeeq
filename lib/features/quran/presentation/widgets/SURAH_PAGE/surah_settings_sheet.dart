@@ -17,7 +17,7 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
- 
+
     final s = ref.watch(surahSettingsProvider);
     final sNotifier = ref.read(surahSettingsProvider.notifier);
 
@@ -202,7 +202,7 @@ class _SurahSettingsSelectTile extends StatelessWidget {
       contentPadding: EdgeInsets.zero,
       title: Text(title, style: titleStyle),
       trailing: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: maxValueWidth ?? double.infinity),
+        constraints: BoxConstraints(maxWidth: maxValueWidth ?? 200),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

@@ -23,7 +23,7 @@ class WeeklyQuranChart extends ConsumerWidget {
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        color: cs.surface,
+        color: cs.surfaceContainerHigh,
       ),
       child: BarChart(
         BarChartData(
@@ -56,7 +56,9 @@ class WeeklyQuranChart extends ConsumerWidget {
                   return Center(
                     child: Text(
                       days[index % 7],
-                      style: theme.textTheme.labelMedium,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: cs.onSurface,
+                      ),
                     ),
                   );
                 },

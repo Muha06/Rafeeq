@@ -35,8 +35,8 @@ ThemeData appLightThemeData() {
     error: AppLightColors.error,
     errorContainer: AppLightColors.errorContainer,
     onErrorContainer: AppLightColors.onErrorContainer,
-
     onError: Colors.white,
+
     surfaceContainerLowest: AppLightColors.canvas,
     surfaceContainerLow: AppLightColors.canvas,
     surfaceContainer: AppLightColors.surface,
@@ -74,6 +74,7 @@ ThemeData appLightThemeData() {
 
     dividerColor: scheme.outlineVariant,
     dividerTheme: DividerThemeData(color: scheme.outlineVariant),
+    textTheme: AppTextTheme.build(scheme),
 
     appBarTheme: AppBarThemeData(
       backgroundColor: scheme.surfaceContainerLowest,
@@ -101,19 +102,19 @@ ThemeData appLightThemeData() {
       ),
     ),
 
-    tabBarTheme: const TabBarThemeData(
+    tabBarTheme: TabBarThemeData(
       labelStyle: TextStyle(
         fontFamily: AppStrings.primaryFont,
         fontSize: 16,
         fontWeight: FontWeight.w500,
         letterSpacing: -0.3,
-        color: AppLightColors.primary,
+        color: scheme.onSurfaceVariant,
       ),
       unselectedLabelStyle: TextStyle(
         fontFamily: AppStrings.primaryFont,
         fontSize: 15.5,
         fontWeight: FontWeight.w500,
-        color: AppLightColors.onSurface2,
+        color: scheme.onSurfaceVariant,
       ),
     ),
 
@@ -146,24 +147,32 @@ ThemeData appLightThemeData() {
     ),
 
     bottomSheetTheme: BottomSheetThemeData(
-      backgroundColor: Colors.white,
+      backgroundColor: AppLightColors.canvas,
       showDragHandle: true,
       modalBarrierColor: scheme.scrim,
-      modalBackgroundColor: Colors.white,
+      shadowColor: scheme.shadow,
+      modalBackgroundColor: AppLightColors.canvas,
       surfaceTintColor: Colors.transparent,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
     ),
 
-    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-      backgroundColor: Colors.white,
+    dialogTheme: DialogThemeData(
+      backgroundColor: scheme.surfaceContainerLowest,
+      surfaceTintColor: Colors.transparent,
+      elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+    ),
+
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: scheme.surfaceContainerLowest,
       elevation: 2,
     ),
 
     progressIndicatorTheme: ProgressIndicatorThemeData(
       strokeWidth: 3.5,
-      linearTrackColor: scheme.surfaceContainerHighest,
+      linearTrackColor: scheme.surfaceContainerHigh,
       borderRadius: BorderRadius.circular(999),
       color: scheme.primary,
     ),
@@ -171,7 +180,7 @@ ThemeData appLightThemeData() {
     sliderTheme: SliderThemeData(
       activeTrackColor: scheme.primary,
       thumbColor: scheme.primary,
-      inactiveTrackColor: Colors.grey.withAlpha(100),
+      inactiveTrackColor: scheme.surface,
     ),
 
     elevatedButtonTheme: ElevatedButtonThemeData(
@@ -245,16 +254,6 @@ ThemeData appLightThemeData() {
       ),
     ),
 
-    dialogTheme: DialogThemeData(
-      backgroundColor: scheme.surfaceContainerLowest,
-      surfaceTintColor: Colors.transparent,
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-        side: BorderSide(color: scheme.outlineVariant),
-      ),
-    ),
-
     textSelectionTheme: TextSelectionThemeData(
       cursorColor: scheme.onSurfaceVariant,
       selectionColor: scheme.primary.withAlpha(51), // ~20%
@@ -264,7 +263,7 @@ ThemeData appLightThemeData() {
     inputDecorationTheme: InputDecorationTheme(
       hintStyle: TextStyle(
         fontFamily: AppStrings.primaryFont,
-        fontSize: 14,
+        fontSize: 16,
         fontWeight: FontWeight.w400,
         color: scheme.onSurfaceVariant,
       ),
@@ -299,8 +298,8 @@ ThemeData appLightThemeData() {
       ),
     ),
 
-    listTileTheme: const ListTileThemeData(
-      iconColor: AppLightColors.onSurface2,
+    listTileTheme: ListTileThemeData(
+      iconColor: scheme.onSurfaceVariant,
       enableFeedback: true,
       contentPadding: EdgeInsets.zero,
       titleTextStyle: TextStyle(
@@ -308,13 +307,13 @@ ThemeData appLightThemeData() {
         fontSize: 17.5,
         fontWeight: FontWeight.w400,
         letterSpacing: -0.3,
-        color: AppLightColors.onSurface,
+        color: scheme.onSurface,
       ),
       subtitleTextStyle: TextStyle(
         fontFamily: AppStrings.primaryFont,
         fontSize: 15,
         fontWeight: FontWeight.w400,
-        color: AppLightColors.onSurface2,
+        color: scheme.onSurfaceVariant,
       ),
     ),
 
@@ -333,6 +332,23 @@ ThemeData appLightThemeData() {
       overlayColor: const WidgetStatePropertyAll(AppLightColors.switchRipple),
     ),
 
-    textTheme: AppTextTheme.build(scheme),
+    timePickerTheme: TimePickerThemeData(
+      backgroundColor: scheme.surfaceContainerLow,
+      hourMinuteColor: scheme.surface,
+      hourMinuteTextColor: scheme.onSurface,
+      dialHandColor: scheme.primary,
+      dialBackgroundColor: scheme.surface,
+      dialTextColor: scheme.onSurface,
+      entryModeIconColor: scheme.onSurface,
+      timeSelectorSeparatorColor: WidgetStatePropertyAll(scheme.primary),
+      confirmButtonStyle: ButtonStyle(
+        backgroundColor: WidgetStatePropertyAll(scheme.primary),
+        foregroundColor: WidgetStatePropertyAll(scheme.onPrimary),
+        padding: const WidgetStatePropertyAll(EdgeInsets.all(8)),
+        shape: WidgetStatePropertyAll(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
+        ),
+      ),
+    ),
   );
 }

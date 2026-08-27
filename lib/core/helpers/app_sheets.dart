@@ -104,6 +104,7 @@ class AppSheets {
                         confirmText,
                         style: theme.textTheme.labelLarge!.copyWith(
                           color: destructive ? cs.onError : cs.onPrimary,
+                          height: 1,
                         ),
                       ),
                     ),
@@ -179,7 +180,6 @@ class AppSheets {
       ),
     );
   }
-
 
   static Future<void> showErrorDialog({
     required BuildContext context,

@@ -93,7 +93,7 @@ class NotificationTile extends ConsumerWidget {
       child: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: cs.surface,
+          color: isRead ? cs.surface : cs.primaryContainer,
           borderRadius: BorderRadius.circular(14),
         ),
         child: Row(

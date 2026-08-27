@@ -46,10 +46,9 @@ class _SearchSurahFieldState extends ConsumerState<SearchSurahField> {
           onPressed: () {
             _focus.unfocus();
           },
-          icon: const Icon(HugeIconsSolid.search01),
+          icon: Icon(HugeIconsSolid.search01, color: cs.onSurfaceVariant),
         ),
         hintText: "Search Surahs...",
-        hintStyle: theme.textTheme.labelSmall,
         filled: true,
         fillColor: cs.surface,
         enabledBorder: border,

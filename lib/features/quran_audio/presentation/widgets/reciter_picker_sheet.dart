@@ -72,65 +72,49 @@ class ReciterPickerSheet extends ConsumerWidget {
 
                     // List
                     Expanded(
-                      child: ListView.separated(
+                      child: ListView.builder(
                         controller: scrollCtrl,
                         itemCount: reciters.length,
-                        separatorBuilder: (_, _) =>
-                            const SizedBox(height: AppSpacing.xl),
                         itemBuilder: (context, i) {
                           final r = reciters[i];
                           final isSelected = r.id == selected.id;
 
-                          return GestureDetector(
+                          return ListTile(
                             onTap: () {
                               ref.read(selectedReciterProvider.notifier).state =
                                   r;
                               AppNav.pop(context, r);
                             },
-                            child: Row(
-                              children: [
-                                // Leading "avatar"
-                                AppIconContainer(
-                                  backgroundColor: cs.primaryContainer,
-                                  borderRadius: 999,
-                                  child: Center(
-                                    child: Text(
-                                      r.name.trim().isNotEmpty
-                                          ? r.name.trim()[0].toUpperCase()
-                                          : '?',
-                                      style: theme.textTheme.labelLarge!
-                                          .copyWith(color: cs.onSurface),
-                                    ),
+                            leading: AppIconContainer(
+                              backgroundColor: cs.secondaryContainer,
+                              borderRadius: 999,
+                              size: 28,
+                              child: Center(
+                                child: Text(
+                                  r.name.trim().isNotEmpty
+                                      ? r.name.trim()[0].toUpperCase()
+                                      : '?',
+                                  style: theme.textTheme.labelLarge!.copyWith(
+                                    color: cs.onSurface,
                                   ),
                                 ),
-                                const SizedBox(width: 12),
-
-                                // Name
-                                Expanded(
-                                  child: Text(
-                                    r.name,
-                                    maxLines: 2,
-                                    style: theme.textTheme.labelLarge?.copyWith(
-                                      fontWeight: isSelected
-                                          ? FontWeight.bold
-                                          : FontWeight.w500,
-                                      color: isSelected
-                                          ? cs.primary
-                                          : cs.onSurface,
-                                    ),
-                                  ),
-                                ),
-
-                                // Selected chip + check
-                                if (isSelected) ...[
-                                  Icon(
+                              ),
+                            ),
+                            title: Text(
+                              r.name,
+                              maxLines: 2,
+                              style: theme.textTheme.labelLarge?.copyWith(
+                                fontWeight: isSelected ? FontWeight.w600 : null,
+                                color: isSelected ? cs.primary : cs.onSurface,
+                              ),
+                            ),
+                            trailing: isSelected
+                                ? Icon(
                                     Icons.check_circle,
                                     size: 24,
                                     color: cs.onSurface,
-                                  ),
-                                ],
-                              ],
-                            ),
+                                  )
+                                : null,
                           );
                         },
                       ),

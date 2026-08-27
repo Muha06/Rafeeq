@@ -44,13 +44,16 @@ class _HomePageState extends ConsumerState<HomePage> {
         body: CustomScrollView(
           slivers: [
             SliverAppBar(
-              title: const Column(
+              title: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  _GreetUserSection(),
-                  SizedBox(height: 8),
-                  HijriDateToday(foregroundColor: Colors.black, fontSize: 14),
+                  const _GreetUserSection(),
+                  const SizedBox(height: 8),
+                  HijriDateToday(
+                    foregroundColor: cs.onSurfaceVariant,
+                    fontSize: 14,
+                  ),
                 ],
               ),
               toolbarHeight: 116,

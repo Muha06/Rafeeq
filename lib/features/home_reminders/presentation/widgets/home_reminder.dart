@@ -49,7 +49,7 @@ class HomeReminderCard extends StatelessWidget {
                       size: 24,
                       child: Icon(
                         CupertinoIcons.bell,
-                        color: cs.onTertiaryContainer,
+                        color: cs.onTertiary,
                         size: 16,
                       ),
                     ),

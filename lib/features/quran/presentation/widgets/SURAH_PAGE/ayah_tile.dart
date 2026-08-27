@@ -214,7 +214,7 @@ class _AyahActionsSheetState extends ConsumerState<AyahActionsSheet> {
           const SizedBox(height: 12),
 
           Text(
-            "${widget.surahNameTranslit} : ${widget.ayah.id}",
+            "${widget.surahNameTranslit} : ${widget.ayah.ayahNumber}",
             style: theme.textTheme.labelLarge,
           ),
 

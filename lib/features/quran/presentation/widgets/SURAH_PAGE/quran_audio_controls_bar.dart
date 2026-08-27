@@ -19,10 +19,12 @@ class QuranAudioControlsBar extends ConsumerWidget {
     required this.onPause,
     required this.onExit,
   });
+
   final VoidCallback onStart;
   final String currentId;
   final VoidCallback onPause;
   final VoidCallback onExit;
+  
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final showAudioControls = ref

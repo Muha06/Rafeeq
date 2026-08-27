@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rafeeq/core/app_keys.dart';
-import 'package:rafeeq/core/features/audio/presentation/widgets/global_mini_player.dart';
-
+ 
 class AppSnackBar {
   static void showSimple({
     required BuildContext context,
@@ -58,27 +57,5 @@ class AppSnackBar {
         duration: duration,
       ),
     );
-  }
-
-  //show player
-  static void showPlayer() {
-    scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
-    scaffoldMessengerKey.currentState?.clearSnackBars();
-
-    scaffoldMessengerKey.currentState?.showSnackBar(
-      const SnackBar(
-        persist: true,
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        margin: EdgeInsets.symmetric(vertical: 8, horizontal: 0),
-        content: GLobalMiniPlayerSheet(),
-        dismissDirection: DismissDirection.none,
-      ),
-    );
-  }
-
-  static void hideSnackbars() {
-    scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
   }
 }

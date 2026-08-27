@@ -56,7 +56,8 @@ class _GoalPageBodyState extends State<_GoalPageBody> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final collapsedHeight = MediaQuery.sizeOf(context).height * .45;
+    final cs = theme.colorScheme;
+    final collapsedHeight = MediaQuery.sizeOf(context).height * .43;
 
     return SlidingUpPanel(
       controller: controller,
@@ -66,7 +67,8 @@ class _GoalPageBodyState extends State<_GoalPageBody> {
 
       borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
 
-      color: theme.colorScheme.surfaceContainerLow,
+      color: cs.surface,
+      boxShadow: null,
       backdropEnabled: true,
       parallaxEnabled: true,
       parallaxOffset: .12,
