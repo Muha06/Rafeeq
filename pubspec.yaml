@@ -117,16 +117,10 @@ flutter:
         - asset: assets/fonts/Rubik/Rubik-Black.ttf
           weight: 900
 
-    - family: PlayFairDisplay
+    - family: DMSerifDisplay
       fonts:
-        - asset: assets/fonts/PlayFairDisplay/PlayFairDisplay-Regular.ttf
+        - asset: assets/fonts/DMSerifDisplay/DMSerifDisplay-Regular.ttf
           weight: 400
-        - asset: assets/fonts/PlayFairDisplay/PlayFairDisplay-Medium.ttf
-          weight: 500
-        - asset: assets/fonts/PlayFairDisplay/PlayFairDisplay-SemiBold.ttf
-          weight: 600
-        - asset: assets/fonts/PlayFairDisplay/PlayFairDisplay-Bold.ttf
-          weight: 700
 
   assets:
     - assets/images/
@@ -134,6 +128,7 @@ flutter:
     - assets/images/quran/pages/
     - assets/images/onboarding/
     - assets/images/salah/
+    - assets/icon/
     - assets/db/
     - .env
 

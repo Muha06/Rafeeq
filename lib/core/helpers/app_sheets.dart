@@ -129,7 +129,7 @@ class AppSheets {
   // ---------------------------
   // MINIMAL CENTER DIALOG
   // ---------------------------
-  static Future<void> showDialogBox({
+  static Future<bool?> showDialogBox({
     required BuildContext context,
     required String title,
     required String description,
@@ -138,7 +138,7 @@ class AppSheets {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
-    return showDialog(
+    return showDialog<bool>(
       context: context,
       builder: (_) => Dialog(
         backgroundColor: Colors.transparent,
@@ -169,7 +169,7 @@ class AppSheets {
               SizedBox(
                 width: double.infinity,
                 child: FilledButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () => Navigator.pop(context, true),
                   child: Text(buttonText),
                 ),
               ),
@@ -179,6 +179,7 @@ class AppSheets {
       ),
     );
   }
+
 
   static Future<void> showErrorDialog({
     required BuildContext context,

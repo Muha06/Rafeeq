@@ -148,8 +148,6 @@ void main() {
       );
     },
     (error, stack) async {
-      debugPrint("Error, $stack");
-
       if (!kDebugMode) {
         await FirebaseCrashlytics.instance.recordError(
           error,
@@ -216,7 +214,7 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
       navigatorKey: navigatorKey,
       scaffoldMessengerKey: scaffoldMessengerKey,
       home: SheetViewport(
-        child: !hasSeenOnboarding
+        child: hasSeenOnboarding
             ? const AppWrapper(child: TabsScreen())
             : const OnboardingPage(),
       ),

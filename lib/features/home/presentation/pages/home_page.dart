@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
- import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:rafeeq/core/animations/navigation_animations.dart';
+import 'package:rafeeq/core/constants/strings/app_strings.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/extensions/page_animate_ext.dart';
-import 'package:rafeeq/features/home/presentation/widgets/hijri_date.dart';
-import 'package:rafeeq/features/home_reminders/presentation/providers/reminder_providers.dart';
+ import 'package:rafeeq/features/home_reminders/presentation/providers/reminder_providers.dart';
 import 'package:rafeeq/features/notifications/presentation/pages/notification_list_page.dart';
 import 'package:rafeeq/features/notifications/presentation/providers/notification_provider.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/ayah_of_the_day.dart';
@@ -14,6 +14,7 @@ import 'package:rafeeq/features/settings/presentation/pages/settings_page.dart';
 import 'package:rafeeq/features/settings/presentation/provider/settings_notifcation_provider.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/salah_notifs_scheduler_provider.dart';
 import 'package:rafeeq/features/timings/presentation/widgets/timeline_card.dart';
+import 'package:rafeeq/user/presentation/providers/user_provider.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -40,11 +41,9 @@ class _HomePageState extends ConsumerState<HomePage> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            leading: HijriDateToday(
-              foregroundColor: cs.onSurface,
-              fontSize: 16,
-            ),
-            leadingWidth: 210,
+            title: const Row(children: [Expanded(child: _GreetUserSection())]),
+            toolbarHeight: 84,
+            actionsPadding: const EdgeInsets.all(12),
             actions: [
               Container(
                 decoration: BoxDecoration(
@@ -92,6 +91,49 @@ class _HomePageState extends ConsumerState<HomePage> {
         ],
       ),
     ).animatePage();
+  }
+}
+
+class _GreetUserSection extends ConsumerWidget {
+  const _GreetUserSection();
+
+  @override
+  Widget build(BuildContext context, ref) {
+    final name = ref.watch(userNameProvider);
+
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+    final tt = theme.textTheme;
+
+    final hasName = name != null;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Assalam alaikum,',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: tt.labelLarge?.copyWith(
+            fontFamily: AppStrings.displayFont,
+            color: cs.primary,
+            fontSize: hasName ? 22 : 20,
+          ),
+        ),
+
+        if (hasName)
+          Text(
+            "$name!",
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: tt.titleLarge?.copyWith(
+              fontWeight: FontWeight.w500,
+              fontFamily: AppStrings.displayFont,
+            ),
+          ),
+      ],
+    );
   }
 }
 

@@ -8,6 +8,7 @@ import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_category_page.d
 import 'package:rafeeq/features/quran/presentation/pages/quran_page.dart';
 import 'package:rafeeq/features/home/presentation/pages/home_page.dart';
 import 'package:rafeeq/features/bookmarks/presentation/pages/bookmark_page.dart';
+import 'package:rafeeq/user/presentation/providers/user_provider.dart';
 
 class TabsScreen extends ConsumerStatefulWidget {
   const TabsScreen({super.key});
@@ -28,7 +29,8 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
   @override
   Widget build(BuildContext context) {
     final selectedIndex = ref.watch(tabsScreenIndexProvider);
-
+    debugPrint("Cached name: ${ref.read(userNameProvider)}");
+    
     return SafeArea(
       top: false,
       child: Scaffold(

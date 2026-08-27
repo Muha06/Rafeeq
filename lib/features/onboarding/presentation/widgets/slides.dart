@@ -5,6 +5,7 @@ import 'package:rafeeq/features/onboarding/presentation/widgets/enable_notifs_ct
 import 'package:rafeeq/features/timings/presentation/riverpod/fetch_salah_times_provider.dart';
 import 'onboarding_slide.dart';
 
+
 class WelcomeSlide extends ConsumerWidget {
   const WelcomeSlide({super.key});
 

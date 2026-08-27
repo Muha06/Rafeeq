@@ -16,7 +16,7 @@ class AppTextTheme {
       headlineSmall: TextStyle(
         fontFamily: displayFont,
         fontSize: 24,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w400,
         letterSpacing: -0.4,
         color: colors.onSurface,
       ),

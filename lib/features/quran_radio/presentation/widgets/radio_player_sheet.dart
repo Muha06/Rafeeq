@@ -5,6 +5,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+import 'package:rafeeq/core/constants/strings/app_strings.dart';
 import 'package:rafeeq/core/features/audio/domain/entities/audio_item.dart';
 import 'package:rafeeq/core/features/audio/domain/entities/audio_source_type.dart';
 import 'package:rafeeq/core/features/audio/presentation/providers/audio_controller.dart';
@@ -224,7 +225,7 @@ class _RadioPlayerSheetState extends ConsumerState<RadioPlayerSheet> {
                       velocity: const Velocity(pixelsPerSecond: Offset(20, 0)),
                       textAlign: TextAlign.center,
                       style: tt.titleMedium?.copyWith(
-                        fontFamily: 'PlayFairDisplay',
+                        fontFamily: AppStrings.displayFont,
                         color: itemColor,
                       ),
                     ),

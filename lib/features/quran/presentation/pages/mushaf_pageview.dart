@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+import 'package:rafeeq/core/constants/strings/app_strings.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/quran_audio_controls_bar.dart';
@@ -87,7 +88,7 @@ class _MushafPageViewState extends ConsumerState<MushafPageView> {
                 Text(
                   'Page $_currentPage',
                   style: theme.textTheme.titleMedium?.copyWith(
-                    fontFamily: 'PlayFairDisplay',
+                    fontFamily: AppStrings.displayFont,
                   ),
                 ),
                 const SizedBox(width: 6),

@@ -1,4 +1,4 @@
 class AppStrings {
-  static const displayFont = 'PlayFairDisplay';
+  static const displayFont = 'DMSerifDisplay';
   static const primaryFont = 'Rubik';
 }

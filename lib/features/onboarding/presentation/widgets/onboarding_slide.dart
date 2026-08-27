@@ -55,7 +55,7 @@ class _OnboardingSlideState extends State<OnboardingSlide>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-     return FadeTransition(
+    return FadeTransition(
       opacity: _fade,
       child: SlideTransition(
         position: _slide,

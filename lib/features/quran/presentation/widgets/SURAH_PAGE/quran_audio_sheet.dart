@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
+import 'package:rafeeq/core/constants/strings/app_strings.dart';
 import 'package:rafeeq/core/features/audio/presentation/providers/audio_controller.dart';
 import 'package:rafeeq/core/features/audio/presentation/widgets/seek_bar.dart';
 import 'package:rafeeq/core/helpers/app_haptics.dart';
@@ -215,7 +216,7 @@ class _AudioDetailsRow extends ConsumerWidget {
               mode: TextScrollMode.endless,
               intervalSpaces: 24,
               style: tt.titleLarge?.copyWith(
-                fontFamily: 'PlayFairDisplay',
+                fontFamily: AppStrings.displayFont,
                 color: itemColor,
               ),
             ),
