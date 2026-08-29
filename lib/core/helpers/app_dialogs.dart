@@ -17,7 +17,7 @@ class AppDialogs {
       context: context,
       builder: (dialogContext) => Dialog(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 24),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -40,12 +40,12 @@ class AppDialogs {
 
               SizedBox(
                 width: double.infinity,
-                child: FilledButton(
+                child: ElevatedButton(
                   onPressed: () => AppNav.pop(dialogContext, true),
                   child: Text(confirmText),
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
 
               TextButton(
                 onPressed: () => AppNav.pop(dialogContext, false),

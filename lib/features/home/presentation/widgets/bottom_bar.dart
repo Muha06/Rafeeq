@@ -132,7 +132,7 @@ class MyBottomBar extends ConsumerWidget {
                           style: theme.textTheme.labelSmall?.copyWith(
                             fontSize: 12,
                             height: 1,
-                            fontWeight: isSelected ? FontWeight.w500 : null,
+                            fontWeight: isSelected ? FontWeight.w400 : null,
                             color: isSelected ? cs.primary : itemColor,
                           ),
                         ),

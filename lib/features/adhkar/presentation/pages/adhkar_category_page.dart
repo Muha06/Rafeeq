@@ -34,7 +34,13 @@ class _AdhkarCategoryPageState extends ConsumerState<AdhkarCategoryPage> {
             );
           }
 
-          return ListView.builder(
+          return GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 2,
+              crossAxisSpacing: 1.5,
+              childAspectRatio: 1.3,
+            ),
             itemCount: categories.length,
             itemBuilder: (context, index) {
               final category = categories[index];
@@ -76,13 +82,20 @@ class AdhkarCategoryTile extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
       child: Container(
         height: 80,
+        alignment: Alignment.center,
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           color: cs.surface,
         ),
-        child: Text(category.title, style: theme.textTheme.labelLarge),
+        child: Text(
+          category.title,
+          textAlign: TextAlign.center,
+          overflow: TextOverflow.visible,
+          maxLines: 2,
+          style: theme.textTheme.labelLarge,
+        ),
       ),
     );
   }

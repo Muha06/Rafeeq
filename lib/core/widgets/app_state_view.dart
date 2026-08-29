@@ -32,14 +32,10 @@ class AppStateView extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: cs.surfaceContainerHighest,
+                  color: cs.surface,
                   shape: BoxShape.circle,
                 ),
-                child: PhosphorIcon(
-                  icon!,
-                  size: 32,
-                  color: cs.onSurfaceVariant,
-                ),
+                child: PhosphorIcon(icon!, size: 32, color: cs.primary),
               ),
 
             const SizedBox(height: 20),

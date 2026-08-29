@@ -82,7 +82,7 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
                   color: cs.primary,
                 ),
 
-                const SizedBox(height: 16),
+                const SizedBox(height: 32),
 
                 // Increment / Decrement row
                 Row(
@@ -121,7 +121,9 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
                     ),
                   ],
                 ),
-                const SizedBox(height: 24),
+
+                const SizedBox(height: 32),
+
                 // Save button
                 SizedBox(
                   width: double.infinity,

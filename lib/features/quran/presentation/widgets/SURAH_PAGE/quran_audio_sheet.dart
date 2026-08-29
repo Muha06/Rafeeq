@@ -240,8 +240,6 @@ class _AudioDetailsRow extends ConsumerWidget {
           children: [
             IconButton(
               onPressed: () {
-                // AppHaptics.selection();
-
                 AppSheets.showBottomSheet(
                   context: context,
                   isScrollControlled: true,
@@ -265,8 +263,8 @@ class _AudioDetailsRow extends ConsumerWidget {
                 AppToast.showCompact(
                   context: context,
                   message: repeatModeEnabled
-                      ? "Repeat mode enabled"
-                      : "Repeat mode disabled",
+                      ? "Repeat mode disabled"
+                      : "Repeat mode enabled",
                 );
               },
               color: repeatModeEnabled ? cs.primary : itemColor,

@@ -65,7 +65,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                     ),
                   ),
 
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 32),
 
                   Row(
                     children: [
@@ -97,7 +97,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
                     ],
                   ),
 
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 32),
 
                   Row(
                     children: [

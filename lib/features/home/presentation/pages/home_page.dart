@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:rafeeq/core/animations/navigation_animations.dart';
@@ -16,6 +17,7 @@ import 'package:rafeeq/features/settings/presentation/provider/settings_notifcat
 import 'package:rafeeq/features/timings/presentation/riverpod/salah_notifs_scheduler_provider.dart';
 import 'package:rafeeq/features/timings/presentation/widgets/timeline_card.dart';
 import 'package:rafeeq/user/presentation/providers/user_provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -140,14 +142,18 @@ class _GreetUserSection extends ConsumerWidget {
         ),
 
         if (hasName)
-          Text(
-            "$name!",
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: tt.titleLarge?.copyWith(
-              fontFamily: AppStrings.displayFont,
-              fontWeight: FontWeight.w500,
-              color: cs.primary,
+          Shimmer.fromColors(
+            baseColor: cs.primary,
+            highlightColor: cs.surface,
+            period: 50.ms,
+            child: Text(
+              "$name!",
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: tt.titleLarge?.copyWith(
+                fontFamily: AppStrings.displayFont,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
       ],

@@ -39,7 +39,7 @@ class BottomSheetActionBtn extends StatelessWidget {
                 duration: 250.ms,
                 height: 64,
                 decoration: BoxDecoration(
-                  color: bgColor ?? cs.surfaceContainerHigh,
+                  color: bgColor ?? cs.surface,
                   shape: BoxShape.circle,
                 ),
                 child: Padding(

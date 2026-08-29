@@ -13,7 +13,7 @@ dependencies:
   flutter_dotenv: ^6.0.0
   http: ^1.6.0
   hijri_date: ^1.0.0
-  shimmer: ^3.0.0
+  shimmer: ^4.0.0
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   collection: ^1.19.1

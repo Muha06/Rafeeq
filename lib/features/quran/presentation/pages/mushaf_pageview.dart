@@ -158,91 +158,76 @@ Future<int?> showMushafPagePickerDialog({
           final cs = theme.colorScheme;
 
           return Dialog(
-            insetPadding: const EdgeInsets.symmetric(
-              horizontal: 18,
-              vertical: 24,
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(18),
-            ),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 420),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const SizedBox(height: 4),
-                    Text('Go to page', style: theme.textTheme.titleMedium),
-                    const SizedBox(height: 14),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 4),
+                  Text('Go to page', style: theme.textTheme.titleMedium),
+                  const SizedBox(height: 14),
 
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 48.0),
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          color: cs.surfaceContainerHighest,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: SizedBox(
-                          height: 240,
-                          child: CupertinoPicker(
-                            scrollController: controller,
-                            itemExtent: 40,
-                            magnification: 1.03,
-                            useMagnifier: true,
-                            selectionOverlay: null,
-                            onSelectedItemChanged: (index) {
-                              setState(() {
-                                selectedPage = index + 1;
-                              });
-                            },
-                            children: [
-                              for (
-                                int page = 1;
-                                page <= _MushafPageViewState._totalPages;
-                                page++
-                              )
-                                Center(
-                                  child: Text(
-                                    'Page $page',
-                                    style: theme.textTheme.titleMedium,
-                                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 48.0),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: cs.surface,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: SizedBox(
+                        height: 240,
+                        width: 160,
+                        child: CupertinoPicker(
+                          scrollController: controller,
+                          itemExtent: 40,
+                          magnification: 1.03,
+                          useMagnifier: true,
+                          selectionOverlay: null,
+                          onSelectedItemChanged: (index) {
+                            setState(() {
+                              selectedPage = index + 1;
+                            });
+                          },
+                          children: [
+                            for (
+                              int page = 1;
+                              page <= _MushafPageViewState._totalPages;
+                              page++
+                            )
+                              Center(
+                                child: Text(
+                                  'Page $page',
+                                  style: theme.textTheme.titleMedium,
                                 ),
-                            ],
-                          ),
+                              ),
+                          ],
                         ),
                       ),
                     ),
-                    const SizedBox(height: 12),
+                  ),
+                  const SizedBox(height: 12),
 
-                    Text(
-                      'Page $selectedPage',
-                      style: theme.textTheme.labelLarge,
-                    ),
-                    const SizedBox(height: 14),
-
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: const Text('Cancel'),
-                          ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text('Cancel'),
                         ),
-                        const SizedBox(width: 12),
+                      ),
+                      const SizedBox(width: 12),
 
-                        Expanded(
-                          child: FilledButton(
-                            onPressed: () {
-                              Navigator.pop(context, selectedPage);
-                            },
-                            child: const Text('Go'),
-                          ),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context, selectedPage);
+                          },
+                          child: const Text('Go'),
                         ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           );

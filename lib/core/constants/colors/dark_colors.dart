@@ -3,7 +3,7 @@ import 'package:flutter/painting.dart';
 class AppDarkColors {
   // BACKGROUND
 
-  static const canvas = Color(0xFF10161C);
+  static const canvas = Color(0xFF0A0F14);
 
   // SURFACES
 
