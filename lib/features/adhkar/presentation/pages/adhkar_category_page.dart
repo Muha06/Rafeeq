@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/extensions/page_animate_ext.dart';
+import 'package:rafeeq/core/widgets/app_pressable.dart';
 import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/features/adhkar/domain/entities/dhikr_category.dart';
 import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_list_page.dart';
@@ -35,17 +36,19 @@ class _AdhkarCategoryPageState extends ConsumerState<AdhkarCategoryPage> {
           }
 
           return GridView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              mainAxisSpacing: 2,
-              crossAxisSpacing: 1.5,
-              childAspectRatio: 1.3,
+              mainAxisSpacing: 16,
+              crossAxisSpacing: 16,
+              childAspectRatio: 1,
             ),
             itemCount: categories.length,
             itemBuilder: (context, index) {
               final category = categories[index];
 
-              return GestureDetector(
+              return AppPressableScale(
+                scale: 0.8,
                 onTap: () => AppNav.push(
                   context,
                   AdhkarPreviewPages(category: category),
@@ -78,24 +81,20 @@ class AdhkarCategoryTile extends ConsumerWidget {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
-      child: Container(
-        height: 80,
-        alignment: Alignment.center,
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          color: cs.surface,
-        ),
-        child: Text(
-          category.title,
-          textAlign: TextAlign.center,
-          overflow: TextOverflow.visible,
-          maxLines: 2,
-          style: theme.textTheme.labelLarge,
-        ),
+    return Container(
+      alignment: Alignment.center,
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        color: cs.surface,
+      ),
+      child: Text(
+        category.title,
+        textAlign: TextAlign.center,
+        overflow: TextOverflow.visible,
+        maxLines: 2,
+        style: theme.textTheme.labelLarge,
       ),
     );
   }

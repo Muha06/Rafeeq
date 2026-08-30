@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rafeeq/core/app_keys.dart';
- 
+
 class AppSnackBar {
   static void showSimple({
     required BuildContext context,
@@ -40,6 +40,7 @@ class AppSnackBar {
     Duration duration = const Duration(seconds: 3),
   }) {
     final theme = Theme.of(context);
+    final cs = theme.colorScheme;
 
     scaffoldMessengerKey.currentState?.hideCurrentSnackBar();
     scaffoldMessengerKey.currentState?.clearSnackBars();
@@ -50,10 +51,14 @@ class AppSnackBar {
         content: Text(
           message,
           style: theme.textTheme.bodyMedium!.copyWith(
-            color: theme.colorScheme.onPrimary,
+            color: cs.surfaceContainerLowest,
           ),
         ),
-        action: SnackBarAction(label: actionLabel, onPressed: onAction),
+        action: SnackBarAction(
+          label: actionLabel,
+          textColor: cs.primary,
+          onPressed: onAction,
+        ),
         duration: duration,
       ),
     );

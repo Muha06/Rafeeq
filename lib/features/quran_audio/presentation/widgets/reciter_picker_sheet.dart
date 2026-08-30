@@ -4,6 +4,7 @@ import 'package:rafeeq/core/constants/spacing/app_spacing.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/widgets/app_drag_handle.dart';
 import 'package:rafeeq/core/widgets/app_icon_container.dart';
+import 'package:rafeeq/core/widgets/app_pressable.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
 
 class ReciterPickerSheet extends ConsumerWidget {
@@ -72,49 +73,57 @@ class ReciterPickerSheet extends ConsumerWidget {
 
                     // List
                     Expanded(
-                      child: ListView.builder(
+                      child: ListView.separated(
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(height: 6),
                         controller: scrollCtrl,
                         itemCount: reciters.length,
                         itemBuilder: (context, i) {
                           final r = reciters[i];
                           final isSelected = r.id == selected.id;
 
-                          return ListTile(
-                            onTap: () {
-                              ref.read(selectedReciterProvider.notifier).state =
-                                  r;
-                              AppNav.pop(context, r);
-                            },
-                            leading: AppIconContainer(
-                              backgroundColor: cs.secondaryContainer,
-                              borderRadius: 999,
-                              size: 28,
-                              child: Center(
-                                child: Text(
-                                  r.name.trim().isNotEmpty
-                                      ? r.name.trim()[0].toUpperCase()
-                                      : '?',
-                                  style: theme.textTheme.labelLarge!.copyWith(
-                                    color: cs.onSurface,
+                          return AppPressableScale(
+                            child: ListTile(
+                              onTap: () {
+                                ref
+                                        .read(selectedReciterProvider.notifier)
+                                        .state =
+                                    r;
+                                AppNav.pop(context, r);
+                              },
+                              leading: AppIconContainer(
+                                backgroundColor: cs.secondaryContainer,
+                                borderRadius: 999,
+                                size: 28,
+                                child: Center(
+                                  child: Text(
+                                    r.name.trim().isNotEmpty
+                                        ? r.name.trim()[0].toUpperCase()
+                                        : '?',
+                                    style: theme.textTheme.labelLarge!.copyWith(
+                                      color: cs.onSurface,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            title: Text(
-                              r.name,
-                              maxLines: 2,
-                              style: theme.textTheme.labelLarge?.copyWith(
-                                fontWeight: isSelected ? FontWeight.w600 : null,
-                                color: isSelected ? cs.primary : cs.onSurface,
+                              title: Text(
+                                r.name,
+                                maxLines: 2,
+                                style: theme.textTheme.labelLarge?.copyWith(
+                                  fontWeight: isSelected
+                                      ? FontWeight.w600
+                                      : null,
+                                  color: isSelected ? cs.primary : cs.onSurface,
+                                ),
                               ),
+                              trailing: isSelected
+                                  ? Icon(
+                                      Icons.check_circle,
+                                      size: 24,
+                                      color: cs.onSurface,
+                                    )
+                                  : null,
                             ),
-                            trailing: isSelected
-                                ? Icon(
-                                    Icons.check_circle,
-                                    size: 24,
-                                    color: cs.onSurface,
-                                  )
-                                : null,
                           );
                         },
                       ),

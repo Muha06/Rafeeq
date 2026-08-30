@@ -4,6 +4,7 @@ import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/constants/spacing/app_spacing.dart';
 import 'package:rafeeq/core/constants/strings/app_strings.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
+import 'package:rafeeq/core/widgets/app_pressable.dart';
 import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/quran/presentation/pages/surah_page.dart';
@@ -53,10 +54,11 @@ class AllSurahsList extends ConsumerWidget {
               itemBuilder: (context, index) {
                 final surah = filtered[index];
 
-                return GestureDetector(
-                  onTap: () =>
-                      AppNav.push(context, FullSurahPage(initialIndex: index)),
-                  behavior: HitTestBehavior.opaque,
+                return AppPressableScale(
+                  onTap: ()   {
+
+                    AppNav.push(context, FullSurahPage(initialIndex: index));
+                  },
                   child: SurahTile(surah: surah, index: index),
                 );
               },

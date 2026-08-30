@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/helpers/app_haptics.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/helpers/app_text_style.dart';
+import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/core/helpers/app_toast.dart';
 import 'package:rafeeq/core/widgets/app_drag_handle.dart';
+import 'package:rafeeq/core/widgets/app_pressable.dart';
 import 'package:rafeeq/core/widgets/bottom_sheet_action.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/Quran/quran_notifier_provider.dart';
 import 'package:rafeeq/features/quran/domain/entities/ayah.dart';
@@ -54,95 +57,98 @@ class _AyahTileState extends ConsumerState<AyahTile> {
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: cs.surface,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            //Controls section
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.transparent,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    '${ayah.surahId}: ${ayahNumber.toString()}',
-                    textAlign: TextAlign.center,
-                    style: theme.textTheme.bodyMedium,
-                  ),
-                  const Spacer(),
-
-                  IconButton(
-                    onPressed: _openAyahActionsSheet,
-                    visualDensity: VisualDensity.compact,
-                    icon: Icon(
-                      HugeIconsSolid.menu09,
-                      color: cs.onSurfaceVariant,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 24),
-
-            //Content section
-            Consumer(
-              builder: (context, ref, child) {
-                final settings = ref.watch(surahSettingsProvider);
-
-                final showTranslation = settings.showTranslation;
-                final arabicFontSize = settings.arabicFontSize;
-                final translationFontSize = settings.translationFontSize;
-
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
+      child: AppPressableScale(
+        scale: 0.95,
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: cs.surface,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              //Controls section
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    // arabic text (right)
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        ayah.textArabic,
-                        textDirection: TextDirection.rtl,
-                        style: AppTextStyles.quranAyah.copyWith(
-                          fontSize: arabicFontSize,
-                          color: cs.onSurface,
+                    Text(
+                      '${ayah.surahId}: ${ayahNumber.toString()}',
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.bodyMedium,
+                    ),
+                    const Spacer(),
+
+                    IconButton(
+                      onPressed: _openAyahActionsSheet,
+                      visualDensity: VisualDensity.compact,
+                      icon: Icon(
+                        HugeIconsSolid.menu09,
+                        color: cs.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
+              //Content section
+              Consumer(
+                builder: (context, ref, child) {
+                  final settings = ref.watch(surahSettingsProvider);
+
+                  final showTranslation = settings.showTranslation;
+                  final arabicFontSize = settings.arabicFontSize;
+                  final translationFontSize = settings.translationFontSize;
+
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // arabic text (right)
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          ayah.textArabic,
+                          textDirection: TextDirection.rtl,
+                          style: AppTextStyles.quranAyah.copyWith(
+                            fontSize: arabicFontSize,
+                            color: cs.onSurface,
+                          ),
                         ),
                       ),
-                    ),
 
-                    // TRANSLATIONS
-                    if (showTranslation) ...[
-                      const SizedBox(height: 20),
-                      _TranslationSection(
-                        label: 'English',
-                        ayahText: ayah.textEnglish,
-                        translationFontSize: translationFontSize,
-                      ),
-                      const SizedBox(height: 16),
-                    ],
+                      // TRANSLATIONS
+                      if (showTranslation) ...[
+                        const SizedBox(height: 20),
+                        _TranslationSection(
+                          label: 'English',
+                          ayahText: ayah.textEnglish,
+                          translationFontSize: translationFontSize,
+                        ),
+                        const SizedBox(height: 16),
+                      ],
 
-                    //Transliterations
-                    if (settings.showTranslit) ...[
-                      _TranslationSection(
-                        label: 'Transliteration',
-                        ayahText: ayah.transliteration,
-                        translationFontSize: translationFontSize,
-                      ),
+                      //Transliterations
+                      if (settings.showTranslit) ...[
+                        _TranslationSection(
+                          label: 'Transliteration',
+                          ayahText: ayah.transliteration,
+                          translationFontSize: translationFontSize,
+                        ),
+                      ],
                     ],
-                  ],
-                );
-              },
-            ),
-          ],
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -270,6 +276,10 @@ class _AyahActionsSheetState extends ConsumerState<AyahActionsSheet> {
                               ? "Ayah Bookmarked"
                               : "Removed from bookmarks",
                         );
+
+                        if (isBookmarked) {
+                          RafeeqAnalytics.logFeature('bookmark-ayah');
+                        }
                       } catch (e) {
                         AppSnackBar.showSimple(
                           context: context,
@@ -308,6 +318,8 @@ class _AyahActionsSheetState extends ConsumerState<AyahActionsSheet> {
                   );
 
                   await controller.share(context: context, text: text);
+
+                  RafeeqAnalytics.logFeature('share-ayah');
                 },
               ),
             ],

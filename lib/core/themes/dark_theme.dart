@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rafeeq/core/constants/colors/dark_colors.dart';
 import 'package:rafeeq/core/constants/strings/app_strings.dart';
@@ -61,10 +62,11 @@ ThemeData appDarkThemeData() {
 
     pageTransitionsTheme: const PageTransitionsTheme(
       builders: {
-        TargetPlatform.android: ZoomPageTransitionsBuilder(),
-        TargetPlatform.iOS: ZoomPageTransitionsBuilder(),
+        TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
       },
     ),
+    visualDensity: VisualDensity.compact,
 
     shadowColor: scheme.shadow,
     scaffoldBackgroundColor: scheme.surfaceContainerLowest,

@@ -244,7 +244,7 @@ class _BottomNavBar extends ConsumerWidget {
                         ? HugeIconsSolid.bookmark01
                         : HugeIconsStroke.bookmark01,
                     iconColor: isBookmarked ? cs.primary : cs.onSurface,
-                    label: isBookmarked ? 'Saved' : 'Save',
+                    label: isBookmarked ? 'Unsave' : 'Save',
                     onTap: () {
                       toggleBookmark(dhikr);
                     },
@@ -347,6 +347,8 @@ class _BottomNavItem extends StatelessWidget {
 
             Text(
               label,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               style: tt.labelMedium?.copyWith(
                 fontSize: 12,
                 color: cs.onSurface,
@@ -477,7 +479,11 @@ class DhikrFloatingButton extends StatelessWidget {
           SizedBox(
             width: 72,
             height: 72,
-            child: CircularProgressIndicator(value: progress, strokeWidth: 5),
+            child: CircularProgressIndicator(
+              value: progress,
+              color: cs.onSurface,
+              strokeWidth: 5,
+            ),
           ),
 
           Column(

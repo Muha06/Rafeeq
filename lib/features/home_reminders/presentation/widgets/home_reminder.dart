@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+ import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/widgets/app_icon_container.dart';
-
+ 
 class HomeReminderCard extends StatelessWidget {
   const HomeReminderCard({
     super.key,
@@ -23,7 +23,11 @@ class HomeReminderCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        decoration: BoxDecoration(color: cs.tertiaryContainer),
+        margin: const EdgeInsets.symmetric(horizontal: 16),
+        decoration: BoxDecoration(
+          color: cs.tertiaryContainer,
+          borderRadius: BorderRadius.circular(12),
+        ),
         child: Stack(
           children: [
             Positioned(
@@ -35,6 +39,7 @@ class HomeReminderCard extends StatelessWidget {
                 color: cs.onSurfaceVariant.withAlpha(48),
               ),
             ),
+
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               child: Center(
@@ -68,6 +73,7 @@ class HomeReminderCard extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style: theme.textTheme.labelLarge?.copyWith(
                               height: 1,
+                              color: cs.onTertiaryContainer,
                             ),
                           ),
 
@@ -78,7 +84,9 @@ class HomeReminderCard extends StatelessWidget {
                             message,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: theme.textTheme.labelMedium,
+                            style: theme.textTheme.labelMedium?.copyWith(
+                              color: cs.onTertiaryContainer.withAlpha(200),
+                            ),
                           ),
                         ],
                       ),

@@ -144,8 +144,8 @@ class _GreetUserSection extends ConsumerWidget {
         if (hasName)
           Shimmer.fromColors(
             baseColor: cs.primary,
-            highlightColor: cs.surface,
-            period: 50.ms,
+            highlightColor: cs.onSurfaceVariant,
+            period: 2.seconds,
             child: Text(
               "$name!",
               maxLines: 1,

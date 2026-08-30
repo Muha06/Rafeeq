@@ -256,8 +256,6 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
 
   Future<void> _handleInitialNavigation() async {
     if (widget.autoScrollAyah != null) {
-      debugPrint('Auto scrolling to Ayah ${widget.autoScrollAyah}');
-
       try {
         await jumpToAyah(widget.autoScrollAyah!, suppressSave: true);
       } catch (e) {
@@ -278,10 +276,6 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
         .read(lastReadRepositoryProvider)
         .getLastRead(currentSurah.id);
 
-    debugPrint(
-      "Last read for Surah ${currentSurah.id}: Ayah ${lastRead?.ayahNumber}",
-    );
-
     if (lastRead == null || !mounted) return;
 
     if (lastRead.surahId == currentSurah.id) {
@@ -299,6 +293,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
 
   Future<void> openSurahInfoSheet() async {
     final info = await ref.read(surahInfoProvider(surah.id).future);
+    RafeeqAnalytics.logFeature('open-surah-info');
 
     if (!context.mounted || info == null) return;
     AppSheets.showBottomSheet(
@@ -341,7 +336,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
     );
 
     const horizontalPadding = AppSpacing.lg;
- 
+
     return PopScope(
       onPopInvokedWithResult: (didPop, result) async {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();

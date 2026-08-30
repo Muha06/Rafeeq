@@ -148,7 +148,6 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
     final userLocState = ref.watch(userLocationProvider).value;
 
     final notifier = ref.read(userLocationProvider.notifier);
-    final cs = theme.colorScheme;
 
     return Scaffold(
       appBar: AppBar(title: const Text('My location')),
@@ -159,8 +158,6 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
             title: 'Use GPS automatically',
             description: 'Allow Location services for precise prayer times',
             selected: isAuto,
-            selectedColor: cs.surfaceContainerHighest,
-            baseColor: cs.surface,
             onTap: () async {
               if (isAuto) return;
 
@@ -207,8 +204,6 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
             description:
                 'Manually choose your country and city for prayer times.',
             selected: !isAuto,
-            selectedColor: cs.surfaceContainerHighest,
-            baseColor: cs.surface,
             onTap: () {
               setState(() => _manualExpanded = !_manualExpanded);
             },
@@ -216,87 +211,77 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
                 ? const Icon(Icons.expand_less_rounded)
                 : const Icon(Icons.expand_more_rounded),
             child: _manualExpanded
-                ? AnimatedCrossFade(
-                    firstChild: const SizedBox.shrink(),
-                    secondChild: Padding(
-                      padding: const EdgeInsets.only(top: 12),
-                      child: Column(
-                        children: [
-                          _ActionButton(
-                            label: _country == null
-                                ? !isAuto
-                                      ? userLocState?.country ??
-                                            'Select country'
-                                      : 'Select country'
-                                : 'Country: $_country',
-                            icon: Icons.public_rounded,
-                            onTap: _pickCountry,
-                          ),
+                ? Padding(
+                    padding: const EdgeInsets.only(top: 12),
+                    child: Column(
+                      children: [
+                        _ActionButton(
+                          label: _country == null
+                              ? !isAuto
+                                    ? userLocState?.country ?? 'Select country'
+                                    : 'Select country'
+                              : 'Country: $_country',
+                          icon: Icons.public_rounded,
+                          onTap: _pickCountry,
+                        ),
 
+                        const SizedBox(height: 10),
+
+                        _ActionButton(
+                          label: _selectedPlace == null
+                              ? !isAuto
+                                    ? userLocState?.city ?? 'Select city'
+                                    : 'Select city'
+                              : 'City: ${_selectedPlace!.name}',
+                          icon: Icons.location_city_rounded,
+                          onTap: _pickCityViaOpenMeteo,
+                        ),
+
+                        if (_verifying) ...[
                           const SizedBox(height: 10),
+                          const LinearProgressIndicator(),
+                        ],
 
-                          _ActionButton(
-                            label: _selectedPlace == null
-                                ? !isAuto
-                                      ? userLocState?.city ?? 'Select city'
-                                      : 'Select city'
-                                : 'City: ${_selectedPlace!.name}',
-                            icon: Icons.location_city_rounded,
-                            onTap: _pickCityViaOpenMeteo,
-                          ),
-
-                          if (_verifying) ...[
-                            const SizedBox(height: 10),
-                            const LinearProgressIndicator(),
-                          ],
-
-                          if (_verifyError != null) ...[
-                            const SizedBox(height: 8),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                _verifyError!,
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: Colors.redAccent.withAlpha(220),
-                                ),
-                              ),
-                            ),
-                          ],
-
-                          const SizedBox(height: 10),
+                        if (_verifyError != null) ...[
+                          const SizedBox(height: 8),
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              _country == null
-                                  ? 'Pick a country to continue.'
-                                  : (_selectedPlace == null
-                                        ? 'Now pick a city.'
-                                        : (_verified
-                                              ? 'City verified ✓,  '
-                                              : 'Verifying…')),
-                              style: theme.textTheme.bodySmall,
-                            ),
-                          ),
-
-                          if (_verifiedCity != null) ...[
-                            const SizedBox(height: 6),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                'Will save: ${_country ?? _selectedPlace?.country}, $_verifiedCity',
-                                style: theme.textTheme.bodyMedium,
+                              _verifyError!,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: Colors.redAccent.withAlpha(220),
                               ),
                             ),
-                          ],
+                          ),
                         ],
-                      ),
+
+                        const SizedBox(height: 10),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            _country == null
+                                ? 'Pick a country to continue.'
+                                : (_selectedPlace == null
+                                      ? 'Now pick a city.'
+                                      : (_verified
+                                            ? 'City verified ✓,  '
+                                            : 'Verifying…')),
+                            style: theme.textTheme.bodySmall,
+                          ),
+                        ),
+
+                        if (_verifiedCity != null) ...[
+                          const SizedBox(height: 6),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Will save: ${_country ?? _selectedPlace?.country}, $_verifiedCity',
+                              style: theme.textTheme.bodyMedium,
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
-                    crossFadeState: _manualExpanded || !isAuto
-                        ? CrossFadeState.showSecond
-                        : CrossFadeState.showFirst,
-                    duration: const Duration(milliseconds: 180),
-                    firstCurve: Curves.easeOut,
-                    secondCurve: Curves.easeOut,
                   )
                 : null,
           ),
@@ -452,8 +437,6 @@ class _SettingCard extends ConsumerWidget {
     required this.title,
     required this.description,
     required this.selected,
-    required this.baseColor,
-    required this.selectedColor,
     required this.onTap,
     required this.trailing,
     this.child,
@@ -462,8 +445,6 @@ class _SettingCard extends ConsumerWidget {
   final String title;
   final String description;
   final bool selected;
-  final Color baseColor;
-  final Color selectedColor;
   final VoidCallback onTap;
   final Widget trailing;
   final Widget? child;
@@ -473,44 +454,48 @@ class _SettingCard extends ConsumerWidget {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
     final tt = theme.textTheme;
+    final color = selected ? cs.primaryContainer : cs.surface;
 
-    return InkWell(
-      borderRadius: BorderRadius.circular(16),
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 160),
-        curve: Curves.easeOut,
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          color: selected ? selectedColor : baseColor,
-        ),
-        child: Column(
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(title, style: tt.labelLarge),
-                      const SizedBox(height: 6),
-                      Text(
-                        description,
-                        style: tt.bodyMedium?.copyWith(
-                          color: cs.onSurfaceVariant,
+    return AnimatedSize(
+      duration: const Duration(milliseconds: 150),
+      clipBehavior: Clip.hardEdge,
+      alignment: Alignment.topCenter,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            color: color,
+          ),
+          child: Column(
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(title, style: tt.labelLarge),
+                        const SizedBox(height: 6),
+                        Text(
+                          description,
+                          style: tt.bodyMedium?.copyWith(
+                            color: cs.onSurfaceVariant,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(width: 10),
-                trailing,
-              ],
-            ),
-            if (child != null) ...[child!],
-          ],
+                  const SizedBox(width: 10),
+                  trailing,
+                ],
+              ),
+              if (child != null) ...[child!],
+            ],
+          ),
         ),
       ),
     );

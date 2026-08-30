@@ -38,7 +38,7 @@ class AppDarkColors {
 
   static const onPrimaryContainer = Color(0xFFD3FAF9);
   static const onSecondaryContainer = Color(0xFFDCE2E6);
-  static const onTertiaryContainer = Color(0xFFDBEEBA);
+  static const onTertiaryContainer = onPrimary;
 
   // ON SURFACES
 

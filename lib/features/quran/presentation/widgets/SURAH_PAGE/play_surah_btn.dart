@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
+import 'package:rafeeq/core/widgets/app_pressable.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/quran_audio/domain/entities/reciter_entity.dart';
@@ -113,52 +114,59 @@ class _PlayFullSurahBtnState extends ConsumerState<PlayFullSurahBtn> {
     final cs = theme.colorScheme;
 
     if (widget.builder != null) {
-      return GestureDetector(
+      return AppPressableScale(
         onTap: () => playSurahAudio(surah: surah),
         child: widget.builder!(isBuffering, _isLoading, isPlaying),
       );
     }
 
-    return TextButton.icon(
-      icon: (isBuffering || _isLoading)
-          ? const SizedBox(height: 12, child: CupertinoActivityIndicator())
-          : (isPlaying && sourceType == AudioSourceType.quranSurah)
-          ? const Icon(HugeIconsStroke.stop)
-          : const Icon(PhosphorIcons.playCircle),
-      onPressed: () async {
-        if (isBuffering || _isLoading) return;
-
-        if (isPlaying) {
-          await ref.read(audioControllerProvider.notifier).pause();
-          return;
-        }
-
-        //select reciter
-        final reciter = await AppSheets.showBottomSheet<ReciterEntity?>(
-          context: context,
-          child: const ReciterPickerSheet(),
-        );
-
-        if (reciter == null) return;
-
-        await playSurahAudio(surah: surah);
-
-        await RafeeqAnalytics.logFeature("Play-surah-audio");
-      },
-
-      label: Text(
-        isBuffering
-            ? 'Loading...'
-            : _isLoading
-            ? 'Downloading surah tracks...'
+    return AppPressableScale(
+      scale: 0.8,
+      child: TextButton.icon(
+        icon: (isBuffering || _isLoading)
+            ? const SizedBox(
+                height: 12,
+                width: 12,
+                child: CupertinoActivityIndicator(),
+              )
             : (isPlaying && sourceType == AudioSourceType.quranSurah)
-            ? 'Stop'
-            : 'Play surah',
-        style: theme.textButtonTheme.style?.textStyle
-            ?.resolve({})
-            ?.copyWith(
-              color: _isLoading || isBuffering ? cs.onSurfaceVariant : null,
-            ),
+            ? const Icon(HugeIconsStroke.stop)
+            : const Icon(PhosphorIcons.playCircle),
+        onPressed: () async {
+          if (isBuffering || _isLoading) return;
+
+          if (isPlaying) {
+            await ref.read(audioControllerProvider.notifier).pause();
+            return;
+          }
+
+          //select reciter
+          final reciter = await AppSheets.showBottomSheet<ReciterEntity?>(
+            context: context,
+            child: const ReciterPickerSheet(),
+          );
+
+          if (reciter == null) return;
+
+          await playSurahAudio(surah: surah);
+
+          await RafeeqAnalytics.logFeature("Play-surah-audio");
+        },
+
+        label: Text(
+          isBuffering
+              ? 'Loading...'
+              : _isLoading
+              ? 'Downloading surah tracks...'
+              : (isPlaying && sourceType == AudioSourceType.quranSurah)
+              ? 'Stop'
+              : 'Play surah',
+          style: theme.textButtonTheme.style?.textStyle
+              ?.resolve({})
+              ?.copyWith(
+                color: _isLoading || isBuffering ? cs.onSurfaceVariant : null,
+              ),
+        ),
       ),
     );
   }

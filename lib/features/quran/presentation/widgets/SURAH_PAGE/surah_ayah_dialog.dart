@@ -10,7 +10,7 @@ Future<void> showSurahAyahPickerDialog({
   int initialSurahIndex = 0,
   int initialAyahIndex = 0, // 0-based
   required void Function(int surahId, int ayahNumber)
-  onGo, // ayahNumber is 1-based
+  onGo, 
 }) async {
   int surahIndex = initialSurahIndex.clamp(0, surahs.length - 1);
   int ayahIndex = initialAyahIndex;

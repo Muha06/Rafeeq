@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rafeeq/core/constants/colors/light_colors.dart';
 import 'package:rafeeq/core/constants/strings/app_strings.dart';
@@ -61,10 +62,11 @@ ThemeData appLightThemeData() {
 
     pageTransitionsTheme: const PageTransitionsTheme(
       builders: {
-        TargetPlatform.android: ZoomPageTransitionsBuilder(),
-        TargetPlatform.iOS: ZoomPageTransitionsBuilder(),
+        TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
       },
     ),
+    visualDensity: VisualDensity.compact,
 
     scaffoldBackgroundColor: scheme.surfaceContainerLowest,
     canvasColor: scheme.surfaceContainerLowest,

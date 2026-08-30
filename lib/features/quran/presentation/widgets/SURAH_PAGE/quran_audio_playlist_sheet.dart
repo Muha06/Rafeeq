@@ -4,7 +4,8 @@ import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:rafeeq/core/constants/strings/app_strings.dart';
 import 'package:rafeeq/core/features/audio/presentation/providers/audio_controller.dart';
 import 'package:rafeeq/core/widgets/app_drag_handle.dart';
- import 'package:rafeeq/features/quran/domain/entities/surah.dart';
+import 'package:rafeeq/core/widgets/app_pressable.dart';
+import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provider.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/play_surah_btn.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
@@ -22,7 +23,7 @@ class _QuranAudioPlaylistSheetState
     extends ConsumerState<QuranAudioPlaylistSheet> {
   @override
   Widget build(BuildContext context) {
-     final surahs = ref.watch(surahsProvider).value ?? [];
+    final surahs = ref.watch(surahsProvider).value ?? [];
 
     return DraggableScrollableSheet(
       minChildSize: 0.5,
@@ -30,33 +31,30 @@ class _QuranAudioPlaylistSheetState
       maxChildSize: 1,
       expand: false,
       builder: (context, scrollController) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: CustomScrollView(
-            controller: scrollController,
-            slivers: [
-              const SliverPersistentHeader(
-                pinned: true,
-                delegate: AppSliverPinnedHeaderDelegate(
-                  height: 100,
+        return CustomScrollView(
+          controller: scrollController,
+          slivers: [
+            const SliverPersistentHeader(
+              pinned: true,
+              delegate: AppSliverPinnedHeaderDelegate(
+                height: 100,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
                   child: _QueueHeader(),
                 ),
               ),
+            ),
 
-              SliverList.separated(
-                itemCount: surahs.length,
-                itemBuilder: (context, index) {
-                  return QuranAudioPlaylistTile(surah: surahs[index]);
-                },
-                separatorBuilder: (context, index) {
-                  return const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 6),
-                    child: Divider(height: 12),
-                  );
-                },
-              ),
-            ],
-          ),
+            SliverList.separated(
+              itemCount: surahs.length,
+              itemBuilder: (context, index) {
+                return QuranAudioPlaylistTile(surah: surahs[index]);
+              },
+              separatorBuilder: (context, index) {
+                return const Divider();
+              },
+            ),
+          ],
         );
       },
     );
@@ -135,57 +133,40 @@ class QuranAudioPlaylistTile extends ConsumerWidget {
       audioControllerProvider.select((s) => s.title),
     );
     final isPlaying = playingTitle == "Surat ${surah.nameTransliteration}";
-    debugPrint("rebuilt");
 
-    return GestureDetector(
-      onTap: () async {
-        final isCurrent =
-            ref.read(audioControllerProvider).currentId ==
-            '${ref.read(selectedReciterProvider).id}:${surah.id}';
+    return AppPressableScale(
+      child: ListTile(
+        onTap: () async {
+          final isCurrent =
+              ref.read(audioControllerProvider).currentId ==
+              '${ref.read(selectedReciterProvider).id}:${surah.id}';
 
-        if (isCurrent) return;
+          if (isCurrent) return;
 
-        final ctrl = ref.read(audioControllerProvider.notifier);
+          final ctrl = ref.read(audioControllerProvider.notifier);
 
-        await ctrl.skipToIndex(surah.id - 1);
-      },
-      behavior: HitTestBehavior.opaque,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: 28,
-            child: Center(
-              child: Text(
-                surah.id.toString(),
-                style: tt.labelSmall,
-                textAlign: TextAlign.end,
-              ),
-            ),
+          await ctrl.skipToIndex(surah.id - 1);
+        },
+        splashColor: Colors.transparent,
+        focusColor: Colors.transparent,
+        leading: SizedBox(
+          width: 28,
+          child: Text(
+            surah.id.toString(),
+            style: tt.labelSmall,
+            textAlign: TextAlign.end,
           ),
-          const SizedBox(width: 16),
-
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  surah.nameTransliteration,
-                  style: tt.labelLarge?.copyWith(
-                    color: isPlaying ? Colors.green : null,
-                    fontWeight: isPlaying ? FontWeight.bold : null,
-                  ),
-                ),
-                const SizedBox(height: 2),
-
-                Text(surah.nameEnglish, style: tt.labelMedium),
-              ],
-            ),
+        ),
+        title: Text(
+          surah.nameTransliteration,
+          style: tt.labelLarge?.copyWith(
+            color: isPlaying ? Colors.green : null,
+            fontWeight: isPlaying ? FontWeight.bold : null,
           ),
-
-          if (isPlaying)
-            Center(
-              child: PlayFullSurahBtn(
+        ),
+        subtitle: Text(surah.nameEnglish),
+        trailing: isPlaying
+            ? PlayFullSurahBtn(
                 initialIndex: surah.id - 1,
                 builder: (isBuffering, isLoading, isPlaying) =>
                     (isLoading || isBuffering)
@@ -194,12 +175,17 @@ class QuranAudioPlaylistTile extends ConsumerWidget {
                         width: 10,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : Icon(
-                        isPlaying ? HugeIconsSolid.pause : HugeIconsSolid.play,
+                    : SizedBox(
+                        height: 32,
+                        width: 32,
+                        child: Icon(
+                          isPlaying
+                              ? HugeIconsSolid.pause
+                              : HugeIconsSolid.play,
+                        ),
                       ),
-              ),
-            ),
-        ],
+              )
+            : null,
       ),
     );
   }

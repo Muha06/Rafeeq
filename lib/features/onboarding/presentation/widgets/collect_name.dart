@@ -58,7 +58,7 @@ class CollectUserNameSlide extends ConsumerWidget {
                     textCapitalization: TextCapitalization.words,
                     textInputAction: TextInputAction.done,
                     textAlign: TextAlign.center,
-                    autofocus: false,
+                    autofocus: true,
                     style: tt.titleMedium,
                     decoration: InputDecoration(
                       hintText: 'Your name',

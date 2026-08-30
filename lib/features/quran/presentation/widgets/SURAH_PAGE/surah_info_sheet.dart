@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/widgets/app_drag_handle.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah_info.dart';
- 
+import 'package:rafeeq/features/quran/presentation/pages/surah_page.dart';
+
 class SurahInfoSheet extends StatelessWidget {
   const SurahInfoSheet({super.key, required this.info});
 
@@ -54,6 +56,33 @@ class SurahInfoSheet extends StatelessWidget {
 
                   Html(
                     data: info.text,
+                    onLinkTap: (url, attributes, element) {
+                      if (url == null) return;
+                      debugPrint("url $url");
+
+                      final match = RegExp(
+                        r'^/?(\d+)/(\d+)(?:-(\d+))?$',
+                      ).firstMatch(url);
+
+                      if (match == null) return;
+
+                      final surahNumber = int.parse(match.group(1)!);
+                      final startAyah = int.parse(match.group(2)!);
+
+                      debugPrint(
+                        "URL: $url \n ATTRIBUTES: $attributes \n ELEMENT: $element \n Surah number: $surahNumber \n start: $startAyah  ",
+                      );
+
+                      AppNav.pop(context);
+
+                      AppNav.push(
+                        context,
+                        FullSurahPage(
+                          initialIndex: surahNumber - 1,
+                          autoScrollAyah: startAyah,
+                        ),
+                      );
+                    },
                     style: {
                       "h2": Style(
                         fontSize: FontSize(bMedium?.fontSize ?? 22),
@@ -68,7 +97,6 @@ class SurahInfoSheet extends StatelessWidget {
                         fontWeight: bLarge?.fontWeight ?? FontWeight.w400,
                         color: bLarge!.color,
                         lineHeight: LineHeight(bLarge.height),
-                        // height: Height(bLarge.height ?? 1.65),
                       ),
                       "p": Style(
                         margin: Margins.zero,
@@ -77,6 +105,11 @@ class SurahInfoSheet extends StatelessWidget {
                         fontWeight: bLarge.fontWeight ?? FontWeight.w400,
                         color: bLarge.color,
                         lineHeight: LineHeight(bLarge.height),
+                      ),
+                      "a": Style(
+                        color: cs.primary,
+                        fontWeight: FontWeight.w600,
+                        textDecoration: TextDecoration.none,
                       ),
                     },
                   ),
