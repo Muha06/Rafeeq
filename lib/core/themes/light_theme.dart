@@ -192,7 +192,7 @@ ThemeData appLightThemeData() {
         iconColor: scheme.onPrimary,
         disabledBackgroundColor: scheme.surfaceContainerHighest,
         disabledForegroundColor: scheme.onSurfaceVariant,
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        padding: const EdgeInsets.all(24),
         textStyle: const TextStyle(
           fontWeight: FontWeight.w600,
           height: 1,
