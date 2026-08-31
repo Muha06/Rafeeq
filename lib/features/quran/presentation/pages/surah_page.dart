@@ -335,7 +335,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
       surahSettingsProvider.select((s) => s.showAutoScrollControls),
     );
 
-    const horizontalPadding = AppSpacing.lg;
+     const horizontalPadding = AppSpacing.lg;
 
     return PopScope(
       onPopInvokedWithResult: (didPop, result) async {

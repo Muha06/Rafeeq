@@ -1,6 +1,7 @@
 import 'dart:async';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/features/local_notifications/providers/general_notifications_provider.dart';
+import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_prayer.dart';
 
 final disabledSalahPrayersProvider =
@@ -68,6 +69,7 @@ class DisabledSalahPrayersNotifier extends Notifier<Set<SalahPrayer>> {
       _userDisabled.remove(prayer);
     } else {
       _userDisabled.add(prayer);
+       RafeeqAnalytics.logFeature('disabled-${prayer.label}-reminder');
     }
 
     state = {..._userDisabled};

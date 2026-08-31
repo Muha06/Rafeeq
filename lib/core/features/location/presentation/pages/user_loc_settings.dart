@@ -169,7 +169,7 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
                 _verifiedCity = null;
               });
 
-              AppToast.showSimple(
+              AppToast.showCompact(
                 context: context,
                 duration: const Duration(seconds: 3),
                 message: 'Setting to GPS mode...',

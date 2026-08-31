@@ -57,7 +57,7 @@ class _AyahTileState extends ConsumerState<AyahTile> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: AppPressableScale(
-        scale: 0.95,
+        scale: 0.98,
         child: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(

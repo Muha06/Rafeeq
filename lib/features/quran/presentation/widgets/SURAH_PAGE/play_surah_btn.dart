@@ -91,7 +91,10 @@ class _PlayFullSurahBtnState extends ConsumerState<PlayFullSurahBtn> {
 
         if (!context.mounted) return;
 
-        AppToast.showError(context: context, message: 'Something went wrong');
+        AppToast.showError(
+          context: context,
+          message: 'Something went wrong. Please try again later',
+        );
       } finally {
         setState(() {
           _isLoading = false;

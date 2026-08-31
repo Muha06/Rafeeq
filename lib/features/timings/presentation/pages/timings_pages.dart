@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
-import 'package:rafeeq/core/helpers/snackbars.dart';
+import 'package:rafeeq/core/helpers/app_toast.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_times.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/disable_salah_reminders_provider.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/fetch_salah_times_provider.dart';
@@ -243,7 +243,7 @@ class _TimingTile extends ConsumerWidget {
       await ref.read(disabledSalahPrayersProvider.notifier).toggle(prayer);
 
       if (!isDisabled && context.mounted) {
-        AppSnackBar.showSimple(
+        AppToast.showCompact(
           context: context,
           message: 'Disabled reminders for ${prayer.label}',
         );
@@ -273,7 +273,7 @@ class _TimingTile extends ConsumerWidget {
                 icon: Icon(
                   isDisabled
                       ? CupertinoIcons.speaker_slash
-                      : CupertinoIcons.speaker_1,
+                      : CupertinoIcons.speaker_3,
                   color: isDisabled
                       ? theme.colorScheme.error
                       : theme.colorScheme.onSurface,

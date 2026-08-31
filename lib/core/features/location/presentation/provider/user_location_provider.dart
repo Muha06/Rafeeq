@@ -4,6 +4,7 @@ import 'package:rafeeq/core/features/location/data/location_local_ds.dart';
 import 'package:rafeeq/core/features/location/domain/user_location.dart';
 import 'package:rafeeq/core/features/location/domain/location_repo.dart';
 import 'package:rafeeq/core/features/location/presentation/provider/general_location_permission_provider.dart';
+import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/features/settings/presentation/provider/settings_notifcation_provider.dart';
 
 // You already have something like this in your app:
@@ -74,6 +75,8 @@ class UserLocationNotifier extends AsyncNotifier<UserLocation> {
     );
 
     await _locationRepo.saveLocation(loc);
+    RafeeqAnalytics.logFeature('set-manual-location');
+
     state = AsyncData(loc);
   }
 
@@ -90,6 +93,9 @@ class UserLocationNotifier extends AsyncNotifier<UserLocation> {
 
     final loc = await _locationRepo.refreshCurrentLocation();
     state = AsyncData(loc);
+
+    RafeeqAnalytics.logFeature('set-auto-location');
+
     return true;
   }
 }
