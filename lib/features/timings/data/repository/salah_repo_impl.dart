@@ -79,16 +79,18 @@ class FetchSalahTimesRepoImpl implements FetchSalahTimesRepo {
     // 3. Cache the entire month
     debugPrint('Caching the entire month of timings...');
 
-    for (final model in monthlyModels) {
-      await local.save(
-        CachedSalahTimesHiveX.fromEntity(
-          entity: model.toEntity(),
-          city: city,
-          country: country,
-          method: method,
-        ),
-      );
-    }
+    final cachedModels = monthlyModels
+        .map(
+          (model) => CachedSalahTimesHiveX.fromEntity(
+            entity: model.toEntity(),
+            city: city,
+            country: country,
+            method: method,
+          ),
+        )
+        .toList();
+
+    await local.saveAll(cachedModels);
 
     // 4. Find today's timing
     final todayModel = monthlyModels.firstWhere(

@@ -9,7 +9,7 @@ abstract class SalahCacheLocalDataSource {
     required int method,
   });
 
-  Future<void> save(CachedSalahTimesHive data);
+  Future<void> saveAll(List<CachedSalahTimesHive> data);
 }
 
 class SalahCacheLocalDataSourceImpl implements SalahCacheLocalDataSource {
@@ -24,29 +24,26 @@ class SalahCacheLocalDataSourceImpl implements SalahCacheLocalDataSource {
     required String country,
     required int method,
   }) {
-    return null;
-  
-    // box.clear();
-    // return null;
+    final k = CachedSalahTimesHive.cachedKey(
+      date: date,
+      city: city,
+      country: country,
+      method: method,
+    ); // key for the cache
 
-    // final k = CachedSalahTimesHive.cachedKey(
-    //   date: date,
-    //   city: city,
-    //   country: country,
-    //   method: method,
-    // ); // key for the cache
-
-    // return box.get(k);
+    return box.get(k);
   }
 
   @override
-  Future<void> save(CachedSalahTimesHive data) async {
-    final k = CachedSalahTimesHive.cachedKey(
-      date: data.date,
-      city: data.city,
-      country: data.country,
-      method: data.method,
-    );
-    await box.put(k, data);
+  Future<void> saveAll(List<CachedSalahTimesHive> data) async {
+    for (final item in data) {
+      final k = CachedSalahTimesHive.cachedKey(
+        date: item.date,
+        city: item.city,
+        country: item.country,
+        method: item.method,
+      );
+      await box.put(k, item);
+    }
   }
 }
