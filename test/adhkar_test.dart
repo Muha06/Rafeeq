@@ -1,11 +1,9 @@
+// import 'package:flutter/material.dart';
 // import 'package:flutter_dotenv/flutter_dotenv.dart';
 // import 'package:flutter_test/flutter_test.dart';
-// import 'package:rafeeq/features/adhkar_02/data/datasources/dhikr_remote_datasource.dart';
-// import 'package:rafeeq/features/adhkar_02/data/repositories/dhikr_repo_impl.dart';
-// import 'package:rafeeq/features/adhkar_02/domain/entities/dhikr_category.dart';
-// import 'package:rafeeq/features/adhkar_02/domain/entities/dhikr_entity.dart';
-//  import 'package:rafeeq/features/adhkar_02/domain/usecases/fetch_all_adhkar.dart';
-// import 'package:rafeeq/features/adhkar_02/domain/usecases/fetch_all_categories.dart';
+// import 'package:rafeeq/features/adhkar/data/datasources/dhikr_remote_datasource.dart';
+// import 'package:rafeeq/features/adhkar/domain/usecases/fetch_all_adhkar.dart';
+// import 'package:rafeeq/features/adhkar/domain/usecases/fetch_all_categories.dart'; 
 //  import 'package:supabase_flutter/supabase_flutter.dart';
 
 // void main() {
@@ -21,18 +19,17 @@
 //     // Initialize the real Supabase client for integration testing.
 //     await Supabase.initialize(
 //       url: dotenv.env['SUPABASE_URL']!,
-//       anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
+//       postgrestOptions: dotenv.env['SUPABASE_ANON_KEY']!,
 //     );
 
 //     // Wire the data source, repository, and use cases exactly like app code.
 //     supabase = Supabase.instance.client;
 //     final remoteDataSource = AdhkarRemoteDatasourceImpl(client: supabase);
-//  final rep
+//  final repo= AdhkarRepositoryImpl(remote: remoteDataSource);
 //     fetchAllCategories = FetchAllCategories(repository: repo);
 //      fetchAllAdhkar = FetchAllAdhkarUsecase(repo: repo);
 //   });
-
-//   group('Adhkar fetching usecases', () {
+// YearPicker  group('Adhkar fetching usecases', () {
 //     test('should fetch all categories', () async {
 //       // ACT: fetch categories from Supabase through the use case.
 //       final result = await fetchAllCategories();

@@ -24,13 +24,19 @@ class SalahCacheLocalDataSourceImpl implements SalahCacheLocalDataSource {
     required String country,
     required int method,
   }) {
-    final k = CachedSalahTimesHive.cachedKey(
-      date: date,
-      city: city,
-      country: country,
-      method: method,
-    );
-    return box.get(k);
+    return null;
+  
+    // box.clear();
+    // return null;
+
+    // final k = CachedSalahTimesHive.cachedKey(
+    //   date: date,
+    //   city: city,
+    //   country: country,
+    //   method: method,
+    // ); // key for the cache
+
+    // return box.get(k);
   }
 
   @override

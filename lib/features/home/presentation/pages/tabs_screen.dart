@@ -30,12 +30,11 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
   Widget build(BuildContext context) {
     final selectedIndex = ref.watch(tabsScreenIndexProvider);
     debugPrint("Cached name: ${ref.read(userNameProvider)}");
-    
+
     return SafeArea(
       top: false,
       child: Scaffold(
-        extendBody: true,
-        body: _pages[selectedIndex],
+        body: SafeArea(top: false, child: _pages[selectedIndex]),
         bottomNavigationBar: MyBottomBar(
           currentIndex: selectedIndex,
           onTap: (value) async {

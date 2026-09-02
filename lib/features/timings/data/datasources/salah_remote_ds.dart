@@ -3,16 +3,17 @@ import 'package:http/http.dart' as http;
 import 'package:rafeeq/features/timings/data/models/salah_times_model.dart';
 
 abstract class SalahRemoteDataSource {
-  Future<AladhanTimingsModel> fetchTodayByCity({
-    required String city,
-    required String country,
-    int method,
-  });
-
-  Future<AladhanTimingsModel> fetchTodayByCoords({
+  Future<List<AladhanTimingsModel>> fetchMonthByCoordinates({
     required double latitude,
     required double longitude,
-    int method,
+    int method = 3,
+  });
+
+  // Month
+  Future<List<AladhanTimingsModel>> fetchMonthByCity({
+    required String city,
+    required String country,
+    int method = 3,
   });
 }
 
@@ -22,67 +23,74 @@ class SalahRemoteDataSourceImpl implements SalahRemoteDataSource {
   const SalahRemoteDataSourceImpl(this.client);
 
   @override
-  Future<AladhanTimingsModel> fetchTodayByCity({
+  Future<List<AladhanTimingsModel>> fetchMonthByCity({
     required String city,
     required String country,
     int method = 3,
   }) async {
-    final uri = Uri.https('api.aladhan.com', '/v1/timingsByCity', {
-      'city': city,
-      'country': country,
-      'method': method.toString(),
-    });
+    final now = DateTime.now();
+
+    final uri = Uri.https(
+      'api.aladhan.com',
+      '/v1/calendarByCity/${now.year}/${now.month}',
+      {'city': city, 'country': country, 'method': method.toString()},
+    );
 
     final res = await client.get(uri);
+
     if (res.statusCode != 200) {
-      throw Exception('Failed to fetch timings: ${res.statusCode}');
+      throw Exception('Failed to fetch monthly timings: ${res.statusCode}');
     }
 
     final jsonMap = json.decode(res.body) as Map<String, dynamic>;
-    final data = jsonMap['data'] as Map<String, dynamic>;
 
-    final timingsMap = data['timings'] as Map<String, dynamic>; //salat timings
-    final metaMap =
-        data['meta'] as Map<String, dynamic>; // meatadata: timezones
-    final dateMap =
-        data['date'] as Map<String, dynamic>; // date for the timings
+    final data = jsonMap['data'] as List<dynamic>;
 
-    return AladhanTimingsModel.fromJson(
-      timingsJson: timingsMap,
-      metaJson: metaMap,
-      dateJson: dateMap,
-    );
+    return data.map((item) {
+      final dataMap = item as Map<String, dynamic>;
+
+      return AladhanTimingsModel.fromJson(
+        timingsJson: dataMap['timings'] as Map<String, dynamic>,
+        metaJson: dataMap['meta'] as Map<String, dynamic>,
+        dateJson: dataMap['date'] as Map<String, dynamic>,
+      );
+    }).toList();
   }
 
   //By coords
   @override
-  Future<AladhanTimingsModel> fetchTodayByCoords({
+  Future<List<AladhanTimingsModel>> fetchMonthByCoordinates({
     required double latitude,
     required double longitude,
     int method = 3,
   }) async {
-    final uri = Uri.https('api.aladhan.com', '/v1/timings', {
-      'latitude': latitude.toString(),
-      'longitude': longitude.toString(),
-      'method': method.toString(),
-    });
+    final now = DateTime.now();
+
+    final uri =
+        Uri.https('api.aladhan.com', '/v1/calendar/${now.year}/${now.month}', {
+          'latitude': latitude.toString(),
+          'longitude': longitude.toString(),
+          'method': method.toString(),
+        });
 
     final res = await client.get(uri);
+
     if (res.statusCode != 200) {
-      throw Exception('Failed to fetch timings: ${res.statusCode}');
+      throw Exception('Failed to fetch monthly timings: ${res.statusCode}');
     }
 
     final jsonMap = json.decode(res.body) as Map<String, dynamic>;
-    final data = jsonMap['data'] as Map<String, dynamic>;
 
-    final timingsJson = data['timings'] as Map<String, dynamic>;
-    final metaJson = data['meta'] as Map<String, dynamic>;
-    final dateJson = data['date'] as Map<String, dynamic>;
+    final data = jsonMap['data'] as List<dynamic>;
 
-    return AladhanTimingsModel.fromJson(
-      timingsJson: timingsJson,
-      metaJson: metaJson,
-      dateJson: dateJson,
-    );
+    return data.map((item) {
+      final dataMap = item as Map<String, dynamic>;
+
+      return AladhanTimingsModel.fromJson(
+        timingsJson: dataMap['timings'] as Map<String, dynamic>,
+        metaJson: dataMap['meta'] as Map<String, dynamic>,
+        dateJson: dataMap['date'] as Map<String, dynamic>,
+      );
+    }).toList();
   }
 }
