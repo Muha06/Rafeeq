@@ -5,7 +5,7 @@ import 'package:rafeeq/core/features/location/domain/user_location.dart';
 
 abstract class LocationRepository {
   /// Returns cached location fast (or fallback if none)
-  Future<UserLocation?> getCachedLocation();
+  Future<UserLocation> getCachedLocation();
 
   /// Refresh using GPS + reverse geocode, then cache it
   Future<UserLocation> refreshCurrentLocation();
@@ -80,8 +80,8 @@ class LocationRepositoryImpl implements LocationRepository {
       await local.write(loc);
 
       return loc;
-    } catch (e, st) {
-      debugPrint('$st');
+    } catch (e) {
+      debugPrint('Error refreshing current location $e');
       rethrow;
     }
   }

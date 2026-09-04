@@ -8,7 +8,7 @@ import 'package:rafeeq/features/settings/presentation/provider/settings_notifcat
 const kAppNotifsAllowedKey = 'app_notifs_allowed';
 const kExactAlarmsAllowedKey = 'exact_alarms_allowed';
 
-final systemNotifAccessProvider =
+final notificationPermissionProvider =
     NotifierProvider<SystemNotifAccessNotifier, SystemNotifAccessState>(
       SystemNotifAccessNotifier.new,
     );
@@ -101,7 +101,7 @@ class SystemNotifAccessNotifier extends Notifier<SystemNotifAccessState> {
       exactAlarmsAllowed: exactAlarmsAllowed,
     );
 
-    //return new state
+    // Update new state
     state = state.copyWith(
       notificationsAllowed: notificationsAllowed,
       exactAlarmsAllowed: exactAlarmsAllowed,

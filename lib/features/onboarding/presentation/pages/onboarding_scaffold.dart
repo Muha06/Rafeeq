@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+import 'package:rafeeq/core/features/location/presentation/provider/location_prov.dart';
+import 'package:rafeeq/core/features/location/presentation/provider/user_location_provider.dart';
 import 'package:rafeeq/core/helpers/app_dialogs.dart';
 import 'package:rafeeq/features/home/presentation/pages/tabs_screen.dart';
 import 'package:rafeeq/features/onboarding/presentation/provider/onboarding_provider.dart';
@@ -76,6 +78,9 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
     final name = _userNameController.text;
     ref.read(userNameProvider.notifier).saveName(name);
 
+    //  Save user location
+    await _saveUserLocation();
+
     if (!context.mounted) return;
 
     Navigator.of(
@@ -83,6 +88,17 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
     ).pushReplacement(MaterialPageRoute(builder: (_) => const TabsScreen()));
 
     await ref.read(setHasSeenOnboardingProvider).call();
+  }
+
+  Future<void> _saveUserLocation() async {
+    debugPrint('Saving user location after onboarding');
+    final locationPerm = ref.watch(locationPermissionProvider);
+
+    final isAllowed = locationPerm.isGranted;
+    debugPrint("Location permission allowed: $isAllowed");
+    if (!isAllowed) return;
+
+    await ref.read(userLocationProvider.notifier).refresh();
   }
 
   @override

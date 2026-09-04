@@ -16,13 +16,15 @@ class _NotificationsPermissionCtaState
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => ref.read(systemNotifAccessProvider.notifier).sync());
+    Future.microtask(
+      () => ref.read(notificationPermissionProvider.notifier).sync(),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final perm = ref.watch(systemNotifAccessProvider);
-    final notifier = ref.watch(systemNotifAccessProvider.notifier);
+    final perm = ref.watch(notificationPermissionProvider);
+    final notifier = ref.watch(notificationPermissionProvider.notifier);
 
     // ✅ Already granted
     if (perm.notificationsAllowed) {
@@ -60,7 +62,7 @@ class _NotificationsPermissionCtaState
           ? null
           : () async {
               final permitted = await ref
-                  .read(systemNotifAccessProvider.notifier)
+                  .read(notificationPermissionProvider.notifier)
                   .requestAll(includeExactAlarms: true);
 
               //Auto toggle reminders

@@ -31,7 +31,9 @@ final adhkarNotificationsControllerProvider = Provider<void>((ref) async {
     await localNotifService.cancel(morningNotifId);
     await localNotifService.cancel(eveningNotifId);
 
-    debugPrint('Scheduling  ');
+    debugPrint(
+      'Scheduling Adhkar notifications at $kmorningAdhkarTime and $keveningAdhkarTime',
+    );
 
     await localNotifService.scheduleDaily(
       id: morningNotifId,

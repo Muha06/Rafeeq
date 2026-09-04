@@ -5,10 +5,10 @@ import 'package:geolocator/geolocator.dart';
 class LocationGpsDataSource {
   Future<Position> getCurrentPosition() async {
     // Check permissions
-    final enabled = await Geolocator.isLocationServiceEnabled();
-    if (!enabled) {
-      throw Exception('Location services disabled');
-    }
+    final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      await Geolocator.openLocationSettings();
+     }
 
     final perm = await Geolocator.checkPermission();
     final allowed =

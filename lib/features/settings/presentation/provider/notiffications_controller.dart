@@ -13,7 +13,9 @@ class SalahNotifController extends Notifier<bool> {
   bool build() {
     // Initial state: read from Hive and check system notifications
     final box = ref.read(settingsBoxProvider);
-    final allowed = ref.read(systemNotifAccessProvider).notificationsAllowed;
+    final allowed = ref
+        .read(notificationPermissionProvider)
+        .notificationsAllowed;
     if (!allowed) return false;
     return box.get(kSalahEnabled, defaultValue: false) as bool;
   }
@@ -30,8 +32,8 @@ class SalahNotifController extends Notifier<bool> {
     ref.read(salahNotifUpdatingProvider.notifier).state = true;
 
     try {
-      final access = ref.read(systemNotifAccessProvider);
-      final sys = ref.read(systemNotifAccessProvider.notifier);
+      final access = ref.read(notificationPermissionProvider);
+      final sys = ref.read(notificationPermissionProvider.notifier);
       final box = ref.read(settingsBoxProvider);
 
       // DISABLE
@@ -42,34 +44,42 @@ class SalahNotifController extends Notifier<bool> {
         return;
       }
 
-      // ENABLE: check system permissions
-      if (!access.notificationsAllowed || !access.exactAlarmsAllowed) {
+      // ENABLE: check system permissions first
+      final notifDisabled = !access.notificationsAllowed;
+      final exactDisabled = !access.exactAlarmsAllowed;
+
+      if (notifDisabled || exactDisabled) {
+        // Request permissions
         final allAllowed = await sys.requestAll(includeExactAlarms: true);
-        if (!allAllowed) {
-          // Permission denied, keep OFF
+
+        // Permission denied, keep OFF
+        final stillDisabled = !allAllowed;
+
+        if (stillDisabled) {
           await box.put(kSalahEnabled, false);
           state = false;
-          debugPrint('Permissions not granted not toggling salah reminders');
+          debugPrint('Permissions not granted not toggling salah reminders on');
 
           if (!context.mounted) return;
 
-          if (showSnack != null && showSnack) {
-            AppToast.showCompact(
-              context: context,
-              message: 'Notification permissions denied.',
-            );
-          }
+          if (showSnack == false) return;
+
+          AppToast.showCompact(
+            context: context,
+            message: 'Notification permissions denied.',
+          );
+
           return;
         }
       }
 
-      // Permission ok -> enable
+      // Permission allowed -> enable
       await box.put(kSalahEnabled, true);
       state = true; // update UI
       RafeeqAnalytics.logFeature("enable_salah_reminders");
       if (!context.mounted) return;
 
-      if (showSnack != null && showSnack) {
+      if (showSnack == true) {
         AppToast.showCompact(
           context: context,
           message: 'Scheduling Salah reminders',
@@ -91,7 +101,9 @@ class AdhkarNotifController extends Notifier<bool> {
   @override
   bool build() {
     final box = ref.read(settingsBoxProvider);
-    final allowed = ref.read(systemNotifAccessProvider).notificationsAllowed;
+    final allowed = ref
+        .read(notificationPermissionProvider)
+        .notificationsAllowed;
     if (!allowed) return false;
     return box.get(kAdhkarEnabled, defaultValue: false) as bool;
   }
@@ -108,8 +120,8 @@ class AdhkarNotifController extends Notifier<bool> {
     ref.read(adhkarNotifUpdatingProvider.notifier).state = true;
 
     try {
-      final access = ref.read(systemNotifAccessProvider);
-      final sys = ref.read(systemNotifAccessProvider.notifier);
+      final access = ref.read(notificationPermissionProvider);
+      final sys = ref.read(notificationPermissionProvider.notifier);
       final box = ref.read(settingsBoxProvider);
 
       // DISABLE
@@ -137,12 +149,12 @@ class AdhkarNotifController extends Notifier<bool> {
         }
       }
 
-      // Permission ok -> enable
+      // Permission allowed -> enable
       await box.put(kAdhkarEnabled, true);
       state = true;
       RafeeqAnalytics.logFeature("enable_adhkar_reminders");
 
-      if (showSnack&&context.mounted) {
+      if (showSnack && context.mounted) {
         AppToast.showCompact(
           context: context,
           message: 'Turning on Adhkar reminders...',

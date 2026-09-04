@@ -190,7 +190,7 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
     if (!hasSeen) return;
 
     //SYNC
-    await ref.read(systemNotifAccessProvider.notifier).sync();
+    await ref.read(notificationPermissionProvider.notifier).sync();
 
     // Schedule ayah of day notifications
     await ref.read(ayahNotificationSchedulerProvider.notifier).schedule();

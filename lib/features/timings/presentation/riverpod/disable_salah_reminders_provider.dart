@@ -27,13 +27,13 @@ class DisabledSalahPrayersNotifier extends Notifier<Set<SalahPrayer>> {
     if (!_didSyncOnce) {
       _didSyncOnce = true;
       Future.microtask(() async {
-        await ref.read(systemNotifAccessProvider.notifier).sync();
+        await ref.read(notificationPermissionProvider.notifier).sync();
       });
     }
 
     // 2) React to notificationsAllowed
     final notifsAllowed = ref.watch(
-      systemNotifAccessProvider.select((s) => s.notificationsAllowed),
+      notificationPermissionProvider.select((s) => s.notificationsAllowed),
     );
 
     // 3) If notifications are OFF → force all salah reminders OFF
@@ -46,7 +46,7 @@ class DisabledSalahPrayersNotifier extends Notifier<Set<SalahPrayer>> {
   }
 
   bool get _notifsAllowed =>
-      ref.read(systemNotifAccessProvider).notificationsAllowed;
+      ref.read(notificationPermissionProvider).notificationsAllowed;
 
   Future<void> toggle(SalahPrayer prayer) async {
     if (!actualSalats.contains(prayer)) return;
@@ -54,7 +54,7 @@ class DisabledSalahPrayersNotifier extends Notifier<Set<SalahPrayer>> {
     // If notifications are not allowed, request first.
     if (!_notifsAllowed) {
       final allowed = await ref
-          .read(systemNotifAccessProvider.notifier)
+          .read(notificationPermissionProvider.notifier)
           .requestAll();
 
       if (!allowed) {

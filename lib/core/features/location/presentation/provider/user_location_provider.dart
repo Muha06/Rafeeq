@@ -29,25 +29,6 @@ class UserLocationNotifier extends AsyncNotifier<UserLocation> {
   Future<UserLocation> build() async {
     final cachedLocation = await _locationRepo.getCachedLocation();
 
-    //If cached is null => Set fallback location (Madinah)
-    if (cachedLocation == null) {
-      setManual(
-        lat: 24.4672,
-        lng: 39.6111,
-        city: 'Madinah',
-        country: 'Saudi Arabia',
-        timezone: 'Ksa/Medinah',
-      );
-
-      return const UserLocation(
-        lat: 24.4672,
-        lng: 39.6111,
-        city: 'Madinah',
-        country: 'Saudi Arabia',
-        isAuto: false,
-      );
-    }
-
     return cachedLocation;
   }
 
