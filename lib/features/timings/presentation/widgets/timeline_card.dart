@@ -31,15 +31,18 @@ class _ErrorCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    return Row(
-      children: [
-        const Text('Oops! Failed to fetch prayer times'),
-        const Spacer(),
-        IconButton(
-          onPressed: () => ref.invalidate(salahStatusProvider),
-          icon: const Icon(HugeIconsSolid.refresh),
-        ),
-      ],
+    return GestureDetector(
+      onTap: () => ref.refresh(salahStatusProvider),
+      child: Row(
+        children: [
+          const Text('Oops! Failed to fetch prayer times'),
+          const Spacer(),
+          IconButton(
+            onPressed: () => ref.invalidate(salahStatusProvider),
+            icon: const Icon(HugeIconsSolid.refresh),
+          ),
+        ],
+      ),
     );
   }
 }

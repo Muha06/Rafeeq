@@ -4,53 +4,9 @@ import 'package:rafeeq/features/timings/domain/entities/salah_status.dart';
 import 'package:rafeeq/features/timings/domain/usecases/get_salah_status.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/fetch_salah_times_provider.dart';
 
-final salahTickerProvider = NotifierProvider<SalahTickerNotifier, DateTime>(
-  SalahTickerNotifier.new,
-);
-
-class SalahTickerNotifier extends Notifier<DateTime> {
-  Timer? _timer;
-  bool _didRegisterDispose = false;
-
-  @override
-  DateTime build() {
-    if (!_didRegisterDispose) {
-      ref.onDispose(() {
-        _timer?.cancel();
-      });
-      _didRegisterDispose = true;
-    }
-
-    _scheduleNextTick();
-    return DateTime.now();
-  }
-
-  void _scheduleNextTick() {
-    final now = DateTime.now();
-
-    final nextMinute = DateTime(
-      now.year,
-      now.month,
-      now.day,
-      now.hour,
-      now.minute + 1,
-    );
-
-    final delay = nextMinute.difference(now);
-
-    _timer?.cancel();
-
-    // schedule
-    // Wait until the next minute starts,
-    // then update the state to trigger a rebuild
-    _timer = Timer(delay, () {
-      // After the delay, update the state
-      state = DateTime.now();
-
-      _scheduleNextTick();
-    });
-  }
-}
+final nowProvider = StreamProvider<DateTime>((ref) {
+  return Stream.periodic(const Duration(seconds: 1), (_) => DateTime.now());
+});
 
 final salahStatusProvider =
     AsyncNotifierProvider<SalahStatusNotifier, SalahStatusEntity>(
@@ -79,6 +35,7 @@ class SalahStatusNotifier extends AsyncNotifier<SalahStatusEntity> {
     return status;
   }
 
+  // Refreshes the SalahStatusEntity when the next Salah time is reached
   void _scheduleNextStatusRefresh(DateTime nextStart) {
     final now = DateTime.now();
     final delay = nextStart.difference(now);
@@ -92,7 +49,7 @@ class SalahStatusNotifier extends AsyncNotifier<SalahStatusEntity> {
 
 final salahTimeToNextProvider = Provider<AsyncValue<Duration>>((ref) {
   final status = ref.watch(salahStatusProvider);
-  final now = ref.watch(salahTickerProvider);
+  final now = ref.watch(nowProvider).value ?? DateTime.now();
 
-  return status.whenData((value) => value.nextStart.difference(now));
+  return status.whenData((status) => status.nextStart.difference(now));
 });
