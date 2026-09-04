@@ -11,19 +11,8 @@ final fetchTodaySalahTimesProvider = FutureProvider<SalahTimesEntity>((
   // Fetch user location
   final userLocation = await ref.watch(userLocationProvider.future);
 
-  final isAuto = userLocation.isAuto;
-  if (isAuto) {
-    return await fetchTimesUsecase.fetchTodayByCoords(
-      latitude: userLocation.lat,
-      longitude: userLocation.lng,
-      city: userLocation.city,
-      country: userLocation.country,
-      method: ref.read(salahMethodProvider),
-    );
-  }
-
-  return fetchTimesUsecase.fetchTodayByCity(
-    city: userLocation.city,
-    country: userLocation.country,
+  return await fetchTimesUsecase.fetchTodayByCoords(
+    userLocation: userLocation,
+    method: ref.read(salahMethodProvider),
   );
 });

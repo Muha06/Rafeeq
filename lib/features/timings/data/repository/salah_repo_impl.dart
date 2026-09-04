@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:rafeeq/core/features/location/domain/user_location.dart';
 import 'package:rafeeq/features/timings/data/datasources/cached_salah_local_ds.dart';
 import 'package:rafeeq/features/timings/data/datasources/salah_remote_ds.dart';
 import 'package:rafeeq/features/timings/data/models/mappers.dart';
@@ -14,42 +15,24 @@ class FetchSalahTimesRepoImpl implements FetchSalahTimesRepo {
 
   @override
   Future<SalahTimesEntity> fetchTodayByCoords({
-    required double latitude,
-    required double longitude,
-    required String city,
-    required String country,
+    required UserLocation userLocation,
     int method = 3,
   }) {
     return _fetchMonthlyTimings(
-      city: city,
-      country: country,
+      longitude: userLocation.lng,
+      latitude: userLocation.lat,
       method: method,
       fetchMonth: () => remote.fetchMonthByCoordinates(
-        latitude: latitude,
-        longitude: longitude,
+        latitude: userLocation.lat,
+        longitude: userLocation.lng,
         method: method,
       ),
     );
   }
 
-  @override
-  Future<SalahTimesEntity> fetchTodayByCity({
-    required String city,
-    required String country,
-    int method = 3,
-  }) {
-    return _fetchMonthlyTimings(
-      city: city,
-      country: country,
-      method: method,
-      fetchMonth: () =>
-          remote.fetchMonthByCity(city: city, country: country, method: method),
-    );
-  }
-
   Future<SalahTimesEntity> _fetchMonthlyTimings({
-    required String city,
-    required String country,
+    required double longitude,
+    required double latitude,
     required int method,
     required Future<List<AladhanTimingsModel>> Function() fetchMonth,
   }) async {
@@ -59,32 +42,33 @@ class FetchSalahTimesRepoImpl implements FetchSalahTimesRepo {
     // 1. Check today's cache
     final cached = local.getToday(
       date: today,
-      city: city,
-      country: country,
+      longitude: longitude,
+      latitude: latitude,
       method: method,
     );
 
     if (cached != null) {
-      debugPrint('Returning cached timings for today: ${cached.date}');
+      // debugPrint('Returning cached timings for today: ${cached.date}✅');
+      // debugPrint("Salah cache length: ${await local.totalSalahsLength()}");
       return cached.toEntity();
     }
 
     // 2. Fetch the entire month
-    debugPrint('No cached timings found. Fetching month from remote...');
+    // debugPrint('No cached timings found. Fetching month from remote...');
 
     final monthlyModels = await fetchMonth();
 
-    debugPrint('Fetched ${monthlyModels.length} timings for the month.');
+    // debugPrint('Fetched ${monthlyModels.length} timings for the month.');
 
     // 3. Cache the entire month
-    debugPrint('Caching the entire month of timings...');
+    // debugPrint('Caching the entire month of timings...');
 
     final cachedModels = monthlyModels
         .map(
           (model) => CachedSalahTimesHiveX.fromEntity(
             entity: model.toEntity(),
-            city: city,
-            country: country,
+            longitude: longitude,
+            latitude: latitude,
             method: method,
           ),
         )
@@ -102,5 +86,11 @@ class FetchSalahTimesRepoImpl implements FetchSalahTimesRepo {
     );
 
     return todayModel.toEntity();
+  }
+
+  Future<int> totalCachedSalahsLength() async {
+    final length = await local.totalSalahsLength();
+    // debugPrint('Total cached SalahTimes: $length');
+    return length;
   }
 }

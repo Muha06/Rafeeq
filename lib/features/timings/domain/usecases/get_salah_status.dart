@@ -7,8 +7,8 @@ SalahStatusEntity computeSalahStatus({
   required DateTime now,
 }) {
   SalahStatusEntity buildStatus({
-    required SalahPrayer current,
-    required SalahPrayer next,
+    required SalahPrayer current, // eg dhuhr
+    required SalahPrayer next, // eg asr
     required DateTime currentStart,
     required DateTime nextStart,
   }) {
@@ -41,21 +41,26 @@ SalahStatusEntity computeSalahStatus({
   ];
 
   // If we're between Fajr and Isha, normal loop works
-  if (!now.isBefore(fajrToday) && now.isBefore(ishaToday)) {
+  final isAfterFajr = !now.isBefore(fajrToday);
+  final isBeforeIsha = now.isBefore(ishaToday);
+
+  if (isAfterFajr && isBeforeIsha) {
     for (var i = 0; i < dayOrder.length - 1; i++) {
-      final cur = dayOrder[i];
-      final nxt = dayOrder[i + 1];
+      final currentSalah = dayOrder[i];
+      final nextSalah = dayOrder[i + 1];
 
-      final curStart = times.at(cur);
-      final nxtStart = times.at(nxt);
+      final currentStart = times.at(currentSalah);
+      final nextStart = times.at(nextSalah);
 
-      if (now.isBefore(curStart) || !now.isBefore(nxtStart)) continue;
+      if (now.isBefore(currentStart) || !now.isBefore(nextStart)) {
+        continue;
+      } // skip if we're not in this window
 
       return buildStatus(
-        current: cur,
-        next: nxt,
-        currentStart: curStart,
-        nextStart: nxtStart,
+        current: currentSalah,
+        currentStart: currentStart,
+        next: nextSalah,
+        nextStart: nextStart,
       );
     }
   }
@@ -63,27 +68,31 @@ SalahStatusEntity computeSalahStatus({
   // ---------- NIGHT MODE HELPERS ----------
   DateTime computeMidnight(DateTime ishaStart, DateTime fajrStart) {
     final totalSeconds = fajrStart.difference(ishaStart).inSeconds;
-    return ishaStart.add(Duration(seconds: totalSeconds ~/ 2));
+    final halfSeconds = totalSeconds ~/ 2;
+
+    return ishaStart.add(Duration(seconds: halfSeconds));
   }
 
+  // Aligns tahajjud to the night window,
+  //ensuring it's after isha and before fajr
   DateTime alignTahajjudToNight({
     required DateTime ishaStart,
     required DateTime midnight,
-    required DateTime tahajjudRaw,
+    required DateTime tahajjud,
     required DateTime fajrStart,
   }) {
-    var t = tahajjudRaw;
-
     // If tahajjud time is earlier than isha, it's after midnight -> next day
-    if (t.isBefore(ishaStart)) t = t.add(const Duration(days: 1));
-
-    // Safety: ensure it's inside the night window and after midnight
-    if (t.isBefore(midnight)) t = midnight;
-    if (!t.isBefore(fajrStart)) {
-      t = fajrStart.subtract(const Duration(minutes: 1));
+    if (tahajjud.isBefore(ishaStart)) {
+      tahajjud = tahajjud.add(const Duration(days: 1));
     }
 
-    return t;
+    // Safety: ensure it's inside the night window and after midnight
+    if (tahajjud.isBefore(midnight)) tahajjud = midnight;
+    if (!tahajjud.isBefore(fajrStart)) {
+      tahajjud = fajrStart.subtract(const Duration(minutes: 1));
+    }
+
+    return tahajjud;
   }
 
   // ---------- NIGHT MODE A: AFTER ISHA ----------
@@ -94,7 +103,7 @@ SalahStatusEntity computeSalahStatus({
 
     final tahajjudRaw = times.at(SalahPrayer.tahajjud);
     final tahajjud = alignTahajjudToNight(
-      tahajjudRaw: tahajjudRaw,
+      tahajjud: tahajjudRaw,
       ishaStart: ishaToday,
       fajrStart: fajrTomorrow,
       midnight: midnight,
@@ -136,7 +145,7 @@ SalahStatusEntity computeSalahStatus({
 
   final tahajjudRaw = times.at(SalahPrayer.tahajjud); // e.g. today 02:30
   final tahajjud = alignTahajjudToNight(
-    tahajjudRaw: tahajjudRaw,
+    tahajjud: tahajjudRaw,
     ishaStart: ishaYesterday,
     fajrStart: fajrToday,
     midnight: midnight,

@@ -4,13 +4,8 @@ import 'package:rafeeq/features/timings/data/models/salah_times_model.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_times.dart';
 import '../../domain/entities/salah_prayer.dart';
 
-/* 
-MODEL -> ENTITY 
-*/
-
 extension AladhanTimingsModelMapper on AladhanTimingsModel {
-  //Method that returns entity model
-
+ 
   SalahTimesEntity toEntity() {
     final sunriseDT = parseAladhanTime(raw: sunrise, date: date);
 
@@ -53,14 +48,14 @@ extension CachedSalahTimesHiveX on CachedSalahTimesHive {
   //ENTITY -> HIVE MODEL
   static CachedSalahTimesHive fromEntity({
     required SalahTimesEntity entity,
-    required String city,
-    required String country,
+   required double longitude,
+    required double latitude,
     required int method,
   }) {
     return CachedSalahTimesHive(
       date: CachedSalahTimesHive.normalizeDate(entity.date),
-      city: city,
-      country: country,
+      longitude: longitude,
+      latitude: latitude,
       method: method,
       timezone: entity.timezone,
       fajr: entity.at(SalahPrayer.fajr),

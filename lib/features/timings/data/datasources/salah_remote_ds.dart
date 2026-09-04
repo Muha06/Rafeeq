@@ -8,54 +8,12 @@ abstract class SalahRemoteDataSource {
     required double longitude,
     int method = 3,
   });
-
-  // Month
-  Future<List<AladhanTimingsModel>> fetchMonthByCity({
-    required String city,
-    required String country,
-    int method = 3,
-  });
 }
 
 class SalahRemoteDataSourceImpl implements SalahRemoteDataSource {
   final http.Client client;
 
   const SalahRemoteDataSourceImpl(this.client);
-
-  @override
-  Future<List<AladhanTimingsModel>> fetchMonthByCity({
-    required String city,
-    required String country,
-    int method = 3,
-  }) async {
-    final now = DateTime.now();
-
-    final uri = Uri.https(
-      'api.aladhan.com',
-      '/v1/calendarByCity/${now.year}/${now.month}',
-      {'city': city, 'country': country, 'method': method.toString()},
-    );
-
-    final res = await client.get(uri);
-
-    if (res.statusCode != 200) {
-      throw Exception('Failed to fetch monthly timings: ${res.statusCode}');
-    }
-
-    final jsonMap = json.decode(res.body) as Map<String, dynamic>;
-
-    final data = jsonMap['data'] as List<dynamic>;
-
-    return data.map((item) {
-      final dataMap = item as Map<String, dynamic>;
-
-      return AladhanTimingsModel.fromJson(
-        timingsJson: dataMap['timings'] as Map<String, dynamic>,
-        metaJson: dataMap['meta'] as Map<String, dynamic>,
-        dateJson: dataMap['date'] as Map<String, dynamic>,
-      );
-    }).toList();
-  }
 
   //By coords
   @override

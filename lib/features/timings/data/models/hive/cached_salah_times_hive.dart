@@ -5,13 +5,13 @@ part 'cached_salah_times_hive.g.dart';
 @HiveType(typeId: 41)
 class CachedSalahTimesHive extends HiveObject {
   @HiveField(0)
-  final DateTime date; // ✅ date for the timings (normalized to midnight)
+  final DateTime date;  
 
   @HiveField(1)
-  final String city;
+  final double longitude;
 
   @HiveField(2)
-  final String country;
+  final double latitude;
 
   @HiveField(3)
   final int method;
@@ -48,8 +48,8 @@ class CachedSalahTimesHive extends HiveObject {
 
   CachedSalahTimesHive({
     required this.date,
-    required this.city,
-    required this.country,
+    required this.longitude,
+    required this.latitude,
     required this.method,
     required this.timezone,
     required this.fajr,
@@ -69,8 +69,8 @@ class CachedSalahTimesHive extends HiveObject {
   /// Use a stable string key for Hive storage
   static String cachedKey({
     required DateTime date,
-    required String city,
-    required String country,
+    required double longitude,
+    required double latitude,
     required int method,
   }) {
     final n = normalizeDate(date);
@@ -78,6 +78,7 @@ class CachedSalahTimesHive extends HiveObject {
     final mm = n.month.toString().padLeft(2, '0');
     final dd = n.day.toString().padLeft(2, '0');
 
-    return '$yyyy-$mm-$dd|${city.toLowerCase()}|${country.toLowerCase()}|$method';
+    return '$yyyy-$mm-$dd|$longitude|$latitude|$method';
+    // eg: 2023-08-15|39.9042|116.4074|3
   }
 }

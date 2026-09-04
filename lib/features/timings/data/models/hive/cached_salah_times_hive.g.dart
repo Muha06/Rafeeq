@@ -18,8 +18,8 @@ class CachedSalahTimesHiveAdapter extends TypeAdapter<CachedSalahTimesHive> {
     };
     return CachedSalahTimesHive(
       date: fields[0] as DateTime,
-      city: fields[1] as String,
-      country: fields[2] as String,
+      longitude: fields[1] as double,
+      latitude: fields[2] as double,
       method: fields[3] as int,
       timezone: fields[4] as String,
       fajr: fields[5] as DateTime,
@@ -41,9 +41,9 @@ class CachedSalahTimesHiveAdapter extends TypeAdapter<CachedSalahTimesHive> {
       ..writeByte(0)
       ..write(obj.date)
       ..writeByte(1)
-      ..write(obj.city)
+      ..write(obj.longitude)
       ..writeByte(2)
-      ..write(obj.country)
+      ..write(obj.latitude)
       ..writeByte(3)
       ..write(obj.method)
       ..writeByte(4)

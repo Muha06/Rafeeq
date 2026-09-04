@@ -3,6 +3,7 @@ import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/features/location/domain/open_mateo.dart';
+import 'package:rafeeq/core/features/location/domain/user_location.dart';
 import 'package:rafeeq/core/features/location/presentation/provider/open_mateo_provider.dart';
 import 'package:rafeeq/core/features/location/presentation/provider/user_location_provider.dart';
 import 'package:rafeeq/core/helpers/app_toast.dart';
@@ -103,10 +104,13 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
       final method = ref.read(salahMethodProvider);
 
       await usecase.fetchTodayByCoords(
-        latitude: p.lat,
-        longitude: p.lng,
-        city: p.name,
-        country: _country ?? p.country,
+        userLocation: UserLocation(
+          lat: p.lat,
+          lng: p.lng,
+          city: p.name,
+          isAuto: false,
+          country: _country ?? p.country,
+        ),
         method: method,
       );
 
@@ -348,9 +352,7 @@ class _CitySearchSheetState extends ConsumerState<CitySearchSheet> {
 
           Text(
             'Select city (${widget.countryName})',
-            style: theme.textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.w800,
-            ),
+            style: theme.textTheme.titleMedium,
           ),
           const SizedBox(height: 16),
 
@@ -359,8 +361,7 @@ class _CitySearchSheetState extends ConsumerState<CitySearchSheet> {
             onChanged: _onChanged,
             style: theme.textTheme.bodyMedium,
             decoration: InputDecoration(
-              hintText: 'Type city… (e.g. Nai)',
-              hintStyle: theme.textTheme.bodySmall,
+              hintText: 'Type city… (e.g. Nairobi)',
               prefixIcon: const Icon(Icons.search_rounded),
               suffixIcon: _ctrl.text.isEmpty
                   ? null

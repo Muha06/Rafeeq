@@ -1,15 +1,18 @@
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import '../models/hive/cached_salah_times_hive.dart';
 
 abstract class SalahCacheLocalDataSource {
   CachedSalahTimesHive? getToday({
     required DateTime date,
-    required String city,
-    required String country,
+    required double longitude,
+    required double latitude,
     required int method,
   });
 
   Future<void> saveAll(List<CachedSalahTimesHive> data);
+
+  Future<int> totalSalahsLength();
 }
 
 class SalahCacheLocalDataSourceImpl implements SalahCacheLocalDataSource {
@@ -20,16 +23,18 @@ class SalahCacheLocalDataSourceImpl implements SalahCacheLocalDataSource {
   @override
   CachedSalahTimesHive? getToday({
     required DateTime date,
-    required String city,
-    required String country,
+    required double longitude,
+    required double latitude,
     required int method,
   }) {
     final k = CachedSalahTimesHive.cachedKey(
       date: date,
-      city: city,
-      country: country,
+      longitude: longitude,
+      latitude: latitude,
       method: method,
     ); // key for the cache
+
+    debugPrint("Local fetching SalahTimes for key: $k");
 
     return box.get(k);
   }
@@ -39,11 +44,17 @@ class SalahCacheLocalDataSourceImpl implements SalahCacheLocalDataSource {
     for (final item in data) {
       final k = CachedSalahTimesHive.cachedKey(
         date: item.date,
-        city: item.city,
-        country: item.country,
+        longitude: item.longitude,
+        latitude: item.latitude,
         method: item.method,
       );
       await box.put(k, item);
     }
+  }
+
+  @override
+  Future<int> totalSalahsLength() async {
+    final salahs = box.values.toList();
+    return salahs.length;
   }
 }
