@@ -13,7 +13,7 @@ class AdhkarPreviewPages extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final adhkarAsync = ref.watch(fetchAllAdhkarProvider(category.id));
+    final adhkarAsync = ref.watch(adhkarProvider(category.id));
 
     final theme = Theme.of(context);
     final cs = theme.colorScheme;

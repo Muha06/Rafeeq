@@ -142,49 +142,69 @@ class _QuranBookmarkTile extends ConsumerWidget {
             const Divider(),
             const SizedBox(height: 8),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                AppIconContainer(
-                  backgroundColor: cs.tertiaryContainer,
-                  child: Icon(
-                    HugeIconsSolid.bookmark01,
-                    color: cs.onTertiaryContainer,
-                    size: 14,
-                  ),
-                ),
-
-                const SizedBox(width: 14),
-
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        bookmark.surahName,
-                        style: tt.titleLarge?.copyWith(fontSize: 13),
-                      ),
-                      const SizedBox(height: 0),
-
-                      Text("Ayah ${bookmark.ayahNumber}", style: tt.bodySmall),
-                    ],
-                  ),
-                ),
-
-                IconButton(
-                  onPressed: () =>
-                      _showActions(context, ref, quranBookmark: bookmark),
-                  icon: Icon(
-                    HugeIconsSolid.moreHorizontal,
-                    color: cs.onSurfaceVariant,
-                  ),
-                ),
-              ],
+            _BookmarkMetadataRow(
+              title: bookmark.surahName,
+              subtitle: "Ayah ${bookmark.ayahNumber}",
+              onOpenActions: () =>
+                  _showActions(context, ref, quranBookmark: bookmark),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _BookmarkMetadataRow extends ConsumerWidget {
+  const _BookmarkMetadataRow({
+    super.key,
+    required this.title,
+    required this.subtitle,
+    required this.onOpenActions,
+  });
+
+  final String title;
+  final String subtitle;
+  final VoidCallback onOpenActions;
+
+  @override
+  Widget build(BuildContext context, ref) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+    final tt = theme.textTheme;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        AppIconContainer(
+          backgroundColor: cs.tertiaryContainer,
+          child: Icon(
+            HugeIconsSolid.bookmark01,
+            color: cs.onTertiaryContainer,
+            size: 14,
+          ),
+        ),
+
+        const SizedBox(width: 14),
+
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title, style: tt.titleLarge?.copyWith(fontSize: 13)),
+              const SizedBox(height: 0),
+
+              Text(subtitle, style: tt.bodySmall),
+            ],
+          ),
+        ),
+
+        IconButton(
+          onPressed: onOpenActions,
+          icon: Icon(HugeIconsSolid.moreHorizontal, color: cs.onSurfaceVariant),
+        ),
+      ],
     );
   }
 }
@@ -202,6 +222,7 @@ class _DhikrBookmarkTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
+    final tt = theme.textTheme;
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -209,7 +230,7 @@ class _DhikrBookmarkTile extends ConsumerWidget {
         //fetching adhkars
 
         final adhkar = await ref.read(
-          fetchAllAdhkarProvider(bookmark.categoryId).future,
+          adhkarProvider(bookmark.categoryId).future,
         );
         final dhikr = adhkar.firstWhere((e) => e.id == bookmark.dhikrId);
 
@@ -222,29 +243,59 @@ class _DhikrBookmarkTile extends ConsumerWidget {
           AdhkarDetailsPage(adhkars: adhkar, initialIndex: index),
         );
       },
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(indexDisplay.toString(), style: theme.textTheme.labelSmall),
-
-          const SizedBox(width: 8),
-
-          Expanded(
-            child: Text(
-              bookmark.title,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.labelLarge,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: cs.surface,
+        ),
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Arabic
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                bookmark.arabic,
+                maxLines: 2,
+                textAlign: TextAlign.right,
+                overflow: TextOverflow.ellipsis,
+                style: AppTextStyles.quranAyah.copyWith(
+                  fontFamily: 'Amiri',
+                  color: cs.onSurface,
+                  fontSize: 18.5,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
             ),
-          ),
 
-          IconButton(
-            onPressed: () {
-              _showActions(context, ref, dhikrBookmark: bookmark);
-            },
-            icon: Icon(Icons.more_horiz, color: cs.onSurfaceVariant),
-          ),
-        ],
+            const SizedBox(height: 8),
+
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                bookmark.translation,
+                maxLines: 2,
+                textAlign: TextAlign.left,
+                overflow: TextOverflow.ellipsis,
+                style: tt.bodyLarge,
+              ),
+            ),
+
+            const SizedBox(height: 8),
+
+            // Actions & refrence
+            const Divider(),
+            const SizedBox(height: 8),
+
+            _BookmarkMetadataRow(
+              title: bookmark.title,
+              subtitle: bookmark.categoryTitle,
+              onOpenActions: () =>
+                  _showActions(context, ref, dhikrBookmark: bookmark),
+            ),
+          ],
+        ),
       ),
     );
   }

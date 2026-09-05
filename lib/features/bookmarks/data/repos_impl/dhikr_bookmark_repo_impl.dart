@@ -42,7 +42,11 @@ class DhikrBookmarksRepositoryImpl implements DhikrBookmarksRepository {
     return DhikrBookmarkHiveModel(
       dhikrId: e.dhikrId,
       dhikrTitle: e.title,
-      subcategoryId: e.categoryId,
+      arabic: e.arabic,
+      translation: e.translation,
+      categoryTitle: e.categoryTitle,
+      repeat: e.repeat,
+      categoryId: e.categoryId,
       createdAtMillis: e.createdAt.millisecondsSinceEpoch,
     );
   }
@@ -51,7 +55,11 @@ class DhikrBookmarksRepositoryImpl implements DhikrBookmarksRepository {
     return DhikrBookmark(
       dhikrId: m.dhikrId,
       title: m.dhikrTitle,
-      categoryId: m.subcategoryId,
+      arabic: m.arabic,
+      translation: m.translation,
+      categoryTitle: m.categoryTitle,
+      categoryId: m.categoryId,
+      repeat: m.repeat,
       createdAt: DateTime.fromMillisecondsSinceEpoch(m.createdAtMillis),
     );
   }

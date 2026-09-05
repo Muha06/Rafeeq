@@ -19,7 +19,7 @@ class AdhkarCategoryPage extends ConsumerStatefulWidget {
 class _AdhkarCategoryPageState extends ConsumerState<AdhkarCategoryPage> {
   @override
   Widget build(BuildContext context) {
-    final adhkarCategoriesState = ref.watch(fetchAdhkarCategoriesProvider);
+    final adhkarCategoriesState = ref.watch(adhkarCategoriesProvider);
 
     return Scaffold(
       extendBody: true,
@@ -29,7 +29,7 @@ class _AdhkarCategoryPageState extends ConsumerState<AdhkarCategoryPage> {
           if (categories.isEmpty) {
             return Center(
               child: GestureDetector(
-                onTap: () => ref.refresh(fetchAdhkarCategoriesProvider),
+                onTap: () => ref.refresh(adhkarCategoriesProvider),
                 child: const Text('No categories found'),
               ),
             );
@@ -63,7 +63,7 @@ class _AdhkarCategoryPageState extends ConsumerState<AdhkarCategoryPage> {
           title: 'Failed to load categories',
           message: 'Please try again.',
           buttonText: 'Retry',
-          onPressed: () => ref.refresh(fetchAdhkarCategoriesProvider),
+          onPressed: () => ref.refresh(adhkarCategoriesProvider),
         ),
         loading: () => const Center(child: CircularProgressIndicator()),
       ),

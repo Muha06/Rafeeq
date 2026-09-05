@@ -11,13 +11,17 @@ final dhikrBookmarksProvider =
 class DhikrBookmarksNotifier extends Notifier<List<DhikrBookmark>> {
   @override
   List<DhikrBookmark> build() {
-    return ref.read(getAllDhikrBookmarksUseCaseProvider).call();
+    final adhkar = ref.read(getAllDhikrBookmarksUseCaseProvider).call();
+
+    adhkar.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+
+    return adhkar;
   }
 
   Future<void> add(DhikrBookmark bookmark) async {
     await ref.read(addDhikrBookmarkUseCaseProvider).call(bookmark);
 
-    state = [...state, bookmark];
+    state = [bookmark, ...state];
   }
 
   Future<void> remove(String bookmarkId) async {

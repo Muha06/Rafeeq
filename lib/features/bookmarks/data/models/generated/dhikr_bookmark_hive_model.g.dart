@@ -19,24 +19,36 @@ class DhikrBookmarkHiveModelAdapter
     };
     return DhikrBookmarkHiveModel(
       dhikrId: fields[0] as String,
-      dhikrTitle: fields[1] as String,
-      createdAtMillis: fields[2] as int,
-      subcategoryId: fields[3] as String,
+      dhikrTitle: fields[2] as String,
+      arabic: fields[3] as String,
+      translation: fields[4] as String,
+      categoryTitle: fields[1] as String,
+      repeat: fields[5] as int,
+      createdAtMillis: fields[7] as int,
+      categoryId: fields[6] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, DhikrBookmarkHiveModel obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.dhikrId)
       ..writeByte(1)
-      ..write(obj.dhikrTitle)
+      ..write(obj.categoryTitle)
       ..writeByte(2)
-      ..write(obj.createdAtMillis)
+      ..write(obj.dhikrTitle)
       ..writeByte(3)
-      ..write(obj.subcategoryId);
+      ..write(obj.arabic)
+      ..writeByte(4)
+      ..write(obj.translation)
+      ..writeByte(5)
+      ..write(obj.repeat)
+      ..writeByte(6)
+      ..write(obj.categoryId)
+      ..writeByte(7)
+      ..write(obj.createdAtMillis);
   }
 
   @override

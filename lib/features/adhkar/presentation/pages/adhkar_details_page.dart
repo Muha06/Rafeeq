@@ -12,6 +12,7 @@ import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/core/helpers/app_text_style.dart';
 import 'package:rafeeq/features/adhkar/domain/entities/dhikr_entity.dart';
+import 'package:rafeeq/features/adhkar/presentation/providers/adhkar_providers.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/dhikr_bookmark.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/dhikr/dhikr_notifier_provider.dart';
 import 'package:vibration/vibration.dart';
@@ -174,10 +175,18 @@ class _BottomNavBar extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     final cs = Theme.of(context).colorScheme;
 
-    void toggleBookmark(Dhikr dhikr) {
+    Future<void> toggleBookmark(Dhikr dhikr) async {
+      final categories = await ref.read(adhkarCategoriesProvider.future);
+
+      final category = categories.firstWhere((c) => c.id == dhikr.categoryId);
+
       final bookmark = DhikrBookmark(
         dhikrId: dhikr.id,
         title: dhikr.title,
+        categoryTitle: category.title,
+        arabic: dhikr.arabicText,
+        translation: dhikr.englishText,
+        repeat: dhikr.repeat,
         categoryId: dhikr.categoryId,
         createdAt: DateTime.now(),
       );
