@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rafeeq/core/helpers/app_haptics.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 
 class AppSheets {
@@ -102,6 +103,8 @@ class AppSheets {
                       ),
                       onPressed: () {
                         onConfirm();
+
+                        if (destructive) AppHaptics.selection();
                       },
                       child: Text(confirmText),
                     ),

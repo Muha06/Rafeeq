@@ -38,10 +38,7 @@ class _QuranAudioPlaylistSheetState
               pinned: true,
               delegate: AppSliverPinnedHeaderDelegate(
                 height: 100,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: _QueueHeader(),
-                ),
+                child: _QueueHeader(),
               ),
             ),
 
@@ -69,7 +66,9 @@ class _QueueHeader extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Container(
-      color: theme.scaffoldBackgroundColor,
+      color: theme.bottomSheetTheme.backgroundColor,
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
           const AppDragHandle(margin: EdgeInsets.only(top: 8)),

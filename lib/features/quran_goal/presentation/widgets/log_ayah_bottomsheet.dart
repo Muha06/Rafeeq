@@ -153,6 +153,8 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
                           updatedProgress.totalRead >= goal.dailyTarget;
 
                       if (!wasCompleted && isCompleted) {
+                        await Future.delayed(2.seconds);
+
                         showGoalCompletedDialog(context, ref, goal.dailyTarget);
                       } else {
                         AppToast.showCompact(
@@ -350,9 +352,7 @@ class LogAyahTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final cs = theme.colorScheme;
-
+  
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ConstrainedBox(
@@ -365,12 +365,7 @@ class LogAyahTextField extends StatelessWidget {
           keyboardType: TextInputType.number,
           textAlign: TextAlign.center,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          decoration: const InputDecoration(contentPadding: EdgeInsets.zero),
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            color: cs.onSurface,
-            fontWeight: FontWeight.bold,
-            fontSize: 14,
-          ),
+          decoration: const InputDecoration(contentPadding: EdgeInsets.zero), 
           onChanged: onChanged,
           controller: controller,
         ),

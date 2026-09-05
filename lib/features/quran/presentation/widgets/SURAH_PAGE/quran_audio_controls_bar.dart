@@ -24,7 +24,7 @@ class QuranAudioControlsBar extends ConsumerWidget {
   final String currentId;
   final VoidCallback onPause;
   final VoidCallback onExit;
-  
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final showAudioControls = ref
@@ -98,7 +98,7 @@ class AudioControlsSection extends ConsumerWidget {
         context: context,
         isScrollControlled: true,
         clipBehavior: Clip.hardEdge,
-        useSafeArea: false, 
+        useSafeArea: false,
         child: const QuranAudioSheet(),
       ),
       child: Column(
@@ -191,7 +191,7 @@ class AudioControlsSection extends ConsumerWidget {
 
           const SizedBox(height: 4),
 
-          const AudioSeekBar(  showDurations: false),
+          const AudioSeekBar(showDurations: false),
         ],
       ),
     );
@@ -232,10 +232,7 @@ class AutoScrollControlsSection extends ConsumerWidget {
 
         Text(
           '${speed.toStringAsFixed(1)}x',
-          style: theme.textTheme.labelSmall?.copyWith(
-            color: cs.onPrimaryContainer,
-            fontWeight: FontWeight.bold,
-          ),
+          style: theme.textTheme.labelLarge?.copyWith(color: cs.onPrimary),
         ),
 
         IconButton(

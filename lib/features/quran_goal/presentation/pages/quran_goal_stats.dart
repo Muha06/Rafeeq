@@ -67,7 +67,7 @@ class _GoalPageBodyState extends State<_GoalPageBody> {
 
       borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
 
-      color: cs.surface,
+      color: cs.surfaceContainerLow,
       boxShadow: null,
       backdropEnabled: true,
       parallaxEnabled: true,
@@ -159,7 +159,10 @@ class _GoalHero extends ConsumerWidget {
         onTap: () => _showGoalActionsSheet(context),
         child: Column(
           children: [
-            if (hasCompleted) const _GoalCompletedBadge(),
+            if (hasCompleted) ...const [
+              _GoalCompletedBadge(),
+              SizedBox(height: 8),
+            ],
 
             Text('Daily target:', style: theme.textTheme.labelSmall),
 
@@ -336,7 +339,7 @@ class _GoalCompletedBadge extends StatelessWidget {
             "🏆  Goal Completed!",
             style: theme.textTheme.labelSmall?.copyWith(
               color: cs.onTertiaryContainer,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ],

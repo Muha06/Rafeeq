@@ -161,7 +161,7 @@ ThemeData appDarkThemeData() {
     ),
 
     dialogTheme: DialogThemeData(
-      backgroundColor: scheme.surfaceContainerLowest,
+      backgroundColor: scheme.surfaceContainerLow,
       surfaceTintColor: Colors.transparent,
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),

@@ -23,7 +23,7 @@ class WeeklyQuranChart extends ConsumerWidget {
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        color: cs.surfaceContainerHigh,
+        color: cs.surface,
       ),
       child: BarChart(
         BarChartData(

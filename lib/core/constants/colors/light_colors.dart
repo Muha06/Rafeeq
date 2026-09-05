@@ -3,9 +3,10 @@ import 'package:flutter/painting.dart';
 class AppLightColors {
   //  BACKGROUND
   static const canvas = Color(0xFFFFFFFF);
-
-  //  SURFACES
-  static const surface = Color(0xFFF3F7F8);
+  static const surfaceLow = Color(0xFFF7F7F7);
+  
+  // SURFACES
+  static const surface = Color(0xFFEFF5F6);
   static const surfaceHigh = Color(0xFFD5E0E4);
   static const surfaceHighest = Color(0xFFBACBD1);
 

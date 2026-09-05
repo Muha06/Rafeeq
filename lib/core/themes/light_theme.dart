@@ -39,7 +39,7 @@ ThemeData appLightThemeData() {
     onError: Colors.white,
 
     surfaceContainerLowest: AppLightColors.canvas,
-    surfaceContainerLow: AppLightColors.canvas,
+    surfaceContainerLow: AppLightColors.surfaceLow,
     surfaceContainer: AppLightColors.surface,
     surfaceContainerHigh: AppLightColors.surfaceHigh,
     surfaceContainerHighest: AppLightColors.surfaceHighest,
@@ -149,19 +149,19 @@ ThemeData appLightThemeData() {
     ),
 
     bottomSheetTheme: BottomSheetThemeData(
-      backgroundColor: AppLightColors.canvas,
+      backgroundColor: scheme.surfaceContainerLow,
       showDragHandle: true,
       modalBarrierColor: scheme.scrim,
       shadowColor: scheme.shadow,
-      modalBackgroundColor: AppLightColors.canvas,
+      modalBackgroundColor: scheme.surfaceContainerLow,
       surfaceTintColor: Colors.transparent,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
       ),
     ),
 
     dialogTheme: DialogThemeData(
-      backgroundColor: scheme.surfaceContainerLowest,
+      backgroundColor: scheme.surfaceContainerLow,
       surfaceTintColor: Colors.transparent,
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),

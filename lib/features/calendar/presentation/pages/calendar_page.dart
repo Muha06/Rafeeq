@@ -6,7 +6,7 @@ import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
 import 'package:rafeeq/core/helpers/app_text_style.dart';
- import 'package:rafeeq/core/widgets/app_drag_handle.dart';
+import 'package:rafeeq/core/widgets/app_drag_handle.dart';
 import 'package:rafeeq/core/widgets/app_icon_container.dart';
 import 'package:rafeeq/features/calendar/presentation/widgets/day_cell.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/log_ayah_bottomsheet.dart';
@@ -27,7 +27,6 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
   DateTime? _selectedDay;
 
   void _openHijriOffsetSheet(BuildContext context) {
-
     AppSheets.showBottomSheet(
       context: context,
       child: SafeArea(
@@ -204,7 +203,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage> {
 
         borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
 
-        color: theme.colorScheme.surface,
+        color: theme.colorScheme.surfaceContainerLow,
         backdropEnabled: true,
         parallaxEnabled: true,
         parallaxOffset: .12,
