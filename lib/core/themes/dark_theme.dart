@@ -39,7 +39,7 @@ ThemeData appDarkThemeData() {
     onError: AppDarkColors.onError,
 
     surfaceContainerLowest: AppDarkColors.canvas,
-    surfaceContainerLow: AppDarkColors.canvas,
+    surfaceContainerLow: AppDarkColors.surfaceLow,
     surfaceContainer: AppDarkColors.surface,
     surfaceContainerHigh: AppDarkColors.surfaceHigh,
     surfaceContainerHighest: AppDarkColors.surfaceHighest,
@@ -149,15 +149,22 @@ ThemeData appDarkThemeData() {
     ),
 
     bottomSheetTheme: BottomSheetThemeData(
-      backgroundColor: scheme.surfaceContainerLowest,
+      backgroundColor: scheme.surfaceContainerLow,
       showDragHandle: true,
       shadowColor: scheme.shadow,
       modalBarrierColor: scheme.scrim,
-      modalBackgroundColor: scheme.surfaceContainerLowest,
+      modalBackgroundColor: scheme.surfaceContainerLow,
       surfaceTintColor: Colors.transparent,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
       ),
+    ),
+
+    dialogTheme: DialogThemeData(
+      backgroundColor: scheme.surfaceContainerLowest,
+      surfaceTintColor: Colors.transparent,
+      elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     ),
 
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
@@ -199,11 +206,9 @@ ThemeData appDarkThemeData() {
       style: ButtonStyle(
         backgroundColor: WidgetStatePropertyAll(scheme.surfaceContainerHighest),
         foregroundColor: WidgetStatePropertyAll(scheme.onSurface),
-        padding: const WidgetStatePropertyAll(
-          EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-        ),
+        padding: const WidgetStatePropertyAll(EdgeInsets.all(24)),
         textStyle: const WidgetStatePropertyAll(
-          TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+          TextStyle(fontWeight: FontWeight.w600, height: 1, fontSize: 16),
         ),
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
@@ -223,7 +228,7 @@ ThemeData appDarkThemeData() {
           side: BorderSide(color: scheme.primary),
         ),
         side: BorderSide(color: scheme.primary, width: 1.25),
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        padding: const EdgeInsets.all(24),
         textStyle: const TextStyle(
           fontWeight: FontWeight.w600,
           height: 1,
@@ -247,13 +252,6 @@ ThemeData appDarkThemeData() {
         minimumSize: Size.zero,
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       ),
-    ),
-
-    dialogTheme: DialogThemeData(
-      backgroundColor: scheme.surfaceContainerLowest,
-      surfaceTintColor: Colors.transparent,
-      elevation: 0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     ),
 
     textSelectionTheme: TextSelectionThemeData(

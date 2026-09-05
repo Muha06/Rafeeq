@@ -4,6 +4,7 @@ class AppDarkColors {
   // BACKGROUND
 
   static const canvas = Color(0xFF0A0F14);
+  static const surfaceLow = Color(0xFF111820); // Bottomsheets, dialogs
 
   // SURFACES
 
@@ -48,7 +49,7 @@ class AppDarkColors {
   // ERROR
 
   static const error = Color(0xFFC95A5A);
-  static const onError = canvas;
+  static const onError = onSurface;
   static const errorContainer = Color(0xFFF9DEDC);
   static const onErrorContainer = Color(0xFF410E0B);
 

@@ -206,11 +206,9 @@ ThemeData appLightThemeData() {
       style: ButtonStyle(
         backgroundColor: WidgetStatePropertyAll(scheme.surfaceContainerHighest),
         foregroundColor: WidgetStatePropertyAll(scheme.onSurface),
-        padding: const WidgetStatePropertyAll(
-          EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-        ),
+        padding: const WidgetStatePropertyAll(EdgeInsets.all(24)),
         textStyle: const WidgetStatePropertyAll(
-          TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+          TextStyle(fontWeight: FontWeight.w600, height: 1, fontSize: 16),
         ),
         shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
@@ -230,7 +228,7 @@ ThemeData appLightThemeData() {
           side: BorderSide(color: scheme.primary),
         ),
         side: BorderSide(color: scheme.primary, width: 1.25),
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        padding: const EdgeInsets.all(24),
         textStyle: const TextStyle(
           fontWeight: FontWeight.w600,
           height: 1,

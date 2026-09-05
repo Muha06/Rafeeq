@@ -92,21 +92,18 @@ class AppSheets {
                 children: [
                   Expanded(
                     child: FilledButton(
-                      style: theme.filledButtonTheme.style?.copyWith(
+                      style: theme.elevatedButtonTheme.style?.copyWith(
                         backgroundColor: WidgetStatePropertyAll(
                           destructive ? cs.error : cs.primary,
+                        ),
+                        foregroundColor: WidgetStatePropertyAll(
+                          destructive ? cs.onPrimary : cs.onPrimary,
                         ),
                       ),
                       onPressed: () {
                         onConfirm();
                       },
-                      child: Text(
-                        confirmText,
-                        style: theme.textTheme.labelLarge!.copyWith(
-                          color: destructive ? cs.onError : cs.onPrimary,
-                          height: 1,
-                        ),
-                      ),
+                      child: Text(confirmText),
                     ),
                   ),
 

@@ -21,7 +21,7 @@ class HomeTimelineCard extends ConsumerWidget {
     return salahStatus.when(
       data: (status) => _BuildTimelineCard(status: status),
       loading: () => const SizedBox.shrink(),
-      error: (error, stackTrace) => const _ErrorCard(),
+      error: (_, _) => const _ErrorCard(),
     );
   }
 }
@@ -38,7 +38,7 @@ class _ErrorCard extends ConsumerWidget {
           const Text('Oops! Failed to fetch prayer times'),
           const Spacer(),
           IconButton(
-            onPressed: () => ref.invalidate(salahStatusProvider),
+            onPressed: () => ref.refresh(salahStatusProvider),
             icon: const Icon(HugeIconsSolid.refresh),
           ),
         ],
