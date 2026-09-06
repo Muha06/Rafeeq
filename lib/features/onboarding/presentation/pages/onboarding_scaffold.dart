@@ -11,7 +11,7 @@ import 'package:rafeeq/features/onboarding/presentation/provider/providers.dart'
 import 'package:rafeeq/features/onboarding/presentation/widgets/collect_name.dart';
 import 'package:rafeeq/features/onboarding/presentation/widgets/dots_indicator.dart';
 import 'package:rafeeq/features/onboarding/presentation/widgets/slides.dart';
-import 'package:rafeeq/user/presentation/providers/user_provider.dart';
+import 'package:rafeeq/features/user/presentation/providers/user_provider.dart';
 
 class OnboardingPage extends ConsumerStatefulWidget {
   const OnboardingPage({super.key});

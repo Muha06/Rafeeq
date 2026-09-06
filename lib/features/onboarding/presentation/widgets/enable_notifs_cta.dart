@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/features/local_notifications/providers/general_notifications_provider.dart';
+import 'package:rafeeq/features/onboarding/presentation/widgets/permission_cta.dart';
 import 'package:rafeeq/features/settings/presentation/provider/notiffications_controller.dart';
 
 class NotificationsPermissionCta extends ConsumerStatefulWidget {
-  const NotificationsPermissionCta({super.key, required this.btnStyle});
-  final ButtonStyle? btnStyle;
+  const NotificationsPermissionCta({super.key});
   @override
   ConsumerState<NotificationsPermissionCta> createState() =>
       _NotificationsPermissionCtaState();
@@ -24,41 +24,35 @@ class _NotificationsPermissionCtaState
   @override
   Widget build(BuildContext context) {
     final perm = ref.watch(notificationPermissionProvider);
-    final notifier = ref.watch(notificationPermissionProvider.notifier);
+    final notifier = ref.read(notificationPermissionProvider.notifier);
+    final cs = Theme.of(context).colorScheme;
 
     // ✅ Already granted
     if (perm.notificationsAllowed) {
-      return ElevatedButton.icon(
-        onPressed: null,
-        icon: const Icon(Icons.check_circle_rounded, color: Colors.green),
-        label: const Text('Notifications Enabled'),
-        style: widget.btnStyle,
+      return const PermissionCta(
+        icon: Icon(Icons.check_circle_rounded, color: Colors.green),
+        title: 'Notifications Enabled',
+        subtitle: "You'll receive Salah and other reminders",
+        onTap: null,
       );
     }
 
     // 🚫 Permanently denied
     if (perm.notifPermanentlyDenied) {
-      return Column(
-        children: [
-          ElevatedButton.icon(
-            onPressed: () async => notifier.openSettings(),
-            icon: const Icon(Icons.settings_rounded),
-            label: const Text('Open Settings'),
-            style: widget.btnStyle,
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Enable notifications in Settings to receive reminders.',
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.white.withAlpha(120)),
-          ),
-        ],
+      return PermissionCta(
+        icon: Icon(Icons.notifications_paused, color: cs.primary),
+        title: 'Enable notifications in Settings',
+        subtitle: "Allow notifications to receive salah and adhkar reminders.",
+        onTap: () async => notifier.openSettings(),
       );
     }
 
     // 🙏 Requestable denied / not yet asked
-    return ElevatedButton.icon(
-      onPressed: perm.isLoading
+    return PermissionCta(
+      icon: const Icon(Icons.notifications_active_rounded),
+      title: perm.isLoading ? 'Enabling…' : 'Enable Notifications',
+      subtitle: "Never miss salah reminders and important updates.",
+      onTap: perm.isLoading
           ? null
           : () async {
               final permitted = await ref
@@ -86,16 +80,6 @@ class _NotificationsPermissionCtaState
                 );
               }
             },
-
-      icon: perm.isLoading
-          ? const SizedBox(
-              width: 18,
-              height: 18,
-              child: CircularProgressIndicator(strokeWidth: 2),
-            )
-          : const Icon(Icons.notifications_active_rounded),
-      label: Text(perm.isLoading ? 'Enabling…' : 'Enable Notifications'),
-      style: widget.btnStyle,
     );
   }
 }

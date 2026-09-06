@@ -16,7 +16,7 @@ import 'package:rafeeq/features/settings/presentation/pages/settings_page.dart';
 import 'package:rafeeq/features/settings/presentation/provider/settings_notifcation_provider.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/salah_notifs_scheduler_provider.dart';
 import 'package:rafeeq/features/timings/presentation/widgets/timeline_card.dart';
-import 'package:rafeeq/user/presentation/providers/user_provider.dart';
+import 'package:rafeeq/features/user/presentation/providers/user_provider.dart';
 import 'package:shimmer/shimmer.dart';
 
 class HomePage extends ConsumerStatefulWidget {

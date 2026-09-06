@@ -1,70 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/features/location/presentation/provider/location_prov.dart';
+import 'package:rafeeq/features/onboarding/presentation/widgets/permission_cta.dart';
 
-class LocationPermissionCta extends ConsumerStatefulWidget {
-  const LocationPermissionCta({super.key, this.btnStyle});
-  final ButtonStyle? btnStyle;
+class LocationPermissionCta extends ConsumerWidget {
+  const LocationPermissionCta({super.key,  });
+ 
 
   @override
-  ConsumerState<LocationPermissionCta> createState() =>
-      _LocationPermissionCtaState();
-}
-
-class _LocationPermissionCtaState extends ConsumerState<LocationPermissionCta> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final perm = ref.watch(locationPermissionProvider);
     final notifier = ref.read(locationPermissionProvider.notifier);
 
     // ✅ Already granted
     if (perm.isGranted) {
-      return ElevatedButton.icon(
-        onPressed: null,
-        icon: const Icon(Icons.check_circle_rounded, color: Colors.green),
-        label: const Text('Location Enabled'),
-        style: widget.btnStyle,
+      return const PermissionCta(
+        icon: Icon(Icons.check_circle_rounded, color: Colors.green),
+        title: 'Location Enabled',
+        subtitle: 'Salah times are based on your location.',
+        onTap: null,
       );
     }
 
     // 🚫 Permanently denied
     if (perm.isPermanentlyDenied) {
-      return Column(
-        children: [
-          ElevatedButton.icon(
-            onPressed: () async {
-              notifier.openSettings();
-            },
-            icon: const Icon(Icons.settings_rounded),
-            label: const Text('Open Settings'),
-            style: widget.btnStyle,
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Enable location in Settings for accurate prayer times.',
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.white.withAlpha(120)),
-          ),
-        ],
+      return PermissionCta(
+        icon: const Icon(Icons.settings_outlined),
+        title: 'Enable Location',
+        subtitle: 'Allow location access in Settings for accurate salah times.',
+        onTap: perm.isLoading ? null : () => notifier.openSettings(),
       );
     }
 
-    // 🙏 Requestable denied
-    return ElevatedButton.icon(
-      onPressed: perm.isLoading
+    // 🙏 Requestable / not yet asked
+    return PermissionCta(
+      icon: const Icon(Icons.location_on_outlined),
+      title: perm.isLoading ? 'Enabling Location…' : 'Allow Location Access',
+      subtitle: 'Get accurate salah times for your location.',
+      onTap: perm.isLoading
           ? null
           : () async {
               await notifier.request();
             },
-      icon: perm.isLoading
-          ? const SizedBox(
-              width: 18,
-              height: 18,
-              child: CircularProgressIndicator(strokeWidth: 2),
-            )
-          : const Icon(Icons.location_on_rounded),
-      label: Text(perm.isLoading ? 'Enabling…' : 'Enable Location'),
-      style: widget.btnStyle,
     );
   }
 }

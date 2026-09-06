@@ -5,7 +5,6 @@ import 'package:rafeeq/features/onboarding/presentation/widgets/enable_notifs_ct
 import 'package:rafeeq/features/timings/presentation/riverpod/fetch_salah_times_provider.dart';
 import 'onboarding_slide.dart';
 
-
 class WelcomeSlide extends ConsumerWidget {
   const WelcomeSlide({super.key});
 
@@ -25,24 +24,20 @@ class SalahSlide extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    final btnStyle = theme.elevatedButtonTheme.style;
-
     return OnboardingSlide(
       imageAsset: 'assets/images/onboarding/salat_feature.png',
       title: 'Stay on time for every ṣalāh',
       subtitle:
           'Enable Location & Notification to calculate and send accurate prayer reminders for where you are.',
       accent: Theme.of(context).colorScheme.primary,
-      child: Column(
+      child: const Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          LocationPermissionCta(btnStyle: btnStyle),
+          LocationPermissionCta(),
 
-          const SizedBox(height: 14),
+          SizedBox(height: 14),
 
-          NotificationsPermissionCta(btnStyle: btnStyle),
+          NotificationsPermissionCta(),
         ],
       ),
     );
