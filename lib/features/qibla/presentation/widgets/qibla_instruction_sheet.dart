@@ -153,11 +153,11 @@ class _InstructionTile extends StatelessWidget {
           ),
         )
         .animate(delay: 450.ms)
-        .fadeIn(duration: 400.ms, curve: Curves.easeOut)
+        .fadeIn(duration: 600.ms, curve: Curves.easeOut)
         .slideY(
           begin: 0.15,
           end: 0,
-          duration: 400.ms,
+          duration: 600.ms,
           curve: Curves.easeOutCubic,
         );
   }

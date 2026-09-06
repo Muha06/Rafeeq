@@ -52,7 +52,6 @@ class _SearchSurahFieldState extends ConsumerState<SearchSurahField> {
         filled: true,
         fillColor: cs.surface,
         enabledBorder: border,
-
         focusedBorder: border,
         suffixIcon: hasInput
             ? IconButton(

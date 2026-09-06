@@ -97,7 +97,9 @@ class _BuildTimelineCard extends ConsumerWidget {
 
                       const Spacer(),
 
-                      const Column(children: [UserLocationChip()]),
+                      const Column(
+                        children: [UserLocationChip(fgColor: Colors.white)],
+                      ),
                     ],
                   ),
 

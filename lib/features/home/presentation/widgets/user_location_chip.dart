@@ -6,7 +6,10 @@ import 'package:rafeeq/core/features/location/presentation/provider/user_locatio
 import 'package:rafeeq/core/helpers/app_nav.dart';
 
 class UserLocationChip extends ConsumerWidget {
-  const UserLocationChip({super.key});
+  const UserLocationChip({super.key, this.padding, required this.fgColor});
+
+  final EdgeInsets? padding;
+  final Color fgColor;
 
   @override
   Widget build(BuildContext context, ref) {
@@ -16,12 +19,16 @@ class UserLocationChip extends ConsumerWidget {
       error: (error, stackTrace) => _MyUserLocChip(
         icon: Icons.error_outline,
         label: 'retry',
+        padding: padding,
+        fgColor: fgColor,
         onTap: () => ref.read(userLocationProvider.notifier).refresh(),
       ),
       loading: () => const SizedBox.shrink(),
       data: (userLocation) => _MyUserLocChip(
         icon: PhosphorIcons.mapPin,
         label: userLocation.city,
+        padding: padding,
+        fgColor: fgColor,
         onTap: () => AppNav.push(context, const UserLocSettingsPage()),
       ),
     );
@@ -33,16 +40,18 @@ class _MyUserLocChip extends StatelessWidget {
     required this.icon,
     required this.label,
     required this.onTap,
+    required this.fgColor,
+    this.padding,
   });
   final IconData icon;
   final String label;
   final VoidCallback onTap;
+  final EdgeInsets? padding;
+  final Color fgColor;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    // final cs = theme.colorScheme;
-    final fgColor = theme.colorScheme.onSurface;
 
     return GestureDetector(
       onTap: onTap,
@@ -52,7 +61,8 @@ class _MyUserLocChip extends StatelessWidget {
           borderRadius: BorderRadius.circular(999),
           border: Border.all(color: fgColor.withAlpha(160)),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+        padding:
+            padding ?? const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         child: IntrinsicWidth(
           child: Row(
             mainAxisSize: MainAxisSize.min,

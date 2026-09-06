@@ -26,19 +26,32 @@ class _QiblaPageState extends ConsumerState<QiblaPage> {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+
     return Scaffold(
       appBar: AppBar(title: const Text('Qibla')),
-      body: const SafeArea(
+      body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(14),
+          padding: const EdgeInsets.all(14),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Align(alignment: Alignment.centerLeft, child: UserLocationChip()),
+              Align(
+                alignment: Alignment.center,
+                child: UserLocationChip(fgColor: cs.onSurface),
+              ),
 
-              SizedBox(height: 48),
+              const SizedBox(height: 24),
 
-              QiblaCompass(),
+              Image.asset(
+                "assets/images/qibla/kaaba.png",
+                height: 52,
+                width: 52,
+              ),
+
+              const SizedBox(height: 48),
+
+              const QiblaCompass(),
             ],
           ),
         ),

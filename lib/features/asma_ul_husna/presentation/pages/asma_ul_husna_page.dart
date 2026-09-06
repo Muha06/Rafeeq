@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/core/constants/strings/app_strings.dart';
+import 'package:rafeeq/core/helpers/app_text_style.dart';
+import 'package:rafeeq/core/widgets/app_icon_container.dart';
+import 'package:rafeeq/core/widgets/app_pressable.dart';
+import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/features/asma_ul_husna/presentation/providers/asma_ul_husna_provider.dart';
 
 class AllahNamesPage extends ConsumerStatefulWidget {
@@ -35,11 +41,7 @@ class _AllahNamesPageState extends ConsumerState<AllahNamesPage> {
         ),
         body: asyncNames.when(
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (e, _) => _ErrorState(
-            message: "Couldn’t load names. Check your internet and try again.",
-            details: e.toString(),
-            onRetry: () => ref.invalidate(allahNamesProvider),
-          ),
+          error: (e, _) => const _ErrorState(),
           data: (names) {
             final filtered = names.where((n) {
               if (_query.isEmpty) return true;
@@ -61,6 +63,7 @@ class _AllahNamesPageState extends ConsumerState<AllahNamesPage> {
             return ListView.separated(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
               itemCount: filtered.length,
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               separatorBuilder: (_, _) => const SizedBox(height: 12),
               itemBuilder: (context, i) {
                 final n = filtered[i];
@@ -95,13 +98,15 @@ class _AllahNameTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final theme = Theme.of(context);
+    final tt = theme.textTheme;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: theme.cardColor,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Padding(
+    return AppPressableScale(
+      scale: 0.95,
+      child: Container(
+        decoration: BoxDecoration(
+          color: theme.cardColor,
+          borderRadius: BorderRadius.circular(16),
+        ),
         padding: const EdgeInsets.all(14),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -120,27 +125,32 @@ class _AllahNameTile extends ConsumerWidget {
                     child: Text(
                       arabic,
                       textDirection: TextDirection.rtl,
-                      style: theme.textTheme.titleLarge?.copyWith(
+                      style: AppTextStyles.arabicUi.copyWith(
                         fontWeight: FontWeight.w700,
                         color: theme.colorScheme.primary,
-                        height: 1,
                       ),
                     ),
                   ),
                   const SizedBox(height: 8),
 
                   // Transliteration
-                  Text(transliteration, style: theme.textTheme.titleMedium),
+                  Text(
+                    transliteration,
+                    overflow: TextOverflow.visible,
+                    style: tt.titleMedium?.copyWith(
+                      fontFamily: AppStrings.displayFont,
+                    ),
+                  ),
                   const SizedBox(height: 6),
 
                   // Meaning
-                  Text(meaning, style: theme.textTheme.bodySmall),
+                  Text(meaning, style: tt.labelMedium),
                 ],
               ),
             ),
           ],
         ),
-      ),
+      ).animate(delay: 50.ms).fadeIn(duration: 200.ms, curve: Curves.easeOut),
     );
   }
 }
@@ -154,20 +164,11 @@ class _NumberBadge extends ConsumerWidget {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
-    return Container(
-      width: 42,
-      height: 42,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(14),
-        color: cs.surfaceContainerHighest,
-      ),
-      alignment: Alignment.center,
-      child: Text(
-        '$number',
-        style: theme.textTheme.titleSmall?.copyWith(
-          fontWeight: FontWeight.w800,
-        ),
-      ),
+    return AppIconContainer(
+      backgroundColor: cs.surfaceContainerHigh,
+      borderRadius: 14,
+      size: 32,
+      child: Text('$number', style: theme.textTheme.titleSmall),
     );
   }
 }
@@ -181,13 +182,23 @@ class _SearchBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
+    final border = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(999),
+      borderSide: const BorderSide(color: Colors.transparent),
+    );
 
     return TextField(
       onChanged: onChanged,
       textInputAction: TextInputAction.search,
-      style: theme.textTheme.bodySmall,
       decoration: InputDecoration(
         hintText: hintText,
+        filled: true,
+        fillColor: cs.surface,
+        border: border,
+        enabledBorder: border,
+        focusedBorder: border,
         prefixIcon: const Icon(Icons.search_rounded),
       ),
     );
@@ -201,84 +212,25 @@ class _EmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.filter_alt_off_rounded,
-              size: 34,
-              color: theme.iconTheme.color,
-            ),
-            const SizedBox(height: 10),
-            Text(
-              title,
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              subtitle,
-              textAlign: TextAlign.center,
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.textTheme.bodySmall!.color,
-              ),
-            ),
-          ],
-        ),
-      ),
+    return AppStateView(
+      icon: Icons.filter_alt_off_rounded,
+      title: title,
+      message: subtitle,
     );
   }
 }
 
-class _ErrorState extends StatelessWidget {
-  final String message;
-  final String details;
-  final VoidCallback onRetry;
-
-  const _ErrorState({
-    required this.message,
-    required this.details,
-    required this.onRetry,
-  });
+class _ErrorState extends ConsumerWidget {
+  const _ErrorState();
 
   @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.wifi_off_rounded,
-              size: 40,
-              color: theme.colorScheme.onSurface.withAlpha(89),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              message,
-              textAlign: TextAlign.center,
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            const SizedBox(height: 10),
-            FilledButton.icon(
-              onPressed: onRetry,
-              icon: const Icon(Icons.refresh_rounded),
-              label: const Text("Retry"),
-            ),
-          ],
-        ),
-      ),
+  Widget build(BuildContext context, ref) {
+    return AppStateView(
+      icon: Icons.wifi_off_rounded,
+      title: 'Failed to fetch names',
+      message: "Couldn’t load names. Check your internet and try again.",
+      buttonText: 'Retry',
+      onPressed: () => ref.invalidate(allahNamesProvider),
     );
   }
 }

@@ -17,6 +17,7 @@ final dioProvider = Provider<Dio>((ref) {
     ),
   );
 });
+
 final allahNamesBoxProvider = Provider<Box<AllahNameHive>>((ref) {
   return Hive.box<AllahNameHive>('allah_names_box');
 });

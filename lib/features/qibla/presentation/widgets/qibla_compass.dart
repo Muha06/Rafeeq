@@ -38,7 +38,7 @@ class _QiblaCompassState extends ConsumerState<QiblaCompass> {
     final difference = (qiblaDirection - direction + 540) % 360 - 180;
 
     if (difference.abs() <= 5) {
-      return "You're facing Qibla!";
+      return "You're facing Qibla 😍";
     }
 
     return difference > 0
@@ -92,6 +92,10 @@ class _QiblaCompassState extends ConsumerState<QiblaCompass> {
                 hasCompassData &&
                 isFacingQibla(currentDirection, qiblaDirection);
 
+            final dialColor = isFacing
+                ? Colors.greenAccent
+                : cs.surfaceContainerHigh;
+
             final compass = SizedBox(
               width: compassSize,
               height: compassSize,
@@ -102,7 +106,7 @@ class _QiblaCompassState extends ConsumerState<QiblaCompass> {
                     size: Size.square(compassSize),
                     painter: CompassCustomPainter(
                       angle: currentDirection,
-                      dialColor: cs.surfaceContainerHigh,
+                      dialColor: dialColor,
                       shadowColor: cs.shadow,
                       tickColor: cs.onSurfaceVariant,
                       strongTickColor: cs.onSurface,
@@ -116,7 +120,7 @@ class _QiblaCompassState extends ConsumerState<QiblaCompass> {
                     child: Transform.rotate(
                       angle: qiblaDirection * pi / 180,
                       child: Image.asset(
-                        'assets/images/qibla/kaaba.png',
+                        'assets/images/qibla/prayer-mat.png',
                         width: compassSize * 0.33,
                       ),
                     ),
@@ -155,16 +159,9 @@ class _QiblaCompassState extends ConsumerState<QiblaCompass> {
                 compass,
                 const SizedBox(height: 12),
                 Text(
-                  hasCompassData
-                      ? isFacing
-                            ? "You're facing Qibla!"
-                            : getQiblaInstruction(
-                                currentDirection,
-                                qiblaDirection,
-                              )
-                      : 'Compass unavailable',
+                  getQiblaInstruction(currentDirection, qiblaDirection),
                   style: theme.textTheme.titleMedium?.copyWith(
-                    color: isFacing ? cs.primary : cs.onSurface,
+                    color: isFacing ? Colors.green : cs.onSurface,
                   ),
                 ),
               ],
