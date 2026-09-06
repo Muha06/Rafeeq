@@ -30,7 +30,7 @@ import 'package:rafeeq/features/bookmarks/data/models/dhikr_bookmark_hive_model.
 import 'package:rafeeq/features/bookmarks/data/models/quran_bookmark_hive_model.dart';
 import 'package:rafeeq/features/onboarding/presentation/pages/onboarding_scaffold.dart';
 import 'package:rafeeq/features/onboarding/presentation/provider/providers.dart';
-import 'package:rafeeq/features/quran/data/dataSources/quran_db_manager.dart';
+ import 'package:rafeeq/features/quran/data/dataSources/quran_db_manager.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/ayah_of_day_scheduler.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/wiring_providers.dart';
 import 'package:rafeeq/features/quran_audio/data/models/hive/reciter_playlist_tracks_hive.dart';

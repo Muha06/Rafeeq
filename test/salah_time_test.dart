@@ -19,9 +19,9 @@ void main() {
   group('SalahRemoteDataSource', () {
     test('should fetch monthly salah timings from AlAdhan API', () async {
       // ACT
-      final result = await ds.fetchMonthByCity(
-        city: 'Nairobi',
-        country: 'Kenya',
+      final result = await ds.fetchMonthByCoordinates(
+        longitude: 0000,
+        latitude: 0000,
         method: 3,
       );
 

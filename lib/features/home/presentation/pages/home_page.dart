@@ -10,6 +10,7 @@ import 'package:rafeeq/features/home/presentation/widgets/hijri_date.dart';
 import 'package:rafeeq/features/home_reminders/presentation/providers/reminder_providers.dart';
 import 'package:rafeeq/features/notifications/presentation/pages/notification_list_page.dart';
 import 'package:rafeeq/features/notifications/presentation/providers/notification_provider.dart';
+import 'package:rafeeq/features/qibla/presentation/widgets/qibla_home_card.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/ayah_of_the_day.dart';
 import 'package:rafeeq/features/home_reminders/presentation/widgets/reminders_carousel.dart';
 import 'package:rafeeq/features/settings/presentation/pages/settings_page.dart';
@@ -94,6 +95,18 @@ class _HomePageState extends ConsumerState<HomePage> {
                   bottom: _v10,
                 ), // to accommodate quick actions overlap
                 child: HomeTimelineCard(),
+              ),
+            ),
+
+            const SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.only(
+                  top: _v10,
+                  left: _hPad,
+                  right: _hPad,
+                  bottom: _v10,
+                ),
+                child: QiblaHomeCard(),
               ),
             ),
 
