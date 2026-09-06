@@ -14,7 +14,7 @@ class AsmaulHusnaHomeCard extends ConsumerWidget {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
-    final randomAllahNameState = ref.watch(randomAllahNameProvider);
+    final randomAllahNameState = ref.watch(dailyAllahNameProvider);
 
     final fgColor = cs.onSurface;
 
