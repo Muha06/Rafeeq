@@ -33,7 +33,7 @@ class AllSurahsList extends ConsumerWidget {
                     s.id.toString() == q;
               }).toList();
 
-        if (surahs.isEmpty) {
+        if (filtered.isEmpty) {
           return const SliverToBoxAdapter(
             child: Center(child: Text('No surahs found.')),
           );
@@ -48,16 +48,17 @@ class AllSurahsList extends ConsumerWidget {
           sliver: SliverSafeArea(
             top: false,
             sliver: SliverList.separated(
-              separatorBuilder: (context, index) => const SizedBox(height: 24),
+              separatorBuilder: (_, index) => const SizedBox(height: 24),
               itemCount: filtered.length,
-              addAutomaticKeepAlives: true,
               itemBuilder: (context, index) {
                 final surah = filtered[index];
 
                 return AppPressableScale(
-                  onTap: ()   {
-
-                    AppNav.push(context, FullSurahPage(initialIndex: index));
+                  onTap: () {
+                    AppNav.push(
+                      context,
+                      FullSurahPage(initialIndex: surah.id - 1),
+                    );
                   },
                   child: SurahTile(surah: surah, index: index),
                 );
@@ -188,66 +189,60 @@ class SurahTileShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final cs = theme.colorScheme;
 
-    final baseColor = theme.colorScheme.surface.withAlpha(64);
-    final highlightColor = theme.colorScheme.onSurface.withAlpha(64);
+    final baseColor = cs.surface.withAlpha(64);
+    final highlightColor = cs.onSurface.withAlpha(64);
 
-    return ListView.builder(
-      itemCount: 7,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemBuilder: (context, index) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4),
-        child: Shimmer.fromColors(
-          baseColor: baseColor,
-          highlightColor: highlightColor,
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(),
-              //color: isDark ? AppColors.darkSurface : AppColors.darkSurface,
-            ),
-            child: ListTile(
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 14,
-                vertical: 8,
-              ),
+    return Shimmer.fromColors(
+      baseColor: baseColor,
+      highlightColor: highlightColor,
+      child: Column(
+        children: List.generate(
+          7,
+          (index) => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: Row(
+              children: [
+                const SizedBox(width: 46, height: 46, child: CircleAvatar()),
+                const SizedBox(width: 10),
 
-              // Leading circle (surah number)
-              leading: const CircleAvatar(backgroundColor: Colors.white),
-
-              // Title shimmer
-              title: Container(
-                height: 16,
-                width: 140,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(6),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 14,
+                        width: 140,
+                        decoration: BoxDecoration(
+                          color: cs.onSurface,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Container(
+                        height: 11,
+                        width: 90,
+                        decoration: BoxDecoration(
+                          color: cs.onSurface,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
 
-              // Subtitle shimmer
-              subtitle: Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: Container(
-                  height: 12,
-                  width: 40,
+                const SizedBox(width: 10),
+
+                Container(
+                  height: 11,
+                  width: 50,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: cs.onSurface,
                     borderRadius: BorderRadius.circular(6),
                   ),
                 ),
-              ),
-
-              // Trailing ayah count
-              trailing: Container(
-                height: 12,
-                width: 24,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(6),
-                ),
-              ),
+              ],
             ),
           ),
         ),

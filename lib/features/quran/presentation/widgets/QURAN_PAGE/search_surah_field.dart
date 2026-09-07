@@ -40,6 +40,7 @@ class _SearchSurahFieldState extends ConsumerState<SearchSurahField> {
       focusNode: _focus,
       controller: _controller,
       textInputAction: TextInputAction.search,
+      autofocus: false,
       decoration: InputDecoration(
         isDense: true,
         prefixIcon: IconButton(
