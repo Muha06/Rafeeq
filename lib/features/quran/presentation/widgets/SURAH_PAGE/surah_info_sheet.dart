@@ -18,107 +18,105 @@ class SurahInfoSheet extends StatelessWidget {
     final bLarge = tt.bodyLarge;
     final bMedium = tt.bodyMedium;
 
-    return SafeArea(
-      child: DraggableScrollableSheet(
-        expand: false,
-        initialChildSize: .9,
-        minChildSize: .5,
-        maxChildSize: 1,
-        builder: (context, controller) {
-          return SingleChildScrollView(
-            controller: controller,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const AppDragHandle(),
+    return DraggableScrollableSheet(
+      expand: false,
+      initialChildSize: .9,
+      minChildSize: .5,
+      maxChildSize: 1,
+      builder: (context, controller) {
+        return SingleChildScrollView(
+          controller: controller,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const AppDragHandle(),
 
-                  const SizedBox(height: 8),
+                const SizedBox(height: 8),
 
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(Icons.info_outline_rounded, color: cs.primary),
-                      const SizedBox(width: 10),
-                      Text(
-                        'About this Surah',
-                        style: theme.textTheme.headlineSmall,
-                      ),
-                    ],
-                  ),
-
-                  // Surah short text
-                  if (info.shortText.isNotEmpty) ...[
-                    const SizedBox(height: 8),
-                    Text(info.shortText, style: theme.textTheme.bodyLarge),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(Icons.info_outline_rounded, color: cs.primary),
+                    const SizedBox(width: 10),
+                    Text(
+                      'About this Surah',
+                      style: theme.textTheme.headlineSmall,
+                    ),
                   ],
+                ),
 
-                  Html(
-                    data: info.text,
-                    onLinkTap: (url, attributes, element) {
-                      if (url == null) return;
-                      debugPrint("url $url");
-
-                      final match = RegExp(
-                        r'^/?(\d+)/(\d+)(?:-(\d+))?$',
-                      ).firstMatch(url);
-
-                      if (match == null) return;
-
-                      final surahNumber = int.parse(match.group(1)!);
-                      final startAyah = int.parse(match.group(2)!);
-
-                      debugPrint(
-                        "URL: $url \n ATTRIBUTES: $attributes \n ELEMENT: $element \n Surah number: $surahNumber \n start: $startAyah  ",
-                      );
-
-                      AppNav.pop(context);
-
-                      AppNav.push(
-                        context,
-                        FullSurahPage(
-                          initialIndex: surahNumber - 1,
-                          autoScrollAyah: startAyah,
-                        ),
-                      );
-                    },
-                    style: {
-                      "h2": Style(
-                        fontSize: FontSize(bMedium?.fontSize ?? 22),
-                        fontWeight: bMedium!.fontWeight,
-                        color: bMedium.color,
-                        margin: Margins.only(top: 20, bottom: 10),
-                      ),
-                      "body": Style(
-                        margin: Margins.zero,
-                        padding: HtmlPaddings.zero,
-                        fontSize: FontSize(bLarge?.fontSize ?? 22),
-                        fontWeight: bLarge?.fontWeight ?? FontWeight.w400,
-                        color: bLarge!.color,
-                        lineHeight: LineHeight(bLarge.height),
-                      ),
-                      "p": Style(
-                        margin: Margins.zero,
-                        padding: HtmlPaddings.zero,
-                        fontSize: FontSize(bLarge.fontSize ?? 22),
-                        fontWeight: bLarge.fontWeight ?? FontWeight.w400,
-                        color: bLarge.color,
-                        lineHeight: LineHeight(bLarge.height),
-                      ),
-                      "a": Style(
-                        color: cs.primary,
-                        fontWeight: FontWeight.w600,
-                        textDecoration: TextDecoration.none,
-                      ),
-                    },
-                  ),
+                // Surah short text
+                if (info.shortText.isNotEmpty) ...[
+                  const SizedBox(height: 8),
+                  Text(info.shortText, style: theme.textTheme.bodyLarge),
                 ],
-              ),
+
+                Html(
+                  data: info.text,
+                  onLinkTap: (url, attributes, element) {
+                    if (url == null) return;
+                    debugPrint("url $url");
+
+                    final match = RegExp(
+                      r'^/?(\d+)/(\d+)(?:-(\d+))?$',
+                    ).firstMatch(url);
+
+                    if (match == null) return;
+
+                    final surahNumber = int.parse(match.group(1)!);
+                    final startAyah = int.parse(match.group(2)!);
+
+                    debugPrint(
+                      "URL: $url \n ATTRIBUTES: $attributes \n ELEMENT: $element \n Surah number: $surahNumber \n start: $startAyah  ",
+                    );
+
+                    AppNav.pop(context);
+
+                    AppNav.push(
+                      context,
+                      FullSurahPage(
+                        initialIndex: surahNumber - 1,
+                        autoScrollAyah: startAyah,
+                      ),
+                    );
+                  },
+                  style: {
+                    "h2": Style(
+                      fontSize: FontSize(bMedium?.fontSize ?? 22),
+                      fontWeight: bMedium!.fontWeight ?? FontWeight.w600,
+                      color: bMedium.color,
+                      margin: Margins.only(top: 20, bottom: 10),
+                    ),
+                    "body": Style(
+                      margin: Margins.zero,
+                      padding: HtmlPaddings.zero,
+                      fontSize: FontSize(bLarge?.fontSize ?? 22),
+                      fontWeight: bLarge?.fontWeight ?? FontWeight.w400,
+                      color: bLarge!.color,
+                      lineHeight: LineHeight(bLarge.height),
+                    ),
+                    "p": Style(
+                      margin: Margins.zero,
+                      padding: HtmlPaddings.zero,
+                      fontSize: FontSize(bLarge.fontSize ?? 22),
+                      fontWeight: bLarge.fontWeight ?? FontWeight.w400,
+                      color: bLarge.color,
+                      lineHeight: LineHeight(bLarge.height),
+                    ),
+                    "a": Style(
+                      color: cs.primary,
+                      fontWeight: FontWeight.w600,
+                      textDecoration: TextDecoration.none,
+                    ),
+                  },
+                ),
+              ],
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }

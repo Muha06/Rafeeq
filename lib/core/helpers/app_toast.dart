@@ -91,7 +91,7 @@ class AppToast {
                     message,
                     textAlign: TextAlign.center,
                     style: theme.textTheme.bodySmall?.copyWith(
-                      color: foregroundColor ?? cs.onSurface,
+                      color: foregroundColor ?? cs.onError,
                       fontSize: 14.5,
                     ),
                   ),

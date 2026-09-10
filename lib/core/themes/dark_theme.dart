@@ -90,7 +90,7 @@ ThemeData appDarkThemeData() {
         fontFamily: AppStrings.displayFont,
         fontSize: 24,
         fontWeight: FontWeight.w400,
-        letterSpacing: -0.4,
+        letterSpacing: 1,
         color: scheme.onSurface,
       ),
     ),

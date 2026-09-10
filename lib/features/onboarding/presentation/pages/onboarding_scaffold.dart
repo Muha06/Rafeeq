@@ -51,6 +51,7 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
     if (index == 1) {
       FocusScope.of(context).unfocus();
       await Future.delayed(200.ms);
+      if (!mounted) return;
 
       // confirm name
       final ok = await AppDialogs.showConfirmDialog(
@@ -83,7 +84,7 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
       await _saveUserLocation();
     } catch (_) {}
 
-    if (!context.mounted) return;
+     if (!mounted) return;
 
     Navigator.of(
       context,

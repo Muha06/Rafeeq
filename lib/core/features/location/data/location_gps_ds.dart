@@ -8,7 +8,7 @@ class LocationGpsDataSource {
     final serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       await Geolocator.openLocationSettings();
-     }
+    }
 
     final perm = await Geolocator.checkPermission();
     final allowed =
@@ -21,8 +21,10 @@ class LocationGpsDataSource {
 
     try {
       return await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-        timeLimit: const Duration(seconds: 60),
+        locationSettings: AndroidSettings(
+          accuracy: LocationAccuracy.high,
+          timeLimit: const Duration(seconds: 60),
+        ),
       );
     } catch (e) {
       debugPrint("Failed to get current position $e");

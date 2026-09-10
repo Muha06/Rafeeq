@@ -39,6 +39,8 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
   void _bootstrap() async {
     await Future.delayed(3.seconds);
 
+    if (!mounted) return;
+    
     await checkNotificationPermission(context: context, ref: ref);
   }
 

@@ -5,7 +5,6 @@ import 'package:rafeeq/core/helpers/app_haptics.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/features/feedback/presentation/pages/feedback_page.dart';
 import 'package:rafeeq/features/settings/presentation/provider/notiffications_controller.dart';
-import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({super.key});
@@ -18,7 +17,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = ref.watch(isDarkProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -29,8 +27,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           SettingsTile(
             leading: const PhosphorIcon(PhosphorIcons.bell),
             title: 'Salah reminders',
-            subtitle: 'Get Salah times reminders',
-            isDark: isDark,
+            subtitle: 'Get Salah reminders',
             trailing: Consumer(
               builder: (context, ref, _) {
                 final enabled = ref.watch(salahNotifControllerProvider);
@@ -53,8 +50,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           SettingsTile(
             leading: const PhosphorIcon(PhosphorIcons.bell),
             title: 'Adhkar reminders',
-            subtitle: 'Morning & evening adhkars',
-            isDark: isDark,
+            subtitle: 'Morning & evening adhkars reminders',
             trailing: Consumer(
               builder: (context, ref, _) {
                 final enabled = ref.watch(adhkarNotifControllerProvider);
@@ -80,7 +76,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             title: 'Share Your Thoughts',
             subtitle:
                 'Share your suggestions and make Rafeeq more beneficial, In shaa Allah',
-            isDark: isDark,
             onTap: () => AppNav.push(context, const FeedbackPage()),
           ),
         ],
@@ -94,7 +89,6 @@ class SettingsTile extends StatelessWidget {
   final String title;
   final String? subtitle;
   final VoidCallback? onTap;
-  final bool isDark;
   final Widget? trailing;
   final EdgeInsetsGeometry? contentPadding;
   final bool enabled;
@@ -103,7 +97,6 @@ class SettingsTile extends StatelessWidget {
     super.key,
     required this.leading,
     required this.title,
-    required this.isDark,
     this.subtitle,
     this.onTap,
     this.trailing,

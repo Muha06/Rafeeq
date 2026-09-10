@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/helpers/app_haptics.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
-import 'package:rafeeq/core/helpers/snackbars.dart';
+import 'package:rafeeq/core/helpers/app_toast.dart';
 import 'package:rafeeq/features/feedback/data/models/feedback_model.dart';
 import 'package:rafeeq/features/feedback/presentation/providers/feedback_controller.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -37,7 +37,7 @@ class _FeedbackPageState extends ConsumerState<FeedbackPage> {
 
       if (!mounted) return;
 
-      AppSnackBar.showSimple(
+      AppToast.showSuccess(
         context: context,
         message: "Thank you for making Rafeeq better! 🎉",
       );
@@ -49,9 +49,9 @@ class _FeedbackPageState extends ConsumerState<FeedbackPage> {
     } catch (e) {
       if (!mounted) return;
 
-      AppSnackBar.showSimple(
+      AppToast.showError(
         context: context,
-        message: "Something went wrong.",
+        message: "Something went wrong. Please try again later",
       );
     }
   }

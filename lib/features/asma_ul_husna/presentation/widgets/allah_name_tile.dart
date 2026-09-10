@@ -8,6 +8,7 @@ import 'package:rafeeq/core/features/audio/domain/entities/audio_source_type.dar
 import 'package:rafeeq/core/features/audio/presentation/providers/audio_controller.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/helpers/app_text_style.dart';
+import 'package:rafeeq/core/helpers/app_toast.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/core/widgets/app_icon_container.dart';
 import 'package:rafeeq/core/widgets/app_pressable.dart';
@@ -151,17 +152,24 @@ class PlayAllahNameButton extends ConsumerWidget {
         child: InkWell(
           customBorder: const CircleBorder(),
           onTap: () async {
-            final item = AudioItem(
-              id: name.id,
-              title: name.transliteration,
-              sourceType: AudioSourceType.allahName,
-              url: name.audioUrl,
-            );
+            try {
+              final item = AudioItem(
+                id: name.id,
+                title: name.transliteration,
+                sourceType: AudioSourceType.allahName,
+                url: name.audioUrl,
+              );
 
-            await audioCtrl.togglePlay(item: item);
+              await audioCtrl.togglePlay(item: item);
 
-            if (!isPlaying) {
-              RafeeqAnalytics.logFeature('play_Allah_name_audio');
+              if (!isPlaying) {
+                RafeeqAnalytics.logFeature('play_Allah_name_audio');
+              }
+            } catch (e) {
+              AppToast.showError(
+                context: context,
+                message: "Failed to play audio. Please try again later.",
+              );
             }
           },
           child: Padding(

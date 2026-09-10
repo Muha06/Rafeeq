@@ -257,7 +257,9 @@ class _TimingTile extends ConsumerWidget {
     final showBell = actualSalats.contains(prayer);
 
     Future<void> toggleSalahReminders() async {
-      await ref.read(disabledSalahPrayersProvider.notifier).toggle(prayer);
+      await ref
+          .read(disabledSalahPrayersProvider.notifier)
+          .toggle(prayer, context);
 
       if (!isDisabled && context.mounted) {
         AppToast.showCompact(

@@ -120,7 +120,7 @@ class AdhkarNotifController extends Notifier<bool> {
     ref.read(adhkarNotifUpdatingProvider.notifier).state = true;
 
     try {
-      final access = ref.read(notificationPermissionProvider);
+      final notifPerm = ref.read(notificationPermissionProvider);
       final sys = ref.read(notificationPermissionProvider.notifier);
       final box = ref.read(settingsBoxProvider);
 
@@ -133,7 +133,7 @@ class AdhkarNotifController extends Notifier<bool> {
       }
 
       // ENABLE: check system permissions
-      if (!access.notificationsAllowed || !access.exactAlarmsAllowed) {
+      if (!notifPerm.notificationsAllowed || !notifPerm.exactAlarmsAllowed) {
         final allAllowed = await sys.requestAll(includeExactAlarms: true);
         if (!allAllowed) {
           await box.put(kAdhkarEnabled, false);

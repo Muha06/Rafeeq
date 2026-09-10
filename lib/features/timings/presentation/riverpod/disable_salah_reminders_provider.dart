@@ -1,6 +1,8 @@
 import 'dart:async';
- import 'package:flutter_riverpod/flutter_riverpod.dart';
+ import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/features/local_notifications/providers/general_notifications_provider.dart';
+import 'package:rafeeq/core/helpers/app_toast.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_prayer.dart';
 
@@ -48,7 +50,7 @@ class DisabledSalahPrayersNotifier extends Notifier<Set<SalahPrayer>> {
   bool get _notifsAllowed =>
       ref.read(notificationPermissionProvider).notificationsAllowed;
 
-  Future<void> toggle(SalahPrayer prayer) async {
+  Future<void> toggle(SalahPrayer prayer, BuildContext context) async {
     if (!actualSalats.contains(prayer)) return;
 
     // If notifications are not allowed, request first.
@@ -58,7 +60,11 @@ class DisabledSalahPrayersNotifier extends Notifier<Set<SalahPrayer>> {
           .requestAll();
 
       if (!allowed) {
-        // user denied → do nothing
+        // user denied 
+         AppToast.showCompact(
+          context: context,
+          message: 'Notification permissions denied.',
+        );
         return;
       }
       // permissions now OK; continue

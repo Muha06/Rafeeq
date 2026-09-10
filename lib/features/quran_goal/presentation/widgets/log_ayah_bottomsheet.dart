@@ -154,6 +154,7 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
 
                       if (!wasCompleted && isCompleted) {
                         await Future.delayed(2.seconds);
+                        if (!context.mounted) return;
 
                         showGoalCompletedDialog(context, ref, goal.dailyTarget);
                       } else {
@@ -352,7 +353,6 @@ class LogAyahTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ConstrainedBox(
@@ -365,7 +365,7 @@ class LogAyahTextField extends StatelessWidget {
           keyboardType: TextInputType.number,
           textAlign: TextAlign.center,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-          decoration: const InputDecoration(contentPadding: EdgeInsets.zero), 
+          decoration: const InputDecoration(contentPadding: EdgeInsets.zero),
           onChanged: onChanged,
           controller: controller,
         ),

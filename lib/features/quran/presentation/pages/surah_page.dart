@@ -295,10 +295,12 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
     final info = await ref.read(surahInfoProvider(surah.id).future);
     RafeeqAnalytics.logFeature('open-surah-info');
 
-    if (!context.mounted || info == null) return;
+    if (!mounted || info == null) return;
+
     AppSheets.showBottomSheet(
       context: context,
       isScrollControlled: true,
+      useSafeArea: false,
       animationDuration: const Duration(milliseconds: 400),
       reverseAnimationDuration: const Duration(milliseconds: 300),
       child: SurahInfoSheet(info: info),
@@ -335,7 +337,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
       surahSettingsProvider.select((s) => s.showAutoScrollControls),
     );
 
-     const horizontalPadding = AppSpacing.lg;
+    const horizontalPadding = AppSpacing.lg;
 
     return PopScope(
       onPopInvokedWithResult: (didPop, result) async {
