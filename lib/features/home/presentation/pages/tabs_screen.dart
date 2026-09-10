@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/app/providers/tabs_screen_provider.dart';
 import 'package:rafeeq/core/helpers/app_haptics.dart';
+import 'package:rafeeq/core/helpers/request_notification.dart';
 import 'package:rafeeq/features/home/presentation/pages/live_tabs.dart';
 import 'package:rafeeq/features/home/presentation/widgets/bottom_bar.dart';
 import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_category_page.dart';
 import 'package:rafeeq/features/quran/presentation/pages/quran_page.dart';
 import 'package:rafeeq/features/home/presentation/pages/home_page.dart';
 import 'package:rafeeq/features/bookmarks/presentation/pages/bookmark_page.dart';
-import 'package:rafeeq/features/user/presentation/providers/user_provider.dart';
 
 class TabsScreen extends ConsumerStatefulWidget {
   const TabsScreen({super.key});
@@ -27,9 +27,21 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _bootstrap();
+    });
+  }
+
+  void _bootstrap() async {
+    await showNotificationPermissionDialog(context: context, ref: ref);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final selectedIndex = ref.watch(tabsScreenIndexProvider);
-    debugPrint("Cached name: ${ref.read(userNameProvider)}");
 
     return SafeArea(
       top: false,

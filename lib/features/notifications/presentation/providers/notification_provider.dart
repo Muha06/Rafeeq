@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/app/connectivity_plus/conectivity_plus_provider.dart';
 import 'package:rafeeq/features/notifications/domain/entities/app_notification.dart';
 import 'package:rafeeq/features/notifications/presentation/providers/wiring_providers.dart';
 
@@ -53,6 +54,10 @@ final notificationByIdProvider = FutureProvider.family<AppNotification, String>(
 );
 
 final hasUnreadNotificationsProvider = Provider<bool>((ref) {
+  final hasInternet = ref.watch(hasInternetConnection);
+
+  if(!hasInternet)return false;
+
   final notificationsAsync = ref.watch(allNotificationsProvider);
 
   return notificationsAsync.maybeWhen(

@@ -10,20 +10,20 @@ class AppWrapper extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Listen for connectivity changes
-    ref.listen<bool>(connectivityProvider, (previous, next) {
+    ref.listen<bool>(hasInternetConnection, (previous, next) {
       if (previous == true && next == false) {
         // Went offline
         AppToast.showCompact(
           context: context,
           message: 'You are offline',
-          duration: const Duration(seconds: 7),
+          duration: const Duration(seconds: 3),
         );
       } else if (previous == false && next == true) {
         // Back online
         AppToast.showCompact(
           context: context,
           message: 'Back online 🎉',
-          duration: const Duration(seconds: 7),
+          duration: const Duration(seconds: 3),
         );
       }
     });
