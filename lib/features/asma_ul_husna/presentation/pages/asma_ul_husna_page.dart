@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
- import 'package:flutter_riverpod/flutter_riverpod.dart';
-  import 'package:rafeeq/core/widgets/app_state_view.dart';
- import 'package:rafeeq/features/asma_ul_husna/domain/entities/translations_enum.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/core/widgets/app_state_view.dart';
+import 'package:rafeeq/features/asma_ul_husna/domain/entities/translations_enum.dart';
 import 'package:rafeeq/features/asma_ul_husna/presentation/providers/asma_ul_husna_provider.dart';
 import 'package:rafeeq/features/asma_ul_husna/presentation/widgets/allah_name_tile.dart';
 
@@ -14,6 +14,7 @@ class AllahNamesPage extends ConsumerStatefulWidget {
 
 class _AllahNamesPageState extends ConsumerState<AllahNamesPage> {
   String _query = '';
+  final scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -59,16 +60,23 @@ class _AllahNamesPageState extends ConsumerState<AllahNamesPage> {
               );
             }
 
-            return ListView.separated(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-              itemCount: filtered.length,
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              separatorBuilder: (_, _) => const SizedBox(height: 12),
-              itemBuilder: (context, i) {
-                final n = filtered[i];
+            return Scrollbar(
+              interactive: true,
+              thickness: 8,
+              controller: scrollController,
+              child: ListView.separated(
+                controller: scrollController,
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+                itemCount: filtered.length,
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                separatorBuilder: (_, _) => const SizedBox(height: 12),
+                itemBuilder: (context, i) {
+                  final n = filtered[i];
 
-                return AllahNameTile(name: n);
-              },
+                  return AllahNameTile(name: n);
+                },
+              ),
             );
           },
         ),
@@ -76,7 +84,6 @@ class _AllahNamesPageState extends ConsumerState<AllahNamesPage> {
     );
   }
 }
-
 
 class _SearchBar extends ConsumerWidget {
   final String hintText;

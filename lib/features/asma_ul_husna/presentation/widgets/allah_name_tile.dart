@@ -96,7 +96,7 @@ class AllahNameTile extends ConsumerWidget {
             const SizedBox(width: 8),
 
             // Play
-            _PlayAllahNameButton(name: name),
+            PlayAllahNameButton(name: name),
           ],
         ),
       ).animate(delay: 50.ms).fadeIn(duration: 200.ms, curve: Curves.easeOut),
@@ -122,10 +122,10 @@ class _NumberBadge extends ConsumerWidget {
   }
 }
 
-class _PlayAllahNameButton extends ConsumerWidget {
+class PlayAllahNameButton extends ConsumerWidget {
   final AllahName name;
 
-  const _PlayAllahNameButton({required this.name});
+  const PlayAllahNameButton({super.key, required this.name});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -135,7 +135,7 @@ class _PlayAllahNameButton extends ConsumerWidget {
     final audioCtrl = ref.read(audioControllerProvider.notifier);
 
     final itemId = name.id;
-    final isCurrent = audioState.currentId == itemId; 
+    final isCurrent = audioState.currentId == itemId;
 
     final isPlaying = audioState.isPlaying && isCurrent;
     debugPrint("Isplaying: $isPlaying");

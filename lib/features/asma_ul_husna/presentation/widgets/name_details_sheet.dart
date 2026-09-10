@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/constants/strings/app_strings.dart';
-import 'package:rafeeq/core/features/audio/domain/entities/audio_item.dart';
-import 'package:rafeeq/core/features/audio/domain/entities/audio_source_type.dart';
 import 'package:rafeeq/core/features/audio/presentation/providers/audio_controller.dart';
 import 'package:rafeeq/core/helpers/app_text_style.dart';
-import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/features/asma_ul_husna/domain/entities/name_entity.dart';
 import 'package:rafeeq/features/asma_ul_husna/domain/entities/translations_enum.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
+import 'package:rafeeq/features/asma_ul_husna/presentation/widgets/allah_name_tile.dart';
 
 class AllahNameDetailsSheet extends ConsumerWidget {
   final AllahName name;
@@ -27,7 +25,6 @@ class AllahNameDetailsSheet extends ConsumerWidget {
     }
 
     final audioState = ref.watch(audioControllerProvider);
-    final audioCtrl = ref.read(audioControllerProvider.notifier);
 
     final itemId = name.id;
     final isCurrent = audioState.currentId == itemId;
@@ -35,24 +32,23 @@ class AllahNameDetailsSheet extends ConsumerWidget {
     final isPlaying = audioState.isPlaying && isCurrent;
     debugPrint("Isplaying: $isPlaying");
 
-    final isBuffering = audioState.isBuffering && isCurrent;
-
     return DraggableScrollableSheet(
       initialChildSize: 1,
       maxChildSize: 1,
+      minChildSize: 0.45,
       expand: false,
       builder: (_, scrollController) => SafeArea(
         top: false,
         child: SingleChildScrollView(
           controller: scrollController,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Arabic
-                Center(
-                  child: Text(
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16.0, 48, 16, 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // Arabic
+                  Text(
                     name.arabic,
                     textDirection: TextDirection.rtl,
                     textAlign: TextAlign.center,
@@ -62,74 +58,89 @@ class AllahNameDetailsSheet extends ConsumerWidget {
                       color: theme.colorScheme.primary,
                     ),
                   ),
-                ),
 
-                const SizedBox(height: 8),
+                  const SizedBox(height: 20),
 
-                Center(
-                  child: Text(
+                  Text(
                     translation.name,
+                    textAlign: TextAlign.center,
                     style: tt.headlineSmall?.copyWith(
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                ),
 
-                const SizedBox(height: 24),
+                  const SizedBox(height: 20),
 
-                Center(
-                  child: Text(
-                    name.transliteration,
-                    style: tt.titleMedium?.copyWith(
-                      fontFamily: AppStrings.displayFont,
+                  Center(
+                    child: Text(
+                      name.transliteration,
+                      style: tt.titleMedium?.copyWith(
+                        fontFamily: AppStrings.displayFont,
+                      ),
                     ),
                   ),
-                ),
 
-                const SizedBox(height: 8),
+                  const SizedBox(height: 24),
 
-                Text(translation.meaning, style: tt.bodyLarge),
+                  PlayAllahNameButton(name: name),
 
-                const SizedBox(height: 24),
+                  const SizedBox(height: 24),
 
-                Text('Details', style: tt.labelMedium),
-
-                const SizedBox(height: 8),
-
-                MarkdownBody(
-                  data: translation.details,
-                  styleSheet: MarkdownStyleSheet(
-                    p: tt.bodyLarge,
-                    strong: tt.bodyLarge?.copyWith(fontWeight: FontWeight.w700),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text('Meaning', style: tt.labelMedium),
                   ),
-                ),
 
-                const SizedBox(height: 24),
+                  const SizedBox(height: 8),
 
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton.icon(
-                    onPressed: () async {
-                      final item = AudioItem(
-                        id: name.id,
-                        title: name.transliteration,
-                        sourceType: AudioSourceType.allahName,
-                        url: name.audioUrl,
-                      );
+                  Text(translation.meaning, style: tt.bodyLarge),
 
-                      await audioCtrl.togglePlay(item: item);
+                  const SizedBox(height: 24),
 
-                      if (!isPlaying) {
-                        RafeeqAnalytics.logFeature('play_Allah_name_audio');
-                      }
-                    },
-                    icon: isBuffering
-                        ? const CircularProgressIndicator()
-                        : const Icon(Icons.play_arrow_rounded),
-                    label: const Text('Listen'),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text('Details', style: tt.labelMedium),
                   ),
-                ),
-              ],
+
+                  const SizedBox(height: 8),
+
+                  MarkdownBody(
+                    data: translation.details,
+                    styleSheet: MarkdownStyleSheet(
+                      p: tt.bodyLarge,
+                      strong: tt.bodyLarge?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  // SizedBox(
+                  //   width: double.infinity,
+                  //   child: ElevatedButton.icon(
+                  //     onPressed: () async {
+                  //       final item = AudioItem(
+                  //         id: name.id,
+                  //         title: name.transliteration,
+                  //         sourceType: AudioSourceType.allahName,
+                  //         url: name.audioUrl,
+                  //       );
+
+                  //       await audioCtrl.togglePlay(item: item);
+
+                  //       if (!isPlaying) {
+                  //         RafeeqAnalytics.logFeature('play_Allah_name_audio');
+                  //       }
+                  //     },
+                  //     icon: isBuffering
+                  //         ? const CircularProgressIndicator()
+                  //         : const Icon(Icons.play_arrow_rounded),
+                  //     label: Text(isBuffering ? 'Buffering' : 'Listen'),
+                  //   ),
+                  // ),
+                ],
+              ),
             ),
           ),
         ),
