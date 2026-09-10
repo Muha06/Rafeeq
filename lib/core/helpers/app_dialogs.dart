@@ -59,6 +59,7 @@ class AppDialogs {
     );
   }
 
+  // Requestable notification
   static Future<bool?> showNotificationPermissionDialog({
     required BuildContext context,
   }) {
@@ -101,6 +102,66 @@ class AppDialogs {
                   child: const Text('Allow notifications'),
                 ),
               ),
+              const SizedBox(height: 24),
+
+              TextButton(
+                onPressed: () => AppNav.pop(dialogContext, false),
+                child: const Text('Not now'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  static Future<bool?> showNotificationSettingsDialog({
+    required BuildContext context,
+  }) {
+    final theme = Theme.of(context);
+
+    return showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => Dialog(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                HugeIconsStroke.notification01,
+                size: 52,
+                color: theme.colorScheme.primary,
+              ),
+
+              const SizedBox(height: 20),
+
+              Text(
+                'Notifications are turned off',
+                textAlign: TextAlign.center,
+                style: theme.textTheme.headlineSmall,
+              ),
+
+              const SizedBox(height: 10),
+
+              Text(
+                'Rafeeq can’t send you Salah and other important reminders '
+                'while notifications are disabled. You can enable them '
+                'from your device settings.',
+                textAlign: TextAlign.center,
+                style: theme.textTheme.bodyMedium,
+              ),
+
+              const SizedBox(height: 16),
+
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () => AppNav.pop(dialogContext, true),
+                  child: const Text('Open settings'),
+                ),
+              ),
+
               const SizedBox(height: 24),
 
               TextButton(

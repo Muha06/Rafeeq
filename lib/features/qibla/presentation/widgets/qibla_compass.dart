@@ -3,9 +3,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_compass_v2/flutter_compass_v2.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/core/constants/strings/app_strings.dart';
 import 'package:rafeeq/core/helpers/app_haptics.dart';
 import 'package:rafeeq/features/qibla/presentation/providers/qibla_direction.dart';
-import 'package:rafeeq/features/qibla/presentation/widgets/compass_dial_painter.dart';
 
 class QiblaCompass extends ConsumerStatefulWidget {
   const QiblaCompass({
@@ -34,6 +34,18 @@ class _QiblaCompassState extends ConsumerState<QiblaCompass> {
     return shortestDifference < 5;
   }
 
+  void _checkQibla(double direction, double qiblaDirection) {
+    if (!widget.enableHaptics) return;
+
+    final facing = isFacingQibla(direction, qiblaDirection);
+
+    if (facing && !_wasFacingQibla && widget.enableHaptics) {
+      AppHaptics.custom(pattern: [0, 100, 50, 100], amplitude: 100);
+    }
+
+    _wasFacingQibla = facing;
+  }
+
   String getQiblaInstruction(double direction, double qiblaDirection) {
     final difference = (qiblaDirection - direction + 540) % 360 - 180;
 
@@ -42,20 +54,8 @@ class _QiblaCompassState extends ConsumerState<QiblaCompass> {
     }
 
     return difference > 0
-        ? 'Turn right ${difference.abs().toStringAsFixed(0)}°'
-        : 'Turn left ${difference.abs().toStringAsFixed(0)}°';
-  }
-
-  void _checkQibla(double direction, double qiblaDirection) {
-    if (!widget.enableHaptics) return;
-
-    final facing = isFacingQibla(direction, qiblaDirection);
-
-    if (facing && !_wasFacingQibla && widget.enableHaptics) {
-      AppHaptics.heavy();
-    }
-
-    _wasFacingQibla = facing;
+        ? 'Turn right  ${difference.abs().toStringAsFixed(0)}°'
+        : 'Turn left  ${difference.abs().toStringAsFixed(0)}°';
   }
 
   @override
@@ -94,28 +94,12 @@ class _QiblaCompassState extends ConsumerState<QiblaCompass> {
                     hasCompassData &&
                     isFacingQibla(currentDirection, qiblaDirection);
 
-                final dialColor = isFacing
-                    ? Colors.greenAccent
-                    : cs.surfaceContainerHigh;
-
                 final compass = SizedBox(
                   width: compassSize,
                   height: compassSize,
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      CustomPaint(
-                        size: Size.square(compassSize),
-                        painter: CompassCustomPainter(
-                          angle: currentDirection,
-                          dialColor: dialColor,
-                          shadowColor: cs.shadow,
-                          tickColor: cs.surfaceContainerHighest,
-                          strongTickColor: cs.surfaceContainerLowest,
-                          northColor: cs.error,
-                        ),
-                      ),
-
                       // Qibla / Kaaba
                       Transform.rotate(
                         angle: -2 * pi * (currentDirection / 360),
@@ -123,7 +107,7 @@ class _QiblaCompassState extends ConsumerState<QiblaCompass> {
                           angle: qiblaDirection * pi / 180,
                           child: Image.asset(
                             'assets/images/qibla/prayer-mat.png',
-                            width: compassSize * 0.33,
+                            width: compassSize * 0.5,
                           ),
                         ),
                       ),
@@ -137,10 +121,10 @@ class _QiblaCompassState extends ConsumerState<QiblaCompass> {
                           child: Transform.rotate(
                             angle: qiblaDirection * pi / 180,
                             child: Align(
-                              alignment: const Alignment(0, -1.2),
+                              alignment: const Alignment(0, -1.4),
                               child: Icon(
                                 Icons.expand_less_outlined,
-                                color: cs.error,
+                                color: isFacing ? Colors.green : cs.error,
                                 size: compassSize * 0.13,
                               ),
                             ),
@@ -159,11 +143,12 @@ class _QiblaCompassState extends ConsumerState<QiblaCompass> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     compass,
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 24),
                     Text(
                       getQiblaInstruction(currentDirection, qiblaDirection),
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        color: isFacing ? Colors.green : cs.onSurface,
+                      style: theme.textTheme.headlineLarge?.copyWith(
+                        color: isFacing ? Colors.green : cs.error,
+                        fontFamily: AppStrings.displayFont,
                       ),
                     ),
                   ],

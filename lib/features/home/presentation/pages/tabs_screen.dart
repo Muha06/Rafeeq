@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/app/providers/tabs_screen_provider.dart';
 import 'package:rafeeq/core/helpers/app_haptics.dart';
@@ -36,7 +37,9 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
   }
 
   void _bootstrap() async {
-    await showNotificationPermissionDialog(context: context, ref: ref);
+    await Future.delayed(3.seconds);
+
+    await checkNotificationPermission(context: context, ref: ref);
   }
 
   @override

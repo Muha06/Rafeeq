@@ -110,7 +110,6 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
             ),
 
-
             const SliverToBoxAdapter(
               child: Padding(
                 padding: EdgeInsets.only(
@@ -163,7 +162,7 @@ class _GreetUserSection extends ConsumerWidget {
           overflow: TextOverflow.ellipsis,
           style: tt.labelLarge?.copyWith(
             fontFamily: AppStrings.displayFont,
-            fontSize: 18,
+            fontSize: 24,
           ),
         ),
 
@@ -176,7 +175,7 @@ class _GreetUserSection extends ConsumerWidget {
               "$name!",
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: tt.titleLarge?.copyWith(
+              style: tt.headlineSmall?.copyWith(
                 fontFamily: AppStrings.displayFont,
                 fontWeight: FontWeight.w500,
               ),
