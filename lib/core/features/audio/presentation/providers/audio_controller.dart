@@ -51,12 +51,11 @@ class AudioController extends Notifier<AudioState> {
         isBuffering: true,
       );
 
-      debugPrint('Loading audio: ${item.id}');
-
       await _handler.load(item: item);
 
       await _handler.setSingleTrackLoop(state.isRepeatEnabled);
-    } catch (e, st) {
+
+     } catch (e, st) {
       debugPrint('Audio load failed: $e');
       debugPrint('$st');
       state = oldState;
@@ -131,7 +130,7 @@ class AudioController extends Notifier<AudioState> {
   }
 
   Future<void> seek(Duration position) async {
-      state = state.copyWith(isSeekingAudio: true);
+    state = state.copyWith(isSeekingAudio: true);
     try {
       await _handler.seek(position);
     } catch (e) {
@@ -203,18 +202,10 @@ class AudioController extends Notifier<AudioState> {
   /// - New track -> load & play
   /// - Same track -> toggle play/pause
   Future<void> togglePlay({required AudioItem item}) async {
+    final isNewTrack = state.currentId == null || state.currentId != item.id;
+
     try {
-      debugPrint(
-        'togglePlay called: ${item.id}, ${item.url}, image: ${item.imageUrl}',
-      );
-
-      final isNewTrack = state.currentId == null || state.currentId != item.id;
-
       if (isNewTrack) {
-        debugPrint(
-          'Switching to new track: ${item.id} has image: ${item.imageUrl != null}',
-        );
-
         await loadAndPlay(item: item);
 
         return;

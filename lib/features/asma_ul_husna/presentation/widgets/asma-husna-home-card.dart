@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/app_text_style.dart';
+import 'package:rafeeq/features/asma_ul_husna/domain/entities/translations_enum.dart';
 import 'package:rafeeq/features/asma_ul_husna/presentation/pages/asma_ul_husna_page.dart';
 import 'package:rafeeq/features/asma_ul_husna/presentation/providers/random_name_provider.dart';
 
@@ -19,7 +20,7 @@ class AsmaulHusnaHomeCard extends ConsumerWidget {
     final fgColor = cs.onSurface;
 
     return randomAllahNameState.when(
-      error: (_, _) => const SizedBox.shrink(),
+      error: (error, _) => Text(error.toString()),
       loading: () => const SizedBox.shrink(),
       data: (name) =>
           Container(
@@ -86,7 +87,7 @@ class AsmaulHusnaHomeCard extends ConsumerWidget {
 
                       Center(
                         child: Text(
-                          name.meaningEn,
+                          name.translations[AllahNameLanguage.english]!.name,
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: cs.onSurface,
                           ),

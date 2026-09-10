@@ -51,7 +51,10 @@ class MyBottomBar extends ConsumerWidget {
     final itemColor = cs.onSurfaceVariant;
 
     final s = ref.watch(audioControllerProvider);
-    final canShow = s.sourceType != AudioSourceType.adhkar;
+
+    final canShow =
+      s.sourceType != AudioSourceType.adhkar &&
+        s.sourceType != AudioSourceType.allahName;
     final hasAudio = s.currentId != null && s.currentId!.isNotEmpty;
 
     final miniPlayer = AnimatedSwitcher(

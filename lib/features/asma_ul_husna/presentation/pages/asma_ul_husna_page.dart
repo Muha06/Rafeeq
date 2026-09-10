@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/core/constants/strings/app_strings.dart';
-import 'package:rafeeq/core/helpers/app_text_style.dart';
-import 'package:rafeeq/core/widgets/app_icon_container.dart';
-import 'package:rafeeq/core/widgets/app_pressable.dart';
-import 'package:rafeeq/core/widgets/app_state_view.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+  import 'package:rafeeq/core/widgets/app_state_view.dart';
+ import 'package:rafeeq/features/asma_ul_husna/domain/entities/translations_enum.dart';
 import 'package:rafeeq/features/asma_ul_husna/presentation/providers/asma_ul_husna_provider.dart';
+import 'package:rafeeq/features/asma_ul_husna/presentation/widgets/allah_name_tile.dart';
 
 class AllahNamesPage extends ConsumerStatefulWidget {
   const AllahNamesPage({super.key});
@@ -49,7 +46,9 @@ class _AllahNamesPageState extends ConsumerState<AllahNamesPage> {
 
               return n.arabic.trim().contains(_query) ||
                   n.transliteration.trim().toLowerCase().contains(q) ||
-                  n.meaningEn.trim().toLowerCase().contains(q) ||
+                  n.translations[AllahNameLanguage.english]!.meaning.contains(
+                    q,
+                  ) ||
                   n.number.toString() == _query;
             }).toList();
 
@@ -67,12 +66,8 @@ class _AllahNamesPageState extends ConsumerState<AllahNamesPage> {
               separatorBuilder: (_, _) => const SizedBox(height: 12),
               itemBuilder: (context, i) {
                 final n = filtered[i];
-                return _AllahNameTile(
-                  number: n.number,
-                  arabic: n.arabic,
-                  transliteration: n.transliteration,
-                  meaning: n.meaningEn,
-                );
+
+                return AllahNameTile(name: n);
               },
             );
           },
@@ -82,96 +77,6 @@ class _AllahNamesPageState extends ConsumerState<AllahNamesPage> {
   }
 }
 
-class _AllahNameTile extends ConsumerWidget {
-  final int number;
-  final String arabic;
-  final String transliteration;
-  final String meaning;
-
-  const _AllahNameTile({
-    required this.number,
-    required this.arabic,
-    required this.transliteration,
-    required this.meaning,
-  });
-
-  @override
-  Widget build(BuildContext context, ref) {
-    final theme = Theme.of(context);
-    final tt = theme.textTheme;
-
-    return AppPressableScale(
-      scale: 0.95,
-      child: Container(
-        decoration: BoxDecoration(
-          color: theme.cardColor,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        padding: const EdgeInsets.all(14),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _NumberBadge(number: number),
-            const SizedBox(width: 12),
-
-            // Main content
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Arabic
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(
-                      arabic,
-                      textDirection: TextDirection.rtl,
-                      style: AppTextStyles.arabicUi.copyWith(
-                        fontWeight: FontWeight.w700,
-                        color: theme.colorScheme.primary,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-
-                  // Transliteration
-                  Text(
-                    transliteration,
-                    overflow: TextOverflow.visible,
-                    style: tt.titleMedium?.copyWith(
-                      fontFamily: AppStrings.displayFont,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-
-                  // Meaning
-                  Text(meaning, style: tt.labelMedium),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ).animate(delay: 50.ms).fadeIn(duration: 200.ms, curve: Curves.easeOut),
-    );
-  }
-}
-
-class _NumberBadge extends ConsumerWidget {
-  final int number;
-  const _NumberBadge({required this.number});
-
-  @override
-  Widget build(BuildContext context, ref) {
-    final theme = Theme.of(context);
-    final cs = theme.colorScheme;
-
-    return AppIconContainer(
-      backgroundColor: cs.surfaceContainerHigh,
-      borderRadius: 14,
-      size: 32,
-      child: Text('$number', style: theme.textTheme.titleSmall),
-    );
-  }
-}
 
 class _SearchBar extends ConsumerWidget {
   final String hintText;

@@ -15,10 +15,14 @@ class AppAudioHandler extends BaseAudioHandler with SeekHandler {
   void _init() {
     // Listen to player state and update audio_service state accordingly
     _player.playerStateStream.listen((playerState) {
+      final processingState = _mapState(playerState.processingState);
+
       playbackState.add(
         playbackState.value.copyWith(
-          playing: playerState.playing,
-          processingState: _mapState(playerState.processingState),
+          playing:
+              playerState.playing &&
+              processingState != AudioProcessingState.completed,
+          processingState: processingState,
           controls: [
             MediaControl.skipToPrevious,
             if (playerState.playing) MediaControl.pause else MediaControl.play,
@@ -71,12 +75,13 @@ class AppAudioHandler extends BaseAudioHandler with SeekHandler {
   /// Load + play
   Future<void> load({required AudioItem item}) async {
     try {
+      playlist = [item];
+
       // load audio
       final duration = await _player.setUrl(AudioHelpers.secureUrl(item.url));
 
       // Set media item for notification & controls
       _setMediaItem(item: item, duration: duration);
-      playlist = [item];
 
       queue.add([
         MediaItem(
@@ -143,7 +148,14 @@ class AppAudioHandler extends BaseAudioHandler with SeekHandler {
 
   //These methods are called by the Lock screen control playback.
   @override
-  Future<void> play() => _player.play();
+  Future<void> play() async {
+    // If is same track just restart it
+    if (_player.processingState == ProcessingState.completed) {
+      await _player.seek(Duration.zero);
+    }
+
+    await _player.play();
+  }
 
   @override
   Future<void> pause() => _player.pause();

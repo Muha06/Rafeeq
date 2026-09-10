@@ -1,1 +1,1 @@
-enum AudioSourceType { quranRadio, quranSurah, adhkar, other }
+enum AudioSourceType { quranRadio, quranSurah, adhkar, allahName, other }

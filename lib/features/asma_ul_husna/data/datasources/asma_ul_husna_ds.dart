@@ -1,31 +1,28 @@
-import 'package:dio/dio.dart';
 import 'package:rafeeq/features/asma_ul_husna/data/models/name_model.dart';
 
-abstract class AllahNamesRemoteDataSource {
-  Future<List<AllahNameDto>> fetchAllahNames();
+import 'dart:convert';
+
+import 'package:flutter/services.dart';
+
+abstract class AllahNamesLocalDataSource {
+  Future<List<AllahNameModel>> getAllahNames();
 }
 
-class AllahNamesRemoteDataSourceImpl implements AllahNamesRemoteDataSource {
-  final Dio dio;
+class AllahNamesLocalDataSourceImpl implements AllahNamesLocalDataSource {
+  const AllahNamesLocalDataSourceImpl();
 
-  AllahNamesRemoteDataSourceImpl(this.dio);
+  static const _assetPath = 'assets/json/allah_names.json';
 
-  static const _endpoint = 'https://api.aladhan.com/v1/asmaAlHusna';
+ @override
+  Future<List<AllahNameModel>> getAllahNames() async {
+    final jsonString = await rootBundle.loadString(_assetPath);
 
-  @override
-  Future<List<AllahNameDto>> fetchAllahNames() async {
-    final res = await dio.get(_endpoint);
+    final json = jsonDecode(jsonString) as Map<String, dynamic>;
 
-    final body = res.data;
-    if (body is! Map) return const [];
+    final names = json['asmaul_husna'] as List<dynamic>;
 
-    final data = body['data']; //data
-
-    if (data is! List) return const [];
-
-    return data
-        .whereType<Map>()
-        .map((e) => AllahNameDto.fromJson(e.cast<String, dynamic>()))
+    return names
+        .map((item) => AllahNameModel.fromJson(item as Map<String, dynamic>))
         .toList();
   }
 }

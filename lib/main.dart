@@ -25,12 +25,11 @@ import 'package:rafeeq/features/adhkar/data/models/hive/dhikr_category_hive.dart
 import 'package:rafeeq/features/adhkar/data/models/hive/dhikr_hive_model.dart';
 import 'package:rafeeq/features/notifications/data/datasources/app_notifications_remote_ds.dart';
 import 'package:rafeeq/features/notifications/data/datasources/push_notification_services.dart';
-import 'package:rafeeq/features/asma_ul_husna/data/models/hive/name_hive_model.dart';
 import 'package:rafeeq/features/bookmarks/data/models/dhikr_bookmark_hive_model.dart';
 import 'package:rafeeq/features/bookmarks/data/models/quran_bookmark_hive_model.dart';
 import 'package:rafeeq/features/onboarding/presentation/pages/onboarding_scaffold.dart';
 import 'package:rafeeq/features/onboarding/presentation/provider/providers.dart';
- import 'package:rafeeq/features/quran/data/dataSources/quran_db_manager.dart';
+import 'package:rafeeq/features/quran/data/dataSources/quran_db_manager.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/ayah_of_day_scheduler.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/wiring_providers.dart';
 import 'package:rafeeq/features/quran_audio/data/models/hive/reciter_playlist_tracks_hive.dart';
@@ -95,7 +94,6 @@ void main() {
       Hive.registerAdapter(QuranGoalTypeHiveAdapter()); // TypeId = 11
       Hive.registerAdapter(QuranTargetUnitHiveAdapter()); // TypeId = 11
       Hive.registerAdapter(QuranHiveLogAdapter()); // TypeId = 11
-      Hive.registerAdapter(AllahNameHiveAdapter()); // TypeId = 30
       Hive.registerAdapter(QuranBookmarkHiveModelAdapter()); // TypeId = 31
       Hive.registerAdapter(DhikrBookmarkHiveModelAdapter()); // TypeId = 32
       Hive.registerAdapter(DhikrCategoryHiveAdapter()); // TypeId = 33
@@ -113,7 +111,6 @@ void main() {
       await Hive.openBox<DhikrBookmarkHiveModel>('dhikr_bookmarks_box');
       await Hive.openBox<List<dynamic>>('adhkar_cache');
       await Hive.openBox('lastReadBox');
-      await Hive.openBox<AllahNameHive>('allah_names_box');
       await Hive.openBox<CachedSalahTimesHive>('salah_times_cache_box');
       await Hive.openBox('settingsBox');
       await Hive.openBox('read_notifications');

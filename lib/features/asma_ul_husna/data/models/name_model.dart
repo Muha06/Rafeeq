@@ -1,41 +1,41 @@
 import 'package:rafeeq/features/asma_ul_husna/domain/entities/name_entity.dart';
+import 'package:rafeeq/features/asma_ul_husna/domain/entities/name_translation.dart';
+import 'package:rafeeq/features/asma_ul_husna/domain/entities/translations_enum.dart';
 
-class AllahNameDto {
-  final int number;
-  final String arabic;
-  final String transliteration;
-  final String meaningEn;
-
-  const AllahNameDto({
-    required this.number,
-    required this.arabic,
-    required this.transliteration,
-    required this.meaningEn,
+class AllahNameModel extends AllahName {
+  const AllahNameModel({
+    required super.number,
+    required super.arabic,
+    required super.transliteration,
+    required super.translations,
+    required super.audioUrl,
   });
 
-  factory AllahNameDto.fromJson(Map<String, dynamic> json) {
-    final en = (json['en'] as Map?)?.cast<String, dynamic>() ?? const {};
-    final meaning = (en['meaning'] as String?) ?? '';
+  factory AllahNameModel.fromJson(Map<String, dynamic> json) {
+    final name = json['name'] as Map<String, dynamic>;
+    final translations = json['translations'] as Map<String, dynamic>;
 
-    return AllahNameDto(
-      number: (json['number'] as num?)?.toInt() ?? 0,
-      arabic: (json['name'] as String?) ?? '',
-      transliteration: (json['transliteration'] as String?) ?? '',
-      meaningEn: meaning,
+    return AllahNameModel(
+      number: json['number'] as int,
+      arabic: name['arabic'] as String,
+      transliteration: name['transliteration'] as String,
+      audioUrl: json['audio_url'] as String,
+      translations: translations.map(
+        (key, value) => MapEntry(
+          AllahNameLanguageX.fromJsonKey(key),
+          AllahNameTranslation.fromJson(value as Map<String, dynamic>),
+        ),
+      ),
     );
   }
 
-  AllahName toEntity() => AllahName(
-    number: number,
-    arabic: arabic,
-    transliteration: transliteration,
-    meaningEn: meaningEn,
-  );
-
-  Map<String, dynamic> toJson() => {
-    'name': arabic,
-    'transliteration': transliteration,
-    'number': number,
-    'en': {'meaning': meaningEn},
-  };
+  AllahName toEntity() {
+    return AllahName(
+      number: number,
+      arabic: arabic,
+      transliteration: transliteration,
+      translations: translations,
+      audioUrl: audioUrl,
+    );
+  }
 }

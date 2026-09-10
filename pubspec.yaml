@@ -76,6 +76,7 @@ dependencies:
   in_app_update: ^5.0.0
   scrollable_positioned_list: ^0.3.8
   flutter_compass_v2: ^1.0.3
+  flutter_markdown_plus: ^1.0.12
 
 dev_dependencies:
   flutter_test:
@@ -132,6 +133,7 @@ flutter:
     - assets/images/qibla/
     - assets/icon/
     - assets/db/
+    - assets/json/
     - .env
 
 flutter_launcher_icons:
