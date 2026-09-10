@@ -63,112 +63,118 @@ class _QiblaCompassState extends ConsumerState<QiblaCompass> {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
-    final qiblaDirection = ref.watch(qiblaDirectionProvider);
+    final qiblaDirectionAsync = ref.watch(qiblaDirectionProvider);
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final maxAvailableSize = constraints.maxWidth.isFinite
-            ? constraints.maxWidth
-            : widget.size;
+    return qiblaDirectionAsync.when(
+      data: (qiblaDirection) {
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            final maxAvailableSize = constraints.maxWidth.isFinite
+                ? constraints.maxWidth
+                : widget.size;
 
-        final compassSize = min(widget.size, maxAvailableSize);
+            final compassSize = min(widget.size, maxAvailableSize);
 
-        return StreamBuilder<CompassEvent>(
-          stream: FlutterCompass.events,
-          builder: (context, snapshot) {
-            final direction = snapshot.data?.heading;
+            return StreamBuilder<CompassEvent>(
+              stream: FlutterCompass.events,
+              builder: (context, snapshot) {
+                final direction = snapshot.data?.heading;
 
-            final hasCompassData = direction != null;
+                final hasCompassData = direction != null;
 
-            // We only check Qibla when we have a real
-            // device heading.
-            if (hasCompassData) {
-              _checkQibla(direction, qiblaDirection);
-            }
+                // We only check Qibla when we have a real
+                // device heading.
+                if (hasCompassData) {
+                  _checkQibla(direction, qiblaDirection);
+                }
 
-            final currentDirection = direction ?? 0.0;
+                final currentDirection = direction ?? 0.0;
 
-            final isFacing =
-                hasCompassData &&
-                isFacingQibla(currentDirection, qiblaDirection);
+                final isFacing =
+                    hasCompassData &&
+                    isFacingQibla(currentDirection, qiblaDirection);
 
-            final dialColor = isFacing
-                ? Colors.greenAccent
-                : cs.surfaceContainerHigh;
+                final dialColor = isFacing
+                    ? Colors.greenAccent
+                    : cs.surfaceContainerHigh;
 
-            final compass = SizedBox(
-              width: compassSize,
-              height: compassSize,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  CustomPaint(
-                    size: Size.square(compassSize),
-                    painter: CompassCustomPainter(
-                      angle: currentDirection,
-                      dialColor: dialColor,
-                      shadowColor: cs.shadow,
-                      tickColor: cs.surfaceContainerHighest,
-                      strongTickColor: cs.surfaceContainerLowest,
-                      northColor: cs.error,
-                    ),
-                  ),
-
-                  // Qibla / Kaaba
-                  Transform.rotate(
-                    angle: -2 * pi * (currentDirection / 360),
-                    child: Transform.rotate(
-                      angle: qiblaDirection * pi / 180,
-                      child: Image.asset(
-                        'assets/images/qibla/prayer-mat.png',
-                        width: compassSize * 0.33,
+                final compass = SizedBox(
+                  width: compassSize,
+                  height: compassSize,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      CustomPaint(
+                        size: Size.square(compassSize),
+                        painter: CompassCustomPainter(
+                          angle: currentDirection,
+                          dialColor: dialColor,
+                          shadowColor: cs.shadow,
+                          tickColor: cs.surfaceContainerHighest,
+                          strongTickColor: cs.surfaceContainerLowest,
+                          northColor: cs.error,
+                        ),
                       ),
-                    ),
-                  ),
 
-                  // Qibla arrow
-                  SizedBox(
-                    width: compassSize * 0.82,
-                    height: compassSize * 0.82,
-                    child: Transform.rotate(
-                      angle: -2 * pi * (currentDirection / 360),
-                      child: Transform.rotate(
-                        angle: qiblaDirection * pi / 180,
-                        child: Align(
-                          alignment: const Alignment(0, -1.2),
-                          child: Icon(
-                            Icons.expand_less_outlined,
-                            color: cs.error,
-                            size: compassSize * 0.13,
+                      // Qibla / Kaaba
+                      Transform.rotate(
+                        angle: -2 * pi * (currentDirection / 360),
+                        child: Transform.rotate(
+                          angle: qiblaDirection * pi / 180,
+                          child: Image.asset(
+                            'assets/images/qibla/prayer-mat.png',
+                            width: compassSize * 0.33,
                           ),
                         ),
                       ),
+
+                      // Qibla arrow
+                      SizedBox(
+                        width: compassSize * 0.82,
+                        height: compassSize * 0.82,
+                        child: Transform.rotate(
+                          angle: -2 * pi * (currentDirection / 360),
+                          child: Transform.rotate(
+                            angle: qiblaDirection * pi / 180,
+                            child: Align(
+                              alignment: const Alignment(0, -1.2),
+                              child: Icon(
+                                Icons.expand_less_outlined,
+                                color: cs.error,
+                                size: compassSize * 0.13,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+
+                if (!widget.showInstruction) {
+                  return compass;
+                }
+
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    compass,
+                    const SizedBox(height: 12),
+                    Text(
+                      getQiblaInstruction(currentDirection, qiblaDirection),
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        color: isFacing ? Colors.green : cs.onSurface,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            );
-
-            if (!widget.showInstruction) {
-              return compass;
-            }
-
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                compass,
-                const SizedBox(height: 12),
-                Text(
-                  getQiblaInstruction(currentDirection, qiblaDirection),
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    color: isFacing ? Colors.green : cs.onSurface,
-                  ),
-                ),
-              ],
+                  ],
+                );
+              },
             );
           },
         );
       },
+      error: (_, _) => const SizedBox.shrink(),
+      loading: () => const SizedBox.shrink(),
     );
   }
 }

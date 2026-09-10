@@ -6,7 +6,7 @@ import 'package:rafeeq/core/animations/navigation_animations.dart';
 import 'package:rafeeq/core/constants/strings/app_strings.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/extensions/page_animate_ext.dart';
-import 'package:rafeeq/features/asma_ul_husna/presentation/widgets/asma-husna-home-card.dart';
+import 'package:rafeeq/features/asma_ul_husna/presentation/widgets/asma_husna_home_card.dart';
 import 'package:rafeeq/features/home/presentation/widgets/hijri_date.dart';
 import 'package:rafeeq/features/home_reminders/presentation/providers/reminder_providers.dart';
 import 'package:rafeeq/features/notifications/presentation/pages/notification_list_page.dart';

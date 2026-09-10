@@ -2,8 +2,8 @@ import 'package:rafeeq/core/features/location/presentation/provider/user_locatio
 import 'package:rafeeq/features/qibla/services/qibla_service.dart';
 import 'package:riverpod/riverpod.dart';
 
-final qiblaDirectionProvider = Provider<double>((ref) {
-  final location = ref.watch(userLocationProvider).value!;
+final qiblaDirectionProvider = FutureProvider<double>((ref) async {
+  final location = await ref.watch(userLocationProvider.future);
 
   return QiblaCalculator.calculate(
     latitude: location.lat,

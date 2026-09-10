@@ -62,55 +62,60 @@ class _SalahTimingsPageState extends ConsumerState<SalahTimingsPage> {
               title: const Text('Today\'s Timings'),
               centerTitle: true,
             ),
-            body: Column(
-              children: [
-                SizedBox(
-                  height: 100,
-                  child: AllSalatTimingsCard(times: times, current: current),
-                ),
+            body: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 20, 16, 16),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 100,
+                    child: AllSalatTimingsCard(times: times, current: current),
+                  ),
 
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.only(top: 8),
-                    child: ListView(
-                      padding: const EdgeInsets.fromLTRB(16, 20, 16, 16),
-                      children: [
-                        // 🕌 Obligatory prayers
-                        Text(
-                          'Obligatory Prayers',
-                          style: theme.textTheme.labelSmall,
-                        ),
-                        const SizedBox(height: 12),
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.only(top: 24),
+                      child: ListView(
+                        children: [
+                          // 🕌 Obligatory prayers
+                          Text(
+                            'Obligatory Prayers',
+                            style: theme.textTheme.labelSmall,
+                          ),
+                          const SizedBox(height: 12),
 
-                        ...salats.map((p) {
-                          final t = times.at(p);
-                          return _TimingTile(
-                            prayer: p,
-                            title: p.label,
-                            timeText: _formatHm(t),
-                          );
-                        }),
+                          ...salats.map((p) {
+                            final t = times.at(p);
+                            return _TimingTile(
+                              prayer: p,
+                              title: p.label,
+                              timeText: _formatHm(t),
+                            );
+                          }),
 
-                        const SizedBox(height: 16),
+                          const SizedBox(height: 16),
 
-                        // 🌤️ Other times
-                        Text('Other Times', style: theme.textTheme.labelSmall),
-                        const SizedBox(height: 12),
+                          // 🌤️ Other times
+                          Text(
+                            'Other Times',
+                            style: theme.textTheme.labelSmall,
+                          ),
+                          const SizedBox(height: 12),
 
-                        ...otherTimes.map((p) {
-                          final t = times.at(p);
-                          return _TimingTile(
-                            prayer: p,
-                            title: p.label,
-                            timeText: _formatHm(t),
-                            canToggle: false,
-                          );
-                        }),
-                      ],
+                          ...otherTimes.map((p) {
+                            final t = times.at(p);
+                            return _TimingTile(
+                              prayer: p,
+                              title: p.label,
+                              timeText: _formatHm(t),
+                              canToggle: false,
+                            );
+                          }),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );
@@ -143,12 +148,24 @@ class AllSalatTimingsCard extends StatelessWidget {
 
     return Stack(
       fit: StackFit.expand,
+      clipBehavior: Clip.antiAlias,
       children: [
         //image
-        Image.asset('assets/images/salah/masjid_dark.jpeg', fit: BoxFit.cover),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(14),
+          child: Image.asset(
+            'assets/images/salah/masjid_dark.jpeg',
+            fit: BoxFit.cover,
+          ),
+        ),
 
         //DARK OVERLAY
-        const DecoratedBox(decoration: BoxDecoration(color: Colors.black38)),
+        DecoratedBox(
+          decoration: BoxDecoration(
+            color: Colors.black38,
+            borderRadius: BorderRadius.circular(14),
+          ),
+        ),
 
         Center(
           child: SingleChildScrollView(
