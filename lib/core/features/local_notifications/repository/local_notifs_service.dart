@@ -145,8 +145,7 @@ class LocalNotificationService {
       priority: Priority.high,
       playSound: true,
       enableVibration: true,
-      // ignore: prefer_const_constructors
-      sound: RawResourceAndroidNotificationSound('adhan_normal'),
+      sound: const RawResourceAndroidNotificationSound('adhan_normal'),
     );
 
     const iosDetails = DarwinNotificationDetails(presentSound: true);

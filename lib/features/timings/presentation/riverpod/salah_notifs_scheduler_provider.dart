@@ -33,7 +33,7 @@ class SalahNotificationsController extends Notifier<void> {
   // listen to salah times updates
   void _listenToSalahTimes() {
     ref.listen(fetchTodaySalahTimesProvider, (_, next) {
-      debugPrint("Satah times changed!");
+      debugPrint("Salah times changed!");
       next.whenData(_onSalahTimesChanged);
     });
   }

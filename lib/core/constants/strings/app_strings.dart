@@ -1,4 +1,6 @@
 class AppStrings {
-  static const displayFont = 'DMSerifDisplay';
+  static const displayFont = 'Moret';
   static const primaryFont = 'Rubik';
 }
+
+

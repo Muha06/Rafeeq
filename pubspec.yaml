@@ -119,9 +119,9 @@ flutter:
         - asset: assets/fonts/Rubik/Rubik-Black.ttf
           weight: 900
 
-    - family: DMSerifDisplay
+    - family: Moret
       fonts:
-        - asset: assets/fonts/DMSerifDisplay/DMSerifDisplay-Regular.ttf
+        - asset: assets/fonts/Moret/Moret-Regular.otf
           weight: 400
 
   assets:

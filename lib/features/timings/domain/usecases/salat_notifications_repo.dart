@@ -36,7 +36,7 @@ class SalahNotifSchedulerService {
   }
 
   Future<void> scheduleForToday({
-    required SalahTimesEntity times,
+    required SalahTimesEntity times, // represent one day
     Set<SalahPrayer> disabled = const {},
   }) async {
     await cancelAll();

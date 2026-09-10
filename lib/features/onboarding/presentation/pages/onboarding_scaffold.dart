@@ -79,7 +79,9 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
     ref.read(userNameProvider.notifier).saveName(name);
 
     //  Save user location
-    await _saveUserLocation();
+    try {
+      await _saveUserLocation();
+    } catch (_) {}
 
     if (!context.mounted) return;
 
@@ -91,12 +93,10 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
   }
 
   Future<void> _saveUserLocation() async {
-    debugPrint('Saving user location after onboarding');
     final locationPerm = ref.watch(locationPermissionProvider);
 
     final isAllowed = locationPerm.isGranted;
-    debugPrint("Location permission allowed: $isAllowed");
-    if (!isAllowed) return;
+    if (!isAllowed) return; // dont save
 
     await ref.read(userLocationProvider.notifier).refresh();
   }

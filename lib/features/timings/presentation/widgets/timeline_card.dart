@@ -8,6 +8,7 @@ import 'package:rafeeq/core/helpers/salat_times.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_prayer.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_status.dart';
 import 'package:rafeeq/features/timings/presentation/pages/timings_pages.dart';
+import 'package:rafeeq/features/timings/presentation/riverpod/fetch_salah_times_provider.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/salah_status_provider.dart';
 import 'package:rafeeq/features/home/presentation/widgets/user_location_chip.dart';
 
@@ -20,6 +21,7 @@ class HomeTimelineCard extends ConsumerWidget {
 
     return salahStatus.when(
       data: (status) => _BuildTimelineCard(status: status),
+
       loading: () => const SizedBox.shrink(),
       error: (_, _) => const _ErrorCard(),
     );
@@ -29,16 +31,21 @@ class HomeTimelineCard extends ConsumerWidget {
 class _ErrorCard extends ConsumerWidget {
   const _ErrorCard({super.key});
 
+  void _retry(WidgetRef ref) {
+    ref.invalidate(fetchTodaySalahTimesProvider);
+    ref.invalidate(salahStatusProvider);
+  }
+
   @override
   Widget build(BuildContext context, ref) {
     return GestureDetector(
-      onTap: () => ref.refresh(salahStatusProvider),
+      onTap: () => _retry(ref),
       child: Row(
         children: [
           const Text('Oops! Failed to fetch prayer times'),
           const Spacer(),
           IconButton(
-            onPressed: () => ref.refresh(salahStatusProvider),
+            onPressed: () => _retry(ref),
             icon: const Icon(HugeIconsSolid.refresh),
           ),
         ],

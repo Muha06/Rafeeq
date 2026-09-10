@@ -186,7 +186,7 @@ class AppSheets {
     String? title,
     required String message,
     String buttonText = "OK",
-    final bool useRootNavigator = true,
+    bool useRootNavigator = true,
   }) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
