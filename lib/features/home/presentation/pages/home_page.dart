@@ -150,8 +150,6 @@ class _GreetUserSection extends ConsumerWidget {
     final cs = theme.colorScheme;
     final tt = theme.textTheme;
 
-    final hasName = name != null;
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -166,21 +164,20 @@ class _GreetUserSection extends ConsumerWidget {
           ),
         ),
 
-        if (hasName)
-          Shimmer.fromColors(
-            baseColor: cs.primary,
-            highlightColor: cs.onSurfaceVariant,
-            period: 2.seconds,
-            child: Text(
-              "$name!",
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: tt.headlineSmall?.copyWith(
-                fontFamily: AppStrings.displayFont,
-                fontWeight: FontWeight.w500,
-              ),
+        Shimmer.fromColors(
+          baseColor: cs.primary,
+          highlightColor: cs.onSurfaceVariant,
+          period: 2.seconds,
+          child: Text(
+            "$name!",
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: tt.headlineSmall?.copyWith(
+              fontFamily: AppStrings.displayFont,
+              fontWeight: FontWeight.w500,
             ),
           ),
+        ),
       ],
     );
   }

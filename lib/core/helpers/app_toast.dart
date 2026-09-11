@@ -130,18 +130,19 @@ class AppToast {
                 color: Colors.transparent,
                 child: Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 10,
+                    horizontal: 12,
+                    vertical: 8,
                   ),
                   decoration: BoxDecoration(
                     color: backgroundColor ?? Colors.green,
-                    borderRadius: BorderRadius.circular(999),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
                     message,
                     textAlign: TextAlign.center,
-                    style: theme.textTheme.bodyMedium?.copyWith(
+                    style: theme.textTheme.bodySmall?.copyWith(
                       color: foregroundColor ?? cs.onError,
+                      fontSize: 14.5,
                     ),
                   ),
                 ),
