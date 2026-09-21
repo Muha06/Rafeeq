@@ -84,7 +84,8 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
       await _saveUserLocation();
     } catch (_) {}
 
-     if (!mounted) return;
+    if (!mounted) return;
+    // debugPrint("Hey");
 
     Navigator.of(
       context,

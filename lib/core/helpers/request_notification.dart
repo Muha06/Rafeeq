@@ -36,6 +36,6 @@ Future<void> checkNotificationPermission({
   );
 
   if (shouldRequest == true) {
-    await notifier.requestNotifications();
+    await notifier.requestAll(includeExactAlarms: true);
   }
 }

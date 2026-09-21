@@ -5,6 +5,7 @@ import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/helpers/app_haptics.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/features/feedback/presentation/pages/feedback_page.dart';
+import 'package:rafeeq/features/settings/presentation/pages/about_page.dart';
 import 'package:rafeeq/features/settings/presentation/provider/notiffications_controller.dart';
 import 'package:rafeeq/features/user/presentation/pages/update_user_name.dart';
 import 'package:rafeeq/features/user/presentation/providers/user_provider.dart';
@@ -27,59 +28,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       ),
       body: ListView(
         children: [
-          SettingsSection(
-            title: 'Reminders',
-            children: [
-              SettingsTile(
-                leading: const PhosphorIcon(PhosphorIcons.bell),
-                title: 'Salah reminders',
-                subtitle: 'Get Salah reminders',
-                trailing: Consumer(
-                  builder: (context, ref, _) {
-                    final enabled = ref.watch(salahNotifControllerProvider);
-                    final controller = ref.read(
-                      salahNotifControllerProvider.notifier,
-                    );
-
-                    return Switch(
-                      value: enabled,
-                      onChanged: (val) {
-                        AppHaptics.light();
-
-                        controller.toggleSalahReminders(val, context);
-                      },
-                    );
-                  },
-                ),
-              ),
-
-              SettingsTile(
-                leading: const PhosphorIcon(PhosphorIcons.bell),
-                title: 'Adhkar reminders',
-                subtitle: 'Morning & evening adhkars reminders',
-                trailing: Consumer(
-                  builder: (context, ref, _) {
-                    final enabled = ref.watch(adhkarNotifControllerProvider);
-                    final controller = ref.read(
-                      adhkarNotifControllerProvider.notifier,
-                    );
-
-                    return Switch(
-                      value: enabled,
-                      onChanged: (val) {
-                        AppHaptics.light();
-
-                        controller.toggleAdhkarReminders(val, context);
-                      },
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 8),
-
           SettingsSection(
             title: 'Personalization',
             children: [
@@ -115,11 +63,64 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             ],
           ),
 
+          SettingsSection(
+            title: 'Reminders',
+            children: [
+              SettingsTile(
+                leading: const PhosphorIcon(PhosphorIcons.bell),
+                title: 'Salah reminders',
+                subtitle: 'Get Salah reminders',
+                trailing: Consumer(
+                  builder: (context, ref, _) {
+                    final enabled = ref.watch(salahNotifControllerProvider);
+                    final controller = ref.read(
+                      salahNotifControllerProvider.notifier,
+                    );
+
+                    return Switch(
+                      value: enabled,
+                      onChanged: (val) {
+                        AppHaptics.light();
+
+                        controller.toggleSalahReminders(val, context);
+                      },
+                    );
+                  },
+                ),
+              ),
+
+              const SizedBox(height: 8),
+
+              SettingsTile(
+                leading: const PhosphorIcon(PhosphorIcons.bell),
+                title: 'Adhkar reminders',
+                subtitle: 'Morning & evening adhkars reminders',
+                trailing: Consumer(
+                  builder: (context, ref, _) {
+                    final enabled = ref.watch(adhkarNotifControllerProvider);
+                    final controller = ref.read(
+                      adhkarNotifControllerProvider.notifier,
+                    );
+
+                    return Switch(
+                      value: enabled,
+                      onChanged: (val) {
+                        AppHaptics.light();
+
+                        controller.toggleAdhkarReminders(val, context);
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+
           const SizedBox(height: 8),
 
           //send feedback
           SettingsSection(
-            title: 'Support',
+            title: 'Get involved',
             children: [
               SettingsTile(
                 leading: const PhosphorIcon(PhosphorIcons.chatTeardropText),
@@ -127,6 +128,15 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 subtitle:
                     'Share your suggestions and make Rafeeq more beneficial, In shaa Allah',
                 onTap: () => AppNav.push(context, const FeedbackPage()),
+              ),
+
+              const SizedBox(height: 8),
+
+              SettingsTile(
+                leading: const PhosphorIcon(PhosphorIcons.questionMark),
+                title: 'About Rafeeq',
+                subtitle: 'Hear our story',
+                onTap: () => AppNav.push(context, const AboutRafeeqPage()),
               ),
             ],
           ),
@@ -187,7 +197,7 @@ class SettingsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
- 
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

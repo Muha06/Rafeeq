@@ -10,6 +10,8 @@ import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_category_page.d
 import 'package:rafeeq/features/quran/presentation/pages/quran_page.dart';
 import 'package:rafeeq/features/home/presentation/pages/home_page.dart';
 import 'package:rafeeq/features/bookmarks/presentation/pages/bookmark_page.dart';
+import 'package:rafeeq/features/whats_new/presentation/pages/whats_new.dart';
+import 'package:rafeeq/features/whats_new/presentation/providers/whats_new_provider.dart';
 
 class TabsScreen extends ConsumerStatefulWidget {
   const TabsScreen({super.key});
@@ -40,8 +42,24 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
     await Future.delayed(3.seconds);
 
     if (!mounted) return;
-    
+
     await checkNotificationPermission(context: context, ref: ref);
+
+    _showWhatsNew();
+  }
+
+  Future<void> _showWhatsNew() async {
+    if (!ref.read(whatsNewProvider) || !mounted) return;
+
+    showModalBottomSheet(
+      context: context,
+      showDragHandle: false,
+      isScrollControlled: true,
+      clipBehavior: Clip.hardEdge,
+      builder: (_) => const WhatsNewPage(),
+    ).then((_) {
+      ref.read(whatsNewProvider.notifier).markAsSeen();
+    });
   }
 
   @override

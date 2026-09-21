@@ -15,7 +15,7 @@ class QuranBookmarksNotifier extends Notifier<List<QuranBookmarkEntity>> {
 
   //Add bookmarks
   Future<void> addBookmark(QuranBookmarkEntity bookmark) async {
-    state = [...state, bookmark];
+    state = [bookmark, ...state];
 
     return await ref.read(addQuranBookmarkUseCaseProvider).call(bookmark);
   }

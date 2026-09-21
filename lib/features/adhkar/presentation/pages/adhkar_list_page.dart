@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
+import 'package:rafeeq/core/widgets/app_pressable.dart';
 import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/features/adhkar/domain/entities/dhikr_category.dart';
 import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_details_page.dart';
@@ -58,35 +59,38 @@ class AdhkarPreviewPages extends ConsumerWidget {
                       horizontal: 12.0,
                       vertical: 12,
                     ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        //Number
-                        SizedBox(
-                          height: 28,
-                          width: 28,
-                          child: Center(
-                            child: Text(
-                              (index + 1).toString(),
-                              style: theme.textTheme.labelSmall,
+                    child: AppPressableScale(
+                      scale: 0.97,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          //Number
+                          SizedBox(
+                            height: 28,
+                            width: 28,
+                            child: Center(
+                              child: Text(
+                                (index + 1).toString(),
+                                style: theme.textTheme.labelSmall,
+                              ),
                             ),
                           ),
-                        ),
 
-                        const SizedBox(width: 10),
+                          const SizedBox(width: 10),
 
-                        Expanded(
-                          child: Text(
-                            dhikr.title,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: theme.textTheme.labelLarge,
+                          Expanded(
+                            child: Text(
+                              dhikr.title,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.labelLarge,
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 8),
+                          const SizedBox(width: 8),
 
-                        Icon(Icons.chevron_right, color: cs.onSurfaceVariant),
-                      ],
+                          Icon(Icons.chevron_right, color: cs.onSurfaceVariant),
+                        ],
+                      ),
                     ),
                   ),
                 );

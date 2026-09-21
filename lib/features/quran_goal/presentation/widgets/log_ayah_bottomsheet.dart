@@ -153,7 +153,7 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
                           updatedProgress.totalRead >= goal.dailyTarget;
 
                       if (!wasCompleted && isCompleted) {
-                        await Future.delayed(2.seconds);
+                        await Future.delayed(1.seconds);
                         if (!context.mounted) return;
 
                         showGoalCompletedDialog(context, ref, goal.dailyTarget);

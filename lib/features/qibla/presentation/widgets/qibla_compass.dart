@@ -50,7 +50,7 @@ class _QiblaCompassState extends ConsumerState<QiblaCompass> {
     final difference = (qiblaDirection - direction + 540) % 360 - 180;
 
     if (difference.abs() <= 5) {
-      return "You're facing Qibla 😍";
+      return "You are facing Qibla 😍";
     }
 
     return difference > 0

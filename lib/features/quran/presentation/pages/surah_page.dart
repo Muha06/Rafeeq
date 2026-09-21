@@ -179,11 +179,13 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
 
     if (!itemScrollController.isAttached) return;
 
-    await itemScrollController.scrollTo(
-      index: ayahNumber,
-      duration: const Duration(milliseconds: 600),
-      curve: Curves.easeInOut,
-    );
+    if (ayahNumber > 2) {
+      await itemScrollController.scrollTo(
+        index: ayahNumber,
+        duration: const Duration(milliseconds: 600),
+        curve: Curves.easeInOut,
+      );
+    }
 
     _suppressNextSave = false;
   }
@@ -540,14 +542,16 @@ class AppbarSurahPicker extends ConsumerWidget {
             borderRadius: BorderRadius.circular(10),
             child: SizedBox(
               height: kToolbarHeight, // fills AppBar height
+              width: 135,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     surah.nameTransliteration,
-                    style: theme.textTheme.titleLarge!.copyWith(
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.labelLarge!.copyWith(
                       fontFamily: AppStrings.displayFont,
-                      fontSize: 14,
+                      fontSize: 17.9,
                     ),
                   ),
                   const SizedBox(width: 2),

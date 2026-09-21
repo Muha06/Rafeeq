@@ -10,7 +10,7 @@ class AppToast {
     Alignment alignment = Alignment.topCenter,
     Color? backgroundColor,
     Color? foregroundColor,
-    Duration duration = const Duration(seconds: 2),
+    Duration duration = const Duration(seconds: 1),
   }) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
