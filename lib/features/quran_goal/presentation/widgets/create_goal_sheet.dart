@@ -40,8 +40,6 @@ class _CreateGoalSheetState extends ConsumerState<CreateGoalSheet> {
   QuranGoalType goalType = QuranGoalType.tilawah;
   QuranTargetUnit targetUnit = QuranTargetUnit.ayah;
 
-  DateTime startDate = DateTime.now();
-  DateTime endDate = DateTime.now().add(const Duration(days: 30));
   TimeOfDay reminder = const TimeOfDay(hour: 20, minute: 0);
 
   final goalTypeNotifier = ValueNotifier(QuranGoalType.tilawah);
@@ -63,8 +61,6 @@ class _CreateGoalSheetState extends ConsumerState<CreateGoalSheet> {
       type: goalTypeNotifier.value,
       targetUnit: targetUnitNotifier.value,
       dailyTarget: dailyTarget,
-      startDate: startDate,
-      endDate: endDate,
       remindMeAt: reminder,
       createdAt: DateTime.now(),
     );
@@ -72,38 +68,6 @@ class _CreateGoalSheetState extends ConsumerState<CreateGoalSheet> {
     AppNav.pop(context);
 
     ref.read(quranGoalProvider.notifier).createGoal(goal);
-  }
-
-  Future<void> pickStartDate() async {
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: startDate,
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2100),
-    );
-
-    if (picked != null) {
-      setState(() {
-        startDate = picked;
-
-        if (endDate.isBefore(startDate)) {
-          endDate = startDate;
-        }
-      });
-    }
-  }
-
-  Future<void> pickEndDate() async {
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: endDate,
-      firstDate: startDate,
-      lastDate: DateTime(2100),
-    );
-
-    if (picked != null) {
-      setState(() => endDate = picked);
-    }
   }
 
   Future<void> pickReminder() async {
@@ -158,20 +122,6 @@ class _CreateGoalSheetState extends ConsumerState<CreateGoalSheet> {
               ),
 
               const SizedBox(height: 16),
-
-              GoalScheduleTile(
-                icon: Icons.calendar_today_outlined,
-                title: 'Start Date',
-                value: formatDate(startDate),
-                onTap: pickStartDate,
-              ),
-
-              GoalScheduleTile(
-                icon: Icons.event_outlined,
-                title: 'End Date',
-                value: formatDate(endDate),
-                onTap: pickEndDate,
-              ),
 
               GoalScheduleTile(
                 icon: Icons.notifications_active_outlined,

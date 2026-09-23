@@ -193,23 +193,7 @@ class _GoalInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            _InfoTile(title: "Started", value: goal.formattedStartDate),
-
-            const Spacer(),
-
-            _InfoTile(title: "End Date", value: goal.formattedEndDate),
-          ],
-        ),
-
-        const SizedBox(height: 20),
-
-        _InfoTile(title: "Remind Me At", value: goal.formattedReminderTime),
-      ],
-    );
+    return _InfoTile(title: "Remind Me At", value: goal.formattedReminderTime);
   }
 }
 

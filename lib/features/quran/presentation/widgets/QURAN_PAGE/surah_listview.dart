@@ -54,6 +54,7 @@ class AllSurahsList extends ConsumerWidget {
                 final surah = filtered[index];
 
                 return AppPressableScale(
+                  scale: 0.95,
                   onTap: () {
                     AppNav.push(
                       context,

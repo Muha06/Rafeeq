@@ -12,33 +12,25 @@ class QuranGoalHive extends HiveObject {
   int dailyTarget;
 
   @HiveField(1)
-  DateTime startDate;
-
-  @HiveField(2)
-  DateTime endDate;
-
-  @HiveField(3)
   bool isActive;
 
-  @HiveField(4)
+  @HiveField(2)
   QuranGoalTypeHive type;
 
-  @HiveField(5)
+  @HiveField(3)
   int? reminderHour;
 
-  @HiveField(6)
+  @HiveField(4)
   int? reminderMinute;
 
-  @HiveField(7)
+  @HiveField(5)
   QuranTargetUnitHive targetUnit;
 
-  @HiveField(8)
+  @HiveField(6)
   DateTime createdAt;
 
   QuranGoalHive({
     required this.dailyTarget,
-    required this.startDate,
-    required this.endDate,
     required this.createdAt,
     required this.isActive,
     required this.type,
@@ -51,8 +43,6 @@ class QuranGoalHive extends HiveObject {
   QuranGoal toDomain() {
     return QuranGoal(
       dailyTarget: dailyTarget,
-      startDate: startDate,
-      endDate: endDate,
       isActive: isActive,
       type: type.toDomain,
       targetUnit: targetUnit.toDomain,
@@ -67,8 +57,6 @@ class QuranGoalHive extends HiveObject {
   QuranGoalHive toHive(QuranGoal goal) {
     return QuranGoalHive(
       dailyTarget: goal.dailyTarget,
-      startDate: goal.startDate,
-      endDate: goal.endDate,
       isActive: goal.isActive,
       type: goal.type.toHive,
       targetUnit: goal.targetUnit.toHive,

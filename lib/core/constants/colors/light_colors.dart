@@ -4,7 +4,7 @@ class AppLightColors {
   //  BACKGROUND
   static const canvas = Color(0xFFFFFFFF);
   static const surfaceLow = Color(0xFFF7F7F7);
-  
+
   // SURFACES
   static const surface = Color(0xFFEFF5F6);
   static const surfaceHigh = Color(0xFFD5E0E4);
@@ -30,12 +30,12 @@ class AppLightColors {
   static const tertiaryContainer = Color(0xFFDBEEBA); // lighter tertiary
 
   // ON CONTAINERS
-  static const onPrimaryContainer = Color(0xFF3D2B12);
+  static const onPrimaryContainer = onSurface;
   static const onSecondaryContainer = onSurface2;
   static const onTertiaryContainer = onSurface;
 
   // ON SURFACES
-  static const onSurface = Color(0xFF303236);
+  static const onSurface = Color(0xFF3D2B12);
   static const onSurface2 = Color(0xFF568A91);
 
   //  ERROR

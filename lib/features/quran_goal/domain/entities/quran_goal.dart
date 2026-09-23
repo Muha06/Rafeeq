@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:rafeeq/features/quran_goal/data/models/hive/quran_goal_hive.dart';
+ import 'package:rafeeq/features/quran_goal/data/models/hive/quran_goal_hive.dart';
 import 'package:rafeeq/features/quran_goal/data/models/hive/quran_goal_type_hive.dart';
 import 'package:rafeeq/features/quran_goal/data/models/hive/quran_target_unit_hive.dart';
 
@@ -14,9 +13,6 @@ class QuranGoal {
 
   final int dailyTarget;
 
-  final DateTime startDate;
-  final DateTime endDate;
-
   final TimeOfDay? remindMeAt;
 
   final bool isActive;
@@ -26,16 +22,11 @@ class QuranGoal {
     required this.type,
     required this.dailyTarget,
     required this.targetUnit,
-    required this.startDate,
-    required this.endDate,
     required this.createdAt,
     this.remindMeAt,
     this.isActive = true,
   });
 
-  //helper to void get formatted start date
-  String get formattedStartDate => DateFormat('d MMMM yyyy').format(startDate);
-  String get formattedEndDate => DateFormat('d MMMM yyyy').format(endDate);
   String get formattedReminderTime {
     if (remindMeAt == null) return 'No reminder set';
 
@@ -58,10 +49,8 @@ class QuranGoal {
     return QuranGoal(
       dailyTarget: dailyTarget ?? this.dailyTarget,
       targetUnit: targetUnit ?? this.targetUnit,
-      endDate: endDate ?? this.endDate,
-      remindMeAt: remindMeAt ?? this.remindMeAt,
-      startDate: startDate ?? this.startDate,
-      isActive: isActive ?? this.isActive,
+       remindMeAt: remindMeAt ?? this.remindMeAt,
+       isActive: isActive ?? this.isActive,
       type: type ?? this.type,
       createdAt: createdAt,
     );
@@ -70,9 +59,7 @@ class QuranGoal {
   QuranGoalHive toHive() {
     return QuranGoalHive(
       dailyTarget: dailyTarget,
-      startDate: startDate,
-      endDate: endDate,
-      isActive: isActive,
+       isActive: isActive,
       type: type.toHive,
       targetUnit: targetUnit.toHive,
       createdAt: createdAt,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rafeeq/core/constants/app_assets.dart';
+import 'package:rafeeq/features/settings/presentation/share_app_card.dart';
 
 class AboutRafeeqPage extends StatelessWidget {
   const AboutRafeeqPage({super.key});
@@ -12,7 +13,7 @@ class AboutRafeeqPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('About Rafeeq')),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
         child: Center(
           child: SingleChildScrollView(
             child: Column(
@@ -50,10 +51,10 @@ class AboutRafeeqPage extends StatelessWidget {
                 const _AboutAppSection(
                   title: 'Free forever, in shaa Allah ✨',
                   body:
-                      "Since Rafeeq was created to benefit the Ummah, we don't want cost to ever be a barrier to using it. No Muslim should have to pay to access the features and resources in Rafeeq. In shaa Allah, Rafeeq will remain completely free — no subscriptions, no paywalls, and no premium features. We built it as a contribution to the Ummah, and that's how we intend to keep it. In the future, we may add an optional way for those who wish to support the project through donations, but using Rafeeq will always remain free, in shaa Allah. ",
+                      "Since Rafeeq was created to benefit the Ummah, I don't want cost to ever be a barrier to using it. No Muslim should have to pay to access the features and resources in Rafeeq. In shaa Allah, Rafeeq will remain completely free — no subscriptions, no paywalls, and no premium features. I built it as a contribution to the Ummah, and that's how I intend to keep it. In the future, I may add an optional way for those who wish to support the project through donations, but using Rafeeq will always remain free, in shaa Allah.",
                 ),
 
-                // TODO: share Rafeeq card
+                const ShareRafeeqCard(),
               ],
             ),
           ),

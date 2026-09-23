@@ -13,7 +13,7 @@ const ramadhanNotifId = 301;
 final ramadanReflectionByDayProvider =
     FutureProvider.family<RamadanReflection?, HijriDate>((ref, hijri) async {
       final month = hijri.hMonth;
-      if (month != 9) return null; // not ramadan
+      if (month != 4) return null; // not ramadan
 
       final day = hijri.hDay;
 

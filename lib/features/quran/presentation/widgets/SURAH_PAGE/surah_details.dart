@@ -17,28 +17,32 @@ class BasmallaPlayBtnColumn extends ConsumerWidget {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
-    return Column(
-      children: [
-        SizedBox(
-          width: double.infinity,
-          child: _SurahDetails(surah: surah),
-        ),
+    return Padding(
+      padding: const EdgeInsets.only(top: 24.0, bottom: 14),
+      child: Column(
+        children: [
+          //Bismillah
+          if (surah.id != 9) ...[
+            Image.asset(
+              'assets/images/quran/bismillah.png',
+              color: cs.onSurface,
+              height: 60,
+            ),
+            const SizedBox(height: 8),
+          ],
 
-        const SizedBox(height: 12),
+          const SizedBox(height: 12),
 
-        //Bismillah
-        if (surah.id != 9) ...[
-          Image.asset(
-            'assets/images/quran/bismillah.png',
-            color: cs.onSurface,
-            height: 60,
+          PlayFullSurahBtn(initialIndex: initialIndex),
+
+          const SizedBox(height: 24),
+
+          SizedBox(
+            width: double.infinity,
+            child: _SurahDetails(surah: surah),
           ),
-          const SizedBox(height: 8),
         ],
-
-        const SizedBox(height: 8),
-        PlayFullSurahBtn(initialIndex: initialIndex),
-      ],
+      ),
     );
   }
 }

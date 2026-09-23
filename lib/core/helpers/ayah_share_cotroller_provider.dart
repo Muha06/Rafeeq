@@ -5,12 +5,12 @@ import 'package:rafeeq/features/Ramadan/domain/ramadan_reflection.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
 
-final ayahShareControllerProvider = Provider<AyahShareController>((ref) {
-  return AyahShareController(ref);
+final shareControllerProvider = Provider<ShareController>((ref) {
+  return ShareController(ref);
 });
 
-class AyahShareController {
-  AyahShareController(this.ref);
+class ShareController {
+  ShareController(this.ref);
   final Ref ref;
 
   //build ayah text
@@ -99,5 +99,26 @@ class AyahShareController {
     );
 
     RafeeqAnalytics.logFeature('share_ayah');
+  }
+
+  // SHARE APP
+  Future<void> shareRafeeqApp({required BuildContext context}) async {
+    const text = '''
+I'm using *Rafeeq* — an Islamic companion app that helps me stay connected with the Quran, salah, adhkar and more. 🤍
+
+It's completely *free*, with no ads or subscriptions.
+
+You might find it useful too, in shaa Allah.
+
+https://play.google.com/store/apps/details?id=com.mohaa.rafeeq
+''';
+
+    await share(
+      context: context,
+      text: text,
+      subject: 'Rafeeq — Your Islamic Companion',
+    );
+
+    RafeeqAnalytics.logFeature('share_rafeeq_app');
   }
 }

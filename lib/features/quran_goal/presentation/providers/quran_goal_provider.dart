@@ -72,9 +72,7 @@ class QuranGoalNotifier extends Notifier<QuranGoal?> {
     RafeeqAnalytics.logFeature(
       'update-quran-goal',
       parameters: {
-        'start_date': goal.startDate.toIso8601String(),
-        'end_date': goal.endDate.toIso8601String(),
-        'target': updated.dailyTarget,
+         'target': updated.dailyTarget,
       },
     );
   }
@@ -100,9 +98,7 @@ class QuranGoalNotifier extends Notifier<QuranGoal?> {
       'create_quran_goal',
       parameters: {
         'goal_type': goal.type.name, // tilawah / hifz
-        'start_date': goal.startDate.toIso8601String(),
-        'end_date': goal.endDate.toIso8601String(),
-        'target': goal.dailyTarget,
+         'target': goal.dailyTarget,
       },
     );
   }

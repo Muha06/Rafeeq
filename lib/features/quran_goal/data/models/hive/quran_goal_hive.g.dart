@@ -18,38 +18,32 @@ class QuranGoalHiveAdapter extends TypeAdapter<QuranGoalHive> {
     };
     return QuranGoalHive(
       dailyTarget: fields[0] as int,
-      startDate: fields[1] as DateTime,
-      endDate: fields[2] as DateTime,
-      createdAt: fields[8] as DateTime,
-      isActive: fields[3] as bool,
-      type: fields[4] as QuranGoalTypeHive,
-      targetUnit: fields[7] as QuranTargetUnitHive,
-      reminderHour: fields[5] as int?,
-      reminderMinute: fields[6] as int?,
+      createdAt: fields[6] as DateTime,
+      isActive: fields[1] as bool,
+      type: fields[2] as QuranGoalTypeHive,
+      targetUnit: fields[5] as QuranTargetUnitHive,
+      reminderHour: fields[3] as int?,
+      reminderMinute: fields[4] as int?,
     );
   }
 
   @override
   void write(BinaryWriter writer, QuranGoalHive obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.dailyTarget)
       ..writeByte(1)
-      ..write(obj.startDate)
-      ..writeByte(2)
-      ..write(obj.endDate)
-      ..writeByte(3)
       ..write(obj.isActive)
-      ..writeByte(4)
+      ..writeByte(2)
       ..write(obj.type)
-      ..writeByte(5)
+      ..writeByte(3)
       ..write(obj.reminderHour)
-      ..writeByte(6)
+      ..writeByte(4)
       ..write(obj.reminderMinute)
-      ..writeByte(7)
+      ..writeByte(5)
       ..write(obj.targetUnit)
-      ..writeByte(8)
+      ..writeByte(6)
       ..write(obj.createdAt);
   }
 

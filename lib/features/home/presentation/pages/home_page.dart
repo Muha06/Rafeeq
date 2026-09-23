@@ -6,7 +6,7 @@ import 'package:rafeeq/core/animations/navigation_animations.dart';
 import 'package:rafeeq/core/constants/strings/app_strings.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/extensions/page_animate_ext.dart';
-import 'package:rafeeq/features/asma_ul_husna/presentation/widgets/asma_husna_home_card.dart';
+ import 'package:rafeeq/features/asma_ul_husna/presentation/widgets/asma_husna_home_card.dart';
 import 'package:rafeeq/features/home/presentation/widgets/hijri_date.dart';
 import 'package:rafeeq/features/home_reminders/presentation/providers/reminder_providers.dart';
 import 'package:rafeeq/features/notifications/presentation/pages/notification_list_page.dart';
@@ -16,6 +16,7 @@ import 'package:rafeeq/features/quran/presentation/widgets/ayah_of_the_day.dart'
 import 'package:rafeeq/features/home_reminders/presentation/widgets/reminders_carousel.dart';
 import 'package:rafeeq/features/settings/presentation/pages/settings_page.dart';
 import 'package:rafeeq/features/settings/presentation/provider/settings_notifcation_provider.dart';
+import 'package:rafeeq/features/settings/presentation/share_app_card.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/salah_notifs_scheduler_provider.dart';
 import 'package:rafeeq/features/timings/presentation/widgets/timeline_card.dart';
 import 'package:rafeeq/features/user/presentation/providers/user_provider.dart';
@@ -130,6 +131,25 @@ class _HomePageState extends ConsumerState<HomePage> {
                   vertical: _v10,
                 ),
                 child: AyahOfTheDay(),
+              ),
+            ),
+
+            // const SliverToBoxAdapter(
+            //   child: HomeSection(
+            //     padding: EdgeInsets.symmetric(
+            //       horizontal: _hPad,
+            //       vertical: _v10,
+            //     ),
+            //     child: RamadanDailyCard(),
+            //   ),
+            // ),
+            const SliverToBoxAdapter(
+              child: HomeSection(
+                padding: EdgeInsets.symmetric(
+                  horizontal: _hPad,
+                  vertical: _v10,
+                ),
+                child: ShareRafeeqCard(),
               ),
             ),
           ],

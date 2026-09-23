@@ -17,6 +17,7 @@ class SurahInfoSheet extends StatelessWidget {
     final tt = theme.textTheme;
     final bLarge = tt.bodyLarge;
     final bMedium = tt.bodyMedium;
+    debugPrint(info.text);
 
     return DraggableScrollableSheet(
       expand: false,
@@ -95,6 +96,14 @@ class SurahInfoSheet extends StatelessWidget {
                       fontSize: FontSize(bLarge?.fontSize ?? 22),
                       fontWeight: bLarge?.fontWeight ?? FontWeight.w400,
                       color: bLarge!.color,
+                      lineHeight: LineHeight(bLarge.height),
+                    ),
+                    "strong": Style(
+                      margin: Margins.zero,
+                      padding: HtmlPaddings.zero,
+                      fontSize: FontSize(bLarge.fontSize ?? 22),
+                      fontWeight: FontWeight.w500,
+                      color: bLarge.color,
                       lineHeight: LineHeight(bLarge.height),
                     ),
                     "p": Style(

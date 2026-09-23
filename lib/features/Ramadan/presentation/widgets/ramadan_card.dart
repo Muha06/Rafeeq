@@ -77,7 +77,6 @@ class _RamadanDailyCardState extends ConsumerState<RamadanDailyCard> {
                       ),
                     ],
                   ),
-
                   const SizedBox(height: 12),
 
                   RamadanReflectionPreview(

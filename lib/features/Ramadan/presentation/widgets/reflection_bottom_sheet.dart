@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/features/quran/presentation/riverpod/ayah_share_cotroller_provider.dart';
+import 'package:rafeeq/core/helpers/ayah_share_cotroller_provider.dart';
 import 'package:rafeeq/features/Ramadan/domain/ramadan_reflection.dart';
 import 'package:rafeeq/features/Ramadan/presentation/widgets/ramadan_card.dart';
 import 'package:rafeeq/features/settings/presentation/provider/theme_provider.dart';
@@ -137,7 +137,7 @@ class RamadanReflectionSheet extends ConsumerWidget {
                   child: ElevatedButton(
                     onPressed: () async {
                       final shareController = ref.read(
-                        ayahShareControllerProvider,
+                        shareControllerProvider,
                       );
 
                       final text = shareController.buildRamadanReflectionText(

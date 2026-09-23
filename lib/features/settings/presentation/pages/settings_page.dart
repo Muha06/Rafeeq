@@ -37,7 +37,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 
                   return SettingsTile(
                     leading: const Icon(HugeIconsStroke.user),
-                    title: 'Update name',
+                    title: 'Change name',
                     subtitle: 'Change what we call you',
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,

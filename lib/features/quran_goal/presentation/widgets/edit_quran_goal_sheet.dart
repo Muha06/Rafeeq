@@ -33,7 +33,6 @@ class _EditQuranGoalSheetState extends ConsumerState<EditQuranGoalSheet> {
     super.initState();
 
     target = widget.goal.dailyTarget;
-    endDate = widget.goal.endDate;
     reminder = widget.goal.remindMeAt;
 
     targetController = TextEditingController(text: target.toString());
@@ -86,19 +85,6 @@ class _EditQuranGoalSheetState extends ConsumerState<EditQuranGoalSheet> {
     AppNav.pop(context);
   }
 
-  Future<void> pickEndDate() async {
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: endDate,
-      firstDate: widget.goal.startDate,
-      lastDate: DateTime(2100),
-    );
-
-    if (picked != null) {
-      setState(() => endDate = picked);
-    }
-  }
-
   Future<void> pickReminder() async {
     final picked = await showTimePicker(
       context: context,
@@ -145,21 +131,15 @@ class _EditQuranGoalSheetState extends ConsumerState<EditQuranGoalSheet> {
 
             const SizedBox(height: 16),
 
-            GoalScheduleTile(
-              icon: Icons.event_outlined,
-              title: 'End Date',
-              value: formatDate(endDate),
-              onTap: pickEndDate,
-            ),
-
-            if (reminder != null)
+            if (reminder != null) ...[
               GoalScheduleTile(
                 icon: Icons.notifications_active_outlined,
                 title: 'Remind me at',
                 value: reminder!.format(context),
                 onTap: pickReminder,
               ),
-
+              const SizedBox(height: 16),
+            ],
             // --- Number selector with buttons ---
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

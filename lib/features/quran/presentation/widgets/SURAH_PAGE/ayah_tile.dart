@@ -13,7 +13,7 @@ import 'package:rafeeq/core/widgets/bottom_sheet_action.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/Quran/quran_notifier_provider.dart';
 import 'package:rafeeq/features/quran/domain/entities/ayah.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/ayah_of_the_day.dart';
-import 'package:rafeeq/features/quran/presentation/riverpod/ayah_share_cotroller_provider.dart';
+import 'package:rafeeq/core/helpers/ayah_share_cotroller_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/quran_bookmark.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
@@ -303,7 +303,7 @@ class _AyahActionsSheetState extends ConsumerState<AyahActionsSheet> {
 
                   final surahName = widget.surahNameTranslit;
 
-                  final controller = ref.read(ayahShareControllerProvider);
+                  final controller = ref.read(shareControllerProvider);
 
                   final text = controller.buildText(
                     englishText: widget.ayah.textEnglish,

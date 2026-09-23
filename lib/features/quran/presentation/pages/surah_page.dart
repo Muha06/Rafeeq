@@ -467,12 +467,9 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
                 ),
                 itemBuilder: (context, index) {
                   if (index == 0) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 24.0),
-                      child: BasmallaPlayBtnColumn(
-                        surah: surah,
-                        initialIndex: widget.initialIndex,
-                      ),
+                    return BasmallaPlayBtnColumn(
+                      surah: surah,
+                      initialIndex: widget.initialIndex,
                     );
                   }
 

@@ -50,11 +50,7 @@ final hasCompletedQuranGoalProvider = Provider<bool>((ref) {
   if (hasCompleted) {
     RafeeqAnalytics.logFeature(
       'complete_quran_goal',
-      parameters: {
-        'goal_type': goal.type.name,
-        'target': goal.dailyTarget,
-        'completed_on_time': !DateTime.now().isAfter(goal.endDate),
-      },
+      parameters: {'goal_type': goal.type.name, 'target': goal.dailyTarget},
     );
   }
 
