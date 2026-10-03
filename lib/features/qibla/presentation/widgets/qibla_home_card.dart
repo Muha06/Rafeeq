@@ -25,24 +25,24 @@ class QiblaHomeCard extends StatelessWidget {
         child:   Row(
           children: [
             // Small live compass
-            SizedBox(
+            const SizedBox(
               width: 52,
               height: 52,
-              child: QiblaCompass(
+              child: const QiblaCompass(
                 size: 52,
                 showInstruction: false,
                 enableHaptics: false,
               ),
             ),
 
-            SizedBox(width: 12),
+            const SizedBox(width: 12),
 
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Qibla', style: theme.textTheme.labelLarge),
-                  SizedBox(height: 2),
+                  const SizedBox(height: 2),
                   Text(
                     'Find the direction of Qibla',
                     style: theme.textTheme.labelSmall,

@@ -98,6 +98,7 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
             _SurahSettingsSelectTile(
               title: 'Reciters',
               value: selectedReciter.name,
+              titleStyle: titleTextstyle,
               valueStyle: valueTextstyle,
               onTap: () {
                 AppSheets.showBottomSheet(
@@ -182,16 +183,14 @@ class _SurahSettingsSelectTile extends StatelessWidget {
   final String value;
   final TextStyle? titleStyle;
   final TextStyle? valueStyle;
-  final double? maxValueWidth;
   final VoidCallback onTap;
 
   const _SurahSettingsSelectTile({
     required this.title,
     required this.value,
     required this.onTap,
-    this.valueStyle,
     this.titleStyle,
-    this.maxValueWidth,
+    this.valueStyle,
   });
 
   @override
@@ -202,7 +201,7 @@ class _SurahSettingsSelectTile extends StatelessWidget {
       contentPadding: EdgeInsets.zero,
       title: Text(title, style: titleStyle),
       trailing: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: maxValueWidth ?? 200),
+        constraints: const BoxConstraints(maxWidth: 200),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

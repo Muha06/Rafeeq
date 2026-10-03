@@ -53,6 +53,55 @@ class SurahInfoSheet extends StatelessWidget {
 
                 HtmlWidget(
                   info.text,
+                  textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurface,
+                    height: 1.6,
+                  ),
+                  customStylesBuilder: (element) {
+                    switch (element.localName) {
+                      case 'p':
+                        return {'margin': '0 0 12px 0'};
+
+                      case 'strong':
+                      case 'b':
+                        return {'font-weight': '600'};
+
+                      case 'em':
+                      case 'i':
+                        return {'font-style': 'italic'};
+
+                      case 'a':
+                        return {
+                          'color': Theme.of(context).colorScheme.primary
+                              .toString(),
+                          'text-decoration': 'none',
+                        };
+
+                      case 'h1':
+                        return {
+                          'font-size': '24px',
+                          'font-weight': '700',
+                          'margin': '0 0 12px 0',
+                        };
+
+                      case 'h2':
+                        return {
+                          'font-size': '20px',
+                          'font-weight': '700',
+                          'margin': '16px 0 8px 0',
+                        };
+
+                      case 'h3':
+                        return {
+                          'font-size': '18px',
+                          'font-weight': '700',
+                          'margin': '12px 0 6px 0',
+                        };
+
+                      default:
+                        return null;
+                    }
+                  },
                   onTapUrl: (url) {
                     final uri = Uri.tryParse(url);
                     final segments = uri == null
@@ -73,7 +122,7 @@ class SurahInfoSheet extends StatelessWidget {
                     AppNav.pop(context);
 
                     AppNav.push(
-                      context,
+                    context,
                       FullSurahPage(
                         initialIndex: surahNumber - 1,
                         autoScrollAyah: startAyah,
