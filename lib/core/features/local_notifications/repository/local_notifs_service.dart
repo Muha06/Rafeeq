@@ -157,13 +157,10 @@ class LocalNotificationService {
 
     final exactAllowed = await canScheduleExactAlarms();
 
-    debugPrint("Exact allowed: ${exactAllowed.toString()}");
-
+ 
     await _plugin.cancel(id: id);
 
-    debugPrint("Scheduling salah reminders");
-    debugPrint("Salah: $id, $title, $body");
-
+ 
     await _plugin.zonedSchedule(
       id: id,
       title: title,

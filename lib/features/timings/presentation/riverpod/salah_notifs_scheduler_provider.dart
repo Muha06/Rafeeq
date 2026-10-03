@@ -7,6 +7,7 @@ import 'package:rafeeq/features/timings/domain/entities/salah_times.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/disable_salah_reminders_provider.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/fetch_salah_times_provider.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/wiring_provider.dart';
+import 'package:rafeeq/features/user/presentation/providers/user_provider.dart';
 
 // //SINGLE SALAT NOTIFICATIONS SCHEDULER    PROVIDER
 // //LISTENS TO 2 PROVIDERS: TIMESPROVIDER & USER SET SETTINGS
@@ -84,13 +85,18 @@ class SalahNotificationsController extends Notifier<void> {
 
     final times = await ref.read(fetchTodaySalahTimesProvider.future);
 
-    await salahNotifsService.scheduleForToday(times: times, disabled: disabled);
+    await salahNotifsService.scheduleForToday(
+      times: times,
+      username: ref.read(userNameProvider),
+      disabled: disabled,
+    );
   }
 
   // Helper
   Future<void> _schedule(SalahTimesEntity times) async {
     await salahNotifsService.scheduleForToday(
       times: times,
+      username: ref.read(userNameProvider),
       disabled: _disabledPrayers,
     );
   }

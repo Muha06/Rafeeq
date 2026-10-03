@@ -37,6 +37,7 @@ class SalahNotifSchedulerService {
 
   Future<void> scheduleForToday({
     required SalahTimesEntity times, // represent one day
+    required String username,
     Set<SalahPrayer> disabled = const {},
   }) async {
     await cancelAll();
@@ -54,8 +55,10 @@ class SalahNotifSchedulerService {
 
       await LocalNotificationService().scheduleSalah(
         id: _adhanIds[prayer]!,
-        title: "Salat time -${prayer.label}",
-        body: 'Time for ${prayer.label}',
+        title: "Salat time - ${prayer.label}",
+        body: username.isNotEmpty
+            ? '$username, it\'s time for ${prayer.label}.'
+            : 'Time for ${prayer.label}.',
         scheduled: adhanTime,
       );
     }

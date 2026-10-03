@@ -6,7 +6,8 @@ import 'package:rafeeq/core/features/local_notifications/repository/local_notifs
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/features/quran_goal/data/models/hive/quran_goal_hive.dart';
 import 'package:rafeeq/features/quran_goal/domain/entities/quran_goal.dart';
- import 'package:rafeeq/features/quran_goal/presentation/providers/quran_log_provider.dart';
+import 'package:rafeeq/features/quran_goal/presentation/providers/quran_log_provider.dart';
+import 'package:rafeeq/features/user/presentation/providers/user_provider.dart';
 
 final quranGoalProvider = NotifierProvider<QuranGoalNotifier, QuranGoal?>(
   QuranGoalNotifier.new,
@@ -71,9 +72,7 @@ class QuranGoalNotifier extends Notifier<QuranGoal?> {
 
     RafeeqAnalytics.logFeature(
       'update-quran-goal',
-      parameters: {
-         'target': updated.dailyTarget,
-      },
+      parameters: {'target': updated.dailyTarget},
     );
   }
 
@@ -85,8 +84,7 @@ class QuranGoalNotifier extends Notifier<QuranGoal?> {
     await notifications.showNow(
       id: nowNotificationId,
       title: 'Goal Created',
-      body:
-          'Your Quran goal has been created successfully. Stay consistent and may Allah bless your journey with the Quran.',
+      body: 'Your Quran goal has been created successfully. Stay consistent and may Allah bless your journey with the Quran.',
     );
 
     // Schedule daily reminder
@@ -98,7 +96,7 @@ class QuranGoalNotifier extends Notifier<QuranGoal?> {
       'create_quran_goal',
       parameters: {
         'goal_type': goal.type.name, // tilawah / hifz
-         'target': goal.dailyTarget,
+        'target': goal.dailyTarget,
       },
     );
   }
@@ -115,8 +113,7 @@ class QuranGoalNotifier extends Notifier<QuranGoal?> {
     await notifications.showNow(
       id: nowNotificationId,
       title: 'Goal Deleted',
-      body:
-          'Your Quran goal has been deleted successfully. You can create a new goal anytime.',
+      body: 'Your Quran goal has been deleted successfully. You can create a new goal anytime.',
     );
 
     ref.read(quranLogProvider.notifier).resetLogs();
@@ -138,11 +135,14 @@ class QuranGoalNotifier extends Notifier<QuranGoal?> {
   }
 
   Future<void> _scheduleReminder(QuranGoal goal) async {
+    final username = ref.read(userNameProvider);
+
     await notifications.scheduleQuranGoalReminder(
       id: dailyReminderNotificationId,
       title: 'Time for Your Quran Goal',
-      body:
-          'Continue your Quran journey today and make progress toward your goal.',
+      body: username.isNotEmpty
+          ? '$username, continue your Quran journey today and make progress toward your goal.'
+          : 'Continue your Quran journey today and make progress toward your goal.',
       time: goal.remindMeAt!,
     );
   }

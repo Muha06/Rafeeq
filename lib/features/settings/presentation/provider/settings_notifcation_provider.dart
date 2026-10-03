@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/features/user/presentation/providers/user_provider.dart';
 import 'package:riverpod/legacy.dart';
 
 import 'package:hive/hive.dart';
@@ -33,21 +34,23 @@ final adhkarNotificationsControllerProvider = Provider<void>((ref) async {
     await localNotifService.cancel(morningNotifId);
     await localNotifService.cancel(eveningNotifId);
 
-    debugPrint(
-      'Scheduling Adhkar notifications at $kmorningAdhkarTime and $keveningAdhkarTime',
-    );
+    final username = ref.read(userNameProvider);
 
     await localNotifService.scheduleDaily(
       id: morningNotifId,
       title: 'Morning Adhkār ☀️',
-      body: 'Take 2 minutes for your morning adhkār.',
+      body: username.isNotEmpty
+          ? '$username, take 2 minutes for your morning adhkār.'
+          : 'Take 2 minutes for your morning adhkār.',
       time: kmorningAdhkarTime,
     );
 
     await localNotifService.scheduleDaily(
       id: eveningNotifId,
       title: 'Evening Adhkār 🌙',
-      body: 'Don’t miss your evening adhkār.',
+      body: username.isNotEmpty
+          ? '$username, don’t miss your evening adhkār.'
+          : 'Don’t miss your evening adhkār.',
       time: keveningAdhkarTime,
     );
   }
