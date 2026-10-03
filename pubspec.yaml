@@ -1,0 +1,159 @@
+name: rafeeq
+description: "An Islamic companion app."
+
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
+
+version: 0.0.8+8
+
+environment:
+  sdk: ^3.13.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_dotenv: ^6.0.0
+  http: ^1.6.0
+  hijri_date: ^1.0.0
+  shimmer: ^4.0.0
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  collection: ^1.19.1
+  carousel_slider: ^5.1.1
+  flutter_local_notifications: ^22.3.1
+  timezone: ^0.11.1
+  flutter_timezone: ^5.0.1
+  flutter_launcher_icons: ^0.14.4
+  flutter_native_splash: ^2.4.7
+  dio: ^5.11.0
+  geolocator: ^14.0.3
+  supabase_flutter: ^2.0.0
+  country_picker: ^2.0.27
+  webview_flutter: ^4.13.1
+  url_launcher: ^6.3.2
+  share_plus: ^13.3.1
+  path_provider: ^2.1.5
+  widgets_to_image: ^2.0.1
+  table_calendar: ^3.2.0
+  permission_handler: ^13.0.2
+  phosphoricons_flutter: ^1.0.0
+  arc_progress_bar_new: ^1.0.4
+  fl_chart: ^1.1.1
+  connectivity_plus: ^7.0.0
+  package_info_plus: ^10.2.1
+  firebase_analytics: ^12.1.2
+  firebase_core: ^4.4.0
+  firebase_crashlytics: ^5.0.7
+  flutter_screenutil: ^5.9.3
+  cached_network_image: ^4.0.4
+  sqflite: ^2.4.2
+  path: ^1.9.1
+  quran: ^1.4.1
+  percent_indicator: ^4.2.5
+  wakelock_plus: ^1.5.1
+  video_player: ^2.11.1
+  intl: ^0.20.2
+  just_audio: ^0.10.5
+  audio_service: ^0.18.18
+  equatable: ^2.0.8
+  palette_generator_master: ^1.1.0
+  firebase_messaging: ^16.2.0
+  flutter_linkify: ^6.0.0
+  riverpod: ^3.4.3
+  flutter_riverpod: ^3.4.3
+  floating_draggable_widget: ^2.3.0
+  vibration: ^3.2.0
+  animated_bottom_navigation_bar: ^1.4.0
+  cupertino_icons: ^1.0.9
+  smooth_sheets: ^1.0.3
+  flutter_animate: ^4.5.2
+  dropdown_button2: ^3.1.0
+  sliding_up_panel2: ^3.3.0+1
+  hugeicons_pro: ^0.0.3
+  toastification: ^3.2.0
+  text_scroll: ^0.2.1
+  flutter_staggered_grid_view: ^0.7.0
+  in_app_update: ^5.0.0
+  scrollable_positioned_list: ^0.3.8
+  flutter_markdown_plus: ^1.0.12
+  change_app_package_name: ^1.5.0
+  flutter_widget_from_html: ^0.17.4
+  geocoding: ^5.0.0
+  flutter_compass_v2: ^1.0.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  build_runner: ^2.4.13
+  hive_generator: ^2.0.0
+
+flutter:
+  uses-material-design: true
+  fonts:
+    - family: Uthmani
+      fonts:
+        - asset: assets/fonts/Uthmani.otf
+
+    - family: Uthmani2
+      fonts:
+        - asset: assets/fonts/uthmani_hafs_2.ttf
+
+    - family: Rubik
+      fonts:
+        - asset: assets/fonts/Rubik/Rubik-Light.ttf
+          weight: 300
+
+        - asset: assets/fonts/Rubik/Rubik-Regular.ttf
+          weight: 400
+
+        - asset: assets/fonts/Rubik/Rubik-Medium.ttf
+          weight: 500
+
+        - asset: assets/fonts/Rubik/Rubik-SemiBold.ttf
+          weight: 600
+
+        - asset: assets/fonts/Rubik/Rubik-Bold.ttf
+          weight: 700
+
+        - asset: assets/fonts/Rubik/Rubik-ExtraBold.ttf
+          weight: 800
+
+        - asset: assets/fonts/Rubik/Rubik-Black.ttf
+          weight: 900
+
+    - family: Moret
+      fonts:
+        - asset: assets/fonts/Moret/Moret-Regular.otf
+          weight: 400
+
+  assets:
+    - assets/images/
+    - assets/images/quran/
+    - assets/images/quran/pages/
+    - assets/images/onboarding/
+    - assets/images/salah/
+    - assets/images/qibla/
+    - assets/icon/
+    - assets/db/
+    - assets/json/
+    - .env
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/app_icon.png"
+
+flutter_native_splash:
+  color: "0A0F14"
+  image: assets/icon/app_splash_icon.png
+  android: true
+  ios: true
+  web: false
+  android_gravity: center
+  ios_content_mode: center
+  fullscreen: true
+
+  android_12:
+    image: assets/icon/app_splash_icon.png
+    icon_background_color: "#0A0F14" # background behind icon
+

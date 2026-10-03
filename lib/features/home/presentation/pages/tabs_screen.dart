@@ -1,0 +1,88 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/app/providers/tabs_screen_provider.dart';
+import 'package:rafeeq/core/helpers/app_haptics.dart';
+import 'package:rafeeq/core/helpers/request_notification.dart';
+import 'package:rafeeq/features/home/presentation/pages/live_tabs.dart';
+import 'package:rafeeq/features/home/presentation/widgets/bottom_bar.dart';
+import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_category_page.dart';
+import 'package:rafeeq/features/quran/presentation/pages/quran_page.dart';
+import 'package:rafeeq/features/home/presentation/pages/home_page.dart';
+import 'package:rafeeq/features/bookmarks/presentation/pages/bookmark_page.dart';
+import 'package:rafeeq/features/whats_new/presentation/pages/whats_new.dart';
+import 'package:rafeeq/features/whats_new/presentation/providers/whats_new_provider.dart';
+
+class TabsScreen extends ConsumerStatefulWidget {
+  const TabsScreen({super.key});
+
+  @override
+  ConsumerState<TabsScreen> createState() => _TabsScreenState();
+}
+
+class _TabsScreenState extends ConsumerState<TabsScreen> {
+  final List<Widget> _pages = [
+    const HomePage(),
+    const QuranPage(),
+    const AdhkarCategoryPage(),
+    const LiveHubTabs(),
+    const BookmarkPage(),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _bootstrap();
+    });
+  }
+
+  void _bootstrap() async {
+    await Future.delayed(3.seconds);
+
+    if (!mounted) return;
+
+    await checkNotificationPermission(context: context, ref: ref);
+
+    _showWhatsNew();
+  }
+
+  Future<void> _showWhatsNew() async {
+    if (!ref.read(whatsNewProvider) || !mounted) return;
+
+    showModalBottomSheet(
+      context: context,
+      showDragHandle: false,
+      isScrollControlled: true,
+      clipBehavior: Clip.hardEdge,
+      builder: (_) => const WhatsNewPage(),
+    ).then((_) {
+      ref.read(whatsNewProvider.notifier).markAsSeen();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final selectedIndex = ref.watch(tabsScreenIndexProvider);
+
+    return SafeArea(
+      top: false,
+      child: Scaffold(
+        body: SafeArea(top: false, child: _pages[selectedIndex]),
+        bottomNavigationBar: MyBottomBar(
+          currentIndex: selectedIndex,
+          onTap: (value) async {
+            setState(() {
+              ref.read(tabsScreenIndexProvider.notifier).state = value;
+            });
+
+            if (selectedIndex == value) return;
+
+            AppHaptics.selection();
+          },
+        ),
+      ),
+    );
+  }
+}

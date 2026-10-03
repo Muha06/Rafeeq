@@ -1,0 +1,177 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+import 'package:rafeeq/core/helpers/app_nav.dart';
+import 'package:rafeeq/core/widgets/app_state_view.dart';
+import 'package:rafeeq/features/notifications/domain/entities/app_notification.dart';
+import 'package:rafeeq/features/notifications/presentation/pages/notif_details_page.dart';
+import 'package:rafeeq/features/notifications/presentation/providers/notification_provider.dart';
+
+class NotificationsInboxPage extends ConsumerWidget {
+  const NotificationsInboxPage({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final notificationsAsync = ref.watch(allNotificationsProvider);
+
+    return Scaffold(
+      appBar: AppBar(title: const Text("Notifications")),
+      body: notificationsAsync.when(
+        loading: () => const _LoadingState(),
+        error: (e, _) => AppStateView(
+          title: 'Failed to load notifications',
+          message:
+              "We could'nt retireve the notifications. \n Please try again later.",
+          buttonText: 'Retry',
+          onPressed: () => ref.refresh(allNotificationsProvider),
+        ),
+        data: (notifications) {
+          if (notifications.isEmpty) {
+            return const EmptyState();
+          }
+
+          return NotificationsList(
+            notifications: notifications,
+            onRefresh: () =>
+                ref.read(allNotificationsProvider.notifier).refresh(),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class NotificationsList extends StatelessWidget {
+  final List<AppNotification> notifications;
+  final Future<void> Function() onRefresh;
+
+  const NotificationsList({
+    super.key,
+    required this.notifications,
+    required this.onRefresh,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return RefreshIndicator(
+      onRefresh: onRefresh,
+      child: ListView.separated(
+        padding: const EdgeInsets.all(12),
+        itemCount: notifications.length,
+        separatorBuilder: (_, _) => const SizedBox(height: 8),
+        itemBuilder: (context, index) {
+          return NotificationTile(notification: notifications[index]);
+        },
+      ),
+    );
+  }
+}
+
+class NotificationTile extends ConsumerWidget {
+  final AppNotification notification;
+
+  const NotificationTile({super.key, required this.notification});
+
+  @override
+  Widget build(BuildContext context, ref) {
+    final isRead = notification.isRead;
+    final theme = Theme.of(context);
+    final tt = theme.textTheme;
+    final cs = theme.colorScheme;
+
+    return GestureDetector(
+      onTap: () async {
+        AppNav.push(
+          context,
+          NotificationDetailPage(notificationId: notification.id),
+        );
+
+        await ref
+            .read(allNotificationsProvider.notifier)
+            .markAsRead(notification.id);
+      },
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: isRead ? cs.surface : cs.primaryContainer,
+          borderRadius: BorderRadius.circular(14),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            if (!isRead) ...[
+              Container(
+                height: 12,
+                width: 12,
+                decoration: BoxDecoration(
+                  color: cs.primary,
+                  shape: BoxShape.circle,
+                ),
+              ),
+
+              const SizedBox(width: 8),
+            ],
+
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    notification.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: tt.labelLarge,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    notification.body,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: tt.bodyMedium,
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(width: 8),
+
+            PhosphorIcon(
+              PhosphorIcons.caretRight,
+              color: cs.onSurfaceVariant,
+              size: 18,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _LoadingState extends StatelessWidget {
+  const _LoadingState();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(child: CircularProgressIndicator());
+  }
+}
+
+class EmptyState extends StatelessWidget {
+  const EmptyState({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(child: Text("No notifications yet"));
+  }
+}
+
+class ErrorState extends StatelessWidget {
+  final String error;
+
+  const ErrorState({super.key, required this.error});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(child: Text("Something went wrong: $error"));
+  }
+}

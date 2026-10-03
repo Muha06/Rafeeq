@@ -1,0 +1,51 @@
+import 'package:flutter/material.dart';
+ import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+import 'package:rafeeq/app/providers/tabs_screen_provider.dart';
+import 'package:rafeeq/core/widgets/app_state_view.dart';
+import 'package:rafeeq/features/bookmarks/presentation/riverpod/dhikr/dhikr_notifier_provider.dart';
+import 'package:rafeeq/features/bookmarks/presentation/widgets/bookmark_tile.dart';
+
+class AdhkarBookmarksTab extends ConsumerStatefulWidget {
+  const AdhkarBookmarksTab({super.key});
+
+  @override
+  ConsumerState<AdhkarBookmarksTab> createState() => _AdhkarBookmarksTabState();
+}
+
+class _AdhkarBookmarksTabState extends ConsumerState<AdhkarBookmarksTab> {
+  @override
+  Widget build(BuildContext context) {
+    final bookMarks = ref.watch(dhikrBookmarksProvider);
+
+    return bookMarks.isEmpty
+        ? Center(
+            child: AppStateView(
+              icon: PhosphorIcons.handsPraying,
+              title: 'No Bookmarks',
+              message:
+                  "You haven't bookmarked any Dhikr yet. bookmark your best Adhkars to find them instantly.",
+              buttonText: "Explore Adhkars",
+              onPressed: () {
+                ref.read(tabsScreenIndexProvider.notifier).state = 2;
+              },
+            ),
+          )
+        : ListView.separated(
+            separatorBuilder: (_, _) {
+              return const SizedBox(height: 16);
+            },
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            itemCount: bookMarks.length,
+            itemBuilder: (context, index) {
+              final bookMark = bookMarks[index];
+              final indexDisplay = index + 1;
+
+              return BookmarkTile(
+                dhikrBookmark: bookMark,
+                indexDisplay: indexDisplay,
+              );
+            },
+          );
+  }
+}

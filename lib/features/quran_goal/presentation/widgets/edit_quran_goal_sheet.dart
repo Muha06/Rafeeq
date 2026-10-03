@@ -1,0 +1,237 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hugeicons_pro/hugeicons.dart';
+import 'package:intl/intl.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+import 'package:rafeeq/core/helpers/app_haptics.dart';
+import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
+import 'package:rafeeq/core/helpers/snackbars.dart';
+import 'package:rafeeq/core/helpers/app_nav.dart';
+import 'package:rafeeq/features/quran_goal/domain/entities/quran_goal.dart';
+import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
+import 'package:rafeeq/features/quran_goal/presentation/widgets/create_goal_sheet.dart';
+import 'package:rafeeq/features/quran_goal/presentation/widgets/log_ayah_bottomsheet.dart';
+
+class EditQuranGoalSheet extends ConsumerStatefulWidget {
+  final QuranGoal goal;
+  const EditQuranGoalSheet({super.key, required this.goal});
+
+  @override
+  ConsumerState<EditQuranGoalSheet> createState() => _EditQuranGoalSheetState();
+}
+
+class _EditQuranGoalSheetState extends ConsumerState<EditQuranGoalSheet> {
+  late int target;
+  late TextEditingController targetController;
+  final goalTypeNotifier = ValueNotifier(QuranGoalType.tilawah);
+  final targetUnitNotifier = ValueNotifier(QuranTargetUnit.page);
+
+  DateTime endDate = DateTime.now().add(const Duration(days: 30));
+  TimeOfDay? reminder;
+
+  @override
+  void initState() {
+    super.initState();
+
+    target = widget.goal.dailyTarget;
+    reminder = widget.goal.remindMeAt;
+
+    targetController = TextEditingController(text: target.toString());
+
+    goalTypeNotifier.value = widget.goal.type;
+    targetUnitNotifier.value = widget.goal.targetUnit;
+  }
+
+  @override
+  void dispose() {
+    targetController.dispose();
+    goalTypeNotifier.dispose();
+    targetUnitNotifier.dispose();
+    super.dispose();
+  }
+
+  void updateController(int value) {
+    target = value;
+    targetController.text = value.toString();
+    // move cursor to end
+    targetController.selection = TextSelection.fromPosition(
+      TextPosition(offset: targetController.text.length),
+    );
+  }
+
+  void _updateGoal() {
+    final parsed = int.tryParse(targetController.text);
+
+    if (parsed != null && parsed <= 0) {
+      AppNav.pop(context);
+      AppSnackBar.showSimple(
+        context: context,
+        message: "Reading target must be at least 1.",
+      );
+      return;
+    }
+
+    ref
+        .read(quranGoalProvider.notifier)
+        .updateGoal(
+          target: parsed ?? target,
+          endDate: endDate,
+          remindMeAt: reminder,
+          targetUnit: targetUnitNotifier.value,
+          type: goalTypeNotifier.value,
+        );
+    RafeeqAnalytics.logFeature('edit_Quran_plan');
+
+    AppNav.pop(context);
+    AppNav.pop(context);
+  }
+
+  Future<void> pickReminder() async {
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: reminder ?? const TimeOfDay(hour: 20, minute: 0),
+    );
+
+    if (picked != null) {
+      setState(() => reminder = picked);
+    }
+  }
+
+  Future<void> addReminder() async {
+    await pickReminder();
+
+    ref.read(quranGoalProvider.notifier).updateGoal(remindMeAt: reminder);
+  }
+
+  String formatDate(DateTime date) {
+    if (DateUtils.isSameDay(date, DateTime.now())) {
+      return "Today";
+    }
+    return DateFormat('dd MMM yyyy').format(date);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Padding(
+      padding: EdgeInsets.only(
+        left: 16,
+        right: 16,
+        top: 16,
+        bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+      ),
+      child: SafeArea(
+        top: false,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text("Adjust Goal", style: theme.textTheme.titleMedium),
+
+            const SizedBox(height: 24),
+
+            GoalTypeTargetRow(
+              goalTypeNotifier: goalTypeNotifier,
+              targetUnitNotifier: targetUnitNotifier,
+            ),
+
+            const SizedBox(height: 16),
+
+            _AddReminderTime(reminder: reminder, onTap: pickReminder),
+            const SizedBox(height: 16),
+
+            // --- Number selector with buttons ---
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircleIconButton(
+                  icon: PhosphorIcons.minus,
+                  onPressed: target > 1
+                      ? () {
+                          AppHaptics.selection();
+
+                          setState(() {
+                            target--;
+                            updateController(target);
+                          });
+                        }
+                      : null,
+                ),
+                const SizedBox(width: 16),
+
+                LogAyahTextField(
+                  controller: targetController,
+                  onChanged: (value) {
+                    final parsed = int.tryParse(value);
+                    if (parsed != null && parsed > 0) {
+                      setState(() => updateController(parsed));
+                    }
+                  },
+                ),
+                const SizedBox(width: 16),
+
+                CircleIconButton(
+                  onPressed: () {
+                    AppHaptics.selection();
+
+                    setState(() {
+                      target++;
+                      updateController(target);
+                    });
+                  },
+                  icon: PhosphorIcons.plus,
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 16),
+
+            // --- Action buttons ---
+            Row(
+              children: [
+                Expanded(
+                  child: TextButton(
+                    onPressed: () => AppNav.pop(context),
+                    child: const Text("Cancel"),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: _updateGoal,
+                    child: const Text("Update"),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _AddReminderTime extends StatelessWidget {
+  const _AddReminderTime({
+    required this.reminder,
+    required this.onTap,
+  });
+
+  final TimeOfDay? reminder;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final tt = Theme.of(context).textTheme;
+
+    return ListTile(
+      onTap: onTap,
+      leading: const Icon(HugeIconsStroke.notification01),
+      title: Text(reminder == null ? 'Add a reminder' : 'Remind me at'),
+      trailing: reminder == null
+          ? const Icon(HugeIconsStroke.arrowRight01)
+          : Text(reminder!.format(context), style: tt.labelMedium),
+    );
+  }
+}

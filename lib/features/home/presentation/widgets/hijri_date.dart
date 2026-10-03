@@ -1,0 +1,50 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+import 'package:rafeeq/core/helpers/app_nav.dart';
+import 'package:rafeeq/features/calendar/presentation/pages/calendar_page.dart';
+import 'package:rafeeq/features/calendar/presentation/providers/hijri_date_providers.dart';
+
+class HijriDateToday extends ConsumerWidget {
+  const HijriDateToday({
+    super.key,
+    required this.foregroundColor,
+    required this.fontSize,
+  });
+  final Color foregroundColor;
+  final double fontSize;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final hijriState = ref.watch(hijriDateProvider);
+
+    return InkWell(
+      onTap: () {
+        AppNav.push(context, const CalendarPage());
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            hijriState.hijri.toFormat('dd MMMM yyyy'),
+            style: theme.textTheme.labelLarge?.copyWith(
+              color: foregroundColor,
+              fontSize: fontSize,
+            ),
+          ),
+
+          const SizedBox(width: 4),
+
+          Icon(
+            PhosphorIcons.caretRight,
+            size: 16,
+            fontWeight: FontWeight.w700,
+            color: foregroundColor,
+          ),
+        ],
+      ),
+    );
+  }
+}
