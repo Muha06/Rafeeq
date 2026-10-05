@@ -20,8 +20,7 @@ class NotificationsInboxPage extends ConsumerWidget {
         loading: () => const _LoadingState(),
         error: (e, _) => AppStateView(
           title: 'Failed to load notifications',
-          message:
-              "We could'nt retireve the notifications. \n Please try again later.",
+          message: "We could'nt retireve the notifications. \n Please try again later.",
           buttonText: 'Retry',
           onPressed: () => ref.refresh(allNotificationsProvider),
         ),
@@ -91,7 +90,7 @@ class NotificationTile extends ConsumerWidget {
             .markAsRead(notification.id);
       },
       child: Container(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: isRead ? cs.surface : cs.primaryContainer,
           borderRadius: BorderRadius.circular(14),

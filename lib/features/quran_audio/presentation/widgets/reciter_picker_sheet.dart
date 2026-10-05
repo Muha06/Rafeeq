@@ -83,6 +83,7 @@ class ReciterPickerSheet extends ConsumerWidget {
                           final isSelected = r.id == selected.id;
 
                           return AppPressableScale(
+                            scale: 0.95,
                             child: ListTile(
                               onTap: () {
                                 ref

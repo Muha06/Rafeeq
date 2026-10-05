@@ -28,7 +28,7 @@ class QiblaHomeCard extends StatelessWidget {
             const SizedBox(
               width: 52,
               height: 52,
-              child: const QiblaCompass(
+              child: QiblaCompass(
                 size: 52,
                 showInstruction: false,
                 enableHaptics: false,

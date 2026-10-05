@@ -1,5 +1,5 @@
 extra["compileSdkVersion"] = 37
-extra["minSdkVersion"] = 23
+extra["minSdkVersion"] = 24
 extra["targetSdkVersion"] = 37
 
 allprojects {
@@ -25,7 +25,7 @@ subprojects {
         if (plugins.hasPlugin("com.android.application") || plugins.hasPlugin("com.android.library")) {
             extensions.configure<com.android.build.api.dsl.CommonExtension> {
                 compileSdk = 37
-                defaultConfig.minSdk = 23
+                defaultConfig.minSdk = 24
             }
         }
     }

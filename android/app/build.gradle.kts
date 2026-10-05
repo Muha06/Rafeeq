@@ -29,7 +29,7 @@ android {
 
     defaultConfig {
         applicationId = "com.mohaa.rafeeq" 
-        minSdk = flutter.minSdkVersion               // Set explicitly to 23
+        minSdk = 24              // Set explicitly to 24
         targetSdk = 37            // Set explicitly to 37
         versionCode = flutter.versionCode
         versionName = flutter.versionName
