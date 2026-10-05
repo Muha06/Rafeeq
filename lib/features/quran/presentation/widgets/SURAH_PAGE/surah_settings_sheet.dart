@@ -45,6 +45,7 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
 
     final selectedReciter = ref.watch(selectedReciterProvider);
 
+    final wbwMode = ref.watch(surahSettingsProvider.select((s) => s.wbwMode));
     return SafeArea(
       top: false,
       bottom: true,
@@ -80,6 +81,16 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
                 sNotifier.setShowTranslation(value);
               },
             ),
+            const SizedBox(height: 4),
+
+            SwitchListTile(
+              title: const Text('Word by word'),
+              value: wbwMode,
+              onChanged: (value) {
+                sNotifier.setWbwMode(value);
+              },
+            ),
+
             const SizedBox(height: 4),
 
             SwitchListTile(

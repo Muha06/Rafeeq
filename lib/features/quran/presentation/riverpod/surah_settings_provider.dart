@@ -1,4 +1,4 @@
- import 'package:riverpod/legacy.dart';
+import 'package:riverpod/legacy.dart';
 
 class SurahSettings {
   final bool showTranslation;
@@ -10,6 +10,7 @@ class SurahSettings {
   final double translationFontSize;
   final double autoScrollSpeed; // ayahs per minute
   final bool mushafMode;
+  final bool wbwMode;
 
   const SurahSettings({
     required this.showTranslation,
@@ -21,6 +22,7 @@ class SurahSettings {
     required this.autoScrollSpeed,
     required this.showTranslit,
     required this.mushafMode,
+    required this.wbwMode,
   });
 
   SurahSettings copyWith({
@@ -30,6 +32,7 @@ class SurahSettings {
     double? autoScrollSpeed,
     bool? showTranslit,
     bool? mushafMode,
+    bool? wbwMode,
     bool? isAutoScrolling,
     bool? showAutoScrollControls,
     bool? showAudioControls,
@@ -41,6 +44,7 @@ class SurahSettings {
       autoScrollSpeed: autoScrollSpeed ?? this.autoScrollSpeed,
       showTranslit: showTranslit ?? this.showTranslit,
       mushafMode: mushafMode ?? this.mushafMode,
+      wbwMode: wbwMode ?? this.wbwMode,
       isAutoScrolling: isAutoScrolling ?? this.isAutoScrolling,
       showAudioControls: showAudioControls ?? this.showAudioControls,
       showAutoScrollControls:
@@ -67,6 +71,7 @@ class SurahSettingsNotifier extends StateNotifier<SurahSettings> {
           isAutoScrolling: false,
           showAudioControls: false,
           showAutoScrollControls: false,
+          wbwMode: true,
         ),
       );
 
@@ -74,6 +79,7 @@ class SurahSettingsNotifier extends StateNotifier<SurahSettings> {
   void setShowTranslit(bool v) => state = state.copyWith(showTranslit: v);
 
   void setMushafMode(bool v) => state = state.copyWith(mushafMode: v);
+  void setWbwMode(bool v) => state = state.copyWith(wbwMode: v);
 
   void setArabicFont(double v) => state = state.copyWith(arabicFontSize: v);
 

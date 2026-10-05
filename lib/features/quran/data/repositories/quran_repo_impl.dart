@@ -2,6 +2,7 @@ import 'package:rafeeq/features/quran/data/dataSources/quran_local_ds.dart';
 import 'package:rafeeq/features/quran/domain/entities/ayah.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah.dart';
 import 'package:rafeeq/features/quran/domain/entities/surah_info.dart';
+import 'package:rafeeq/features/quran/domain/entities/wbw/word_by_word.dart';
 import 'package:rafeeq/features/quran/domain/repository/quran_repo.dart';
 
 class QuranRepoImpl implements QuranRepository {
@@ -22,5 +23,10 @@ class QuranRepoImpl implements QuranRepository {
   @override
   Future<List<Surah>> getSurahs() async {
     return localDs.getSurahs();
+  }
+
+  @override
+  Future<WordByWord> getWordByWord(int surahId, int ayahNumber) async {
+    return localDs.getWordByWord(surahId, ayahNumber);
   }
 }

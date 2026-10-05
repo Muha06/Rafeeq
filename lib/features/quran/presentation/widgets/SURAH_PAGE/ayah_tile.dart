@@ -14,6 +14,7 @@ import 'package:rafeeq/features/bookmarks/presentation/riverpod/Quran/quran_noti
 import 'package:rafeeq/features/quran/domain/entities/ayah.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/ayah_of_the_day.dart';
 import 'package:rafeeq/core/helpers/ayah_share_cotroller_provider.dart';
+import 'package:rafeeq/features/quran/presentation/riverpod/fetch_ayah_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/quran_bookmark.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
@@ -105,27 +106,30 @@ class _AyahTileState extends ConsumerState<AyahTile> {
                   final showTranslation = settings.showTranslation;
                   final arabicFontSize = settings.arabicFontSize;
                   final translationFontSize = settings.translationFontSize;
+                  final wbwMode = settings.wbwMode;
 
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       // arabic text (right)
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          ayah.textArabic,
-                          textDirection: TextDirection.rtl,
-                          style: AppTextStyles.quranAyah.copyWith(
-                            fontSize: arabicFontSize,
-                            color: cs.onSurface,
-                          ),
-                        ),
-                      ),
+                      wbwMode
+                          ? WbwList(ayah: ayah)
+                          : Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                ayah.textArabic,
+                                textDirection: TextDirection.rtl,
+                                style: AppTextStyles.quranAyah.copyWith(
+                                  fontSize: arabicFontSize,
+                                  color: cs.onSurface,
+                                ),
+                              ),
+                            ),
 
                       // TRANSLATIONS
                       if (showTranslation) ...[
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 32),
                         _TranslationSection(
                           label: 'English',
                           ayahText: ayah.textEnglish,
@@ -325,6 +329,73 @@ class _AyahActionsSheetState extends ConsumerState<AyahActionsSheet> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class WbwList extends ConsumerWidget {
+  const WbwList({super.key, required this.ayah});
+  final Ayah ayah;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final wbwAsync = ref.watch(
+      wbwProvider('${ayah.surahId}:${ayah.ayahNumber}'),
+    );
+
+    return wbwAsync.when(
+      data: (wbw) {
+        final words = wbw.words
+            .map((word) => WbwTile(arabic: word.arabic, english: word.english))
+            .toList();
+
+        return SizedBox(
+          width: double.infinity,
+          child: Wrap(
+            alignment: WrapAlignment.start,
+            crossAxisAlignment: WrapCrossAlignment.end,
+            runAlignment: WrapAlignment.start,
+            textDirection: TextDirection.rtl,
+            runSpacing: 16,
+            spacing: 24,
+            children: words,
+          ),
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, stack) => Center(child: Text('Error: $error')),
+    );
+  }
+}
+
+class WbwTile extends ConsumerWidget {
+  const WbwTile({super.key, required this.arabic, required this.english});
+
+  final String arabic;
+  final String english;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final tt = Theme.of(context).textTheme;
+    final cs = Theme.of(context).colorScheme;
+    final fontSize = ref.watch(
+      surahSettingsProvider.select((s) => s.arabicFontSize),
+    );
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        //ar
+        Text(
+          arabic,
+          style: AppTextStyles.quranAyah.copyWith(
+            fontSize: fontSize,
+            color: cs.onSurface,
+          ),
+        ),
+
+        //en
+        Text(english, style: tt.labelMedium),
+      ],
     );
   }
 }

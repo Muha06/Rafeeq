@@ -22,6 +22,7 @@ void main() {
         autoScrollSpeed: 20,
         showTranslit: true,
         mushafMode: false,
+        wbwMode: false,
       );
 
       final updated = initial.copyWith(showAudioControls: true);

@@ -135,6 +135,7 @@ flutter:
     - assets/images/qibla/
     - assets/icon/
     - assets/db/
+    - assets/db/wbw/
     - assets/json/
     - .env
 
