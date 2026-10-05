@@ -1,6 +1,7 @@
 // ignore_for_file: unused_result
 
 import 'dart:async';
+
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,6 +12,7 @@ import 'package:rafeeq/core/features/location/presentation/provider/user_locatio
 import 'package:rafeeq/core/helpers/app_toast.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/core/widgets/app_drag_handle.dart';
+import 'package:rafeeq/features/timings/presentation/riverpod/calculation_methods_provider.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/fetch_salah_times_provider.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/wiring_provider.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
@@ -45,6 +47,7 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
   //PICK COUNTRY
   Future<void> _pickCountry() async {
     final theme = Theme.of(context);
+    final cs = theme.colorScheme;
 
     showCountryPicker(
       context: context,
@@ -58,14 +61,17 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
       },
       showDragHandle: false,
       countryListTheme: CountryListThemeData(
-        bottomSheetHeight: MediaQuery.of(context).size.height * 0.8,
+        bottomSheetHeight: MediaQuery.of(context).size.height * 0.9,
         backgroundColor: theme.bottomSheetTheme.backgroundColor,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
         textStyle: theme.textTheme.labelLarge,
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
-        inputDecoration: const InputDecoration(
+        margin: EdgeInsets.zero,
+        inputDecoration: InputDecoration(
           hintText: 'Search country…',
-          prefixIcon: Icon(PhosphorIcons.magnifyingGlass),
+          filled: true,
+          fillColor: cs.surfaceContainerHigh,
+          prefixIcon: const Icon(PhosphorIcons.magnifyingGlass),
         ),
       ),
     );
@@ -103,7 +109,7 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
 
     try {
       final usecase = ref.read(fetchSalahTimesUsecase);
-      final method = ref.read(salahMethodProvider);
+      final method = ref.read(selectedCalculationMethodProvider).id;
 
       await usecase.fetchTodayByCoords(
         userLocation: UserLocation(
@@ -334,6 +340,7 @@ class _CitySearchSheetState extends ConsumerState<CitySearchSheet> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final cs = theme.colorScheme;
 
     final asyncPlaces = (_q.isEmpty)
         ? const AsyncValue<List<GeoPlace>>.data([])
@@ -361,9 +368,11 @@ class _CitySearchSheetState extends ConsumerState<CitySearchSheet> {
           TextField(
             controller: _ctrl,
             onChanged: _onChanged,
-            style: theme.textTheme.bodyMedium,
+            style: theme.textTheme.titleSmall,
             decoration: InputDecoration(
-              hintText: 'Type city… (e.g. Nairobi)',
+              hintText: 'Type a city… (e.g. Madinah)',
+              filled: true,
+              fillColor: cs.surfaceContainerHigh,
               prefixIcon: const Icon(Icons.search_rounded),
               suffixIcon: _ctrl.text.isEmpty
                   ? null
@@ -405,12 +414,11 @@ class _CitySearchSheetState extends ConsumerState<CitySearchSheet> {
                     final p = places[i];
                     return ListTile(
                       contentPadding: EdgeInsets.zero,
-                      title: Text(p.name, style: theme.textTheme.labelLarge),
+                      title: Text(p.name),
                       subtitle: Text(
                         p.admin1 == null || p.admin1!.trim().isEmpty
                             ? p.country
                             : '${p.admin1}, ${p.country}',
-                        style: theme.textTheme.bodySmall,
                       ),
                       trailing: const Icon(Icons.chevron_right_rounded),
                       onTap: () => Navigator.pop(context, p),
@@ -538,9 +546,8 @@ class _ActionButton extends ConsumerWidget {
                 label,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: Theme.of(
-                  context,
-                ).textTheme.labelMedium?.copyWith(color: cs.onSurface),
+                style: Theme.of(context).textTheme.labelMedium
+                    ?.copyWith(color: cs.onSurface),
               ),
             ),
           ],

@@ -7,6 +7,8 @@ import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/features/feedback/presentation/pages/feedback_page.dart';
 import 'package:rafeeq/features/settings/presentation/pages/about_page.dart';
 import 'package:rafeeq/features/settings/presentation/provider/notiffications_controller.dart';
+import 'package:rafeeq/features/timings/presentation/pages/calculation_methods.dart';
+import 'package:rafeeq/features/timings/presentation/riverpod/calculation_methods_provider.dart';
 import 'package:rafeeq/features/user/presentation/pages/update_user_name.dart';
 import 'package:rafeeq/features/user/presentation/providers/user_provider.dart';
 
@@ -63,6 +65,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             ],
           ),
 
+          // REMINDERS
           SettingsSection(
             title: 'Reminders',
             children: [
@@ -118,15 +121,39 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 
           const SizedBox(height: 8),
 
-          //send feedback
+          SettingsSection(
+            title: 'Prayer Times',
+            children: [
+              Consumer(
+                builder: (context, ref, _) {
+                  final selectedMethod = ref.watch(
+                    selectedCalculationMethodProvider,
+                  );
+
+                  return SettingsTile(
+                    leading: const Icon(HugeIconsStroke.calculator),
+                    title: 'Calculation method',
+                    subtitle: selectedMethod.name,
+                    onTap: () => AppNav.push(
+                      context,
+                      const PrayerCalculationMethodsPage(),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 8),
+
+          // GET INVOLVED
           SettingsSection(
             title: 'Get involved',
             children: [
               SettingsTile(
                 leading: const PhosphorIcon(PhosphorIcons.chatTeardropText),
                 title: 'Share Your Thoughts',
-                subtitle:
-                    'Share your suggestions and make Rafeeq more beneficial, In shaa Allah',
+                subtitle: 'Share your suggestions and make Rafeeq more beneficial, In shaa Allah',
                 onTap: () => AppNav.push(context, const FeedbackPage()),
               ),
 

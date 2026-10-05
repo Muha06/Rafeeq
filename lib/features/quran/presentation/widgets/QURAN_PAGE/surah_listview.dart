@@ -56,6 +56,8 @@ class AllSurahsList extends ConsumerWidget {
                 return AppPressableScale(
                   scale: 0.98,
                   onTap: () {
+                    FocusScope.of(context).unfocus();
+                    
                     AppNav.push(
                       context,
                       FullSurahPage(initialIndex: surah.id - 1),

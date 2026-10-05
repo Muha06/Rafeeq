@@ -4,9 +4,11 @@ import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/features/asma_ul_husna/domain/entities/translations_enum.dart';
 import 'package:rafeeq/features/asma_ul_husna/presentation/providers/asma_ul_husna_provider.dart';
 import 'package:rafeeq/features/asma_ul_husna/presentation/widgets/allah_name_tile.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class AllahNamesPage extends ConsumerStatefulWidget {
-  const AllahNamesPage({super.key});
+  const AllahNamesPage({super.key, required this.autoScrollName});
+  final int autoScrollName;
 
   @override
   ConsumerState<AllahNamesPage> createState() => _AllahNamesPageState();
@@ -14,7 +16,33 @@ class AllahNamesPage extends ConsumerStatefulWidget {
 
 class _AllahNamesPageState extends ConsumerState<AllahNamesPage> {
   String _query = '';
-  final scrollController = ScrollController();
+  final ItemScrollController itemScrollController = ItemScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _jumpToName(widget.autoScrollName);
+    });
+  }
+
+  // METHODS
+  Future<void> _jumpToName(int nameNumber) async {
+    while (!itemScrollController.isAttached) {
+      await Future.delayed(const Duration(milliseconds: 100));
+    }
+
+    if (!itemScrollController.isAttached) return;
+
+    if (nameNumber > 2) {
+      await itemScrollController.scrollTo(
+        index: nameNumber - 1,
+        duration: const Duration(milliseconds: 600),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,23 +88,16 @@ class _AllahNamesPageState extends ConsumerState<AllahNamesPage> {
               );
             }
 
-            return Scrollbar(
-              interactive: true,
-              thickness: 8,
-              controller: scrollController,
-              child: ListView.separated(
-                controller: scrollController,
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-                itemCount: filtered.length,
-                keyboardDismissBehavior:
-                    ScrollViewKeyboardDismissBehavior.onDrag,
-                separatorBuilder: (_, _) => const SizedBox(height: 12),
-                itemBuilder: (context, i) {
-                  final n = filtered[i];
+            return ScrollablePositionedList.separated(
+              itemCount: filtered.length,
+              itemScrollController: itemScrollController,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              separatorBuilder: (context, index) => const SizedBox(height: 16),
+              itemBuilder: (context, i) {
+                final n = filtered[i];
 
-                  return AllahNameTile(name: n);
-                },
-              ),
+                return AllahNameTile(name: n);
+              },
             );
           },
         ),

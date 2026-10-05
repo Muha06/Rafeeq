@@ -30,7 +30,6 @@ final fetchSalahTimesUsecase = Provider<FetchTodaySalahTimes>((ref) {
   return FetchTodaySalahTimes(ref.read(salahTimesRepositoryProvider));
 });
 
-final salahMethodProvider = Provider<int>((ref) => 3);
 
 final salahNotifSchedulerServiceProvider = Provider((ref) {
   final localNotifService = ref.watch(localNotificationServiceProvider);

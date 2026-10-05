@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/features/timings/domain/entities/prayer_calculation_method.dart';
 import 'package:rafeeq/features/timings/domain/usecases/salat_notifications_repo.dart';
 import 'package:rafeeq/features/settings/presentation/provider/notiffications_controller.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_prayer.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_times.dart';
+import 'package:rafeeq/features/timings/presentation/riverpod/calculation_methods_provider.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/disable_salah_reminders_provider.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/fetch_salah_times_provider.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/wiring_provider.dart';
@@ -29,6 +31,7 @@ class SalahNotificationsController extends Notifier<void> {
     _listenToSalahTimes(); // listen salah times
     _listenToNotificationToggle(); // listen user settings
     _listenToDisabledPrayers(); // listen disabled salah
+    _listenToCalculationMethods();
   }
 
   // listen to salah times updates
@@ -56,6 +59,30 @@ class SalahNotificationsController extends Notifier<void> {
 
       _onDisabledPrayersChanged(disabled);
     });
+  }
+
+  // listen to calculation methods
+  void _listenToCalculationMethods() {
+    ref.listen(selectedCalculationMethodProvider, (_, newMethod) {
+      debugPrint("Calculation Methods changed !");
+
+      _onCalculationMethodChanged(newMethod);
+    });
+  }
+
+  // On Calculation method changed
+  Future<void> _onCalculationMethodChanged(
+    PrayerCalculationMethod newMethod,
+  ) async {
+    if (!_notificationsEnabled) {
+      await _cancelAll();
+      return;
+    }
+
+    final times = await ref.read(fetchTodaySalahTimesProvider.future);
+
+    // Schedule
+    await _schedule(times);
   }
 
   // On salah times changed

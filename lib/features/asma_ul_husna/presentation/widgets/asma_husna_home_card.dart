@@ -30,7 +30,8 @@ class AsmaulHusnaHomeCard extends ConsumerWidget {
         ),
         padding: const EdgeInsets.all(16),
         child: InkWell(
-          onTap: () => AppNav.push(context, const AllahNamesPage()),
+          onTap: () =>
+              AppNav.push(context, AllahNamesPage(autoScrollName: name.number)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

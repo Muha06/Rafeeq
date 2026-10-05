@@ -70,7 +70,7 @@ class AppDialogs {
       context: context,
       builder: (dialogContext) => Dialog(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
+          padding: const EdgeInsets.fromLTRB(24, 28, 24, 32),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

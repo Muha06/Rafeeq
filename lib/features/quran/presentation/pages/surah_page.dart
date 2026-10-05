@@ -1,6 +1,7 @@
 // ignore_for_file: unused_result
 
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
@@ -462,6 +463,7 @@ class _FullSurahPageState extends ConsumerState<FullSurahPage> {
                 itemPositionsListener: itemPositionsListener,
                 scrollOffsetController: scrollOffsetController,
                 scrollOffsetListener: scrollOffsetListener,
+                minCacheExtent: 1000,
                 padding: const EdgeInsets.symmetric(
                   horizontal: horizontalPadding,
                 ),

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
@@ -22,8 +23,23 @@ class HomeTimelineCard extends ConsumerWidget {
     return salahStatus.when(
       data: (status) => _BuildTimelineCard(status: status),
 
-      loading: () => const SizedBox.shrink(),
+      loading: () => const _LoadingStateCard(),
       error: (_, _) => const _ErrorCard(),
+    );
+  }
+}
+
+class _LoadingStateCard extends StatelessWidget {
+  const _LoadingStateCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Row(
+      children: [
+        Text('Fetching prayer times...'),
+        Spacer(),
+        CupertinoActivityIndicator(radius: 12),
+      ],
     );
   }
 }
@@ -166,10 +182,7 @@ class _TimeToNextText extends ConsumerWidget {
 }
 
 class _CurrentSalat extends StatelessWidget {
-  const _CurrentSalat({
-    required this.current,
-    required this.currentStart,
-  });
+  const _CurrentSalat({required this.current, required this.currentStart});
   final SalahPrayer current;
   final DateTime currentStart;
 

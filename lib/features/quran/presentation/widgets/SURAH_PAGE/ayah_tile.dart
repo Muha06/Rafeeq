@@ -336,6 +336,7 @@ class _AyahActionsSheetState extends ConsumerState<AyahActionsSheet> {
 class WbwList extends ConsumerWidget {
   const WbwList({super.key, required this.ayah});
   final Ayah ayah;
+  
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final wbwAsync = ref.watch(

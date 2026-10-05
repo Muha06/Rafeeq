@@ -43,6 +43,7 @@ class _SearchSurahFieldState extends ConsumerState<SearchSurahField> {
       autofocus: false,
       decoration: InputDecoration(
         isDense: true,
+        visualDensity: VisualDensity.comfortable,
         prefixIcon: IconButton(
           onPressed: () {
             _focus.unfocus();
