@@ -11,6 +11,11 @@ class LocalNotificationService {
   final _plugin = FlutterLocalNotificationsPlugin(); // Plugin
 
   FlutterLocalNotificationsPlugin get plugin => _plugin;
+  static const int fridayVirtuesReminderId = 207;
+  static const TimeOfDay _fridayVirtuesReminderTime = TimeOfDay(
+    hour: 9,
+    minute: 0,
+  );
   static const String _channelId = 'rafeeq_salah_adhan_v5';
   static const _adhanChannelName = 'Salah (Adhan)';
   static const _adhanDescription = 'Salah notifications with adhan sound';
@@ -157,10 +162,8 @@ class LocalNotificationService {
 
     final exactAllowed = await canScheduleExactAlarms();
 
- 
     await _plugin.cancel(id: id);
 
- 
     await _plugin.zonedSchedule(
       id: id,
       title: title,
@@ -265,8 +268,6 @@ class LocalNotificationService {
 
     await _plugin.cancel(id: id);
 
-    debugPrint("Scheduling Quran goal reminders");
-
     await _plugin.zonedSchedule(
       id: id,
       title: title,
@@ -277,6 +278,54 @@ class LocalNotificationService {
           ? AndroidScheduleMode.exactAllowWhileIdle
           : AndroidScheduleMode.inexactAllowWhileIdle, // fallback
       matchDateTimeComponents: DateTimeComponents.time,
+    );
+  }
+
+  Future<void> scheduleFridayVirtuesReminder({required String username}) async {
+    final now = tz.TZDateTime.now(tz.local);
+    final daysUntilFriday = (DateTime.friday - now.weekday + 7) % 7;
+
+    var scheduled = tz.TZDateTime(
+      tz.local,
+      now.year,
+      now.month,
+      now.day + daysUntilFriday,
+      _fridayVirtuesReminderTime.hour,
+      _fridayVirtuesReminderTime.minute,
+    );
+
+    if (!scheduled.isAfter(now)) {
+      scheduled = scheduled.add(const Duration(days: 7));
+    }
+
+    debugPrint("Scheduling Friday virtues reminder for $scheduled");
+
+    const details = NotificationDetails(
+      android: AndroidNotificationDetails(
+        'rafeeq_reminders',
+        'Reminders',
+        channelDescription: 'Weekly Friday virtues reminder',
+        importance: Importance.high,
+        priority: Priority.high,
+      ),
+      iOS: DarwinNotificationDetails(),
+    );
+
+    final exactAllowed = await canScheduleExactAlarms();
+
+    await _plugin.cancel(id: fridayVirtuesReminderId);
+    await _plugin.zonedSchedule(
+      id: fridayVirtuesReminderId,
+      title: 'Friday virtues',
+      body: username.isNotEmpty
+          ? '$username, explore the virtues and sunnahs of Friday.'
+          : 'Explore the virtues and sunnahs of Friday.',
+      scheduledDate: scheduled,
+      notificationDetails: details,
+      androidScheduleMode: exactAllowed
+          ? AndroidScheduleMode.exactAllowWhileIdle
+          : AndroidScheduleMode.inexactAllowWhileIdle,
+      matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
     );
   }
 

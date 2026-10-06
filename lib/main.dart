@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -16,6 +17,7 @@ import 'package:rafeeq/core/helpers/app_update_service.dart';
 import 'package:rafeeq/features/home/presentation/pages/tabs_screen.dart';
 import 'package:rafeeq/core/app_keys.dart';
 import 'package:rafeeq/core/features/audio/data/audio_handler.dart';
+import 'package:rafeeq/core/features/local_notifications/providers/friday_virtues_reminder_provider.dart';
 import 'package:rafeeq/core/features/local_notifications/repository/local_notifs_service.dart';
 import 'package:rafeeq/core/themes/dark_theme.dart';
 import 'package:rafeeq/core/themes/light_theme.dart';
@@ -188,6 +190,8 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
 
     //SYNC
     await ref.read(notificationPermissionProvider.notifier).sync();
+
+    ref.read(fridayVirtuesReminderProvider.notifier).schedule();
 
     // Schedule ayah of day notifications
     await ref.read(ayahNotificationSchedulerProvider.notifier).schedule();
