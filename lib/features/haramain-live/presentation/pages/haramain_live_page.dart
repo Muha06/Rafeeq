@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:rafeeq/core/constants/spacing/app_spacing.dart';
+import 'package:rafeeq/core/widgets/my_chip.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
@@ -161,7 +162,7 @@ class _HaramainLivePageState extends State<HaramainLivePage> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           child: Row(
             children: [
               ChoiceChip(
@@ -198,6 +199,14 @@ class _HaramainLivePageState extends State<HaramainLivePage> {
         ),
 
         const SizedBox(height: AppSpacing.xxxl),
+
+        MyChip(
+          borderRadius: 4,
+          backgroundColor: cs.tertiary,
+          child: const Text(
+            'Please note that the Haramain livestream may occasionally be unstable.',
+          ),
+        ),
 
         _error != null
             ? _buildError()

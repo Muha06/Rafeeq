@@ -13,6 +13,14 @@ class AppTextTheme {
       // HEADINGS
       // ─────────────────────────────────────────────
 
+      headlineMedium: TextStyle(
+        fontFamily: displayFont,
+        fontSize: 30,
+        fontWeight: FontWeight.w400,
+        letterSpacing: -0.1,
+        color: colors.onSurface,
+      ),
+
       headlineSmall: TextStyle(
         fontFamily: displayFont,
         fontSize: 24,
@@ -75,8 +83,8 @@ class AppTextTheme {
 
       bodyMedium: TextStyle(
         fontFamily: primaryFont,
-        fontSize: 16.5,
-        fontWeight: FontWeight.w300,
+        fontSize: 17,
+        fontWeight: FontWeight.w400,
         height: 1.45,
         letterSpacing: 0,
         color: colors.onSurfaceVariant,

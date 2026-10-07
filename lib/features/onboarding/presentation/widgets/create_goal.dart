@@ -27,75 +27,78 @@ class _CreateGoalSlideState extends ConsumerState<CreateGoalSlide> {
   Widget build(BuildContext context) {
     final name = ref.watch(userNameProvider);
     final theme = Theme.of(context);
-    final cs = theme.colorScheme;
     final tt = theme.textTheme;
 
-    return Center(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              'Set a daily target you plan to complete, $name',
-              textAlign: TextAlign.center,
-              style: tt.headlineSmall?.copyWith(
-                fontFamily: AppStrings.displayFont,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            'Set a daily target you plan to complete, $name',
+            textAlign: TextAlign.center,
+            style: tt.headlineMedium,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Start with what feels realistic. You can always increase it later.',
+            textAlign: TextAlign.center,
+            style: tt.bodyMedium,
+          ),
+          const SizedBox(height: 48),
+
+          Expanded(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: goals.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 12,
+                            mainAxisSpacing: 16,
+                            childAspectRatio: 1,
+                          ),
+                      itemBuilder: (context, index) {
+                        final goal = goals[index];
+
+                        return CreateGoalTile(
+                          amount: goal.amount,
+                          title: goal.title,
+                          icon: goal.icon,
+                          isSelected: selectedGoal == goal.amount,
+                          onTap: () {
+                            setState(() {
+                              selectedGoal = goal.amount;
+                            });
+
+                            ref.read(quranGoalTargetProvider.notifier).state =
+                                goal.amount;
+                          },
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      '“The most beloved deeds to Allah are those that are consistent, even if they are few.”',
+                      textAlign: TextAlign.center,
+                      style: tt.bodyMedium?.copyWith(
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-
-            const SizedBox(height: 8),
-
-            Text(
-              'Start with what feels realistic. You can always increase it later.',
-              textAlign: TextAlign.center,
-              style: tt.bodyLarge,
-            ),
-
-            const SizedBox(height: 24),
-
-            GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: goals.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 16,
-                childAspectRatio: 1,
-              ),
-              itemBuilder: (context, index) {
-                final goal = goals[index];
-
-                return CreateGoalTile(
-                  amount: goal.amount,
-                  title: goal.title,
-                  icon: goal.icon,
-                  isSelected: selectedGoal == goal.amount,
-                  onTap: () {
-                    setState(() {
-                      selectedGoal = goal.amount;
-                    });
-
-                    ref.read(quranGoalTargetProvider.notifier).state =
-                        goal.amount;
-                  },
-                );
-              },
-            ),
-
-            const SizedBox(height: 20),
-
-            Text(
-              '“The most beloved deeds to Allah are those that are consistent, even if they are few.”',
-              textAlign: TextAlign.center,
-              style: tt.bodyMedium?.copyWith(
-                fontStyle: FontStyle.italic,
-                color: cs.onSurfaceVariant,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -171,9 +174,7 @@ class _DailyReminderSlideState extends State<DailyReminderSlide> {
                 Text(
                   'Choose a daily reminder',
                   textAlign: TextAlign.center,
-                  style: tt.headlineSmall?.copyWith(
-                    fontFamily: AppStrings.displayFont,
-                  ),
+                  style: tt.headlineMedium,
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -185,7 +186,6 @@ class _DailyReminderSlideState extends State<DailyReminderSlide> {
             ),
           ),
 
-          
           Center(
             child: Column(
               mainAxisSize: MainAxisSize.min,

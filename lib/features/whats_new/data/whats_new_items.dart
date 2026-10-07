@@ -1,46 +1,27 @@
+import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/features/whats_new/domain/entitites/whats_new_item.dart';
 
-const currentWhatsNewVersion = '0.0.9'; // Version of this release
+const currentWhatsNewVersion = '0.1.0'; // Version of this release
 
 const whatsNewItems = [
   WhatsNewItem(
-    icon: PhosphorIcons.compass,
-    title: 'Qibla Compass',
-    description: 'Find the Qibla direction with our new compass experience.',
-  ),
-  WhatsNewItem(
-    icon: PhosphorIcons.bell,
-    title: 'Better Salah reminders',
-    description:
-        'Improved notification handling and more reliable Salah times.',
-  ),
-  WhatsNewItem(
-    icon: PhosphorIcons.calendarCheck,
-    title: 'More reliable Salah times',
-    description:
-        'Extended Salah data storage so prayer times remain available more reliably.',
-  ),
-  WhatsNewItem(
-    icon: PhosphorIcons.heart,
-    title: 'Asmaul Husna',
-    description:
-        'Explore the beautiful 99 Names of Allah with their meanings and details.',
-  ),
-  WhatsNewItem(
-    icon: PhosphorIcons.target,
-    title: 'Improved Quran goals',
-    description:
-        'Fixed Quran goal progress tracking for a more accurate experience.',
-  ),
-  WhatsNewItem(
-    icon: PhosphorIcons.mapPin,
-    title: 'Better location handling',
-    description:
-        'Improved location detection and handling for a more reliable experience.',
+    icon: HugeIconsSolid.quran01,
+    title: 'Quran Word by Word',
+    description: 'Explore the Quran with our new Word by Word feature, providing detailed insights and translations for each word.',
   ),
   WhatsNewItem(
     icon: PhosphorIcons.textAa,
+    title: 'Prayer times calculation methods',
+    description: 'Added multiple calculation methods for prayer times, allowing you to choose the one that best suits your location and preferences.',
+  ),
+  WhatsNewItem(
+    icon: HugeIconsSolid.tasbih,
+    title: 'Adhkar Category images',
+    description: 'Added images to Adhkar categories for a more visually appealing experience.',
+  ),
+  WhatsNewItem(
+    icon: HugeIconsSolid.text,
     title: 'Font improvements',
     description:
         'Fixed font issues and improved text consistency across the app.',

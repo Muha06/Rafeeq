@@ -97,7 +97,7 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
       ref.read(quranGoalProvider.notifier).createGoal(goal);
       RafeeqAnalytics.logFeature('create-onboarding-goal');
     }
-    
+
     await _pageController.animateToPage(
       index,
       duration: const Duration(milliseconds: 220),
@@ -111,9 +111,8 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
 
     if (!mounted) return;
 
-    Navigator.of(
-      context,
-    ).pushReplacement(MaterialPageRoute(builder: (_) => const TabsScreen()));
+    Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (_) => const TabsScreen()));
 
     // Save location in the background; failure must not block onboarding.
     unawaited(_saveUserLocation());
@@ -150,7 +149,7 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
             Expanded(
               child: PageView(
                 controller: _pageController,
-                physics: const NeverScrollableScrollPhysics(),
+                // physics: const NeverScrollableScrollPhysics(),
                 onPageChanged: (i) => {
                   FocusScope.of(context).unfocus(),
 
@@ -181,9 +180,8 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
                     Text(
                       "We'll send you a notification for your reminder.",
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: cs.onSurfaceVariant,
-                      ),
+                      style: Theme.of(context).textTheme.bodySmall
+                          ?.copyWith(color: cs.onSurfaceVariant),
                     ),
                     const SizedBox(height: 12),
                   ],

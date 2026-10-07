@@ -40,14 +40,14 @@ class CollectUserNameSlide extends ConsumerWidget {
             Text(
               'Assalam alaikum, What should we call you?',
               textAlign: TextAlign.center,
-              style: tt.headlineSmall,
+              style: tt.headlineMedium,
             ),
             const SizedBox(height: 16),
 
             Text(
               'We use this information to personalize your experience and make Rafeeq more useful for you.',
               textAlign: TextAlign.center,
-              style: tt.bodyLarge,
+              style: tt.bodyMedium,
             ),
 
             Expanded(

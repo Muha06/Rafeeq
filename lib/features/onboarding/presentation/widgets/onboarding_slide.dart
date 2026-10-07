@@ -74,10 +74,10 @@ class _OnboardingSlideState extends State<OnboardingSlide>
               Text(
                 widget.title,
                 textAlign: TextAlign.center,
-                style: theme.textTheme.headlineSmall,
+                style: theme.textTheme.headlineMedium,
               ),
 
-              const SizedBox(height: 26),
+              const SizedBox(height: 20),
 
               // subtitle
               Text(
