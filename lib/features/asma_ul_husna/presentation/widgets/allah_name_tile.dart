@@ -2,16 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rafeeq/core/constants/strings/app_strings.dart';
-import 'package:rafeeq/core/features/audio/domain/entities/audio_item.dart';
+ import 'package:rafeeq/core/features/audio/domain/entities/audio_item.dart';
 import 'package:rafeeq/core/features/audio/domain/entities/audio_source_type.dart';
 import 'package:rafeeq/core/features/audio/presentation/providers/audio_controller.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/helpers/app_text_style.dart';
 import 'package:rafeeq/core/helpers/app_toast.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
-import 'package:rafeeq/core/widgets/app_icon_container.dart';
-import 'package:rafeeq/core/widgets/app_pressable.dart';
+ import 'package:rafeeq/core/widgets/app_pressable.dart';
 import 'package:rafeeq/features/asma_ul_husna/domain/entities/name_entity.dart';
 import 'package:rafeeq/features/asma_ul_husna/domain/entities/translations_enum.dart';
 import 'package:rafeeq/features/asma_ul_husna/presentation/widgets/name_details_sheet.dart';
@@ -75,10 +73,7 @@ class AllahNameTile extends ConsumerWidget {
                   // Transliteration
                   Text(
                     name.transliteration,
-                    style: tt.titleSmall?.copyWith(
-                      fontFamily: AppStrings.displayFont,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: tt.headlineSmall?.copyWith(fontSize: 20),
                   ),
 
                   const SizedBox(height: 4),
@@ -88,7 +83,7 @@ class AllahNameTile extends ConsumerWidget {
                     translation.meaning,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: tt.labelSmall,
+                    style: tt.bodyMedium,
                   ),
                 ],
               ),
@@ -112,14 +107,8 @@ class _NumberBadge extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final theme = Theme.of(context);
-    final cs = theme.colorScheme;
 
-    return AppIconContainer(
-      backgroundColor: cs.surfaceContainerHigh,
-      borderRadius: 14,
-      size: 32,
-      child: Text('$number', style: theme.textTheme.titleSmall),
-    );
+    return Text('$number', style: theme.textTheme.titleSmall);
   }
 }
 

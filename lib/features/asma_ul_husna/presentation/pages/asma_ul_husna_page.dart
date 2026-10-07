@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/features/asma_ul_husna/domain/entities/translations_enum.dart';
@@ -23,7 +24,7 @@ class _AllahNamesPageState extends ConsumerState<AllahNamesPage> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _jumpToName(widget.autoScrollName);
+      Future.delayed(150.ms, () => _jumpToName(widget.autoScrollName));
     });
   }
 
