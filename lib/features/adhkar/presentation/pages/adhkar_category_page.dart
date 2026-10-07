@@ -36,19 +36,19 @@ class _AdhkarCategoryPageState extends ConsumerState<AdhkarCategoryPage> {
           }
 
           return GridView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              mainAxisSpacing: 16,
-              crossAxisSpacing: 16,
-              childAspectRatio: 1,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+              childAspectRatio: 0.87,
             ),
             itemCount: categories.length,
             itemBuilder: (context, index) {
               final category = categories[index];
 
               return AppPressableScale(
-                scale: 0.8,
+                scale: 0.93,
                 onTap: () => AppNav.push(
                   context,
                   AdhkarPreviewPages(category: category),
@@ -77,24 +77,55 @@ class AdhkarCategoryTile extends ConsumerWidget {
   final DhikrCategory category;
 
   @override
-  Widget build(BuildContext context, ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final cs = theme.colorScheme;
 
-    return Container(
-      alignment: Alignment.center,
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: cs.surface,
-      ),
-      child: Text(
-        category.title,
-        textAlign: TextAlign.center,
-        overflow: TextOverflow.visible,
-        maxLines: 2,
-        style: theme.textTheme.labelLarge,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(14),
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(
+              category.previewAssetPath,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) => Image.asset(
+                DhikrCategory.fallbackPreviewAsset,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+
+          Positioned.fill(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.transparent,
+                    Colors.black.withValues(alpha: 0.95),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          Positioned(
+            left: 16,
+            right: 16,
+            bottom: 16,
+            child: Text(
+              category.title,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.labelLarge?.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

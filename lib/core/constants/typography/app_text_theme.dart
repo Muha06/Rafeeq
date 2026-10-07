@@ -68,7 +68,7 @@ class AppTextTheme {
       bodyLarge: TextStyle(
         fontFamily: primaryFont,
         fontSize: 15.7,
-        fontWeight: FontWeight.w300,
+        fontWeight: FontWeight.w400,
         height: 1.5,
         color: colors.onSurface,
       ),

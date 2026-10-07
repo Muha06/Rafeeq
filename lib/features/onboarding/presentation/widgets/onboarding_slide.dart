@@ -87,7 +87,7 @@ class _OnboardingSlideState extends State<OnboardingSlide>
               ),
 
               if (widget.child != null) ...[
-                const SizedBox(height: 18),
+                const SizedBox(height: 26),
                 widget.child!,
               ],
 

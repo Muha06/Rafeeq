@@ -133,6 +133,7 @@ flutter:
     - assets/images/onboarding/
     - assets/images/salah/
     - assets/images/qibla/
+    - assets/images/adhkar/
     - assets/icon/
     - assets/db/
     - assets/db/wbw/

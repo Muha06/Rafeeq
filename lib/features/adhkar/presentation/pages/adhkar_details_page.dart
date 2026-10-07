@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:floating_draggable_widget/floating_draggable_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import 'package:rafeeq/core/helpers/app_haptics.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/core/helpers/app_text_style.dart';
+import 'package:rafeeq/core/widgets/my_chip.dart';
 import 'package:rafeeq/features/adhkar/domain/entities/dhikr_entity.dart';
 import 'package:rafeeq/features/adhkar/presentation/providers/adhkar_providers.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/dhikr_bookmark.dart';
@@ -54,6 +56,9 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+    final tt = theme.textTheme;
+
     final dhikr = widget.adhkars[currentIndex];
 
     return LayoutBuilder(
@@ -74,6 +79,18 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
                       fontSize: 18,
                     ),
                   ),
+                  actionsPadding: const EdgeInsets.symmetric(horizontal: 16),
+                  actions: [
+                    //note
+                    MyChip(
+                      backgroundColor: cs.tertiary,
+                      borderRadius: 4,
+                      child: Text(
+                        '${dhikr.repeat}×',
+                        style: tt.labelMedium?.copyWith(color: cs.onTertiary),
+                      ),
+                    ),
+                  ],
                   bottom: PreferredSize(
                     preferredSize: const Size.fromHeight(1),
                     child: LinearProgressIndicator(
@@ -94,14 +111,14 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
                       // Left edge tapped
                       _controller.previousPage(
                         duration: duration,
-                        curve: Curves.fastOutSlowIn,
+                        curve: Curves.easeInOut,
                       );
                       if (currentIndex > 0) AppHaptics.selection();
                     } else if (dx > screenWidth - edgeWidth) {
                       // Right edge tapped
                       _controller.nextPage(
                         duration: duration,
-                        curve: Curves.fastOutSlowIn,
+                        curve: Curves.easeInOut,
                       );
 
                       if (currentIndex < widget.adhkars.length - 1) {
@@ -386,7 +403,7 @@ class _AdhkarDetailsSectionState extends ConsumerState<AdhkarDetailsSection> {
     final textTheme = theme.textTheme;
     final dhikr = widget.dhikr;
 
-    final bodyTextstyle = textTheme.bodyLarge;
+    final bodyTextstyle = textTheme.bodyLarge?.copyWith(fontSize: 18);
     final cs = theme.colorScheme;
 
     Widget section(String title, String? text) {
@@ -397,7 +414,7 @@ class _AdhkarDetailsSectionState extends ConsumerState<AdhkarDetailsSection> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: textTheme.labelSmall), //header
+          Text(title, style: textTheme.labelSmall),
           const SizedBox(height: 8),
 
           Text(text, style: bodyTextstyle), //text
@@ -407,7 +424,7 @@ class _AdhkarDetailsSectionState extends ConsumerState<AdhkarDetailsSection> {
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
       child: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -415,10 +432,11 @@ class _AdhkarDetailsSectionState extends ConsumerState<AdhkarDetailsSection> {
           children: [
             //arabic
             Align(
-              alignment: Alignment.centerRight,
+              alignment: Alignment.center,
               child: Text(
                 cleanDhikr(widget.dhikr.arabicText),
                 textDirection: TextDirection.rtl,
+                textAlign: TextAlign.center,
                 style: AppTextStyles.quranAyah.copyWith(
                   color: cs.onSurface,
                   fontSize: 30,
@@ -432,10 +450,7 @@ class _AdhkarDetailsSectionState extends ConsumerState<AdhkarDetailsSection> {
             section('Transliteration', dhikr.transliteration),
 
             //english
-            section('Translation', dhikr.englishText),
-
-            //note
-            section('Notes', 'Repeat ${dhikr.repeat} times'),
+            section('Translation', dhikr.englishText.trim()),
 
             const SizedBox(height: 80),
           ],

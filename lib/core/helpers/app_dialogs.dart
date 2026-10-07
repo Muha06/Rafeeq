@@ -18,7 +18,7 @@ class AppDialogs {
       context: context,
       builder: (dialogContext) => Dialog(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 30),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 38),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -46,7 +46,7 @@ class AppDialogs {
                   child: Text(confirmText),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 24),
 
               TextButton(
                 onPressed: () => AppNav.pop(dialogContext, false),
@@ -91,7 +91,7 @@ class AppDialogs {
                 'Allow notifications so Rafeeq can remind you about Salah, '
                 'Friday reminders, and other important moments.',
                 textAlign: TextAlign.center,
-                style: tt.bodyMedium,
+                style: tt.bodyLarge,
               ),
               const SizedBox(height: 16),
 

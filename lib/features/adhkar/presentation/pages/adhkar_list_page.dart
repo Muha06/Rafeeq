@@ -36,9 +36,19 @@ class AdhkarPreviewPages extends ConsumerWidget {
             }
 
             return ListView.builder(
-              itemCount: adhkars.length,
+              itemCount: adhkars.length + 1,
               itemBuilder: (context, index) {
-                final dhikr = adhkars[index];
+                if (index == 0) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 12,
+                    ),
+                    child: _AdhkarCategoryPreview(category: category),
+                  );
+                }
+
+                final dhikr = adhkars[index - 1];
 
                 return AppPressableScale(
                   scale: 0.97,
@@ -47,7 +57,7 @@ class AdhkarPreviewPages extends ConsumerWidget {
                         context,
                         AdhkarDetailsPage(
                           adhkars: adhkars,
-                          initialIndex: index,
+                          initialIndex: index - 1,
                         ),
                       ).then(
                         (value) => RafeeqAnalytics.logScreenView(
@@ -56,26 +66,23 @@ class AdhkarPreviewPages extends ConsumerWidget {
                       ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 12.0,
+                      horizontal: 12,
                       vertical: 12,
                     ),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        //Number
                         SizedBox(
                           height: 28,
                           width: 28,
                           child: Center(
                             child: Text(
-                              (index + 1).toString(),
+                              index.toString(),
                               style: theme.textTheme.labelSmall,
                             ),
                           ),
                         ),
-
                         const SizedBox(width: 10),
-
                         Expanded(
                           child: Text(
                             dhikr.title,
@@ -85,7 +92,6 @@ class AdhkarPreviewPages extends ConsumerWidget {
                           ),
                         ),
                         const SizedBox(width: 8),
-
                         Icon(Icons.chevron_right, color: cs.onSurfaceVariant),
                       ],
                     ),
@@ -94,6 +100,38 @@ class AdhkarPreviewPages extends ConsumerWidget {
               },
             );
           },
+        ),
+      ),
+    );
+  }
+}
+
+class _AdhkarCategoryPreview extends StatelessWidget {
+  const _AdhkarCategoryPreview({required this.category});
+
+  final DhikrCategory category;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(16),
+      child: SizedBox(
+        height: 140,
+        width: double.infinity,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Image.asset(
+              category.previewAssetPath,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Image.asset(
+                  DhikrCategory.fallbackPreviewAsset,
+                  fit: BoxFit.cover,
+                );
+              },
+            ),
+          ],
         ),
       ),
     );

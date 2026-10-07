@@ -27,7 +27,7 @@ class ShareRafeeqCard extends ConsumerWidget {
 
           Text(
             'Rafeeq helps Muslims stay connected to the Quran, salah, adhkar and their deen. Share it with another Muslim and spread something beneficial.',
-            style: tt.bodyMedium?.copyWith(color: cs.onSurface),
+            style: tt.bodyLarge?.copyWith(color: cs.onSurface),
           ),
 
           const SizedBox(height: 16),

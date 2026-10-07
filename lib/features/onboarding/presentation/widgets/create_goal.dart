@@ -49,7 +49,7 @@ class _CreateGoalSlideState extends ConsumerState<CreateGoalSlide> {
             Text(
               'Start with what feels realistic. You can always increase it later.',
               textAlign: TextAlign.center,
-              style: tt.bodyMedium,
+              style: tt.bodyLarge,
             ),
 
             const SizedBox(height: 24),

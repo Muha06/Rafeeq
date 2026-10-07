@@ -47,7 +47,7 @@ class CollectUserNameSlide extends ConsumerWidget {
             Text(
               'We use this information to personalize your experience and make Rafeeq more useful for you.',
               textAlign: TextAlign.center,
-              style: tt.bodyMedium,
+              style: tt.bodyLarge,
             ),
 
             Expanded(
