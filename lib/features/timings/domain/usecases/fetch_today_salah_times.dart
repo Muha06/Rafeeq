@@ -10,7 +10,12 @@ class FetchTodaySalahTimes {
   Future<SalahTimesEntity> fetchTodayByCoords({
     required UserLocation userLocation,
     int method = 3,
+    required DateTime date,
   }) {
-    return repo.fetchTodayByCoords(userLocation: userLocation, method: method);
+    return repo.fetchByCoords(
+      userLocation: userLocation,
+      date: date,
+      method: method,
+    );
   }
 }

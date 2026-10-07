@@ -48,7 +48,7 @@ class _ErrorCard extends ConsumerWidget {
   const _ErrorCard();
 
   void _retry(WidgetRef ref) {
-    ref.invalidate(fetchTodaySalahTimesProvider);
+    ref.invalidate(fetchSalahTimesProvider);
     ref.invalidate(salahStatusProvider);
   }
 

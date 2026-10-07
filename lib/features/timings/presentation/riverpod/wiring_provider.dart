@@ -6,7 +6,7 @@ import 'package:rafeeq/features/timings/data/datasources/salah_remote_ds.dart';
 import 'package:rafeeq/features/timings/data/repository/salah_repo_impl.dart';
 import 'package:rafeeq/features/timings/domain/repository/get_today_salah_times_repo.dart';
 import 'package:rafeeq/features/timings/domain/usecases/fetch_today_salah_times.dart';
-import 'package:rafeeq/features/timings/domain/usecases/salat_notifications_repo.dart';
+import 'package:rafeeq/features/timings/domain/usecases/salat_notifications_scheduler.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:rafeeq/features/timings/data/datasources/cached_salah_local_ds.dart';
@@ -29,7 +29,6 @@ final salahTimesRepositoryProvider = Provider<FetchSalahTimesRepo>((ref) {
 final fetchSalahTimesUsecase = Provider<FetchTodaySalahTimes>((ref) {
   return FetchTodaySalahTimes(ref.read(salahTimesRepositoryProvider));
 });
-
 
 final salahNotifSchedulerServiceProvider = Provider((ref) {
   final localNotifService = ref.watch(localNotificationServiceProvider);

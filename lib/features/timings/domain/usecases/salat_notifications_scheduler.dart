@@ -8,53 +8,50 @@ class SalahNotifSchedulerService {
   SalahNotifSchedulerService({required this.localNotificationService});
 
   final LocalNotificationService localNotificationService;
-  // Adhan IDs (stable)
-  static const _adhanIds = {
-    SalahPrayer.fajr: 101,
-    SalahPrayer.dhuhr: 102,
-    SalahPrayer.asr: 103,
-    SalahPrayer.maghrib: 104,
-    SalahPrayer.isha: 105,
-  };
 
-  // Reminder-before IDs (separate so they don't overwrite adhan)
-  static const _reminderIds = {
-    SalahPrayer.fajr: 201,
-    SalahPrayer.dhuhr: 202,
-    SalahPrayer.asr: 203,
-    SalahPrayer.maghrib: 204,
-    SalahPrayer.isha: 205,
-  };
+  static const _scheduleDays = 3;
 
   Future<void> cancelAll() async {
-    for (final id in _adhanIds.values) {
-      await localNotificationService.cancel(id);
-    }
-    for (final id in _reminderIds.values) {
-      await localNotificationService.cancel(id);
+    // Cancel notifications for the scheduling window
+
+    final today = DateUtils.dateOnly(DateTime.now());
+
+    for (int i = 0; i < _scheduleDays; i++) {
+      final date = today.add(Duration(days: i));
+
+      // Generate the ids for each prayer and cancel them
+      for (final prayer in SalahPrayer.values) {
+        final adhanId = _notificationId(
+          date: date,
+          prayer: prayer,
+          isReminder: false,
+        );
+
+        final reminderId = _notificationId(
+          date: date,
+          prayer: prayer,
+          isReminder: true,
+        );
+
+        await localNotificationService.cancel(adhanId);
+        await localNotificationService.cancel(reminderId);
+      }
     }
   }
 
-  Future<void> scheduleForToday({
-    required SalahTimesEntity times, // represent one day
+  Future<void> scheduleForDay({
+    required SalahTimesEntity times,
     required String username,
     Set<SalahPrayer> disabled = const {},
   }) async {
-    await cancelAll();
-
-    final now = tz.TZDateTime.now(tz.local);
-
-    for (final prayer in _adhanIds.keys) {
+    for (final prayer in SalahPrayer.values) {
+      // Skip if disabled
       if (disabled.contains(prayer)) continue;
 
       var adhanTime = tz.TZDateTime.from(times.at(prayer), tz.local);
 
-      if (!adhanTime.isAfter(now)) {
-        adhanTime = adhanTime.add(const Duration(days: 1));
-      }
-
-      await LocalNotificationService().scheduleSalah(
-        id: _adhanIds[prayer]!,
+      await localNotificationService.scheduleSalah(
+        id: _notificationId(date: adhanTime, prayer: prayer, isReminder: false),
         title: "Salat time - ${prayer.label}",
         body: username.isNotEmpty
             ? '$username, it\'s time for ${prayer.label}.'
@@ -83,5 +80,17 @@ class SalahNotifSchedulerService {
       "Exact allowed: $exactAllowed \n Notifications allowed: $notifAllowed",
     );
     await localNotificationService.testAdhanNow();
+  }
+
+  int _notificationId({
+    required DateTime date,
+    required SalahPrayer prayer,
+    required bool isReminder,
+  }) {
+    final dateKey = date.year * 10000 + date.month * 100 + date.day;
+    final prayerKey = prayer.index + 1;
+    final typeKey = isReminder ? 2 : 1;
+
+    return dateKey * 100 + prayerKey * 10 + typeKey;
   }
 }

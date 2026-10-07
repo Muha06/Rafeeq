@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/features/onboarding/presentation/widgets/enable_loc_cta.dart';
 import 'package:rafeeq/features/onboarding/presentation/widgets/enable_notifs_cta.dart';
-import 'package:rafeeq/features/timings/presentation/riverpod/fetch_salah_times_provider.dart';
+
 import 'onboarding_slide.dart';
 
 class WelcomeSlide extends ConsumerWidget {
@@ -27,8 +27,7 @@ class SalahSlide extends StatelessWidget {
     return OnboardingSlide(
       imageAsset: 'assets/images/onboarding/salat_feature.png',
       title: 'Stay on time for every ṣalāh',
-      subtitle:
-          'Enable Location & Notification to calculate and send accurate prayer reminders for where you are.',
+      subtitle: 'Enable Location & Notification to calculate and send accurate prayer reminders for where you are.',
       accent: Theme.of(context).colorScheme.primary,
       child: const Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -49,8 +48,6 @@ class QuranAdhkarSlide extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    ref.watch(fetchTodaySalahTimesProvider);
-
     return OnboardingSlide(
       imageAsset: 'assets/images/onboarding/quran_feature.png',
       title: 'Stay connected daily',

@@ -4,17 +4,17 @@ import 'package:rafeeq/features/timings/domain/entities/salah_times.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/calculation_methods_provider.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/wiring_provider.dart';
 
-final fetchTodaySalahTimesProvider = FutureProvider<SalahTimesEntity>((
-  ref,
-) async {
-  final fetchTimesUsecase = ref.watch(fetchSalahTimesUsecase);
+final fetchSalahTimesProvider =
+    FutureProvider.family<SalahTimesEntity, DateTime>((ref, date) async {
+      final fetchTimesUsecase = ref.watch(fetchSalahTimesUsecase);
 
-  final userLocation = await ref.watch(userLocationProvider.future);
+      final userLocation = await ref.watch(userLocationProvider.future);
 
-  final result = await fetchTimesUsecase.fetchTodayByCoords(
-    userLocation: userLocation,
-    method: ref.watch(selectedCalculationMethodProvider).id,
-  );
+      final result = await fetchTimesUsecase.fetchTodayByCoords(
+        userLocation: userLocation,
+        date: date,
+        method: ref.watch(selectedCalculationMethodProvider).id,
+      );
 
-  return result;
-});
+      return result;
+    });

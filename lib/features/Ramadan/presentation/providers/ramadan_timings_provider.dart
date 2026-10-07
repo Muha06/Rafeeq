@@ -4,7 +4,9 @@ import 'package:rafeeq/features/timings/domain/entities/salah_prayer.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/fetch_salah_times_provider.dart';
 
 final ramadanTimesProvider = Provider<AsyncValue<RamadanTimesEntity>>((ref) {
-  final timesAsync = ref.watch(fetchTodaySalahTimesProvider); //fetch timings
+  final timesAsync = ref.watch(
+    fetchSalahTimesProvider(DateTime.now()),
+  ); //fetch timings
 
   return timesAsync.whenData((times) {
     final map = times.times;

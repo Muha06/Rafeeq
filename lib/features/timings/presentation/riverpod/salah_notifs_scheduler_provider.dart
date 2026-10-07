@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/features/timings/domain/entities/prayer_calculation_method.dart';
-import 'package:rafeeq/features/timings/domain/usecases/salat_notifications_repo.dart';
+import 'package:rafeeq/features/timings/domain/usecases/salat_notifications_scheduler.dart';
 import 'package:rafeeq/features/settings/presentation/provider/notiffications_controller.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_prayer.dart';
-import 'package:rafeeq/features/timings/domain/entities/salah_times.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/calculation_methods_provider.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/disable_salah_reminders_provider.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/fetch_salah_times_provider.dart';
@@ -21,10 +20,11 @@ final salahNotifSchedulerProvider =
 class SalahNotificationsController extends Notifier<void> {
   SalahNotifSchedulerService get salahNotifsService =>
       ref.read(salahNotifSchedulerServiceProvider);
+
   bool get _notificationsEnabled => ref.read(salahNotifControllerProvider);
 
   Set<SalahPrayer> get _disabledPrayers =>
-      ref.watch(disabledSalahPrayersProvider);
+      ref.read(disabledSalahPrayersProvider);
 
   @override
   void build() {
@@ -36,9 +36,10 @@ class SalahNotificationsController extends Notifier<void> {
 
   // listen to salah times updates
   void _listenToSalahTimes() {
-    ref.listen(fetchTodaySalahTimesProvider, (_, next) {
+    ref.listen(fetchSalahTimesProvider(DateTime.now()), (_, next) {
       debugPrint("Salah times changed!");
-      next.whenData(_onSalahTimesChanged);
+
+      _onSalahTimesChanged();
     });
   }
 
@@ -57,7 +58,7 @@ class SalahNotificationsController extends Notifier<void> {
       debugPrint("Disabled salahs changed !");
       debugPrint("$disabled");
 
-      _onDisabledPrayersChanged(disabled);
+      _onDisabledPrayersChanged();
     });
   }
 
@@ -79,53 +80,59 @@ class SalahNotificationsController extends Notifier<void> {
       return;
     }
 
-    final times = await ref.read(fetchTodaySalahTimesProvider.future);
-
     // Schedule
-    await _schedule(times);
+    await _cancelAll();
+    await _schedule();
   }
 
   // On salah times changed
-  Future<void> _onSalahTimesChanged(SalahTimesEntity times) async {
+  Future<void> _onSalahTimesChanged() async {
     if (!_notificationsEnabled) {
       await _cancelAll();
       return;
     }
 
     // Schedule
-    await _schedule(times);
+    await _schedule();
   }
 
   // On salah times changed
   Future<void> _onNotificationToggle(bool enabled) async {
     if (!enabled) {
+      // If disabled => cancel all salah notifications
       await _cancelAll();
       return;
     }
 
-    final times = await ref.read(fetchTodaySalahTimesProvider.future);
-    await _schedule(times);
+    await _schedule();
   }
 
-  Future<void> _onDisabledPrayersChanged(Set<SalahPrayer> disabled) async {
+  Future<void> _onDisabledPrayersChanged() async {
     if (!_notificationsEnabled) return;
 
-    final times = await ref.read(fetchTodaySalahTimesProvider.future);
-
-    await salahNotifsService.scheduleForToday(
-      times: times,
-      username: ref.read(userNameProvider),
-      disabled: disabled,
-    );
+    await _cancelAll();
+    await _schedule();
   }
 
   // Helper
-  Future<void> _schedule(SalahTimesEntity times) async {
-    await salahNotifsService.scheduleForToday(
-      times: times,
-      username: ref.read(userNameProvider),
-      disabled: _disabledPrayers,
-    );
+  // Should schedule notifs for 3 days
+  Future<void> _schedule() async {
+    debugPrint("Scheduling Salah notifications for 3 days...");
+
+    final today = DateUtils.dateOnly(DateTime.now());
+
+    for (int i = 0; i < 3; i++) {
+      debugPrint("Scheduling Salah notifications for day ${i + 1}...");
+      
+      final date = today.add(Duration(days: i));
+      final times = await ref.read(fetchSalahTimesProvider(date).future);
+
+      await salahNotifsService.scheduleForDay(
+        times: times,
+        username: ref.read(userNameProvider),
+        disabled: _disabledPrayers,
+      );
+    }
   }
 
   Future<void> _cancelAll() => salahNotifsService.cancelAll();

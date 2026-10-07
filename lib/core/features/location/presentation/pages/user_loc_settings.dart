@@ -119,6 +119,7 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
           isAuto: false,
           country: _country ?? p.country,
         ),
+        date: DateTime.now(),
         method: method,
       );
 
@@ -139,7 +140,7 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
           );
       setState(() => _manualExpanded = true);
 
-      ref.invalidate(fetchTodaySalahTimesProvider);
+      ref.invalidate(fetchSalahTimesProvider);
       RafeeqAnalytics.logFeature("location_set_manual");
     } catch (e) {
       setState(() {
@@ -200,7 +201,7 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
                 return;
               }
 
-              ref.refresh(fetchTodaySalahTimesProvider);
+              ref.refresh(fetchSalahTimesProvider(DateTime.now()));
 
               RafeeqAnalytics.logFeature("location_set_auto");
             },
