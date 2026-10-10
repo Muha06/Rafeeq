@@ -57,101 +57,98 @@ class _AyahTileState extends ConsumerState<AyahTile> {
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
-      child: AppPressableScale(
-        scale: 0.98,
-        child: Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: cs.surface,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              //Controls section
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      '${ayah.surahId}: ${ayahNumber.toString()}',
-                      textAlign: TextAlign.center,
-                      style: theme.textTheme.labelMedium,
-                    ),
-                    const Spacer(),
-
-                    IconButton(
-                      onPressed: _openAyahActionsSheet,
-                      visualDensity: VisualDensity.compact,
-                      icon: Icon(
-                        HugeIconsSolid.menu09,
-                        color: cs.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
-                ),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: cs.surface,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            //Controls section
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(8),
               ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    '${ayah.surahId}: ${ayahNumber.toString()}',
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.labelMedium,
+                  ),
+                  const Spacer(),
 
-              const SizedBox(height: 24),
+                  IconButton(
+                    onPressed: _openAyahActionsSheet,
+                    visualDensity: VisualDensity.compact,
+                    icon: Icon(
+                      HugeIconsSolid.menu09,
+                      color: cs.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            ),
 
-              //Content section
-              Consumer(
-                builder: (context, ref, child) {
-                  final settings = ref.watch(surahSettingsProvider);
+            const SizedBox(height: 24),
 
-                  final showTranslation = settings.showTranslation;
-                  final arabicFontSize = settings.arabicFontSize;
-                  final translationFontSize = settings.translationFontSize;
-                  final wbwMode = settings.wbwMode;
+            //Content section
+            Consumer(
+              builder: (context, ref, child) {
+                final settings = ref.watch(surahSettingsProvider);
 
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // arabic text (right)
-                      wbwMode
-                          ? WbwList(ayah: ayah)
-                          : Align(
-                              alignment: Alignment.centerRight,
-                              child: Text(
-                                ayah.textArabic,
-                                textDirection: TextDirection.rtl,
-                                style: AppTextStyles.quranAyah.copyWith(
-                                  fontSize: arabicFontSize,
-                                  color: cs.onSurface,
-                                ),
+                final showTranslation = settings.showTranslation;
+                final arabicFontSize = settings.arabicFontSize;
+                final translationFontSize = settings.translationFontSize;
+                final wbwMode = settings.wbwMode;
+
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // arabic text (right)
+                    wbwMode
+                        ? WbwList(ayah: ayah)
+                        : Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              ayah.textArabic,
+                              textDirection: TextDirection.rtl,
+                              style: AppTextStyles.quranAyah.copyWith(
+                                fontSize: arabicFontSize,
+                                color: cs.onSurface,
                               ),
                             ),
+                          ),
 
-                      // TRANSLATIONS
-                      if (showTranslation) ...[
-                        const SizedBox(height: 32),
-                        _TranslationSection(
-                          label: 'English',
-                          ayahText: ayah.textEnglish,
-                          translationFontSize: translationFontSize,
-                        ),
-                        const SizedBox(height: 16),
-                      ],
-
-                      //Transliterations
-                      if (settings.showTranslit) ...[
-                        _TranslationSection(
-                          label: 'Transliteration',
-                          ayahText: ayah.transliteration,
-                          translationFontSize: translationFontSize,
-                        ),
-                      ],
+                    // TRANSLATIONS
+                    if (showTranslation) ...[
+                      const SizedBox(height: 32),
+                      _TranslationSection(
+                        label: 'English',
+                        ayahText: ayah.textEnglish,
+                        translationFontSize: translationFontSize,
+                      ),
+                      const SizedBox(height: 16),
                     ],
-                  );
-                },
-              ),
-            ],
-          ),
+
+                    //Transliterations
+                    if (settings.showTranslit) ...[
+                      _TranslationSection(
+                        label: 'Transliteration',
+                        ayahText: ayah.transliteration,
+                        translationFontSize: translationFontSize,
+                      ),
+                    ],
+                  ],
+                );
+              },
+            ),
+          ],
         ),
       ),
     );
@@ -336,7 +333,7 @@ class _AyahActionsSheetState extends ConsumerState<AyahActionsSheet> {
 class WbwList extends ConsumerWidget {
   const WbwList({super.key, required this.ayah});
   final Ayah ayah;
-  
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final wbwAsync = ref.watch(
@@ -382,21 +379,24 @@ class WbwTile extends ConsumerWidget {
       surahSettingsProvider.select((s) => s.arabicFontSize),
     );
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        //ar
-        Text(
-          arabic,
-          style: AppTextStyles.quranAyah.copyWith(
-            fontSize: fontSize,
-            color: cs.onSurface,
+    return AppPressableScale(
+      scale: .9,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          //ar
+          Text(
+            arabic,
+            style: AppTextStyles.quranAyah.copyWith(
+              fontSize: fontSize,
+              color: cs.onSurface,
+            ),
           ),
-        ),
 
-        //en
-        Text(english, style: tt.labelMedium),
-      ],
+          //en
+          Text(english, style: tt.labelMedium),
+        ],
+      ),
     );
   }
 }

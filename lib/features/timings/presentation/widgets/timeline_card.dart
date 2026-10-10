@@ -97,7 +97,7 @@ class _BuildTimelineCard extends ConsumerWidget {
           children: [
             // Background image
             Image.asset(
-              'assets/images/salah/masjid_dark.jpeg',
+              'assets/images/salah/salah_card.png',
               fit: BoxFit.cover,
             ),
 

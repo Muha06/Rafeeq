@@ -18,11 +18,13 @@ class SalahTimingsPage extends ConsumerStatefulWidget {
 }
 
 class _SalahTimingsPageState extends ConsumerState<SalahTimingsPage> {
+  final now = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final timesAsync = ref.watch(fetchSalahTimesProvider(DateTime.now()));
+    final timesAsync = ref.watch(fetchSalahTimesProvider(now));
 
     return timesAsync.when(
       loading: () =>

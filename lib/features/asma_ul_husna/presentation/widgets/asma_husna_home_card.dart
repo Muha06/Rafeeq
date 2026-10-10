@@ -70,10 +70,7 @@ class AsmaulHusnaHomeCard extends ConsumerWidget {
               Center(
                 child: Text(
                   name.transliteration,
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    color: fgColor,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: theme.textTheme.titleSmall?.copyWith(color: fgColor),
                 ),
               ),
 
@@ -83,7 +80,7 @@ class AsmaulHusnaHomeCard extends ConsumerWidget {
                 child: Text(
                   name.translations[AllahNameLanguage.english]!.name,
                   style: theme.textTheme.bodyMedium?.copyWith(
-                    color: cs.onSurface,
+                    // color: cs.onSurface,
                   ),
                 ),
               ),

@@ -12,6 +12,7 @@ import 'package:rafeeq/features/home/presentation/pages/home_page.dart';
 import 'package:rafeeq/features/bookmarks/presentation/pages/bookmark_page.dart';
 import 'package:rafeeq/features/whats_new/presentation/pages/whats_new.dart';
 import 'package:rafeeq/features/whats_new/presentation/providers/whats_new_provider.dart';
+import 'package:rafeeq/core/helpers/in_app_review.dart';
 
 class TabsScreen extends ConsumerStatefulWidget {
   const TabsScreen({super.key});
@@ -46,6 +47,9 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
     await checkNotificationPermission(context: context, ref: ref);
 
     _showWhatsNew();
+
+    const AppReviewService()
+        .requestReview(); // TODO: Use after user has used app
   }
 
   Future<void> _showWhatsNew() async {

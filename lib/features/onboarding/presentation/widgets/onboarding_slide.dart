@@ -55,47 +55,56 @@ class _OnboardingSlideState extends State<OnboardingSlide>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return FadeTransition(
-      opacity: _fade,
-      child: SlideTransition(
-        position: _slide,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 26, 24, 18),
-          child: Column(
-            children: [
-              const Spacer(),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final imageHeight = (constraints.maxHeight * 0.32).clamp(110.0, 250.0);
 
-              // hero image
-              Image.asset(widget.imageAsset, height: 250, fit: BoxFit.contain),
+        return FadeTransition(
+          opacity: _fade,
+          child: SlideTransition(
+            position: _slide,
+            child: SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 26, 24, 18),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        widget.imageAsset,
+                        height: imageHeight,
+                        fit: BoxFit.contain,
+                      ),
 
-              const SizedBox(height: 26),
+                      const SizedBox(height: 26),
 
-              // title
-              Text(
-                widget.title,
-                textAlign: TextAlign.center,
-                style: theme.textTheme.headlineMedium,
+                      Text(
+                        widget.title,
+                        textAlign: TextAlign.center,
+                        style: theme.textTheme.headlineMedium,
+                      ),
+
+                      const SizedBox(height: 20),
+
+                      Text(
+                        widget.subtitle,
+                        textAlign: TextAlign.center,
+                        style: theme.textTheme.bodyMedium,
+                      ),
+                      
+                      if (widget.child != null) ...[
+                        const SizedBox(height: 26),
+                        widget.child!,
+                      ],
+                    ],
+                  ),
+                ),
               ),
-
-              const SizedBox(height: 20),
-
-              // subtitle
-              Text(
-                widget.subtitle,
-                textAlign: TextAlign.center,
-                style: theme.textTheme.bodyMedium,
-              ),
-
-              if (widget.child != null) ...[
-                const SizedBox(height: 26),
-                widget.child!,
-              ],
-
-              const Spacer(flex: 2),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

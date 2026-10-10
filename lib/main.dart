@@ -40,6 +40,7 @@ import 'package:rafeeq/features/quran_goal/data/models/hive/quran_goal_hive.dart
 import 'package:rafeeq/features/quran_goal/data/models/hive/quran_goal_type_hive.dart';
 import 'package:rafeeq/features/quran_goal/data/models/hive/quran_log_hive.dart';
 import 'package:rafeeq/features/quran_goal/data/models/hive/quran_target_unit_hive.dart';
+import 'package:rafeeq/features/timings/data/datasources/salah_bg_worker.dart';
 import 'package:rafeeq/features/timings/data/models/hive/cached_salah_times_hive.dart';
 import 'package:rafeeq/firebase_options.dart';
 import 'package:smooth_sheets/smooth_sheets.dart';
@@ -137,6 +138,8 @@ void main() {
       final quranDbsManager = QuranDatabaseManager();
       await quranDbsManager.init();
 
+      await SalahBackgroundWorker().initialize();
+      
       runApp(
         ProviderScope(
           overrides: [

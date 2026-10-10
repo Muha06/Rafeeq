@@ -64,7 +64,7 @@ class _CreateGoalSlideState extends ConsumerState<CreateGoalSlide> {
                             crossAxisCount: 2,
                             crossAxisSpacing: 12,
                             mainAxisSpacing: 16,
-                            childAspectRatio: 1,
+                            childAspectRatio: 0.9,
                           ),
                       itemBuilder: (context, index) {
                         final goal = goals[index];

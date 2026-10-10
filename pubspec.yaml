@@ -79,6 +79,8 @@ dependencies:
   flutter_widget_from_html: ^0.17.4
   geocoding: ^5.0.0
   flutter_compass_v2: ^1.0.3
+  workmanager: ^0.10.10
+  in_app_review: ^2.0.12
 
 dev_dependencies:
   flutter_test:

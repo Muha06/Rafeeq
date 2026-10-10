@@ -6,8 +6,7 @@ import 'package:timezone/timezone.dart' as tz;
 
 class LocalNotificationService {
   LocalNotificationService();
-  // static final instance = LocalNotificationService._(); // Instance
-
+ 
   final _plugin = FlutterLocalNotificationsPlugin(); // Plugin
 
   FlutterLocalNotificationsPlugin get plugin => _plugin;
@@ -16,6 +15,7 @@ class LocalNotificationService {
     hour: 9,
     minute: 0,
   );
+
   static const String _channelId = 'rafeeq_salah_adhan_v5';
   static const _adhanChannelName = 'Salah (Adhan)';
   static const _adhanDescription = 'Salah notifications with adhan sound';

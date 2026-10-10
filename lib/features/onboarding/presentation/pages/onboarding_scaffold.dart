@@ -149,7 +149,7 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
             Expanded(
               child: PageView(
                 controller: _pageController,
-                // physics: const NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 onPageChanged: (i) => {
                   FocusScope.of(context).unfocus(),
 
