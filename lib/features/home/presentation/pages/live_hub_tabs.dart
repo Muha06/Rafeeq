@@ -16,7 +16,6 @@ class _LiveHubTabsState extends State<LiveHubTabs> {
     return DefaultTabController(
       length: 2,
       child: SafeArea(
-        // top: false,
         bottom: false,
         child: Scaffold(
           body: NestedScrollView(

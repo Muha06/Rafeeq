@@ -157,16 +157,8 @@ class AllSalatTimingsCard extends StatelessWidget {
         ClipRRect(
           borderRadius: BorderRadius.circular(14),
           child: Image.asset(
-            'assets/images/salah/masjid_dark.jpeg',
+            'assets/images/salah/salah_card.png',
             fit: BoxFit.cover,
-          ),
-        ),
-
-        //DARK OVERLAY
-        DecoratedBox(
-          decoration: BoxDecoration(
-            color: Colors.black38,
-            borderRadius: BorderRadius.circular(14),
           ),
         ),
 
@@ -179,14 +171,14 @@ class AllSalatTimingsCard extends StatelessWidget {
                 final isCurrent = p == current;
 
                 final lightColors = isCurrent
-                    ? Colors.amber
+                    ? cs.tertiary
                     : cs.onPrimary.withAlpha(200);
-                final lightColors2 = isCurrent ? Colors.amber : cs.onPrimary;
+                final lightColors2 = isCurrent ? cs.tertiary : cs.onPrimary;
 
                 final darkColors = isCurrent
-                    ? Colors.amber
+                    ? cs.tertiary
                     : cs.onSurface.withAlpha(200);
-                final darkColors2 = isCurrent ? Colors.amber : cs.onSurface;
+                final darkColors2 = isCurrent ? cs.tertiary : cs.onSurface;
 
                 final isDark = theme.brightness == Brightness.dark;
 

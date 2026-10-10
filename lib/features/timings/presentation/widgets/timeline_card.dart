@@ -6,6 +6,7 @@ import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/constants/strings/app_strings.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/salat_times.dart';
+import 'package:rafeeq/core/widgets/app_pressable.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_prayer.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_status.dart';
 import 'package:rafeeq/features/timings/presentation/pages/timings_pages.dart';
@@ -83,13 +84,21 @@ class _BuildTimelineCard extends ConsumerWidget {
     final currentStart = status.currentStart;
     final next = status.next;
 
-    return GestureDetector(
+    return AppPressableScale(
+      scale: 0.98,
       onTap: () => AppNav.push(context, const SalahTimingsPage()),
       child: Container(
         height: 120,
         decoration: BoxDecoration(
           color: cs.primary.withAlpha(160),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: cs.shadow.withValues(alpha: 0.08),
+              blurRadius: 16,
+              offset: const Offset(0, 8),
+            ),
+          ],
         ),
         clipBehavior: Clip.antiAlias,
         child: Stack(
@@ -101,8 +110,16 @@ class _BuildTimelineCard extends ConsumerWidget {
               fit: BoxFit.cover,
             ),
 
-            const DecoratedBox(
-              decoration: BoxDecoration(color: Colors.black38),
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.bottomLeft,
+                    end: Alignment.topRight,
+                    colors: [cs.shadow.withValues(alpha: 0.25), cs.shadow],
+                  ),
+                ),
+              ),
             ),
 
             // Content

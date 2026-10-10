@@ -87,7 +87,7 @@ class MyBottomBar extends ConsumerWidget {
         SafeArea(
           top: false,
           child: Container(
-            height: 72,
+            height: 84,
             padding: const EdgeInsets.symmetric(horizontal: 2),
             decoration: BoxDecoration(
               color: theme.bottomNavigationBarTheme.backgroundColor,

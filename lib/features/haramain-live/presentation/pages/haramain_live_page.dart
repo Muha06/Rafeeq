@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:rafeeq/core/constants/spacing/app_spacing.dart';
-import 'package:rafeeq/core/widgets/my_chip.dart';
+import 'package:rafeeq/features/haramain-live/presentation/widgets/haramain_video_player.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
@@ -166,6 +165,7 @@ class _HaramainLivePageState extends State<HaramainLivePage> {
           child: Row(
             children: [
               ChoiceChip(
+                padding: const EdgeInsets.all(12),
                 label: Text(
                   'Makkah',
                   style: theme.chipTheme.labelStyle?.copyWith(
@@ -188,6 +188,7 @@ class _HaramainLivePageState extends State<HaramainLivePage> {
                     color: isMadinah ? cs.onPrimary : cs.onSurfaceVariant,
                   ),
                 ),
+                padding: const EdgeInsets.all(12),
                 selected: isMadinah,
                 backgroundColor: isMadinah ? cs.primary : cs.surface,
                 onSelected: (_) {
@@ -200,14 +201,6 @@ class _HaramainLivePageState extends State<HaramainLivePage> {
 
         const SizedBox(height: AppSpacing.xxxl),
 
-        MyChip(
-          borderRadius: 4,
-          backgroundColor: cs.tertiary,
-          child: const Text(
-            'Please note that the Haramain livestream may occasionally be unstable.',
-          ),
-        ),
-
         _error != null
             ? _buildError()
             : isLoading
@@ -219,19 +212,21 @@ class _HaramainLivePageState extends State<HaramainLivePage> {
             : (_controller != null && _controller!.value.isInitialized)
             ? Padding(
                 padding: const EdgeInsets.all(8.0),
-                child:
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: AspectRatio(
-                        aspectRatio: _controller!.value.aspectRatio,
-                        child: VideoPlayer(_controller!),
+                child: Column(
+                  children: [
+                    HaramainVideoPlayer(controller: _controller!),
+
+                    const SizedBox(height: 16),
+
+                    Text(
+                      'Please note that the Haramain livestream may occasionally be unstable.',
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.labelMedium?.copyWith(
+                        color: cs.onSurfaceVariant,
                       ),
-                    ).animate().scale(
-                      begin: const Offset(0.95, 0.95),
-                      end: const Offset(1.0, 1.0),
-                      duration: const Duration(milliseconds: 500),
-                      curve: Curves.easeOutBack,
                     ),
+                  ],
+                ),
               )
             : const CircularProgressIndicator(),
       ],
