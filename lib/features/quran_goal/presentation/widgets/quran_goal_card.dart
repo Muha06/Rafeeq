@@ -41,8 +41,8 @@ class QuranReadingPlanCard extends ConsumerWidget {
           boxShadow: [
             BoxShadow(
               color: cs.shadow.withValues(alpha: 0.08),
-              blurRadius: 16,
-              offset: const Offset(0, 8),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
             ),
           ],
         ),
@@ -64,8 +64,8 @@ class QuranReadingPlanCard extends ConsumerWidget {
                       begin: Alignment.bottomLeft,
                       end: Alignment.topRight,
                       colors: [
-                        cs.shadow.withValues(alpha: 0.65),
-                        cs.shadow.withValues(alpha: 0.25),
+                        Colors.black.withValues(alpha: 0.65),
+                        Colors.black.withValues(alpha: 0.25),
                       ],
                     ),
                   ),

@@ -119,7 +119,7 @@ class _GLobalMiniPlayerSheetState extends ConsumerState<GLobalMiniPlayerSheet> {
                     ),
                     const SizedBox(width: 12),
                   ] else ...[
-                    const Icon(HugeIconsSolid.audioWave02, size: 48),
+                    const Icon(HugeIconsStroke.audioWave02, size: 48),
                     const SizedBox(width: 12),
                   ],
 
@@ -138,16 +138,20 @@ class _GLobalMiniPlayerSheetState extends ConsumerState<GLobalMiniPlayerSheet> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  TextScroll(
-                                    key: ValueKey(sourceType),
-                                    title ?? 'Now playing',
-                                    intervalSpaces: 16,
-                                    velocity: const Velocity(
-                                      pixelsPerSecond: Offset(20, 0),
-                                    ),
-                                    textAlign: TextAlign.left,
-                                    style: theme.textTheme.titleSmall?.copyWith(
-                                      fontSize: 14,
+                                  SizedBox(
+                                    height: 20,
+                                    child: ClipRect(
+                                      child: TextScroll(
+                                        key: ValueKey(sourceType),
+                                        title ?? 'Now playing',
+                                        intervalSpaces: 16,
+                                        velocity: const Velocity(
+                                          pixelsPerSecond: Offset(20, 0),
+                                        ),
+                                        textAlign: TextAlign.left,
+                                        style: theme.textTheme.titleSmall
+                                            ?.copyWith(fontSize: 14),
+                                      ),
                                     ),
                                   ),
 
@@ -169,15 +173,18 @@ class _GLobalMiniPlayerSheetState extends ConsumerState<GLobalMiniPlayerSheet> {
 
                             // ACTIONS
                             isBuffering
-                                ? const CupertinoActivityIndicator()
+                                ? const Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: CupertinoActivityIndicator(),
+                                  )
                                 : IconButton(
                                     onPressed: () {
                                       isPlaying ? ctrl.pause() : ctrl.play();
                                     },
                                     icon: Icon(
                                       isPlaying
-                                          ? HugeIconsStroke.pause
-                                          : PhosphorIcons.play,
+                                          ? HugeIconsSolid.pause
+                                          : PhosphorIconsBold.play,
                                       size: controlsIconSize,
                                       color: cs.onSurface,
                                     ),
@@ -204,7 +211,7 @@ class _GLobalMiniPlayerSheetState extends ConsumerState<GLobalMiniPlayerSheet> {
                                     ?.hideCurrentSnackBar();
                               },
                               icon: Icon(
-                                HugeIconsStroke.cancel01,
+                                HugeIconsSolid.cancel01,
                                 size: controlsIconSize,
                                 color: cs.onSurface,
                               ),

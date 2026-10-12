@@ -300,10 +300,11 @@ class _BottomNavBar extends ConsumerWidget {
                           : HugeIconsStroke.play,
 
                       label: isPlaying ? 'Stop' : 'Play',
+                      
                       onTap: () async {
                         final item = AudioItem(
                           id: dhikr.id,
-                          title: dhikr.transliteration ?? 'adhkar',
+                          title: dhikr.title,
                           sourceType: AudioSourceType.adhkar,
                           url: dhikr.audioUrl!,
                         );

@@ -6,6 +6,11 @@ const currentWhatsNewVersion = '0.1.0'; // Version of this release
 
 const whatsNewItems = [
   WhatsNewItem(
+    icon: HugeIconsSolid.kaaba01,
+    title: 'Haramain mini player',
+    description: 'Watch Makkah and Madinah livestreams while browsing other parts of Rafeeq.',
+  ),
+  WhatsNewItem(
     icon: HugeIconsSolid.quran01,
     title: 'Quran Word by Word',
     description: 'Explore the Quran with our new Word by Word feature, providing detailed insights and translations for each word.',
@@ -22,9 +27,8 @@ const whatsNewItems = [
   ),
   WhatsNewItem(
     icon: HugeIconsSolid.text,
-    title: 'Font improvements',
-    description:
-        'Fixed font issues and improved text consistency across the app.',
+    title: 'UI improvements',
+    description: 'Improved typography, text consistency, and overall readability throughout the app.',
   ),
   WhatsNewItem(
     icon: PhosphorIcons.bug,

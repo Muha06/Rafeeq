@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/widgets/app_drag_handle.dart';
+import 'package:rafeeq/core/widgets/my_chip.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/quran_audio/presentation/providers/reciters_provider.dart';
 import 'package:rafeeq/features/quran_audio/presentation/widgets/reciter_picker_sheet.dart';
@@ -17,6 +18,7 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final cs = theme.colorScheme;
 
     final s = ref.watch(surahSettingsProvider);
     final sNotifier = ref.read(surahSettingsProvider.notifier);
@@ -84,7 +86,21 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
             const SizedBox(height: 4),
 
             SwitchListTile(
-              title: const Text('Word by word'),
+              title: Row(
+                children: [
+                  const Text('Word by word'),
+
+                  MyChip(
+                    backgroundColor: cs.tertiaryContainer,
+                    child: Text(
+                      'New',
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: cs.onTertiaryContainer,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               value: wbwMode,
               onChanged: (value) {
                 sNotifier.setWbwMode(value);
@@ -119,7 +135,7 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
               },
             ),
 
-            const SizedBox(height: 4),
+            const SizedBox(height: 8),
 
             // Font size slider (Arabic)
             _LabelValueRow(
