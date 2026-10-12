@@ -16,9 +16,9 @@ class AppDialogs {
 
     return showDialog<bool>(
       context: context,
-      builder: (dialogContext) => Dialog(
+      builder: (dialogContext) => Dialog( 
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 38),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

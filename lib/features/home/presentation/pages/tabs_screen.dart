@@ -1,9 +1,14 @@
+import 'package:floating_draggable_widget/floating_draggable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/app/providers/tabs_screen_provider.dart';
 import 'package:rafeeq/core/helpers/app_haptics.dart';
+import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/request_notification.dart';
+import 'package:rafeeq/features/haramain-live/presentation/pages/haramain_fullscreen.dart';
+import 'package:rafeeq/features/haramain-live/presentation/provider/haramain_player_provider.dart';
+import 'package:rafeeq/features/haramain-live/presentation/widgets/haramain_floating_player.dart';
 import 'package:rafeeq/features/home/presentation/pages/live_hub_tabs.dart';
 import 'package:rafeeq/features/home/presentation/widgets/bottom_bar.dart';
 import 'package:rafeeq/features/adhkar/presentation/pages/adhkar_category_page.dart';
@@ -70,23 +75,69 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
   Widget build(BuildContext context) {
     final selectedIndex = ref.watch(tabsScreenIndexProvider);
 
-    return SafeArea(
+    ref.listen(tabsScreenIndexProvider, (previousIndex, currentIndex) {
+      if (previousIndex == 3 && currentIndex != 3) {
+        ref.read(haramainPlayerProvider.notifier).showPlayer();
+      }
+    });
+
+    final screen = SafeArea(
       top: false,
       child: Scaffold(
         body: SafeArea(top: false, child: _pages[selectedIndex]),
         bottomNavigationBar: MyBottomBar(
           currentIndex: selectedIndex,
           onTap: (value) async {
-            setState(() {
-              ref.read(tabsScreenIndexProvider.notifier).state = value;
-            });
-
             if (selectedIndex == value) return;
 
+            ref.read(tabsScreenIndexProvider.notifier).state = value;
             AppHaptics.selection();
           },
         ),
       ),
+    );
+
+    return _HaramainPlayerLayer(screen: screen);
+  }
+}
+
+class _HaramainPlayerLayer extends ConsumerWidget {
+  const _HaramainPlayerLayer({required this.screen});
+
+  final Widget screen;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final player = ref.watch(haramainPlayerProvider);
+    final controller = player.controller;
+    final isMiniPlayerVisible =
+        player.isVisible &&
+        controller != null &&
+        controller.value.isInitialized;
+    final size = MediaQuery.sizeOf(context);
+
+    return FloatingDraggableWidget(
+      mainScreenWidget: screen,
+      floatingWidget: isMiniPlayerVisible
+          ? HaramainFloatingPlayer(
+              controller: controller,
+              onClose: () {
+                ref.read(haramainPlayerProvider.notifier).stop();
+              },
+              onFullscreen: () {
+                AppNav.push(
+                  context,
+                  HaramainFullscreenPage(controller: controller),
+                );
+              },
+            )
+          : const SizedBox.shrink(),
+      floatingWidgetWidth: 220,
+      floatingWidgetHeight: 124,
+      dx: (size.width - 236).clamp(0.0, double.infinity).toDouble(),
+      dy: (size.height - 260).clamp(0.0, double.infinity).toDouble(),
+      autoAlign: true,
+      disableBounceAnimation: true,
     );
   }
 }

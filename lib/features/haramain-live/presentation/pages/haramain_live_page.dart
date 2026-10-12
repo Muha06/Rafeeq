@@ -1,161 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:rafeeq/core/constants/spacing/app_spacing.dart';
+import 'package:rafeeq/features/haramain-live/presentation/provider/haramain_player_provider.dart';
 import 'package:rafeeq/features/haramain-live/presentation/widgets/haramain_video_player.dart';
-import 'package:video_player/video_player.dart';
-import 'package:wakelock_plus/wakelock_plus.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HaramainLivePage extends StatefulWidget {
-  const HaramainLivePage({super.key});
+class HaramainLivePage extends ConsumerStatefulWidget {
+  const HaramainLivePage({super.key, this.startOnOpen = true});
+
+  final bool startOnOpen;
 
   @override
-  State<HaramainLivePage> createState() => _HaramainLivePageState();
+  ConsumerState<HaramainLivePage> createState() => _HaramainLivePageState();
 }
 
-class _HaramainLivePageState extends State<HaramainLivePage> {
-  VideoPlayerController? _controller;
-
-  int _selectedIndex = 0;
-
-  String? _error;
-  bool isLoading = true;
-  String _currentUrl = makkahLive;
-  int _retryCount = 0;
-  bool _isRetrying = false;
-  static const makkahLive = 'https://win.holol.com/live/quran/playlist.m3u8';
-  static const madinahLive = 'https://win.holol.com/live/sunnah/playlist.m3u8';
-
+class _HaramainLivePageState extends ConsumerState<HaramainLivePage> {
   @override
   void initState() {
     super.initState();
 
-    _initController(_currentUrl);
+    if (!widget.startOnOpen) return;
 
-    WakelockPlus.enable();
-  }
-
-  Future<void> _initController(String url) async {
-    setState(() {
-      isLoading = true;
-      _error = null;
-    });
-
-    try {
-      final newController = VideoPlayerController.networkUrl(Uri.parse(url));
-
-      await newController.initialize();
-
-      if (!mounted || url != _currentUrl) {
-        await newController.dispose();
-        return;
-      }
-
-      // Dispose old controller safely
-      if (_controller != null) {
-        await _controller!.dispose();
-      }
-
-      // Always attach listener to NEW controller
-      final controller = newController;
-
-      controller.addListener(() {
-        final error = controller.value.errorDescription;
-
-        if (error != null && error.isNotEmpty) {
-          if (_error == null) {
-            setState(() {
-              _error = "Stream interrupted...";
-              isLoading = false;
-            });
-
-            _autoReconnect(_currentUrl);
-          }
-        }
-      });
-
-      _controller = controller;
-
-      await _controller?.play();
-
-      setState(() {
-        isLoading = false;
-        _error = null;
-        _retryCount = 0;
-        _isRetrying = false;
-      });
-    } catch (e) {
+    Future.microtask(() {
       if (!mounted) return;
-      setState(() {
-        _error = "Stream dropped. Reconnecting...";
-        isLoading = false;
-      });
 
-      debugPrint('Error $e');
-      _autoReconnect(url);
-    }
-  }
-
-  Future<void> _autoReconnect(String url) async {
-    if (_isRetrying) return;
-
-    _isRetrying = true;
-
-    final delay = Duration(seconds: (_retryCount * 2).clamp(2, 10));
-
-    await Future.delayed(delay);
-
-    if (!mounted || url != _currentUrl) {
-      _isRetrying = false; // 🔥 MUST reset here
-      return;
-    }
-
-    _retryCount++;
-
-    await _initController(url);
-
-    _isRetrying = false; // 🔥 always reset after attempt
-  }
-
-  Future<void> _switchStream(int index, String url) async {
-    if (_selectedIndex == index) return;
-
-    setState(() {
-      _selectedIndex = index;
-      _currentUrl = url;
+      final notifier = ref.read(haramainPlayerProvider.notifier);
+      notifier.start();
     });
-
-    await _initController(url);
   }
 
-  @override
-  void dispose() {
-    _controller?.dispose();
-    WakelockPlus.disable();
-    super.dispose();
-  }
+  Widget _buildError(String error) {
+    final notifier = ref.read(haramainPlayerProvider.notifier);
 
-  Widget _buildError() {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         const Icon(Icons.wifi_off, size: 40),
         const SizedBox(height: 10),
-        Text(_error!, textAlign: TextAlign.center),
+        Text(error, textAlign: TextAlign.center),
         const SizedBox(height: 12),
-        TextButton(
-          onPressed: () => _initController(_currentUrl),
-          child: const Text('Retry'),
-        ),
+        TextButton(onPressed: notifier.retry, child: const Text('Retry')),
       ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final player = ref.watch(haramainPlayerProvider);
+    final notifier = ref.read(haramainPlayerProvider.notifier);
+
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
-    final isMakkah = _selectedIndex == 0;
-    final isMadinah = !isMakkah;
+    final isMakkah = player.selectedIndex == 0;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -173,62 +69,55 @@ class _HaramainLivePageState extends State<HaramainLivePage> {
                   ),
                 ),
                 selected: isMakkah,
-                backgroundColor: _selectedIndex == 0 ? cs.primary : cs.surface,
-                onSelected: (_) {
-                  _switchStream(0, makkahLive);
-                },
+                backgroundColor: isMakkah ? cs.primary : cs.surface,
+                onSelected: (_) => notifier.switchStream(0),
               ),
-
               const SizedBox(width: 8),
-
               ChoiceChip(
+                padding: const EdgeInsets.all(12),
                 label: Text(
                   'Madinah',
                   style: theme.chipTheme.labelStyle?.copyWith(
-                    color: isMadinah ? cs.onPrimary : cs.onSurfaceVariant,
+                    color: !isMakkah ? cs.onPrimary : cs.onSurfaceVariant,
                   ),
                 ),
-                padding: const EdgeInsets.all(12),
-                selected: isMadinah,
-                backgroundColor: isMadinah ? cs.primary : cs.surface,
-                onSelected: (_) {
-                  _switchStream(1, madinahLive);
-                },
+                selected: !isMakkah,
+                backgroundColor: !isMakkah ? cs.primary : cs.surface,
+                onSelected: (_) => notifier.switchStream(1),
               ),
             ],
           ),
         ),
-
         const SizedBox(height: AppSpacing.xxxl),
-
-        _error != null
-            ? _buildError()
-            : isLoading
-            ? const SizedBox(
-                height: 24,
-                width: 24,
-                child: CircularProgressIndicator(),
-              )
-            : (_controller != null && _controller!.value.isInitialized)
-            ? Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    HaramainVideoPlayer(controller: _controller!),
-
-                    const SizedBox(height: 16),
-
-                    Text(
-                      'Please note that the Haramain livestream may occasionally be unstable.',
-                      textAlign: TextAlign.center,
-                      style: theme.textTheme.labelMedium?.copyWith(
-                        color: cs.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
+        
+        if (player.error != null)
+          _buildError(player.error!)
+        else if (player.isLoading)
+          const SizedBox(
+            height: 24,
+            width: 24,
+            child: CircularProgressIndicator(),
+          )
+        else if (player.controller case final controller?
+            when controller.value.isInitialized)
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              children: [
+                HaramainVideoPlayer(controller: controller),
+                const SizedBox(height: 16),
+                Text(
+                  'Please note that the Haramain livestream may occasionally be unstable.',
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.labelMedium?.copyWith(
+                    color: cs.onSurfaceVariant,
+                  ),
                 ),
-              )
-            : const CircularProgressIndicator(),
+              ],
+            ),
+          )
+        else
+          const CircularProgressIndicator(),
       ],
     );
   }

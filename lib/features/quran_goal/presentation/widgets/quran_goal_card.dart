@@ -52,7 +52,7 @@ class QuranReadingPlanCard extends ConsumerWidget {
             children: [
               Positioned.fill(
                 child: Image.asset(
-                  'assets/images/quran/quran_goal_card_2.png',
+                  'assets/images/quran/quran_goal_card.png',
                   fit: BoxFit.cover,
                 ),
               ),

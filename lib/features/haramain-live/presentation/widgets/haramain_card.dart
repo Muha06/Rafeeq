@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/features/haramain-live/presentation/pages/haramain_live_page.dart';
+import 'package:rafeeq/features/haramain-live/presentation/provider/haramain_player_provider.dart';
 import 'package:rafeeq/features/quran_radio/presentation/pages/radios_list_page.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
 
@@ -41,7 +42,6 @@ class LiveHubCard extends ConsumerWidget {
             ],
           ),
 
-        
           const SizedBox(height: 16),
 
           // HARAMAIN
@@ -50,6 +50,7 @@ class LiveHubCard extends ConsumerWidget {
             subtitle: 'Makkah • Madinah live',
             icon: HugeIconsStroke.mosque05,
             onTap: () {
+              ref.read(haramainPlayerProvider.notifier).showPlayer();
               AppNav.push(
                 context,
                 const HaramainLivePage(),

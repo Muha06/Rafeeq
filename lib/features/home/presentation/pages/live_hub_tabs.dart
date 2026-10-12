@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/helpers/extensions/page_animate_ext.dart';
 import 'package:rafeeq/features/haramain-live/presentation/pages/haramain_live_page.dart';
+import 'package:rafeeq/features/haramain-live/presentation/provider/haramain_player_provider.dart';
 import 'package:rafeeq/features/quran_radio/presentation/pages/radios_list_page.dart';
 
-class LiveHubTabs extends StatefulWidget {
+class LiveHubTabs extends ConsumerStatefulWidget {
   const LiveHubTabs({super.key});
 
   @override
-  State<LiveHubTabs> createState() => _LiveHubTabsState();
+  ConsumerState<LiveHubTabs> createState() => _LiveHubTabsState();
 }
 
-class _LiveHubTabsState extends State<LiveHubTabs> {
+class _LiveHubTabsState extends ConsumerState<LiveHubTabs> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -31,8 +33,20 @@ class _LiveHubTabsState extends State<LiveHubTabs> {
                 SliverPersistentHeader(
                   pinned: true,
                   delegate: _TabBarDelegate(
-                    const TabBar(
-                      tabs: [
+                    TabBar(
+                      onTap: (index) {
+                        final notifier = ref.read(
+                          haramainPlayerProvider.notifier,
+                        );
+
+                        if (index == 1) {
+                          notifier.hidePlayer();
+                          notifier.start();
+                        } else {
+                          notifier.showPlayer();
+                        }
+                      },
+                      tabs: const [
                         Tab(text: 'Radio'),
                         Tab(text: 'Haramain'),
                       ],
@@ -43,7 +57,7 @@ class _LiveHubTabsState extends State<LiveHubTabs> {
             },
             body: const TabBarView(
               physics: NeverScrollableScrollPhysics(),
-              children: [RadioListPage(), HaramainLivePage()],
+              children: [RadioListPage(), HaramainLivePage(startOnOpen: false)],
             ),
           ),
         ),
