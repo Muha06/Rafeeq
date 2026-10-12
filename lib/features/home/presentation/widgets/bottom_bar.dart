@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
+import 'package:rafeeq/core/features/audio/domain/entities/audio_source_type.dart';
 import 'package:rafeeq/core/features/audio/presentation/providers/audio_controller.dart';
 import 'package:rafeeq/core/features/audio/presentation/widgets/global_mini_player.dart';
 
@@ -53,31 +54,39 @@ class MyBottomBar extends ConsumerWidget {
 
     final hasAudio = s.currentId != null && s.currentId!.isNotEmpty;
 
-    final miniPlayer = AnimatedSwitcher(
-      duration: const Duration(milliseconds: 300),
-      switchInCurve: Curves.easeOutCubic,
-      switchOutCurve: Curves.easeInCubic,
-      transitionBuilder: (child, animation) {
-        return FadeTransition(
-          opacity: animation,
-          child: SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(0, 0.3),
-              end: Offset.zero,
-            ).animate(animation),
-            child: child,
-          ),
-        );
-      },
-      child: hasAudio
-          ? const GLobalMiniPlayerSheet(key: ValueKey('mini-player'))
-          : const SizedBox.shrink(key: ValueKey('empty')),
-    );
+    final isHiddenSourceType =
+        s.sourceType == AudioSourceType.haramainLive ||
+        s.sourceType == AudioSourceType.allahName;
+        
+    final shouldShowMiniPlayer = hasAudio && !isHiddenSourceType;
+
+    final miniPlayer = shouldShowMiniPlayer
+        ? AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            switchInCurve: Curves.easeOutCubic,
+            switchOutCurve: Curves.easeInCubic,
+            transitionBuilder: (child, animation) {
+              return FadeTransition(
+                opacity: animation,
+                child: SlideTransition(
+                  position: Tween<Offset>(
+                    begin: const Offset(0, 0.3),
+                    end: Offset.zero,
+                  ).animate(animation),
+                  child: child,
+                ),
+              );
+            },
+            child: hasAudio
+                ? const GLobalMiniPlayerSheet(key: ValueKey('mini-player'))
+                : const SizedBox.shrink(key: ValueKey('empty')),
+          )
+        : null;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (hasAudio) ...[
+        if (shouldShowMiniPlayer) ...[
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
             child: miniPlayer,

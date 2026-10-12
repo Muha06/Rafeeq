@@ -1,5 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/core/features/audio/domain/entities/audio_item.dart';
+import 'package:rafeeq/core/features/audio/domain/entities/audio_source_type.dart';
+import 'package:rafeeq/core/features/audio/presentation/providers/audio_controller.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
@@ -10,6 +13,7 @@ class HaramainPlayerState {
     this.error,
     this.isLoading = true,
     this.isVisible = false,
+    this.isHaramainTabActive = false,
   });
 
   final VideoPlayerController? controller;
@@ -17,6 +21,7 @@ class HaramainPlayerState {
   final String? error;
   final bool isLoading;
   final bool isVisible;
+  final bool isHaramainTabActive;
 
   String get currentUrl => selectedIndex == 0 ? makkahLive : madinahLive;
 
@@ -31,6 +36,7 @@ class HaramainPlayerState {
     bool clearError = false,
     bool? isLoading,
     bool? isVisible,
+    bool? isHaramainTabActive,
   }) {
     return HaramainPlayerState(
       controller: clearController ? null : controller ?? this.controller,
@@ -38,6 +44,7 @@ class HaramainPlayerState {
       error: clearError ? null : error ?? this.error,
       isLoading: isLoading ?? this.isLoading,
       isVisible: isVisible ?? this.isVisible,
+      isHaramainTabActive: isHaramainTabActive ?? this.isHaramainTabActive,
     );
   }
 }
@@ -81,6 +88,22 @@ class HaramainPlayerNotifier extends Notifier<HaramainPlayerState> {
     }
 
     await _initController(state.currentUrl);
+
+    // Android controls
+    await _play();
+  }
+
+  Future<void> _play() async {
+    final title = state.currentUrl.contains('quran') ? 'Makkah' : 'Madinah';
+
+    final item = AudioItem(
+      id: state.currentUrl,
+      title: title,
+      url: state.currentUrl,
+      sourceType: AudioSourceType.haramainLive,
+    );
+
+    await ref.read(audioControllerProvider.notifier).togglePlay(item: item);
   }
 
   Future<void> _initController(String url) async {
@@ -192,6 +215,8 @@ class HaramainPlayerNotifier extends Notifier<HaramainPlayerState> {
     _isRetrying = false;
 
     await _initController(state.currentUrl);
+
+    await _play();
   }
 
   Future<void> retry() async {
@@ -222,6 +247,8 @@ class HaramainPlayerNotifier extends Notifier<HaramainPlayerState> {
       if (controller != null) controller.dispose(),
       WakelockPlus.disable(),
     ]);
+
+    await ref.read(audioControllerProvider.notifier).stop();
   }
 
   void hidePlayer() {
@@ -230,5 +257,9 @@ class HaramainPlayerNotifier extends Notifier<HaramainPlayerState> {
 
   void showPlayer() {
     state = state.copyWith(isVisible: true);
+  }
+
+  void setHaramainTabActive(bool isActive) {
+    state = state.copyWith(isHaramainTabActive: isActive, isVisible: !isActive);
   }
 }

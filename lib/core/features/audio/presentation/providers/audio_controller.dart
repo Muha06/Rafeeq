@@ -54,8 +54,7 @@ class AudioController extends Notifier<AudioState> {
       await _handler.load(item: item);
 
       await _handler.setSingleTrackLoop(state.isRepeatEnabled);
-
-     } catch (e, st) {
+    } catch (e, st) {
       debugPrint('Audio load failed: $e');
       debugPrint('$st');
       state = oldState;
@@ -131,6 +130,7 @@ class AudioController extends Notifier<AudioState> {
 
   Future<void> seek(Duration position) async {
     state = state.copyWith(isSeekingAudio: true);
+    
     try {
       await _handler.seek(position);
     } catch (e) {

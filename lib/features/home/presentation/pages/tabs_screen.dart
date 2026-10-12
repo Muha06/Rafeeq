@@ -110,6 +110,7 @@ class _HaramainPlayerLayer extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final player = ref.watch(haramainPlayerProvider);
     final controller = player.controller;
+
     final isMiniPlayerVisible =
         player.isVisible &&
         controller != null &&

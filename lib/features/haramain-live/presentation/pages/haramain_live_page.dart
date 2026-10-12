@@ -53,72 +53,88 @@ class _HaramainLivePageState extends ConsumerState<HaramainLivePage> {
 
     final isMakkah = player.selectedIndex == 0;
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-          child: Row(
-            children: [
-              ChoiceChip(
-                padding: const EdgeInsets.all(12),
-                label: Text(
-                  'Makkah',
-                  style: theme.chipTheme.labelStyle?.copyWith(
-                    color: isMakkah ? cs.onPrimary : cs.onSurfaceVariant,
-                  ),
-                ),
-                selected: isMakkah,
-                backgroundColor: isMakkah ? cs.primary : cs.surface,
-                onSelected: (_) => notifier.switchStream(0),
-              ),
-              const SizedBox(width: 8),
-              ChoiceChip(
-                padding: const EdgeInsets.all(12),
-                label: Text(
-                  'Madinah',
-                  style: theme.chipTheme.labelStyle?.copyWith(
-                    color: !isMakkah ? cs.onPrimary : cs.onSurfaceVariant,
-                  ),
-                ),
-                selected: !isMakkah,
-                backgroundColor: !isMakkah ? cs.primary : cs.surface,
-                onSelected: (_) => notifier.switchStream(1),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: AppSpacing.xxxl),
-        
-        if (player.error != null)
-          _buildError(player.error!)
-        else if (player.isLoading)
-          const SizedBox(
-            height: 24,
-            width: 24,
-            child: CircularProgressIndicator(),
-          )
-        else if (player.controller case final controller?
-            when controller.value.isInitialized)
+    return RefreshIndicator(
+      onRefresh: () {
+        final notifier = ref.read(haramainPlayerProvider.notifier);
+        return notifier.retry();
+      },
+      child: ListView(
+        // mainAxisSize: MainAxisSize.min,
+        children: [
           Padding(
-            padding: const EdgeInsets.all(8),
-            child: Column(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            child: Row(
               children: [
-                HaramainVideoPlayer(controller: controller),
-                const SizedBox(height: 16),
-                Text(
-                  'Please note that the Haramain livestream may occasionally be unstable.',
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.labelMedium?.copyWith(
-                    color: cs.onSurfaceVariant,
+                ChoiceChip(
+                  padding: const EdgeInsets.all(12),
+                  label: Text(
+                    'Makkah',
+                    style: theme.chipTheme.labelStyle?.copyWith(
+                      color: isMakkah ? cs.onPrimary : cs.onSurfaceVariant,
+                    ),
                   ),
+                  selected: isMakkah,
+                  backgroundColor: isMakkah ? cs.primary : cs.surface,
+                  onSelected: (_) => notifier.switchStream(0),
+                ),
+                const SizedBox(width: 8),
+                ChoiceChip(
+                  padding: const EdgeInsets.all(12),
+                  label: Text(
+                    'Madinah',
+                    style: theme.chipTheme.labelStyle?.copyWith(
+                      color: !isMakkah ? cs.onPrimary : cs.onSurfaceVariant,
+                    ),
+                  ),
+                  selected: !isMakkah,
+                  backgroundColor: !isMakkah ? cs.primary : cs.surface,
+                  onSelected: (_) => notifier.switchStream(1),
                 ),
               ],
             ),
-          )
-        else
-          const CircularProgressIndicator(),
-      ],
+          ),
+          const SizedBox(height: AppSpacing.xxxl),
+
+          if (player.error != null)
+            _buildError(player.error!)
+            
+          else if (player.isLoading)
+            const Center(
+              child: SizedBox(
+                height: 24,
+                width: 24,
+                child: CircularProgressIndicator(),
+              ),
+            )
+
+          else if (player.controller case final controller?
+              when controller.value.isInitialized)
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                children: [
+                  HaramainVideoPlayer(controller: controller),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Please note that the Haramain livestream may occasionally be unstable.',
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.labelMedium?.copyWith(
+                      color: cs.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          else
+            const Center(
+              child: SizedBox(
+                height: 24,
+                width: 24,
+                child: CircularProgressIndicator(),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

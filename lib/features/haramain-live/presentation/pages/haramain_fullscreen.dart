@@ -37,6 +37,11 @@ class _HaramainFullscreenPageState extends State<HaramainFullscreenPage> {
   Future<void> _exitFullscreen() async {
     await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
+    await SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.immersiveSticky,
+      overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom],
+    );
+
     await SystemChrome.setPreferredOrientations(DeviceOrientation.values);
 
     if (mounted) {
@@ -45,10 +50,12 @@ class _HaramainFullscreenPageState extends State<HaramainFullscreenPage> {
   }
 
   @override
-  void dispose() { 
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  void dispose() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
     SystemChrome.setPreferredOrientations(DeviceOrientation.values);
+
+    WakelockPlus.disable();
 
     super.dispose();
   }
