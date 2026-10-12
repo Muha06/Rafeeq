@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/features/location/presentation/provider/location_prov.dart';
 import 'package:rafeeq/core/features/location/presentation/provider/user_location_provider.dart';
 import 'package:rafeeq/core/helpers/app_dialogs.dart';
@@ -136,7 +135,8 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
     final index = ref.watch(onboardingIndexProvider);
 
     final name = _userNameController.text.trim();
-    final canContinue = (name.isNotEmpty);
+    final canContinue = index != 0 || name.isNotEmpty;
+    final isLastPage = index == _pageCount - 1;
 
     final cs = Theme.of(context).colorScheme;
 
@@ -172,7 +172,7 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
 
             // ✅ bottom controls
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -185,34 +185,23 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
                     ),
                     const SizedBox(height: 12),
                   ],
+                  
                   Row(
                     children: [
                       OnboardingDots(count: _pageCount, index: index),
                       const Spacer(),
 
-                      // Skip (hide on last page)
-                      Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: canContinue ? cs.primary : cs.primaryContainer,
-                        ),
-                        child: IconButton(
-                          onPressed: canContinue
-                              ? () async {
-                                  if (index < _pageCount - 1) {
-                                    await _goTo(index + 1);
-                                  } else {
-                                    _finishOnboarding();
-                                  }
+                      ElevatedButton(
+                        onPressed: canContinue
+                            ? () async {
+                                if (!isLastPage) {
+                                  await _goTo(index + 1);
+                                } else {
+                                  await _finishOnboarding();
                                 }
-                              : null,
-                          icon: PhosphorIcon(
-                            index == (_pageCount - 1)
-                                ? PhosphorIcons.check
-                                : PhosphorIcons.caretRight,
-                            color: cs.onPrimary,
-                          ),
-                        ),
+                              }
+                            : null,
+                        child: Text(isLastPage ? 'Alhamdulillah!' : 'Continue'),
                       ),
                     ],
                   ),
