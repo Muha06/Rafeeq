@@ -16,7 +16,7 @@ class FetchSalahTimesRepoImpl implements FetchSalahTimesRepo {
     required UserLocation userLocation,
     int method = 3,
     required DateTime date,
-  }) async { 
+  }) async {
     final day = DateTime(date.year, date.month, date.day);
 
     // 1. Check today's cache
@@ -28,23 +28,17 @@ class FetchSalahTimesRepoImpl implements FetchSalahTimesRepo {
     );
 
     if (cached != null) {
-      // debugPrint('Returning cached timings for today: ${cached.date}✅');
-      // debugPrint("Salah cache length: ${await local.totalSalahsLength()}");
       return cached.toEntity();
     }
 
     // 2. Fetch the entire month
-    // debugPrint('No cached timings found. Fetching month from remote...');
 
     final monthlyModels = await remote.fetchMonthByCoordinates(
       latitude: userLocation.lat,
       longitude: userLocation.lng,
     );
 
-    // debugPrint('Fetched ${monthlyModels.length} timings for the month.');
-
     // 3. Cache the entire month
-    // debugPrint('Caching the entire month of timings...');
 
     final cachedModels = monthlyModels
         .map(

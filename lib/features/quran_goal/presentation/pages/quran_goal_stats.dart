@@ -308,10 +308,12 @@ class _GoalCompletedBadge extends ConsumerWidget {
         borderRadius: BorderRadius.circular(14),
       ),
       child: RichText(
+        textAlign: TextAlign.center,
         text: TextSpan(
-          style: tt.labelSmall?.copyWith(color: cs.onTertiaryContainer),
+          style: tt.labelMedium?.copyWith(color: cs.onTertiaryContainer),
           children: [
             const TextSpan(text: "🎉 Congratulations "),
+
             TextSpan(
               text: username,
               style: tt.labelSmall?.copyWith(
@@ -319,8 +321,9 @@ class _GoalCompletedBadge extends ConsumerWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
+
             const TextSpan(
-              text: "! You've reached today's goal! Barakallāhu fīk",
+              text: "! You've reached today's reading goal! Barakallāhu fīk",
             ),
           ],
         ),

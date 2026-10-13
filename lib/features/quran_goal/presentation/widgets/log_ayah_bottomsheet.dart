@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/features/local_notifications/providers/wiring_providers.dart';
 import 'package:rafeeq/core/helpers/app_haptics.dart';
@@ -13,13 +12,15 @@ import 'package:rafeeq/features/quran_goal/presentation/providers/progress_provi
 import 'package:rafeeq/features/quran_goal/presentation/providers/quran_goal_provider.dart';
 import 'package:rafeeq/features/quran_goal/presentation/providers/quran_log_provider.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:rafeeq/features/user/presentation/providers/user_provider.dart';
+import 'package:flutter_confetti_plus/flutter_confetti_plus.dart';
 
-void showAyahLogSheet(BuildContext context, WidgetRef ref) {
+void showAyahLogSheet(BuildContext pageContext, WidgetRef ref) {
   int ayahsRead = 1;
   final ayahController = TextEditingController(text: ayahsRead.toString());
 
   AppSheets.showBottomSheet(
-    context: context,
+    context: pageContext,
     reverseAnimationDuration: 450.ms,
     child: StatefulBuilder(
       builder: (context, setState) {
@@ -56,15 +57,12 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
-                  HugeIconsStroke.floppyDisk,
-                  color: cs.onSurfaceVariant,
-                  size: 48,
-                ),
-                const SizedBox(height: 10),
-
                 // Title
-                Text('Save your progress', style: theme.textTheme.titleMedium),
+                Text(
+                  'Save your reading progress, ${ref.read(userNameProvider)}.',
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.titleMedium,
+                ),
                 const SizedBox(height: 16),
 
                 // Progress info
@@ -153,10 +151,16 @@ void showAyahLogSheet(BuildContext context, WidgetRef ref) {
                           updatedProgress.totalRead >= goal.dailyTarget;
 
                       if (!wasCompleted && isCompleted) {
-                        await Future.delayed(1.seconds);
-                        if (!context.mounted) return;
+                        ConfettiPlus.success(context);
 
-                        showGoalCompletedDialog(context, ref, goal.dailyTarget);
+                        await Future.delayed(500.ms);
+                        if (!pageContext.mounted) return;
+
+                        showGoalCompletedDialog(
+                          pageContext,
+                          ref,
+                          goal.dailyTarget,
+                        );
                       } else {
                         AppToast.showCompact(
                           context: context,
@@ -192,74 +196,112 @@ void showGoalCompletedDialog(
   showDialog(
     context: context,
     builder: (context) => Dialog(
-      backgroundColor: Colors.transparent,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-        decoration: BoxDecoration(
-          color: cs.surface,
-          borderRadius: BorderRadius.circular(24),
-        ),
+      elevation: 0,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CircleAvatar(
-                  radius: 34,
-                  backgroundColor: cs.surfaceContainerHigh,
-                  child: Icon(
-                    Icons.auto_awesome_rounded,
-                    color: cs.primary,
-                    size: 34,
-                  ),
+            Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Container(
+                      width: 72,
+                      height: 72,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: LinearGradient(
+                          colors: [
+                            cs.primary.withValues(alpha: 0.15),
+                            cs.primary.withValues(alpha: 0.02),
+                          ],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                        ),
+                      ),
+                    ),
+                    Icon(
+                      Icons.auto_awesome_rounded,
+                      color: cs.primary,
+                      size: 38,
+                    ),
+                  ],
                 )
                 .animate()
                 .scale(
-                  begin: const Offset(.8, .8),
+                  begin: const Offset(0.5, 0.5),
                   end: const Offset(1, 1),
-                  curve: Curves.elasticOut,
-                  duration: 1.seconds,
+                  curve: Curves.easeInBack,
+                  duration: 600.ms,
                 )
-                .fadeIn(),
+                .shimmer(
+                  delay: 400.ms,
+                  duration: 1.seconds,
+                  color: cs.onPrimary,
+                ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 24),
 
+            // Header Title
             Text(
                   'Masha’Allah!',
-                  style: theme.textTheme.headlineSmall?.copyWith(
-                    color: cs.primary,
+                  style: theme.textTheme.headlineMedium?.copyWith(
+                    color: cs.onSurface,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: -0.5,
                   ),
                   textAlign: TextAlign.center,
                 )
                 .animate()
-                .fadeIn(delay: 100.ms)
-                .slideY(begin: .2, end: 0, curve: Curves.easeOutCubic),
+                .fadeIn(delay: 200.ms, duration: 400.ms)
+                .slideY(begin: 0.15, end: 0, curve: Curves.easeOutCubic),
 
-            const SizedBox(height: 10),
+            const SizedBox(height: 12),
 
+            // Subtle Status Badge
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-              decoration: BoxDecoration(
-                color: cs.primaryContainer,
-                borderRadius: BorderRadius.circular(99),
-              ),
-              child: Text(
-                'Goal completed!',
-                style: theme.textTheme.labelMedium?.copyWith(
-                  color: cs.onPrimaryContainer,
-                ),
-              ),
-            ).animate().fadeIn(delay: 80.ms).scale(),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [cs.primary, cs.tertiary],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(100),
+                    boxShadow: [
+                      BoxShadow(
+                        color: cs.primary.withValues(alpha: 0.25),
+                        blurRadius: 8,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: Text(
+                    'Goal Completed',
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      color: cs.onPrimary,
+                    ),
+                  ),
+                )
+                .animate()
+                .fadeIn(delay: 350.ms, duration: 300.ms)
+                .scale(begin: const Offset(0.9, 0.9), curve: Curves.easeInBack),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 24),
 
+            // Description
             Text(
-              'You reached your Quran goal for today.\n'
-              'May Allah ﷻ accept your recitation, increase you in guidance, and make the Quran the light of your heart.',
+              'You reached your Quran goal for today.\nMay Allah ﷻ accept your recitation, and make the Quran the light of your heart.',
               textAlign: TextAlign.center,
-              style: theme.textTheme.bodyMedium,
-            ).animate().fadeIn(delay: 260.ms),
+              style: theme.textTheme.bodyLarge,
+            ).animate().fadeIn(delay: 500.ms, duration: 500.ms),
 
-            const SizedBox(height: 28),
+            const SizedBox(height: 32),
 
+            // Primary Call to Action
             SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
@@ -273,16 +315,15 @@ void showGoalCompletedDialog(
                           .showNow(
                             id: 1001,
                             title: '🎉 Goal Completed!',
-                            body:
-                                'You completed your Quran goal for today. Keep the momentum going!',
+                            body: 'You completed your Quran goal for today. Keep the momentum going!',
                           );
                     },
                     child: const Text('Alhamdulillah'),
                   ),
                 )
                 .animate()
-                .fadeIn(delay: 340.ms)
-                .slideY(begin: .2, end: 0, curve: Curves.easeOutCubic),
+                .fadeIn(delay: 650.ms, duration: 400.ms)
+                .slideY(begin: 0.1, end: 0, curve: Curves.easeOutCubic),
           ],
         ),
       ),

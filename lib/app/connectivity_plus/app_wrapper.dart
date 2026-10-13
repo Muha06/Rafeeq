@@ -10,7 +10,7 @@ class AppWrapper extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Listen for connectivity changes
-    ref.listen<bool>(hasInternetConnection, (previous, next) {
+    ref.listen<bool>(hasInternetConnectionProvider, (previous, next) {
       if (previous == true && next == false) {
         // Went offline
         AppToast.showCompact(

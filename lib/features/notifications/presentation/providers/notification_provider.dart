@@ -53,7 +53,7 @@ final notificationByIdProvider = FutureProvider.family<AppNotification, String>(
 );
 
 final hasUnreadNotificationsProvider = Provider<bool>((ref) {
-  final hasInternet = ref.watch(hasInternetConnection);
+  final hasInternet = ref.watch(hasInternetConnectionProvider);
 
   if (!hasInternet) return false;
 

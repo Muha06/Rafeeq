@@ -30,7 +30,7 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
-  static const double _hPad = 12.0;
+  static const double _hPad = 14.0;
   static const double _v10 = 10.0;
   static const double _appBarIconSize = 26.0;
 
@@ -95,10 +95,11 @@ class _HomePageState extends ConsumerState<HomePage> {
                   left: _hPad,
                   right: _hPad,
                   bottom: _v10,
-                ), // to accommodate quick actions overlap
+                ),
                 child: HomeTimelineCard(),
               ),
             ),
+
             const SliverToBoxAdapter(
               child: Padding(
                 padding: EdgeInsets.only(

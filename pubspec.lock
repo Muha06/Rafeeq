@@ -630,6 +630,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.3"
+  flutter_confetti_plus:
+    dependency: "direct main"
+    description:
+      name: flutter_confetti_plus
+      sha256: "13db9b8b0c11bacb4cec0be6ac324fb4e1ae430804f39fcea5fe891bc5fbb0f4"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.3"
   flutter_dotenv:
     dependency: "direct main"
     description:

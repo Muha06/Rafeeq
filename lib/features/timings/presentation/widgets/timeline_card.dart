@@ -36,6 +36,7 @@ class _LoadingStateCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Text('Fetching prayer times...'),
         Spacer(),
@@ -58,6 +59,7 @@ class _ErrorCard extends ConsumerWidget {
     return GestureDetector(
       onTap: () => _retry(ref),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
           const Text('Oops! Failed to fetch prayer times'),
           const Spacer(),

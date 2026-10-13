@@ -27,6 +27,7 @@ class _LiveHubTabsState extends ConsumerState<LiveHubTabs> {
                   title: Text('Live Hub'),
                   floating: true,
                   snap: true,
+                  centerTitle: true,
                   pinned: false,
                 ),
 

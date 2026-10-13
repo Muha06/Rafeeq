@@ -45,6 +45,7 @@ class _QuranPageState extends ConsumerState<QuranPage> {
             pinned: false,
             floating: true,
             snap: false,
+            centerTitle: true,
             title: GestureDetector(
               onTap: scrollToTop,
               child: const Text('Quran'),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/helpers/app_toast.dart';
+import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_times.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/disable_salah_reminders_provider.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/fetch_salah_times_provider.dart';
@@ -20,6 +21,11 @@ class SalahTimingsPage extends ConsumerStatefulWidget {
 class _SalahTimingsPageState extends ConsumerState<SalahTimingsPage> {
   final now = DateTime.now();
 
+  void _retry(WidgetRef ref) {
+    ref.invalidate(fetchSalahTimesProvider);
+    ref.invalidate(salahStatusProvider);
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -33,9 +39,11 @@ class _SalahTimingsPageState extends ConsumerState<SalahTimingsPage> {
       error: (e, _) => Scaffold(
         body: Padding(
           padding: const EdgeInsets.all(16),
-          child: Text(
-            'Failed to load timings.\n$e',
-            style: theme.textTheme.bodyMedium,
+          child: AppStateView(
+            title: 'Failed to fetch Prayer times',
+            message: 'Please check your internet connection then try again',
+            buttonText: 'Retry',
+            onPressed: () => _retry,
           ),
         ),
       ),

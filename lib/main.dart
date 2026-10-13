@@ -223,9 +223,9 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
       navigatorKey: navigatorKey,
       scaffoldMessengerKey: scaffoldMessengerKey,
       home: SheetViewport(
-        child: hasSeenOnboarding
-            ? const AppWrapper(child: TabsScreen())
-            : const OnboardingPage(),
+        child: AppWrapper(
+          child: hasSeenOnboarding ? const TabsScreen() : const OnboardingPage(),
+        ),
       ),
     );
   }

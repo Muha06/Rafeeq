@@ -64,14 +64,14 @@ class SurahSettingsNotifier extends StateNotifier<SurahSettings> {
         const SurahSettings(
           showTranslation: true,
           arabicFontSize: 24,
-          translationFontSize: 15,
+          translationFontSize: 16,
           autoScrollSpeed: 20,
-          showTranslit: true,
+          showTranslit: false,
           mushafMode: false,
           isAutoScrolling: false,
           showAudioControls: false,
           showAutoScrollControls: false,
-          wbwMode: true,
+          wbwMode: false,
         ),
       );
 

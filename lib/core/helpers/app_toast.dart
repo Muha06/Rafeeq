@@ -10,7 +10,7 @@ class AppToast {
     Alignment alignment = Alignment.topCenter,
     Color? backgroundColor,
     Color? foregroundColor,
-    Duration duration = const Duration(seconds: 1),
+    Duration duration = const Duration(seconds: 2),
   }) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
@@ -35,7 +35,7 @@ class AppToast {
                   ),
                   decoration: BoxDecoration(
                     color: backgroundColor ?? cs.onSurface,
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
                     message,

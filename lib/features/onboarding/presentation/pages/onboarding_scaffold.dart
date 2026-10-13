@@ -7,6 +7,7 @@ import 'package:rafeeq/core/features/location/presentation/provider/location_pro
 import 'package:rafeeq/core/features/location/presentation/provider/user_location_provider.dart';
 import 'package:rafeeq/core/helpers/app_dialogs.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
+import 'package:rafeeq/features/adhkar/presentation/providers/adhkar_providers.dart';
 import 'package:rafeeq/features/home/presentation/pages/tabs_screen.dart';
 import 'package:rafeeq/features/onboarding/presentation/provider/onboarding_provider.dart';
 import 'package:rafeeq/features/onboarding/presentation/provider/providers.dart';
@@ -133,6 +134,14 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
   @override
   Widget build(BuildContext context) {
     final index = ref.watch(onboardingIndexProvider);
+    
+    ref.listen(prefetchAdhkarCacheProvider, (previous, next) {
+      next.whenOrNull(
+        error: (error, stackTrace) {
+          debugPrint('Failed to prefetch adhkar cache: $error');
+        },
+      );
+    });
 
     final name = _userNameController.text.trim();
     final canContinue = index != 0 || name.isNotEmpty;
@@ -185,7 +194,7 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
                     ),
                     const SizedBox(height: 12),
                   ],
-                  
+
                   Row(
                     children: [
                       OnboardingDots(count: _pageCount, index: index),

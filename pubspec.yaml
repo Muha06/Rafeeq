@@ -81,6 +81,7 @@ dependencies:
   flutter_compass_v2: ^1.0.3
   workmanager: ^0.10.10
   in_app_review: ^2.0.12
+  flutter_confetti_plus: ^0.0.3
 
 dev_dependencies:
   flutter_test:
@@ -148,7 +149,7 @@ flutter_launcher_icons:
   image_path: "assets/icon/app_icon.png"
 
 flutter_native_splash:
-  color: "FFFFFF"
+  color: "0A0F14"
   image: assets/icon/app_splash_icon.png
   android: true
   ios: true
@@ -159,5 +160,5 @@ flutter_native_splash:
 
   android_12:
     image: assets/icon/app_splash_icon.png
-    icon_background_color: "#FFFFFF" # background behind icon
+    icon_background_color: "#FF0A0F14" # background behind icon
 

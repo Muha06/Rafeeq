@@ -90,10 +90,12 @@ class _SurahSettingsSheetState extends ConsumerState<SurahSettingsSheet> {
                 children: [
                   const Text('Word by word'),
 
+                  const SizedBox(width: 8),
+
                   MyChip(
                     backgroundColor: cs.tertiaryContainer,
                     child: Text(
-                      'New',
+                      'New ✨',
                       style: theme.textTheme.labelSmall?.copyWith(
                         color: cs.onTertiaryContainer,
                       ),

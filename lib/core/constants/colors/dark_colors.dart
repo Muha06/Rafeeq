@@ -8,7 +8,7 @@ class AppDarkColors {
 
   // SURFACES
 
-  static const surface = Color(0xFF151C23);
+  static const surface = Color(0xFF131A21);
   static const surfaceHigh = Color(0xFF333B48);
   static const surfaceHighest = Color(0xFF424B58);
 
@@ -21,7 +21,7 @@ class AppDarkColors {
 
   static const primary = Color(0xFF1D7382);
   static const secondary = Color(0xFFA7B3BC);
-  static const tertiary = Color(0xFFA4DF3F);  
+  static const tertiary = Color(0xFFA4DF3F);
 
   // ON P | S | T
 
