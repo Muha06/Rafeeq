@@ -91,6 +91,7 @@ class SalahNotificationsController extends Notifier<void> {
     }
 
     // Schedule
+    
     await _schedule();
   }
 

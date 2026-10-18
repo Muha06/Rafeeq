@@ -36,6 +36,7 @@ class FetchSalahTimesRepoImpl implements FetchSalahTimesRepo {
     final monthlyModels = await remote.fetchMonthByCoordinates(
       latitude: userLocation.lat,
       longitude: userLocation.lng,
+      method: method,
     );
 
     // 3. Cache the entire month
