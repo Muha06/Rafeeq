@@ -314,6 +314,7 @@ class LocalNotificationService {
     final exactAllowed = await canScheduleExactAlarms();
 
     await _plugin.cancel(id: fridayVirtuesReminderId);
+
     await _plugin.zonedSchedule(
       id: fridayVirtuesReminderId,
       title: 'Friday virtues',
@@ -385,7 +386,7 @@ class LocalNotificationService {
 
   Future<void> cancel(int id) async {
     try {
-      debugPrint("Cancelling $id");
+      // debugPrint("Cancelling $id");
       await _plugin.cancel(id: id);
     } catch (e) {
       debugPrint("Error cancelling $e");

@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_status.dart';
 import 'package:rafeeq/features/timings/domain/usecases/get_salah_status.dart';
@@ -28,9 +27,7 @@ class SalahStatusNotifier extends AsyncNotifier<SalahStatusEntity> {
       _didRegisterDispose = true;
     }
 
-    final times = await ref.watch(
-      fetchSalahTimesProvider .future,
-    );
+    final times = await ref.watch(fetchSalahTimesProvider.future);
 
     final status = computeSalahStatus(times: times, now: DateTime.now());
 
