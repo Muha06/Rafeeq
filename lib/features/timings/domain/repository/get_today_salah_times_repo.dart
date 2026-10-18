@@ -4,7 +4,6 @@ import 'package:rafeeq/features/timings/domain/entities/salah_times.dart';
 abstract class FetchSalahTimesRepo {
   Future<SalahTimesEntity> fetchByCoords({
     required UserLocation userLocation,
-    int method,
-    required DateTime date,
+    int method, 
   });
 }

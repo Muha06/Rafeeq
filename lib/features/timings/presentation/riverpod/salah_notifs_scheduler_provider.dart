@@ -36,9 +36,7 @@ class SalahNotificationsController extends Notifier<void> {
 
   // listen to salah times updates
   void _listenToSalahTimes() {
-    ref.listen(fetchSalahTimesProvider(DateTime.now()), (_, next) {
-      debugPrint("Salah times changed!");
-
+    ref.listen(fetchSalahTimesProvider, (_, next) {
       _onSalahTimesChanged();
     });
   }
@@ -65,8 +63,6 @@ class SalahNotificationsController extends Notifier<void> {
   // listen to calculation methods
   void _listenToCalculationMethods() {
     ref.listen(selectedCalculationMethodProvider, (_, newMethod) {
-      debugPrint("Calculation Methods changed !");
-
       _onCalculationMethodChanged(newMethod);
     });
   }
@@ -79,6 +75,8 @@ class SalahNotificationsController extends Notifier<void> {
       await _cancelAllPrayerReminders();
       return;
     }
+
+    debugPrint("Calculation Methods changed !");
 
     // Schedule
     await _cancelAllPrayerReminders();
@@ -104,9 +102,11 @@ class SalahNotificationsController extends Notifier<void> {
       return;
     }
 
+    debugPrint("Salah times changed!");
     await _schedule();
   }
 
+  // I'm cancel all notifs then reschedule afresh exluding the disabled prayer
   Future<void> _onDisabledPrayersChanged() async {
     if (!_notificationsEnabled) return;
 
@@ -117,11 +117,7 @@ class SalahNotificationsController extends Notifier<void> {
   // Helper
   // Should schedule notifs for 3 days
   Future<void> _schedule() async {
-    debugPrint("Scheduling Salah notifications for 3 days...");
-
-    final today = DateUtils.dateOnly(DateTime.now());
-
-    final times = await ref.read(fetchSalahTimesProvider(today).future);
+    final times = await ref.read(fetchSalahTimesProvider.future);
 
     await salahNotifsService.scheduleForDay(
       times: times,

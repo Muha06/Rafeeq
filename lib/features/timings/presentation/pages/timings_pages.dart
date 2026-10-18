@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/helpers/app_toast.dart';
@@ -30,7 +31,7 @@ class _SalahTimingsPageState extends ConsumerState<SalahTimingsPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final timesAsync = ref.watch(fetchSalahTimesProvider(now));
+    final timesAsync = ref.watch(fetchSalahTimesProvider);
 
     return timesAsync.when(
       loading: () =>
@@ -270,38 +271,49 @@ class _TimingTile extends ConsumerWidget {
           message: 'Disabled reminders for ${prayer.label}',
         );
       }
+
+      if (isDisabled) {
+        AppToast.showCompact(
+          context: context,
+          message: 'Enabled reminders for ${prayer.label}',
+        );
+      }
     }
 
-    return ListTile(
-      leading: Icon(prayer.icon, size: 24, color: cs.onSurfaceVariant),
-      title: Text(title),
-      contentPadding: EdgeInsets.zero,
-      onTap: canToggle! ? toggleSalahReminders : null,
-      trailing: IntrinsicWidth(
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              timeText,
-              style: theme.textTheme.labelLarge?.copyWith(fontSize: 16),
-            ),
-
-            const SizedBox(width: 8),
-
-            if (showBell)
-              IconButton(
-                onPressed: toggleSalahReminders,
-
-                icon: Icon(
-                  isDisabled
-                      ? CupertinoIcons.speaker_slash
-                      : CupertinoIcons.speaker_3,
-                  color: isDisabled
-                      ? theme.colorScheme.error
-                      : theme.colorScheme.onSurface,
-                ),
+    return AnimatedOpacity(
+      opacity: isDisabled ? 0.4 : 1,
+      duration: 250.ms,
+      child: ListTile(
+        leading: Icon(prayer.icon, size: 24, color: cs.onSurfaceVariant),
+        title: Text(title),
+        contentPadding: EdgeInsets.zero,
+        onTap: canToggle! ? toggleSalahReminders : null,
+        trailing: IntrinsicWidth(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                timeText,
+                style: theme.textTheme.labelLarge?.copyWith(fontSize: 16),
               ),
-          ],
+
+              const SizedBox(width: 8),
+
+              if (showBell)
+                IconButton(
+                  onPressed: toggleSalahReminders,
+
+                  icon: Icon(
+                    isDisabled
+                        ? CupertinoIcons.speaker_slash
+                        : CupertinoIcons.speaker_3,
+                    color: isDisabled
+                        ? theme.colorScheme.error
+                        : theme.colorScheme.onSurface,
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );

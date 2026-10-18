@@ -72,6 +72,9 @@ ThemeData appLightThemeData() {
     canvasColor: scheme.surfaceContainerLowest,
     hintColor: scheme.onSurfaceVariant,
     disabledColor: scheme.onSurfaceVariant.withAlpha(140),
+    splashFactory: NoSplash.splashFactory,
+    highlightColor: Colors.transparent,
+    hoverColor: Colors.transparent,
     fontFamily: AppStrings.primaryFont,
 
     dividerColor: scheme.outlineVariant,

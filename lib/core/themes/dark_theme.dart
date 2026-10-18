@@ -68,6 +68,9 @@ ThemeData appDarkThemeData() {
     ),
     visualDensity: VisualDensity.compact,
 
+    splashFactory: NoSplash.splashFactory,
+    highlightColor: Colors.transparent,
+    hoverColor: Colors.transparent,
     shadowColor: scheme.shadow,
     scaffoldBackgroundColor: scheme.surfaceContainerLowest,
     canvasColor: scheme.surfaceContainerLowest,

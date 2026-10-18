@@ -29,7 +29,7 @@ class SalahStatusNotifier extends AsyncNotifier<SalahStatusEntity> {
     }
 
     final times = await ref.watch(
-      fetchSalahTimesProvider(DateTime.now()).future,
+      fetchSalahTimesProvider .future,
     );
 
     final status = computeSalahStatus(times: times, now: DateTime.now());

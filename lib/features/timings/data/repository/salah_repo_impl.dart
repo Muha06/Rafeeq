@@ -15,9 +15,9 @@ class FetchSalahTimesRepoImpl implements FetchSalahTimesRepo {
   Future<SalahTimesEntity> fetchByCoords({
     required UserLocation userLocation,
     int method = 3,
-    required DateTime date,
   }) async {
-    final day = DateTime(date.year, date.month, date.day);
+    final now = DateTime.now();
+    final day = DateTime(now.year, now.month, now.day);
 
     // 1. Check today's cache
     final cached = local.getToday(

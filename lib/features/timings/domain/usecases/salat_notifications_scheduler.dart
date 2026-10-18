@@ -11,6 +11,14 @@ class SalahNotifSchedulerService {
 
   final LocalNotificationService localNotificationService;
 
+  final prayers = [
+    SalahPrayer.fajr,
+    SalahPrayer.dhuhr,
+    SalahPrayer.asr,
+    SalahPrayer.maghrib,
+    SalahPrayer.isha,
+  ];
+
   // Cancel all salah notifications
   Future<void> cancelAllPrayerReminders() async {
     final today = DateUtils.dateOnly(DateTime.now());
@@ -18,6 +26,7 @@ class SalahNotifSchedulerService {
     // Generate the ids for each prayer and cancel them
     for (final prayer in SalahPrayer.values) {
       final adhanId = _notificationId(date: today, prayer: prayer);
+      debugPrint("Cancelling salah notif: $adhanId");
 
       await localNotificationService.cancel(adhanId);
     }
@@ -28,13 +37,19 @@ class SalahNotifSchedulerService {
     required String username,
     Set<SalahPrayer> disabled = const {},
   }) async {
-    for (final prayer in SalahPrayer.values) {
+    for (final prayer in prayers) {
       // Skip if disabled
       if (disabled.contains(prayer)) continue;
 
       var adhanTime = tz.TZDateTime.from(times.at(prayer), tz.local);
 
-      debugPrint("Scheduling salah: $_notificationId(date: adhanTime ),");
+      if (!adhanTime.isAfter(tz.TZDateTime.now(tz.local))) {
+        continue;
+      }
+
+      debugPrint(
+        "Scheduling salah: ${_notificationId(prayer: prayer, date: adhanTime)},  for time: $adhanTime",
+      );
 
       await localNotificationService.scheduleSalah(
         id: _notificationId(date: adhanTime, prayer: prayer),

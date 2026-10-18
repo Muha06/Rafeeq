@@ -119,7 +119,6 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
           isAuto: false,
           country: _country ?? p.country,
         ),
-        date: DateTime.now(),
         method: method,
       );
 
@@ -201,7 +200,7 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
                 return;
               }
 
-              ref.refresh(fetchSalahTimesProvider(DateTime.now()));
+              ref.refresh(fetchSalahTimesProvider);
 
               RafeeqAnalytics.logFeature("location_set_auto");
             },

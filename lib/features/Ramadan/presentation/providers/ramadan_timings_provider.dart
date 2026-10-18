@@ -5,7 +5,7 @@ import 'package:rafeeq/features/timings/presentation/riverpod/fetch_salah_times_
 
 final ramadanTimesProvider = Provider<AsyncValue<RamadanTimesEntity>>((ref) {
   final timesAsync = ref.watch(
-    fetchSalahTimesProvider(DateTime.now()),
+    fetchSalahTimesProvider 
   ); //fetch timings
 
   return timesAsync.whenData((times) {
