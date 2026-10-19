@@ -6,11 +6,12 @@ import 'package:rafeeq/features/timings/presentation/riverpod/wiring_provider.da
 
 final fetchSalahTimesProvider = FutureProvider<SalahTimesEntity>((ref) async {
   final fetchTimesUsecase = ref.watch(fetchSalahTimesUsecase);
+  final methodId = ref.watch(selectedCalculationMethodProvider).id;
   final userLocation = await ref.watch(userLocationProvider.future);
 
   final result = await fetchTimesUsecase.fetchTodayByCoords(
     userLocation: userLocation,
-    method: ref.watch(selectedCalculationMethodProvider).id,
+    method: methodId,
   );
 
   return result;

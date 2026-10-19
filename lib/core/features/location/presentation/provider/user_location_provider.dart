@@ -7,8 +7,6 @@ import 'package:rafeeq/core/features/location/presentation/provider/general_loca
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/features/settings/presentation/provider/settings_notifcation_provider.dart';
 
-// You already have something like this in your app:
-
 final locationRepositoryProvider = Provider<LocationRepository>((ref) {
   final box = ref.read(settingsBoxProvider);
   return LocationRepositoryImpl(
@@ -32,7 +30,7 @@ class UserLocationNotifier extends AsyncNotifier<UserLocation> {
     return cachedLocation;
   }
 
-  //refresh
+  // Refresh user location then cached by the repo
   Future<void> refresh() async {
     final newLoc = await _locationRepo.refreshCurrentLocation();
     state = AsyncData(newLoc);
