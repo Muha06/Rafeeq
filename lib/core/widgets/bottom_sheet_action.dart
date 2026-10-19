@@ -24,7 +24,7 @@ class BottomSheetActionBtn extends StatelessWidget {
     final maxWidth = 86.0;
 
     return AppPressableScale(
-      scale: 0.8,
+      scale: 0.95,
       child: AnimatedSize(
         duration: const Duration(milliseconds: 250),
         alignment: Alignment.topCenter,

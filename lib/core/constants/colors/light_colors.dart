@@ -7,7 +7,7 @@ class AppLightColors {
 
   // SURFACES
   static const surface = Color(0xFFEFF5F6);
-  static const surfaceHigh = Color(0xFFD5E0E4);
+  static const surfaceHigh = Color(0xFFE3EAED);
   static const surfaceHighest = Color(0xFFBACBD1);
 
   //  BORDERS / DIVIDERS

@@ -94,7 +94,9 @@ class HaramainPlayerNotifier extends Notifier<HaramainPlayerState> {
   }
 
   Future<void> _play() async {
-    final title = state.currentUrl.contains('quran') ? 'Makkah' : 'Madinah';
+    final title = state.currentUrl.contains('quran')
+        ? 'Makkah live'
+        : 'Madinah live';
 
     final item = AudioItem(
       id: state.currentUrl,

@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rafeeq/core/features/location/domain/open_mateo.dart';
 import 'package:rafeeq/core/features/location/domain/user_location.dart';
 import 'package:rafeeq/core/features/location/presentation/provider/open_mateo_provider.dart';
+import 'package:rafeeq/core/features/location/presentation/provider/general_location_permission_provider.dart';
 import 'package:rafeeq/core/features/location/presentation/provider/user_location_provider.dart';
 import 'package:rafeeq/core/helpers/app_toast.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
@@ -27,6 +28,7 @@ class UserLocSettingsPage extends ConsumerStatefulWidget {
 
 class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
   bool _manualExpanded = false;
+  bool _refreshingLocation = false;
 
   String? _country;
   String? _countryCode; // ✅ needed for Open-Meteo country filter
@@ -42,6 +44,59 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
     _verifyError = null;
     _verified = false;
     _verifiedCity = null;
+  }
+
+  Future<void> _refreshLocation() async {
+    if (_refreshingLocation) return;
+
+    setState(() => _refreshingLocation = true);
+
+    try {
+      final permissionGranted = await ref
+          .read(systemLocationAccessProvider.notifier)
+          .requestLocationAccess();
+
+      if (!mounted) return;
+
+      if (!permissionGranted) {
+        AppToast.showError(
+          context: context,
+          message: 'Please grant location permissions to continue',
+        );
+        return;
+      }
+
+      await ref.read(userLocationProvider.notifier).refresh();
+
+      if (!mounted) return;
+
+      setState(() {
+        _manualExpanded = false;
+        _country = null;
+        _countryCode = null;
+        _selectedPlace = null;
+        _resetVerification();
+      });
+
+      ref.refresh(fetchSalahTimesProvider);
+
+      AppToast.showSuccess(
+        context: context,
+        message: 'Location updated successfully',
+      );
+    } catch (e) {
+      debugPrint('Failed to refresh user location: $e');
+      if (mounted) {
+        AppToast.showError(
+          context: context,
+          message: 'Could not refresh location. Check location services and try again.',
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _refreshingLocation = false);
+      }
+    }
   }
 
   //PICK COUNTRY
@@ -207,6 +262,17 @@ class _UserLocSettingsPageState extends ConsumerState<UserLocSettingsPage> {
             trailing: isAuto
                 ? const Icon(Icons.check_circle_rounded)
                 : const Icon(Icons.gps_fixed_rounded),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 12),
+              child: _ActionButton(
+                label: _refreshingLocation
+                    ? 'Refreshing current location…'
+                    : 'Refresh current location',
+                icon: Icons.my_location_rounded,
+                isLoading: _refreshingLocation,
+                onTap: _refreshingLocation ? null : _refreshLocation,
+              ),
+            ),
           ),
           const SizedBox(height: 12),
 
@@ -518,11 +584,13 @@ class _ActionButton extends ConsumerWidget {
     required this.label,
     required this.icon,
     required this.onTap,
+    this.isLoading = false,
   });
 
   final String label;
   final IconData icon;
   final VoidCallback? onTap;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context, ref) {
@@ -539,7 +607,14 @@ class _ActionButton extends ConsumerWidget {
         ),
         child: Row(
           children: [
-            Icon(icon, size: 18),
+            if (isLoading)
+              const SizedBox(
+                width: 18,
+                height: 18,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              )
+            else
+              Icon(icon, size: 18),
             const SizedBox(width: 8),
             Expanded(
               child: Text(

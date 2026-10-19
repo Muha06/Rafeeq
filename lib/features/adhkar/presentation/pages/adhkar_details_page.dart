@@ -84,7 +84,7 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
                     //note
                     MyChip(
                       backgroundColor: cs.tertiary,
-                      borderRadius: 4,
+                      borderRadius: 999,
                       child: Text(
                         '${dhikr.repeat}×',
                         style: tt.labelMedium?.copyWith(color: cs.onTertiary),
@@ -300,7 +300,7 @@ class _BottomNavBar extends ConsumerWidget {
                           : HugeIconsStroke.play,
 
                       label: isPlaying ? 'Stop' : 'Play',
-                      
+
                       onTap: () async {
                         final item = AudioItem(
                           id: dhikr.id,

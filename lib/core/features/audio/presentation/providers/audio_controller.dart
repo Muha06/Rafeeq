@@ -41,7 +41,6 @@ class AudioController extends Notifier<AudioState> {
     final oldState = state;
     try {
       // Update state
-
       state = state.copyWith(
         currentId: item.id,
         title: item.title,

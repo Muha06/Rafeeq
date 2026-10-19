@@ -36,7 +36,7 @@ class QiblaInstructionSheet extends StatelessWidget {
               children: [
                 // Icon
                 AppIconContainer(
-                  backgroundColor: cs.surface,
+                  backgroundColor: cs.surfaceContainerHigh,
                   size: 80,
                   borderRadius: 999,
                   child: const Icon(
@@ -156,7 +156,7 @@ class _InstructionTile extends StatelessWidget {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
     return Card(
-          color: cs.surface,
+          color: cs.surfaceContainerHigh,
           margin: const EdgeInsets.only(bottom: 12),
           shadowColor: Colors.transparent,
           child: ListTile(
