@@ -18,6 +18,11 @@ const whatsNewItems = [
   WhatsNewItem(
     icon: PhosphorIcons.textAa,
     title: 'Prayer times calculation methods',
+    description: 'Refresh your current location to update the city used for prayer times.',
+  ),
+    WhatsNewItem(
+    icon: PhosphorIcons.mapPin,
+    title: 'Refresh current location',
     description: 'Added multiple calculation methods for prayer times, allowing you to choose the one that best suits your location and preferences.',
   ),
   WhatsNewItem(

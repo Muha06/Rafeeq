@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
+import 'package:rafeeq/core/features/location/presentation/provider/general_location_permission_provider.dart';
+import 'package:rafeeq/core/features/location/presentation/provider/user_location_provider.dart';
 import 'package:rafeeq/core/helpers/app_toast.dart';
 import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/features/timings/domain/entities/salah_times.dart';
@@ -21,35 +23,92 @@ class SalahTimingsPage extends ConsumerStatefulWidget {
 
 class _SalahTimingsPageState extends ConsumerState<SalahTimingsPage> {
   final now = DateTime.now();
+  bool _refreshingLocation = false;
 
   void _retry(WidgetRef ref) {
     ref.invalidate(fetchSalahTimesProvider);
     ref.invalidate(salahStatusProvider);
   }
 
+  Future<void> _refreshLocation() async {
+    if (_refreshingLocation) return;
+
+    setState(() => _refreshingLocation = true);
+
+    try {
+      final permissionGranted = await ref
+          .read(systemLocationAccessProvider.notifier)
+          .requestLocationAccess();
+
+      if (!mounted) return;
+
+      if (!permissionGranted) {
+        AppToast.showError(
+          context: context,
+          message: 'Please grant location permissions to refresh your location',
+        );
+        return;
+      }
+
+      await ref.read(userLocationProvider.notifier).refresh();
+      await ref.read(fetchSalahTimesProvider.future);
+
+      if (!mounted) return;
+
+      AppToast.showSuccess(
+        context: context,
+        message: 'Location and prayer times updated',
+      );
+    } catch (e) {
+      debugPrint('Failed to refresh location and prayer times: $e');
+      if (mounted) {
+        AppToast.showError(
+          context: context,
+          message: 'Could not refresh location. Check location services and try again.',
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _refreshingLocation = false);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final cs = theme.colorScheme;
 
     final timesAsync = ref.watch(fetchSalahTimesProvider);
 
     return timesAsync.when(
-      loading: () =>
-          const Scaffold(body: Center(child: CircularProgressIndicator())),
+      loading: () => Scaffold(
+        appBar: AppBar(
+          title: const Text('Today\'s Timings'),
+          centerTitle: true,
+        ),
+        body: const Center(child: CircularProgressIndicator()),
+      ),
 
       error: (e, _) => Scaffold(
+        appBar: AppBar(
+          title: const Text('Today\'s Timings'),
+          centerTitle: true,
+        ),
         body: Padding(
           padding: const EdgeInsets.all(16),
           child: AppStateView(
             title: 'Failed to fetch Prayer times',
             message: 'Please check your internet connection then try again',
             buttonText: 'Retry',
-            onPressed: () => _retry,
+            onPressed: () => _retry(ref),
           ),
         ),
       ),
 
       data: (times) {
+        final location = ref.watch(userLocationProvider).value;
+
         const salats = [
           SalahPrayer.fajr,
           SalahPrayer.dhuhr,
@@ -78,6 +137,38 @@ class _SalahTimingsPageState extends ConsumerState<SalahTimingsPage> {
               padding: const EdgeInsets.fromLTRB(16, 20, 16, 16),
               child: Column(
                 children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _LocationLabel(
+                          city: location?.city ?? 'Location unavailable',
+                          country: location?.country,
+                        ),
+                      ),
+
+                      const SizedBox(width: 12),
+
+                      IconButton.filledTonal(
+                        tooltip: 'Refresh current location',
+                        color: cs.surface,
+                        onPressed: _refreshingLocation
+                            ? null
+                            : _refreshLocation,
+                        icon: _refreshingLocation
+                            ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : Icon(Icons.refresh_rounded, color: cs.onSurface),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 24),
+
                   SizedBox(
                     height: 100,
                     child: AllSalatTimingsCard(times: times, current: current),
@@ -132,6 +223,55 @@ class _SalahTimingsPageState extends ConsumerState<SalahTimingsPage> {
           ),
         );
       },
+      skipLoadingOnRefresh: true,
+    );
+  }
+}
+
+class _LocationLabel extends StatelessWidget {
+  const _LocationLabel({required this.city, this.country});
+
+  final String city;
+  final String? country;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final location = [
+      city,
+      if (country != null && country!.isNotEmpty && country != city) country!,
+    ].join(', ');
+
+    return Row(
+      children: [
+        Icon(PhosphorIcons.mapPin, size: 20, color: colorScheme.primary),
+        const SizedBox(width: 10),
+
+        Expanded(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'PRAYER TIMES FOR',
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                  letterSpacing: 0.6,
+                ),
+              ),
+              Text(
+                location,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.titleSmall?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
