@@ -4,6 +4,7 @@ import 'package:rafeeq/core/helpers/app_haptics.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/helpers/app_text_style.dart';
+import 'package:rafeeq/core/helpers/ayah_share_cotroller_provider.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/core/helpers/snackbars.dart';
 import 'package:rafeeq/core/helpers/app_toast.dart';
@@ -13,11 +14,12 @@ import 'package:rafeeq/core/widgets/bottom_sheet_action.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/Quran/quran_notifier_provider.dart';
 import 'package:rafeeq/features/quran/domain/entities/ayah.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/ayah_of_the_day.dart';
-import 'package:rafeeq/core/helpers/ayah_share_cotroller_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/fetch_ayah_provider.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/quran_bookmark.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
+import 'package:rafeeq/features/quran/presentation/share/services/ayah_share_service.dart';
+import 'package:rafeeq/features/quran/presentation/share/widgets/share_ayah_sheet.dart';
 
 class AyahTile extends ConsumerStatefulWidget {
   final String surahNameTranslit;
@@ -67,31 +69,51 @@ class _AyahTileState extends ConsumerState<AyahTile> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             //Controls section
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.transparent,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    '${ayah.surahId}: ${ayahNumber.toString()}',
-                    textAlign: TextAlign.center,
-                    style: theme.textTheme.labelMedium,
-                  ),
-                  const Spacer(),
+            Consumer(
+              builder: (_, ref, _) {
+                final bookmarkId = widget.ayah.verseKey;
 
-                  IconButton(
-                    onPressed: _openAyahActionsSheet,
-                    visualDensity: VisualDensity.compact,
-                    icon: Icon(
-                      HugeIconsSolid.menu09,
-                      color: cs.onSurfaceVariant,
-                    ),
+                final isBookmarked = ref.watch(
+                  isQuranBookmarkedProvider(bookmarkId),
+                );
+
+                return Container(
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                ],
-              ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${ayah.surahId}: ${ayahNumber.toString()}',
+                        textAlign: TextAlign.center,
+                        style: theme.textTheme.labelMedium,
+                      ),
+
+                      const SizedBox(width: 8),
+
+                      if (isBookmarked)
+                        Icon(
+                          HugeIconsSolid.bookmark01,
+                          size: 16,
+                          color: cs.tertiary,
+                        ),
+
+                      const Spacer(),
+
+                      IconButton(
+                        onPressed: _openAyahActionsSheet,
+                        visualDensity: VisualDensity.compact,
+                        icon: Icon(
+                          HugeIconsSolid.menu09,
+                          color: cs.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
 
             const SizedBox(height: 24),
@@ -232,7 +254,7 @@ class _AyahActionsSheetState extends ConsumerState<AyahActionsSheet> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Consumer(
-                builder: (context, ref, child) {
+                builder: (_, ref, _) {
                   final isBookmarked = ref.watch(
                     isQuranBookmarkedProvider(bookmarkId),
                   );
@@ -244,8 +266,8 @@ class _AyahActionsSheetState extends ConsumerState<AyahActionsSheet> {
                     label: isBookmarked ? 'Remove bookmark' : 'Bookmark',
                     bgColor: isBookmarked
                         ? cs.primary
-                        : cs.surfaceContainerHighest,
-                    fgColor: isBookmarked ? cs.onPrimary : null,
+                        : cs.surfaceContainerHigh,
+                    fgColor: isBookmarked ? cs.onPrimary : cs.onSurface,
                     onPressed: () async {
                       try {
                         AppHaptics.selection();
@@ -301,26 +323,44 @@ class _AyahActionsSheetState extends ConsumerState<AyahActionsSheet> {
               BottomSheetActionBtn(
                 iconData: HugeIconsStroke.share01,
                 label: 'Share',
-                bgColor: cs.surfaceContainerHighest,
+                bgColor: cs.surfaceContainerHigh,
+                fgColor: cs.onSurface,
                 onPressed: () async {
                   AppHaptics.selection();
 
                   final surahName = widget.surahNameTranslit;
 
-                  final controller = ref.read(shareControllerProvider);
+                  final type = await showAyahShareSheet(context);
 
-                  final text = controller.buildText(
-                    englishText: widget.ayah.textEnglish,
-                    arabicText: widget.ayah.textArabic,
-                    ayahNumber: widget.ayah.ayahNumber,
-                    surahId: widget.ayah.surahId,
-                    surahName: surahName,
-                    includeTranslation: ref
-                        .read(surahSettingsProvider)
-                        .showTranslation,
-                  );
+                  // User dismissed the sheet.
+                  if (!context.mounted || type == null) return;
 
-                  await controller.share(context: context, text: text);
+                  switch (type) {
+                    case AyahShareType.image:
+                      final ayahShareService = AyahShareService();
+
+                      await ayahShareService.shareAyah(
+                        context: context,
+                        ayah: widget.ayah,
+                        surahName: surahName,
+                      );
+
+                    case AyahShareType.text:
+                      final controller = ref.read(shareControllerProvider);
+
+                      final text = controller.buildText(
+                        englishText: widget.ayah.textEnglish,
+                        arabicText: widget.ayah.textArabic,
+                        ayahNumber: widget.ayah.ayahNumber,
+                        surahId: widget.ayah.surahId,
+                        surahName: surahName,
+                        includeTranslation: ref
+                            .read(surahSettingsProvider)
+                            .showTranslation,
+                      );
+
+                      await controller.share(context: context, text: text);
+                  }
 
                   RafeeqAnalytics.logFeature('share-ayah');
                 },
