@@ -10,9 +10,6 @@ import 'package:share_plus/share_plus.dart';
 class AppShareService {
   final ScreenshotController _screenshotController = ScreenshotController();
 
-  // TODO: replace with your real store link
-  static const String _appLink = '[YOUR APP LINK]';
-
   Future<void> shareApp({required BuildContext context}) async {
     final theme = Theme.of(context);
 

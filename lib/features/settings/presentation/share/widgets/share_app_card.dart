@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
-import 'package:rafeeq/core/helpers/ayah_share_cotroller_provider.dart';
-import 'package:rafeeq/features/settings/presentation/share/service/app_share_service.dart';
+ import 'package:rafeeq/features/settings/presentation/share/service/app_share_service.dart';
 
 class ShareRafeeqCard extends ConsumerWidget {
   const ShareRafeeqCard({super.key});

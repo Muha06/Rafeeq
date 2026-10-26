@@ -91,6 +91,26 @@ class AppShareCard extends StatelessWidget {
                       icon: HugeIconsStroke.compass01,
                       label: 'Qibla',
                     ),
+                    _FeaturePill(
+                      icon: HugeIconsStroke.liveStreaming01,
+                      label: 'Haramain Live',
+                    ),
+                    _FeaturePill(
+                      icon: HugeIconsStroke.radio01,
+                      label: 'Quran Radio',
+                    ),
+                    _FeaturePill(
+                      icon: HugeIconsStroke.calendar03,
+                      label: 'Hijri Calendar',
+                    ),
+                    _FeaturePill(
+                      icon: HugeIconsStroke.target01,
+                      label: 'Quran Goals',
+                    ),
+                    _FeaturePill(
+                      icon: HugeIconsStroke.bookmark01,
+                      label: 'Bookmarks',
+                    ),
                   ],
                 ),
 
