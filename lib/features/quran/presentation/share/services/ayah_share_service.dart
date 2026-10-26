@@ -29,9 +29,10 @@ class AyahShareService {
           ),
         ),
       ),
-      pixelRatio: 2,
-      constraints: BoxConstraints(
-        maxWidth: MediaQuery.sizeOf(context).width,
+      pixelRatio: 3, // sharper, since the card is only 540 wide
+      constraints: const BoxConstraints(
+        minWidth: 540,
+        maxWidth: 540,
         maxHeight: double.infinity,
       ),
     );
