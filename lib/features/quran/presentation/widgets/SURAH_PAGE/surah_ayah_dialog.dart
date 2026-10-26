@@ -212,7 +212,7 @@ class _WheelCard extends ConsumerWidget {
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: cs.surfaceHigh,
+        color: cs.surfaceContainerHigh,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(

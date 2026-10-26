@@ -5,7 +5,7 @@ class AppPressableScale extends StatefulWidget {
     super.key,
     required this.child,
     this.onTap,
-    this.scale = 0.9,
+    this.scale = 0.97,
     this.duration = const Duration(milliseconds: 300),
     this.curve = Curves.easeOut,
   });

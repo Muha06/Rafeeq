@@ -9,6 +9,7 @@ import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/helpers/app_text_style.dart';
 import 'package:rafeeq/core/helpers/app_toast.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
+import 'package:rafeeq/core/widgets/app_icon_container.dart';
 import 'package:rafeeq/core/widgets/app_pressable.dart';
 import 'package:rafeeq/features/asma_ul_husna/domain/entities/name_entity.dart';
 import 'package:rafeeq/features/asma_ul_husna/domain/entities/translations_enum.dart';
@@ -132,52 +133,45 @@ class PlayAllahNameButton extends ConsumerWidget {
 
     final isBuffering = audioState.isBuffering && isCurrent;
 
-    return SizedBox(
-      height: 48,
-      width: 48,
-      child: Material(
-        color: theme.colorScheme.primaryContainer,
-        shape: const CircleBorder(),
-        child: InkWell(
-          customBorder: const CircleBorder(),
-          onTap: () async {
-            try {
-              final item = AudioItem(
-                id: name.id,
-                title: name.transliteration,
-                sourceType: AudioSourceType.allahName,
-                url: name.audioUrl,
-              );
+    return GestureDetector(
+      onTap: () async {
+        try {
+          final item = AudioItem(
+            id: name.id,
+            title: name.transliteration,
+            sourceType: AudioSourceType.allahName,
+            url: name.audioUrl,
+          );
 
-              await audioCtrl.togglePlay(item: item);
+          await audioCtrl.togglePlay(item: item);
 
-              if (!isPlaying) {
-                RafeeqAnalytics.logFeature('play_Allah_name_audio');
-              }
-            } catch (e) {
-              if (!context.mounted) return;
+          if (!isPlaying) {
+            RafeeqAnalytics.logFeature('play_Allah_name_audio');
+          }
+        } catch (e) {
+          if (!context.mounted) return;
 
-              AppToast.showError(
-                context: context,
-                message: "Failed to play audio. Please try again later.",
-              );
-            }
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(11),
-            child: isBuffering
-                ? const SizedBox(
-                    height: 16,
-                    width: 16,
-                    child: CupertinoActivityIndicator(),
-                  )
-                : Icon(
-                    isPlaying ? Icons.pause : Icons.play_arrow,
-                    size: 22,
-                    color: theme.colorScheme.onPrimaryContainer,
-                  ),
-          ),
-        ),
+          AppToast.showError(
+            context: context,
+            message: "Failed to play audio. Please try again later.",
+          );
+        }
+      },
+      child: AppIconContainer(
+        backgroundColor: theme.colorScheme.surfaceContainerHigh,
+        borderRadius: 999,
+        size: 48,
+        child: isBuffering
+            ? const SizedBox(
+                height: 16,
+                width: 16,
+                child: CupertinoActivityIndicator(),
+              )
+            : Icon(
+                isPlaying ? Icons.pause : Icons.play_arrow,
+                size: 30,
+                color: theme.colorScheme.onSurface,
+              ),
       ),
     );
   }

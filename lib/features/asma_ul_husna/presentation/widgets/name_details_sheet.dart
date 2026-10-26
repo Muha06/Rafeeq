@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:rafeeq/core/constants/strings/app_strings.dart';
-import 'package:rafeeq/core/features/audio/presentation/providers/audio_controller.dart';
 import 'package:rafeeq/core/helpers/app_text_style.dart';
+import 'package:rafeeq/core/widgets/app_icon_container.dart';
+import 'package:rafeeq/core/widgets/app_pressable.dart';
 import 'package:rafeeq/features/asma_ul_husna/domain/entities/name_entity.dart';
 import 'package:rafeeq/features/asma_ul_husna/domain/entities/translations_enum.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
+import 'package:rafeeq/features/asma_ul_husna/presentation/share/services/name_share_service.dart';
 import 'package:rafeeq/features/asma_ul_husna/presentation/widgets/allah_name_tile.dart';
 
 class AllahNameDetailsSheet extends ConsumerWidget {
@@ -17,6 +20,7 @@ class AllahNameDetailsSheet extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     final theme = Theme.of(context);
     final tt = theme.textTheme;
+    final cs = theme.colorScheme;
 
     final translation = name.translations[AllahNameLanguage.english];
 
@@ -24,18 +28,10 @@ class AllahNameDetailsSheet extends ConsumerWidget {
       return const SizedBox.shrink();
     }
 
-    final audioState = ref.watch(audioControllerProvider);
-
-    final itemId = name.id;
-    final isCurrent = audioState.currentId == itemId;
-
-    final isPlaying = audioState.isPlaying && isCurrent;
-    debugPrint("Isplaying: $isPlaying");
-
     return DraggableScrollableSheet(
       initialChildSize: 1,
       maxChildSize: 1,
-      minChildSize: 0.45,
+      minChildSize: 0.3,
       expand: false,
       builder: (_, scrollController) => SafeArea(
         top: false,
@@ -82,7 +78,33 @@ class AllahNameDetailsSheet extends ConsumerWidget {
 
                   const SizedBox(height: 24),
 
-                  PlayAllahNameButton(name: name),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      PlayAllahNameButton(name: name),
+
+                      const SizedBox(width: 16),
+
+                      AppPressableScale(
+                        scale: 0.8,
+                        onTap: () {
+                          AllahNameShareService().shareAllahName(
+                            name: name,
+                            context: context,
+                          );
+                        },
+                        child: AppIconContainer(
+                          backgroundColor: cs.surfaceContainerHigh,
+                          borderRadius: 999,
+                          size: 48,
+                          child: Icon(
+                            HugeIconsSolid.share01,
+                            color: cs.onSurface,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
 
                   const SizedBox(height: 24),
 
@@ -113,32 +135,6 @@ class AllahNameDetailsSheet extends ConsumerWidget {
                       ),
                     ),
                   ),
-
-                  const SizedBox(height: 24),
-
-                  // SizedBox(
-                  //   width: double.infinity,
-                  //   child: ElevatedButton.icon(
-                  //     onPressed: () async {
-                  //       final item = AudioItem(
-                  //         id: name.id,
-                  //         title: name.transliteration,
-                  //         sourceType: AudioSourceType.allahName,
-                  //         url: name.audioUrl,
-                  //       );
-
-                  //       await audioCtrl.togglePlay(item: item);
-
-                  //       if (!isPlaying) {
-                  //         RafeeqAnalytics.logFeature('play_Allah_name_audio');
-                  //       }
-                  //     },
-                  //     icon: isBuffering
-                  //         ? const CircularProgressIndicator()
-                  //         : const Icon(Icons.play_arrow_rounded),
-                  //     label: Text(isBuffering ? 'Buffering' : 'Listen'),
-                  //   ),
-                  // ),
                 ],
               ),
             ),
