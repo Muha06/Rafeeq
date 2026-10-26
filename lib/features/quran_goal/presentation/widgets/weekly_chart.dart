@@ -14,8 +14,7 @@ class WeeklyQuranChart extends ConsumerWidget {
 
     final weeklyRead = ref.watch(weeklyProgressByDayProvider);
     final dailyTarget = ref.watch(quranGoalProvider)!.dailyTarget;
-    debugPrint("Target: $dailyTarget");
-
+ 
     final chartMaxY = dailyTarget > 0 ? dailyTarget.toDouble() : 1.0;
     final chartInterval = chartMaxY / 5;
 

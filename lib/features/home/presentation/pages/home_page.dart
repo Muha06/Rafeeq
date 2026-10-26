@@ -16,7 +16,7 @@ import 'package:rafeeq/features/quran/presentation/widgets/ayah_of_the_day.dart'
 import 'package:rafeeq/features/home_reminders/presentation/widgets/reminders_carousel.dart';
 import 'package:rafeeq/features/settings/presentation/pages/settings_page.dart';
 import 'package:rafeeq/features/settings/presentation/provider/settings_notifcation_provider.dart';
-import 'package:rafeeq/features/settings/presentation/share_app_card.dart';
+import 'package:rafeeq/features/settings/presentation/share/widgets/share_app_card.dart';
 import 'package:rafeeq/features/timings/presentation/riverpod/salah_notifs_scheduler_provider.dart';
 import 'package:rafeeq/features/timings/presentation/widgets/timeline_card.dart';
 import 'package:rafeeq/features/user/presentation/providers/user_provider.dart';

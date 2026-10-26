@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rafeeq/core/constants/app_assets.dart';
-import 'package:rafeeq/features/settings/presentation/share_app_card.dart';
+import 'package:rafeeq/features/settings/presentation/share/widgets/share_app_card.dart';
 
 class AboutRafeeqPage extends StatelessWidget {
   const AboutRafeeqPage({super.key});

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:rafeeq/core/helpers/ayah_share_cotroller_provider.dart';
+import 'package:rafeeq/features/settings/presentation/share/service/app_share_service.dart';
 
 class ShareRafeeqCard extends ConsumerWidget {
   const ShareRafeeqCard({super.key});
@@ -67,9 +68,7 @@ class ShareRafeeqCard extends ConsumerWidget {
             width: double.infinity,
             child: ElevatedButton.icon(
               onPressed: () {
-                ref
-                    .read(shareControllerProvider)
-                    .shareRafeeqApp(context: context);
+                AppShareService().shareApp(context: context);
               },
               icon: const Icon(Icons.share_rounded, size: 18),
               label: const Text('Share Rafeeq'),
