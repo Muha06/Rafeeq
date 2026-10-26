@@ -6,11 +6,16 @@ import 'package:rafeeq/core/helpers/app_clipboard.dart';
 import 'package:rafeeq/core/helpers/app_haptics.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/app_toast.dart';
+import 'package:rafeeq/core/helpers/ayah_share_cotroller_provider.dart';
+import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/features/bookmarks/domain/entities/quran_bookmark.dart';
 import 'package:rafeeq/features/bookmarks/presentation/riverpod/Quran/quran_notifier_provider.dart';
 import 'package:rafeeq/features/quran/presentation/pages/surah_page.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/ayah_of_the_day.dart';
 import 'package:rafeeq/features/quran/presentation/riverpod/fetch_surahs_provider.dart';
+import 'package:rafeeq/features/quran/presentation/riverpod/surah_settings_provider.dart';
+import 'package:rafeeq/features/quran/presentation/share/services/ayah_share_service.dart';
+import 'package:rafeeq/features/quran/presentation/share/widgets/share_ayah_sheet.dart';
 import 'package:rafeeq/features/quran_goal/presentation/widgets/log_ayah_bottomsheet.dart';
 
 class AyahOfTheDay extends ConsumerWidget {
@@ -140,8 +145,7 @@ class AyahOfTheDay extends ConsumerWidget {
                               } catch (e) {
                                 AppToast.showCompact(
                                   context: context,
-                                  message:
-                                      "Failed to bookmark ayah. Please try again later",
+                                  message: "Failed to bookmark ayah. Please try again later",
                                 );
                               }
                             },
@@ -153,9 +157,50 @@ class AyahOfTheDay extends ConsumerWidget {
 
                       CircleIconButton(
                         size: 36,
-                        icon: Icons.content_copy,
-                        onPressed: () {
-                          AppClipboard.copyAyah(ayah: ayah);
+                        icon: Icons.share,
+                        onPressed: () async {
+                          AppHaptics.selection();
+
+                          final surah = ayahSurah;
+
+                          final type = await showAyahShareSheet(context);
+
+                          // User dismissed the sheet.
+                          if (!context.mounted || type == null) return;
+
+                          switch (type) {
+                            case AyahShareType.image:
+                              final ayahShareService = AyahShareService();
+
+                              await ayahShareService.shareAyah(
+                                context: context,
+                                ayah: ayah,
+                                surahName: surah.nameTransliteration,
+                              );
+
+                            case AyahShareType.text:
+                              final controller = ref.read(
+                                shareControllerProvider,
+                              );
+
+                              final text = controller.buildText(
+                                englishText: ayah.textEnglish,
+                                arabicText: ayah.textArabic,
+                                ayahNumber: ayah.ayahNumber,
+                                surahId: ayah.surahId,
+                                surahName: surah.nameTransliteration,
+                                includeTranslation: ref
+                                    .read(surahSettingsProvider)
+                                    .showTranslation,
+                              );
+
+                              await controller.share(
+                                context: context,
+                                text: text,
+                              );
+                          }
+
+                          RafeeqAnalytics.logFeature('share-ayah');
                         },
                       ),
                     ],
