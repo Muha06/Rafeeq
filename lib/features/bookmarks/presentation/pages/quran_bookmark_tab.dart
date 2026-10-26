@@ -7,19 +7,18 @@ import 'package:rafeeq/features/bookmarks/presentation/riverpod/Quran/quran_noti
 import 'package:rafeeq/features/bookmarks/presentation/widgets/bookmark_tile.dart';
 
 class QuranBookmarksTab extends ConsumerWidget {
-  const QuranBookmarksTab({super.key});
-
-  @override
+  const QuranBookmarksTab({super.key,  });
+   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bookMarks = ref.watch(quranBookmarksProvider);
+    final bottomPadding = MediaQuery.paddingOf(context).bottom;
 
     return bookMarks.isEmpty
         ? Center(
             child: AppStateView(
               icon: PhosphorIcons.book,
               title: 'No Bookmarks',
-              message:
-                  'You have no saved bookmarks yet. Start bookmarking your favorite ayahs to easily read them later.',
+              message: 'You have no saved bookmarks yet. Start bookmarking your favorite ayahs to easily read them later.',
               buttonText: "Read Quran",
               onPressed: () =>
                   ref.read(tabsScreenIndexProvider.notifier).state = 1,
@@ -29,7 +28,7 @@ class QuranBookmarksTab extends ConsumerWidget {
             separatorBuilder: (_, _) {
               return const SizedBox(height: 16);
             },
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+            padding: EdgeInsets.fromLTRB(12, 16, 12, bottomPadding),
             itemCount: bookMarks.length,
             physics: const BouncingScrollPhysics(),
             itemBuilder: (context, index) {

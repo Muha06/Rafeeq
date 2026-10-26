@@ -43,120 +43,111 @@ class _HomePageState extends ConsumerState<HomePage> {
     ref.watch(salahNotifSchedulerProvider); // scheduler salah notifs
     ref.watch(adhkarNotificationsControllerProvider); // scheduler adhkar notifs
 
-    return SafeArea(
-      top: false,
-      child: Scaffold(
-        body: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const _GreetUserSection(),
-                  const SizedBox(height: 8),
-                  HijriDateToday(
-                    foregroundColor: cs.onSurfaceVariant,
-                    fontSize: 14,
-                  ),
-                ],
-              ),
-              toolbarHeight: 116,
-              actionsPadding: const EdgeInsets.all(12),
-              actions: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: cs.surface,
-                    borderRadius: BorderRadius.circular(999),
-                  ),
-                  child: const Row(
-                    children: [
-                      _NotificationIcon(iconSize: _appBarIconSize),
-                      _SettingsIcon(iconSize: _appBarIconSize),
-                    ],
-                  ),
+    final bottomInset = MediaQuery.paddingOf(context).bottom;
+
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const _GreetUserSection(),
+                const SizedBox(height: 8),
+                HijriDateToday(
+                  foregroundColor: cs.onSurfaceVariant,
+                  fontSize: 14,
                 ),
               ],
-              bottom: reminders.isNotEmpty
-                  ? const PreferredSize(
-                      preferredSize: Size.fromHeight(74),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8.0),
-                        child: HomeRemindersCarousel(),
-                      ),
-                    )
-                  : null,
             ),
-
-            // TIMESCARD
-            const SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.only(
-                  left: _hPad,
-                  right: _hPad,
-                  bottom: _v10,
+            toolbarHeight: 116,
+            actionsPadding: const EdgeInsets.all(12),
+            actions: [
+              Container(
+                decoration: BoxDecoration(
+                  color: cs.surface,
+                  borderRadius: BorderRadius.circular(999),
                 ),
-                child: HomeTimelineCard(),
-              ),
-            ),
-
-            const SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.only(
-                  top: _v10,
-                  left: _hPad,
-                  right: _hPad,
-                  bottom: _v10,
+                child: const Row(
+                  children: [
+                    _NotificationIcon(iconSize: _appBarIconSize),
+                    _SettingsIcon(iconSize: _appBarIconSize),
+                  ],
                 ),
-                child: AsmaulHusnaHomeCard(),
               ),
-            ),
+            ],
+            bottom: reminders.isNotEmpty
+                ? const PreferredSize(
+                    preferredSize: Size.fromHeight(74),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 8.0),
+                      child: HomeRemindersCarousel(),
+                    ),
+                  )
+                : null,
+          ),
 
-            const SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.only(
-                  top: _v10,
-                  left: _hPad,
-                  right: _hPad,
-                  bottom: _v10,
-                ),
-                child: QiblaHomeCard(),
-              ),
+          // TIMESCARD
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.only(left: _hPad, right: _hPad, bottom: _v10),
+              child: HomeTimelineCard(),
             ),
+          ),
 
-            // AYAH OF THE DAY
-            const SliverToBoxAdapter(
-              child: HomeSection(
-                padding: EdgeInsets.symmetric(
-                  horizontal: _hPad,
-                  vertical: _v10,
-                ),
-                child: AyahOfTheDay(),
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.only(
+                top: _v10,
+                left: _hPad,
+                right: _hPad,
+                bottom: _v10,
               ),
+              child: AsmaulHusnaHomeCard(),
             ),
+          ),
 
-            // const SliverToBoxAdapter(
-            //   child: HomeSection(
-            //     padding: EdgeInsets.symmetric(
-            //       horizontal: _hPad,
-            //       vertical: _v10,
-            //     ),
-            //     child: RamadanDailyCard(),
-            //   ),
-            // ),
-            const SliverToBoxAdapter(
-              child: HomeSection(
-                padding: EdgeInsets.symmetric(
-                  horizontal: _hPad,
-                  vertical: _v10,
-                ),
-                child: ShareRafeeqCard(),
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.only(
+                top: _v10,
+                left: _hPad,
+                right: _hPad,
+                bottom: _v10,
               ),
+              child: QiblaHomeCard(),
             ),
-          ],
-        ),
-      ).animatePage(),
-    );
+          ),
+
+          // AYAH OF THE DAY
+          const SliverToBoxAdapter(
+            child: HomeSection(
+              padding: EdgeInsets.symmetric(horizontal: _hPad, vertical: _v10),
+              child: AyahOfTheDay(),
+            ),
+          ),
+
+          // const SliverToBoxAdapter(
+          //   child: HomeSection(
+          //     padding: EdgeInsets.symmetric(
+          //       horizontal: _hPad,
+          //       vertical: _v10,
+          //     ),
+          //     child: RamadanDailyCard(),
+          //   ),
+          // ),
+          const SliverToBoxAdapter(
+            child: HomeSection(
+              padding: EdgeInsets.symmetric(horizontal: _hPad, vertical: _v10),
+              child: ShareRafeeqCard(),
+            ),
+          ),
+
+          SliverToBoxAdapter(child: SizedBox(height: bottomInset)),
+        ],
+      ),
+    ).animatePage();
   }
 }
 

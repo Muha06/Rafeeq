@@ -11,6 +11,7 @@ import 'package:rafeeq/core/features/audio/presentation/providers/is_seeking_pro
 import 'package:rafeeq/core/features/audio/presentation/widgets/seek_bar.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/widgets/app_cache_image.dart';
+import 'package:rafeeq/core/widgets/app_icon_container.dart';
 import 'package:rafeeq/features/quran/presentation/widgets/SURAH_PAGE/quran_audio_sheet.dart';
 import 'package:rafeeq/features/quran_radio/presentation/providers/radio_context_provider.dart';
 import 'package:rafeeq/features/quran_radio/presentation/providers/selected_station_provider.dart';
@@ -53,183 +54,185 @@ class _GLobalMiniPlayerSheetState extends ConsumerState<GLobalMiniPlayerSheet> {
 
     final session = ref.watch(radioPlaybackSessionProvider);
 
-    final controlsIconSize = 24.0;
+    final controlsIconSize = 16.0;
 
     final isQuranSurah = sourceType == AudioSourceType.quranSurah;
 
-    return SafeArea(
-      top: false,
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: () {
-          switch (sourceType) {
-            case AudioSourceType.quranSurah:
-              AppSheets.showBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                clipBehavior: Clip.hardEdge,
-                useSafeArea: false,
-                animationDuration: const Duration(milliseconds: 400),
-                child: const QuranAudioSheet(),
-              );
-              break;
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        switch (sourceType) {
+          case AudioSourceType.quranSurah:
+            AppSheets.showBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              clipBehavior: Clip.hardEdge,
+              useSafeArea: false,
+              animationDuration: const Duration(milliseconds: 400),
+              child: const QuranAudioSheet(),
+            );
+            break;
 
-            case AudioSourceType.quranRadio:
-              if (session == null) return;
+          case AudioSourceType.quranRadio:
+            if (session == null) return;
 
-              AppSheets.showBottomSheet(
-                context: context,
-                useSafeArea: false,
-                isScrollControlled: true,
-                animationDuration: const Duration(milliseconds: 400),
-                child: RadioPlayerSheet(
-                  stations: session.stations,
-                  initialIndex: session.currentIndex,
-                ),
-              );
+            AppSheets.showBottomSheet(
+              context: context,
+              useSafeArea: false,
+              isScrollControlled: true,
+              animationDuration: const Duration(milliseconds: 400),
+              child: RadioPlayerSheet(
+                stations: session.stations,
+                initialIndex: session.currentIndex,
+              ),
+            );
 
-              break;
+            break;
 
-            default:
-              break;
-          }
-        },
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(isQuranSurah ? 14 : 999),
-            color: cs.primaryContainer,
-          ),
-          child: Center(
-            child: AnimatedSize(
-              alignment: Alignment.topCenter,
-              duration: 300.ms,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (imageUrl != null) ...[
-                    AppCachedImage(
-                      imageUrl: imageUrl,
-                      height: 48,
-                      width: 48,
-                      shape: AppImageShape.circle,
-                      borderRadius: 12,
-                    ),
-                    const SizedBox(width: 12),
-                  ] else ...[
-                    const Icon(HugeIconsStroke.audioWave02, size: 48),
-                    const SizedBox(width: 12),
-                  ],
+          default:
+            break;
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        margin: const EdgeInsets.symmetric(horizontal: 6),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(isQuranSurah ? 20 : 999),
+          border: Border.all(color: cs.outlineVariant),
+          color: cs.primaryContainer,
+        ),
+        child: Center(
+          child: AnimatedSize(
+            alignment: Alignment.topCenter,
+            duration: 300.ms,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (imageUrl != null) ...[
+                  AppCachedImage(
+                    imageUrl: imageUrl,
+                    height: 48,
+                    width: 48,
+                    shape: AppImageShape.circle,
+                    borderRadius: 12,
+                  ),
+                  const SizedBox(width: 12),
+                ] else ...[
+                  const Icon(HugeIconsStroke.audioWave02, size: 48),
+                  const SizedBox(width: 12),
+                ],
 
-                  // Column
-                  Expanded(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        // TOP ROW: details + actions
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            // DETAILS
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  SizedBox(
-                                    height: 20,
-                                    child: ClipRect(
-                                      child: TextScroll(
-                                        key: ValueKey(sourceType),
-                                        title ?? 'Now playing',
-                                        intervalSpaces: 16,
-                                        velocity: const Velocity(
-                                          pixelsPerSecond: Offset(20, 0),
-                                        ),
-                                        textAlign: TextAlign.left,
-                                        style: theme.textTheme.titleSmall
-                                            ?.copyWith(fontSize: 14),
-                                      ),
-                                    ),
-                                  ),
-
-                                  if (artist != null)
-                                    TextScroll(
-                                      "🎧 $artist",
-                                      mode: TextScrollMode.endless,
+                // Column
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // TOP ROW: details + actions
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          // DETAILS
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SizedBox(
+                                  height: 20,
+                                  child: ClipRect(
+                                    child: TextScroll(
+                                      key: ValueKey(sourceType),
+                                      title ?? 'Now playing',
                                       intervalSpaces: 16,
                                       velocity: const Velocity(
                                         pixelsPerSecond: Offset(20, 0),
                                       ),
                                       textAlign: TextAlign.left,
-                                      style: theme.textTheme.labelSmall
-                                          ?.copyWith(fontSize: 12),
+                                      style: theme.textTheme.titleSmall
+                                          ?.copyWith(fontSize: 14),
                                     ),
-                                ],
-                              ),
-                            ),
+                                  ),
+                                ),
 
-                            // ACTIONS
-                            isBuffering
-                                ? const Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: CupertinoActivityIndicator(),
-                                  )
-                                : IconButton(
-                                    onPressed: () {
-                                      isPlaying ? ctrl.pause() : ctrl.play();
-                                    },
-                                    icon: Icon(
+                                if (artist != null)
+                                  TextScroll(
+                                    "🎧 $artist",
+                                    mode: TextScrollMode.endless,
+                                    intervalSpaces: 16,
+                                    velocity: const Velocity(
+                                      pixelsPerSecond: Offset(20, 0),
+                                    ),
+                                    textAlign: TextAlign.left,
+                                    style: theme.textTheme.labelSmall?.copyWith(
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+
+                          // ACTIONS
+                          IconButton(
+                            onPressed: () {
+                              isPlaying ? ctrl.pause() : ctrl.play();
+                            },
+                            icon: AppIconContainer(
+                              backgroundColor: cs.tertiary,
+                              borderRadius: 999,
+                              child: isBuffering
+                                  ? const Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: CupertinoActivityIndicator(),
+                                    )
+                                  : Icon(
                                       isPlaying
                                           ? HugeIconsSolid.pause
-                                          : PhosphorIconsBold.play,
+                                          : PhosphorIconsFill.play,
                                       size: controlsIconSize,
-                                      color: cs.onSurface,
+                                      color: cs.onTertiary,
                                     ),
-                                    visualDensity: VisualDensity.compact,
-                                  ),
-
-                            IconButton(
-                              onPressed: () {
-                                ref
-                                        .read(currentStationProvider.notifier)
-                                        .state =
-                                    null;
-
-                                ref
-                                        .read(
-                                          radioPlaybackSessionProvider.notifier,
-                                        )
-                                        .state =
-                                    null;
-
-                                ctrl.stop();
-
-                                scaffoldMessengerKey.currentState
-                                    ?.hideCurrentSnackBar();
-                              },
-                              icon: Icon(
-                                HugeIconsSolid.cancel01,
-                                size: controlsIconSize,
-                                color: cs.onSurface,
-                              ),
-                              visualDensity: VisualDensity.compact,
                             ),
-                          ],
-                        ),
+                            visualDensity: VisualDensity.compact,
+                          ),
 
-                        // SEEK BAR
-                        if (isQuranSurah) ...[
-                          const SizedBox(height: 2),
-                          AudioSeekBar(showDurations: isSeekingAudio),
+                          IconButton(
+                            onPressed: () {
+                              ref.read(currentStationProvider.notifier).state =
+                                  null;
+
+                              ref
+                                      .read(
+                                        radioPlaybackSessionProvider.notifier,
+                                      )
+                                      .state =
+                                  null;
+
+                              ctrl.stop();
+
+                              scaffoldMessengerKey.currentState
+                                  ?.hideCurrentSnackBar();
+                            },
+                            icon: Icon(
+                              HugeIconsSolid.cancel01,
+                              size: controlsIconSize,
+                              color: cs.onSurface,
+                            ),
+                            visualDensity: VisualDensity.compact,
+                          ),
                         ],
+                      ),
+
+                      // SEEK BAR
+                      if (isQuranSurah) ...[
+                        const SizedBox(height: 2),
+                        AudioSeekBar(showDurations: isSeekingAudio),
                       ],
-                    ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

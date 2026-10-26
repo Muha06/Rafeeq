@@ -22,6 +22,7 @@ class _AdhkarCategoryPageState extends ConsumerState<AdhkarCategoryPage> {
   Widget build(BuildContext context) {
     final adhkarCategoriesState = ref.watch(adhkarCategoriesProvider);
     final theme = Theme.of(context);
+    final bottomInset = MediaQuery.paddingOf(context).bottom;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Adhkar'), centerTitle: true),
@@ -45,7 +46,7 @@ class _AdhkarCategoryPageState extends ConsumerState<AdhkarCategoryPage> {
             physics: const BouncingScrollPhysics(),
             slivers: [
               SliverPadding(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
+                padding: EdgeInsets.fromLTRB(16, 8, 16, bottomInset),
                 sliver: SliverGrid(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,

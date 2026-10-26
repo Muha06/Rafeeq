@@ -6,7 +6,9 @@ import 'package:rafeeq/core/widgets/app_state_view.dart';
 import 'package:rafeeq/features/quran_radio/domain/enums/radio_audio_category.dart';
 import 'package:rafeeq/features/quran_radio/presentation/providers/radio_controller.dart';
 import 'package:rafeeq/features/quran_radio/presentation/widgets/radio_tab_selector.dart';
+
 import '../widgets/radio_card.dart';
+
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class RadioListPage extends ConsumerStatefulWidget {
@@ -27,6 +29,8 @@ class _RadioListPageState extends ConsumerState<RadioListPage> {
     if (state is RadioLoaded) {
       _selectedCategory = state.selectedCategory;
     }
+
+    final bottomInset = MediaQuery.paddingOf(context).bottom;
 
     return CustomScrollView(
       slivers: [
@@ -55,8 +59,7 @@ class _RadioListPageState extends ConsumerState<RadioListPage> {
             child: AppStateView(
               icon: PhosphorIcons.radio,
               title: "Error loading stations",
-              message:
-                  "We couldn't load the radio stations, please try again later.",
+              message: "We couldn't load the radio stations, please try again later.",
               buttonText: "retry",
               onPressed: () => controller.loadAll(),
             ),
@@ -66,9 +69,11 @@ class _RadioListPageState extends ConsumerState<RadioListPage> {
             SliverFillRemaining(child: _emptyState()),
 
           RadioLoaded(:final stations) => SliverPadding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.screenHorizontal,
-              vertical: AppSpacing.screenVertical,
+            padding: EdgeInsets.fromLTRB(
+              AppSpacing.screenHorizontal,
+              AppSpacing.screenVertical,
+              AppSpacing.screenHorizontal,
+              bottomInset,
             ),
             sliver: SliverMasonryGrid.count(
               crossAxisCount: 3,

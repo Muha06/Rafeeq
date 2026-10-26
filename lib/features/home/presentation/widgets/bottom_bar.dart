@@ -57,7 +57,7 @@ class MyBottomBar extends ConsumerWidget {
     final isHiddenSourceType =
         s.sourceType == AudioSourceType.haramainLive ||
         s.sourceType == AudioSourceType.allahName;
-        
+
     final shouldShowMiniPlayer = hasAudio && !isHiddenSourceType;
 
     final miniPlayer = shouldShowMiniPlayer
@@ -88,7 +88,7 @@ class MyBottomBar extends ConsumerWidget {
       children: [
         if (shouldShowMiniPlayer) ...[
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
             child: miniPlayer,
           ),
         ],

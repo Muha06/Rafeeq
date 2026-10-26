@@ -84,7 +84,8 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
     final screen = SafeArea(
       top: false,
       child: Scaffold(
-        body: SafeArea(top: false, child: _pages[selectedIndex]),
+        body: _pages[selectedIndex],
+        extendBody: true,
         bottomNavigationBar: MyBottomBar(
           currentIndex: selectedIndex,
           onTap: (value) async {

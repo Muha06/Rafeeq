@@ -20,60 +20,55 @@ class _BookmarkPageState extends ConsumerState<BookmarkPage> {
 
     return DefaultTabController(
       length: 2,
-      child: SafeArea(
-        top: false,
-        child: Scaffold(
-          appBar: AppBar(title: const Text('Bookmarks'), centerTitle: true),
-          body: Column(
-            children: [
-              // Tabs
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 0.60,
-                  height: 48,
-                  padding: const EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(999),
-                    border: Border.all(color: theme.dividerColor),
-                  ),
-                  child: TabBar(
-                    dividerColor: Colors.transparent,
-                    splashFactory: NoSplash.splashFactory,
-                    isScrollable: false,
-                    overlayColor: WidgetStateProperty.all(Colors.transparent),
-                    indicatorSize: TabBarIndicatorSize.tab,
-                    indicator: BoxDecoration(
-                      borderRadius: BorderRadius.circular(999),
-                      color: theme.colorScheme.primary,
-                    ),
-
-                    labelStyle: tt.labelLarge?.copyWith(
-                      color: cs.onPrimary,
-                    ), // selected
-
-                    unselectedLabelStyle: tt.labelLarge?.copyWith(
-                      color: cs.onSurface,
-                      fontSize: 14,
-                    ),
-
-                    tabs: const [
-                      Tab(text: 'Quran'),
-                      Tab(text: 'Adhkār'),
-                    ],
-                  ),
-                ),
+      child: Scaffold(
+        extendBody: true,
+        appBar: AppBar(title: const Text('Bookmarks'), centerTitle: true),
+        body: Column(
+          children: [
+            // Tabs
+            Container(
+              width: MediaQuery.of(context).size.width * 0.60,
+              height: 48,
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(999),
+                border: Border.all(color: theme.dividerColor),
               ),
-
-              const SizedBox(height: 8),
-
-              const Expanded(
-                child: TabBarView(
-                  children: [QuranBookmarksTab(), AdhkarBookmarksTab()],
+              child: TabBar(
+                dividerColor: Colors.transparent,
+                splashFactory: NoSplash.splashFactory,
+                isScrollable: false,
+                overlayColor: WidgetStateProperty.all(Colors.transparent),
+                indicatorSize: TabBarIndicatorSize.tab,
+                indicator: BoxDecoration(
+                  borderRadius: BorderRadius.circular(999),
+                  color: theme.colorScheme.primary,
                 ),
+
+                labelStyle: tt.labelLarge?.copyWith(
+                  color: cs.onPrimary,
+                ), // selected
+
+                unselectedLabelStyle: tt.labelLarge?.copyWith(
+                  color: cs.onSurface,
+                  fontSize: 14,
+                ),
+
+                tabs: const [
+                  Tab(text: 'Quran'),
+                  Tab(text: 'Adhkār'),
+                ],
               ),
-            ],
-          ),
+            ),
+
+            const SizedBox(height: 8),
+
+            const Expanded(
+              child: TabBarView(
+                children: [QuranBookmarksTab(), AdhkarBookmarksTab()],
+              ),
+            ),
+          ],
         ),
       ),
     ).animatePage();
