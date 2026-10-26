@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:rafeeq/core/constants/app_assets.dart';
 import 'package:rafeeq/core/helpers/app_text_style.dart';
@@ -22,9 +23,7 @@ class AllahNameShareCard extends StatelessWidget {
     final scheme = theme.colorScheme;
     final tertiary = Theme.of(context).colorScheme.tertiary;
 
-    final base = scheme.surfaceContainerLow;
     final onBase = scheme.onSurface;
-    final deep = Color.lerp(base, Colors.black, 0.45)!;
 
     final translation =
         name.translations[language] ?? name.translations.values.firstOrNull;
@@ -33,80 +32,66 @@ class AllahNameShareCard extends StatelessWidget {
     return SizedBox(
       width: 540,
       height: 720,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [base, deep],
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          // Pattern
+          CustomPaint(
+            painter: _StarPatternPainter(color: onBase.withValues(alpha: 0.04)),
           ),
-        ),
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            // Pattern
-            CustomPaint(
-              painter: _StarPatternPainter(
-                color: onBase.withValues(alpha: 0.06),
-              ),
-            ),
 
-            // Content
-            Padding(
-              padding: const EdgeInsets.fromLTRB(44, 44, 44, 44),
-              child: Column(
-                children: [
-                  _Header(number: name.number, color: onBase),
-                  const Spacer(flex: 2),
+          // Content
+          Padding(
+            padding: const EdgeInsets.fromLTRB(44, 44, 44, 44),
+            child: Column(
+              children: [
+                _Header(number: name.number, color: onBase),
+                const Spacer(flex: 2),
 
-                  // Arabic
-                  Directionality(
-                    textDirection: TextDirection.rtl,
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Text(
-                        name.arabic,
-                        textAlign: TextAlign.center,
-                        style: AppTextStyles.arabicUi.copyWith(
-                          color: tertiary,
-                          fontSize: 120,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-
-                  Text(
-                    name.transliteration,
-                    textAlign: TextAlign.center,
-                    style: tt.titleMedium?.copyWith(
-                      fontSize: 30,
-                      color: onBase,
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-
-                  _OrnamentDivider(color: tertiary),
-
-                  const SizedBox(height: 24),
-                  if (meaning.isNotEmpty)
-                    Text(
-                      meaning,
+                // Arabic
+                Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      name.arabic,
                       textAlign: TextAlign.center,
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                      style: tt.bodyLarge?.copyWith(
-                        fontSize: 24,
-                        color: onBase.withValues(alpha: 0.95),
+                      style: AppTextStyles.arabicUi.copyWith(
+                        color: tertiary,
+                        fontSize: 120,
                       ),
                     ),
-                  const Spacer(flex: 3),
-                  _Footer(color: onBase),
-                ],
-              ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+
+                Text(
+                  name.transliteration,
+                  textAlign: TextAlign.center,
+                  style: tt.titleMedium?.copyWith(fontSize: 30, color: onBase),
+                ),
+                const SizedBox(height: 24),
+
+                _OrnamentDivider(color: tertiary),
+
+                const SizedBox(height: 24),
+                if (meaning.isNotEmpty)
+                  Text(
+                    meaning,
+                    textAlign: TextAlign.center,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    style: tt.bodyLarge?.copyWith(
+                      fontSize: 24,
+                      color: onBase.withValues(alpha: 0.95),
+                    ),
+                  ),
+                const Spacer(flex: 3),
+                _Footer(color: onBase),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
