@@ -9,6 +9,7 @@ import 'package:rafeeq/core/features/audio/domain/entities/audio_item.dart';
 import 'package:rafeeq/core/features/audio/domain/entities/audio_source_type.dart';
 import 'package:rafeeq/core/features/audio/presentation/providers/audio_controller.dart';
 import 'package:rafeeq/core/helpers/app_haptics.dart';
+import 'package:rafeeq/core/helpers/app_toast.dart';
 import 'package:rafeeq/core/helpers/clean_arabic_text.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/core/helpers/app_text_style.dart';
@@ -38,10 +39,13 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
   int currentIndex = 0;
   int _dhikrCount = 0;
 
+  static const _edgeWidth = 80.0;
+  static const _pageDuration = Duration(milliseconds: 280);
+  static const _pageCurve = Curves.easeOutCubic;
+
   @override
   void initState() {
     super.initState();
-
     _controller = PageController(initialPage: widget.initialIndex);
     currentIndex = widget.initialIndex;
   }
@@ -49,8 +53,44 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
   @override
   void dispose() {
     _controller.dispose();
-
     super.dispose();
+  }
+
+  void _handleEdgeTap(TapUpDetails details, double width) {
+    final dx = details.localPosition.dx;
+    final isRtl = Directionality.of(context) == TextDirection.rtl;
+
+    int delta = 0;
+    if (dx < _edgeWidth) {
+      delta = isRtl ? 1 : -1;
+    } else if (dx > width - _edgeWidth) {
+      delta = isRtl ? -1 : 1;
+    }
+    if (delta == 0) return;
+
+    final target = currentIndex + delta;
+    if (target < 0 || target >= widget.adhkars.length) return;
+
+    _controller.animateToPage(
+      target,
+      duration: _pageDuration,
+      curve: _pageCurve,
+    );
+    AppHaptics.selection();
+  }
+
+  Future<void> _onCounterTap(Dhikr dhikr) async {
+    if (_dhikrCount >= dhikr.repeat) return; // clamp
+
+    setState(() => _dhikrCount++);
+
+    final completed = _dhikrCount >= dhikr.repeat;
+    if (await Vibration.hasVibrator()) {
+      await Vibration.vibrate(
+        duration: completed ? 300 : 20,
+        amplitude: completed ? 255 : 128,
+      );
+    }
   }
 
   @override
@@ -58,126 +98,84 @@ class _AdhkarDetailsPageState extends ConsumerState<AdhkarDetailsPage> {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
     final tt = theme.textTheme;
-
     final dhikr = widget.adhkars[currentIndex];
 
     return LayoutBuilder(
-      builder: (context, _) {
-        final screenHeight = MediaQuery.of(context).size.height;
-        final screenWidth = MediaQuery.of(context).size.width;
+      builder: (context, constraints) {
+        final width = constraints.maxWidth;
+        final height = constraints.maxHeight;
 
         return FloatingDraggableWidget(
-          mainScreenWidget: SafeArea(
-            top: false,
-            bottom: true,
-            child: SafeArea(
-              child: Scaffold(
-                appBar: AppBar(
-                  title: Text(
-                    dhikr.title,
-                    style: theme.appBarTheme.titleTextStyle?.copyWith(
-                      fontSize: 18,
-                    ),
+          mainScreenWidget: Scaffold(
+            appBar: AppBar(
+              title: Text(
+                dhikr.title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: theme.appBarTheme.titleTextStyle?.copyWith(fontSize: 18),
+              ),
+              actionsPadding: const EdgeInsets.symmetric(horizontal: 16),
+              actions: [
+                GestureDetector(
+                  onTap: () => AppToast.showCompact(
+                    context: context,
+                    message: "Repeat the dhikr ${dhikr.repeat} times",
                   ),
-                  actionsPadding: const EdgeInsets.symmetric(horizontal: 16),
-                  actions: [
-                    //note
-                    MyChip(
-                      backgroundColor: cs.tertiary,
-                      borderRadius: 999,
-                      child: Text(
-                        '${dhikr.repeat}×',
-                        style: tt.labelMedium?.copyWith(color: cs.onTertiary),
-                      ),
-                    ),
-                  ],
-                  bottom: PreferredSize(
-                    preferredSize: const Size.fromHeight(1),
-                    child: LinearProgressIndicator(
-                      value: (currentIndex + 1) / widget.adhkars.length,
+                  child: MyChip(
+                    backgroundColor: cs.tertiary,
+                    borderRadius: 999,
+                    child: Text(
+                      '${dhikr.repeat}×',
+                      style: tt.labelMedium?.copyWith(color: cs.onTertiary),
                     ),
                   ),
                 ),
-
-                body: GestureDetector(
-                  onTapUp: (details) {
-                    final screenWidth = MediaQuery.of(context).size.width;
-                    final dx = details.localPosition.dx;
-
-                    const edgeWidth = 80.0;
-                    const duration = Duration(milliseconds: 170);
-
-                    if (dx < edgeWidth) {
-                      // Left edge tapped
-                      _controller.previousPage(
-                        duration: duration,
-                        curve: Curves.easeInOut,
-                      );
-                      if (currentIndex > 0) AppHaptics.selection();
-                    } else if (dx > screenWidth - edgeWidth) {
-                      // Right edge tapped
-                      _controller.nextPage(
-                        duration: duration,
-                        curve: Curves.easeInOut,
-                      );
-
-                      if (currentIndex < widget.adhkars.length - 1) {
-                        AppHaptics.selection();
-                      }
-                    }
-                  },
-                  child: Stack(
-                    children: [
-                      PageView.builder(
-                        controller: _controller,
-                        itemCount: widget.adhkars.length,
-                        onPageChanged: (index) {
-                          setState(() {
-                            currentIndex = index;
-                            _dhikrCount = 0;
-                          });
-                        },
-                        itemBuilder: (context, index) {
-                          final dhikr = widget.adhkars[index];
-
-                          return AdhkarDetailsSection(dhikr: dhikr);
-                        },
-                      ),
-
-                      // Fixed bottom nav bar
-                      Positioned(
-                        bottom: 16,
-                        left: 48,
-                        right: 48,
-                        child: _BottomNavBar(dhikr: dhikr),
-                      ),
-                    ],
-                  ),
+              ],
+              bottom: PreferredSize(
+                preferredSize: const Size.fromHeight(1),
+                child: TweenAnimationBuilder<double>(
+                  tween: Tween(end: (currentIndex + 1) / widget.adhkars.length),
+                  duration: const Duration(milliseconds: 250),
+                  curve: Curves.easeOut,
+                  builder: (_, value, _) =>
+                      LinearProgressIndicator(value: value, minHeight: 2),
                 ),
+              ),
+            ),
+            body: GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onTapUp: (d) => _handleEdgeTap(d, width),
+              child: Stack(
+                children: [
+                  PageView.builder(
+                    controller: _controller,
+                    itemCount: widget.adhkars.length,
+                    onPageChanged: (index) => setState(() {
+                      currentIndex = index;
+                      _dhikrCount = 0;
+                    }),
+                    itemBuilder: (_, index) =>
+                        AdhkarDetailsSection(dhikr: widget.adhkars[index]),
+                  ),
+                  Positioned(
+                    bottom: 16 + MediaQuery.of(context).padding.bottom,
+                    left: 48,
+                    right: 48,
+                    child: _BottomNavBar(dhikr: dhikr),
+                  ),
+                ],
               ),
             ),
           ),
           floatingWidget: DhikrFloatingButton(
             count: _dhikrCount,
             total: dhikr.repeat,
-            onTap: () async {
-              setState(() {
-                _dhikrCount++;
-              });
-
-              final isCompleting = _dhikrCount >= dhikr.repeat;
-
-              if (isCompleting) {
-                await Vibration.vibrate(duration: 300, amplitude: 255);
-              } else {
-                await Vibration.vibrate(duration: 20);
-              }
-            },
+            onTap: () => _onCounterTap(dhikr),
           ),
-          floatingWidgetHeight: 64,
-          floatingWidgetWidth: 64,
-          dy: screenHeight - 200,
-          dx: screenWidth - 100,
+          floatingWidgetHeight: 72,
+          floatingWidgetWidth: 72,
+          dy: height - 220,
+          dx: width - 100,
         );
       },
     );
@@ -322,7 +320,11 @@ class _BottomNavBar extends ConsumerWidget {
                 icon: HugeIconsStroke.copy01,
                 label: 'Copy',
                 onTap: () async {
-                  copyDhikr(dhikr);
+                  await copyDhikr(dhikr);
+                  AppHaptics.selection();
+                  if (context.mounted) {
+                    AppToast.showCompact(context: context, message: 'Copied');
+                  }
                 },
               ),
             ],
@@ -388,26 +390,20 @@ class _BottomNavItem extends StatelessWidget {
   }
 }
 
-class AdhkarDetailsSection extends ConsumerStatefulWidget {
+class AdhkarDetailsSection extends StatelessWidget {
   const AdhkarDetailsSection({super.key, required this.dhikr});
 
   final Dhikr dhikr;
-  @override
-  ConsumerState<AdhkarDetailsSection> createState() =>
-      _AdhkarDetailsSectionState();
-}
 
-class _AdhkarDetailsSectionState extends ConsumerState<AdhkarDetailsSection> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
-    final dhikr = widget.dhikr;
 
     final bodyTextstyle = textTheme.bodyLarge?.copyWith(fontSize: 18);
     final cs = theme.colorScheme;
 
-    Widget section(String title, String? text) {
+    Widget section(IconData icon, String title, String? text) {
       final hasValidText = text != null && text.isNotEmpty;
 
       if (!hasValidText) return const SizedBox.shrink();
@@ -415,7 +411,18 @@ class _AdhkarDetailsSectionState extends ConsumerState<AdhkarDetailsSection> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: textTheme.labelSmall),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(icon, size: 15, color: cs.onSurfaceVariant),
+
+              const SizedBox(width: 8),
+
+              Text(title, style: textTheme.labelSmall),
+            ],
+          ),
+
           const SizedBox(height: 8),
 
           Text(text, style: bodyTextstyle), //text
@@ -435,7 +442,7 @@ class _AdhkarDetailsSectionState extends ConsumerState<AdhkarDetailsSection> {
             Align(
               alignment: Alignment.center,
               child: Text(
-                cleanDhikr(widget.dhikr.arabicText),
+                cleanDhikr(dhikr.arabicText),
                 textDirection: TextDirection.rtl,
                 textAlign: TextAlign.center,
                 style: AppTextStyles.quranAyah.copyWith(
@@ -448,10 +455,18 @@ class _AdhkarDetailsSectionState extends ConsumerState<AdhkarDetailsSection> {
             const SizedBox(height: 32),
 
             //transliteration
-            section('Transliteration', dhikr.transliteration),
+            section(
+              HugeIconsSolid.book01,
+              'Transliteration',
+              dhikr.transliteration,
+            ),
 
             //english
-            section('Translation', dhikr.englishText.trim()),
+            section(
+              HugeIconsSolid.translation,
+              'Translation',
+              dhikr.englishText.trim(),
+            ),
 
             const SizedBox(height: 80),
           ],
