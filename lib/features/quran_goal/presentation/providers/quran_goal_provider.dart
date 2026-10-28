@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:rafeeq/core/features/local_notifications/providers/wiring_providers.dart';
 import 'package:rafeeq/core/features/local_notifications/repository/local_notifs_service.dart';
+import 'package:rafeeq/core/helpers/app_review_service.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/features/quran_goal/data/models/hive/quran_goal_hive.dart';
 import 'package:rafeeq/features/quran_goal/domain/entities/quran_goal.dart';
@@ -70,13 +71,15 @@ class QuranGoalNotifier extends Notifier<QuranGoal?> {
       await notifications.cancel(dailyReminderNotificationId);
     }
 
+    ref.read(appReviewServiceProvider).requestReview();
+
     RafeeqAnalytics.logFeature(
       'update-quran-goal',
       parameters: {'target': updated.dailyTarget},
     );
   }
 
-  void createGoal(QuranGoal goal) async {
+  void createGoal(QuranGoal goal, {bool requestReview = false}) async {
     state = goal;
     _save(goal);
     // await notifications.cancel(dailyReminderNotificationId);
@@ -99,6 +102,10 @@ class QuranGoalNotifier extends Notifier<QuranGoal?> {
         'target': goal.dailyTarget,
       },
     );
+
+    if (requestReview == true) {
+      ref.read(appReviewServiceProvider).requestReview();
+    }
   }
 
   Future<void> deleteGoal() async {

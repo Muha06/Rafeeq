@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AppReviewService {
   const AppReviewService();
@@ -14,3 +15,7 @@ class AppReviewService {
     }
   }
 }
+
+final appReviewServiceProvider = Provider<AppReviewService>((ref) {
+  return const AppReviewService();
+});

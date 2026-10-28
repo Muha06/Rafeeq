@@ -3,12 +3,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:rafeeq/core/constants/app_assets.dart';
+import 'package:rafeeq/core/helpers/app_review_service.dart';
 import 'package:rafeeq/features/settings/presentation/share/widgets/share_app_image.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 
 class AppShareService {
   final ScreenshotController _screenshotController = ScreenshotController();
+  final AppReviewService _reviewService = const AppReviewService();
 
   Future<void> shareApp({required BuildContext context}) async {
     final theme = Theme.of(context);
@@ -46,5 +48,7 @@ class AppShareService {
     await SharePlus.instance.share(
       ShareParams(files: [XFile(file.path)], text: caption),
     );
+
+    _reviewService.requestReview();
   }
 }

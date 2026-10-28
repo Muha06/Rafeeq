@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rafeeq/core/helpers/app_review_service.dart';
 import 'package:rafeeq/features/feedback/data/models/feedback_model.dart';
 import 'package:rafeeq/features/feedback/presentation/providers/wiring_providers.dart';
 
@@ -15,6 +16,8 @@ class FeedbackController extends AsyncNotifier<void> {
       final repo = ref.read(feedbackRepositoryProvider);
       await repo.submitFeedback(feedback);
       state = const AsyncData(null);
+
+      ref.read(appReviewServiceProvider).requestReview();
     } catch (e, st) {
       state = AsyncError(e, st);
       rethrow;

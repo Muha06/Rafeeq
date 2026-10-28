@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hugeicons_pro/hugeicons.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
+import 'package:rafeeq/core/helpers/app_review_service.dart';
 import 'package:rafeeq/core/helpers/app_toast.dart';
 import 'package:rafeeq/features/user/presentation/providers/user_provider.dart';
 
@@ -42,6 +43,8 @@ class _UpdateUserNamePageState extends ConsumerState<UpdateUserNamePage> {
     AppToast.showSuccess(context: context, message: "Name changed!");
 
     ref.read(userNameProvider.notifier).updateName(newName);
+
+    ref.read(appReviewServiceProvider).requestReview();
   }
 
   @override

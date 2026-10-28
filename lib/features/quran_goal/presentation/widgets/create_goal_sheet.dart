@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
- import 'package:intl/intl.dart';
+import 'package:intl/intl.dart';
 import 'package:rafeeq/core/constants/spacing/app_spacing.dart';
 import 'package:rafeeq/core/helpers/app_nav.dart';
 import 'package:rafeeq/core/helpers/app_sheets.dart';
@@ -67,7 +67,7 @@ class _CreateGoalSheetState extends ConsumerState<CreateGoalSheet> {
 
     AppNav.pop(context);
 
-    ref.read(quranGoalProvider.notifier).createGoal(goal);
+    ref.read(quranGoalProvider.notifier).createGoal(goal, requestReview: true);
   }
 
   Future<void> pickReminder() async {
@@ -184,8 +184,6 @@ class GoalTypeTargetRow extends StatelessWidget {
     );
   }
 }
-
-
 
 class GoalScheduleTile extends StatelessWidget {
   const GoalScheduleTile({

@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:rafeeq/core/helpers/app_review_service.dart';
 import 'package:rafeeq/core/helpers/firebase_analytics/rafeeq_analytics.dart';
 import 'package:rafeeq/features/quran_goal/data/models/hive/quran_log_hive.dart';
 import 'package:rafeeq/features/quran_goal/domain/entities/quran_log.dart';
@@ -27,6 +28,8 @@ class QuranLogsNotifier extends Notifier<List<QuranLog>> {
     box.add(hiveLog);
 
     state = [...state, domainLog];
+
+    ref.read(appReviewServiceProvider).requestReview();
 
     RafeeqAnalytics.logFeature('log-quran-goal');
   }

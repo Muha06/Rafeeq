@@ -17,7 +17,7 @@ import 'package:rafeeq/features/home/presentation/pages/home_page.dart';
 import 'package:rafeeq/features/bookmarks/presentation/pages/bookmark_page.dart';
 import 'package:rafeeq/features/whats_new/presentation/pages/whats_new.dart';
 import 'package:rafeeq/features/whats_new/presentation/providers/whats_new_provider.dart';
-import 'package:rafeeq/core/helpers/in_app_review.dart';
+import 'package:rafeeq/core/helpers/app_review_service.dart';
 
 class TabsScreen extends ConsumerStatefulWidget {
   const TabsScreen({super.key});
