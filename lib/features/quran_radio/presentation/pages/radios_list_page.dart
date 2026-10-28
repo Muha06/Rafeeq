@@ -109,7 +109,11 @@ class _RadioListPageState extends ConsumerState<RadioListPage> {
               crossAxisSpacing: 20,
               childCount: stations.length,
               itemBuilder: (_, i) {
-                return RadioCard(stations: stations, initialIndex: i);
+                return RadioCard(
+                  key: ValueKey(stations[i].id),
+                  stations: stations,
+                  initialIndex: i,
+                );
               },
             ),
           ),

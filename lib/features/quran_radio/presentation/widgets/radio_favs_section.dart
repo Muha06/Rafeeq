@@ -204,14 +204,14 @@ class FavoriteStationCard extends ConsumerWidget {
                         Icon(
                           Icons.graphic_eq_rounded,
                           size: 14,
-                          color: cs.primary,
+                          color: cs.tertiary,
                         ),
                         const SizedBox(width: 4),
                         Text(
                           'Playing',
-                          style: tt.labelSmall?.copyWith(
+                          style: tt.bodySmall?.copyWith(
                             color: Colors.white,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ],

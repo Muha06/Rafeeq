@@ -4,8 +4,8 @@ import 'package:hugeicons_pro/hugeicons.dart';
 enum RadioAudioCategory {
   quran,
   hadith,
-  tafsir,
   adhkar,
+  tafsir,
   seerah,
   fiqh,
   qisas,
