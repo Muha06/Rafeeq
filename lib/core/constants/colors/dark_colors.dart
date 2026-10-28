@@ -2,41 +2,41 @@ import 'package:flutter/painting.dart';
 
 class AppDarkColors {
   // BACKGROUND
-  static const canvas = Color(0xFF0A0F14);
-  static const surfaceLow = Color(0xFF0F161D); // Bottomsheets, dialogs
+  static const canvas = Color(0xFF08110E); // deep emerald-black
+  static const surfaceLow = Color(0xFF0D1814); // Bottomsheets, dialogs
 
   // SURFACES
-  static const surface = Color(0xFF131B23);
-  static const surfaceHigh = Color(0xFF1B2733);
-  static const surfaceHighest = Color(0xFF2A3A48);
+  static const surface = Color(0xFF121F1A);
+  static const surfaceHigh = Color(0xFF1A2B24);
+  static const surfaceHighest = Color(0xFF263A31);
 
-  // BORDERS / DIVIDERS (tinted navy, subtler)
-  static const outline = Color(0xFF26323D);
-  static const outlineVariant = Color(0xFF334250);
+  // BORDERS / DIVIDERS (green-tinted, subtle)
+  static const outline = Color(0xFF27382F);
+  static const outlineVariant = Color(0xFF36493F);
 
   // PRIMARY || SECONDARY || TERTIARY
-  static const primary = Color(0xFF3FB1C0); // lighter teal: readable on dark
-  static const secondary = Color(0xFFA7B3BC);
-  static const tertiary = Color(0xFFE3B866); // gold, replaces lime
+  static const primary = Color(0xFF35A77E); // deeper emerald
+  static const secondary = Color(0xFFA9B8AF); // soft sage
+  static const tertiary = Color(0xFFD9B35F); // muted gold
 
   // ON P | S | T
-  static const onPrimary = Color(0xFF04242A);
-  static const onSecondary = Color(0xFF1E252D);
-  static const onTertiary = Color(0xFF2A1D08);
+  static const onPrimary = Color(0xFF03271B);
+  static const onSecondary = Color(0xFF1B251F);
+  static const onTertiary = Color(0xFF2B1F06);
 
   // CONTAINERS
-  static const primaryContainer = Color(0xFF1E4750);
-  static const secondaryContainer = Color(0xFF2F3A44);
-  static const tertiaryContainer = Color(0xFF3D3116); // dark gold-brown
+  static const primaryContainer = Color(0xFF174B38);
+  static const secondaryContainer = Color(0xFF2E3D35);
+  static const tertiaryContainer = Color(0xFF3A3719); // olive-gold
 
   // ON CONTAINERS
-  static const onPrimaryContainer = Color(0xFFD3FAF9);
-  static const onSecondaryContainer = Color(0xFFDCE2E6);
-  static const onTertiaryContainer = Color(0xFFF6E8C8);
+  static const onPrimaryContainer = Color(0xFFCFF7E5);
+  static const onSecondaryContainer = Color(0xFFDDE6E0);
+  static const onTertiaryContainer = Color(0xFFF3EBC6);
 
   // ON SURFACES
-  static const onSurface = Color(0xFFEEF2F4);
-  static const onSurface2 = Color(0xFF8CA3B2); // secondary text, ~6.5:1
+  static const onSurface = Color(0xFFEFF3EE); // slightly warm white
+  static const onSurface2 = Color(0xFF93A89C); // secondary text
 
   // ERROR
   static const error = Color(0xFFE07A7A);
@@ -50,6 +50,6 @@ class AppDarkColors {
 
   // SWITCH
   static const switchOn = primary;
-  static const switchBg = Color(0xFF35434A);
-  static const switchRipple = Color(0x1A9FC4C8);
+  static const switchBg = Color(0xFF33453C);
+  static const switchRipple = Color(0x1A35A77E); // matches new primary
 }
