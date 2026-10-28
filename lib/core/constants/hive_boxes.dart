@@ -3,4 +3,5 @@ class HiveBoxes {
 
   static const String reciterPlaylistTracks = 'reciter_playlist_tracks';
   static const String salahTimesCacheBox = 'salah_times_cache_box';
+  static const String radioFavoritesBox = 'radio_favorites_box';
 }

@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:phosphoricons_flutter/phosphoricons_flutter.dart';
 import 'package:rafeeq/core/constants/spacing/app_spacing.dart';
+import 'package:rafeeq/core/helpers/app_sheets.dart';
 import 'package:rafeeq/core/widgets/app_state_view.dart';
+import 'package:rafeeq/features/quran_radio/domain/entities/radio_context.dart';
 import 'package:rafeeq/features/quran_radio/domain/enums/radio_audio_category.dart';
+import 'package:rafeeq/features/quran_radio/presentation/providers/radio_context_provider.dart';
 import 'package:rafeeq/features/quran_radio/presentation/providers/radio_controller.dart';
+import 'package:rafeeq/features/quran_radio/presentation/widgets/radio_favs_section.dart';
+import 'package:rafeeq/features/quran_radio/presentation/widgets/radio_player_sheet.dart';
 import 'package:rafeeq/features/quran_radio/presentation/widgets/radio_tab_selector.dart';
 
 import '../widgets/radio_card.dart';
@@ -46,7 +51,30 @@ class _RadioListPageState extends ConsumerState<RadioListPage> {
           ),
         ),
 
-        const SliverToBoxAdapter(child: SizedBox(height: 10)),
+        // const SliverToBoxAdapter(child: SizedBox(height: 10)),
+        SliverToBoxAdapter(
+          child: FavoriteStationsSection(
+            onStationTap: (stations, index) async {
+              ref.read(radioPlaybackSessionProvider.notifier).state =
+                  RadioPlaybackSession(stations: stations, currentIndex: index);
+
+              if (!context.mounted) return;
+
+              AppSheets.showBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                clipBehavior: Clip.hardEdge,
+                useSafeArea: false,
+                animationDuration: const Duration(milliseconds: 400),
+                reverseAnimationDuration: const Duration(milliseconds: 300),
+                child: RadioPlayerSheet(
+                  stations: stations,
+                  initialIndex: index,
+                ),
+              );
+            },
+          ),
+        ),
 
         switch (state) {
           RadioInitial() => const SliverFillRemaining(child: SizedBox()),

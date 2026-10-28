@@ -16,7 +16,7 @@ class AppHaptics {
   static Future<void> light() async {
     if (!await _canVibrate()) return;
 
-    Vibration.vibrate(duration: 30);
+    Vibration.vibrate(duration: 15);
   }
 
   static Future<void> medium() async {

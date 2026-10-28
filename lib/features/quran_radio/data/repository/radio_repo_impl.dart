@@ -1,4 +1,4 @@
-import 'package:rafeeq/features/quran_radio/data/radio_remote_ds.dart';
+import 'package:rafeeq/features/quran_radio/data/datasources/radio_remote_ds.dart';
 import 'package:rafeeq/features/quran_radio/domain/entities/radio_station.dart';
 import 'package:rafeeq/features/quran_radio/domain/repository/radio_repository.dart';
 

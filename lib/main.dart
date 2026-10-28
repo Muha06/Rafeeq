@@ -121,6 +121,7 @@ void main() {
       await Hive.openBox<ReciterPlaylistTracksHive>(
         HiveBoxes.reciterPlaylistTracks,
       );
+      await Hive.openBox<int>(HiveBoxes.radioFavoritesBox);
 
       // Notifications
       await LocalNotificationService().init();
@@ -139,7 +140,7 @@ void main() {
       await quranDbsManager.init();
 
       await SalahBackgroundWorker().initialize();
-      
+
       runApp(
         ProviderScope(
           overrides: [
@@ -224,7 +225,9 @@ class _MyAppState extends ConsumerState<MyApp> with WidgetsBindingObserver {
       scaffoldMessengerKey: scaffoldMessengerKey,
       home: SheetViewport(
         child: AppWrapper(
-          child: hasSeenOnboarding ? const TabsScreen() : const OnboardingPage(),
+          child: hasSeenOnboarding
+              ? const TabsScreen()
+              : const OnboardingPage(),
         ),
       ),
     );
