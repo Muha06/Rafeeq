@@ -190,7 +190,7 @@ class _BookmarkMetadataRow extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title, style: tt.titleLarge?.copyWith(fontSize: 13)),
+              Text(title, style: tt.titleSmall?.copyWith()),
               const SizedBox(height: 0),
 
               Text(subtitle, style: tt.bodySmall),
