@@ -267,7 +267,7 @@ class _AyahActionsSheetState extends ConsumerState<AyahActionsSheet> {
                     bgColor: isBookmarked
                         ? cs.primary
                         : cs.surfaceContainerHigh,
-                    fgColor: isBookmarked ? cs.onPrimary : cs.onSurface,
+                    fgColor: isBookmarked ? cs.onPrimary : cs.primary,
                     onPressed: () async {
                       try {
                         AppHaptics.selection();
@@ -324,7 +324,7 @@ class _AyahActionsSheetState extends ConsumerState<AyahActionsSheet> {
                 iconData: HugeIconsStroke.share01,
                 label: 'Share',
                 bgColor: cs.surfaceContainerHigh,
-                fgColor: cs.onSurface,
+                fgColor: cs.primary,
                 onPressed: () async {
                   AppHaptics.selection();
 

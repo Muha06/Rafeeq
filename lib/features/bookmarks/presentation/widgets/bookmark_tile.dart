@@ -116,7 +116,7 @@ class _QuranBookmarkTile extends ConsumerWidget {
                 overflow: TextOverflow.ellipsis,
                 style: AppTextStyles.quranAyah.copyWith(
                   color: cs.onSurface,
-                  fontSize: 18.5,
+                  fontSize: 20,
                   fontWeight: FontWeight.w500,
                 ),
               ),
